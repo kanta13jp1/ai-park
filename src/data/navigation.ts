@@ -24,6 +24,7 @@ export const navigationSections: NavSection[] = [
       { name: "Antigravity導入ガイド", href: "/guide", icon: "🚀" },
       { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "β公開" },
       { name: "MCP外部ツール連携", href: "/mcp-hub", icon: "🔌" },
+      { name: "学習リソース・勉強会", href: "/learning", icon: "📚", badge: "公開中" },
       { name: "Antigravity情報局", href: "/antigravity-info", icon: "🌌" },
     ]
   },
@@ -31,7 +32,7 @@ export const navigationSections: NavSection[] = [
     title: "🖥️ エージェント・ツール",
     items: [
       { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β公開" },
-      { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "準備中" },
+      { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "公開中" },
       { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "準備中" },
       { name: "利用状況ダッシュボード", href: "/gemini-stats", icon: "💎", badge: "モック" },
       { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "準備中" },
@@ -40,7 +41,7 @@ export const navigationSections: NavSection[] = [
   {
     title: "🗨️ コミュニティ",
     items: [
-      { name: "AIアンバサダー", href: "/ambassadors", badge: "準備中" },
+      { name: "AIアンバサダー", href: "/ambassadors", icon: "🤝", badge: "稼働中" },
     ]
   },
   {

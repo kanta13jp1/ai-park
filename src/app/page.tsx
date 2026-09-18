@@ -41,11 +41,11 @@ export default function Home() {
     },
     {
       title: "Subagents活用事例",
-      description: "自律並列サブエージェント（Research, Coding, QA）による工数削減事例",
+      description: "自律並列サブエージェント（SRE・調達・QA自動化）による工数削減事例",
       icon: "🟣",
       href: "/agent-cases",
-      badge: "🚧 PoC中",
-      badgeColor: "bg-rose-100 text-rose-800 border border-rose-200",
+      badge: "公開中",
+      badgeColor: "bg-purple-100 text-purple-800",
     },
     {
       title: "利用状況ダッシュボード",

@@ -100,14 +100,14 @@ const tasksData: TaskItem[] = [
     href: "/ambassadors",
     phase: "Phase 2",
     targetDate: "2026年10月上旬 (W3)",
-    status: "in-progress",
+    status: "completed",
     category: "community",
     icon: "🤝",
-    description: "各事業部・開発チームでAI活用をリードする「AIアンバサダー」のメンバー一覧、得意技術スタック（フロント、バックエンド、データ分析）、相談窓口を公開します。",
+    description: "各事業部・開発チームでAI活用をリードする「AIアンバサダー」のメンバー一覧、得意技術スタック（フロント、バックエンド、データ分析）、相談窓口を公開しました。",
     items: [
-      { text: "アンバサダープロフィールカード（所属・技術・アバター）", done: false },
-      { text: "得意分野別（LLMアプリ、プロンプト、MCP開発）タグ検索", done: false },
-      { text: "アンバサダーへの質問・壁打ち依頼ボタン（Slack連携）", done: false },
+      { text: "アンバサダープロフィールカード（所属・技術・アバター）", done: true },
+      { text: "得意分野別（LLMアプリ、プロンプト、MCP開発）タグ検索", done: true },
+      { text: "アンバサダー公募・参加申請モーダル & 相談ボタン（Slack連携）", done: true },
     ],
   },
   {
@@ -117,14 +117,14 @@ const tasksData: TaskItem[] = [
     href: "/agent-cases",
     phase: "Phase 2",
     targetDate: "2026年10月中旬 (W3)",
-    status: "planned",
+    status: "completed",
     category: "community",
     icon: "🟣",
-    description: "MightyLINK社内ですでに稼働・PoC中の自律型Subagents（コード自動レビュー、障害影響分析、仕様書生成）のアーキテクチャ図と定量効果を詳細掲載します。",
+    description: "MightyLINK社内ですでに稼働・PoC中の自律型Subagents（コード自動レビュー、障害影響分析、仕様書生成）のアーキテクチャ図と定量効果を詳細掲載しました。",
     items: [
-      { text: "エージェント構成図（Mermaid図）のインタラクティブ表示", done: false },
-      { text: "システムプロンプトの構成例 & 設計ベストプラクティス", done: false },
-      { text: "導入前後の工数削減実績（メトリクス）グラフの配置", done: false },
+      { text: "自律エージェント処理フロー（4ステップ構成）の可視化", done: true },
+      { text: "システムプロンプトの構成例 & 設計ベストプラクティス（モーダル表示）", done: true },
+      { text: "定量的工数削減実績（メトリクス）グリッド & 事例掲載申請フォーム", done: true },
     ],
   },
   {
@@ -134,14 +134,14 @@ const tasksData: TaskItem[] = [
     href: "/learning",
     phase: "Phase 2",
     targetDate: "2026年10月中旬 (W4)",
-    status: "planned",
+    status: "completed",
     category: "community",
     icon: "📚",
-    description: "過去に社内開催されたAntigravityハンズオン、プロンプト勉強会の録画アーカイブやスライド資料を体系化して集約します。",
+    description: "全社員向けセキュリティ必修からAntigravityエンジニア向けハンズオンまで体系的なカリキュラムと、過去の勉強会アーカイブを公開しました。",
     items: [
-      { text: "初級・中級・上級別のステップアップ学習ロードマップ", done: false },
-      { text: "社内勉強会スライド & YouTube/Drive録画への直リンク", done: false },
-      { text: "おすすめ外部認定資格（Google Cloud GenAI認定等）ガイド", done: false },
+      { text: "全社員・初級・中級・上級別のカリキュラム一覧 & 受講進捗バー", done: true },
+      { text: "社内勉強会スライド & 録画アーカイブへの直リンク", done: true },
+      { text: "チーム向けハンズオン・勉強会開催の相談受付導線", done: true },
     ],
   },
 
@@ -153,7 +153,7 @@ const tasksData: TaskItem[] = [
     href: "/gemini-stats",
     phase: "Phase 3",
     targetDate: "2026年10月下旬 (W5)",
-    status: "planned",
+    status: "in-progress",
     category: "data",
     icon: "💎",
     description: "現在固定モックデータとなっているグラフに、期間切り替え（日次・週次・月次）や部署別フィルタ、CSVインポート/エクスポート機能を実装します。",
@@ -170,7 +170,7 @@ const tasksData: TaskItem[] = [
     href: "/adoption",
     phase: "Phase 3",
     targetDate: "2026年10月下旬 (W6)",
-    status: "planned",
+    status: "in-progress",
     category: "data",
     icon: "👀",
     description: "全社的なAIツールの導入率、アンケートに基づく満足度推移、推定削減工数（月間合計時間）を可視化するダッシュボードを新設します。",
@@ -286,7 +286,7 @@ export default function RoadmapPage() {
                 <Sparkles className="w-3.5 h-3.5 text-cyan-600" />
                 <span>Phase 1〜4 全体進行度</span>
               </span>
-              <span className="font-bold text-cyan-700">{progressPercentage}% 完了 (Phase 1 進行中)</span>
+              <span className="font-bold text-cyan-700">{progressPercentage}% 完了 (Phase 2 完了 / Phase 3 進行中)</span>
             </div>
             <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/60">
               <div
@@ -302,7 +302,7 @@ export default function RoadmapPage() {
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-emerald-800 px-2 py-0.5 bg-emerald-100 rounded flex items-center space-x-1">
                   <span>✓</span>
-                  <span>Phase 1 (β公開完了)</span>
+                  <span>Phase 1 (完了)</span>
                 </span>
                 <span className="text-[10px] text-emerald-600 font-medium">9月下旬</span>
               </div>
@@ -312,10 +312,11 @@ export default function RoadmapPage() {
 
             <div className="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-blue-800 px-2 py-0.5 bg-blue-100 rounded">
-                  Phase 2 (進行中)
+                <span className="text-[11px] font-bold text-emerald-800 px-2 py-0.5 bg-emerald-100 rounded flex items-center space-x-1">
+                  <span>✓</span>
+                  <span>Phase 2 (公開完了)</span>
                 </span>
-                <span className="text-[10px] text-blue-600 font-medium">10月上旬〜</span>
+                <span className="text-[10px] text-emerald-600 font-medium">10月上旬</span>
               </div>
               <h4 className="font-bold text-slate-800 text-xs mt-1">コミュニティ & 事例</h4>
               <p className="text-[11px] text-slate-600">アンバサダー紹介、Subagents事例詳細、学習教材</p>
@@ -323,10 +324,10 @@ export default function RoadmapPage() {
 
             <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/50 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-amber-800 px-2 py-0.5 bg-amber-100 rounded">
-                  Phase 3 (予定)
+                <span className="text-[11px] font-bold text-blue-800 px-2 py-0.5 bg-blue-100 rounded">
+                  Phase 3 (進行中)
                 </span>
-                <span className="text-[10px] text-amber-600 font-medium">10月下旬〜</span>
+                <span className="text-[10px] text-blue-600 font-medium">10月下旬〜</span>
               </div>
               <h4 className="font-bold text-slate-800 text-xs mt-1">データ可視化 & 分析</h4>
               <p className="text-[11px] text-slate-600">利用統計フィルタ、全社AI活用率、ToolsHub整備</p>
