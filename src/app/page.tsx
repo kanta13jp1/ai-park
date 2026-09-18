@@ -87,6 +87,31 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ロードマップ案内バナー */}
+        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-[#3b4856] rounded-2xl p-5 md:p-6 text-white shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 border border-slate-700/60">
+          <div className="space-y-1 max-w-2xl">
+            <div className="flex items-center space-x-2">
+              <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 rounded text-[11px] font-semibold">
+                プロジェクト進捗
+              </span>
+              <span className="text-xs text-slate-300 font-mono">Phase 1〜4 計画公開中</span>
+            </div>
+            <h3 className="font-bold text-base md:text-lg text-white">
+              準備中機能の実装スケジュール & 開発ロードマップ
+            </h3>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              社内Skillsカタログ拡充、アイデア宣言ボード、利用統計ダッシュボードの動的連携など、準備中となっている各機能の対応スケジュールと進捗を随時公開しています。
+            </p>
+          </div>
+          <Link
+            href="/roadmap"
+            className="shrink-0 inline-flex items-center space-x-2 px-4 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl text-xs transition-colors shadow-sm self-start md:self-center"
+          >
+            <span>対応スケジュールを見る</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+
         {/* メインナビゲーションカードグリッド */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">

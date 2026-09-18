@@ -14,7 +14,8 @@ export interface NavSection {
 export const navigationSections: NavSection[] = [
   {
     items: [
-      { name: "ホーム", href: "/" }
+      { name: "ホーム", href: "/" },
+      { name: "開発ロードマップ", href: "/roadmap", icon: "🗺️", badge: "進行中" }
     ]
   },
   {
