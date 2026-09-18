@@ -47,14 +47,14 @@ const tasksData: TaskItem[] = [
     href: "/skills-hub",
     phase: "Phase 1",
     targetDate: "2026年9月下旬 (W1)",
-    status: "in-progress",
+    status: "completed",
     category: "interaction",
     icon: "🛠️",
-    description: "現在サンプル展示中の社内Skillsを、タグ・カテゴリで絞り込める検索機能および、エンジニアが自身の作成したSKILL.mdを共有・登録申請できるモーダルUIを実装します。",
+    description: "現在社内で推奨されている主要Skillsを、カテゴリタブやキーワードで絞り込める検索機能および、エンジニアが自作SKILL.mdを共有・登録申請できるモーダルUIを実装しました。",
     items: [
-      { text: "キーワード & カテゴリ（開発・分析・インフラ）フィルター", done: false },
-      { text: "新規Skill登録申請フォーム（モーダル）の追加", done: false },
-      { text: "公式SKILL.md作成ガイド & テンプレート即時コピー機能", done: true },
+      { text: "キーワード & カテゴリ（開発・分析・インフラ・セキュリティ）フィルター", done: true },
+      { text: "新規Skill登録申請フォーム（モーダル） & テンプレート即時挿入", done: true },
+      { text: "導入コマンド（agy CLI） & SKILL.md 定義内容ワンクリックコピー", done: true },
     ],
   },
   {
@@ -64,14 +64,14 @@ const tasksData: TaskItem[] = [
     href: "/idea-board",
     phase: "Phase 1",
     targetDate: "2026年9月下旬 (W2)",
-    status: "in-progress",
+    status: "completed",
     category: "interaction",
     icon: "💡",
-    description: "社内メンバーが自らAI活用のアイデアを起票し、いいねリアクションを送信できるUIを実装します。ブラウザ内に一時保存しつつ、社内Slackとの連携導線を整備します。",
+    description: "社内メンバーが自らAI活用のアイデアを起票し、いいねリアクションを送信できるUIを実装しました。検索・ステータス絞り込み機能も備えています。",
     items: [
-      { text: "アイデア新規投稿フォーム（タイトル・概要・タグ・ステータス）", done: false },
-      { text: "リアルタイムいいねカウントのインタラクション", done: false },
-      { text: "ステータス別（検証中 / アイデア募集中 / 本番開発中）タブ切替", done: true },
+      { text: "アイデア新規投稿フォーム（タイトル・概要・タグ・ステータス）", done: true },
+      { text: "リアルタイムいいねカウント & トグルリアクション", done: true },
+      { text: "ステータス別（検証中 / アイデア募集中 / 本番開発中）タブ切替 & キーワード検索", done: true },
     ],
   },
   {
@@ -81,14 +81,14 @@ const tasksData: TaskItem[] = [
     href: "/antigravity-info",
     phase: "Phase 1",
     targetDate: "2026年10月上旬 (W2)",
-    status: "in-progress",
+    status: "completed",
     category: "interaction",
     icon: "📅",
-    description: "AI CoE相談デスクの予約完了画面から、ワンクリックでGoogleカレンダーやOutlookに予定を追加できるリンク生成機能を実装します。",
+    description: "AI CoE相談デスクの予約完了画面から、ワンクリックでGoogleカレンダーに仮予定を追加できるリンク生成および予約メモコピー機能を実装しました。",
     items: [
-      { text: "予約スロット選択時のGoogle Calendar追加リンク生成", done: false },
-      { text: "予約確認メッセージ・事前質問の下書きコピー機能", done: false },
-      { text: "予約履歴のブラウザローカル保存とキャンセル機能", done: false },
+      { text: "予約スロット選択時のGoogle Calendar追加リンク生成", done: true },
+      { text: "予約確認メッセージ・事前質問の詳細メモコピー機能", done: true },
+      { text: "入力項目（所属部署・相談テーマ・事前メモ）のUI最適化", done: true },
     ],
   },
 
@@ -100,7 +100,7 @@ const tasksData: TaskItem[] = [
     href: "/ambassadors",
     phase: "Phase 2",
     targetDate: "2026年10月上旬 (W3)",
-    status: "planned",
+    status: "in-progress",
     category: "community",
     icon: "🤝",
     description: "各事業部・開発チームでAI活用をリードする「AIアンバサダー」のメンバー一覧、得意技術スタック（フロント、バックエンド、データ分析）、相談窓口を公開します。",
@@ -300,21 +300,22 @@ export default function RoadmapPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
             <div className="p-3.5 rounded-xl border border-blue-200 bg-blue-50/50 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-blue-800 px-2 py-0.5 bg-blue-100 rounded">
-                  Phase 1 (進行中)
+                <span className="text-[11px] font-bold text-emerald-800 px-2 py-0.5 bg-emerald-100 rounded flex items-center space-x-1">
+                  <span>✓</span>
+                  <span>Phase 1 (β公開完了)</span>
                 </span>
-                <span className="text-[10px] text-blue-600 font-medium">9月下旬〜</span>
+                <span className="text-[10px] text-emerald-600 font-medium">9月下旬</span>
               </div>
               <h4 className="font-bold text-slate-800 text-xs mt-1">インタラクション・申請</h4>
-              <p className="text-[11px] text-slate-600">Skills検索、アイデア投稿、OfficeHourカレンダー連携</p>
+              <p className="text-[11px] text-slate-600">Skills検索・申請、アイデア宣言、OfficeHour連携</p>
             </div>
 
             <div className="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-emerald-800 px-2 py-0.5 bg-emerald-100 rounded">
-                  Phase 2 (予定)
+                <span className="text-[11px] font-bold text-blue-800 px-2 py-0.5 bg-blue-100 rounded">
+                  Phase 2 (進行中)
                 </span>
-                <span className="text-[10px] text-emerald-600 font-medium">10月上旬〜</span>
+                <span className="text-[10px] text-blue-600 font-medium">10月上旬〜</span>
               </div>
               <h4 className="font-bold text-slate-800 text-xs mt-1">コミュニティ & 事例</h4>
               <p className="text-[11px] text-slate-600">アンバサダー紹介、Subagents事例詳細、学習教材</p>

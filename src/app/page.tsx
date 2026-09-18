@@ -25,11 +25,11 @@ export default function Home() {
     },
     {
       title: "社内Skillsカタログ",
-      description: "テスト自動化、規約ガード、BigQuery分析など社内公認スキル集の配布",
+      description: "テスト自動化、規約ガード、BigQuery分析など社内公認スキル集の配布・申請",
       icon: "🛠️",
       href: "/skills-hub",
-      badge: "🚧 準備中",
-      badgeColor: "bg-amber-100 text-amber-800 border border-amber-200",
+      badge: "β公開中",
+      badgeColor: "bg-emerald-100 text-emerald-800",
     },
     {
       title: "MCP外部ツール連携",
