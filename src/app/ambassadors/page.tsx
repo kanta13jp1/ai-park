@@ -3,6 +3,7 @@
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import BookingModal from "@/components/BookingModal";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import {
   Users,
   Sparkles,
@@ -168,24 +169,32 @@ export default function AmbassadorsPage() {
       <OfficeHourBanner />
 
       <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
+        <UnderConstructionAlert
+          statusType="draft"
+          title="📋 公募準備中・モデルプロフィール掲載中"
+          message="現在掲載されているアンバサダー情報は運用モデルケースです。第1期アンバサダーの公募・選定制度および正式相談窓口の開設を準備中です。"
+          prepDetails="社内アンバサダー選定基準の策定および各事業部からの公募受付フェーズ"
+          releaseDate="2026年10月23日(金)"
+        />
+
         {/* バナー: アンバサダー稼働中 */}
-        <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-900">
+        <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-950">
           <div className="flex items-start space-x-3">
-            <div className="p-2 bg-emerald-200/60 text-emerald-800 rounded-lg shrink-0 mt-0.5">
-              <Award className="w-5 h-5 text-emerald-700" />
+            <div className="p-2 bg-indigo-200/60 text-indigo-800 rounded-lg shrink-0 mt-0.5">
+              <Award className="w-5 h-5 text-indigo-700" />
             </div>
             <div className="space-y-0.5 text-xs">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-bold text-sm text-emerald-950 flex items-center space-x-1">
+                <span className="font-bold text-sm text-indigo-950 flex items-center space-x-1">
                   <span>🤝</span>
-                  <span>第1期 社内AIアンバサダーネットワーク稼働中</span>
+                  <span>第1期 社内AIアンバサダーネットワーク</span>
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900 font-semibold text-[10px]">
-                  Phase 2 機能稼働
+                <span className="px-2 py-0.5 rounded-full bg-sky-100 border border-sky-300 text-sky-900 font-semibold text-[10px]">
+                  📋 公募準備中
                 </span>
               </div>
-              <p className="text-emerald-800/90 leading-relaxed">
-                自チームの技術スタックや業務内容に最も近いアンバサダーに、直接SlackやOffice Hourを通じてAI活用・実装の相談が可能です。
+              <p className="text-indigo-900/90 leading-relaxed">
+                自チームの技術スタックや業務内容に最も近いアンバサダーに、直接SlackやOffice Hourを通じてAI活用・実装の相談が可能になる予定です。
               </p>
             </div>
           </div>

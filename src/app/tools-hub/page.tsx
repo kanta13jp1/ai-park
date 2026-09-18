@@ -2,6 +2,7 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import {
   Wrench,
   Terminal,
@@ -152,24 +153,32 @@ export default function ToolsHubPage() {
       />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
+        <UnderConstructionAlert
+          statusType="construction"
+          title="🚧 工事中・申請フロー試作版"
+          message="現在掲載されているライセンス利用申請フォームはUIプロトタイプです。社内ワークフロー基盤（承認ルート・Slack連携）への本番接続を準備中です。"
+          prepDetails="社内申請承認API連携およびIT資産管理システムとのID同期フェーズ"
+          releaseDate="2026年11月27日(金)"
+        />
+
         {/* バナー */}
-        <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-900">
+        <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-950">
           <div className="flex items-start space-x-3">
-            <div className="p-2 bg-emerald-200/60 text-emerald-800 rounded-lg shrink-0 mt-0.5">
-              <ShieldCheck className="w-5 h-5 text-emerald-700" />
+            <div className="p-2 bg-indigo-200/60 text-indigo-800 rounded-lg shrink-0 mt-0.5">
+              <ShieldCheck className="w-5 h-5 text-indigo-700" />
             </div>
             <div className="space-y-0.5 text-xs">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-bold text-sm text-emerald-950 flex items-center space-x-1">
+                <span className="font-bold text-sm text-indigo-950 flex items-center space-x-1">
                   <span>📍</span>
-                  <span>公認 AI Tools Hub & 申請フロー公開中</span>
+                  <span>公認 AI Tools Hub & 申請フロー（先行試作版）</span>
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900 font-semibold text-[10px]">
-                  Phase 3 機能稼働
+                <span className="px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-semibold text-[10px]">
+                  🚧 工事中（承認API準備中）
                 </span>
               </div>
-              <p className="text-emerald-800/90 leading-relaxed">
+              <p className="text-indigo-900/90 leading-relaxed">
                 社内で承認されている各AIツールのセキュリティ区分、利用推奨ユースケース、および新規ライセンス申請手順をまとめています。
               </p>
             </div>
@@ -179,7 +188,7 @@ export default function ToolsHubPage() {
             className="shrink-0 inline-flex items-center space-x-1.5 px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors self-end sm:self-center"
           >
             <PlusCircle size={14} />
-            <span>ツール利用申請を行う</span>
+            <span>ツール利用申請を試す</span>
           </button>
         </div>
 

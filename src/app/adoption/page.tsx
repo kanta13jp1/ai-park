@@ -2,6 +2,7 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import {
   Activity,
   Users,
@@ -86,24 +87,32 @@ export default function AdoptionPage() {
       />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
+        <UnderConstructionAlert
+          statusType="poc"
+          title="🧪 PoC検証中・シミュレーション表示"
+          message="現在表示されている全社AI活用率や満足度アンケート結果は試算モデル値です。現在、社内全社アンケートの実施および部署別実測ROI集計基盤を準備中です。"
+          prepDetails="2026年Q3全社AIアンケート集計および部署別ROI実測データの入力フェーズ"
+          releaseDate="2026年11月13日(金)"
+        />
+
         {/* バナー: Phase 3 稼働 */}
-        <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-900">
+        <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-950">
           <div className="flex items-start space-x-3">
-            <div className="p-2 bg-emerald-200/60 text-emerald-800 rounded-lg shrink-0 mt-0.5">
-              <Sparkles className="w-5 h-5 text-emerald-700" />
+            <div className="p-2 bg-indigo-200/60 text-indigo-800 rounded-lg shrink-0 mt-0.5">
+              <Sparkles className="w-5 h-5 text-indigo-700" />
             </div>
             <div className="space-y-0.5 text-xs">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-bold text-sm text-emerald-950 flex items-center space-x-1">
+                <span className="font-bold text-sm text-indigo-950 flex items-center space-x-1">
                   <span>👀</span>
-                  <span>全社AI活用推進ダッシュボード & ROIシミュレータ公開中</span>
+                  <span>全社AI活用推進ダッシュボード & ROIシミュレータ</span>
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900 font-semibold text-[10px]">
-                  Phase 3 機能稼働
+                <span className="px-2 py-0.5 rounded-full bg-purple-100 border border-purple-300 text-purple-900 font-semibold text-[10px]">
+                  🧪 PoC検証中
                 </span>
               </div>
-              <p className="text-emerald-800/90 leading-relaxed">
+              <p className="text-indigo-900/90 leading-relaxed">
                 全社フェーズ進捗、社内アンケート集計、および自チームの人数や想定時給に応じた工数削減シミュレーションが即座に実行可能です。
               </p>
             </div>

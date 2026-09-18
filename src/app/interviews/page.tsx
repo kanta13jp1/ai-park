@@ -144,6 +144,7 @@ export default function InterviewsPage() {
           title="📋 取材準備中・ドラフト事例モデル掲載"
           message="現在掲載されているインタビュー記事は、社内実務ユースケースに基づくモデルケース（ドラフト）です。正式な社内インタビューの取材・記事公開を順次準備しています。"
           prepDetails="社内各部署からの取材立候補を受付中（下の「取材に立候補する」ボタンより応募可能）"
+          releaseDate="2026年10月16日(金)"
         />
         {/* バナー */}
         <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-900">

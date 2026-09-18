@@ -2,6 +2,7 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import {
   BarChart3,
   TrendingUp,
@@ -159,24 +160,32 @@ export default function GeminiStatsPage() {
       />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
+        <UnderConstructionAlert
+          statusType="construction"
+          title="🚧 工事中・サンプルシミュレーション表示中"
+          message="現在表示されているMAUや部署別プロンプト推移はサンプル・シミュレーション値です。現在、社内BigQuery利用ログデータパイプライン接続を準備中です。"
+          prepDetails="BigQuery監査ログパイプラインおよび日次MAU実データ自動集計バッチの構築フェーズ"
+          releaseDate="2026年11月20日(金)"
+        />
+
         {/* バナー */}
-        <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-900">
+        <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-950">
           <div className="flex items-start space-x-3">
-            <div className="p-2 bg-emerald-200/60 text-emerald-800 rounded-lg shrink-0 mt-0.5">
-              <Sparkles className="w-5 h-5 text-emerald-700" />
+            <div className="p-2 bg-indigo-200/60 text-indigo-800 rounded-lg shrink-0 mt-0.5">
+              <Sparkles className="w-5 h-5 text-indigo-700" />
             </div>
             <div className="space-y-0.5 text-xs">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-bold text-sm text-emerald-950 flex items-center space-x-1">
+                <span className="font-bold text-sm text-indigo-950 flex items-center space-x-1">
                   <span>💎</span>
-                  <span>利用状況ダッシュボード（動的分析版）稼働中</span>
+                  <span>利用状況ダッシュボード（動的分析シミュレータ）</span>
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900 font-semibold text-[10px]">
-                  Phase 3 機能稼働
+                <span className="px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-semibold text-[10px]">
+                  🚧 工事中（データ連携準備中）
                 </span>
               </div>
-              <p className="text-emerald-800/90 leading-relaxed">
+              <p className="text-indigo-900/90 leading-relaxed">
                 期間別の集計切り替え、CSVダウンロード、および社内利用ログのインポートによる動的シミュレーションに対応しています。
               </p>
             </div>
