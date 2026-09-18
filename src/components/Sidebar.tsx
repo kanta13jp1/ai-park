@@ -6,6 +6,7 @@ import Image from "next/image";
 import { navigationSections } from "@/data/navigation";
 import { ExternalLink, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { basePath } from "@/lib/basePath";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -41,7 +42,7 @@ export default function Sidebar() {
           <div className="flex items-center space-x-2 mb-3">
             <div className="bg-slate-900/60 border border-slate-600/50 px-3 py-1.5 rounded-lg shadow-sm flex items-center">
               <Image
-                src="/images/mightylink-logo.png"
+                src={`${basePath}/images/mightylink-logo.png`}
                 alt="MightyLINK"
                 width={130}
                 height={30}
