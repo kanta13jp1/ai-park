@@ -8,6 +8,7 @@ export interface NavItem {
 
 export interface NavSection {
   title?: string;
+  href?: string;
   items: NavItem[];
 }
 
@@ -20,12 +21,13 @@ export const navigationSections: NavSection[] = [
   },
   {
     title: "■ 使い方・学び",
+    href: "/how-to",
     items: [
-      { name: "Antigravity導入ガイド", href: "/guide", icon: "🚀" },
-      { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "β公開" },
-      { name: "MCP外部ツール連携", href: "/mcp-hub", icon: "🔌" },
-      { name: "学習リソース・勉強会", href: "/learning", icon: "📚", badge: "公開中" },
-      { name: "Antigravity情報局", href: "/antigravity-info", icon: "🌌" },
+      { name: "AIツール一覧", href: "/tools", icon: "🤖" },
+      { name: "教育用コンテンツ", href: "/learning", icon: "✍️", badge: "公開中" },
+      { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️" },
+      { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️" },
+      { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "β" },
     ]
   },
   {

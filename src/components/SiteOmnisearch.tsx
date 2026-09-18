@@ -22,6 +22,13 @@ interface SearchIndexItem {
 
 const siteSearchIndex: SearchIndexItem[] = [
   {
+    title: "使い方・学び 総合ハブ",
+    category: "ナレッジ",
+    href: "/how-to",
+    description: "AIツール一覧、教育用コンテンツ、AI活用インタビュー、AWS・クラウド情報局の総合案内ポータル",
+    keywords: ["使い方", "学び", "ハブ", "ポータル", "教育", "ツール一覧", "インタビュー", "aws", "クラウド", "初心者"],
+  },
+  {
     title: "Google Antigravity 導入ガイド",
     category: "導入・設定",
     href: "/guide",

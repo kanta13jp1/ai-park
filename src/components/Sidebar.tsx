@@ -64,9 +64,23 @@ export default function Sidebar() {
           {navigationSections.map((section, secIdx) => (
             <div key={secIdx} className="space-y-1">
               {section.title && (
-                <div className="px-3 py-1 text-xs font-semibold text-slate-300/80 tracking-wider">
-                  {section.title}
-                </div>
+                section.href ? (
+                  <Link
+                    href={section.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block px-3 py-1 text-xs font-semibold tracking-wider rounded transition-colors ${
+                      pathname === section.href || pathname.startsWith(section.href + "/")
+                        ? "text-sky-300 bg-sky-950/40 font-bold"
+                        : "text-slate-300/90 hover:text-white hover:bg-slate-600/30"
+                    }`}
+                  >
+                    {section.title}
+                  </Link>
+                ) : (
+                  <div className="px-3 py-1 text-xs font-semibold text-slate-300/80 tracking-wider">
+                    {section.title}
+                  </div>
+                )
               )}
               <div className="space-y-0.5">
                 {section.items.map((item) => {
