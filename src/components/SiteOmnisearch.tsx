@@ -22,6 +22,13 @@ interface SearchIndexItem {
 
 const siteSearchIndex: SearchIndexItem[] = [
   {
+    title: "ご意見・改善ToDoボード",
+    category: "フィードバック",
+    href: "/feedback-todo",
+    description: "社員からのご意見・改善要望の蓄積、進捗管理、タスク起票、CSVエクスポート",
+    keywords: ["ご意見", "改善", "todo", "フィードバック", "要望", "バックログ", "チャット", "杉村", "タスク", "起票"],
+  },
+  {
     title: "使い方・学び 総合ハブ",
     category: "ナレッジ",
     href: "/how-to",

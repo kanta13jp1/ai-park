@@ -19,6 +19,7 @@ import {
   Boxes,
   Plug,
   Award,
+  ChevronRight,
 } from "lucide-react";
 
 export default function Home() {
@@ -82,9 +83,174 @@ export default function Home() {
         isHome={true}
       />
 
-      <OfficeHourBanner />
+      {/* メインコンテンツエリア */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-8 flex-1">
+        {/* 社員フィードバック反映アナウンスバナー */}
+        <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-slate-900 border border-indigo-700/60 rounded-2xl p-4 sm:p-5 text-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start sm:items-center space-x-3.5">
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center shrink-0 text-indigo-300 shadow-inner">
+              <Sparkles size={20} />
+            </div>
+            <div className="space-y-0.5">
+              <div className="flex items-center space-x-2">
+                <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300 font-bold border border-emerald-400/30">
+                  新機能
+                </span>
+                <span className="text-xs font-semibold text-indigo-200">社員のご意見から改善中</span>
+              </div>
+              <h3 className="font-bold text-sm sm:text-base text-white">
+                社内Chatでいただいたご意見を「改善ToDoボード」として蓄積・反映しています
+              </h3>
+              <p className="text-xs text-slate-300">
+                杉村さんからの「シンプル導線」「導入・初級・実践編」や小林さんからのアカウント疑問などをタスク化しました。
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/feedback-todo"
+            className="shrink-0 inline-flex items-center space-x-1.5 px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-xs transition-colors shadow-xs self-start sm:self-center"
+          >
+            <span>ご意見・改善ToDoを見る</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-10">
+        {/* 杉村さんのご意見を反映：はじめての方向け 迷わない3ステップ導線 */}
+        <section className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-xs space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-lg">🌱</span>
+                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
+                  はじめての方へ：迷わない社内AI活用 3ステップ
+                </h3>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                「情報が多くて迷子になりそう」というお声に応え、最短で実務に活かせるステップを整理しました。
+              </p>
+            </div>
+            <span className="text-xs text-indigo-600 font-bold bg-indigo-50 px-2.5 py-1 rounded-full self-start sm:self-center">
+              まずはここから！
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Step 1: 導入編 */}
+            <Link
+              href="/guide"
+              className="group p-5 rounded-xl border border-sky-200 bg-sky-50/40 hover:bg-sky-50 hover:border-sky-400 hover:shadow-md transition-all flex flex-col justify-between space-y-3"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-extrabold text-sky-600 bg-white px-2 py-0.5 rounded border border-sky-200">
+                    Step 01
+                  </span>
+                  <span className="text-xs text-slate-400 font-semibold">所要 10分</span>
+                </div>
+                <h4 className="font-bold text-slate-900 group-hover:text-sky-700 text-base flex items-center space-x-1.5">
+                  <span>🔰 AI導入編</span>
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Antigravityのインストールと、VS Code / IDEの日本語化設定手順。迷わず使える環境をセットアップします。
+                </p>
+              </div>
+              <div className="pt-3 border-t border-sky-100 flex items-center justify-between text-xs font-bold text-sky-600">
+                <span>導入手順書を見る</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Step 2: 初級編 */}
+            <Link
+              href="/learning"
+              className="group p-5 rounded-xl border border-amber-200 bg-amber-50/40 hover:bg-amber-50 hover:border-amber-400 hover:shadow-md transition-all flex flex-col justify-between space-y-3"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-extrabold text-amber-700 bg-white px-2 py-0.5 rounded border border-amber-200">
+                    Step 02
+                  </span>
+                  <span className="text-xs text-slate-400 font-semibold">初心者向け</span>
+                </div>
+                <h4 className="font-bold text-slate-900 group-hover:text-amber-800 text-base flex items-center space-x-1.5">
+                  <span>📖 AI初級編</span>
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Antigravityの基本的なプロンプト指示、ファイル編集の依頼法、エラー解決の基本手順書（チートシート）。
+                </p>
+              </div>
+              <div className="pt-3 border-t border-amber-100 flex items-center justify-between text-xs font-bold text-amber-700">
+                <span>基本手順書を見る</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Step 3: 実践編 */}
+            <Link
+              href="/agent-cases"
+              className="group p-5 rounded-xl border border-purple-200 bg-purple-50/40 hover:bg-purple-50 hover:border-purple-400 hover:shadow-md transition-all flex flex-col justify-between space-y-3"
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-extrabold text-purple-700 bg-white px-2 py-0.5 rounded border border-purple-200">
+                    Step 03
+                  </span>
+                  <span className="text-xs text-slate-400 font-semibold">社内事例</span>
+                </div>
+                <h4 className="font-bold text-slate-900 group-hover:text-purple-800 text-base flex items-center space-x-1.5">
+                  <span>🏢 AI実践編</span>
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  社内のAI関連プロジェクトの最新状況、他部署での活用事例、過去の社内勉強会アーカイブ動画を掲載。
+                </p>
+              </div>
+              <div className="pt-3 border-t border-purple-100 flex items-center justify-between text-xs font-bold text-purple-700">
+                <span>社内プロジェクト・事例を見る</span>
+                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+          </div>
+
+          {/* 注目のサブ導線（ビジネスモデル懸賞 ＆ 注意事項） */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+            <Link
+              href="/idea-board"
+              className="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-indigo-50/60 border border-slate-200 hover:border-indigo-300 rounded-xl transition-all"
+            >
+              <div className="flex items-center space-x-3">
+                <span className="text-xl">💡</span>
+                <div>
+                  <h5 className="font-bold text-xs text-slate-900">
+                    社内AIビジネスモデル提案（懸賞・企画）
+                  </h5>
+                  <p className="text-[11px] text-slate-500">
+                    AIを使った新しい業務改革・事業アイデアの宣言ボード
+                  </p>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-slate-400" />
+            </Link>
+
+            <Link
+              href="/tools-hub"
+              className="flex items-center justify-between p-3.5 bg-slate-50 hover:bg-rose-50/60 border border-slate-200 hover:border-rose-300 rounded-xl transition-all"
+            >
+              <div className="flex items-center space-x-3">
+                <span className="text-xl">⚠️</span>
+                <div>
+                  <h5 className="font-bold text-xs text-slate-900">
+                    社内AI利用時の注意事項・セキュリティ基準
+                  </h5>
+                  <p className="text-[11px] text-slate-500">
+                    機密情報マスキングルールとLevel 1〜3早見表
+                  </p>
+                </div>
+              </div>
+              <ChevronRight size={16} className="text-slate-400" />
+            </Link>
+          </div>
+        </section>
+
         {/* 1. 「何がしたい？」目的に合わせてページへジャンプ (参考サイト完全準拠) */}
         <PurposeJump />
 
