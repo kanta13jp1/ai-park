@@ -49,11 +49,11 @@ export default function Home() {
     },
     {
       title: "利用状況ダッシュボード",
-      description: "各部署のAntigravity / Gemini Enterprise 活用率・プロンプト推移レポート",
+      description: "各部署のAntigravity / Gemini 活用率・プロンプト推移・CSV入出力分析",
       icon: "💎",
       href: "/gemini-stats",
-      badge: "🚧 モック",
-      badgeColor: "bg-amber-100 text-amber-800 border border-amber-200",
+      badge: "稼働中",
+      badgeColor: "bg-blue-100 text-blue-800",
     },
   ];
 

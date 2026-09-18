@@ -33,9 +33,9 @@ export const navigationSections: NavSection[] = [
     items: [
       { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β公開" },
       { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "公開中" },
-      { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "準備中" },
-      { name: "利用状況ダッシュボード", href: "/gemini-stats", icon: "💎", badge: "モック" },
-      { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "準備中" },
+      { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "公開中" },
+      { name: "利用状況ダッシュボード", href: "/gemini-stats", icon: "💎", badge: "稼働中" },
+      { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "公開中" },
     ]
   },
   {

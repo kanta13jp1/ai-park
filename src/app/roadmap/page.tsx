@@ -153,14 +153,14 @@ const tasksData: TaskItem[] = [
     href: "/gemini-stats",
     phase: "Phase 3",
     targetDate: "2026年10月下旬 (W5)",
-    status: "in-progress",
+    status: "completed",
     category: "data",
     icon: "💎",
-    description: "現在固定モックデータとなっているグラフに、期間切り替え（日次・週次・月次）や部署別フィルタ、CSVインポート/エクスポート機能を実装します。",
+    description: "期間切り替え（7日/30日/90日）、部署別フィルタ、CSVインポート/エクスポート機能、モデル別トークン消費シェアを実装しました。",
     items: [
-      { text: "集計期間セレクター（過去7日間 / 30日間 / 3ヶ月）", done: false },
-      { text: "部署・チーム別のアクティブ利用率フィルター", done: false },
-      { text: "社内利用集計データのCSVエクスポート機能", done: false },
+      { text: "集計期間セレクター（過去7日間 / 30日間 / 90日間）動的切替", done: true },
+      { text: "部署・チーム別のアクティブ利用率フィルター & 検索バー", done: true },
+      { text: "社内利用集計データのCSVエクスポート & サンプルインポート機能", done: true },
     ],
   },
   {
@@ -170,14 +170,14 @@ const tasksData: TaskItem[] = [
     href: "/adoption",
     phase: "Phase 3",
     targetDate: "2026年10月下旬 (W6)",
-    status: "in-progress",
+    status: "completed",
     category: "data",
     icon: "👀",
-    description: "全社的なAIツールの導入率、アンケートに基づく満足度推移、推定削減工数（月間合計時間）を可視化するダッシュボードを新設します。",
+    description: "自チームの人数や想定時給に応じた年間削減工数・コストROIシミュレータ、全社フェーズ進捗、社内アンケート集計を公開しました。",
     items: [
-      { text: "事業部別のAIツール利用浸透度グラフ", done: false },
-      { text: "「削減できた工数」を試算する簡易ROIシミュレータ", done: false },
-      { text: "定期社内アンケート結果サマリーの自動反映エリア", done: false },
+      { text: "チーム人数・平均時給・削減時間に基づくリアルタイムROI試算機能", done: true },
+      { text: "全社AI活用推進フェーズマップ (Phase 1〜4)", done: true },
+      { text: "社員満足度アンケート (91.8%向上実感) & 活用TOP業務サマリー", done: true },
     ],
   },
   {
@@ -187,14 +187,14 @@ const tasksData: TaskItem[] = [
     href: "/tools-hub",
     phase: "Phase 3",
     targetDate: "2026年11月上旬 (W6)",
-    status: "planned",
+    status: "completed",
     category: "data",
     icon: "📍",
-    description: "社内で利用可能な各種生成AIツール（Antigravity, Gemini Code Assist, ChatGPT Enterprise, Claude等）の利用規約・セキュリティ区分・アカウント申請手順を整理します。",
+    description: "社内公認AIツール（Antigravity, Gemini, Claude, ChatGPT等）のセキュリティ基準（Level 1〜3）、推奨ユースケース、ライセンス利用申請フォームを整備しました。",
     items: [
-      { text: "ツール別セキュリティ基準（機密情報取扱い可否マトリクス）", done: false },
-      { text: "ライセンス利用申請フォームへのワンクリック導線", done: false },
-      { text: "各ツールの利用推奨ユースケース比較表", done: false },
+      { text: "社内データ取り扱いセキュリティ基準マトリクス（機密情報可否）", done: true },
+      { text: "ライセンス利用申請モーダル（誓約書チェック・即時受付フロー）", done: true },
+      { text: "社内開発ユーティリティ集（マスキング・プロンプトライブラリ・SDK）", done: true },
     ],
   },
 
@@ -206,7 +206,7 @@ const tasksData: TaskItem[] = [
     href: "/",
     phase: "Phase 4",
     targetDate: "2026年11月中旬以降",
-    status: "planned",
+    status: "in-progress",
     category: "system",
     icon: "⚡",
     description: "社内Slack（#ai-park）への更新通知Botや、GitHub Discussions / Issueとの自動双方向同期を整備します。",
@@ -286,7 +286,7 @@ export default function RoadmapPage() {
                 <Sparkles className="w-3.5 h-3.5 text-cyan-600" />
                 <span>Phase 1〜4 全体進行度</span>
               </span>
-              <span className="font-bold text-cyan-700">{progressPercentage}% 完了 (Phase 2 完了 / Phase 3 進行中)</span>
+              <span className="font-bold text-cyan-700">{progressPercentage}% 完了 (Phase 3 完了 / Phase 4 進行中)</span>
             </div>
             <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/60">
               <div
@@ -314,7 +314,7 @@ export default function RoadmapPage() {
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-bold text-emerald-800 px-2 py-0.5 bg-emerald-100 rounded flex items-center space-x-1">
                   <span>✓</span>
-                  <span>Phase 2 (公開完了)</span>
+                  <span>Phase 2 (完了)</span>
                 </span>
                 <span className="text-[10px] text-emerald-600 font-medium">10月上旬</span>
               </div>
@@ -324,10 +324,11 @@ export default function RoadmapPage() {
 
             <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/50 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-blue-800 px-2 py-0.5 bg-blue-100 rounded">
-                  Phase 3 (進行中)
+                <span className="text-[11px] font-bold text-emerald-800 px-2 py-0.5 bg-emerald-100 rounded flex items-center space-x-1">
+                  <span>✓</span>
+                  <span>Phase 3 (公開完了)</span>
                 </span>
-                <span className="text-[10px] text-blue-600 font-medium">10月下旬〜</span>
+                <span className="text-[10px] text-emerald-600 font-medium">10月下旬</span>
               </div>
               <h4 className="font-bold text-slate-800 text-xs mt-1">データ可視化 & 分析</h4>
               <p className="text-[11px] text-slate-600">利用統計フィルタ、全社AI活用率、ToolsHub整備</p>
@@ -335,10 +336,10 @@ export default function RoadmapPage() {
 
             <div className="p-3.5 rounded-xl border border-purple-200 bg-purple-50/50 space-y-1">
               <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-purple-800 px-2 py-0.5 bg-purple-100 rounded">
-                  Phase 4 (予定)
+                <span className="text-[11px] font-bold text-blue-800 px-2 py-0.5 bg-blue-100 rounded">
+                  Phase 4 (進行中)
                 </span>
-                <span className="text-[10px] text-purple-600 font-medium">11月中旬〜</span>
+                <span className="text-[10px] text-blue-600 font-medium">11月中旬〜</span>
               </div>
               <h4 className="font-bold text-slate-800 text-xs mt-1">システム連携基盤</h4>
               <p className="text-[11px] text-slate-600">Slack Bot通知、Discussions同期、SSO連携</p>
