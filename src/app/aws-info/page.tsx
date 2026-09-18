@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import BookingModal from "@/components/BookingModal";
@@ -184,14 +184,14 @@ export default function AwsInfoPage() {
           <div className="w-full max-w-md bg-[#faf7f0] border-2 border-[#e6decb] rounded-3xl p-6 sm:p-8 shadow-xl shadow-amber-900/5 text-center relative overflow-hidden">
             {/* 上部タグ */}
             <div className="inline-block px-3 py-1 rounded-full bg-[#ecdcc4] text-[#784d1b] text-[11px] font-bold tracking-wider mb-4 border border-[#debfa0]">
-              MightyLINK AWS推進エバンジェリスト
+              MightyLINK クラウド推進デスク
             </div>
 
             {/* 写真フレーム（レトロクラシックなポートレート） */}
             <div className="relative mx-auto w-56 h-56 sm:w-64 sm:h-64 rounded-2xl overflow-hidden shadow-md border-4 border-white bg-slate-200 mb-3 group">
               <img
                 src={`${basePath}/images/aws-evangelist.jpg`}
-                alt="AWS推進エバンジェリスト 馬渕さん"
+                alt="MightyLINK クラウド推進相談役"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center pb-3">
@@ -201,18 +201,18 @@ export default function AwsInfoPage() {
               </div>
             </div>
 
-            {/* 参考サイト完全オマージュのアイコニックな注記 */}
+            {/* 親しみやすい社内公認注記（実在人物ではなく社内公認キャラクター） */}
             <p className="text-xs sm:text-sm font-bold text-slate-600 tracking-wide mb-4">
-              ※馬渕さんへの許可は得ています
+              ※社内クラウド推進チーム公認（相談大歓迎）
             </p>
 
             {/* エバンジェリスト名 & 役職 */}
             <div className="space-y-1 border-t border-[#e2d8c0] pt-4">
               <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-                馬渕 誠 <span className="text-sm font-normal text-slate-600">（まぶち まこと）</span>
+                MightyLINK クラウド相談役
               </h3>
               <p className="text-xs text-amber-800 font-semibold">
-                クラウド推進部 / AWS Ambassadors & 生成AIリード
+                クラウド推進部 / AWS & Amazon Bedrock 活用支援チーム
               </p>
             </div>
 
@@ -230,7 +230,7 @@ export default function AwsInfoPage() {
                 className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center justify-center space-x-2 cursor-pointer group"
               >
                 <Calendar className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                <span>馬渕さんに個別相談する（Office Hour 予約）</span>
+                <span>クラウド相談役に個別相談する（Office Hour 予約）</span>
               </button>
               <div className="flex items-center justify-center space-x-3 text-[11px] text-slate-500 pt-1">
                 <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
