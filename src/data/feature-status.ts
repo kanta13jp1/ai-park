@@ -43,6 +43,18 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     releaseCondition: "初期バージョン公開完了",
   },
   {
+    id: "agent-tools",
+    name: "エージェント・ツール 総合ハブ",
+    href: "/agent-tools",
+    isVerified: true,
+    status: "verified",
+    evidence: "エージェント・ツール配下5大機能への案内リンクおよび活用ステップ確認完了",
+    currentBadge: "公開中",
+    disclaimer: "",
+    releaseDate: "公開済み",
+    releaseCondition: "初期バージョン公開完了",
+  },
+  {
     id: "guide",
     name: "Antigravity導入ガイド",
     href: "/guide",

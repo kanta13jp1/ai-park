@@ -32,6 +32,7 @@ export const navigationSections: NavSection[] = [
   },
   {
     title: "🖥️ エージェント・ツール",
+    href: "/agent-tools",
     items: [
       { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β版" },
       { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "🧪 PoC中" },
