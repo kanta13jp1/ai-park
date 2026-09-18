@@ -23,28 +23,28 @@ export const navigationSections: NavSection[] = [
     title: "■ 使い方・学び",
     href: "/how-to",
     items: [
-      { name: "AIツール一覧", href: "/tools", icon: "🤖" },
-      { name: "教育用コンテンツ", href: "/learning", icon: "✍️", badge: "公開中" },
-      { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️" },
+      { name: "AIツール一覧", href: "/tools", icon: "🤖", badge: "🧪 PoC中" },
+      { name: "教育用コンテンツ", href: "/learning", icon: "✍️" },
+      { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️", badge: "📋 準備中" },
       { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️" },
-      { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "β" },
+      { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "β版" },
     ]
   },
   {
     title: "🖥️ エージェント・ツール",
     items: [
-      { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β公開" },
-      { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "公開中" },
-      { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "公開中" },
-      { name: "利用状況ダッシュボード", href: "/gemini-stats", icon: "💎", badge: "稼働中" },
-      { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "公開中" },
+      { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β版" },
+      { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "🧪 PoC中" },
+      { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "🧪 PoC中" },
+      { name: "利用状況ダッシュボード", href: "/gemini-stats", icon: "💎", badge: "🚧 工事中" },
+      { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "🚧 工事中" },
     ]
   },
   {
     title: "🗨️ コミュニティ",
     items: [
-      { name: "AIアンバサダー", href: "/ambassadors", icon: "🤝", badge: "稼働中" },
-      { name: "ご意見・改善ToDo", href: "/feedback-todo", icon: "📋", badge: "新着" },
+      { name: "AIアンバサダー", href: "/ambassadors", icon: "🤝", badge: "📋 準備中" },
+      { name: "ご意見・改善ToDo", href: "/feedback-todo", icon: "📋", badge: "β版" },
     ]
   },
   {

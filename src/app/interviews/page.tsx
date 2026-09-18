@@ -2,6 +2,7 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import {
   UserCheck,
   MessageSquare,
@@ -131,14 +132,19 @@ export default function InterviewsPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center">
       <HeroBanner
-        title="AI活用インタビュー"
-        subtitle="MightyLINK 社内の開発・業務現場で成果を出しているプロジェクトのリアルな生の声"
+        title="社員インタビュー・活用事例集"
+        subtitle="社内業務でAIツールを実践導入している社員の生の声・工夫・成果を共有します"
       />
-      <OfficeHourBanner />
 
       <div className="max-w-5xl w-full mx-auto px-4 py-8 space-y-6">
+        <UnderConstructionAlert
+          statusType="draft"
+          title="📋 取材準備中・ドラフト事例モデル掲載"
+          message="現在掲載されているインタビュー記事は、社内実務ユースケースに基づくモデルケース（ドラフト）です。正式な社内インタビューの取材・記事公開を順次準備しています。"
+          prepDetails="社内各部署からの取材立候補を受付中（下の「取材に立候補する」ボタンより応募可能）"
+        />
         {/* バナー */}
         <div className="bg-emerald-50 border border-emerald-300 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-emerald-900">
           <div className="flex items-start space-x-3">

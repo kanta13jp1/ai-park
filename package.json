@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
+    "check:gate": "node scripts/verify-deployment-gate.mjs",
     "start": "next start",
     "lint": "eslint"
   },

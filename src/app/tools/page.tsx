@@ -21,6 +21,7 @@ import {
   Bot,
   Zap,
 } from "lucide-react";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 
 interface MatrixTool {
   id: number;
@@ -552,6 +553,13 @@ export default function ToolsPage() {
               社内マスターシートの最新登録情報が自動反映されます。
             </p>
           </div>
+
+          <UnderConstructionAlert
+            statusType="poc"
+            title="🧪 PoC検証中・サンプルデータ表示"
+            message="本ツールのマトリクス適合度・残ライセンス数は検証用サンプルデータです。現在、社内Google SheetsマスターAPI連携および本番反映を準備中です。"
+            prepDetails="スプレッドシート連携APIおよび権限管理仕様の策定フェーズ"
+          />
 
           {/* 4大KPIカード */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
