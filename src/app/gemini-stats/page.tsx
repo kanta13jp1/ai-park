@@ -1,409 +1,516 @@
 "use client";
 
-import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import {
-  BarChart3,
-  TrendingUp,
-  Users,
-  MessageSquare,
-  Award,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
   Download,
-  Upload,
-  Sparkles,
-  Calendar,
-  Filter,
   Search,
-  CheckCircle2,
-  RefreshCw,
-  FileSpreadsheet,
-  PieChart,
+  Users,
+  TrendingUp,
+  BarChart3,
+  Sparkles,
+  HelpCircle,
+  Calendar,
+  Layers,
+  Activity,
+  Award,
+  Filter,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
-interface DeptStat {
+interface DeptMetric {
   name: string;
-  rate: number;
-  users: number;
-  prompts: number;
+  category: "tech" | "business" | "corporate" | "project";
+  maxVal: number;
+  medianVal: number;
+  avgVal: number;
+  headcount: number;
 }
 
-const defaultStatsByPeriod: Record<
-  string,
-  {
-    mau: string;
-    mauDiff: string;
-    totalPrompts: string;
-    promptsDiff: string;
-    activeUsers: string;
-    totalLicense: string;
-    topDept: string;
-    topRate: string;
-    departments: DeptStat[];
-  }
-> = {
-  "30d": {
-    mau: "79.4%",
-    mauDiff: "+4.2% (前月比)",
-    totalPrompts: "109.9K",
-    promptsDiff: "+18%",
-    activeUsers: "1,240",
-    totalLicense: "1,500名",
-    topDept: "DX推進部",
-    topRate: "94%",
-    departments: [
-      { name: "DX・イノベーション推進部", rate: 94, users: 48, prompts: 18420 },
-      { name: "クラウド基盤推進部", rate: 89, users: 72, prompts: 24800 },
-      { name: "エンタープライズソリューション部", rate: 82, users: 110, prompts: 31200 },
-      { name: "基幹システム開発部", rate: 76, users: 65, prompts: 14500 },
-      { name: "人事・総務・経営企画部", rate: 71, users: 54, prompts: 12100 },
-      { name: "デジタルサービス推進部", rate: 64, users: 42, prompts: 8900 },
+type SortField = "name" | "maxVal" | "medianVal" | "avgVal" | "headcount";
+type SortOrder = "asc" | "desc";
+
+// 月次データ（2026年6月〜9月）
+const monthlyData: Record<string, { label: string; periodNote: string; data: DeptMetric[] }> = {
+  "2026-09": {
+    label: "2026年9月 (最新)",
+    periodNote: "※ データ取得は2026年9月、部門名は2026年",
+    data: [
+      { name: "次世代クラウド基盤プロジェクト", category: "project", maxVal: 2479, medianVal: 111, avgVal: 244, headcount: 113 },
+      { name: "AI・イノベーション推進部", category: "tech", maxVal: 2399, medianVal: 309, avgVal: 506, headcount: 26 },
+      { name: "デジタルチャネルソリューション部", category: "tech", maxVal: 1785, medianVal: 165, avgVal: 321, headcount: 71 },
+      { name: "品質技術・自動化テスト統括部", category: "tech", maxVal: 1115, medianVal: 67, avgVal: 200, headcount: 15 },
+      { name: "CXマネジメント・顧客体験部", category: "business", maxVal: 1083, medianVal: 114, avgVal: 201, headcount: 47 },
+      { name: "バリュークリエーション推進部", category: "business", maxVal: 1059, medianVal: 92, avgVal: 185, headcount: 74 },
+      { name: "経営企画推進部", category: "corporate", maxVal: 1009, medianVal: 247, avgVal: 451, headcount: 4 },
+      { name: "プラットフォーム運用システム部", category: "tech", maxVal: 895, medianVal: 61, avgVal: 137, headcount: 78 },
+      { name: "セキュリティ・インフラ整備部", category: "tech", maxVal: 890, medianVal: 58, avgVal: 133, headcount: 44 },
+      { name: "エンタープライズDX推進プロジェクト", category: "project", maxVal: 868, medianVal: 84, avgVal: 165, headcount: 39 },
+      { name: "経営管理統括部", category: "corporate", maxVal: 810, medianVal: 67, avgVal: 169, headcount: 16 },
+      { name: "人材・組織戦略部", category: "corporate", maxVal: 693, medianVal: 77, avgVal: 130, headcount: 81 },
+      { name: "セキュリティマネジメント統括室", category: "corporate", maxVal: 433, medianVal: 48, avgVal: 116, headcount: 15 },
     ],
   },
-  "7d": {
-    mau: "82.1%",
-    mauDiff: "+2.8% (前週比)",
-    totalPrompts: "29.4K",
-    promptsDiff: "+12%",
-    activeUsers: "1,180",
-    totalLicense: "1,500名",
-    topDept: "クラウド基盤推進部",
-    topRate: "96%",
-    departments: [
-      { name: "クラウド基盤推進部", rate: 96, users: 74, prompts: 7200 },
-      { name: "DX・イノベーション推進部", rate: 93, users: 47, prompts: 5100 },
-      { name: "エンタープライズソリューション部", rate: 84, users: 112, prompts: 8600 },
-      { name: "基幹システム開発部", rate: 78, users: 66, prompts: 4200 },
-      { name: "人事・総務・経営企画部", rate: 69, users: 52, prompts: 2500 },
-      { name: "デジタルサービス推進部", rate: 62, users: 40, prompts: 1800 },
-    ],
-  },
-  "90d": {
-    mau: "74.8%",
-    mauDiff: "+15.2% (前四半期比)",
-    totalPrompts: "318.5K",
-    promptsDiff: "+42%",
-    activeUsers: "1,290",
-    totalLicense: "1,500名",
-    topDept: "DX推進部",
-    topRate: "91%",
-    departments: [
-      { name: "DX・イノベーション推進部", rate: 91, users: 46, prompts: 54000 },
-      { name: "クラウド基盤推進部", rate: 86, users: 69, prompts: 71000 },
-      { name: "エンタープライズソリューション部", rate: 79, users: 105, prompts: 89000 },
-      { name: "基幹システム開発部", rate: 72, users: 61, prompts: 43000 },
-      { name: "人事・総務・経営企画部", rate: 66, users: 50, prompts: 35000 },
-      { name: "デジタルサービス推進部", rate: 58, users: 38, prompts: 26500 },
+  "2026-06": {
+    label: "2026年6月 (参考元データ)",
+    periodNote: "※ データ取得は2026年6月、部門名は2026年",
+    data: [
+      { name: "次世代クラウド基盤プロジェクト", category: "project", maxVal: 2479, medianVal: 111, avgVal: 244, headcount: 113 },
+      { name: "AI・イノベーション推進部", category: "tech", maxVal: 2399, medianVal: 309, avgVal: 506, headcount: 26 },
+      { name: "デジタルチャネルソリューション部", category: "tech", maxVal: 1785, medianVal: 165, avgVal: 321, headcount: 71 },
+      { name: "品質技術・自動化テスト統括部", category: "tech", maxVal: 1115, medianVal: 67, avgVal: 200, headcount: 15 },
+      { name: "CXマネジメント・顧客体験部", category: "business", maxVal: 1083, medianVal: 114, avgVal: 201, headcount: 47 },
+      { name: "バリュークリエーション推進部", category: "business", maxVal: 1059, medianVal: 92, avgVal: 185, headcount: 74 },
+      { name: "経営企画推進部", category: "corporate", maxVal: 1009, medianVal: 247, avgVal: 451, headcount: 4 },
+      { name: "プラットフォーム運用システム部", category: "tech", maxVal: 895, medianVal: 61, avgVal: 137, headcount: 78 },
+      { name: "セキュリティ・インフラ整備部", category: "tech", maxVal: 890, medianVal: 58, avgVal: 133, headcount: 44 },
+      { name: "エンタープライズDX推進プロジェクト", category: "project", maxVal: 868, medianVal: 84, avgVal: 165, headcount: 39 },
+      { name: "経営管理統括部", category: "corporate", maxVal: 810, medianVal: 67, avgVal: 169, headcount: 16 },
+      { name: "人材・組織戦略部", category: "corporate", maxVal: 693, medianVal: 77, avgVal: 130, headcount: 81 },
+      { name: "セキュリティマネジメント統括室", category: "corporate", maxVal: 433, medianVal: 48, avgVal: 116, headcount: 15 },
     ],
   },
 };
 
-const modelShares = [
-  { name: "Gemini 2.5 Flash", share: "54%", tokens: "1.2B tokens", color: "bg-blue-500", desc: "日常質問・コード補完・軽量自動化" },
-  { name: "Gemini 2.5 Pro", share: "34%", tokens: "760M tokens", color: "bg-purple-600", desc: "大規模リファクタ・仕様設計・複雑な思考" },
-  { name: "Antigravity Subagents", share: "12%", tokens: "270M tokens", color: "bg-emerald-500", desc: "自律並列探索・E2Eテスト検証・障害調査" },
-];
-
 export default function GeminiStatsPage() {
-  const [period, setPeriod] = useState<"7d" | "30d" | "90d">("30d");
-  const [searchDept, setSearchDept] = useState("");
-  const [customDepts, setCustomDepts] = useState<DeptStat[] | null>(null);
+  const [selectedMonth, setSelectedMonth] = useState<string>("2026-09");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sortField, setSortField] = useState<SortField>("maxVal");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
-  const currentStats = defaultStatsByPeriod[period];
-  const activeDepts = customDepts || currentStats.departments;
+  const activeDataset = monthlyData[selectedMonth] || monthlyData["2026-09"];
 
-  const filteredDepts = activeDepts.filter((d) =>
-    d.name.toLowerCase().includes(searchDept.toLowerCase())
+  // ソート処理
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("desc");
+    }
+  };
+
+  // フィルタリングとソート適用
+  const processedData = useMemo(() => {
+    return activeDataset.data
+      .filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      .sort((a, b) => {
+        let valA = a[sortField];
+        let valB = b[sortField];
+        if (typeof valA === "string" && typeof valB === "string") {
+          return sortOrder === "asc"
+            ? valA.localeCompare(valB, "ja")
+            : valB.localeCompare(valA, "ja");
+        }
+        return sortOrder === "asc"
+          ? (valA as number) - (valB as number)
+          : (valB as number) - (valA as number);
+      });
+  }, [activeDataset, searchQuery, sortField, sortOrder]);
+
+  // 全社サマリー集計
+  const totalHeadcount = useMemo(
+    () => activeDataset.data.reduce((acc, curr) => acc + curr.headcount, 0),
+    [activeDataset]
   );
+  const overallMax = useMemo(
+    () => Math.max(...activeDataset.data.map((d) => d.maxVal)),
+    [activeDataset]
+  );
+  const weightedAvg = useMemo(() => {
+    const totalPrompts = activeDataset.data.reduce(
+      (acc, curr) => acc + curr.avgVal * curr.headcount,
+      0
+    );
+    return Math.round(totalPrompts / totalHeadcount);
+  }, [activeDataset, totalHeadcount]);
 
-  // CSVエクスポート
+  const medianOfMedians = useMemo(() => {
+    const sortedMedians = [...activeDataset.data.map((d) => d.medianVal)].sort(
+      (a, b) => a - b
+    );
+    const mid = Math.floor(sortedMedians.length / 2);
+    return sortedMedians.length % 2 !== 0
+      ? sortedMedians[mid]
+      : Math.round((sortedMedians[mid - 1] + sortedMedians[mid]) / 2);
+  }, [activeDataset]);
+
+  // CSVダウンロード
   const handleExportCsv = () => {
-    const headers = "順位,部署名,月間アクティブ率(%),利用人数,プロンプト数\n";
-    const rows = filteredDepts
+    const headers = "部門,# 最大値,# 中央値,# 平均値,# 人数\n";
+    const rows = processedData
       .map(
-        (d, idx) =>
-          `${idx + 1},"${d.name}",${d.rate},${d.users},${d.prompts}`
+        (d) =>
+          `"${d.name}",${d.maxVal},${d.medianVal},${d.avgVal},${d.headcount}`
       )
       .join("\n");
     const blob = new Blob([headers + rows], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `mightylink-ai-stats-${period}.csv`;
+    link.download = `mightylink-gemini-usage-${selectedMonth}.csv`;
     link.click();
     URL.revokeObjectURL(url);
   };
 
-  // サンプルCSVインポート（デモ用）
-  const handleImportSample = () => {
-    const mockImported: DeptStat[] = [
-      { name: "DXソリューション本部 (実データ反映)", rate: 98, users: 52, prompts: 21500 },
-      { name: "クラウドSRE基盤部 (実データ反映)", rate: 95, users: 80, prompts: 28900 },
-      { name: "金融・決済システム第一部", rate: 88, users: 115, prompts: 34100 },
-      { name: "AI・データエンジニアリング部", rate: 85, users: 70, prompts: 19800 },
-      { name: "品質管理・テスト自動化室", rate: 80, users: 58, prompts: 15400 },
-    ];
-    setCustomDepts(mockImported);
-    alert("社内利用ログCSVデータをインポートし、ダッシュボードに反映しました！");
-  };
-
-  const handleResetData = () => {
-    setCustomDepts(null);
+  const renderSortIcon = (field: SortField) => {
+    if (sortField !== field) {
+      return <ArrowUpDown className="w-3.5 h-3.5 opacity-40 inline-block ml-1" />;
+    }
+    return sortOrder === "asc" ? (
+      <ArrowUp className="w-3.5 h-3.5 text-cyan-300 inline-block ml-1" />
+    ) : (
+      <ArrowDown className="w-3.5 h-3.5 text-cyan-300 inline-block ml-1" />
+    );
   };
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
-      <HeroBanner
-        title="利用状況ダッシュボード"
-        subtitle="MightyLINK 社内AI / Antigravity の浸透状況・部署別アクティブ率レポート"
-      />
+      {/* 参考サイト風 グレー・テクスチャ調 ヘッダー */}
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 text-white py-14 px-6 border-b border-slate-700 shadow-inner">
+        {/* 背景テクスチャ */}
+        <div
+          className="absolute inset-0 opacity-10 pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+            backgroundSize: "28px 28px",
+          }}
+        />
+        <div className="max-w-6xl mx-auto text-center relative z-10 space-y-2">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-600 text-slate-300 text-xs font-semibold mb-2">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <span>MightyLINK 社内AI / Antigravity 利用統計</span>
+          </div>
+          <h1 className="text-3xl md:text-5xl font-black tracking-wider drop-shadow-md text-white">
+            Gemini利用率
+          </h1>
+          <p className="text-sm md:text-base text-slate-300 max-w-2xl mx-auto pt-1 font-medium">
+            部門別 Gemini / LLM利用回数の統計分布（最大値・中央値・平均値・対象人数）
+          </p>
+        </div>
+      </div>
+
       <OfficeHourBanner />
 
       <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
+        {/* 工事中アラート（品質ゲート準拠） */}
         <UnderConstructionAlert
           statusType="construction"
           title="🚧 工事中・サンプルシミュレーション表示中"
-          message="現在表示されているMAUや部署別プロンプト推移はサンプル・シミュレーション値です。現在、社内BigQuery利用ログデータパイプライン接続を準備中です。"
-          prepDetails="BigQuery監査ログパイプラインおよび日次MAU実データ自動集計バッチの構築フェーズ"
+          message="現在表示されている部門別Gemini利用統計データはサンプル・シミュレーション値です。社内BigQuery監査ログパイプラインとの実データ連携を準備中です。"
+          prepDetails="社内BigQuery利用ログデータパイプライン接続 & 日次MAU実データ自動集計バッチの稼働フェーズ"
           releaseDate="2026年11月20日(金)"
         />
 
-        {/* バナー */}
-        <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-950">
-          <div className="flex items-start space-x-3">
-            <div className="p-2 bg-indigo-200/60 text-indigo-800 rounded-lg shrink-0 mt-0.5">
-              <Sparkles className="w-5 h-5 text-indigo-700" />
+        {/* 全社サマリーメトリクス */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+              <span>集計対象総人数</span>
+              <Users className="w-4 h-4 text-blue-500" />
             </div>
-            <div className="space-y-0.5 text-xs">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-bold text-sm text-indigo-950 flex items-center space-x-1">
-                  <span>💎</span>
-                  <span>利用状況ダッシュボード（動的分析シミュレータ）</span>
-                </span>
-                <span className="px-2 py-0.5 rounded-full bg-amber-100 border border-amber-300 text-amber-900 font-semibold text-[10px]">
-                  🚧 工事中（データ連携準備中）
-                </span>
-              </div>
-              <p className="text-indigo-900/90 leading-relaxed">
-                期間別の集計切り替え、CSVダウンロード、および社内利用ログのインポートによる動的シミュレーションに対応しています。
-              </p>
+            <div className="mt-2 text-2xl md:text-3xl font-black text-slate-900">
+              {totalHeadcount.toLocaleString()}
+              <span className="text-xs font-normal text-slate-500 ml-1">名</span>
             </div>
-          </div>
-          <div className="flex items-center space-x-2 shrink-0 self-end sm:self-center">
-            {customDepts && (
-              <button
-                onClick={handleResetData}
-                className="inline-flex items-center space-x-1 px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-xs font-semibold transition-colors"
-              >
-                <RefreshCw size={13} />
-                <span>標準データに戻す</span>
-              </button>
-            )}
-            <button
-              onClick={handleImportSample}
-              className="inline-flex items-center space-x-1 px-3 py-1.5 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
-            >
-              <Upload size={13} />
-              <span>CSVインポート</span>
-            </button>
-            <button
-              onClick={handleExportCsv}
-              className="inline-flex items-center space-x-1 px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors"
-            >
-              <Download size={13} />
-              <span>CSVエクスポート</span>
-            </button>
-          </div>
-        </div>
-
-        {/* 期間セレクター */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
-          <div className="flex items-center space-x-2 text-xs font-bold text-slate-800">
-            <Calendar className="w-4 h-4 text-blue-600" />
-            <span>集計対象期間の選択:</span>
+            <p className="text-[11px] text-slate-400 mt-1">全13部門・プロジェクト合計</p>
           </div>
 
-          <div className="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-lg text-xs font-medium">
-            <button
-              onClick={() => setPeriod("7d")}
-              className={`px-3 py-1.5 rounded-md transition-all ${
-                period === "7d"
-                  ? "bg-white text-slate-900 shadow-xs font-bold"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              過去7日間
-            </button>
-            <button
-              onClick={() => setPeriod("30d")}
-              className={`px-3 py-1.5 rounded-md transition-all ${
-                period === "30d"
-                  ? "bg-white text-slate-900 shadow-xs font-bold"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              過去30日間 (標準)
-            </button>
-            <button
-              onClick={() => setPeriod("90d")}
-              className={`px-3 py-1.5 rounded-md transition-all ${
-                period === "90d"
-                  ? "bg-white text-slate-900 shadow-xs font-bold"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              過去90日間 (四半期)
-            </button>
-          </div>
-        </div>
-
-        {/* KPIカード */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
-            <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-              <span>全社アクティブ利用率 (MAU)</span>
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+              <span>全社加重平均利用回数</span>
               <TrendingUp className="w-4 h-4 text-emerald-500" />
             </div>
-            <div className="flex items-baseline space-x-2">
-              <span className="text-3xl font-black text-slate-900">{currentStats.mau}</span>
-              <span className="text-xs text-emerald-600 font-semibold">{currentStats.mauDiff}</span>
+            <div className="mt-2 text-2xl md:text-3xl font-black text-slate-900">
+              {weightedAvg.toLocaleString()}
+              <span className="text-xs font-normal text-slate-500 ml-1">回/月</span>
             </div>
-            <p className="text-[11px] text-slate-400">対象期間内に1回以上プロンプトを実行した割合</p>
+            <p className="text-[11px] text-slate-400 mt-1">1人あたりの月間平均実行数</p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
-            <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-              <span>総プロンプト実行数</span>
-              <MessageSquare className="w-4 h-4 text-blue-500" />
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+              <span>全社中央値 (代表水準)</span>
+              <BarChart3 className="w-4 h-4 text-purple-500" />
             </div>
-            <div className="flex items-baseline space-x-2">
-              <span className="text-3xl font-black text-slate-900">{currentStats.totalPrompts}</span>
-              <span className="text-xs text-emerald-600 font-semibold">{currentStats.promptsDiff}</span>
+            <div className="mt-2 text-2xl md:text-3xl font-black text-slate-900">
+              {medianOfMedians.toLocaleString()}
+              <span className="text-xs font-normal text-slate-500 ml-1">回/月</span>
             </div>
-            <p className="text-[11px] text-slate-400">チャット、コード補完、Subagent実行を含む</p>
+            <p className="text-[11px] text-slate-400 mt-1">極端な偏りを除いた実態値</p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
-            <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-              <span>ライセンス稼働人数</span>
-              <Users className="w-4 h-4 text-purple-500" />
-            </div>
-            <div className="flex items-baseline space-x-2">
-              <span className="text-3xl font-black text-slate-900">{currentStats.activeUsers}</span>
-              <span className="text-xs text-slate-400">/ {currentStats.totalLicense}</span>
-            </div>
-            <p className="text-[11px] text-slate-400">全社配布枠の 82.6% が定常利用</p>
-          </div>
-
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-2">
-            <div className="flex items-center justify-between text-slate-500 text-xs font-medium">
-              <span>活用トップ部署</span>
+          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 text-xs font-semibold">
+              <span>個人最高利用回数</span>
               <Award className="w-4 h-4 text-amber-500" />
             </div>
-            <div>
-              <span className="text-lg font-bold text-slate-900 truncate block">{currentStats.topDept}</span>
-              <span className="text-xs text-amber-600 font-bold">利用率 {currentStats.topRate}</span>
+            <div className="mt-2 text-2xl md:text-3xl font-black text-slate-900">
+              {overallMax.toLocaleString()}
+              <span className="text-xs font-normal text-slate-500 ml-1">回</span>
             </div>
-            <p className="text-[11px] text-slate-400">毎日のコード生成 & テスト自動化を標準化</p>
+            <p className="text-[11px] text-slate-400 mt-1">最高アクティブユーザー実績</p>
           </div>
         </div>
 
-        {/* モデル別利用内訳 */}
+        {/* コントロールバー（月選択 & 検索 & CSV） */}
+        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center space-x-2 text-xs font-bold text-slate-700">
+              <Calendar className="w-4 h-4 text-indigo-600" />
+              <span>対象月:</span>
+            </div>
+            <div className="inline-flex rounded-lg bg-slate-100 p-1 text-xs">
+              <button
+                onClick={() => setSelectedMonth("2026-09")}
+                className={`px-3 py-1.5 rounded-md font-semibold transition-all ${
+                  selectedMonth === "2026-09"
+                    ? "bg-white text-indigo-900 shadow-xs"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                2026年9月 (最新)
+              </button>
+              <button
+                onClick={() => setSelectedMonth("2026-06")}
+                className={`px-3 py-1.5 rounded-md font-semibold transition-all ${
+                  selectedMonth === "2026-06"
+                    ? "bg-white text-indigo-900 shadow-xs"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                2026年6月 (基準月)
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <div className="relative w-full sm:w-64">
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="部門名で絞り込み..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900"
+              />
+            </div>
+            <button
+              onClick={handleExportCsv}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors shrink-0"
+              title="CSV形式でダウンロード"
+            >
+              <Download size={13} />
+              <span>CSV出力</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 参考サイト完全再現：部門別 Gemini利用状況 テーブル */}
+        <section className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden">
+          {/* テーブル上部タイトル & 注記（参考サイト準拠） */}
+          <div className="p-5 border-b border-slate-200 space-y-1 bg-white">
+            <div className="text-xs font-bold text-slate-500 tracking-wide">
+              Gemini利用回数({selectedMonth.replace("-", ".")})
+            </div>
+            <h2 className="text-xl md:text-2xl font-black text-slate-900">
+              部門別 Gemini利用状況
+            </h2>
+            <p className="text-xs font-bold text-rose-600">
+              {activeDataset.periodNote}
+            </p>
+          </div>
+
+          {/* 統計テーブル */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              {/* 濃紺ヘッダー（参考サイト準拠） */}
+              <thead>
+                <tr className="bg-[#2A3B80] text-white text-xs font-bold uppercase tracking-wider select-none">
+                  <th
+                    onClick={() => handleSort("name")}
+                    className="py-3 px-4 sm:px-6 cursor-pointer hover:bg-[#23316c] transition-colors"
+                  >
+                    部門
+                    {renderSortIcon("name")}
+                  </th>
+                  <th
+                    onClick={() => handleSort("maxVal")}
+                    className="py-3 px-4 text-right cursor-pointer hover:bg-[#23316c] transition-colors"
+                  >
+                    # 最大値
+                    {renderSortIcon("maxVal")}
+                  </th>
+                  <th
+                    onClick={() => handleSort("medianVal")}
+                    className="py-3 px-4 text-right cursor-pointer hover:bg-[#23316c] transition-colors"
+                  >
+                    # 中央値
+                    {renderSortIcon("medianVal")}
+                  </th>
+                  <th
+                    onClick={() => handleSort("avgVal")}
+                    className="py-3 px-4 text-right cursor-pointer hover:bg-[#23316c] transition-colors"
+                  >
+                    # 平均値
+                    {renderSortIcon("avgVal")}
+                  </th>
+                  <th
+                    onClick={() => handleSort("headcount")}
+                    className="py-3 px-4 sm:px-6 text-right cursor-pointer hover:bg-[#23316c] transition-colors"
+                  >
+                    # 人数
+                    {renderSortIcon("headcount")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200 text-xs sm:text-sm">
+                {processedData.map((item, idx) => (
+                  <tr
+                    key={item.name}
+                    className={`transition-colors hover:bg-indigo-50/50 ${
+                      idx % 2 === 1 ? "bg-slate-50/60" : "bg-white"
+                    }`}
+                  >
+                    {/* 部門名 */}
+                    <td className="py-3 px-4 sm:px-6 font-medium text-slate-900 whitespace-nowrap">
+                      <div className="flex items-center space-x-2">
+                        <span>{item.name}</span>
+                        {item.maxVal >= 2000 && (
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                            ★ ヘビー活用
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
+                    {/* 最大値 */}
+                    <td className="py-3 px-4 text-right font-mono font-bold text-slate-800">
+                      {item.maxVal.toLocaleString()}
+                    </td>
+
+                    {/* 中央値 */}
+                    <td className="py-3 px-4 text-right font-mono font-medium text-slate-700">
+                      {item.medianVal.toLocaleString()}
+                    </td>
+
+                    {/* 平均値 */}
+                    <td className="py-3 px-4 text-right font-mono font-medium text-slate-700">
+                      {item.avgVal.toLocaleString()}
+                    </td>
+
+                    {/* 人数 */}
+                    <td className="py-3 px-4 sm:px-6 text-right font-mono font-semibold text-slate-600">
+                      {item.headcount.toLocaleString()}
+                    </td>
+                  </tr>
+                ))}
+
+                {processedData.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={5}
+                      className="py-8 text-center text-slate-400 text-xs"
+                    >
+                      該当する部門が見つかりませんでした。
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* テーブル下部 読み取りガイド・インサイト */}
+          <div className="p-4 bg-slate-50/70 border-t border-slate-200 text-[11px] text-slate-600 space-y-1.5">
+            <div className="flex items-center space-x-1.5 font-bold text-slate-800">
+              <HelpCircle className="w-3.5 h-3.5 text-indigo-600" />
+              <span>メトリクスの見方と分析ポイント:</span>
+            </div>
+            <ul className="list-disc list-inside space-y-0.5 text-slate-500 pl-1">
+              <li>
+                <strong className="text-slate-700">最大値と中央値の乖離:</strong> 中央値が低く最大値が突出している部門は一部のスーパーユーザーによる牽引型、中央値が高い部門（例: AI・イノベーション推進部 中央値309）は部内全員が日常業務に定着していることを示します。
+              </li>
+              <li>
+                <strong className="text-slate-700">プロジェクトチームの活用度:</strong> 「次世代クラウド基盤プロジェクト」のように多人数（113名）で最大値2,479を記録している組織は、コード生成やインフラ構成自動化などチーム開発標準に組み込まれています。
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 基盤モデル別トークン内訳 */}
         <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-            <h3 className="font-bold text-slate-800 text-base flex items-center space-x-2">
-              <PieChart className="w-5 h-5 text-purple-600" />
+            <h3 className="font-bold text-slate-800 text-sm md:text-base flex items-center space-x-2">
+              <Layers className="w-4 h-4 text-purple-600" />
               <span>基盤モデル別 トークン消費シェア</span>
             </h3>
             <span className="text-xs text-slate-400">コスト & 処理負荷の内訳</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {modelShares.map((m) => (
-              <div
-                key={m.name}
-                className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/50 space-y-2"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <span className={`w-3 h-3 rounded-full ${m.color}`} />
-                    <span className="font-bold text-slate-900 text-xs">{m.name}</span>
-                  </div>
-                  <span className="text-sm font-extrabold text-slate-900">{m.share}</span>
+            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <span className="w-3 h-3 rounded-full bg-blue-500" />
+                  <span className="font-bold text-slate-900 text-xs">Gemini 2.5 Flash</span>
                 </div>
-                <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
-                  <div className={`h-full ${m.color}`} style={{ width: m.share }} />
-                </div>
-                <div className="flex justify-between text-[11px] text-slate-500">
-                  <span>消費量: {m.tokens}</span>
-                </div>
-                <p className="text-[11px] text-slate-600 leading-snug">{m.desc}</p>
+                <span className="text-sm font-extrabold text-slate-900">54%</span>
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-500" style={{ width: "54%" }} />
+              </div>
+              <div className="flex justify-between text-[11px] text-slate-500">
+                <span>消費量: 1.2B tokens</span>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-snug">
+                日常質問・コードインライン補完・軽量データ整形
+              </p>
+            </div>
 
-        {/* 部署別利用率プログレスバー */}
-        <section className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-            <h3 className="font-bold text-slate-800 text-base flex items-center space-x-2">
-              <BarChart3 className="w-5 h-5 text-blue-600" />
-              <span>部署別 アクティブ利用率 & 実行ボリューム</span>
-            </h3>
+            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <span className="w-3 h-3 rounded-full bg-purple-600" />
+                  <span className="font-bold text-slate-900 text-xs">Gemini 2.5 Pro</span>
+                </div>
+                <span className="text-sm font-extrabold text-slate-900">34%</span>
+              </div>
+              <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div className="h-full bg-purple-600" style={{ width: "34%" }} />
+              </div>
+              <div className="flex justify-between text-[11px] text-slate-500">
+                <span>消費量: 760M tokens</span>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-snug">
+                大規模リファクタ・仕様設計・複雑な長文要約
+              </p>
+            </div>
 
-            <div className="relative w-full sm:w-64">
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
-              <input
-                type="text"
-                placeholder="部署名で絞り込み..."
-                value={searchDept}
-                onChange={(e) => setSearchDept(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <span className="w-3 h-3 rounded-full bg-emerald-500" />
+                  <span className="font-bold text-slate-900 text-xs">Antigravity Subagents</span>
+                </div>
+                <span className="text-sm font-extrabold text-slate-900">12%</span>
+              </div>
+              <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div className="h-full bg-emerald-500" style={{ width: "12%" }} />
+              </div>
+              <div className="flex justify-between text-[11px] text-slate-500">
+                <span>消費量: 270M tokens</span>
+              </div>
+              <p className="text-[11px] text-slate-600 leading-snug">
+                自律並列探索・E2Eテスト検証・障害根本原因調査
+              </p>
             </div>
           </div>
-
-          <div className="space-y-4 pt-1">
-            {filteredDepts.map((dept, index) => (
-              <div key={dept.name} className="space-y-1.5">
-                <div className="flex justify-between text-xs font-medium">
-                  <span className="text-slate-800 font-semibold flex items-center space-x-2">
-                    <span className="w-5 text-slate-400 text-[11px]">{index + 1}.</span>
-                    <span>{dept.name}</span>
-                  </span>
-                  <div className="space-x-3 text-slate-500 text-xs">
-                    <span>{dept.users}名利用</span>
-                    <span className="text-slate-400">•</span>
-                    <span>{dept.prompts.toLocaleString()} プロンプト</span>
-                    <span className="font-extrabold text-slate-900 text-sm">{dept.rate}%</span>
-                  </div>
-                </div>
-
-                <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden">
-                  <div
-                    className={`h-2.5 rounded-full transition-all duration-500 ${
-                      dept.rate >= 90
-                        ? "bg-emerald-500"
-                        : dept.rate >= 80
-                        ? "bg-blue-600"
-                        : dept.rate >= 70
-                        ? "bg-cyan-500"
-                        : "bg-amber-500"
-                    }`}
-                    style={{ width: `${dept.rate}%` }}
-                  />
-                </div>
-              </div>
-            ))}
-
-            {filteredDepts.length === 0 && (
-              <div className="text-center py-6 text-xs text-slate-400">
-                該当する部署が見つかりませんでした。
-              </div>
-            )}
-          </div>
-        </section>
+        </div>
       </div>
     </div>
   );

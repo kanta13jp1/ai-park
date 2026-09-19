@@ -37,7 +37,7 @@ export const navigationSections: NavSection[] = [
       { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β版" },
       { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "🧪 PoC中" },
       { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "🧪 PoC中" },
-      { name: "利用状況ダッシュボード", href: "/gemini-stats", icon: "💎", badge: "🚧 工事中" },
+      { name: "Gemini利用率", href: "/gemini-stats", icon: "✦", badge: "🚧 工事中" },
       { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "🚧 工事中" },
     ]
   },
