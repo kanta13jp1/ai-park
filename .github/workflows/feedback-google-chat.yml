@@ -1,0 +1,42 @@
+name: Notify Google Chat on feedback issues
+
+on:
+  issues:
+    types: [opened, closed, reopened, labeled]
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    if: contains(github.event.issue.labels.*.name, 'feedback')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to Google Chat
+        env:
+          WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+          ACTION: ${{ github.event.action }}
+          LABEL: ${{ github.event.label.name }}
+          TITLE: ${{ github.event.issue.title }}
+          NUMBER: ${{ github.event.issue.number }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          if [ -z "$WEBHOOK_URL" ]; then
+            echo "GOOGLE_CHAT_WEBHOOK_URL が未設定のため通知をスキップします"
+            exit 0
+          fi
+          case "$ACTION" in
+            opened)   HEAD="📥 新しいご意見が起票されました" ;;
+            closed)   HEAD="✅ ご意見への対応が完了しました" ;;
+            reopened) HEAD="🔁 ご意見が再オープンされました" ;;
+            labeled)
+              case "$LABEL" in
+                status:in-progress) HEAD="🚧 ご意見への対応を開始しました" ;;
+                *) echo "通知対象外のラベル: $LABEL"; exit 0 ;;
+              esac ;;
+          esac
+          BOARD_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/ai-park/feedback-todo/"
+          TEXT=$(printf '%s\n*#%s %s*\n%s\n(by %s) ボード: %s' "$HEAD" "$NUMBER" "$TITLE" "$ISSUE_URL" "$ACTOR" "$BOARD_URL")
+          jq -n --arg text "$TEXT" '{text: $text}' \
+            | curl -sSf -X POST -H 'Content-Type: application/json; charset=UTF-8' --data @- "$WEBHOOK_URL"

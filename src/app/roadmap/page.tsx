@@ -214,6 +214,26 @@ const tasksData: TaskItem[] = [
     ],
   },
 
+  {
+    id: "feedback-github-sync",
+    title: "ご意見・改善ToDoボードのGitHub Issue / Google Chat連携",
+    pageName: "ご意見・改善ToDoボード",
+    href: "/feedback-todo",
+    phase: "Phase 1",
+    targetDate: "2026年10月2日(金)",
+    status: "in-progress",
+    currentVerificationBadge: "β版",
+    releaseCondition: "Google Chat / GitHub Issue 双方向自動同期の稼働をもって正式運用へ移行",
+    category: "system",
+    icon: "📋",
+    description: "ラベル「feedback」付きGitHub Issueをボードへ自動掲載し、ボードからはIssueフォームへ入力内容をプリフィルして起票できるようにしました。Issueの起票・対応開始・完了はGitHub ActionsからGoogle Chatへ通知します。",
+    items: [
+      { text: "feedbackラベル付きIssueのボード自動同期（対応中ラベル / Closeでステータス反映）", done: true },
+      { text: "起票モーダルからIssueフォームへのプリフィル起票 & Issueテンプレート整備", done: true },
+      { text: "Issue起票・対応開始・完了時のGoogle Chat通知ワークフロー", done: true },
+      { text: "Google Chat Webhook（GOOGLE_CHAT_WEBHOOK_URL）の本番設定と通知の実機確認", done: false },
+    ],
+  },
   // Phase 2: ツール連携 & コミュニティ（現在進行中）
   {
     id: "tools-sheets-sync",
@@ -406,7 +426,7 @@ export default function RoadmapPage() {
                 <span className="px-2.5 py-0.5 rounded-full bg-cyan-100 text-cyan-800 text-xs font-semibold">
                   Project Schedule
                 </span>
-                <span className="text-xs text-slate-500">最終更新: 2026年9月18日</span>
+                <span className="text-xs text-slate-500">最終更新: 2026年9月25日</span>
               </div>
               <h2 className="text-xl font-bold text-slate-900 mt-1">
                 AI Park 機能実装マイルストーン

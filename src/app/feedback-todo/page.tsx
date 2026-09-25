@@ -22,7 +22,17 @@ import {
   ChevronRight,
   HelpCircle,
   Calendar,
+  CircleDot,
+  RefreshCw,
+  ExternalLink,
 } from "lucide-react";
+import {
+  GITHUB_REPO,
+  FEEDBACK_LABEL,
+  IN_PROGRESS_LABEL,
+  buildNewIssueUrl,
+  fetchFeedbackIssues,
+} from "@/lib/githubFeedback";
 
 export interface FeedbackTodoItem {
   id: string;
@@ -37,6 +47,8 @@ export interface FeedbackTodoItem {
   actionPlan: string;
   relatedLink?: string;
   relatedLinkText?: string;
+  issueNumber?: number; // GitHub Issue から同期された項目
+  issueUrl?: string;
 }
 
 const initialFeedbackList: FeedbackTodoItem[] = [
@@ -160,6 +172,11 @@ export default function FeedbackTodoPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // GitHub Issue 同期
+  const [githubItems, setGithubItems] = useState<FeedbackTodoItem[]>([]);
+  const [syncState, setSyncState] = useState<"loading" | "ok" | "error">("loading");
+  const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null);
+
   // 新規登録フォーム用State
   const [formAuthor, setFormAuthor] = useState("");
   const [formDept, setFormDept] = useState("");
@@ -184,6 +201,33 @@ export default function FeedbackTodoPage() {
     }
   }, []);
 
+  const loadGithubIssues = (signal?: AbortSignal) =>
+    fetchFeedbackIssues(signal).then(
+      (items) => {
+        setGithubItems(items);
+        setSyncState("ok");
+        setLastSyncedAt(new Date());
+      },
+      (e) => {
+        if (signal?.aborted) return;
+        console.error("Failed to sync GitHub issues", e);
+        setSyncState("error");
+      }
+    );
+
+  const syncGithubIssues = () => {
+    setSyncState("loading");
+    loadGithubIssues();
+  };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    loadGithubIssues(controller.signal);
+    return () => controller.abort();
+  }, []);
+
+  const allItems = [...githubItems, ...todos];
+
   // 保存処理
   const saveTodos = (newTodos: FeedbackTodoItem[]) => {
     setTodos(newTodos);
@@ -199,9 +243,24 @@ export default function FeedbackTodoPage() {
   };
 
   // 新規投稿
-  const handleCreateTodo = (e: React.FormEvent) => {
+  const handleCreateTodo = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formTitle.trim() || !formAuthor.trim()) return;
+
+    // 「GitHub Issueとして起票」: Issue フォームへプリフィルして遷移（公開後ボードへ自動同期）
+    const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null;
+    if (submitter?.value === "github") {
+      const url = buildNewIssueUrl({
+        title: formTitle,
+        author: formAuthor,
+        dept: formDept,
+        quote: formQuote,
+        actionPlan: formActionPlan,
+      });
+      window.open(url, "_blank", "noopener,noreferrer");
+      setIsModalOpen(false);
+      return;
+    }
 
     const newId = `TODO-${String(todos.length + 1).padStart(2, "0")}`;
     const today = new Date();
@@ -234,7 +293,7 @@ export default function FeedbackTodoPage() {
   // CSVエクスポート
   const handleExportCsv = () => {
     const header = ["ID", "タイトル", "カテゴリ", "起票者", "所属", "起票日", "優先度", "ステータス", "ご意見原文", "対応方針"];
-    const rows = todos.map((t) => [
+    const rows = allItems.map((t) => [
       t.id,
       `"${t.title.replace(/"/g, '""')}"`,
       t.category,
@@ -261,7 +320,7 @@ export default function FeedbackTodoPage() {
   };
 
   // フィルタリング
-  const filteredTodos = todos.filter((item) => {
+  const filteredTodos = allItems.filter((item) => {
     if (statusFilter !== "all" && item.status !== statusFilter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -275,9 +334,9 @@ export default function FeedbackTodoPage() {
     return true;
   });
 
-  const todoCount = todos.filter((t) => t.status === "todo").length;
-  const inProgressCount = todos.filter((t) => t.status === "in_progress").length;
-  const doneCount = todos.filter((t) => t.status === "done").length;
+  const todoCount = allItems.filter((t) => t.status === "todo").length;
+  const inProgressCount = allItems.filter((t) => t.status === "in_progress").length;
+  const doneCount = allItems.filter((t) => t.status === "done").length;
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
@@ -323,7 +382,7 @@ export default function FeedbackTodoPage() {
             <div className="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-xs">
               <span className="text-xs text-slate-400 block font-medium">蓄積されたご意見</span>
               <span className="text-2xl sm:text-3xl font-extrabold text-white mt-1 block">
-                {todos.length} <span className="text-xs font-normal text-slate-400">件</span>
+                {allItems.length} <span className="text-xs font-normal text-slate-400">件</span>
               </span>
             </div>
             <div className="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-xs">
@@ -362,7 +421,7 @@ export default function FeedbackTodoPage() {
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              すべて ({todos.length})
+              すべて ({allItems.length})
             </button>
             <button
               onClick={() => setStatusFilter("in_progress")}
@@ -412,6 +471,48 @@ export default function FeedbackTodoPage() {
           </div>
         </div>
 
+        {/* GitHub Issue 同期ステータス */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-2xs text-xs">
+          <div className="flex items-center gap-2 text-slate-600 flex-wrap">
+            <CircleDot size={15} className="text-slate-800 shrink-0" />
+            <span className="font-bold text-slate-800">GitHub Issue 連携</span>
+            {syncState === "loading" && <span className="text-slate-500">同期中...</span>}
+            {syncState === "ok" && (
+              <span className="text-emerald-700">
+                ✅ {githubItems.length} 件を同期
+                {lastSyncedAt && `（${lastSyncedAt.toLocaleTimeString("ja-JP")}）`}
+              </span>
+            )}
+            {syncState === "error" && (
+              <span className="text-rose-600">
+                ⚠️ 同期に失敗しました（ブラウザ保存分のみ表示中）
+              </span>
+            )}
+            <span className="text-slate-400">
+              ラベル「{FEEDBACK_LABEL}」付き Issue を自動掲載 / 「{IN_PROGRESS_LABEL}」で対応中・Closeで完了
+            </span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href={`https://github.com/${GITHUB_REPO}/issues?q=label%3A${FEEDBACK_LABEL}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold"
+            >
+              Issue一覧
+              <ExternalLink size={12} />
+            </a>
+            <button
+              onClick={() => syncGithubIssues()}
+              disabled={syncState === "loading"}
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-700 text-white font-bold disabled:opacity-50 cursor-pointer"
+            >
+              <RefreshCw size={12} className={syncState === "loading" ? "animate-spin" : ""} />
+              再同期
+            </button>
+          </div>
+        </div>
+
         {/* ToDoカード一覧 */}
         <div className="space-y-4">
           {filteredTodos.length === 0 ? (
@@ -433,9 +534,20 @@ export default function FeedbackTodoPage() {
                 {/* カード上部：タグ、ID、ステータス */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                   <div className="flex items-center space-x-2 flex-wrap gap-y-1.5">
-                    <span className="text-xs font-mono font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
-                      {item.id}
-                    </span>
+                    {item.issueUrl ? (
+                      <a
+                        href={item.issueUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-mono font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 px-2 py-0.5 rounded"
+                      >
+                        <CircleDot size={12} />#{item.issueNumber}
+                      </a>
+                    ) : (
+                      <span className="text-xs font-mono font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded">
+                        {item.id}
+                      </span>
+                    )}
                     <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
                       {item.category}
                     </span>
@@ -452,7 +564,31 @@ export default function FeedbackTodoPage() {
                     </span>
                   </div>
 
-                  {/* ステータスセレクター */}
+                  {/* ステータスセレクター（GitHub同期項目は Issue 側で更新） */}
+                  {item.issueUrl ? (
+                    <div className="flex items-center space-x-1.5">
+                      <span
+                        className={`text-xs px-2.5 py-1 rounded-md font-bold border ${
+                          item.status === "done"
+                            ? "bg-emerald-100 text-emerald-800 border-emerald-300"
+                            : item.status === "in_progress"
+                            ? "bg-sky-100 text-sky-800 border-sky-300"
+                            : "bg-amber-100 text-amber-800 border-amber-300"
+                        }`}
+                      >
+                        {item.status === "done" ? "✅ 完了" : item.status === "in_progress" ? "🚧 対応中" : "📥 検討中"}
+                      </span>
+                      <a
+                        href={item.issueUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs px-2.5 py-1 rounded-md font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 inline-flex items-center gap-1"
+                      >
+                        GitHubで更新
+                        <ExternalLink size={11} />
+                      </a>
+                    </div>
+                  ) : (
                   <div className="flex items-center space-x-1.5">
                     <button
                       onClick={() => handleStatusChange(item.id, "todo")}
@@ -485,6 +621,7 @@ export default function FeedbackTodoPage() {
                       ✅ 完了
                     </button>
                   </div>
+                  )}
                 </div>
 
                 {/* カードタイトル */}
@@ -671,7 +808,12 @@ export default function FeedbackTodoPage() {
                 />
               </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-end space-x-3">
+              <p className="text-slate-500 leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+                「GitHub Issueとして起票」を押すと入力内容がプリフィルされたIssueフォームが開きます。
+                Issue作成後はこのボードへ自動掲載され、Google Chatにも通知されます。
+              </p>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end flex-wrap gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -681,10 +823,20 @@ export default function FeedbackTodoPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 font-bold shadow-xs flex items-center space-x-1.5"
+                  value="local"
+                  title="このブラウザにのみ保存されます（他のメンバーには共有されません）"
+                  className="px-4 py-2 rounded-lg border border-indigo-300 text-indigo-700 hover:bg-indigo-50 font-bold flex items-center space-x-1.5"
                 >
                   <Send size={14} />
-                  <span>ToDoボードに登録する</span>
+                  <span>ブラウザに一時保存</span>
+                </button>
+                <button
+                  type="submit"
+                  value="github"
+                  className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 font-bold shadow-xs flex items-center space-x-1.5"
+                >
+                  <CircleDot size={14} />
+                  <span>GitHub Issueとして起票（全員に共有）</span>
                 </button>
               </div>
             </form>

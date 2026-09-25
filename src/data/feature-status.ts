@@ -84,7 +84,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     href: "/feedback-todo",
     isVerified: true,
     status: "verified",
-    evidence: "Google Chatでいただいた実在のご意見を初期タスクとして登録・起票機能稼働",
+    evidence: "Google Chatでいただいた実在のご意見を初期タスクとして登録・起票機能稼働 / feedbackラベル付きGitHub Issueの自動同期・Issueフォーム起票・Google Chat通知ワークフロー実装済み（Webhook本番設定待ち）",
     currentBadge: "β版",
     disclaimer: "",
     releaseDate: "2026年10月2日(金)",

@@ -1,0 +1,52 @@
+name: ご意見・改善要望
+description: AI Park へのご意見・改善要望を起票します（ご意見・改善ToDoボードに自動掲載されます）
+title: "[ご意見] "
+labels: ["feedback"]
+body:
+  - type: input
+    id: author
+    attributes:
+      label: お名前 / 起票元
+      placeholder: 例: 亮一杉村
+    validations:
+      required: true
+  - type: input
+    id: dept
+    attributes:
+      label: 所属部署 / チーム
+      placeholder: 例: クラウド開発部
+  - type: dropdown
+    id: category
+    attributes:
+      label: カテゴリ
+      options:
+        - UI/UX
+        - AI導入編
+        - AI初級編
+        - AI実践編
+        - ガイドライン
+        - 企画・懸賞
+        - 開発環境
+        - アカウント運用
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 優先度
+      options:
+        - 高
+        - 中
+        - 低
+    validations:
+      required: true
+  - type: textarea
+    id: quote
+    attributes:
+      label: いただいたご意見の原文・引用メモ
+      placeholder: チャットでいただいたコメントをそのまま貼り付けてください
+  - type: textarea
+    id: action_plan
+    attributes:
+      label: ポータルでの対応方針・アクションプラン
+      placeholder: 具体的にポータルのどこにどのようなコンテンツを追加・改修するか
