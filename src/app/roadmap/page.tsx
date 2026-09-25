@@ -231,7 +231,8 @@ const tasksData: TaskItem[] = [
       { text: "feedbackラベル付きIssueのボード自動同期（対応中ラベル / Closeでステータス反映）", done: true },
       { text: "起票モーダルからIssueフォームへのプリフィル起票 & Issueテンプレート整備", done: true },
       { text: "Issue起票・対応開始・完了時のGoogle Chat通知ワークフロー", done: true },
-      { text: "Google Chat Webhook（GOOGLE_CHAT_WEBHOOK_URL）の本番設定と通知の実機確認", done: false },
+      { text: "Google Chat Webhook（GOOGLE_CHAT_WEBHOOK_URL）の本番設定と通知の実機確認", done: true },
+      { text: "Google Chat 投稿からのIssue自動起票（Chatアプリ / GCP側の受け口整備）", done: false },
     ],
   },
   // Phase 2: ツール連携 & コミュニティ（現在進行中）
