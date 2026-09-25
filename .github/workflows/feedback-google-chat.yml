@@ -36,7 +36,7 @@ jobs:
                 *) echo "通知対象外のラベル: $LABEL"; exit 0 ;;
               esac ;;
           esac
-          BOARD_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/ai-park/feedback-todo/"
+          BOARD_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/ai-park/feedback-todo"
           TEXT=$(printf '%s\n*#%s %s*\n%s\n(by %s) ボード: %s' "$HEAD" "$NUMBER" "$TITLE" "$ISSUE_URL" "$ACTOR" "$BOARD_URL")
           jq -n --arg text "$TEXT" '{text: $text}' \
             | curl -sSf -X POST -H 'Content-Type: application/json; charset=UTF-8' --data @- "$WEBHOOK_URL"
