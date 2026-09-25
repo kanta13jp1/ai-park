@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import BeginnerCheatsheet from "@/components/BeginnerCheatsheet";
 import {
   GraduationCap,
   BookOpen,
@@ -373,6 +374,8 @@ export default function LearningPage() {
 
       {/* メイングリッドエリア */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-6">
+        <BeginnerCheatsheet />
+
         {/* 検索ボックス ＆ 受講サポート案内 */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
           <div className="flex items-center space-x-2 text-xs text-slate-600">

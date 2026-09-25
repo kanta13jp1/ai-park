@@ -117,6 +117,30 @@ const internalUtilities = [
   },
 ];
 
+// ご意見TODO-05への対応。社内承認後に「準備中」表記を外す
+const aiGuidelines = [
+  {
+    title: "機密・個人情報は入力先を選ぶ",
+    body: "顧客の個人情報・社内機密・未公開ソースコードは、会社契約で学習不使用が担保されたAI（Level 1）にのみ入力します。個人アカウントのAIには入力しません。",
+  },
+  {
+    title: "入力前にマスキングする",
+    body: "Level 2 のツールでは、氏名・電話番号・メールアドレス・顧客名・案件名などを「顧客A」「xxx-xxxx」のように置き換えてから入力します。",
+  },
+  {
+    title: "出力は必ず人が確認する",
+    body: "AIの回答やコードには誤りが含まれます。事実・数値・法令・セキュリティに関わる内容は一次情報で確認し、コードはレビューとテストを通してから使います。",
+  },
+  {
+    title: "成果物の責任は使った人が持つ",
+    body: "AIで作った資料・コードでも、社外に出す・本番に反映する責任は利用者にあります。他者の著作物をそのまま出力させて使うことは避けます。",
+  },
+  {
+    title: "迷ったら使う前に相談する",
+    body: "新しいツールの業務利用や、扱ってよいデータか判断できない場合は、利用前にAI CoE（お問い合わせ・Office Hour）へ相談してください。",
+  },
+];
+
 export default function ToolsHubPage() {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [selectedToolForApply, setSelectedToolForApply] = useState<string>("Claude 3.5 Sonnet (Vertex AI経由)");
@@ -209,8 +233,8 @@ export default function ToolsHubPage() {
                 <span>Level 1: 社内機密・コード入力可</span>
               </div>
               <p className="text-slate-600 text-[11px] leading-relaxed">
-                対象: <strong>Antigravity, Gemini Enterprise</strong><br />
-                エンタープライズ契約により入力データがモデル学習に使用されないことが法的に保証されています。社内ソースコードや設計書の投入が可能です。
+                対象: <strong>会社契約のAI（Gemini Enterprise 等）</strong><br />
+                会社として契約し、入力データをモデル学習に使わないことが契約上担保されているサービス。社内ソースコードや設計書の投入が可能です。
               </p>
             </div>
 
@@ -231,11 +255,37 @@ export default function ToolsHubPage() {
                 <span>Level 3: 一般公開情報のみ</span>
               </div>
               <p className="text-slate-600 text-[11px] leading-relaxed">
-                対象: <strong>個人アカウントの無料AIツール</strong><br />
-                社内規程により、業務における個人アカウントのChatGPT等の利用は厳禁です。必ず本ポータル公認の社内アカウントをご利用ください。
+                対象: <strong>個人アカウントのAIツール（個人アカウントの Antigravity を含む）</strong><br />
+                個人向け規約が適用されるため、顧客情報・社内機密・未公開ソースコードは入力しないでください。公開情報を使った学習・試用にとどめます。
               </p>
             </div>
           </div>
+        </div>
+
+        {/* 社内AI利用の注意事項（案） */}
+        <div id="ai-guidelines" className="scroll-mt-6 bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+          <div className="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 className="font-bold text-slate-900 text-base flex items-center space-x-2">
+              <ShieldCheck className="w-5 h-5 text-indigo-600" />
+              <span>社内AI利用の注意事項 5箇条</span>
+            </h3>
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 self-start sm:self-center">
+              📋 準備中：AI CoE 起案・社内承認前のドラフトです
+            </span>
+          </div>
+          <ol className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            {aiGuidelines.map((g, i) => (
+              <li key={g.title} className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                <div className="flex items-center gap-2 font-bold text-slate-900">
+                  <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] flex items-center justify-center shrink-0">
+                    {i + 1}
+                  </span>
+                  <span>{g.title}</span>
+                </div>
+                <p className="text-slate-600 leading-relaxed">{g.body}</p>
+              </li>
+            ))}
+          </ol>
         </div>
 
         {/* 公認ツール一覧グリッド */}

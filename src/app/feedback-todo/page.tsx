@@ -60,9 +60,9 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     authorDept: "社内エンジニア",
     date: "2026/09/18",
     priority: "高",
-    status: "in_progress",
+    status: "done",
     feedbackQuote: "「社内ポータルであればもっとシンプルなほうが良いかなと思いました。いざ使ってみようとなったときに情報量多すぎて迷子になりそうな気がしました・・・」",
-    actionPlan: "トップページ最上部に「導入編」「初級編」「実践編」の大きな3枚カードを配置し、初めての社員でも迷わず最短でAIを使い始められるシンプルUIを実装。",
+    actionPlan: "【反映済み】トップページ最上部に「導入編」「初級編」「実践編」の3ステップカードを配置し、初めての社員でも迷わず始められる導線を実装しました。",
     relatedLink: "/",
     relatedLinkText: "トップページのシンプル導線を見る",
   },
@@ -74,11 +74,11 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     authorDept: "社内エンジニア",
     date: "2026/09/18",
     priority: "高",
-    status: "in_progress",
+    status: "done",
     feedbackQuote: "「コンテンツとしてはこのくらいでどうでしょう：・AI導入編 ⇒ antigravityの導入とIDEの日本語設定などの手順」",
-    actionPlan: "社内Windows PCへのAntigravityインストーラー実行、初回ログイン、日本語言語パック適用手順をキャプチャ付きでステップ解説する導入編ドキュメントを公開。",
+    actionPlan: "【反映済み】導入ガイドを公式ドキュメント準拠で全面改訂。動作環境・インストール・サインイン・日本語化（言語パック／表示言語／AI回答の日本語化の3設定）・CLI導入を掲載しました。",
     relatedLink: "/guide",
-    relatedLinkText: "導入ガイド（改訂版）",
+    relatedLinkText: "導入ガイド（改訂版）を見る",
   },
   {
     id: "TODO-03",
@@ -88,11 +88,11 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     authorDept: "社内エンジニア",
     date: "2026/09/18",
     priority: "高",
-    status: "todo",
+    status: "done",
     feedbackQuote: "「最初の導入だけ手順とガイドラインなどを作って人が増えた場合は「ここ見てやってみて」って言える情報があればよいかなと」",
-    actionPlan: "プロンプトの基本的な投げ方、コード生成・ファイル編集の許可フロー、エラーが出たときの対処法を1枚でわかるチートシート形式で作成。",
+    actionPlan: "【反映済み】「頼み方の4点セット」「ファイル編集を任せるときの流れ」「エラー時の対処」を1枚にまとめたAI初級編チートシートを学習ページ先頭に掲載しました。",
     relatedLink: "/learning",
-    relatedLinkText: "学習コンテンツを見る",
+    relatedLinkText: "初級編チートシートを見る",
   },
   {
     id: "TODO-04",
@@ -116,11 +116,11 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     authorDept: "社内エンジニア",
     date: "2026/09/18",
     priority: "高",
-    status: "todo",
+    status: "in_progress",
     feedbackQuote: "「社内のAI時の注意事項もあったほうが良いですね」",
-    actionPlan: "顧客個人情報や機密データの入力禁止ルール、マスキング基準（Level 1〜3）、著作権・成果物の責任範囲をまとめた「社内AI利用心得5箇条」を制定・掲載。",
-    relatedLink: "/tools-hub",
-    relatedLinkText: "セキュリティ基準早見表",
+    actionPlan: "【ドラフト掲載】入力先の選び方・マスキング・出力確認・責任範囲・事前相談の「社内AI利用の注意事項5箇条（案）」を掲載し、早見表の記載も実態に合わせて修正しました。社内承認後に正式版へ移行します。",
+    relatedLink: "/tools-hub#ai-guidelines",
+    relatedLinkText: "注意事項5箇条（案）を見る",
   },
   {
     id: "TODO-06",
@@ -144,11 +144,11 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     authorDept: "社内エンジニア",
     date: "2026/09/18",
     priority: "中",
-    status: "todo",
+    status: "done",
     feedbackQuote: "「あー、あとは今後Gitを使うとすると、そのあたりの情報も追加ですかね」",
-    actionPlan: "Gitの基本操作（クローン・ブランチ・コミット・プッシュ）と、Antigravity / VS CodeでのGUI操作手順、GitHub Copilotとの連携ベストプラクティスをまとめる。",
+    actionPlan: "【反映済み】導入ガイドに「Git / GitHubとの付き合い方」を追加。ブランチ運用、AIの変更を差分で確認する流れ、変更の取り消し方を掲載しました。",
     relatedLink: "/guide",
-    relatedLinkText: "開発ガイドを見る",
+    relatedLinkText: "Git連携の手順を見る",
   },
   {
     id: "TODO-08",
@@ -158,13 +158,15 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     authorDept: "社内エンジニア",
     date: "2026/09/18",
     priority: "中",
-    status: "todo",
+    status: "done",
     feedbackQuote: "「調べて行ったら、個人アカウントのgoogleからしかProプランには加入できないようです。会社側でWorkspaceを使用して加入はできないと書いてありました」",
-    actionPlan: "Google WorkspaceとGemini/Antigravityのアカウント体系の違い、社内経費精算や会社認可のアカウント連携方法についてのQ&A・FAQをFAQセクションに掲載。",
+    actionPlan: "【反映済み】お問い合わせページに「アカウント・ライセンス」FAQを追加。Google AI ProはWorkspaceアカウントでは加入できないこと、Antigravityは個人アカウント向けでチーム利用はGemini Enterprise経由であることを公式情報の出典付きで掲載しました。経費精算・会社契約の方針はAI CoEで整理中です。",
     relatedLink: "/contact",
-    relatedLinkText: "お問い合わせ・相談窓口",
+    relatedLinkText: "アカウントFAQを見る",
   },
 ];
+
+const seedIds = new Set(initialFeedbackList.map((t) => t.id));
 
 export default function FeedbackTodoPage() {
   const [todos, setTodos] = useState<FeedbackTodoItem[]>(initialFeedbackList);
@@ -193,7 +195,9 @@ export default function FeedbackTodoPage() {
       try {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setTodos(parsed);
+          // 運営登録のToDo（TODO-xx）は常にコード側の最新内容を使い、ブラウザ保存分は利用者の起票のみ採用
+          const userItems = parsed.filter((t: FeedbackTodoItem) => !seedIds.has(t.id));
+          setTodos([...userItems, ...initialFeedbackList]);
         }
       } catch (e) {
         console.error("Failed to load feedback todos", e);
@@ -262,7 +266,7 @@ export default function FeedbackTodoPage() {
       return;
     }
 
-    const newId = `TODO-${String(todos.length + 1).padStart(2, "0")}`;
+    const newId = `MY-${String(todos.filter((t) => !seedIds.has(t.id)).length + 1).padStart(2, "0")}`;
     const today = new Date();
     const dateStr = `${today.getFullYear()}/${String(today.getMonth() + 1).padStart(2, "0")}/${String(today.getDate()).padStart(2, "0")}`;
 
@@ -564,8 +568,8 @@ export default function FeedbackTodoPage() {
                     </span>
                   </div>
 
-                  {/* ステータスセレクター（GitHub同期項目は Issue 側で更新） */}
-                  {item.issueUrl ? (
+                  {/* ステータスセレクター（GitHub同期項目・運営登録項目は表示のみ） */}
+                  {item.issueUrl || seedIds.has(item.id) ? (
                     <div className="flex items-center space-x-1.5">
                       <span
                         className={`text-xs px-2.5 py-1 rounded-md font-bold border ${
@@ -578,15 +582,17 @@ export default function FeedbackTodoPage() {
                       >
                         {item.status === "done" ? "✅ 完了" : item.status === "in_progress" ? "🚧 対応中" : "📥 検討中"}
                       </span>
-                      <a
-                        href={item.issueUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs px-2.5 py-1 rounded-md font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 inline-flex items-center gap-1"
-                      >
-                        GitHubで更新
-                        <ExternalLink size={11} />
-                      </a>
+                      {item.issueUrl && (
+                        <a
+                          href={item.issueUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs px-2.5 py-1 rounded-md font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 inline-flex items-center gap-1"
+                        >
+                          GitHubで更新
+                          <ExternalLink size={11} />
+                        </a>
+                      )}
                     </div>
                   ) : (
                   <div className="flex items-center space-x-1.5">

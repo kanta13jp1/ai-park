@@ -2,8 +2,33 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
-import { Mail, MessageSquare, Send } from "lucide-react";
+import { Mail, MessageSquare, Send, HelpCircle, ExternalLink } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
+
+// ご意見TODO-08への対応（Google公式情報 2026/09/25 確認）
+const accountFaqs = [
+  {
+    q: "会社のGoogle Workspaceアカウントで Google AI Pro に加入できますか？",
+    a: "できません。Google AI Pro / Ultra は個人のGoogleアカウント向けのプランで、Workspaceアカウントからは加入できません。Workspaceでは管理者が契約するGemini（Workspace / Gemini Enterprise）を利用します。",
+    source: { label: "Antigravity Plans", href: "https://antigravity.google/docs/plans/" },
+  },
+  {
+    q: "Antigravity は会社のアカウントでログインできますか？",
+    a: "Antigravity は現在、個人のGoogleアカウント向けに提供されています。公式FAQでもWorkspaceアカウントで問題がある場合は @gmail.com のアカウントを使うよう案内されています。チームでの利用は Google Cloud の規約のもと Gemini Enterprise 経由で提供されています。",
+    source: { label: "Antigravity FAQ", href: "https://antigravity.google/docs/faq/" },
+  },
+  {
+    q: "個人アカウントで Antigravity を業務に使ってもよいですか？",
+    a: "個人アカウントには個人向けの利用規約が適用されます。顧客情報・社内機密・未公開ソースコードは入力せず、公開情報での学習・試用にとどめてください。業務での本格利用の方針（会社契約の要否・経費精算）はAI CoEで整理中です。",
+    source: { label: "社内AI利用の注意事項", href: "/tools-hub#ai-guidelines", internal: true },
+  },
+  {
+    q: "無料プランと Google AI Pro では何が違いますか？",
+    a: "どちらもGeminiモデルと主要機能を利用できます。違いは利用上限で、無料（Base）プランは週単位、Google AI Pro は5時間ごとにクォータが回復し上限も高く設定されています。",
+    source: { label: "Antigravity Plans", href: "https://antigravity.google/docs/plans/" },
+  },
+];
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
@@ -96,6 +121,42 @@ export default function ContactPage() {
             </form>
           )}
         </div>
+
+        {/* アカウント・ライセンスFAQ */}
+        <section className="mt-8 bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-xs space-y-4">
+          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+            <HelpCircle className="w-5 h-5 text-indigo-600" />
+            <h3 className="font-bold text-slate-900 text-base">よくある質問：アカウント・ライセンス</h3>
+          </div>
+          <div className="space-y-3">
+            {accountFaqs.map((f) => (
+              <details key={f.q} className="group rounded-lg border border-slate-200 bg-slate-50/60 p-4">
+                <summary className="cursor-pointer font-bold text-sm text-slate-900 list-none flex items-start gap-2">
+                  <span className="text-indigo-600">Q.</span>
+                  <span>{f.q}</span>
+                </summary>
+                <div className="mt-2 pl-5 space-y-2">
+                  <p className="text-xs text-slate-700 leading-relaxed">{f.a}</p>
+                  {f.source.internal ? (
+                    <Link href={f.source.href} className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 hover:underline">
+                      {f.source.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={f.source.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 hover:underline"
+                    >
+                      出典: {f.source.label}
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
