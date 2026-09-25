@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   RefreshCw,
@@ -22,6 +22,7 @@ import {
   Zap,
 } from "lucide-react";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
+import { TOOLS_SHEET_CSV_URL, fetchSheetTools } from "@/lib/toolsSheet";
 
 interface MatrixTool {
   id: number;
@@ -407,8 +408,11 @@ const matrixTools: MatrixTool[] = [
 export default function ToolsPage() {
   const [activeTab, setActiveTab] = useState<"matrix" | "quadrant" | "coverage" | "diagnosis">("matrix");
   const [statusFilter, setStatusFilter] = useState<"all" | "available" | "verifying" | "listup">("available");
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [lastSynced, setLastSynced] = useState("2026/09/18 17:50");
+  const [tools, setTools] = useState<MatrixTool[]>(matrixTools);
+  const [isSyncing, setIsSyncing] = useState(Boolean(TOOLS_SHEET_CSV_URL));
+  const [lastSynced, setLastSynced] = useState(
+    TOOLS_SHEET_CSV_URL ? "同期中..." : "未接続（ページ組込みデータ）"
+  );
   const [selectedTool, setSelectedTool] = useState<MatrixTool | null>(null);
 
   // 診断ウィザード用状態
@@ -418,19 +422,40 @@ export default function ToolsPage() {
     dataLevel: "",
   });
 
+  // 社内Google Sheets（AIツールマスター）の公開CSVから取得。失敗時は組込みデータを維持
+  const loadSheetTools = (signal?: AbortSignal) =>
+    fetchSheetTools(signal)
+      .then((sheetTools) => {
+        setTools(sheetTools);
+        const now = new Date();
+        setLastSynced(
+          `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, "0")}/${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}（Google Sheets）`
+        );
+      })
+      .catch((e) => {
+        if (signal?.aborted) return;
+        console.error("Failed to sync tools sheet", e);
+        setLastSynced("同期失敗（ページ組込みデータを表示中）");
+      })
+      .finally(() => {
+        if (!signal?.aborted) setIsSyncing(false);
+      });
+
+  useEffect(() => {
+    if (!TOOLS_SHEET_CSV_URL) return;
+    const controller = new AbortController();
+    loadSheetTools(controller.signal);
+    return () => controller.abort();
+  }, []);
+
   const handleSync = () => {
+    if (!TOOLS_SHEET_CSV_URL) return;
     setIsSyncing(true);
-    setTimeout(() => {
-      setIsSyncing(false);
-      const now = new Date();
-      setLastSynced(
-        `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, "0")}/${String(now.getDate()).padStart(2, "0")} ${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`
-      );
-    }, 800);
+    loadSheetTools();
   };
 
   // フィルタリング処理
-  const filteredTools = matrixTools.filter((tool) => {
+  const filteredTools = tools.filter((tool) => {
     if (statusFilter === "available") {
       return (
         tool.status === "全社員利用可能" ||
@@ -648,7 +673,7 @@ export default function ToolsPage() {
             </span>
             <button
               onClick={handleSync}
-              disabled={isSyncing}
+              disabled={isSyncing || !TOOLS_SHEET_CSV_URL}
               className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-2xs cursor-pointer"
             >
               <RefreshCw
@@ -872,7 +897,7 @@ export default function ToolsPage() {
               </div>
 
               {/* ツールプロットバブル */}
-              {matrixTools.map((tool) => {
+              {tools.map((tool) => {
                 const leftPercent = Math.min(Math.max((tool.easeScore / 10) * 88 + 6, 6), 92);
                 const bottomPercent = Math.min(Math.max((tool.impactScore / 10) * 85 + 6, 6), 92);
 
