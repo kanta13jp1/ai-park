@@ -582,7 +582,7 @@ export default function ToolsPage() {
           <UnderConstructionAlert
             statusType="poc"
             title="🧪 PoC検証中・サンプルデータ表示"
-            message="本ツールのマトリクス適合度・残ライセンス数は検証用サンプルデータです。現在、社内Google SheetsマスターAPI連携および本番反映を準備中です。"
+            message="マトリクスは社内マスターGoogle Sheets（AIツールマスター）から自動同期しています。ただし適合度・残ライセンス数の値は社内確認前のサンプルデータです。残ライセンス枠・申請フロー連携を準備中です。"
             prepDetails="スプレッドシート連携APIおよび権限管理仕様の策定フェーズ"
             releaseDate="2026年10月9日(金)"
           />

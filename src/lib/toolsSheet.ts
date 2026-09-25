@@ -1,8 +1,9 @@
 // AIツール検証マトリックス ⇔ 社内Google Sheets（AIツールマスター）連携
 // シートを「ウェブに公開（CSV）」した URL から取得し、列名（1行目）でマッピングする。
 
-// 公開CSVのURL（未設定の間はページ内の組込みデータを表示）
-export const TOOLS_SHEET_CSV_URL = "";
+// 公開CSVのURL（社内アカウントの「AIツールマスター」/ ai-tools-master シート）
+export const TOOLS_SHEET_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vR49_QiMXyFDle6USwoDRRIzfjljOR0QRHpEWJN-ncHMoxOxR3VdasIjgixvyz43JkQ2aAEGO_aFqCk/pub?gid=895015812&single=true&output=csv";
 
 type Score = 1 | 2 | 3;
 

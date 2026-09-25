@@ -251,7 +251,7 @@ const tasksData: TaskItem[] = [
     description: "19種類のAIツールの適合度評価・残ライセンス枠・セキュリティ区分を、社内Google SheetsマスターAPIから日次自動同期し、リアルタイム残枠を反映します。",
     items: [
       { text: "マトリクス適合度・4象限ポジションUIプロトタイプ構築", done: true },
-      { text: "社内Google Sheets APIとの同期サービス・Webhook設計", done: false },
+      { text: "社内Google Sheets（AIツールマスター）公開CSVからのマトリクス自動同期", done: true },
       { text: "ライセンス残枠のリアルタイム取得 & 各部署向け枠管理連携", done: false },
     ],
   },

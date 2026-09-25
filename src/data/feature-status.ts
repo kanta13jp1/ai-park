@@ -98,7 +98,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "poc_sample",
     evidence: "",
     currentBadge: "🧪 PoC中",
-    disclaimer: "【PoC検証中】ツールマトリクスの適合度・残枠数は検証用サンプルデータです。社内マスターGoogle Sheets APIとの自動同期を準備中です。",
+    disclaimer: "【PoC検証中】ツールマトリクスは社内マスターGoogle Sheetsから自動同期していますが、適合度・残枠数の値は社内確認前のサンプルデータです。残ライセンス枠・申請フロー連携を準備中です。",
     releaseDate: "2026年10月9日(金)",
     releaseCondition: "社内Google SheetsマスターAPI自動同期 & 残ライセンス枠・申請フロー連携の完了",
   },
