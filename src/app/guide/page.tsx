@@ -37,13 +37,14 @@ export default function GuidePage() {
       id: "STEP 2",
       title: "インストールする",
       actions: [
-        "エクスプローラーで「ダウンロード」フォルダを開き、ダウンロードしたファイル（.exe）をダブルクリック",
+        "ダウンロードが終わったら、Chrome 右上のダウンロード表示にある「Antigravity-x64.exe」をクリック（エクスプローラーの「ダウンロード」フォルダからダブルクリックでもOK）",
         "青い画面「Windows によって PC が保護されました」が出たら、「詳細情報」→「実行」をクリック（出なければそのまま次へ）",
         "以前のバージョンが入っていて「Keep Both」「Replace」を聞かれたら「Replace」を選ぶ",
-        "画面の案内に沿って進め、インストールが終わるまで待つ",
+        "「Antigravity セットアップ」の画面で「インストールしています。しばらくお待ちください…」と表示されるので、終わるまで待つ",
       ],
       note: "「詳細情報」→「実行」は、公式サイト（antigravity.google）からダウンロードしたファイルの場合だけ行ってください。",
-      imageAlt: "インストーラーの画面",
+      image: "G2-install.png",
+      imageAlt: "ダウンロード完了表示とインストール中の画面",
     },
     {
       id: "STEP 3",
@@ -69,26 +70,40 @@ export default function GuidePage() {
     },
     {
       id: "STEP 5",
-      title: "作業フォルダをプロジェクトとして登録する",
+      title: "作業フォルダを登録して、AI に依頼してみる",
       actions: [
-        "左側の「Projects」にある「Create New Project」をクリック",
-        "開いたフォルダ選択画面で、AI に作業させたいフォルダ（Git リポジトリなど）を選ぶ",
-        "プロジェクト名の横の歯車アイコンから設定を開き、「Security Preset」でターミナルのコマンド実行やファイル操作の前に確認（レビュー）を求める設定になっていることを確認",
-        "「New Conversation」から AI への依頼（チャット）を始める",
+        "① 左側の「Projects」の右にあるフォルダ＋のアイコンをクリックし、AI に作業させたいフォルダ（Git リポジトリなど）を選ぶ",
+        "② 左上の「New Conversation」をクリック",
+        "画面中央の入力欄（Ask anything...）に、やってほしいことを日本語で書いて Enter",
+        "入力欄の下の「Local」は自分の PC のフォルダで作業するという意味です。最初はそのままでOK",
       ],
-      note: "慣れるまでは、AI がコマンドを実行したりファイルを書き換えたりする前に必ず確認する設定で使ってください。頼み方のコツは「教育用コンテンツ」の初級編チートシートを参照。",
-      imageAlt: "Projects の Create New Project ボタン",
+      note: "頼み方のコツは「教育用コンテンツ」の初級編チートシートを参照。右上の「Open IDE」は STEP 7 で IDE を入れた場合に使います。",
+      image: "G5-main.png",
+      imageAlt: "メイン画面（プロジェクト追加・New Conversation・Settings の場所）",
     },
     {
       id: "STEP 6",
+      title: "安全設定を確認する（最初に必ず）",
+      actions: [
+        "③ 左下の「Settings」をクリックし、① 「General」を開く",
+        "② 「Security Preset」：AI がどこまで操作できるかの設定です。「Full Machine」は PC 全体を操作できる状態なので、慣れるまでは ▼ からより制限の強い設定を選ぶ",
+        "③ 「Plan Review Policy」：「Always Proceed」は確認なしで作業を進める設定です。▼ から、作業前に計画の確認を求める設定を選ぶ",
+        "右上の × で設定を閉じる",
+      ],
+      note: "選べる項目の名前はバージョンによって変わることがあります。各項目の「Learn more」で意味を確認してから選んでください。迷ったら Office Hour で相談してください。",
+      image: "G6-settings.png",
+      imageAlt: "Settings の General（Security Preset と Plan Review Policy）",
+    },
+    {
+      id: "STEP 7",
       title: "（任意）エディタ付きの IDE を追加する",
       link: { label: "ダウンロードページを開く", href: "https://antigravity.google/download" },
       actions: [
-        "コードを見ながら作業したい人向け。アプリ右上の「Install IDE」をクリック（またはダウンロードページの下のほうにある「Antigravity IDE (Standalone)」の「Download for x64」）",
-        "STEP 2 と同じ手順でインストールする",
+        "コードを見ながら作業したい人向け。アプリ右上のボタン（未インストールなら「Install IDE」、インストール済みなら「Open IDE」）をクリック",
+        "ダウンロードページから入れる場合は、下のほうにある「Antigravity IDE (Standalone)」の「Download for x64」をクリックし、STEP 2 と同じ手順でインストール",
         "IDE を日本語で使いたい場合は、下の「IDEの日本語化」へ",
       ],
-      image: "G6-download-ide.png",
+      image: "G7-download-ide.png",
       imageAlt: "ダウンロードページの Antigravity IDE (Standalone) の Download for x64",
     },
   ];
@@ -161,7 +176,7 @@ export default function GuidePage() {
         <section className="space-y-4">
           <h3 className="font-bold text-slate-800 text-lg flex items-center space-x-2">
             <Download className="w-5 h-5 text-blue-600" />
-            <span>初期導入ステップ（はじめての方はここから・所要15分）</span>
+            <span>初期導入ステップ（はじめての方はここから・所要15〜20分）</span>
           </h3>
           <p className="text-xs text-slate-600 leading-relaxed">
             上から順番に進めれば使い始められます。右側の画像の赤枠の場所をクリックしてください。
@@ -180,7 +195,7 @@ export default function GuidePage() {
         <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
             <Languages className="w-5 h-5 text-emerald-600" />
-            <h3 className="font-bold text-slate-800 text-base">IDEの日本語化（STEP 6 で IDE を入れた方向け・3つの設定）</h3>
+            <h3 className="font-bold text-slate-800 text-base">IDEの日本語化（STEP 7 で IDE を入れた方向け・3つの設定）</h3>
           </div>
           <ol className="space-y-3">
             {japaneseSteps.map((s, i) => (
