@@ -117,7 +117,7 @@ const internalUtilities = [
   },
 ];
 
-// ご意見TODO-05への対応。社内承認後に「準備中」表記を外す
+// ご意見TODO-05への対応。暫定版（2026/09/26〜）。社長・杉村さんとの協議で正式版に更新する
 const aiGuidelines = [
   {
     title: "機密・個人情報は入力先を選ぶ",
@@ -270,7 +270,7 @@ export default function ToolsHubPage() {
               <span>社内AI利用の注意事項 5箇条</span>
             </h3>
             <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 self-start sm:self-center">
-              📋 準備中：AI CoE 起案・社内承認前のドラフトです
+              暫定版（2026/09/26〜）：詳細は社長・杉村さんと協議のうえ正式決定します
             </span>
           </div>
           <ol className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">

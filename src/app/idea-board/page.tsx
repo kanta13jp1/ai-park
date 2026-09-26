@@ -450,29 +450,39 @@ export default function IdeaBoardPage() {
 
       {/* 3. メインコンテンツエリア */}
       <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        {/* ご意見TODO-06：AIビジネスモデル提案コンテスト（企画案） */}
+        {/* ご意見TODO-06：AIビジネスモデル提案コンテスト（暫定版） */}
         <details className="bg-white border border-amber-300 rounded-2xl p-5 shadow-2xs group">
           <summary className="cursor-pointer list-none flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <span className="font-bold text-sm text-slate-900">🏆 社内AIビジネスモデル提案コンテスト（企画案）</span>
+            <span className="font-bold text-sm text-slate-900">🏆 社内AIビジネスモデル提案コンテスト（応募期間：2026/11/2〜12/18）</span>
             <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 self-start sm:self-center">
-              📋 準備中：開催内容は社内決裁前の案です（クリックで詳細）
+              暫定版：詳細は社長・杉村さんと協議のうえ正式決定します（クリックで詳細）
             </span>
           </summary>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700 leading-relaxed">
             <div className="space-y-2">
               <p><span className="font-bold text-slate-900">目的：</span>業務の効率化だけでなく、AIで新しい顧客価値や収益を生むビジネスモデルのアイデアを全社から集める</p>
-              <p><span className="font-bold text-slate-900">対象：</span>全社員（個人・チームどちらでも可）</p>
-              <p><span className="font-bold text-slate-900">審査の観点（案）：</span>顧客にとっての価値／実現できるか／収益につながるか／AIならではの活かし方</p>
-              <p className="text-slate-500">アイデアの種は、このボードで気軽に宣言・議論してください。</p>
+              <p><span className="font-bold text-slate-900">対象：</span>全社員（個人・チームどちらでも可、1人何件でも応募可）</p>
+              <p><span className="font-bold text-slate-900">応募期間：</span>2026年11月2日（月）〜12月18日（金）</p>
+              <p><span className="font-bold text-slate-900">審査・表彰：</span>2027年1月中に審査し、全社の場で表彰</p>
+              <p><span className="font-bold text-slate-900">審査員：</span>社長・杉村さん・AI CoE</p>
+              <p><span className="font-bold text-slate-900">審査の観点：</span>顧客にとっての価値／実現できるか／収益につながるか／AIならではの活かし方</p>
+              <p><span className="font-bold text-slate-900">賞：</span>最優秀賞 1件・優秀賞 2件・アイデア賞（件数自由）。賞品の内容は協議のうえ決定</p>
             </div>
             <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 space-y-1.5">
-              <p className="font-bold text-amber-900">決定待ちの項目</p>
-              <ul className="list-disc pl-5 space-y-1 text-amber-900">
-                <li>開催期間・応募締切</li>
-                <li>賞品・表彰の内容（懸賞）</li>
-                <li>審査員</li>
-                <li>応募方法（社外秘を含みうるため、公開サイトではなく社内フォームで受付予定）</li>
-              </ul>
+              <p className="font-bold text-amber-900">応募方法（社内のみで受付）</p>
+              <p className="text-amber-900">
+                アイデアには社外秘が含まれうるため、このサイトや GitHub では受け付けません。下の項目を記入し、
+                Google Chat で AI CoE に DM で送ってください。
+              </p>
+              <ol className="list-decimal pl-5 space-y-1 text-amber-900">
+                <li>タイトル（ひとことで）</li>
+                <li>誰のどんな困りごと・ニーズを解決するか</li>
+                <li>AIをどう使うか</li>
+                <li>どうやって収益・価値につながるか</li>
+                <li>最初の一歩として試せること</li>
+                <li>応募者（個人名またはチーム名・所属）</li>
+              </ol>
+              <p className="text-amber-800 pt-1">アイデアの種は、このボードで気軽に宣言・議論してからでもOKです。</p>
             </div>
           </div>
         </details>
