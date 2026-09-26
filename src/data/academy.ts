@@ -112,7 +112,7 @@ export const courses: Course[] = [
           },
           {
             "type": "p",
-            "text": "画面の中央にある入力欄に、やってほしいことを日本語で書いて送るだけです。「@」でファイルを指定したり、「/」で便利な機能（計画だけ作らせる plan など）を呼び出したりもできます。"
+            "text": "画面の中央にある入力欄に、やってほしいことを日本語で書いて送るだけです。「@」でファイルを指定したり、「/」で便利な機能（計画だけ作らせる「/plan」など）を呼び出したりもできます。"
           },
           {
             "type": "image",
@@ -234,13 +234,22 @@ export const courses: Course[] = [
             "type": "steps",
             "items": [
               "スタートメニューを開き「Antigravity」を探してクリックする",
-              "サインイン方法を選ぶ画面が表示される"
+              "「Loading Antigravity」と表示されている間は、そのまま待つ"
             ]
           },
           {
-            "type": "shot",
-            "alt": "サインイン方法を選ぶ画面",
-            "todo": "「Use business account」「Continue with Google」が並ぶ最初の画面"
+            "type": "image",
+            "file": "S0-loading.png",
+            "alt": "起動中の画面（Loading Antigravity）"
+          },
+          {
+            "type": "p",
+            "text": "しばらくすると「Welcome to Antigravity」の画面が表示され、サインイン方法を2つから選びます。"
+          },
+          {
+            "type": "image",
+            "file": "S1-signin.png",
+            "alt": "サインイン方法を選ぶ画面"
           },
           {
             "type": "h",
@@ -600,10 +609,14 @@ export const courses: Course[] = [
           {
             "type": "steps",
             "items": [
-              "入力欄に「/」を入力する",
-              "表示された候補から「plan」を選ぶ",
-              "続けて、やりたいことを書いて送る"
+              "入力欄に「/plan」と入力する（「/」を入力すると候補に「plan」が表示されるので、それを選んでもOK）",
+              "続けて、やりたいことを書いて送る",
+              "エージェントが、作業の前に計画（どのファイルをどう変えるか）を作って見せてくれる"
             ]
+          },
+          {
+            "type": "tip",
+            "text": "以前の「計画モード」は、今は「/plan」で呼び出す形になっています（アプリ内の案内「Planning mode has moved to /plan」より）。"
           },
           {
             "type": "p",
@@ -643,7 +656,7 @@ export const courses: Course[] = [
           },
           {
             "type": "p",
-            "text": "「Always Ask」で計画を必ず見せてもらい、大きな作業は「/」→「plan」でまず計画だけ作らせます。変更するファイルとやらないことを確認してから進めてもらいましょう。"
+            "text": "「Always Ask」で計画を必ず見せてもらい、大きな作業は「/plan」でまず計画だけ作らせます。変更するファイルとやらないことを確認してから進めてもらいましょう。"
           }
         ],
       },

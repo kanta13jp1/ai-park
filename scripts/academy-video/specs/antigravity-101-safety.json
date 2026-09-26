@@ -3,7 +3,7 @@
   "course": "Antigravity 101",
   "tts": {
     "provider": "gemini",
-    "model": "gemini-3.8-flash-tts",
+    "model": "gemini-3.8-flash-lite-tts",
     "voice": "Kore",
     "style": "落ち着いた、分かりやすい研修講師の話し方"
   },
@@ -15,36 +15,97 @@
     },
     {
       "title": "最初に必ず：安全設定",
-      "say": "左下の「Settings」→「General」で、エージェントにどこまで任せるかを決めます。慣れるまでは、必ず確認が入る設定にしておきます。",
-      "lead": "左下の「Settings」→「General」で、エージェントにどこまで任せるかを決めます。慣れるまでは、必ず確認が入る設定にしておきます。"
+      "say": "使い始める前に、エージェントにどこまで任せるかを決めておきましょう。最初は「何かする前に必ず確認してくれる」設定にしておくと安心です。",
+      "lead": "使い始める前に、エージェントにどこまで任せるかを決めておきましょう。最初は「何かする前に必ず確認してくれる」設定にしておくと安心です。"
     },
     {
-      "title": "おすすめの設定",
+      "title": "設定画面を開く",
       "bullets": [
-        "Security Preset：「Default」を選ぶ（ターミナ…",
-        "Plan Review Policy：「Always Ask」を選…"
+        "左下の「Settings」をクリック",
+        "左のメニューから「General」を選ぶ"
       ],
       "highlight": 0,
-      "say": "Security Preset：「Default」を選ぶ（ターミナルのコマンド実行と、作業フォルダの外のファイル操作の前に確認が入る）。"
+      "say": "左下の「Settings」をクリック。"
     },
     {
-      "title": "おすすめの設定",
+      "title": "設定画面を開く",
       "bullets": [
-        "Security Preset：「Default」を選ぶ（ターミナ…",
-        "Plan Review Policy：「Always Ask」を選…"
+        "左下の「Settings」をクリック",
+        "左のメニューから「General」を選ぶ"
       ],
       "highlight": 1,
-      "say": "Plan Review Policy：「Always Ask」を選ぶ（作業を始める前に計画を見せて確認を求める）。"
+      "say": "左のメニューから「General」を選ぶ。"
     },
     {
-      "title": "おすすめの設定",
+      "title": "設定画面を開く",
+      "say": "画面では、このように表示されます。",
+      "image": "G6-settings.png"
+    },
+    {
+      "title": "Security Preset（任せる範囲）",
+      "say": "「Security Preset」は、エージェントが確認なしでできることの範囲です。右側の ▼ をクリックすると4つの選択肢が出ます。",
+      "image": "L2-security-preset.png",
+      "speak": "「Security Preset」は、エージェントが確認なしでできることの範囲です。右側の 下向きの矢印 をクリックすると4つの選択肢が出ます。"
+    },
+    {
+      "title": "Security Preset（任せる範囲）",
+      "bullets": [
+        "Default（おすすめ）：ターミナルのコマンド実行と、作業フォル…",
+        "Full machine：コマンドは確認が入るが、PC 内のどのフ…",
+        "Turbo mode：安全のための確認がすべて無くなる",
+        "Custom：項目ごとに自分で細かく決める"
+      ],
+      "highlight": 0,
+      "say": "Default（おすすめ）：ターミナルのコマンド実行と、作業フォルダの外のファイル操作の前に必ず確認が入る。"
+    },
+    {
+      "title": "Security Preset（任せる範囲）",
+      "bullets": [
+        "Default（おすすめ）：ターミナルのコマンド実行と、作業フォル…",
+        "Full machine：コマンドは確認が入るが、PC 内のどのフ…",
+        "Turbo mode：安全のための確認がすべて無くなる",
+        "Custom：項目ごとに自分で細かく決める"
+      ],
+      "highlight": 1,
+      "say": "Full machine：コマンドは確認が入るが、PC 内のどのファイルでも読み書きできる。"
+    },
+    {
+      "title": "Security Preset（任せる範囲）",
+      "bullets": [
+        "Default（おすすめ）：ターミナルのコマンド実行と、作業フォル…",
+        "Full machine：コマンドは確認が入るが、PC 内のどのフ…",
+        "Turbo mode：安全のための確認がすべて無くなる",
+        "Custom：項目ごとに自分で細かく決める"
+      ],
+      "highlight": 2,
+      "say": "Turbo mode：安全のための確認がすべて無くなる。"
+    },
+    {
+      "title": "Security Preset（任せる範囲）",
+      "bullets": [
+        "Default（おすすめ）：ターミナルのコマンド実行と、作業フォル…",
+        "Full machine：コマンドは確認が入るが、PC 内のどのフ…",
+        "Turbo mode：安全のための確認がすべて無くなる",
+        "Custom：項目ごとに自分で細かく決める"
+      ],
+      "highlight": 3,
+      "say": "Custom：項目ごとに自分で細かく決める。"
+    },
+    {
+      "title": "Security Preset（任せる範囲）",
       "say": "画面では、このように表示されます。",
       "image": "G6-settings-options.png"
     },
     {
-      "title": "業務で使わない設定",
-      "say": "注意してください。「Full machine」は PC 内のどのファイルでも読み書きでき、「Turbo mode」は安全のための確認がすべて無くなります。業務では使わないでください。",
-      "lead": "注意してください。「Full machine」は PC 内のどのファイルでも読み書きでき、「Turbo mode」は安全のための確認がすべて無くなります。業務では使わないでください。"
+      "title": "Plan Review Policy（計画の確認）",
+      "say": "「Plan Review Policy」は、作業を始める前に計画を見せてくれるかどうかの設定です。「Always Ask」を選ぶと、エージェントはまず計画を見せて、あなたの確認を待ってくれます。注意してください。「Full machine」「Turbo mode」と「Always Proceed」は、慣れるまで・業務では使わないでください。意図しないファイルの変更やコマンドの実行を止められなくなります。",
+      "image": "L3-plan-review.png"
+    },
+    {
+      "title": "まとめ",
+      "say": "まとめです。Settings → General で、Security Preset を「Default」、Plan Review Policy を「Always Ask」にします。これで、エージェントは作業前に計画を見せ、コマンド実行や作業フォルダ外の操作の前に必ず確認してくれます。",
+      "lead": "Settings → General で、Security Preset を「Default」、Plan Review Policy を「Always Ask」にします。これで、エージェントは作業前に計画を見せ、コマンド実行や作業フォルダ外の操作の前に必ず確認してくれます。",
+      "speak": "まとめです。Settings、General で、Security Preset を「Default」、Plan Review Policy を「Always Ask」にします。これで、エージェントは作業前に計画を見せ、コマンド実行や作業フォルダ外の操作の前に必ず確認してくれます。"
     }
   ]
 }

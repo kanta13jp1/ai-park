@@ -3,7 +3,7 @@
   "course": "Antigravity 実践",
   "tts": {
     "provider": "gemini",
-    "model": "gemini-3.8-flash-tts",
+    "model": "gemini-3.8-flash-lite-tts",
     "voice": "Kore",
     "style": "落ち着いた、分かりやすい研修講師の話し方"
   },
@@ -15,51 +15,33 @@
     },
     {
       "title": "変更の確認と取り消し（Git）",
-      "bullets": [
-        "git switch -c feature/xxx：作業用ブランチ…",
-        "git status / git diff：何が変わったかを確認する",
-        "git add . && git commit -m \"...\"：…",
-        "git restore <file>：意図と違う変更をコミット前に…"
-      ],
-      "highlight": 0,
-      "say": "エージェントは複数のファイルを一度に書き換えます。作業前にブランチを切り、変更を差分で確認してから取り込むのが事故を防ぐ基本です。git switch -c feature/xxx：作業用ブランチを作る（main で直接作業しない）。",
-      "speak": "エージェントは複数のファイルを一度に書き換えます。作業前にブランチを切り、変更を差分で確認してから取り込むのが事故を防ぐ基本です。git switch：作業用ブランチを作る（main で直接作業しない）。"
+      "say": "エージェントは一度に複数のファイルを書き換えます。Git を使えば、何が変わったかを確認でき、意図と違えば元に戻せます。コマンドは右のボタンでコピーできます。",
+      "lead": "エージェントは一度に複数のファイルを書き換えます。Git を使えば、何が変わったかを確認でき、意図と違えば元に戻せます。コマンドは右のボタンでコピーできます。"
     },
     {
-      "title": "変更の確認と取り消し（Git）",
-      "bullets": [
-        "git switch -c feature/xxx：作業用ブランチ…",
-        "git status / git diff：何が変わったかを確認する",
-        "git add . && git commit -m \"...\"：…",
-        "git restore <file>：意図と違う変更をコミット前に…"
-      ],
-      "highlight": 1,
-      "say": "git status / git diff：何が変わったかを確認する。",
-      "speak": "git status と git diff：何が変わったかを確認する。"
+      "title": "作業前にブランチを作る",
+      "say": "main（本番用）で直接作業せず、作業用のブランチを作ってから依頼します。コマンドは、レッスンのページからコピーできます。",
+      "lead": "main（本番用）で直接作業せず、作業用のブランチを作ってから依頼します。コマンドは、レッスンのページからコピーできます。"
     },
     {
-      "title": "変更の確認と取り消し（Git）",
-      "bullets": [
-        "git switch -c feature/xxx：作業用ブランチ…",
-        "git status / git diff：何が変わったかを確認する",
-        "git add . && git commit -m \"...\"：…",
-        "git restore <file>：意図と違う変更をコミット前に…"
-      ],
-      "highlight": 2,
-      "say": "git add . && git commit -m \"...\"：確認できた変更を記録する。",
-      "speak": "git add と git commit：確認できた変更を記録する。"
+      "title": "変わったところを確認する",
+      "say": "エージェントに要点をまとめてもらうのも便利です。",
+      "lead": "エージェントに要点をまとめてもらうのも便利です。"
     },
     {
-      "title": "変更の確認と取り消し（Git）",
-      "bullets": [
-        "git switch -c feature/xxx：作業用ブランチ…",
-        "git status / git diff：何が変わったかを確認する",
-        "git add . && git commit -m \"...\"：…",
-        "git restore <file>：意図と違う変更をコミット前に…"
-      ],
-      "highlight": 3,
-      "say": "git restore <file>：意図と違う変更をコミット前に取り消す。",
-      "speak": "git restore：意図と違う変更をコミット前に取り消す。"
+      "title": "例：変更内容の確認",
+      "lead": "今回変更したファイルと、それぞれの変更内容の要点を一覧にしてください。",
+      "say": "例えば、次のように頼みます。今回変更したファイルと、それぞれの変更内容の要点を一覧にしてください。"
+    },
+    {
+      "title": "意図と違えば取り消す",
+      "say": "ポイントです。IDE（Antigravity IDE や VS Code）を使っている場合は、左側の「ソース管理」からも同じ操作をボタンで行えます。",
+      "lead": "ポイントです。IDE（Antigravity IDE や VS Code）を使っている場合は、左側の「ソース管理」からも同じ操作をボタンで行えます。"
+    },
+    {
+      "title": "まとめ",
+      "say": "まとめです。作業前にブランチを作り、git status と git diff で変更を確認してからコミットします。意図と違う変更は git restore で取り消せます。",
+      "lead": "作業前にブランチを作り、git status と git diff で変更を確認してからコミットします。意図と違う変更は git restore で取り消せます。"
     }
   ]
 }

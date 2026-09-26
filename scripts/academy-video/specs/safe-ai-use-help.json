@@ -3,7 +3,7 @@
   "course": "安全に使う",
   "tts": {
     "provider": "gemini",
-    "model": "gemini-3.8-flash-tts",
+    "model": "gemini-3.8-flash-lite-tts",
     "voice": "Kore",
     "style": "落ち着いた、分かりやすい研修講師の話し方"
   },
@@ -15,6 +15,11 @@
     },
     {
       "title": "困ったときの相談先",
+      "say": "分からないこと・困ったことがあれば、ひとりで悩まずに相談してください。",
+      "lead": "分からないこと・困ったことがあれば、ひとりで悩まずに相談してください。"
+    },
+    {
+      "title": "相談先",
       "bullets": [
         "Office Hour：画面上部の「AI Office Hour …",
         "Google Chat の「AI勉強会」スペース",
@@ -24,7 +29,7 @@
       "say": "Office Hour：画面上部の「AI Office Hour 予約」から。"
     },
     {
-      "title": "困ったときの相談先",
+      "title": "相談先",
       "bullets": [
         "Office Hour：画面上部の「AI Office Hour …",
         "Google Chat の「AI勉強会」スペース",
@@ -34,7 +39,7 @@
       "say": "Google Chat の「AI勉強会」スペース。"
     },
     {
-      "title": "困ったときの相談先",
+      "title": "相談先",
       "bullets": [
         "Office Hour：画面上部の「AI Office Hour …",
         "Google Chat の「AI勉強会」スペース",
@@ -42,6 +47,16 @@
       ],
       "highlight": 2,
       "say": "お問い合わせページのフォーム・FAQ。"
+    },
+    {
+      "title": "例：相談メッセージの型",
+      "lead": "【やりたいこと】 【試したこと】 【困っていること・エラー文】 【使っているツール】（例：Antigravity 2.0）",
+      "say": "このような型を使って頼みます。プロンプトは、レッスンのページからコピーできます。"
+    },
+    {
+      "title": "まとめ",
+      "say": "まとめです。Office Hour・Google Chat の AI勉強会スペース・お問い合わせページの3か所で相談できます。やりたいこと・試したこと・困っていることを書くと、早く解決できます。",
+      "lead": "Office Hour・Google Chat の AI勉強会スペース・お問い合わせページの3か所で相談できます。やりたいこと・試したこと・困っていることを書くと、早く解決できます。"
     }
   ]
 }

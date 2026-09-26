@@ -3,7 +3,7 @@
   "course": "Antigravity 101",
   "tts": {
     "provider": "gemini",
-    "model": "gemini-3.8-flash-tts",
+    "model": "gemini-3.8-flash-lite-tts",
     "voice": "Kore",
     "style": "落ち着いた、分かりやすい研修講師の話し方"
   },
@@ -15,38 +15,140 @@
     },
     {
       "title": "サインインと初期設定",
+      "say": "インストールが終わったら、Antigravity を起動してサインインします。業務で使うときと、個人で学習するときでサインイン方法が違うので注意してください。",
+      "lead": "インストールが終わったら、Antigravity を起動してサインインします。業務で使うときと、個人で学習するときでサインイン方法が違うので注意してください。"
+    },
+    {
+      "title": "起動する",
       "bullets": [
-        "スタートメニューから Antigravity を起動",
-        "業務で使う場合は「Use business account」を選び…",
-        "テーマ（画面の色）を選ぶ → Google プラグインは分からなけ…"
+        "スタートメニューを開き「Antigravity」を探してクリックする",
+        "「Loading Antigravity」と表示されている間は、そ…"
       ],
       "highlight": 0,
-      "say": "スタートメニューから Antigravity を起動。"
+      "say": "スタートメニューを開き「Antigravity」を探してクリックする。"
     },
     {
-      "title": "サインインと初期設定",
+      "title": "起動する",
       "bullets": [
-        "スタートメニューから Antigravity を起動",
-        "業務で使う場合は「Use business account」を選び…",
-        "テーマ（画面の色）を選ぶ → Google プラグインは分からなけ…"
+        "スタートメニューを開き「Antigravity」を探してクリックする",
+        "「Loading Antigravity」と表示されている間は、そ…"
       ],
       "highlight": 1,
-      "say": "業務で使う場合は「Use business account」を選び、会社アカウントでサインインしてから会社の Google Cloud プロジェクトを選ぶ。"
+      "say": "「Loading Antigravity」と表示されている間は、そのまま待つ。"
+    },
+    {
+      "title": "起動する",
+      "say": "しばらくすると「Welcome to Antigravity」の画面が表示され、サインイン方法を2つから選びます。",
+      "image": "S0-loading.png"
     },
     {
       "title": "サインインと初期設定",
+      "say": "画面では、このように表示されます。",
+      "image": "S1-signin.png"
+    },
+    {
+      "title": "業務で使う場合（会社アカウント）",
       "bullets": [
-        "スタートメニューから Antigravity を起動",
-        "業務で使う場合は「Use business account」を選び…",
-        "テーマ（画面の色）を選ぶ → Google プラグインは分からなけ…"
+        "「Use business account」を選ぶ",
+        "ブラウザが開くので、会社の Google アカウントでログインする",
+        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
+        "ブラウザに表示される「Open Antigravity」をクリック…"
+      ],
+      "highlight": 0,
+      "say": "「Use business account」を選ぶ。"
+    },
+    {
+      "title": "業務で使う場合（会社アカウント）",
+      "bullets": [
+        "「Use business account」を選ぶ",
+        "ブラウザが開くので、会社の Google アカウントでログインする",
+        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
+        "ブラウザに表示される「Open Antigravity」をクリック…"
+      ],
+      "highlight": 1,
+      "say": "ブラウザが開くので、会社の Google アカウントでログインする。"
+    },
+    {
+      "title": "業務で使う場合（会社アカウント）",
+      "bullets": [
+        "「Use business account」を選ぶ",
+        "ブラウザが開くので、会社の Google アカウントでログインする",
+        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
+        "ブラウザに表示される「Open Antigravity」をクリック…"
       ],
       "highlight": 2,
-      "say": "テーマ（画面の色）を選ぶ → Google プラグインは分からなければ選ばずに進む → 利用規約を確認して「Accept」→「Finish」。"
+      "say": "会社の Google Cloud プロジェクトを選ぶ（プロジェクト ID は AI推進担当から案内されます）。"
     },
     {
-      "title": "サインインと初期設定",
-      "say": "ポイントです。会社のプロジェクト ID は AI推進担当 から案内されます。「権限がない」と表示された場合は、管理者の設定が終わっていない可能性があるので AI推進担当 に連絡してください。",
-      "lead": "ポイントです。会社のプロジェクト ID は AI推進担当 から案内されます。「権限がない」と表示された場合は、管理者の設定が終わっていない可能性があるので AI推進担当 に連絡してください。"
+      "title": "業務で使う場合（会社アカウント）",
+      "bullets": [
+        "「Use business account」を選ぶ",
+        "ブラウザが開くので、会社の Google アカウントでログインする",
+        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
+        "ブラウザに表示される「Open Antigravity」をクリック…"
+      ],
+      "highlight": 3,
+      "say": "ブラウザに表示される「Open Antigravity」をクリックしてアプリに戻る。"
+    },
+    {
+      "title": "業務で使う場合（会社アカウント）",
+      "say": "ポイントです。「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。",
+      "lead": "ポイントです。「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。"
+    },
+    {
+      "title": "個人で学習する場合",
+      "say": "「Continue with Google」を選び、個人の Google アカウントでログインします。業務の情報は入力しないでください。",
+      "lead": "「Continue with Google」を選び、個人の Google アカウントでログインします。業務の情報は入力しないでください。"
+    },
+    {
+      "title": "初期設定",
+      "bullets": [
+        "テーマ（画面の色）を選ぶ",
+        "Google プラグインの選択は、分からなければ何も選ばずに進む",
+        "利用規約を確認して「Accept」",
+        "「Finish」をクリックすると、メイン画面が開く"
+      ],
+      "highlight": 0,
+      "say": "テーマ（画面の色）を選ぶ。"
+    },
+    {
+      "title": "初期設定",
+      "bullets": [
+        "テーマ（画面の色）を選ぶ",
+        "Google プラグインの選択は、分からなければ何も選ばずに進む",
+        "利用規約を確認して「Accept」",
+        "「Finish」をクリックすると、メイン画面が開く"
+      ],
+      "highlight": 1,
+      "say": "Google プラグインの選択は、分からなければ何も選ばずに進む。"
+    },
+    {
+      "title": "初期設定",
+      "bullets": [
+        "テーマ（画面の色）を選ぶ",
+        "Google プラグインの選択は、分からなければ何も選ばずに進む",
+        "利用規約を確認して「Accept」",
+        "「Finish」をクリックすると、メイン画面が開く"
+      ],
+      "highlight": 2,
+      "say": "利用規約を確認して「Accept」。"
+    },
+    {
+      "title": "初期設定",
+      "bullets": [
+        "テーマ（画面の色）を選ぶ",
+        "Google プラグインの選択は、分からなければ何も選ばずに進む",
+        "利用規約を確認して「Accept」",
+        "「Finish」をクリックすると、メイン画面が開く"
+      ],
+      "highlight": 3,
+      "say": "「Finish」をクリックすると、メイン画面が開く。"
+    },
+    {
+      "title": "まとめ",
+      "say": "まとめです。業務では「Use business account」で会社アカウントにサインインし、会社のプロジェクトを選びます。初期設定はテーマ選択 → プラグイン（飛ばしてOK）→ Accept → Finish の順です。",
+      "lead": "業務では「Use business account」で会社アカウントにサインインし、会社のプロジェクトを選びます。初期設定はテーマ選択 → プラグイン（飛ばしてOK）→ Accept → Finish の順です。",
+      "speak": "まとめです。業務では「Use business account」で会社アカウントにサインインし、会社のプロジェクトを選びます。初期設定はテーマ選択、プラグイン（飛ばしてOK）、Accept、Finish の順です。"
     }
   ]
 }

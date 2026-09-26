@@ -8,6 +8,7 @@
 """
 
 import base64
+import hashlib
 import json
 import os
 import time
@@ -24,6 +25,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[2]
 IMAGES = ROOT / "public" / "images" / "guide"
 OUT_DIR = ROOT / "public" / "videos" / "academy"
+CACHE_DIR = Path(os.environ.get("ACADEMY_TTS_CACHE", Path.home() / ".cache" / "ai-park-academy-tts"))
 W, H = 1280, 720
 BG, INK, SUB, ACCENT = (250, 249, 245), (20, 20, 19), (90, 90, 88), (217, 119, 87)
 FONT_TITLE = "C:/Windows/Fonts/BIZ-UDMinchoM.ttc"
@@ -95,14 +97,33 @@ def speak_gemini(text, cfg, wav_path):
         "response_format": {"type": "audio"},
         "generation_config": {"speech_config": [{"voice": cfg.get("voice", "Kore")}]},
     }
+    # 同じ台本・同じ設定の音声はキャッシュを使い、利用回数（1日の上限あり）を無駄にしない
+    key = hashlib.sha256(json.dumps(body, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:24]
+    cached = CACHE_DIR / f"{key}.wav"
+    if cached.exists():
+        Path(wav_path).write_bytes(cached.read_bytes())
+        return
     req = urllib.request.Request(
         "https://generativelanguage.googleapis.com/v1beta/interactions",
         data=json.dumps(body).encode(),
         headers={"x-goog-api-key": os.environ["GEMINI_API_KEY"], "Content-Type": "application/json"},
     )
-    res = json.load(urllib.request.urlopen(req, timeout=300))
+    for attempt in range(4):
+        try:
+            res = json.load(urllib.request.urlopen(req, timeout=300))
+            break
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode(errors="replace")
+            if e.code == 429 and "per day" in detail:
+                raise SystemExit(f"TTS の1日の利用上限に達しました（{body['model']}）: {detail[:200]}")
+            if e.code in (429, 500, 503) and attempt < 3:
+                time.sleep(20 * (attempt + 1))
+                continue
+            raise
     audio = next(c["data"] for step in res["steps"] for c in step.get("content", []) if c.get("data"))
-    Path(wav_path).write_bytes(base64.b64decode(audio))
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cached.write_bytes(base64.b64decode(audio))
+    Path(wav_path).write_bytes(cached.read_bytes())
 
 
 def speak_windows(text, cfg, wav_path):
@@ -151,6 +172,17 @@ def transcribe(wav_path):
     return f"［文字起こし失敗: {last}］"
 
 
+def run_ffmpeg(args):
+    """ffmpeg を実行する。メモリ不足などで一時的に落ちることがあるため1回だけ再試行する。"""
+    for attempt in range(2):
+        try:
+            return subprocess.run(args, check=True)
+        except subprocess.CalledProcessError:
+            if attempt:
+                raise
+            time.sleep(3)
+
+
 def vtt_time(t):
     h, rem = divmod(t, 3600)
     m, s = divmod(rem, 60)
@@ -174,11 +206,11 @@ def main(spec_path, verify=False):
                 print(f"--- {i}. {slide['title']}")
                 print(f"台本: {slide['say']}")
                 print(f"音声: {transcribe(wav)}")
-            subprocess.run(
+            run_ffmpeg(
                 ["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", str(png), "-i", str(wav),
-                 "-af", f"apad=pad_dur={pad}", "-t", f"{dur:.3f}", "-c:v", "libx264", "-tune", "stillimage",
-                 "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "aac", "-b:a", "96k", "-ar", "44100", str(mp4)],
-                check=True,
+                 "-af", f"apad=pad_dur={pad}", "-t", f"{dur:.3f}", "-c:v", "libx264", "-tune", "stillimage", "-preset", "veryfast", "-threads", "1",  # メモリが少ない PC でも落ちにくい設定
+                
+                 "-pix_fmt", "yuv420p", "-r", "30", "-c:a", "aac", "-b:a", "96k", "-ar", "44100", str(mp4)]
             )
             segments.append(mp4)
             # 字幕は「。」ごとに分け、文字数に応じて表示時間を割り振る
@@ -193,8 +225,8 @@ def main(spec_path, verify=False):
         listfile = tmp / "list.txt"
         listfile.write_text("".join(f"file '{p.as_posix()}'\n" for p in segments), encoding="utf-8")
         out = OUT_DIR / f"{spec['id']}.mp4"
-        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(listfile),
-                        "-c", "copy", "-movflags", "+faststart", str(out)], check=True)
+        run_ffmpeg(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(listfile),
+                        "-c", "copy", "-movflags", "+faststart", str(out)])
     vtt = ["WEBVTT", ""]
     for n, (a, b, text) in enumerate(cues, 1):
         vtt += [str(n), f"{vtt_time(a)} --> {vtt_time(b)}", text, ""]
