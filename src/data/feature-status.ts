@@ -199,6 +199,18 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     releaseCondition: "各部署からの登録が集まり、月次の状況更新が回り始めた時点で正式運用へ移行",
   },
   {
+    id: "calendar",
+    name: "AI Park カレンダー",
+    href: "/calendar",
+    isVerified: false,
+    status: "in_development",
+    evidence: "",
+    currentBadge: "🚧 工事中",
+    disclaimer: "【工事中】「AI Park イベント」カレンダー（社内限定共有）の作成と、AI勉強会アジェンダ自動追加スクリプトの設置を準備中です。",
+    releaseDate: "2026年10月2日(金)",
+    releaseCondition: "社内カレンダーの作成・組織内共有、アジェンダ自動追加スクリプトの稼働確認、ページへのカレンダー埋め込み",
+  },
+  {
     id: "idea-board",
     name: "アイデア宣言ボード",
     href: "/idea-board",

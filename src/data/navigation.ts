@@ -46,6 +46,7 @@ export const navigationSections: NavSection[] = [
     title: "🗨️ コミュニティ",
     items: [
       { name: "AIアンバサダー", href: "/ambassadors", icon: "🤝", badge: "📋 準備中" },
+      { name: "AI Park カレンダー", href: "/calendar", icon: "🗓️", badge: "🚧 工事中" },
       { name: "ご意見・改善ToDo", href: "/feedback-todo", icon: "📋", badge: "β版" },
     ]
   },
