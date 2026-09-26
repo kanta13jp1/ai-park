@@ -3,6 +3,7 @@
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import Link from "next/link";
+import GcpSetupGuide from "@/components/GcpSetupGuide";
 import { Terminal, Download, Languages, GitBranch, AlertTriangle, ExternalLink } from "lucide-react";
 
 // 手順は Google Antigravity 公式ドキュメント（2026年9月25日確認）に基づく
@@ -29,7 +30,7 @@ export default function GuidePage() {
     {
       step: "03",
       title: "Googleアカウントでサインイン",
-      desc: "業務では会社アカウントで「Business account」→「Continue with Google Cloud」を選び、AI CoEから案内された会社のGoogle Cloudプロジェクトとロケーションを選択します（事前にAI CoEへ権限付与を依頼）。個人の学習用途なら個人のGoogleアカウントでもサインインできます。",
+      desc: "業務では会社アカウントで「Business account」→「Continue with Google Cloud」を選び、AI CoEから案内された会社のGoogle Cloudプロジェクトとロケーションを選択します（詳しくは下の「会社の Google Cloud で Antigravity を使う」U1）。個人の学習用途なら個人のGoogleアカウントでもサインインできます。",
     },
     {
       step: "04",
@@ -123,6 +124,8 @@ export default function GuidePage() {
             ))}
           </div>
         </section>
+
+        <GcpSetupGuide />
 
         {/* 日本語化 */}
         <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
