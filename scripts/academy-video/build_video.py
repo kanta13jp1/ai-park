@@ -106,7 +106,14 @@ def main(spec_path):
                 check=True,
             )
             segments.append(mp4)
-            cues.append((t, t + dur - pad / 2, slide["say"]))
+            # 字幕は「。」ごとに分け、文字数に応じて表示時間を割り振る
+            sentences = [x + "。" for x in slide["say"].split("。") if x.strip()]
+            total_chars = sum(len(x) for x in sentences)
+            start, span = t, dur - pad / 2
+            for sentence in sentences:
+                length = span * len(sentence) / total_chars
+                cues.append((start, start + length, sentence))
+                start += length
             t += dur
         listfile = tmp / "list.txt"
         listfile.write_text("".join(f"file '{p.as_posix()}'\n" for p in segments), encoding="utf-8")
