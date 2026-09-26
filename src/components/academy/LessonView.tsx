@@ -110,7 +110,17 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
               </div>
 
               <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
-                {lesson.video ? (
+                {lesson.ownVideo ? (
+                  <video
+                    controls
+                    preload="metadata"
+                    poster={`${basePath}/videos/academy/${lesson.ownVideo}.jpg`}
+                    className="w-full aspect-video bg-black"
+                  >
+                    <source src={`${basePath}/videos/academy/${lesson.ownVideo}.mp4`} type="video/mp4" />
+                    <track kind="captions" srcLang="ja" label="日本語" src={`${basePath}/videos/academy/${lesson.ownVideo}.vtt`} default />
+                  </video>
+                ) : lesson.video ? (
                   <div className="aspect-video">
                     <iframe
                       className="w-full h-full"
@@ -127,7 +137,11 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                 )}
                 <div className="px-4 py-3 space-y-1 border-t border-slate-100">
                   <p className="text-sm font-bold text-slate-900">
-                    {lesson.video ? `${lesson.video.title}（${lesson.video.channel}・英語）` : lesson.title}
+                    {lesson.ownVideo
+                      ? `${lesson.title}（AI推進担当 作成・字幕付き／音声は合成音声）`
+                      : lesson.video
+                      ? `${lesson.video.title}（${lesson.video.channel}・英語）`
+                      : lesson.title}
                   </p>
                   <p className="text-xs text-slate-600">{lesson.summary}</p>
                 </div>

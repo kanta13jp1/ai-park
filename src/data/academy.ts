@@ -25,6 +25,8 @@ export interface Lesson {
   section: string; // コース内のまとまり（目次の見出し）
   summary: string; // 1〜2文の概要（動画の下に表示）
   video?: VideoRef;
+  // AI推進担当が作成した動画（public/videos/academy/<id>.mp4 / .vtt / .jpg）。scripts/academy-video で生成
+  ownVideo?: string;
   blocks: LessonBlock[];
 }
 
@@ -89,6 +91,7 @@ export const courses: Course[] = [
         minutes: 10,
         section: "セットアップ",
         summary: "Antigravity は、デスクトップアプリ・エディタ（IDE）・ターミナル（CLI）・既存エディタの拡張機能の4つの形で使えます。まずはデスクトップアプリを入れましょう。",
+        ownVideo: "antigravity-101-install",
         blocks: [
           { type: "h", id: "app", text: "Antigravity 2.0（デスクトップアプリ）" },
           { type: "p", text: "エージェントに仕事を依頼・管理する中心のアプリです。迷ったらこれを入れてください。必要な環境は Windows 10（64bit）以降です。" },
