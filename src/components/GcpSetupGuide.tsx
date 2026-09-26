@@ -21,15 +21,15 @@ const adminSteps: GuideStep[] = [
     id: "A1",
     title: "プロジェクトに会社の支払い方法をひも付ける",
     who: "請求先アカウント管理者",
-    path: "Google Cloud コンソール → 左上でプロジェクトを選択 → 左上「≡」→「お支払い」",
+    path: "Google Cloud コンソール → 左上でプロジェクトを選択 → 左上「≡」→「課金」",
     link: { label: "Google Cloud コンソールを開く", href: "https://console.cloud.google.com/" },
     actions: [
       "画面左上のプロジェクト名をクリックし、Antigravity 用のプロジェクトを選ぶ",
-      "左上の「≡」メニューから「お支払い」を開く",
+      "左上の「≡」メニューから「課金」を開く",
       "「請求先アカウントをリンク」をクリックし、会社の請求先アカウントを選んで「アカウントを設定」",
     ],
     note: "初めて Google Cloud を使う請求先アカウントには 300ドル分の無料トライアルクレジット（90日間）が付きます。90日経過かクレジットを使い切ると、有料アカウントへアップグレードしない限りプロジェクトが止まります。",
-    imageAlt: "お支払い画面の「請求先アカウントをリンク」ボタン",
+    imageAlt: "課金画面の「請求先アカウントをリンク」ボタン",
   },
   {
     id: "A2",
@@ -63,7 +63,7 @@ const adminSteps: GuideStep[] = [
     id: "A4",
     title: "月の利用上限を設定する（超えたら自動で一時停止）",
     who: "請求先アカウント管理者",
-    path: "左上「≡」→「お支払い」→「予算とアラート」→「予算を作成」",
+    path: "左上「≡」→「課金」→「予算とアラート」→「予算を作成」",
     link: {
       label: "公式の設定手順（Spend cap）",
       href: "https://docs.cloud.google.com/billing/docs/how-to/budgets-spend-caps",
@@ -81,12 +81,12 @@ const adminSteps: GuideStep[] = [
     id: "A5",
     title: "使った金額と計上先を確認する",
     who: "請求先アカウント管理者",
-    path: "左上「≡」→「お支払い」→「レポート」",
+    path: "左上「≡」→「課金」→「レポート」",
     actions: [
       "利用者が少し使ったあとにレポートを開く",
       "Antigravity の利用料が「Gemini Enterprise Agent Platform」に計上されていることを確認（違うサービス名なら A4 の対象サービスをそれに合わせる）",
     ],
-    imageAlt: "お支払いレポート画面",
+    imageAlt: "課金レポート画面",
   },
 ];
 
