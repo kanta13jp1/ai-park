@@ -270,6 +270,7 @@ const tasksData: TaskItem[] = [
     description: "社内業務でAIツールを実践導入している社員への直接取材を実施し、実際の工数削減成果、直面した課題、プロンプトの工夫をインタビュー記事として正式公開します。",
     items: [
       { text: "インタビュー記事フォーマット & 取材立候補フォームUI構築", done: true },
+      { text: "取材立候補のGitHub Issue受付・Google Chat通知 & 取材キット（流れ・質問項目）公開", done: true },
       { text: "デジタル推進部・クラウド開発チームへの実務取材実施（2件）", done: false },
       { text: "記事校正・関係者レビュー完了後の正式公開", done: false },
     ],

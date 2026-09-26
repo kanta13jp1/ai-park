@@ -1,0 +1,40 @@
+name: AI活用インタビュー 取材立候補
+description: 現場のAI活用インタビューへの立候補・情報提供（AI CoE 編集部が取材を調整します）
+title: "[取材立候補] "
+labels: ["interview"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        このリポジトリは公開されています。顧客名・案件名・社外秘の数値は書かず、概要のみご記入ください（詳細は取材時に伺います）。
+  - type: input
+    id: author
+    attributes:
+      label: お名前
+      placeholder: 例: 山本 雄二
+    validations:
+      required: true
+  - type: input
+    id: dept
+    attributes:
+      label: 所属部署 / チーム
+      placeholder: 例: デジタル推進第一部
+    validations:
+      required: true
+  - type: input
+    id: tools
+    attributes:
+      label: 使っているAIツール
+      placeholder: 例: Antigravity, Gemini, Dify
+  - type: textarea
+    id: theme
+    attributes:
+      label: 取り組み内容・アピールポイント
+      placeholder: 「自作のプロンプトで〇〇作業を短縮した」「チームでAntigravityを運用中」など
+    validations:
+      required: true
+  - type: textarea
+    id: effect
+    attributes:
+      label: 効果（分かる範囲で）
+      placeholder: 例: 週3時間かかっていた集計が30分に短縮

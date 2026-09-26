@@ -18,6 +18,7 @@ import {
   Share2,
 } from "lucide-react";
 import { useState } from "react";
+import { GITHUB_REPO } from "@/lib/githubFeedback";
 
 interface InterviewArticle {
   id: string;
@@ -45,6 +46,47 @@ interface InterviewArticle {
     content: string;
   };
   advice: string;
+  published?: boolean; // 実取材・本人と上長の原稿確認が済んだ正式記事のみ true（未指定はモデルケース）
+}
+
+// 取材キット：取材の流れと質問項目（記事フォーマットの各欄に対応）
+const interviewFlow = [
+  { step: "立候補", desc: "下のボタンから立候補（GitHub Issue）。AI CoE に通知が届きます" },
+  { step: "日程調整", desc: "AI CoE 編集部から連絡し、30分の取材枠を調整（オンライン可）" },
+  { step: "取材", desc: "下の質問項目に沿ってお話を伺います。画面を見せながらでもOK" },
+  { step: "原稿確認", desc: "ご本人と上長に原稿を確認いただき、社外秘の情報がないかをチェック" },
+  { step: "公開", desc: "確認が取れた記事から「正式公開」として掲載します" },
+];
+
+const interviewQuestions = [
+  "どんな業務で、何に困っていましたか？（AI導入前の状況）",
+  "どのAIツールを、どう使いましたか？（使ったプロンプトや手順があれば）",
+  "どれくらい効果がありましたか？（時間・件数などの数字で分かる範囲）",
+  "うまくいかなかったこと・つまずいたことは？",
+  "これから始める人へのアドバイスをひとこと",
+];
+
+function buildCandidateIssueUrl(fields: { author: string; dept: string; theme: string }) {
+  const params = new URLSearchParams({
+    template: "interview.yml",
+    title: `[取材立候補] ${fields.dept} ${fields.author}`,
+    author: fields.author,
+    dept: fields.dept,
+    theme: fields.theme,
+  });
+  return `https://github.com/${GITHUB_REPO}/issues/new?${params.toString()}`;
+}
+
+function ArticleStatusBadge({ published }: { published?: boolean }) {
+  return published ? (
+    <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+      ✅ 正式公開
+    </span>
+  ) : (
+    <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">
+      📋 モデルケース（架空の事例）
+    </span>
+  );
 }
 
 const interviewArticles: InterviewArticle[] = [
@@ -277,21 +319,21 @@ export default function InterviewsPage() {
   const [candidateName, setCandidateName] = useState("");
   const [candidateDept, setCandidateDept] = useState("");
   const [candidateTheme, setCandidateTheme] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [copiedPromptId, setCopiedPromptId] = useState<string | null>(null);
 
+  // 立候補は GitHub Issue フォーム（interview.yml）へ入力内容を引き継いで起票 → Google Chat に通知
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!candidateName || !candidateDept) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setIsSubmitModalOpen(false);
-      setCandidateName("");
-      setCandidateDept("");
-      setCandidateTheme("");
-      alert("インタビューへの立候補ありがとうございます！CoE編集部より日程調整のご連絡を差し上げます。");
-    }, 1800);
+    window.open(
+      buildCandidateIssueUrl({ author: candidateName, dept: candidateDept, theme: candidateTheme }),
+      "_blank",
+      "noopener,noreferrer"
+    );
+    setIsSubmitModalOpen(false);
+    setCandidateName("");
+    setCandidateDept("");
+    setCandidateTheme("");
   };
 
   const handleCopyPrompt = (id: string, text: string) => {
@@ -333,7 +375,7 @@ export default function InterviewsPage() {
           statusType="draft"
           title="📋 取材準備中・ドラフト事例モデル掲載"
           message="現在掲載されているインタビュー記事は、社内実務ユースケースに基づくモデルケース（ドラフト）です。正式な社内インタビューの取材・記事公開を順次準備しています。"
-          prepDetails="社内各部署からの取材立候補を受付中（下の「取材に立候補する」ボタンより応募可能）"
+          prepDetails="取材立候補を受付中（下の「取材に立候補する」から応募するとAI CoEに通知されます）。各記事の「モデルケース」「正式公開」バッジで区別できます"
           releaseDate="2026年10月16日(金)"
         />
 
@@ -362,9 +404,42 @@ export default function InterviewsPage() {
           </button>
         </div>
 
+        {/* 取材キット：流れと質問項目 */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <h3 className="font-bold text-sm text-slate-900">🗓️ 取材から公開までの流れ</h3>
+            <ol className="space-y-2">
+              {interviewFlow.map((f, i) => (
+                <li key={f.step} className="flex items-start gap-2.5 text-xs">
+                  <span className="w-5 h-5 rounded-full bg-blue-600 text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+                    {i + 1}
+                  </span>
+                  <span className="text-slate-700 leading-relaxed">
+                    <span className="font-bold text-slate-900">{f.step}：</span>
+                    {f.desc}
+                  </span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="space-y-3">
+            <h3 className="font-bold text-sm text-slate-900">🎤 取材でお聞きすること（所要30分）</h3>
+            <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-700 leading-relaxed">
+              {interviewQuestions.map((q) => (
+                <li key={q}>{q}</li>
+              ))}
+            </ul>
+            <p className="text-[11px] text-slate-500">
+              準備は不要です。顧客名・案件名などは記事では伏せ字にします。
+            </p>
+          </div>
+        </div>
+
         {/* 連載インタビュー一覧（参考サイト再現：通し番号見出し ＋ 2カラムメディアカード） */}
         <div className="space-y-8">
-          {interviewArticles.map((article) => (
+          {[...interviewArticles]
+            .sort((a, b) => Number(Boolean(b.published)) - Number(Boolean(a.published)))
+            .map((article) => (
             <div key={article.id} className="space-y-3">
               {/* セクション見出し（青ラインバー付き） */}
               <div className="flex items-center space-x-3">
@@ -372,6 +447,7 @@ export default function InterviewsPage() {
                 <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight flex items-center space-x-2">
                   <span>{article.sectionTitle}</span>
                 </h2>
+                <ArticleStatusBadge published={article.published} />
               </div>
 
               {/* 2カラム・メディアカード */}
@@ -483,6 +559,7 @@ export default function InterviewsPage() {
                 <span className={`text-xs font-bold px-2.5 py-0.5 rounded ${selectedArticle.tagColor}`}>
                   {selectedArticle.tag}
                 </span>
+                <ArticleStatusBadge published={selectedArticle.published} />
                 <span className="text-xs text-slate-400 font-mono">
                   {selectedArticle.date}
                 </span>
@@ -680,6 +757,11 @@ export default function InterviewsPage() {
                   className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed"
                 />
               </div>
+
+              <p className="text-slate-500 leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+                「立候補を送信」を押すと、入力内容が入った GitHub Issue の画面が開きます。そこで送信すると AI CoE に通知が届きます。
+                Issue は公開されるため、顧客名・案件名・社外秘の数値は書かずに概要だけご記入ください。
+              </p>
 
               <div className="pt-2 flex justify-end space-x-2">
                 <button
