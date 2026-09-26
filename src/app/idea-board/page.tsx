@@ -450,6 +450,33 @@ export default function IdeaBoardPage() {
 
       {/* 3. メインコンテンツエリア */}
       <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        {/* ご意見TODO-06：AIビジネスモデル提案コンテスト（企画案） */}
+        <details className="bg-white border border-amber-300 rounded-2xl p-5 shadow-2xs group">
+          <summary className="cursor-pointer list-none flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <span className="font-bold text-sm text-slate-900">🏆 社内AIビジネスモデル提案コンテスト（企画案）</span>
+            <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 self-start sm:self-center">
+              📋 準備中：開催内容は社内決裁前の案です（クリックで詳細）
+            </span>
+          </summary>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700 leading-relaxed">
+            <div className="space-y-2">
+              <p><span className="font-bold text-slate-900">目的：</span>業務の効率化だけでなく、AIで新しい顧客価値や収益を生むビジネスモデルのアイデアを全社から集める</p>
+              <p><span className="font-bold text-slate-900">対象：</span>全社員（個人・チームどちらでも可）</p>
+              <p><span className="font-bold text-slate-900">審査の観点（案）：</span>顧客にとっての価値／実現できるか／収益につながるか／AIならではの活かし方</p>
+              <p className="text-slate-500">アイデアの種は、このボードで気軽に宣言・議論してください。</p>
+            </div>
+            <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 space-y-1.5">
+              <p className="font-bold text-amber-900">決定待ちの項目</p>
+              <ul className="list-disc pl-5 space-y-1 text-amber-900">
+                <li>開催期間・応募締切</li>
+                <li>賞品・表彰の内容（懸賞）</li>
+                <li>審査員</li>
+                <li>応募方法（社外秘を含みうるため、公開サイトではなく社内フォームで受付予定）</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
         {/* タブ1: 宣言一覧 */}
         {activeTab === "list" && (
           <div className="space-y-4">

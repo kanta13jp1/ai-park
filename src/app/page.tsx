@@ -187,7 +187,7 @@ export default function Home() {
 
             {/* Step 3: 実践編 */}
             <Link
-              href="/agent-cases"
+              href="/ai-projects"
               className="group p-5 rounded-xl border border-purple-200 bg-purple-50/40 hover:bg-purple-50 hover:border-purple-400 hover:shadow-md transition-all flex flex-col justify-between space-y-3"
             >
               <div className="space-y-2">
@@ -201,7 +201,7 @@ export default function Home() {
                   <span>🏢 AI実践編</span>
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  社内のAI関連プロジェクトの最新状況、他部署での活用事例、過去の社内勉強会アーカイブ動画を掲載。
+                  社内のAI関連プロジェクトの最新状況（どの部署が何のツールで何をしているか）を一覧で確認できます。
                 </p>
               </div>
               <div className="pt-3 border-t border-purple-100 flex items-center justify-between text-xs font-bold text-purple-700">

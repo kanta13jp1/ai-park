@@ -34,6 +34,7 @@ export const navigationSections: NavSection[] = [
     title: "🖥️ エージェント・ツール",
     href: "/agent-tools",
     items: [
+      { name: "社内AIプロジェクト一覧", href: "/ai-projects", icon: "🏢", badge: "β版" },
       { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β版" },
       { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "🧪 PoC中" },
       { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "🧪 PoC中" },

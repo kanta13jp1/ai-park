@@ -187,6 +187,18 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     releaseCondition: "Skill登録申請と社内プライベートレジストリ自動配信の接続",
   },
   {
+    id: "ai-projects",
+    name: "社内AIプロジェクト一覧",
+    href: "/ai-projects",
+    isVerified: true,
+    status: "verified",
+    evidence: "AI CoEが進める実在プロジェクト2件を掲載。ai-projectラベル付きGitHub Issueの登録・自動掲載・Google Chat通知を実装",
+    currentBadge: "β版",
+    disclaimer: "",
+    releaseDate: "2026年10月2日(金)",
+    releaseCondition: "各部署からの登録が集まり、月次の状況更新が回り始めた時点で正式運用へ移行",
+  },
+  {
     id: "idea-board",
     name: "アイデア宣言ボード",
     href: "/idea-board",

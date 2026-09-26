@@ -35,7 +35,7 @@ export interface GitHubFeedbackItem {
   issueUrl: string;
 }
 
-interface GitHubIssue {
+export interface GitHubIssue {
   number: number;
   title: string;
   body: string | null;
@@ -48,7 +48,7 @@ interface GitHubIssue {
 }
 
 // Issue フォーム（.github/ISSUE_TEMPLATE/feedback.yml）が生成する「### 見出し\n\n値」形式を解析
-function parseIssueFormBody(body: string): Record<string, string> {
+export function parseIssueFormBody(body: string): Record<string, string> {
   const sections: Record<string, string> = {};
   const parts = body.split(/^### /m).slice(1);
   for (const part of parts) {
@@ -61,12 +61,12 @@ function parseIssueFormBody(body: string): Record<string, string> {
   return sections;
 }
 
-function pick(sections: Record<string, string>, prefix: string): string {
+export function pick(sections: Record<string, string>, prefix: string): string {
   const key = Object.keys(sections).find((k) => k.startsWith(prefix));
   return key ? sections[key] : "";
 }
 
-function formatDate(iso: string): string {
+export function formatDate(iso: string): string {
   const d = new Date(iso);
   return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getDate()).padStart(2, "0")}`;
 }
@@ -109,9 +109,10 @@ export function issueToFeedbackItem(issue: GitHubIssue): GitHubFeedbackItem {
   };
 }
 
-export async function fetchFeedbackIssues(signal?: AbortSignal): Promise<GitHubFeedbackItem[]> {
+// 公開リポジトリの指定ラベル付き Issue を取得（Pull Request は除外）
+export async function fetchIssuesByLabel(label: string, signal?: AbortSignal): Promise<GitHubIssue[]> {
   const url = `https://api.github.com/repos/${GITHUB_REPO}/issues?labels=${encodeURIComponent(
-    FEEDBACK_LABEL
+    label
   )}&state=all&per_page=100&sort=created&direction=desc`;
   const res = await fetch(url, {
     headers: { Accept: "application/vnd.github+json" },
@@ -121,7 +122,11 @@ export async function fetchFeedbackIssues(signal?: AbortSignal): Promise<GitHubF
     throw new Error(`GitHub API ${res.status}`);
   }
   const issues = (await res.json()) as GitHubIssue[];
-  return issues.filter((i) => !i.pull_request).map(issueToFeedbackItem);
+  return issues.filter((i) => !i.pull_request);
+}
+
+export async function fetchFeedbackIssues(signal?: AbortSignal): Promise<GitHubFeedbackItem[]> {
+  return (await fetchIssuesByLabel(FEEDBACK_LABEL, signal)).map(issueToFeedbackItem);
 }
 
 // Issue フォームへ入力値をプリフィルした起票URL（フォーム項目の id をクエリに指定）
