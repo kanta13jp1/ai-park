@@ -3,10 +3,14 @@
 使い方:  python scripts/academy-video/build_video.py scripts/academy-video/install.json
 出力:    public/videos/academy/<id>.mp4 と <id>.vtt
 
-必要なもの: Python + Pillow、ffmpeg、Windows の日本語音声（Microsoft Haruka など）
+必要なもの: Python + Pillow、ffmpeg、環境変数 GEMINI_API_KEY（Gemini 3.8 Flash TTS で読み上げ）
+確認:    --verify を付けると、各スライドの音声を Gemini で文字起こしして台本と並べて表示する
 """
 
+import base64
 import json
+import os
+import urllib.request
 import subprocess
 import sys
 import tempfile
@@ -66,17 +70,62 @@ def render_slide(slide, course_title, index, total, path):
     im.save(path)
 
 
-def speak(text, voice, rate, wav_path):
+def speak_gemini(text, cfg, wav_path):
+    """Gemini TTS（既定: gemini-3.8-flash-tts）で読み上げ、WAV（24kHz/mono/16bit）を保存する。
+    API キーは環境変数 GEMINI_API_KEY から読む（ファイルやログには出さない）。"""
+    body = {
+        "model": cfg.get("model", "gemini-3.8-flash-tts"),
+        "input": [{"type": "user_input", "content": [{
+            "type": "text", "text": text,
+            "annotations": [{"type": "speech_metadata", "style": cfg.get("style", "落ち着いた、分かりやすい研修講師の話し方")}],
+        }]}],
+        "response_format": {"type": "audio"},
+        "generation_config": {"speech_config": [{"voice": cfg.get("voice", "Kore")}]},
+    }
+    req = urllib.request.Request(
+        "https://generativelanguage.googleapis.com/v1beta/interactions",
+        data=json.dumps(body).encode(),
+        headers={"x-goog-api-key": os.environ["GEMINI_API_KEY"], "Content-Type": "application/json"},
+    )
+    res = json.load(urllib.request.urlopen(req, timeout=300))
+    audio = next(c["data"] for step in res["steps"] for c in step.get("content", []) if c.get("data"))
+    Path(wav_path).write_bytes(base64.b64decode(audio))
+
+
+def speak_windows(text, cfg, wav_path):
+    """Windows の日本語音声で読み上げる（予備）。文字化けを防ぐため台本は UTF-8 ファイルで渡す。"""
+    txt = Path(wav_path).with_suffix(".txt")
+    txt.write_text(text, encoding="utf-8")
     ps = (
         "Add-Type -AssemblyName System.Speech;"
         "$s=New-Object System.Speech.Synthesis.SpeechSynthesizer;"
-        f"$s.SelectVoice('{voice}');$s.Rate={rate};"
+        f"$s.SelectVoice('{cfg.get('voice', 'Microsoft Haruka Desktop')}');$s.Rate={int(cfg.get('rate', 0))};"
         f"$s.SetOutputToWaveFile('{wav_path}');"
-        "$s.Speak([Console]::In.ReadToEnd());$s.Dispose()"
+        f"$s.Speak([IO.File]::ReadAllText('{txt}', [Text.Encoding]::UTF8));$s.Dispose()"
     )
-    subprocess.run(["powershell", "-NoProfile", "-Command", ps], input=text.encode("utf-8"), check=True)
+    subprocess.run(["powershell", "-NoProfile", "-Command", ps], check=True)
+
+
+def speak(text, cfg, wav_path):
+    (speak_windows if cfg.get("provider") == "windows" else speak_gemini)(text, cfg, wav_path)
     with wave.open(str(wav_path)) as w:
         return w.getnframes() / w.getframerate()
+
+
+def transcribe(wav_path):
+    """確認用：生成した音声を Gemini で文字起こしする。"""
+    data = base64.b64encode(Path(wav_path).read_bytes()).decode()
+    body = {"contents": [{"parts": [
+        {"inline_data": {"mime_type": "audio/wav", "data": data}},
+        {"text": "この音声を日本語でそのまま文字起こししてください。文字起こし結果だけを出力してください。聞き取れない部分は［不明］と書いてください。"},
+    ]}]}
+    req = urllib.request.Request(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+        data=json.dumps(body).encode(),
+        headers={"x-goog-api-key": os.environ["GEMINI_API_KEY"], "Content-Type": "application/json"},
+    )
+    res = json.load(urllib.request.urlopen(req, timeout=300))
+    return res["candidates"][0]["content"]["parts"][0]["text"].strip()
 
 
 def vtt_time(t):
@@ -85,11 +134,10 @@ def vtt_time(t):
     return f"{int(h):02d}:{int(m):02d}:{s:06.3f}"
 
 
-def main(spec_path):
+def main(spec_path, verify=False):
     spec = json.loads(Path(spec_path).read_text(encoding="utf-8"))
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    voice = spec.get("voice", "Microsoft Haruka Desktop")
-    rate = int(spec.get("rate", 0))  # 読み上げ速度（-10〜10）
+    tts = spec.get("tts", {})  # provider: gemini（既定）/ windows、model・voice・style など
     pad = 0.6
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
@@ -98,7 +146,11 @@ def main(spec_path):
             png, wav, mp4 = tmp / f"s{i}.png", tmp / f"s{i}.wav", tmp / f"s{i}.mp4"
             render_slide(slide, spec["course"], i, len(spec["slides"]), png)
             # 読み上げ用テキスト（speak）が無ければ字幕テキストをそのまま読む
-            dur = speak(slide.get("speak", slide["say"]), voice, rate, wav) + pad
+            dur = speak(slide.get("speak", slide["say"]), tts, wav) + pad
+            if verify:
+                print(f"--- {i}. {slide['title']}")
+                print(f"台本: {slide['say']}")
+                print(f"音声: {transcribe(wav)}")
             subprocess.run(
                 ["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-i", str(png), "-i", str(wav),
                  "-af", f"apad=pad_dur={pad}", "-t", f"{dur:.3f}", "-c:v", "libx264", "-tune", "stillimage",
@@ -128,4 +180,4 @@ def main(spec_path):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    main(sys.argv[1], verify="--verify" in sys.argv)

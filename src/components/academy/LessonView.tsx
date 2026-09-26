@@ -138,7 +138,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                 <div className="px-4 py-3 space-y-1 border-t border-slate-100">
                   <p className="text-sm font-bold text-slate-900">
                     {lesson.ownVideo
-                      ? `${lesson.title}（AI推進担当 作成・字幕付き／音声は合成音声）`
+                      ? `${lesson.title}（AI推進担当 作成・字幕付き／音声：Gemini 3.8 Flash TTS）`
                       : lesson.video
                       ? `${lesson.video.title}（${lesson.video.channel}・英語）`
                       : lesson.title}
