@@ -4,6 +4,7 @@
 export const GITHUB_REPO = "kanta13jp1/ai-park";
 export const FEEDBACK_LABEL = "feedback";
 export const IN_PROGRESS_LABEL = "status:in-progress";
+export const TEST_LABEL = "test";
 
 export const feedbackCategories = [
   "UI/UX",
@@ -122,7 +123,8 @@ export async function fetchIssuesByLabel(label: string, signal?: AbortSignal): P
     throw new Error(`GitHub API ${res.status}`);
   }
   const issues = (await res.json()) as GitHubIssue[];
-  return issues.filter((i) => !i.pull_request);
+  // 連携テスト用の Issue（test ラベル）はページに表示しない
+  return issues.filter((i) => !i.pull_request && !i.labels.some((l) => l.name === TEST_LABEL));
 }
 
 export async function fetchFeedbackIssues(signal?: AbortSignal): Promise<GitHubFeedbackItem[]> {
