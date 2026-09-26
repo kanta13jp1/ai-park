@@ -3,16 +3,48 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Award, BookOpen, Clock, ExternalLink, ListChecks, PlayCircle, Printer } from "lucide-react";
+import { ArrowLeft, Award, BookOpen, Check, Clock, Copy, ExternalLink, ListChecks, PlayCircle, Printer } from "lucide-react";
 import { basePath } from "@/lib/basePath";
 import { PASS_RATE, type Course, type LessonBlock } from "@/data/academy";
 import { useCourseProgress } from "./useCourseProgress";
 
+function CodeBlock({ label, text }: { label?: string; text: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <div className="space-y-1">
+      {label && <p className="text-xs font-bold text-slate-600">{label}</p>}
+      <div className="flex items-start gap-3 bg-white border border-slate-200 rounded-lg px-4 py-3">
+        <code className="flex-1 font-mono text-[13px] text-slate-800 break-all">{text}</code>
+        <button
+          onClick={() => {
+            navigator.clipboard?.writeText(text).then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1500);
+            });
+          }}
+          className="shrink-0 text-slate-500 hover:text-slate-900 cursor-pointer"
+          title="コピー"
+        >
+          {copied ? <Check size={16} className="text-emerald-600" /> : <Copy size={16} />}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Block({ block }: { block: LessonBlock }) {
   switch (block.type) {
+    case "code":
+      return <CodeBlock label={block.label} text={block.text} />;
+    case "link":
+      return (
+        <a href={block.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:underline">
+          {block.text} <ExternalLink size={13} />
+        </a>
+      );
     case "h":
       return (
-        <h3 id={block.id} className="scroll-mt-6 font-serif font-bold text-xl text-slate-900 pt-2">
+        <h3 id={block.id} className="scroll-mt-6 font-serif font-bold text-2xl text-slate-900 pt-6">
           {block.text}
         </h3>
       );
@@ -32,8 +64,10 @@ function Block({ block }: { block: LessonBlock }) {
       return <p className="text-sm bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 text-amber-900 leading-relaxed">⚠️ {block.text}</p>;
     case "image":
       return (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={`${basePath}/images/guide/${block.file}`} alt={block.alt} className="w-full rounded-lg border border-slate-200" />
+        <figure className="bg-[#f3f1ea] rounded-xl p-4 sm:p-6">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={`${basePath}/images/guide/${block.file}`} alt={block.alt} className="w-full rounded-lg border border-slate-200 shadow-md" />
+        </figure>
       );
   }
 }

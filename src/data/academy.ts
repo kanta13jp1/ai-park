@@ -8,7 +8,9 @@ export type LessonBlock =
   | { type: "tip"; text: string }
   | { type: "warn"; text: string }
   | { type: "image"; file: string; alt: string }
-  | { type: "h"; id: string; text: string }; // ページ内見出し（右側の目次に表示）
+  | { type: "h"; id: string; text: string } // ページ内見出し（右側の目次に表示）
+  | { type: "code"; label?: string; text: string } // コピーボタン付きのコマンド
+  | { type: "link"; href: string; text: string };
 
 export interface VideoRef {
   id: string; // YouTube の動画ID
@@ -84,21 +86,54 @@ export const courses: Course[] = [
       {
         id: "install",
         title: "インストールする",
-        minutes: 5,
+        minutes: 10,
         section: "セットアップ",
-        summary: "公式サイトからインストーラーを入手して、Windows にインストールします。",
+        summary: "Antigravity は、デスクトップアプリ・エディタ（IDE）・ターミナル（CLI）・既存エディタの拡張機能の4つの形で使えます。まずはデスクトップアプリを入れましょう。",
         blocks: [
-          { type: "h", id: "download", text: "ダウンロード" },
-          { type: "p", text: "必要な環境は Windows 10（64bit）以降です。公式サイトからインストーラーをダウンロードします。" },
+          { type: "h", id: "app", text: "Antigravity 2.0（デスクトップアプリ）" },
+          { type: "p", text: "エージェントに仕事を依頼・管理する中心のアプリです。迷ったらこれを入れてください。必要な環境は Windows 10（64bit）以降です。" },
           { type: "steps", items: [
-            "https://antigravity.google/download を開く",
-            "「Windows」を選び、「Antigravity 2.0」の「Download for x64」をクリック（ARM 版 PC の場合だけ ARM64）",
-            "ダウンロードした Antigravity-x64.exe を実行し、「インストールしています…」の画面が終わるまで待つ",
+            "公式のダウンロードページを開く",
+            "①「Windows」を選び、②「Antigravity 2.0」の「Download for x64」をクリック（Snapdragon など ARM 版の PC の場合だけ「Download for ARM64」）",
+            "ダウンロードした Antigravity-x64.exe を開く",
+            "「Antigravity セットアップ」の画面で「インストールしています。しばらくお待ちください…」と表示されるので、終わるまで待つ",
           ] },
-          { type: "image", file: "G1-download-app.png", alt: "ダウンロードページ" },
-          { type: "h", id: "run-installer", text: "インストーラーの実行" },
+          { type: "link", href: "https://antigravity.google/download", text: "公式ダウンロードページを開く" },
+          { type: "image", file: "G1-download-app.png", alt: "ダウンロードページで Windows を選び Download for x64 を押すところ" },
           { type: "image", file: "G2-install.png", alt: "ダウンロード完了とインストール中の画面" },
-          { type: "tip", text: "「Windows によって PC が保護されました」と出たら、公式サイトから入手したファイルであることを確認したうえで「詳細情報」→「実行」を選びます。" },
+          { type: "tip", text: "「Windows によって PC が保護されました」と出たら、公式サイト（antigravity.google）から入手したファイルであることを確認したうえで「詳細情報」→「実行」を選びます。以前のバージョンがあり「Keep Both / Replace」を聞かれたら「Replace」を選びます。" },
+
+          { type: "h", id: "ide", text: "Antigravity IDE（エディタ版）" },
+          { type: "p", text: "コードを見ながら作業したい人向けの、エディタとエージェントの画面が一体になったアプリです。デスクトップアプリ右上の「Install IDE」（インストール済みなら「Open IDE」）から入れられます。ダウンロードページの下のほうにある「Antigravity IDE (Standalone)」の「Download for x64」からも入手できます。" },
+          { type: "image", file: "G7-download-ide.png", alt: "ダウンロードページの Antigravity IDE (Standalone)" },
+          { type: "tip", text: "デスクトップアプリから「Open IDE」を押すと「An external application wants to open ...」という確認が出ます。自分で押した場合だけ「Yes」を選びます。" },
+
+          { type: "h", id: "cli", text: "CLI（ターミナルから使う）" },
+          { type: "p", text: "PowerShell やコマンドプロンプトからエージェントを使いたい人向けです。公式のインストールコマンドを実行すると、agy コマンドが使えるようになります。" },
+          { type: "code", label: "Windows PowerShell", text: "irm https://antigravity.google/cli/install.ps1 | iex" },
+          { type: "code", label: "Windows コマンドプロンプト（CMD）", text: "curl -fsSL https://antigravity.google/cli/install.cmd -o install.cmd && install.cmd && del install.cmd" },
+          { type: "code", label: "macOS / Linux", text: "curl -fsSL https://antigravity.google/cli/install.sh | bash" },
+          { type: "image", file: "G3-download-cli.png", alt: "ダウンロードページの CLI インストールコマンド" },
+          { type: "p", text: "インストールが終わるとブラウザが開き、サインインを求められます。作業したいフォルダに移動して agy を実行すると、初回は画面の色・表示方法・フォルダを信頼するかの確認が出ます。" },
+          { type: "code", label: "作業フォルダで実行", text: "agy" },
+
+          { type: "h", id: "extensions", text: "VS Code などの拡張機能" },
+          { type: "p", text: "いつも使っているエディタの中で Antigravity のエージェントを使うこともできます。VS Code・Visual Studio・JetBrains（IntelliJ IDEA など）・Zed・Xcode 向けの公式拡張機能があります。" },
+          { type: "steps", items: [
+            "VS Code の場合：1.90 以降で、Ctrl+Shift+X で拡張機能を開く",
+            "「Google Antigravity」（発行元：Google）を検索して「Install」をクリック",
+            "左のアクティビティバーの Antigravity アイコンをクリックし、Google アカウントでサインインする",
+          ] },
+          { type: "image", file: "G4-ide-extensions.png", alt: "ダウンロードページの Antigravity for IDEs" },
+          { type: "link", href: "https://antigravity.google/docs/ide/extensions", text: "各エディタの拡張機能の公式ドキュメント" },
+
+          { type: "h", id: "which", text: "どれを使えばいい？" },
+          { type: "steps", items: [
+            "はじめての人・コードをあまり書かない人：Antigravity 2.0（デスクトップアプリ）",
+            "コードを見ながら直したい人：Antigravity IDE、またはいつものエディタの拡張機能",
+            "ターミナルに慣れている人・作業を自動化したい人：CLI（agy）",
+          ] },
+          { type: "p", text: "どれを使っても同じ Google アカウントでサインインし、業務では会社の Google Cloud プロジェクト経由で使います。次のレッスンでサインインと初期設定を行います。" },
         ],
       },
       {
