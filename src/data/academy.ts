@@ -73,6 +73,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "はじめに",
         summary: "Antigravity でできることと、業務で使うときの前提（会社の Google Cloud 経由）を押さえます。",
+        ownVideo: "antigravity-101-what",
         video: { id: "6C0FjHoN3qE", title: "Google Antigravity 2.0 Beginner's Guide", channel: "Google Antigravity" },
         blocks: [
           { type: "p", text: "Google Antigravity は、AI エージェントに開発や調査などの作業を任せるためのツールです。自分の PC のフォルダを「プロジェクト」として登録し、チャットで依頼すると、エージェントがファイルを読み書きしたりコマンドを実行したりして作業を進めます。" },
@@ -145,6 +146,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "セットアップ",
         summary: "会社アカウントでサインインし、初期設定を済ませます。",
+        ownVideo: "antigravity-101-signin",
         blocks: [
           { type: "steps", items: [
             "スタートメニューから Antigravity を起動",
@@ -160,6 +162,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "セットアップ",
         summary: "エージェントに任せる範囲を決める2つの設定を、安全な状態にします。",
+        ownVideo: "antigravity-101-safety",
         blocks: [
           { type: "p", text: "左下の「Settings」→「General」で、エージェントにどこまで任せるかを決めます。慣れるまでは、必ず確認が入る設定にしておきます。" },
           { type: "h", id: "recommended", text: "おすすめの設定" },
@@ -178,6 +181,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "使ってみる",
         summary: "作業フォルダを登録して、はじめての依頼を出してみます。",
+        ownVideo: "antigravity-101-first-task",
         blocks: [
           { type: "steps", items: [
             "左側「Projects」の右にあるフォルダ＋のアイコンから、作業させたいフォルダを登録する",
@@ -218,6 +222,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "依頼のしかた",
         summary: "やり直しを減らす「4点セット」の頼み方を身につけます。",
+        ownVideo: "antigravity-practice-ask",
         video: { id: "bSp-foRDH5M", title: "How to build apps and automate tasks with Google Antigravity 2.0", channel: "Google" },
         blocks: [
           { type: "p", text: "AI への依頼は「目的・対象・条件・完了の形」の4点をそろえると、やり直しが減ります。" },
@@ -236,6 +241,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "依頼のしかた",
         summary: "作業前に計画を作らせ、方針を確認してから任せる流れを学びます。",
+        ownVideo: "antigravity-practice-plan",
         blocks: [
           { type: "p", text: "Plan Review Policy を「Always Ask」にしておくと、エージェントは作業の前に計画を見せてくれます。計画を読んで、方針が合っていれば進めてもらい、違えばその場で修正を伝えます。" },
           { type: "steps", items: [
@@ -251,6 +257,7 @@ export const courses: Course[] = [
         minutes: 8,
         section: "安全に進める",
         summary: "AI の変更を Git で確認し、意図と違えば取り消す方法を学びます。",
+        ownVideo: "antigravity-practice-git",
         blocks: [
           { type: "p", text: "エージェントは複数のファイルを一度に書き換えます。作業前にブランチを切り、変更を差分で確認してから取り込むのが事故を防ぐ基本です。" },
           { type: "steps", items: [
@@ -267,6 +274,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "安全に進める",
         summary: "エラーが出たときに、早く解決するための伝え方を学びます。",
+        ownVideo: "antigravity-practice-error",
         blocks: [
           { type: "steps", items: [
             "エラーメッセージを省略せず全文そのまま貼り、「原因と直し方を説明して」と頼む",
@@ -304,6 +312,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "ルール",
         summary: "入力してよいデータを、AI の種類ごとに3つのレベルで判断します。",
+        ownVideo: "safe-ai-use-levels",
         blocks: [
           { type: "steps", items: [
             "Level 1（社内機密・コード入力可）：会社として契約し、入力データを学習に使わないことが担保されたAI（会社の Google Cloud 経由の Antigravity、Gemini Enterprise など）",
@@ -318,6 +327,7 @@ export const courses: Course[] = [
         minutes: 5,
         section: "ルール",
         summary: "社内AI利用の注意事項5箇条（暫定版）を確認します。",
+        ownVideo: "safe-ai-use-rules",
         blocks: [
           { type: "steps", items: [
             "機密・個人情報は入力先を選ぶ",
@@ -335,6 +345,7 @@ export const courses: Course[] = [
         minutes: 3,
         section: "サポート",
         summary: "困ったときにどこへ相談すればよいかを確認します。",
+        ownVideo: "safe-ai-use-help",
         blocks: [
           { type: "steps", items: [
             "Office Hour：画面上部の「AI Office Hour 予約」から",

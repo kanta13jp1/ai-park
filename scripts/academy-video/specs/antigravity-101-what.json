@@ -1,0 +1,53 @@
+{
+  "id": "antigravity-101-what",
+  "course": "Antigravity 101",
+  "tts": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Kore",
+    "style": "落ち着いた、分かりやすい研修講師の話し方"
+  },
+  "slides": [
+    {
+      "title": "Antigravity とは",
+      "lead": "Antigravity でできることと、業務で使うときの前提（会社の Google Cloud 経由）を押さえます。",
+      "say": "Antigravity でできることと、業務で使うときの前提（会社の Google Cloud 経由）を押さえます。"
+    },
+    {
+      "title": "Antigravity とは",
+      "bullets": [
+        "Antigravity 2.0（アプリ）：エージェントに仕事を依頼…",
+        "Antigravity IDE：コードを見ながら作業したい人向けの…",
+        "Antigravity CLI（agy）：ターミナルから使いたい人…"
+      ],
+      "highlight": 0,
+      "say": "Google Antigravity は、AI エージェントに開発や調査などの作業を任せるためのツールです。自分の PC のフォルダを「プロジェクト」として登録し、チャットで依頼すると、エージェントがファイルを読み書きしたりコマンドを実行したりして作業を進めます。Antigravity 2.0（アプリ）：エージェントに仕事を依頼・管理する中心のアプリ。"
+    },
+    {
+      "title": "Antigravity とは",
+      "bullets": [
+        "Antigravity 2.0（アプリ）：エージェントに仕事を依頼…",
+        "Antigravity IDE：コードを見ながら作業したい人向けの…",
+        "Antigravity CLI（agy）：ターミナルから使いたい人…"
+      ],
+      "highlight": 1,
+      "say": "Antigravity IDE：コードを見ながら作業したい人向けのエディタ（任意で追加）。"
+    },
+    {
+      "title": "Antigravity とは",
+      "bullets": [
+        "Antigravity 2.0（アプリ）：エージェントに仕事を依頼…",
+        "Antigravity IDE：コードを見ながら作業したい人向けの…",
+        "Antigravity CLI（agy）：ターミナルから使いたい人…"
+      ],
+      "highlight": 2,
+      "say": "Antigravity CLI（agy）：ターミナルから使いたい人向け（任意）。",
+      "speak": "Antigravity CLI（エー・ジー・ワイ）：ターミナルから使いたい人向け（任意）。"
+    },
+    {
+      "title": "Antigravity とは",
+      "say": "業務では、会社の Google アカウントのまま会社の Google Cloud プロジェクト経由で使います。料金は使った分だけ会社の請求にまとまるため、個人で Google AI Pro に加入する必要はありません。注意してください。個人の Google アカウントで使う場合は個人向けの利用規約が適用されます。顧客情報・社内機密・未公開のソースコードは入力しないでください。",
+      "lead": "業務では、会社の Google アカウントのまま会社の Google Cloud プロジェクト経由で使います。料金は使った分だけ会社の請求にまとまるため、個人で Google AI Pro に加入する必要はありません。注意してください。個人の Google アカウントで使う場合は個人向けの利用規約が適用されます。顧客情報・社内機密・未公開のソースコードは入力しないでください。"
+    }
+  ]
+}

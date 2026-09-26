@@ -10,6 +10,8 @@
 import base64
 import json
 import os
+import time
+import urllib.error
 import urllib.request
 import subprocess
 import sys
@@ -58,13 +60,24 @@ def render_slide(slide, course_title, index, total, path):
         frame.paste(pic, ((box_w - pic.width) // 2, (box_h - pic.height) // 2))
         im.paste(frame, (56, 170))
     else:
-        title_font = ImageFont.truetype(FONT_TITLE, 60)
-        d.text((56, 190), slide["title"], fill=INK, font=title_font)
+        title_font = ImageFont.truetype(FONT_TITLE, 52)
+        d.text((56, 170), slide["title"], fill=INK, font=title_font)
         body = ImageFont.truetype(FONT_BODY, 30)
+        bold = ImageFont.truetype(FONT_BOLD, 30)
         y = 300
-        for item in slide.get("bullets", []):
-            for i, line in enumerate(wrap(d, item, body, W - 180)):
-                d.text((96, y), ("・" if i == 0 else "　") + line, fill=INK, font=body)
+        if slide.get("lead"):
+            for line in wrap(d, slide["lead"], body, W - 150)[:6]:
+                d.text((64, y), line, fill=INK, font=body)
+                y += 48
+        hl = slide.get("highlight")  # 読み上げ中の手順（それ以外は薄く表示）
+        for n, item in enumerate(slide.get("bullets", [])):
+            active = hl is None or n == hl
+            font = bold if hl is not None and active else body
+            color = INK if active else (175, 175, 170)
+            if hl is not None and active:
+                d.rectangle((72, y + 6, 78, y + 34), fill=ACCENT)
+            for i, line in enumerate(wrap(d, item, font, W - 190)):
+                d.text((96, y), ("・" if i == 0 else "　") + line, fill=color, font=font)
                 y += 46
             y += 10
     im.save(path)
@@ -124,8 +137,18 @@ def transcribe(wav_path):
         data=json.dumps(body).encode(),
         headers={"x-goog-api-key": os.environ["GEMINI_API_KEY"], "Content-Type": "application/json"},
     )
-    res = json.load(urllib.request.urlopen(req, timeout=300))
-    return res["candidates"][0]["content"]["parts"][0]["text"].strip()
+    # 応答に候補が無い・一時的なエラーのときは少し待って再試行し、それでも駄目なら理由を返す（生成は止めない）
+    last = ""
+    for attempt in range(3):
+        try:
+            res = json.load(urllib.request.urlopen(req, timeout=300))
+            if res.get("candidates"):
+                return res["candidates"][0]["content"]["parts"][0]["text"].strip()
+            last = json.dumps(res.get("promptFeedback") or res, ensure_ascii=False)[:200]
+        except urllib.error.HTTPError as e:
+            last = f"HTTP {e.code}"
+        time.sleep(5 * (attempt + 1))
+    return f"［文字起こし失敗: {last}］"
 
 
 def vtt_time(t):

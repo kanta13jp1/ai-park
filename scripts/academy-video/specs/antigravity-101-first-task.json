@@ -1,0 +1,52 @@
+{
+  "id": "antigravity-101-first-task",
+  "course": "Antigravity 101",
+  "tts": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Kore",
+    "style": "落ち着いた、分かりやすい研修講師の話し方"
+  },
+  "slides": [
+    {
+      "title": "はじめての依頼",
+      "lead": "作業フォルダを登録して、はじめての依頼を出してみます。",
+      "say": "作業フォルダを登録して、はじめての依頼を出してみます。"
+    },
+    {
+      "title": "はじめての依頼",
+      "bullets": [
+        "左側「Projects」の右にあるフォルダ＋のアイコンから、作業さ…",
+        "左上の「New Conversation」をクリック",
+        "入力欄（Ask anything...）に、やってほしいことを日本…"
+      ],
+      "highlight": 0,
+      "say": "左側「Projects」の右にあるフォルダ＋のアイコンから、作業させたいフォルダを登録する。"
+    },
+    {
+      "title": "はじめての依頼",
+      "bullets": [
+        "左側「Projects」の右にあるフォルダ＋のアイコンから、作業さ…",
+        "左上の「New Conversation」をクリック",
+        "入力欄（Ask anything...）に、やってほしいことを日本…"
+      ],
+      "highlight": 1,
+      "say": "左上の「New Conversation」をクリック。"
+    },
+    {
+      "title": "はじめての依頼",
+      "bullets": [
+        "左側「Projects」の右にあるフォルダ＋のアイコンから、作業さ…",
+        "左上の「New Conversation」をクリック",
+        "入力欄（Ask anything...）に、やってほしいことを日本…"
+      ],
+      "highlight": 2,
+      "say": "入力欄（Ask anything...）に、やってほしいことを日本語で書いて送信する。"
+    },
+    {
+      "title": "はじめての依頼",
+      "say": "ポイントです。最初は「このフォルダの中身を説明して」のような、ファイルを変更しない依頼から試すと安心です。",
+      "image": "G5-main.png"
+    }
+  ]
+}

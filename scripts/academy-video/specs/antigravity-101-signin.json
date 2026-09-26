@@ -1,0 +1,52 @@
+{
+  "id": "antigravity-101-signin",
+  "course": "Antigravity 101",
+  "tts": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Kore",
+    "style": "落ち着いた、分かりやすい研修講師の話し方"
+  },
+  "slides": [
+    {
+      "title": "サインインと初期設定",
+      "lead": "会社アカウントでサインインし、初期設定を済ませます。",
+      "say": "会社アカウントでサインインし、初期設定を済ませます。"
+    },
+    {
+      "title": "サインインと初期設定",
+      "bullets": [
+        "スタートメニューから Antigravity を起動",
+        "業務で使う場合は「Use business account」を選び…",
+        "テーマ（画面の色）を選ぶ → Google プラグインは分からなけ…"
+      ],
+      "highlight": 0,
+      "say": "スタートメニューから Antigravity を起動。"
+    },
+    {
+      "title": "サインインと初期設定",
+      "bullets": [
+        "スタートメニューから Antigravity を起動",
+        "業務で使う場合は「Use business account」を選び…",
+        "テーマ（画面の色）を選ぶ → Google プラグインは分からなけ…"
+      ],
+      "highlight": 1,
+      "say": "業務で使う場合は「Use business account」を選び、会社アカウントでサインインしてから会社の Google Cloud プロジェクトを選ぶ。"
+    },
+    {
+      "title": "サインインと初期設定",
+      "bullets": [
+        "スタートメニューから Antigravity を起動",
+        "業務で使う場合は「Use business account」を選び…",
+        "テーマ（画面の色）を選ぶ → Google プラグインは分からなけ…"
+      ],
+      "highlight": 2,
+      "say": "テーマ（画面の色）を選ぶ → Google プラグインは分からなければ選ばずに進む → 利用規約を確認して「Accept」→「Finish」。"
+    },
+    {
+      "title": "サインインと初期設定",
+      "say": "ポイントです。会社のプロジェクト ID は AI推進担当 から案内されます。「権限がない」と表示された場合は、管理者の設定が終わっていない可能性があるので AI推進担当 に連絡してください。",
+      "lead": "ポイントです。会社のプロジェクト ID は AI推進担当 から案内されます。「権限がない」と表示された場合は、管理者の設定が終わっていない可能性があるので AI推進担当 に連絡してください。"
+    }
+  ]
+}

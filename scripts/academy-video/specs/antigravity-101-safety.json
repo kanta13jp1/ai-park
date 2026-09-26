@@ -1,0 +1,50 @@
+{
+  "id": "antigravity-101-safety",
+  "course": "Antigravity 101",
+  "tts": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Kore",
+    "style": "落ち着いた、分かりやすい研修講師の話し方"
+  },
+  "slides": [
+    {
+      "title": "最初に必ず：安全設定",
+      "lead": "エージェントに任せる範囲を決める2つの設定を、安全な状態にします。",
+      "say": "エージェントに任せる範囲を決める2つの設定を、安全な状態にします。"
+    },
+    {
+      "title": "最初に必ず：安全設定",
+      "say": "左下の「Settings」→「General」で、エージェントにどこまで任せるかを決めます。慣れるまでは、必ず確認が入る設定にしておきます。",
+      "lead": "左下の「Settings」→「General」で、エージェントにどこまで任せるかを決めます。慣れるまでは、必ず確認が入る設定にしておきます。"
+    },
+    {
+      "title": "おすすめの設定",
+      "bullets": [
+        "Security Preset：「Default」を選ぶ（ターミナ…",
+        "Plan Review Policy：「Always Ask」を選…"
+      ],
+      "highlight": 0,
+      "say": "Security Preset：「Default」を選ぶ（ターミナルのコマンド実行と、作業フォルダの外のファイル操作の前に確認が入る）。"
+    },
+    {
+      "title": "おすすめの設定",
+      "bullets": [
+        "Security Preset：「Default」を選ぶ（ターミナ…",
+        "Plan Review Policy：「Always Ask」を選…"
+      ],
+      "highlight": 1,
+      "say": "Plan Review Policy：「Always Ask」を選ぶ（作業を始める前に計画を見せて確認を求める）。"
+    },
+    {
+      "title": "おすすめの設定",
+      "say": "画面では、このように表示されます。",
+      "image": "G6-settings-options.png"
+    },
+    {
+      "title": "業務で使わない設定",
+      "say": "注意してください。「Full machine」は PC 内のどのファイルでも読み書きでき、「Turbo mode」は安全のための確認がすべて無くなります。業務では使わないでください。",
+      "lead": "注意してください。「Full machine」は PC 内のどのファイルでも読み書きでき、「Turbo mode」は安全のための確認がすべて無くなります。業務では使わないでください。"
+    }
+  ]
+}

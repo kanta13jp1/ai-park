@@ -1,0 +1,47 @@
+{
+  "id": "safe-ai-use-help",
+  "course": "安全に使う",
+  "tts": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Kore",
+    "style": "落ち着いた、分かりやすい研修講師の話し方"
+  },
+  "slides": [
+    {
+      "title": "困ったときの相談先",
+      "lead": "困ったときにどこへ相談すればよいかを確認します。",
+      "say": "困ったときにどこへ相談すればよいかを確認します。"
+    },
+    {
+      "title": "困ったときの相談先",
+      "bullets": [
+        "Office Hour：画面上部の「AI Office Hour …",
+        "Google Chat の「AI勉強会」スペース",
+        "お問い合わせページのフォーム・FAQ"
+      ],
+      "highlight": 0,
+      "say": "Office Hour：画面上部の「AI Office Hour 予約」から。"
+    },
+    {
+      "title": "困ったときの相談先",
+      "bullets": [
+        "Office Hour：画面上部の「AI Office Hour …",
+        "Google Chat の「AI勉強会」スペース",
+        "お問い合わせページのフォーム・FAQ"
+      ],
+      "highlight": 1,
+      "say": "Google Chat の「AI勉強会」スペース。"
+    },
+    {
+      "title": "困ったときの相談先",
+      "bullets": [
+        "Office Hour：画面上部の「AI Office Hour …",
+        "Google Chat の「AI勉強会」スペース",
+        "お問い合わせページのフォーム・FAQ"
+      ],
+      "highlight": 2,
+      "say": "お問い合わせページのフォーム・FAQ。"
+    }
+  ]
+}

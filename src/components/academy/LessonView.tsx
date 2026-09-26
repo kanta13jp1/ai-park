@@ -153,7 +153,10 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-xs text-slate-600 underline"
                 >
-                  YouTube で見る（字幕の自動翻訳で日本語表示できます） <ExternalLink size={11} />
+                  {lesson.ownVideo
+                    ? `参考：公式動画「${lesson.video.title}」（${lesson.video.channel}・英語）を YouTube で見る`
+                    : "YouTube で見る（字幕の自動翻訳で日本語表示できます）"}{" "}
+                  <ExternalLink size={11} />
                 </a>
               )}
 

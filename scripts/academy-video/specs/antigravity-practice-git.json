@@ -1,0 +1,65 @@
+{
+  "id": "antigravity-practice-git",
+  "course": "Antigravity 実践",
+  "tts": {
+    "provider": "gemini",
+    "model": "gemini-3.8-flash-tts",
+    "voice": "Kore",
+    "style": "落ち着いた、分かりやすい研修講師の話し方"
+  },
+  "slides": [
+    {
+      "title": "変更の確認と取り消し（Git）",
+      "lead": "AI の変更を Git で確認し、意図と違えば取り消す方法を学びます。",
+      "say": "AI の変更を Git で確認し、意図と違えば取り消す方法を学びます。"
+    },
+    {
+      "title": "変更の確認と取り消し（Git）",
+      "bullets": [
+        "git switch -c feature/xxx：作業用ブランチ…",
+        "git status / git diff：何が変わったかを確認する",
+        "git add . && git commit -m \"...\"：…",
+        "git restore <file>：意図と違う変更をコミット前に…"
+      ],
+      "highlight": 0,
+      "say": "エージェントは複数のファイルを一度に書き換えます。作業前にブランチを切り、変更を差分で確認してから取り込むのが事故を防ぐ基本です。git switch -c feature/xxx：作業用ブランチを作る（main で直接作業しない）。",
+      "speak": "エージェントは複数のファイルを一度に書き換えます。作業前にブランチを切り、変更を差分で確認してから取り込むのが事故を防ぐ基本です。git switch：作業用ブランチを作る（main で直接作業しない）。"
+    },
+    {
+      "title": "変更の確認と取り消し（Git）",
+      "bullets": [
+        "git switch -c feature/xxx：作業用ブランチ…",
+        "git status / git diff：何が変わったかを確認する",
+        "git add . && git commit -m \"...\"：…",
+        "git restore <file>：意図と違う変更をコミット前に…"
+      ],
+      "highlight": 1,
+      "say": "git status / git diff：何が変わったかを確認する。",
+      "speak": "git status と git diff：何が変わったかを確認する。"
+    },
+    {
+      "title": "変更の確認と取り消し（Git）",
+      "bullets": [
+        "git switch -c feature/xxx：作業用ブランチ…",
+        "git status / git diff：何が変わったかを確認する",
+        "git add . && git commit -m \"...\"：…",
+        "git restore <file>：意図と違う変更をコミット前に…"
+      ],
+      "highlight": 2,
+      "say": "git add . && git commit -m \"...\"：確認できた変更を記録する。",
+      "speak": "git add と git commit：確認できた変更を記録する。"
+    },
+    {
+      "title": "変更の確認と取り消し（Git）",
+      "bullets": [
+        "git switch -c feature/xxx：作業用ブランチ…",
+        "git status / git diff：何が変わったかを確認する",
+        "git add . && git commit -m \"...\"：…",
+        "git restore <file>：意図と違う変更をコミット前に…"
+      ],
+      "highlight": 3,
+      "say": "git restore <file>：意図と違う変更をコミット前に取り消す。",
+      "speak": "git restore：意図と違う変更をコミット前に取り消す。"
+    }
+  ]
+}
