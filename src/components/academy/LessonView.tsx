@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Award, BookOpen, Check, Clock, Copy, ExternalLink, ListChecks, PlayCircle, Printer } from "lucide-react";
+import { ArrowLeft, ArrowRight, Award, BookOpen, Camera, Check, Clock, Copy, ExternalLink, ListChecks, PlayCircle, Printer, ThumbsDown, ThumbsUp } from "lucide-react";
 import { basePath } from "@/lib/basePath";
 import { PASS_RATE, type Course, type LessonBlock } from "@/data/academy";
 import { useCourseProgress } from "./useCourseProgress";
@@ -14,7 +14,7 @@ function CodeBlock({ label, text }: { label?: string; text: string }) {
     <div className="space-y-1">
       {label && <p className="text-xs font-bold text-slate-600">{label}</p>}
       <div className="flex items-start gap-3 bg-white border border-slate-200 rounded-lg px-4 py-3">
-        <code className="flex-1 font-mono text-[13px] text-slate-800 break-all">{text}</code>
+        <code className="flex-1 font-mono text-[13px] text-slate-800 break-all whitespace-pre-wrap">{text}</code>
         <button
           onClick={() => {
             navigator.clipboard?.writeText(text).then(() => {
@@ -32,8 +32,47 @@ function CodeBlock({ label, text }: { label?: string; text: string }) {
   );
 }
 
+function PromptCard({ label, text }: { label?: string; text: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+      <div className="flex items-center gap-1.5 px-4 pt-3">
+        <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+        <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+        {label && <span className="ml-2 text-xs font-bold text-slate-500">{label}</span>}
+      </div>
+      <p className="mx-3 mt-2 border border-slate-200 rounded-xl px-4 py-3 text-[15px] text-slate-800 leading-relaxed whitespace-pre-wrap">{text}</p>
+      <div className="flex justify-end px-4 py-3">
+        <button
+          onClick={() =>
+            navigator.clipboard?.writeText(text).then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1500);
+            })
+          }
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer"
+        >
+          {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
+          {copied ? "コピーしました" : "プロンプトをコピー"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Block({ block }: { block: LessonBlock }) {
   switch (block.type) {
+    case "prompt":
+      return <PromptCard label={block.label} text={block.text} />;
+    case "shot":
+      return (
+        <figure className="rounded-xl border-2 border-dashed border-slate-300 bg-[#f3f1ea] px-6 py-10 text-center text-slate-500 space-y-1">
+          <Camera size={26} className="mx-auto" />
+          <p className="text-sm font-bold">画面キャプチャ準備中：{block.alt}</p>
+          <p className="text-xs">{block.todo}</p>
+        </figure>
+      );
     case "code":
       return <CodeBlock label={block.label} text={block.text} />;
     case "link":
@@ -70,6 +109,41 @@ function Block({ block }: { block: LessonBlock }) {
         </figure>
       );
   }
+}
+
+// 「このレッスンは役に立ちましたか？」（評価はこのブラウザにのみ保存）
+function Helpful({ lessonKey }: { lessonKey: string }) {
+  const storageKey = `ai_park_academy_helpful_${lessonKey}`;
+  const [vote, setVote] = useState<string | null>(null);
+  const choose = (v: "up" | "down") => {
+    setVote(v);
+    try {
+      localStorage.setItem(storageKey, v);
+    } catch {
+      // 保存できない環境では表示のみ切り替える
+    }
+  };
+  return (
+    <div className="bg-[#f3f1ea] border border-slate-200 rounded-xl px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+      <p className="font-serif font-bold text-slate-900">
+        {vote ? "ご回答ありがとうございます。" : "このレッスンは役に立ちましたか？"}
+      </p>
+      {vote ? (
+        <Link href="/feedback-todo" className="text-sm text-blue-700 underline">
+          分かりにくかった点はご意見ボードへ
+        </Link>
+      ) : (
+        <div className="flex gap-2">
+          <button onClick={() => choose("up")} title="役に立った" className="w-9 h-9 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-50 cursor-pointer">
+            <ThumbsUp size={16} />
+          </button>
+          <button onClick={() => choose("down")} title="分かりにくかった" className="w-9 h-9 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-50 cursor-pointer">
+            <ThumbsDown size={16} />
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function LessonView({ course, stepId }: { course: Course; stepId: string }) {
@@ -166,10 +240,19 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                 ))}
               </article>
 
-              <div className="pt-6 border-t border-slate-200 flex items-center justify-between gap-3">
+              <Helpful lessonKey={`${course.id}/${lesson.id}`} />
+
+              <div className="pt-6 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {index > 0 ? (
-                  <button onClick={() => go(steps[index - 1].id)} className="text-sm text-slate-600 hover:underline cursor-pointer">
-                    ← {steps[index - 1].label}
+                  <button
+                    onClick={() => go(steps[index - 1].id)}
+                    className="flex items-center gap-3 text-left bg-white border border-slate-200 rounded-xl px-4 py-4 hover:border-slate-400 cursor-pointer"
+                  >
+                    <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0"><ArrowLeft size={15} /></span>
+                    <span>
+                      <span className="block text-xs text-slate-500">前のレッスン</span>
+                      <span className="block text-sm font-bold text-slate-900">{steps[index - 1].label}</span>
+                    </span>
                   </button>
                 ) : (
                   <span />
@@ -179,9 +262,13 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                     markLessonDone(lesson.id);
                     go(steps[index + 1].id);
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-white text-sm font-bold cursor-pointer"
+                  className="flex items-center justify-end gap-3 text-right bg-slate-900 hover:bg-slate-700 text-white rounded-xl px-4 py-4 cursor-pointer"
                 >
-                  完了して次へ：{steps[index + 1].label} →
+                  <span>
+                    <span className="block text-xs text-slate-300">完了して次へ</span>
+                    <span className="block text-sm font-bold">{steps[index + 1].label}</span>
+                  </span>
+                  <span className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center shrink-0"><ArrowRight size={15} /></span>
                 </button>
               </div>
             </>

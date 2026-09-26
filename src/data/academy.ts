@@ -10,7 +10,9 @@ export type LessonBlock =
   | { type: "image"; file: string; alt: string }
   | { type: "h"; id: string; text: string } // ページ内見出し（右側の目次に表示）
   | { type: "code"; label?: string; text: string } // コピーボタン付きのコマンド
-  | { type: "link"; href: string; text: string };
+  | { type: "link"; href: string; text: string }
+  | { type: "prompt"; label?: string; text: string } // そのまま使えるプロンプト例（コピーボタン付き）
+  | { type: "shot"; alt: string; todo: string }; // 撮影待ちの画面キャプチャ枠（todo に撮る画面を書く）
 
 export interface VideoRef {
   id: string; // YouTube の動画ID
@@ -76,14 +78,83 @@ export const courses: Course[] = [
         ownVideo: "antigravity-101-what",
         video: { id: "6C0FjHoN3qE", title: "Google Antigravity 2.0 Beginner's Guide", channel: "Google Antigravity" },
         blocks: [
-          { type: "p", text: "Google Antigravity は、AI エージェントに開発や調査などの作業を任せるためのツールです。自分の PC のフォルダを「プロジェクト」として登録し、チャットで依頼すると、エージェントがファイルを読み書きしたりコマンドを実行したりして作業を進めます。" },
-          { type: "steps", items: [
-            "Antigravity 2.0（アプリ）：エージェントに仕事を依頼・管理する中心のアプリ",
-            "Antigravity IDE：コードを見ながら作業したい人向けのエディタ（任意で追加）",
-            "Antigravity CLI（agy）：ターミナルから使いたい人向け（任意）",
-          ] },
-          { type: "p", text: "業務では、会社の Google アカウントのまま会社の Google Cloud プロジェクト経由で使います。料金は使った分だけ会社の請求にまとまるため、個人で Google AI Pro に加入する必要はありません。" },
-          { type: "warn", text: "個人の Google アカウントで使う場合は個人向けの利用規約が適用されます。顧客情報・社内機密・未公開のソースコードは入力しないでください。" },
+          {
+            "type": "p",
+            "text": "Antigravity は、AI エージェントに作業を任せるための Google のツールです。チャットで「こうしてほしい」と頼むと、エージェントが自分の PC のフォルダの中身を読み、ファイルを作ったり直したりしながら作業を進めます。"
+          },
+          {
+            "type": "h",
+            "id": "screen",
+            "text": "画面の見方"
+          },
+          {
+            "type": "p",
+            "text": "起動すると、次のような画面が開きます。まずは4か所だけ覚えれば大丈夫です。"
+          },
+          {
+            "type": "image",
+            "file": "G5-main.png",
+            "alt": "Antigravity のメイン画面"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "①「Projects」の右のアイコン：作業させたいフォルダを登録する場所",
+              "②「New Conversation」：新しい依頼（会話）を始めるボタン",
+              "③「Settings」：安全設定などを変える場所（レッスン4で使います）",
+              "「Open IDE」：コードを見ながら作業したいときにエディタを開くボタン"
+            ]
+          },
+          {
+            "type": "h",
+            "id": "chat",
+            "text": "頼み方はチャットと同じ"
+          },
+          {
+            "type": "p",
+            "text": "画面の中央にある入力欄に、やってほしいことを日本語で書いて送るだけです。「@」でファイルを指定したり、「/」で便利な機能（計画だけ作らせる plan など）を呼び出したりもできます。"
+          },
+          {
+            "type": "image",
+            "file": "L1-input.png",
+            "alt": "依頼を書く入力欄"
+          },
+          {
+            "type": "h",
+            "id": "forms",
+            "text": "4つの使い方"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "Antigravity 2.0（デスクトップアプリ）：中心となるアプリ。迷ったらこれ",
+              "Antigravity IDE：コードを見ながら作業したい人向けのエディタ",
+              "CLI（agy）：ターミナルから使いたい人向け",
+              "VS Code などの拡張機能：いつものエディタの中で使いたい人向け"
+            ]
+          },
+          {
+            "type": "h",
+            "id": "business",
+            "text": "業務で使うときの前提"
+          },
+          {
+            "type": "p",
+            "text": "業務では、会社の Google アカウントのまま、会社の Google Cloud プロジェクト経由で使います。料金は使った分だけ会社の請求にまとまるので、個人で Google AI Pro に加入する必要はありません。"
+          },
+          {
+            "type": "warn",
+            "text": "個人の Google アカウントで使う場合は個人向けの利用規約が適用されます。顧客情報・社内機密・未公開のソースコードは入力しないでください。"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "Antigravity は、チャットで頼むとエージェントがフォルダの中で作業してくれるツールです。画面は「Projects」「New Conversation」「入力欄」「Settings」の4か所を押さえれば使い始められます。業務では会社の Google Cloud 経由で使います。"
+          }
         ],
       },
       {
@@ -138,6 +209,8 @@ export const courses: Course[] = [
             "ターミナルに慣れている人・作業を自動化したい人：CLI（agy）",
           ] },
           { type: "p", text: "どれを使っても同じ Google アカウントでサインインし、業務では会社の Google Cloud プロジェクト経由で使います。次のレッスンでサインインと初期設定を行います。" },
+          {"type": "h", "id": "recap", "text": "まとめ"},
+          {"type": "p", "text": "迷ったらデスクトップアプリを入れます。コードを見たい人は IDE か拡張機能、ターミナル派は CLI（agy）。どれを使っても、業務では会社の Google Cloud 経由でサインインします。"},
         ],
       },
       {
@@ -148,12 +221,87 @@ export const courses: Course[] = [
         summary: "会社アカウントでサインインし、初期設定を済ませます。",
         ownVideo: "antigravity-101-signin",
         blocks: [
-          { type: "steps", items: [
-            "スタートメニューから Antigravity を起動",
-            "業務で使う場合は「Use business account」を選び、会社アカウントでサインインしてから会社の Google Cloud プロジェクトを選ぶ",
-            "テーマ（画面の色）を選ぶ → Google プラグインは分からなければ選ばずに進む → 利用規約を確認して「Accept」→「Finish」",
-          ] },
-          { type: "tip", text: "会社のプロジェクト ID は AI推進担当 から案内されます。「権限がない」と表示された場合は、管理者の設定が終わっていない可能性があるので AI推進担当 に連絡してください。" },
+          {
+            "type": "p",
+            "text": "インストールが終わったら、Antigravity を起動してサインインします。業務で使うときと、個人で学習するときでサインイン方法が違うので注意してください。"
+          },
+          {
+            "type": "h",
+            "id": "launch",
+            "text": "起動する"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "スタートメニューを開き「Antigravity」を探してクリックする",
+              "サインイン方法を選ぶ画面が表示される"
+            ]
+          },
+          {
+            "type": "shot",
+            "alt": "サインイン方法を選ぶ画面",
+            "todo": "「Use business account」「Continue with Google」が並ぶ最初の画面"
+          },
+          {
+            "type": "h",
+            "id": "business",
+            "text": "業務で使う場合（会社アカウント）"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "「Use business account」を選ぶ",
+              "ブラウザが開くので、会社の Google アカウントでログインする",
+              "会社の Google Cloud プロジェクトを選ぶ（プロジェクト ID は AI推進担当から案内されます）",
+              "ブラウザに表示される「Open Antigravity」をクリックしてアプリに戻る"
+            ]
+          },
+          {
+            "type": "tip",
+            "text": "「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。"
+          },
+          {
+            "type": "link",
+            "href": "https://kanta13jp1.github.io/ai-park/guide",
+            "text": "会社の Google Cloud で使うための手順（導入ガイド）"
+          },
+          {
+            "type": "h",
+            "id": "personal",
+            "text": "個人で学習する場合"
+          },
+          {
+            "type": "p",
+            "text": "「Continue with Google」を選び、個人の Google アカウントでログインします。業務の情報は入力しないでください。"
+          },
+          {
+            "type": "h",
+            "id": "setup",
+            "text": "初期設定"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "テーマ（画面の色）を選ぶ",
+              "Google プラグインの選択は、分からなければ何も選ばずに進む",
+              "利用規約を確認して「Accept」",
+              "「Finish」をクリックすると、メイン画面が開く"
+            ]
+          },
+          {
+            "type": "shot",
+            "alt": "テーマ選択〜Finish の画面",
+            "todo": "初回起動時に表示されるテーマ選択・プラグイン選択・利用規約・Finish の各画面"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "業務では「Use business account」で会社アカウントにサインインし、会社のプロジェクトを選びます。初期設定はテーマ選択 → プラグイン（飛ばしてOK）→ Accept → Finish の順です。"
+          }
         ],
       },
       {
@@ -164,15 +312,82 @@ export const courses: Course[] = [
         summary: "エージェントに任せる範囲を決める2つの設定を、安全な状態にします。",
         ownVideo: "antigravity-101-safety",
         blocks: [
-          { type: "p", text: "左下の「Settings」→「General」で、エージェントにどこまで任せるかを決めます。慣れるまでは、必ず確認が入る設定にしておきます。" },
-          { type: "h", id: "recommended", text: "おすすめの設定" },
-          { type: "steps", items: [
-            "Security Preset：「Default」を選ぶ（ターミナルのコマンド実行と、作業フォルダの外のファイル操作の前に確認が入る）",
-            "Plan Review Policy：「Always Ask」を選ぶ（作業を始める前に計画を見せて確認を求める）",
-          ] },
-          { type: "image", file: "G6-settings-options.png", alt: "Security Preset と Plan Review Policy の選択肢" },
-          { type: "h", id: "avoid", text: "業務で使わない設定" },
-          { type: "warn", text: "「Full machine」は PC 内のどのファイルでも読み書きでき、「Turbo mode」は安全のための確認がすべて無くなります。業務では使わないでください。" },
+          {
+            "type": "p",
+            "text": "使い始める前に、エージェントにどこまで任せるかを決めておきましょう。最初は「何かする前に必ず確認してくれる」設定にしておくと安心です。"
+          },
+          {
+            "type": "h",
+            "id": "open",
+            "text": "設定画面を開く"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "左下の「Settings」をクリック",
+              "左のメニューから「General」を選ぶ"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "G6-settings.png",
+            "alt": "Settings の General 画面"
+          },
+          {
+            "type": "h",
+            "id": "security-preset",
+            "text": "Security Preset（任せる範囲）"
+          },
+          {
+            "type": "p",
+            "text": "「Security Preset」は、エージェントが確認なしでできることの範囲です。右側の ▼ をクリックすると4つの選択肢が出ます。"
+          },
+          {
+            "type": "image",
+            "file": "L2-security-preset.png",
+            "alt": "Security Preset の設定欄"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "Default（おすすめ）：ターミナルのコマンド実行と、作業フォルダの外のファイル操作の前に必ず確認が入る",
+              "Full machine：コマンドは確認が入るが、PC 内のどのファイルでも読み書きできる",
+              "Turbo mode：安全のための確認がすべて無くなる",
+              "Custom：項目ごとに自分で細かく決める"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "G6-settings-options.png",
+            "alt": "おすすめの設定（Default と Always Ask）"
+          },
+          {
+            "type": "h",
+            "id": "plan-review",
+            "text": "Plan Review Policy（計画の確認）"
+          },
+          {
+            "type": "p",
+            "text": "「Plan Review Policy」は、作業を始める前に計画を見せてくれるかどうかの設定です。「Always Ask」を選ぶと、エージェントはまず計画を見せて、あなたの確認を待ってくれます。"
+          },
+          {
+            "type": "image",
+            "file": "L3-plan-review.png",
+            "alt": "Plan Review Policy の設定欄"
+          },
+          {
+            "type": "warn",
+            "text": "「Full machine」「Turbo mode」と「Always Proceed」は、慣れるまで・業務では使わないでください。意図しないファイルの変更やコマンドの実行を止められなくなります。"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "Settings → General で、Security Preset を「Default」、Plan Review Policy を「Always Ask」にします。これで、エージェントは作業前に計画を見せ、コマンド実行や作業フォルダ外の操作の前に必ず確認してくれます。"
+          }
         ],
       },
       {
@@ -183,13 +398,78 @@ export const courses: Course[] = [
         summary: "作業フォルダを登録して、はじめての依頼を出してみます。",
         ownVideo: "antigravity-101-first-task",
         blocks: [
-          { type: "steps", items: [
-            "左側「Projects」の右にあるフォルダ＋のアイコンから、作業させたいフォルダを登録する",
-            "左上の「New Conversation」をクリック",
-            "入力欄（Ask anything...）に、やってほしいことを日本語で書いて送信する",
-          ] },
-          { type: "image", file: "G5-main.png", alt: "メイン画面" },
-          { type: "tip", text: "最初は「このフォルダの中身を説明して」のような、ファイルを変更しない依頼から試すと安心です。" },
+          {
+            "type": "p",
+            "text": "いよいよ最初の依頼です。まずは、ファイルを変更しない「質問」から試してみましょう。"
+          },
+          {
+            "type": "h",
+            "id": "project",
+            "text": "作業フォルダを登録する"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "左側の「Projects」の右にあるフォルダ＋のアイコンをクリック",
+              "開いた画面で、作業させたいフォルダを選ぶ",
+              "「Projects」の一覧にフォルダ名が表示されれば登録完了"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "G5-main.png",
+            "alt": "Projects の登録ボタンと New Conversation"
+          },
+          {
+            "type": "h",
+            "id": "ask",
+            "text": "依頼を送る"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "左上の「New Conversation」をクリック",
+              "入力欄の上に、登録したフォルダ名が表示されていることを確認する",
+              "入力欄に依頼を書いて Enter キーで送る"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "L1-input.png",
+            "alt": "依頼を書く入力欄"
+          },
+          {
+            "type": "h",
+            "id": "example",
+            "text": "例：フォルダの中身を説明してもらう"
+          },
+          {
+            "type": "p",
+            "text": "最初は、次のようにファイルを変更しないことをはっきり書いて頼むと安心です。"
+          },
+          {
+            "type": "prompt",
+            "text": "このフォルダの中にあるファイルの構成と、それぞれの役割を初心者にも分かるように説明してください。ファイルは変更しないでください。",
+            "label": "はじめての依頼"
+          },
+          {
+            "type": "shot",
+            "alt": "エージェントの回答画面",
+            "todo": "上のプロンプトを送ったあと、エージェントがフォルダの中身を説明している画面"
+          },
+          {
+            "type": "tip",
+            "text": "回答の途中で分からない言葉が出てきたら、そのまま「〇〇とは何ですか？」と続けて質問して大丈夫です。"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "「Projects」にフォルダを登録し、「New Conversation」から入力欄に依頼を書いて送ります。最初は「ファイルは変更しないでください」と添えた質問から始めると安全です。"
+          }
         ],
       },
     ],
@@ -225,14 +505,65 @@ export const courses: Course[] = [
         ownVideo: "antigravity-practice-ask",
         video: { id: "bSp-foRDH5M", title: "How to build apps and automate tasks with Google Antigravity 2.0", channel: "Google" },
         blocks: [
-          { type: "p", text: "AI への依頼は「目的・対象・条件・完了の形」の4点をそろえると、やり直しが減ります。" },
-          { type: "steps", items: [
-            "目的：何のためにやるか",
-            "対象：どのファイル・どの画面か（ファイル名を具体的に）",
-            "条件：変えてはいけないこと・使う言語やルール",
-            "完了の形：どうなれば終わりか（テストが通る・画面に表示される など）",
-          ] },
-          { type: "tip", text: "例：「src/app/contact/page.tsx の送信ボタンを、必須項目が空のときは押せないようにしてください。見た目は変えないでください。」" },
+          {
+            "type": "p",
+            "text": "エージェントは、言われたことを言われたとおりに進めます。やり直しを減らすコツは、頼む前に「目的・対象・条件・完了の形」の4点をそろえることです。"
+          },
+          {
+            "type": "h",
+            "id": "four",
+            "text": "4点セット"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "目的：何のためにやるか",
+              "対象：どのファイル・どの画面か（ファイル名を具体的に）",
+              "条件：変えてはいけないこと・使う言語やルール",
+              "完了の形：どうなれば終わりか（テストが通る・画面に表示される など）"
+            ]
+          },
+          {
+            "type": "h",
+            "id": "bad",
+            "text": "よくない例"
+          },
+          {
+            "type": "prompt",
+            "text": "問い合わせフォームを直して",
+            "label": "あいまいな依頼"
+          },
+          {
+            "type": "p",
+            "text": "これだと、どのファイルの何を、どう直せば終わりなのかが分かりません。エージェントは推測で作業を始めてしまい、意図と違う変更が入りがちです。"
+          },
+          {
+            "type": "h",
+            "id": "good",
+            "text": "よい例"
+          },
+          {
+            "type": "prompt",
+            "text": "src/app/contact/page.tsx の送信ボタンを、必須項目が空のときは押せないようにしてください。見た目は変えないでください。直したら、どのように確認すればよいかも教えてください。",
+            "label": "4点セットの依頼"
+          },
+          {
+            "type": "p",
+            "text": "「対象（ファイル名）」「目的（空のときは押せない）」「条件（見た目は変えない）」「完了の形（確認方法）」がそろっています。"
+          },
+          {
+            "type": "tip",
+            "text": "4点を全部思いつかないときは、「この作業を頼みたいです。依頼の前に確認すべきことを質問してください」と頼むと、エージェントが足りない点を聞いてくれます。"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "依頼は「目的・対象・条件・完了の形」の4点をそろえます。あいまいなまま頼むより、ファイル名や変えてはいけないことを具体的に書いたほうが、やり直しが減ります。"
+          }
         ],
       },
       {
@@ -243,12 +574,77 @@ export const courses: Course[] = [
         summary: "作業前に計画を作らせ、方針を確認してから任せる流れを学びます。",
         ownVideo: "antigravity-practice-plan",
         blocks: [
-          { type: "p", text: "Plan Review Policy を「Always Ask」にしておくと、エージェントは作業の前に計画を見せてくれます。計画を読んで、方針が合っていれば進めてもらい、違えばその場で修正を伝えます。" },
-          { type: "steps", items: [
-            "入力欄で「/」を入力して「plan」を選ぶと、まず計画を作らせることができる",
-            "計画の中で「変更するファイル」「やらないこと」を確認する",
-            "分からない手順があれば、進める前に理由を質問する",
-          ] },
+          {
+            "type": "p",
+            "text": "大きな変更や、どこを直すべきか分からない作業では、いきなり作業させずに、まず計画を作らせるのが安全です。"
+          },
+          {
+            "type": "h",
+            "id": "setting",
+            "text": "計画を必ず見せてもらう設定"
+          },
+          {
+            "type": "p",
+            "text": "Settings → General の「Plan Review Policy」を「Always Ask」にしておくと、エージェントは作業前に計画を見せて、あなたの確認を待ちます（レッスン「最初に必ず：安全設定」で設定済みのはずです）。"
+          },
+          {
+            "type": "image",
+            "file": "L3-plan-review.png",
+            "alt": "Plan Review Policy と「/」→「plan」の案内"
+          },
+          {
+            "type": "h",
+            "id": "plan",
+            "text": "計画だけ作らせる"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "入力欄に「/」を入力する",
+              "表示された候補から「plan」を選ぶ",
+              "続けて、やりたいことを書いて送る"
+            ]
+          },
+          {
+            "type": "p",
+            "text": "たとえば、次のように「まだ変更しない」ことをはっきり書きます。"
+          },
+          {
+            "type": "prompt",
+            "text": "ヘッダーにダークモードの切り替えボタンを付けたいです。まず、どのファイルをどう変更するかの計画だけを作ってください。まだファイルは変更しないでください。",
+            "label": "計画を作らせる依頼"
+          },
+          {
+            "type": "shot",
+            "alt": "エージェントが計画を示している画面",
+            "todo": "上のプロンプトを送ったあと、変更予定のファイルと手順が並んだ計画（implementation plan）が表示された画面"
+          },
+          {
+            "type": "h",
+            "id": "check",
+            "text": "計画のチェックポイント"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "変更するファイルは、思っている範囲に収まっているか",
+              "「やらないこと」（触ってほしくないファイルや機能）が守られているか",
+              "手順の中に分からないものがあれば、進める前に理由を質問する"
+            ]
+          },
+          {
+            "type": "p",
+            "text": "問題なければ計画どおりに進めてもらい、違っていればその場で「〇〇は変更しないで」などと修正を伝えます。"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "「Always Ask」で計画を必ず見せてもらい、大きな作業は「/」→「plan」でまず計画だけ作らせます。変更するファイルとやらないことを確認してから進めてもらいましょう。"
+          }
         ],
       },
       {
@@ -259,13 +655,86 @@ export const courses: Course[] = [
         summary: "AI の変更を Git で確認し、意図と違えば取り消す方法を学びます。",
         ownVideo: "antigravity-practice-git",
         blocks: [
-          { type: "p", text: "エージェントは複数のファイルを一度に書き換えます。作業前にブランチを切り、変更を差分で確認してから取り込むのが事故を防ぐ基本です。" },
-          { type: "steps", items: [
-            "git switch -c feature/xxx：作業用ブランチを作る（main で直接作業しない）",
-            "git status / git diff：何が変わったかを確認する",
-            "git add . && git commit -m \"...\"：確認できた変更を記録する",
-            "git restore <file>：意図と違う変更をコミット前に取り消す",
-          ] },
+          {
+            "type": "p",
+            "text": "エージェントは一度に複数のファイルを書き換えます。Git を使えば、何が変わったかを確認でき、意図と違えば元に戻せます。コマンドは右のボタンでコピーできます。"
+          },
+          {
+            "type": "h",
+            "id": "branch",
+            "text": "作業前にブランチを作る"
+          },
+          {
+            "type": "p",
+            "text": "main（本番用）で直接作業せず、作業用のブランチを作ってから依頼します。"
+          },
+          {
+            "type": "code",
+            "text": "git switch -c feature/dark-mode",
+            "label": "作業用ブランチを作る（feature/dark-mode の部分は作業内容に合わせて変える）"
+          },
+          {
+            "type": "h",
+            "id": "check",
+            "text": "変わったところを確認する"
+          },
+          {
+            "type": "code",
+            "text": "git status",
+            "label": "変更されたファイルの一覧"
+          },
+          {
+            "type": "code",
+            "text": "git diff",
+            "label": "変更の中身（追加は + 、削除は - で表示）"
+          },
+          {
+            "type": "p",
+            "text": "エージェントに要点をまとめてもらうのも便利です。"
+          },
+          {
+            "type": "prompt",
+            "text": "今回変更したファイルと、それぞれの変更内容の要点を一覧にしてください。",
+            "label": "変更内容の確認"
+          },
+          {
+            "type": "h",
+            "id": "commit",
+            "text": "問題なければ記録する"
+          },
+          {
+            "type": "code",
+            "text": "git add .\ngit commit -m \"ヘッダーにダークモード切り替えを追加\"",
+            "label": "変更を記録（コミット）する"
+          },
+          {
+            "type": "h",
+            "id": "restore",
+            "text": "意図と違えば取り消す"
+          },
+          {
+            "type": "code",
+            "text": "git restore <ファイル名>",
+            "label": "コミット前の変更を元に戻す"
+          },
+          {
+            "type": "tip",
+            "text": "IDE（Antigravity IDE や VS Code）を使っている場合は、左側の「ソース管理」からも同じ操作をボタンで行えます。"
+          },
+          {
+            "type": "shot",
+            "alt": "IDE のソース管理画面",
+            "todo": "Antigravity IDE の「ソース管理」で、変更されたファイルと差分が表示されている画面"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "作業前にブランチを作り、git status と git diff で変更を確認してからコミットします。意図と違う変更は git restore で取り消せます。"
+          }
         ],
       },
       {
@@ -276,12 +745,55 @@ export const courses: Course[] = [
         summary: "エラーが出たときに、早く解決するための伝え方を学びます。",
         ownVideo: "antigravity-practice-error",
         blocks: [
-          { type: "steps", items: [
-            "エラーメッセージを省略せず全文そのまま貼り、「原因と直し方を説明して」と頼む",
-            "直前に何をしたか（実行したコマンド・変更したファイル）も一緒に伝える",
-            "同じ修正を3回繰り返しても直らないときは、git restore で元に戻して頼み方を変える",
-            "解決しないときはエラー文を添えて Office Hour／お問い合わせへ",
-          ] },
+          {
+            "type": "p",
+            "text": "エラーが出ても慌てなくて大丈夫です。エージェントに必要な情報をそろえて伝えれば、原因と直し方を一緒に探してくれます。"
+          },
+          {
+            "type": "h",
+            "id": "tell",
+            "text": "伝える3つのこと"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "エラーメッセージの全文（省略しない）",
+              "直前に何をしたか（実行したコマンド・変更したファイル）",
+              "本当はどうなってほしかったか"
+            ]
+          },
+          {
+            "type": "h",
+            "id": "template",
+            "text": "そのまま使える依頼の型"
+          },
+          {
+            "type": "prompt",
+            "text": "次のエラーが出ました。原因と直し方を、初心者にも分かるように説明してください。直す前に、どのファイルをどう変更するかを先に教えてください。\n\n【直前にしたこと】\n（例：npm run build を実行した）\n\n【本当はどうなってほしいか】\n（例：ビルドが成功してほしい）\n\n【エラー全文】\n（ここにエラーをそのまま貼り付ける）",
+            "label": "エラー相談の型"
+          },
+          {
+            "type": "h",
+            "id": "loop",
+            "text": "直らないときは"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "同じ修正を3回繰り返しても直らないときは、いったん git restore で元に戻す",
+              "頼み方を変える（エラーの前後の状況を詳しく書く・「まず原因の候補を3つ挙げて」と頼む）",
+              "それでも解決しないときは、エラー文を添えて Office Hour／お問い合わせへ"
+            ]
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "エラー全文・直前にしたこと・期待する結果の3つをそろえて伝えます。同じ修正を繰り返すようなら一度元に戻して、頼み方を変えましょう。"
+          }
         ],
       },
     ],
@@ -314,11 +826,55 @@ export const courses: Course[] = [
         summary: "入力してよいデータを、AI の種類ごとに3つのレベルで判断します。",
         ownVideo: "safe-ai-use-levels",
         blocks: [
-          { type: "steps", items: [
-            "Level 1（社内機密・コード入力可）：会社として契約し、入力データを学習に使わないことが担保されたAI（会社の Google Cloud 経由の Antigravity、Gemini Enterprise など）",
-            "Level 2（マスキング必須）：氏名・電話番号・顧客名などを置き換えてから入力する",
-            "Level 3（公開情報のみ）：個人アカウントのAIツール。公開情報での学習・試用にとどめる",
-          ] },
+          {
+            "type": "p",
+            "text": "AI に入力してよいデータは、使う AI の種類によって違います。入力する前に「この AI はどのレベルか」を確認しましょう。"
+          },
+          {
+            "type": "h",
+            "id": "levels",
+            "text": "3つのレベル"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "Level 1（社内機密・コード入力可）：会社として契約し、入力データを学習に使わないことが担保された AI（会社の Google Cloud 経由の Antigravity、Gemini Enterprise など）",
+              "Level 2（マスキング必須）：氏名・電話番号・顧客名などを置き換えてから入力する",
+              "Level 3（公開情報のみ）：個人アカウントの AI ツール。公開情報での学習・試用にとどめる"
+            ]
+          },
+          {
+            "type": "link",
+            "href": "https://kanta13jp1.github.io/ai-park/tools-hub",
+            "text": "AI Tools Hub のセキュリティ基準早見表"
+          },
+          {
+            "type": "h",
+            "id": "masking",
+            "text": "マスキングの例"
+          },
+          {
+            "type": "p",
+            "text": "Level 2 の AI に相談するときは、個人や会社を特定できる情報を置き換えます。"
+          },
+          {
+            "type": "prompt",
+            "text": "取引先A社の担当者（Bさん）から、納期を2週間延ばしてほしいというメールが届きました。丁寧にお断りしつつ、代わりに1週間なら調整できると伝える返信文を作ってください。",
+            "label": "マスキングした相談"
+          },
+          {
+            "type": "tip",
+            "text": "実際の会社名・氏名・メールアドレス・電話番号・金額は、「A社」「Bさん」「〇〇円」のように置き換えてから入力します。"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "入力前に、使う AI のレベルを確認します。機密や個人情報は Level 1 の AI にだけ入力し、Level 2 ではマスキング、Level 3 では公開情報だけを扱います。"
+          }
         ],
       },
       {
@@ -329,14 +885,68 @@ export const courses: Course[] = [
         summary: "社内AI利用の注意事項5箇条（暫定版）を確認します。",
         ownVideo: "safe-ai-use-rules",
         blocks: [
-          { type: "steps", items: [
-            "機密・個人情報は入力先を選ぶ",
-            "入力前にマスキングする",
-            "出力は必ず人が確認する",
-            "成果物の責任は使った人が持つ",
-            "迷ったら使う前に相談する",
-          ] },
-          { type: "p", text: "詳細は社長・杉村さんとの協議のうえ正式決定されます。最新版は AI Tools Hub の「社内AI利用の注意事項」を確認してください。" },
+          {
+            "type": "p",
+            "text": "社内で AI を使うときの注意事項5箇条（暫定版）です。迷ったときは、この5つに立ち返ってください。"
+          },
+          {
+            "type": "h",
+            "id": "rule1",
+            "text": "1. 機密・個人情報は入力先を選ぶ"
+          },
+          {
+            "type": "p",
+            "text": "顧客の個人情報・社内機密・未公開ソースコードは、会社契約で学習不使用が担保された AI（Level 1）にのみ入力します。"
+          },
+          {
+            "type": "h",
+            "id": "rule2",
+            "text": "2. 入力前にマスキングする"
+          },
+          {
+            "type": "p",
+            "text": "Level 2 のツールでは、氏名・電話番号・メールアドレス・顧客名・案件名などを置き換えてから入力します。"
+          },
+          {
+            "type": "h",
+            "id": "rule3",
+            "text": "3. 出力は必ず人が確認する"
+          },
+          {
+            "type": "p",
+            "text": "AI の回答やコードには誤りが含まれます。事実・数値・法令・セキュリティに関わる内容は一次情報で確認し、コードはレビューとテストを通してから使います。"
+          },
+          {
+            "type": "h",
+            "id": "rule4",
+            "text": "4. 成果物の責任は使った人が持つ"
+          },
+          {
+            "type": "p",
+            "text": "AI で作った資料・コードでも、社外に出す・本番に反映する責任は利用者にあります。"
+          },
+          {
+            "type": "h",
+            "id": "rule5",
+            "text": "5. 迷ったら使う前に相談する"
+          },
+          {
+            "type": "p",
+            "text": "新しいツールの業務利用や、扱ってよいデータか判断できない場合は、利用前に AI推進担当へ相談してください。"
+          },
+          {
+            "type": "tip",
+            "text": "詳細は社長・杉村さんとの協議のうえ正式決定されます。最新版は AI Tools Hub の「社内AI利用の注意事項」で確認してください。"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "入力先を選ぶ・マスキングする・出力を確認する・責任は使った人・迷ったら相談、の5つです。"
+          }
         ],
       },
       {
@@ -347,11 +957,47 @@ export const courses: Course[] = [
         summary: "困ったときにどこへ相談すればよいかを確認します。",
         ownVideo: "safe-ai-use-help",
         blocks: [
-          { type: "steps", items: [
-            "Office Hour：画面上部の「AI Office Hour 予約」から",
-            "Google Chat の「AI勉強会」スペース",
-            "お問い合わせページのフォーム・FAQ",
-          ] },
+          {
+            "type": "p",
+            "text": "分からないこと・困ったことがあれば、ひとりで悩まずに相談してください。"
+          },
+          {
+            "type": "h",
+            "id": "where",
+            "text": "相談先"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "Office Hour：画面上部の「AI Office Hour 予約」から",
+              "Google Chat の「AI勉強会」スペース",
+              "お問い合わせページのフォーム・FAQ"
+            ]
+          },
+          {
+            "type": "link",
+            "href": "https://kanta13jp1.github.io/ai-park/contact",
+            "text": "お問い合わせ・よくある質問"
+          },
+          {
+            "type": "h",
+            "id": "how",
+            "text": "相談するときに書くとよいこと"
+          },
+          {
+            "type": "prompt",
+            "text": "【やりたいこと】\n【試したこと】\n【困っていること・エラー文】\n【使っているツール】（例：Antigravity 2.0）",
+            "label": "相談メッセージの型"
+          },
+          {
+            "type": "h",
+            "id": "recap",
+            "text": "まとめ"
+          },
+          {
+            "type": "p",
+            "text": "Office Hour・Google Chat の AI勉強会スペース・お問い合わせページの3か所で相談できます。やりたいこと・試したこと・困っていることを書くと、早く解決できます。"
+          }
         ],
       },
     ],

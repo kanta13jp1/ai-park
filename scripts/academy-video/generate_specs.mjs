@@ -67,6 +67,15 @@ for (const course of courses) {
       else if (b.type === "code" && !codeMentioned) {
         ensure().say += "コマンドは、レッスンのページからコピーできます。";
         codeMentioned = true;
+      } else if (b.type === "prompt") {
+        // プロンプト例は専用スライドに。短いものは読み上げ、長い型はページからのコピーを案内
+        push();
+        const short = b.text.length <= 120 && !b.text.includes("\n");
+        slides.push({
+          title: b.label ? `例：${b.label}` : "プロンプトの例",
+          lead: clip(b.text.replace(/\n+/g, " "), 150),
+          say: short ? `例えば、次のように頼みます。${sentence(b.text)}` : "このような型を使って頼みます。プロンプトは、レッスンのページからコピーできます。",
+        });
       } else if (b.type === "image") {
         if (cur?.image) push();
         ensure().image = b.file;
