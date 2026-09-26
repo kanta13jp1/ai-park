@@ -287,11 +287,12 @@ const tasksData: TaskItem[] = [
     releaseCondition: "第1期アンバサダー公募選定・各事業部リーダーの正式登録と相談窓口の開設",
     category: "community",
     icon: "🤝",
-    description: "各事業部・開発チームでAI活用をリードする「AIアンバサダー」を正式公募・選定し、各メンバーの得意技術（LLM、プロンプト、MCP）とSlack直通相談窓口を開設します。",
+    description: "各事業部・開発チームでAI活用をリードする「AIアンバサダー」を正式公募・選定し、各メンバーの得意技術（LLM、プロンプト、MCP）と Google Chat での相談窓口を開設します。",
     items: [
       { text: "アンバサダー紹介UI & 公募応募フォームのプロトタイプ構築", done: true },
+      { text: "応募のGitHub Issue受付・Google Chat通知 & 第1期制度（案）の公開", done: true },
       { text: "第1期アンバサダーの全社公募・選定（各事業部より6名）", done: false },
-      { text: "各アンバサダーのSlack相談チャンネル（#ask-coe-*）正式稼働", done: false },
+      { text: "アンバサダーへの相談窓口（Google Chat）の正式稼働", done: false },
     ],
   },
   {

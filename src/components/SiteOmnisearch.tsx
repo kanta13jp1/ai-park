@@ -95,7 +95,7 @@ const siteSearchIndex: SearchIndexItem[] = [
     title: "社内AIアンバサダー",
     category: "コミュニティ",
     href: "/ambassadors",
-    description: "各部署のAI推進リーダー一覧、得意技術スタック、Slack相談窓口、アンバサダー公募",
+    description: "各部署のAI推進リーダー一覧、得意技術スタック、Google Chat 相談窓口、アンバサダー公募",
     keywords: ["アンバサダー", "リーダー", "相談", "slack", "推進", "公募", "高橋", "佐藤", "田中"],
   },
   {

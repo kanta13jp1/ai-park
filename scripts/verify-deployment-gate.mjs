@@ -34,22 +34,21 @@ console.log(`📋 事実確認・未完了（未連携・検証中）の対象�
 unverifiedHrefs.forEach((href) => console.log(`   - ${href}`));
 console.log("");
 
-// 2. navigation.ts の検査（未確認機能が「稼働中」「公開中」になっていないか）
-const navPath = path.join(rootDir, "src", "data", "navigation.ts");
-const navContent = fs.readFileSync(navPath, "utf-8");
+// 2. ナビゲーション類の検査（未確認機能が「稼働中」「公開中」になっていないか）
+//    サイドバー（navigation.ts）に加え、目的別ナビ（PurposeJump.tsx）も対象にする
+const navContent = ["src/data/navigation.ts", "src/components/PurposeJump.tsx"]
+  .map((rel) => fs.readFileSync(path.join(rootDir, rel), "utf-8"))
+  .join("\n");
 
 const forbiddenProductionBadges = ["稼働中", "公開中", "正式運用", "本番稼働", "運用中"];
 
 unverifiedHrefs.forEach((href) => {
-  // navigation.ts 内で href の前後の badge 定義を検索
-  const itemRegex = new RegExp(`href:\\s*["']${href}["'][^}]*badge:\\s*["']([^"']+)["']`, "s");
-  const reverseItemRegex = new RegExp(`badge:\\s*["']([^"']+)["'][^}]*href:\\s*["']${href}["']`, "s");
+  // 同じ href が複数のナビに載ることがあるため、すべての出現箇所の badge を検査する
+  const itemRegex = new RegExp(`href:\\s*["']${href}["'][^}]*?badge:\\s*["']([^"']+)["']`, "gs");
+  const reverseItemRegex = new RegExp(`badge:\\s*["']([^"']+)["'][^{}]*?href:\\s*["']${href}["']`, "gs");
+  const badges = [...navContent.matchAll(itemRegex), ...navContent.matchAll(reverseItemRegex)].map((m) => m[1]);
 
-  const m1 = navContent.match(itemRegex);
-  const m2 = navContent.match(reverseItemRegex);
-  const badge = m1 ? m1[1] : m2 ? m2[1] : null;
-
-  if (badge) {
+  for (const badge of badges) {
     for (const forbidden of forbiddenProductionBadges) {
       if (badge.includes(forbidden)) {
         console.error(

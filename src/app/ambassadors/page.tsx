@@ -19,6 +19,7 @@ import {
   Award,
 } from "lucide-react";
 import { useState } from "react";
+import { GITHUB_REPO } from "@/lib/githubFeedback";
 
 interface Ambassador {
   id: number;
@@ -30,6 +31,28 @@ interface Ambassador {
   recentAchievement: string;
   availableTopics: string[];
   slackHandle: string;
+  isModel?: boolean; // 公募選定前のモデルプロフィール（架空）。正式登録された実在メンバーは false
+}
+
+// 第1期アンバサダー制度（案）。社内決裁後に「案」を外す
+const programDraft = [
+  { label: "役割", text: "自チームのAI活用の相談役。困りごとを拾ってAI CoEにつなぎ、うまくいった工夫をAI Parkで共有する" },
+  { label: "人数・任期", text: "各事業部から1名程度、任期は半年（第1期：2026年10月〜2027年3月）" },
+  { label: "活動量の目安", text: "月2時間程度（月1回のアンバサダー会＋チーム内での相談対応）" },
+  { label: "選び方", text: "自薦・他薦を受け付け、AI CoE と各事業部リーダーで相談して決定。専門資格やAI開発経験は不問" },
+  { label: "相談窓口", text: "開設までは Office Hour と Google Chat の「AI勉強会」スペースで受け付け" },
+];
+
+function buildApplyIssueUrl(fields: { author: string; dept: string; specialty: string; motivation: string }) {
+  const params = new URLSearchParams({
+    template: "ambassador.yml",
+    title: `[アンバサダー応募] ${fields.dept} ${fields.author}`,
+    author: fields.author,
+    dept: fields.dept,
+    specialty: fields.specialty,
+    motivation: fields.motivation,
+  });
+  return `https://github.com/${GITHUB_REPO}/issues/new?${params.toString()}`;
 }
 
 const initialAmbassadors: Ambassador[] = [
@@ -42,6 +65,7 @@ const initialAmbassadors: Ambassador[] = [
     specialties: ["Google Antigravity", "Subagents並列実行", "MCPツール連携", "Terraform"],
     recentAchievement: "インフラ自動プロビジョニング用MCPサーバーを開発し全社展開中",
     availableTopics: ["CLI/IDE環境構築", "カスタムMCPサーバー作成", "破壊的操作防止ルール設定"],
+    isModel: true,
     slackHandle: "#ask-coe-takahashi",
   },
   {
@@ -53,6 +77,7 @@ const initialAmbassadors: Ambassador[] = [
     specialties: ["プロンプトエンジニアリング", "Gemini 3.1 Pro", "Document AI", "業務フロー改善"],
     recentAchievement: "調達見積書のPDF自動抽出・比較AIエージェントのPoCを主導",
     availableTopics: ["非エンジニア向けプロンプト作成", "PDF・画像解析", "議事録自動化"],
+    isModel: true,
     slackHandle: "#ask-coe-sato",
   },
   {
@@ -64,6 +89,7 @@ const initialAmbassadors: Ambassador[] = [
     specialties: ["社内AI利用規約", "機密情報保護", "データマスキング", "著作権・ライセンス"],
     recentAchievement: "全社向け「生成AI利用セキュリティチェックシート」の策定と運用自動化",
     availableTopics: ["社内データ取扱い可否", "商用利用リスク", "外部API連携審査"],
+    isModel: true,
     slackHandle: "#ask-coe-tanaka",
   },
   {
@@ -75,6 +101,7 @@ const initialAmbassadors: Ambassador[] = [
     specialties: ["Next.js / TypeScript", "Playwright自動テスト", "コード自動レビュー", "Skills開発"],
     recentAchievement: "プルリクエスト自動レビューAgentをチームに導入しレビュー時間を半減",
     availableTopics: ["フロントエンドAI駆動開発", "E2Eテスト自動生成", "自作Skillの配布"],
+    isModel: true,
     slackHandle: "#ask-coe-suzuki",
   },
   {
@@ -86,6 +113,7 @@ const initialAmbassadors: Ambassador[] = [
     specialties: ["BigQuery", "SQL最適化", "Vertex AI", "Python / pandas"],
     recentAchievement: "BigQuery SQL自動最適化Skillを作成し社内カタログにて公開",
     availableTopics: ["大量データ高速集計", "BQコスト削減", "データ分析自動化"],
+    isModel: true,
     slackHandle: "#ask-coe-nakamura",
   },
   {
@@ -97,6 +125,7 @@ const initialAmbassadors: Ambassador[] = [
     specialties: ["オブザーバビリティ", "ログ解析Agent", "Slack Bot", "障害復旧支援"],
     recentAchievement: "システム障害時のログ自動要約Botを社内Slackへ導入",
     availableTopics: ["アラート自動解析", "Datadog / Cloud Logging連携", "オンコール自動化"],
+    isModel: true,
     slackHandle: "#ask-coe-watanabe",
   },
 ];
@@ -126,23 +155,20 @@ export default function AmbassadorsPage() {
   const [applySpecialty, setApplySpecialty] = useState("");
   const [applyMotivation, setApplyMotivation] = useState("");
 
+  // 応募は GitHub Issue フォーム（ambassador.yml）へ入力内容を引き継いで起票 → Google Chat に通知
   const handleApplySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!applyName || !applyDept) {
-      alert("お名前と所属部署を入力してください。");
-      return;
-    }
-
+    if (!applyName || !applyDept) return;
+    window.open(
+      buildApplyIssueUrl({ author: applyName, dept: applyDept, specialty: applySpecialty, motivation: applyMotivation }),
+      "_blank",
+      "noopener,noreferrer"
+    );
     setAppliedSuccess(true);
-    setTimeout(() => {
-      setAppliedSuccess(false);
-      setIsApplyModalOpen(false);
-      setApplyName("");
-      setApplyDept("");
-      setApplySpecialty("");
-      setApplyMotivation("");
-      alert("AIアンバサダーへのご応募ありがとうございます！CoEよりSlackにてご連絡差し上げます。");
-    }, 1800);
+    setApplyName("");
+    setApplyDept("");
+    setApplySpecialty("");
+    setApplyMotivation("");
   };
 
   const filteredAmbassadors = ambassadors.filter((amb) => {
@@ -172,7 +198,7 @@ export default function AmbassadorsPage() {
         <UnderConstructionAlert
           statusType="draft"
           title="📋 公募準備中・モデルプロフィール掲載中"
-          message="現在掲載されているアンバサダー情報は運用モデルケースです。第1期アンバサダーの公募・選定制度および正式相談窓口の開設を準備中です。"
+          message="掲載中のアンバサダーは「モデル（架空）」のプロフィールです。第1期の応募受付を開始しました（応募は AI CoE に通知されます）。選定・正式登録と相談窓口の開設を準備中です。"
           prepDetails="社内アンバサダー選定基準の策定および各事業部からの公募受付フェーズ"
           releaseDate="2026年10月23日(金)"
         />
@@ -194,7 +220,7 @@ export default function AmbassadorsPage() {
                 </span>
               </div>
               <p className="text-indigo-900/90 leading-relaxed">
-                自チームの技術スタックや業務内容に最も近いアンバサダーに、直接SlackやOffice Hourを通じてAI活用・実装の相談が可能になる予定です。
+                自チームの技術スタックや業務内容に最も近いアンバサダーに、Google Chat や Office Hour を通じてAI活用・実装の相談ができるようにします。第1期の応募を受付中です。
               </p>
             </div>
           </div>
@@ -205,6 +231,24 @@ export default function AmbassadorsPage() {
             <UserPlus size={14} />
             <span>アンバサダーに応募する</span>
           </button>
+        </div>
+
+        {/* 第1期 制度（案） */}
+        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h3 className="font-bold text-sm text-slate-900">第1期 AIアンバサダー制度</h3>
+            <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 self-start">
+              📋 準備中：社内決裁前の案です
+            </span>
+          </div>
+          <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs">
+            {programDraft.map((d) => (
+              <div key={d.label} className="flex gap-2">
+                <dt className="font-bold text-slate-700 shrink-0 w-24">{d.label}</dt>
+                <dd className="text-slate-600 leading-relaxed">{d.text}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
 
         {/* 検索 & フィルター */}
@@ -254,6 +298,11 @@ export default function AmbassadorsPage() {
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-900 text-base">{amb.name}</h4>
+                    {amb.isModel && (
+                      <span className="inline-block text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">
+                        📋 モデル（架空）
+                      </span>
+                    )}
                     <p className="text-xs text-slate-500">{amb.dept}</p>
                     <span className="inline-block mt-0.5 text-[11px] font-semibold text-blue-700">
                       {amb.role}
@@ -303,15 +352,14 @@ export default function AmbassadorsPage() {
                 >
                   Office Hourで相談
                 </button>
-                <a
-                  href={`https://slack.com/app_redirect?channel=${amb.slackHandle.replace('#', '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors"
-                  title="Slackチャンネルを開く"
-                >
-                  <MessageCircle size={15} />
-                </a>
+                {!amb.isModel && (
+                  <span
+                    className="p-2 bg-slate-100 text-slate-700 rounded-lg"
+                    title="Google Chat の「AI勉強会」スペースで声をかけてください"
+                  >
+                    <MessageCircle size={15} />
+                  </span>
+                )}
               </div>
             </div>
           ))}
@@ -353,10 +401,21 @@ export default function AmbassadorsPage() {
                 <div className="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
                   <CheckCircle2 size={28} />
                 </div>
-                <h4 className="font-bold text-emerald-950 text-base">応募を受け付けました！</h4>
-                <p className="text-xs text-emerald-800">
-                  ご応募ありがとうございます。CoEメンターよりSlackにて活動詳細・キックオフのご案内をお送りします。
+                <h4 className="font-bold text-emerald-950 text-base">応募フォームを開きました</h4>
+                <p className="text-xs text-emerald-800 leading-relaxed">
+                  別タブで開いた GitHub の画面で「Submit new issue」を押すと応募が完了し、AI CoE に通知が届きます。
+                  選定後、AI CoE から Google Chat でご連絡します。
                 </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setAppliedSuccess(false);
+                    setIsApplyModalOpen(false);
+                  }}
+                  className="px-4 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold"
+                >
+                  閉じる
+                </button>
               </div>
             ) : (
               <form onSubmit={handleApplySubmit} className="space-y-4 text-xs">
@@ -414,6 +473,10 @@ export default function AmbassadorsPage() {
                     className="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none leading-relaxed"
                   />
                 </div>
+
+                <p className="text-slate-500 leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+                  「アンバサダーに応募する」を押すと入力内容が入った GitHub Issue の画面が開きます。応募内容は公開されるため、社外秘の情報は書かないでください。
+                </p>
 
                 <div className="pt-2 flex justify-end space-x-2">
                   <button

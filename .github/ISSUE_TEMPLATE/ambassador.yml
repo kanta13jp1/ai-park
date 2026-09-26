@@ -1,0 +1,41 @@
+name: AIアンバサダー応募
+description: 社内AIアンバサダー（第1期）への応募・推薦（AI CoE から個別にご連絡します）
+title: "[アンバサダー応募] "
+labels: ["ambassador"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        専門資格や高度なAI開発経験は不問です。このリポジトリは公開されているため、社外秘の情報は書かないでください。
+  - type: input
+    id: author
+    attributes:
+      label: お名前
+      placeholder: 例: 佐々木 拓也
+    validations:
+      required: true
+  - type: input
+    id: dept
+    attributes:
+      label: 所属部署 / チーム
+      placeholder: 例: 基幹システム部
+    validations:
+      required: true
+  - type: input
+    id: specialty
+    attributes:
+      label: 関心のある領域・得意な技術
+      placeholder: 例: Python, BigQuery, テスト自動化, プロンプト設計
+  - type: textarea
+    id: motivation
+    attributes:
+      label: 自チームでやってみたいこと・志望動機
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 応募の種類
+      options:
+        - 自薦
+        - 他薦（推薦したい人がいる）
