@@ -15,16 +15,26 @@ const accountFaqs = [
   },
   {
     q: "Antigravity は会社のアカウントでログインできますか？",
-    a: "Antigravity は現在、個人のGoogleアカウント向けに提供されています。公式FAQでもWorkspaceアカウントで問題がある場合は @gmail.com のアカウントを使うよう案内されています。チームでの利用は Google Cloud の規約のもと Gemini Enterprise 経由で提供されています。",
-    source: { label: "Antigravity FAQ", href: "https://antigravity.google/docs/faq/" },
+    a: "できます。会社のGoogle Cloudプロジェクトに接続する方式（Business account → Continue with Google Cloud）でサインインすると、Workspaceアカウントのまま利用でき、Google Cloudの利用規約とデータ保護のもとで動作します。社内ではこの方式を業務利用の標準とします（利用したい方はAI CoEへ権限付与を依頼してください）。",
+    source: { label: "Antigravity Enterprise", href: "https://antigravity.google/docs/enterprise/" },
+  },
+  {
+    q: "会社のGoogle Cloud経由で使う場合、料金は月額ですか？",
+    a: "月額定額ではなく、使った分だけ会社のGoogle Cloud請求に計上される従量課金です。個人のGoogle AI Proへの加入や経費精算は不要です。使いすぎを防ぐため、管理者がCloud Billingで月額の上限（Spend cap）を設定しており、上限に達するとその月はAI APIの利用が一時停止します。",
+    source: { label: "Antigravity Enterprise", href: "https://antigravity.google/docs/enterprise/" },
+  },
+  {
+    q: "Google Cloudに表示される「300ドル分のクレジット」とは何ですか？",
+    a: "Google Cloudを初めて使う請求先アカウントに付く無料トライアルのクレジットで、90日間有効です。期間中の利用料はこのクレジットから差し引かれ、請求は発生しません。90日経過またはクレジットを使い切ると、有料アカウントへアップグレードしない限りプロジェクトが停止するため、継続利用する場合はアップグレードが必要です。",
+    source: { label: "Google Cloud 無料トライアル FAQ", href: "https://cloud.google.com/signup-faqs" },
   },
   {
     q: "個人アカウントで Antigravity を業務に使ってもよいですか？",
-    a: "個人アカウントには個人向けの利用規約が適用されます。顧客情報・社内機密・未公開ソースコードは入力せず、公開情報での学習・試用にとどめてください。業務での本格利用の方針（会社契約の要否・経費精算）はAI CoEで整理中です。",
+    a: "個人アカウントには個人向けの利用規約が適用されます。顧客情報・社内機密・未公開ソースコードは入力せず、公開情報での学習・試用にとどめてください。業務では会社のGoogle Cloudプロジェクト経由で利用してください。",
     source: { label: "社内AI利用の注意事項", href: "/tools-hub#ai-guidelines", internal: true },
   },
   {
-    q: "無料プランと Google AI Pro では何が違いますか？",
+    q: "（個人利用の場合）無料プランと Google AI Pro では何が違いますか？",
     a: "どちらもGeminiモデルと主要機能を利用できます。違いは利用上限で、無料（Base）プランは週単位、Google AI Pro は5時間ごとにクォータが回復し上限も高く設定されています。",
     source: { label: "Antigravity Plans", href: "https://antigravity.google/docs/plans/" },
   },

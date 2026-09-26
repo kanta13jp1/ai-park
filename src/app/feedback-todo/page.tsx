@@ -160,7 +160,7 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     priority: "中",
     status: "done",
     feedbackQuote: "「調べて行ったら、個人アカウントのgoogleからしかProプランには加入できないようです。会社側でWorkspaceを使用して加入はできないと書いてありました」",
-    actionPlan: "【反映済み】お問い合わせページに「アカウント・ライセンス」FAQを追加。Google AI ProはWorkspaceアカウントでは加入できないこと、Antigravityは個人アカウント向けでチーム利用はGemini Enterprise経由であることを公式情報の出典付きで掲載しました。経費精算・会社契約の方針はAI CoEで整理中です。",
+    actionPlan: "【反映済み】お問い合わせページに「アカウント・ライセンス」FAQを追加。Google AI ProはWorkspaceアカウントでは加入できないこと、Antigravityは個人アカウント向けでチーム利用はGemini Enterprise経由であることを公式情報の出典付きで掲載しました。業務利用は会社のGoogle Cloudプロジェクト経由（従量課金・個人Pro加入不要）を標準とし、300ドルの無料トライアルクレジットの扱いもFAQに追記しました。",
     relatedLink: "/contact",
     relatedLinkText: "アカウントFAQを見る",
   },

@@ -233,7 +233,7 @@ export default function ToolsHubPage() {
                 <span>Level 1: 社内機密・コード入力可</span>
               </div>
               <p className="text-slate-600 text-[11px] leading-relaxed">
-                対象: <strong>会社契約のAI（Gemini Enterprise 等）</strong><br />
+                対象: <strong>会社契約のAI（Gemini Enterprise、会社のGoogle Cloudプロジェクト経由の Antigravity 等）</strong><br />
                 会社として契約し、入力データをモデル学習に使わないことが契約上担保されているサービス。社内ソースコードや設計書の投入が可能です。
               </p>
             </div>

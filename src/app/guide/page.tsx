@@ -29,7 +29,7 @@ export default function GuidePage() {
     {
       step: "03",
       title: "Googleアカウントでサインイン",
-      desc: "初回起動時にブラウザが開き、Googleアカウントでサインインします。Antigravity は個人のGoogleアカウント向けに提供されており、会社のGoogle Workspaceアカウントでは利用できない場合があります（詳しくはお問い合わせページのFAQを参照）。",
+      desc: "業務では会社アカウントで「Business account」→「Continue with Google Cloud」を選び、AI CoEから案内された会社のGoogle Cloudプロジェクトとロケーションを選択します（事前にAI CoEへ権限付与を依頼）。個人の学習用途なら個人のGoogleアカウントでもサインインできます。",
     },
     {
       step: "04",
@@ -95,8 +95,8 @@ export default function GuidePage() {
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
           <p>
             <span className="font-bold">業務で使う前に：</span>
-            個人アカウントで利用する場合、入力したコードやプロンプトの取り扱いは個人向けの利用規約に従います。
-            顧客情報や社内機密を扱う業務での利用可否は、必ず
+            業務では会社のGoogle Cloudプロジェクト経由で利用します（料金は会社の請求に従量課金でまとまり、個人のPro加入は不要）。
+            個人アカウントで利用する場合は個人向けの利用規約が適用されます。扱ってよいデータは、必ず
             <Link href="/tools-hub#ai-guidelines" className="underline font-bold mx-0.5">社内AI利用の注意事項</Link>
             を確認してください。
           </p>
