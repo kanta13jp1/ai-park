@@ -54,6 +54,9 @@ export default function BeginnerCheatsheet() {
             インストールがまだの方は先に
             <Link href="/guide" className="underline font-semibold text-sky-700 mx-0.5">導入ガイド</Link>
             へ。AIエージェントに仕事を頼むときの基本を1枚にまとめました。
+            体系的に学んで修了証を取りたい方は
+            <Link href="/academy" className="underline font-semibold text-orange-700 mx-0.5">Antigravity Academy</Link>
+            へ。
           </p>
         </div>
       </div>

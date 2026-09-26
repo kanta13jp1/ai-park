@@ -24,6 +24,7 @@ export const navigationSections: NavSection[] = [
     href: "/how-to",
     items: [
       { name: "AIツール一覧", href: "/tools", icon: "🤖", badge: "🧪 PoC中" },
+      { name: "Antigravity Academy", href: "/academy", icon: "🎓", badge: "β版" },
       { name: "教育用コンテンツ", href: "/learning", icon: "✍️" },
       { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️", badge: "📋 準備中" },
       { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️" },
