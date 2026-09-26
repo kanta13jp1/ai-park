@@ -86,12 +86,12 @@ export default function GuidePage() {
       title: "安全設定を確認する（最初に必ず）",
       actions: [
         "③ 左下の「Settings」をクリックし、① 「General」を開く",
-        "② 「Security Preset」：AI がどこまで操作できるかの設定です。「Full Machine」は PC 全体を操作できる状態なので、慣れるまでは ▼ からより制限の強い設定を選ぶ",
-        "③ 「Plan Review Policy」：「Always Proceed」は確認なしで作業を進める設定です。▼ から、作業前に計画の確認を求める設定を選ぶ",
+        "② 「Security Preset」の ▼ をクリックし「Default」を選ぶ（ターミナルのコマンド実行と、作業フォルダの外のファイル操作の前に必ず確認が入る設定）",
+        "③ 「Plan Review Policy」の ▼ をクリックし「Always Ask」を選ぶ（作業を始める前に計画を見せて確認を求める設定）",
         "右上の × で設定を閉じる",
       ],
-      note: "選べる項目の名前はバージョンによって変わることがあります。各項目の「Learn more」で意味を確認してから選んでください。迷ったら Office Hour で相談してください。",
-      image: "G6-settings.png",
+      note: "「Full machine」は PC 内のどのファイルでも読み書きでき、「Turbo mode」は安全のための確認がすべて無くなります。業務では使わないでください。",
+      image: ["G6-settings.png", "G6-settings-options.png"],
       imageAlt: "Settings の General（Security Preset と Plan Review Policy）",
     },
     {
@@ -101,9 +101,10 @@ export default function GuidePage() {
       actions: [
         "コードを見ながら作業したい人向け。アプリ右上のボタン（未インストールなら「Install IDE」、インストール済みなら「Open IDE」）をクリック",
         "ダウンロードページから入れる場合は、下のほうにある「Antigravity IDE (Standalone)」の「Download for x64」をクリックし、STEP 2 と同じ手順でインストール",
+        "「Open IDE」を押すと「An external application wants to open ...」という確認が出ます。自分で押した場合だけ「Yes」をクリック（身に覚えがないときは「No」）",
         "IDE を日本語で使いたい場合は、下の「IDEの日本語化」へ",
       ],
-      image: "G7-download-ide.png",
+      image: ["G7-download-ide.png", "G7-open-ide-dialog.png"],
       imageAlt: "ダウンロードページの Antigravity IDE (Standalone) の Download for x64",
     },
   ];

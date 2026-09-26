@@ -12,7 +12,7 @@ export interface GuideStep {
   link?: { label: string; href: string };
   actions: string[];
   note?: string;
-  image?: string;
+  image?: string | string[]; // 複数指定すると縦に並べて表示
   imageAlt: string;
 }
 
@@ -58,15 +58,19 @@ export default function StepCard({ step }: { step: GuideStep }) {
         )}
       </div>
       {step.image ? (
-        <a href={`${basePath}/images/guide/${step.image}`} target="_blank" rel="noopener noreferrer" className="block">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={`${basePath}/images/guide/${step.image}`}
-            alt={step.imageAlt}
-            className="w-full rounded-lg border border-slate-200 shadow-xs"
-          />
-          <span className="block text-[11px] text-slate-400 mt-1">クリックで拡大</span>
-        </a>
+        <div className="space-y-3">
+          {[step.image].flat().map((file) => (
+            <a key={file} href={`${basePath}/images/guide/${file}`} target="_blank" rel="noopener noreferrer" className="block">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`${basePath}/images/guide/${file}`}
+                alt={step.imageAlt}
+                className="w-full rounded-lg border border-slate-200 shadow-xs"
+              />
+            </a>
+          ))}
+          <span className="block text-[11px] text-slate-400">画像をクリックで拡大</span>
+        </div>
       ) : (
         <div className="rounded-lg border-2 border-dashed border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-center p-6 min-h-40 text-slate-400">
           <ImageIcon size={28} />
