@@ -4,6 +4,7 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import Link from "next/link";
 import GcpSetupGuide from "@/components/GcpSetupGuide";
+import StepCard, { type GuideStep } from "@/components/GuideStepCard";
 import { Terminal, Download, Languages, GitBranch, AlertTriangle, ExternalLink } from "lucide-react";
 
 // 手順は Google Antigravity 公式ドキュメント（2026年9月25日確認）に基づく
@@ -16,26 +17,79 @@ const officialLinks = [
 ];
 
 export default function GuidePage() {
-  const steps = [
+  // 手順は公式ドキュメント・公式 codelab（2026/09/26 確認）に基づく。アプリ画面のキャプチャは順次追加
+  const steps: GuideStep[] = [
     {
-      step: "01",
-      title: "動作環境の確認",
-      desc: "Windows 10（64bit）以降、macOS 12（Monterey）以降、または glibc 2.28 以降の Linux が必要です。",
+      id: "STEP 1",
+      title: "インストーラーをダウンロードする",
+      link: { label: "ダウンロードページを開く", href: "https://antigravity.google/download" },
+      actions: [
+        "左のリンクからダウンロードページを開く",
+        "① 画面中ほどの「Windows」をクリック",
+        "②「Antigravity 2.0」の下にある黒い「Download for x64」をクリック",
+        "画面下や右上に出るダウンロード表示で、ファイルの保存が終わるまで待つ",
+      ],
+      note: "ほとんどの Windows PC は「x64」です。Snapdragon など ARM 版の PC の場合だけ「Download for ARM64」を選びます。必要な環境は Windows 10（64bit）以降です。",
+      image: "G1-download-app.png",
+      imageAlt: "ダウンロードページで Windows を選び Download for x64 を押すところ",
     },
     {
-      step: "02",
-      title: "インストーラーのダウンロードと実行",
-      desc: "公式サイト（antigravity.google/download）からOSに合ったインストーラーを取得して実行します。Windowsで SmartScreen の警告が出た場合は、配布元が公式サイトであることを確認のうえ「詳細情報」→「実行」を選びます。既存版の置き換え確認が出たら「Replace（置き換え）」を選択します。",
+      id: "STEP 2",
+      title: "インストールする",
+      actions: [
+        "エクスプローラーで「ダウンロード」フォルダを開き、ダウンロードしたファイル（.exe）をダブルクリック",
+        "青い画面「Windows によって PC が保護されました」が出たら、「詳細情報」→「実行」をクリック（出なければそのまま次へ）",
+        "以前のバージョンが入っていて「Keep Both」「Replace」を聞かれたら「Replace」を選ぶ",
+        "画面の案内に沿って進め、インストールが終わるまで待つ",
+      ],
+      note: "「詳細情報」→「実行」は、公式サイト（antigravity.google）からダウンロードしたファイルの場合だけ行ってください。",
+      imageAlt: "インストーラーの画面",
     },
     {
-      step: "03",
-      title: "Googleアカウントでサインイン",
-      desc: "業務では会社アカウントで「Business account」→「Continue with Google Cloud」を選び、AI CoEから案内された会社のGoogle Cloudプロジェクトとロケーションを選択します（詳しくは下の「会社の Google Cloud で Antigravity を使う」U1）。個人の学習用途なら個人のGoogleアカウントでもサインインできます。",
+      id: "STEP 3",
+      title: "起動してサインインする",
+      actions: [
+        "スタートメニューから「Antigravity」を起動",
+        "業務で使う場合：「Use business account」を選び、会社アカウントでサインイン（詳しくは下の「会社の Google Cloud で Antigravity を使う」の U1）",
+        "個人の学習用に使う場合：「Continue with Google」を選び、個人の Google アカウントでサインイン",
+        "ブラウザでのログインが終わったら、表示される「Open Antigravity」をクリックしてアプリに戻る",
+      ],
+      imageAlt: "サインイン方法を選ぶ画面",
     },
     {
-      step: "04",
-      title: "作業フォルダを開いて信頼設定",
-      desc: "作業するフォルダ（Gitリポジトリ）を開き、「このフォルダを信頼するか」の確認で信頼を選びます。エージェントは信頼したフォルダ内のファイルを読み書きします。",
+      id: "STEP 4",
+      title: "初期設定を済ませる",
+      actions: [
+        "好きなテーマ（画面の色）を選ぶ",
+        "Google プラグインの選択画面は、分からなければ何も選ばずに進んでOK",
+        "利用規約を確認して「Accept」をクリック",
+        "「Finish」をクリックするとメイン画面が開く",
+      ],
+      imageAlt: "初期設定（テーマ選択〜Finish）の画面",
+    },
+    {
+      id: "STEP 5",
+      title: "作業フォルダをプロジェクトとして登録する",
+      actions: [
+        "左側の「Projects」にある「Create New Project」をクリック",
+        "開いたフォルダ選択画面で、AI に作業させたいフォルダ（Git リポジトリなど）を選ぶ",
+        "プロジェクト名の横の歯車アイコンから設定を開き、「Security Preset」でターミナルのコマンド実行やファイル操作の前に確認（レビュー）を求める設定になっていることを確認",
+        "「New Conversation」から AI への依頼（チャット）を始める",
+      ],
+      note: "慣れるまでは、AI がコマンドを実行したりファイルを書き換えたりする前に必ず確認する設定で使ってください。頼み方のコツは「教育用コンテンツ」の初級編チートシートを参照。",
+      imageAlt: "Projects の Create New Project ボタン",
+    },
+    {
+      id: "STEP 6",
+      title: "（任意）エディタ付きの IDE を追加する",
+      link: { label: "ダウンロードページを開く", href: "https://antigravity.google/download" },
+      actions: [
+        "コードを見ながら作業したい人向け。アプリ右上の「Install IDE」をクリック（またはダウンロードページの下のほうにある「Antigravity IDE (Standalone)」の「Download for x64」）",
+        "STEP 2 と同じ手順でインストールする",
+        "IDE を日本語で使いたい場合は、下の「IDEの日本語化」へ",
+      ],
+      image: "G6-download-ide.png",
+      imageAlt: "ダウンロードページの Antigravity IDE (Standalone) の Download for x64",
     },
   ];
 
@@ -74,7 +128,7 @@ export default function GuidePage() {
       <div className="max-w-5xl w-full mx-auto px-4 py-8 space-y-10">
         {/* 公式ドキュメント */}
         <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center gap-3 text-xs">
-          <span className="font-bold text-slate-700 shrink-0">公式ドキュメント（2026/09/25 確認）</span>
+          <span className="font-bold text-slate-700 shrink-0">公式ドキュメント（2026/09/26 確認）</span>
           <div className="flex flex-wrap gap-2">
             {officialLinks.map((l) => (
               <a
@@ -107,20 +161,15 @@ export default function GuidePage() {
         <section className="space-y-4">
           <h3 className="font-bold text-slate-800 text-lg flex items-center space-x-2">
             <Download className="w-5 h-5 text-blue-600" />
-            <span>初期導入ステップ（IDE版）</span>
+            <span>初期導入ステップ（はじめての方はここから・所要15分）</span>
           </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <p className="text-xs text-slate-600 leading-relaxed">
+            上から順番に進めれば使い始められます。右側の画像の赤枠の場所をクリックしてください。
+            表示が英語の画面もありますが、ボタン名は手順に書いた文字と同じです（バージョンによって見た目が少し違うことがあります）。
+          </p>
+          <div className="space-y-3">
             {steps.map((s) => (
-              <div key={s.step} className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs">
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="text-xs font-black px-2 py-0.5 rounded bg-blue-600 text-white">
-                    STEP {s.step}
-                  </span>
-                  <h4 className="font-bold text-slate-900 text-sm">{s.title}</h4>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">{s.desc}</p>
-              </div>
+              <StepCard key={s.id} step={s} />
             ))}
           </div>
         </section>
@@ -131,7 +180,7 @@ export default function GuidePage() {
         <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
           <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
             <Languages className="w-5 h-5 text-emerald-600" />
-            <h3 className="font-bold text-slate-800 text-base">IDEの日本語化（3つの設定）</h3>
+            <h3 className="font-bold text-slate-800 text-base">IDEの日本語化（STEP 6 で IDE を入れた方向け・3つの設定）</h3>
           </div>
           <ol className="space-y-3">
             {japaneseSteps.map((s, i) => (
