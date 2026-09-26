@@ -1,19 +1,28 @@
 // Antigravity Academy の教材データ
 // 内容は導入ガイド・注意事項（公式ドキュメント／実機画面で確認済み、2026/09/26）と同じ事実に基づく。
-// 動画は収録後に lesson.video（YouTube の動画ID）を設定すると表示される。
+// 動画は公式チャンネルの動画（YouTube oEmbed で投稿チャンネルを確認、2026/09/26）。社内で収録した動画も lesson.video に設定できる。
 
 export type LessonBlock =
   | { type: "p"; text: string }
   | { type: "steps"; items: string[] }
   | { type: "tip"; text: string }
   | { type: "warn"; text: string }
-  | { type: "image"; file: string; alt: string };
+  | { type: "image"; file: string; alt: string }
+  | { type: "h"; id: string; text: string }; // ページ内見出し（右側の目次に表示）
+
+export interface VideoRef {
+  id: string; // YouTube の動画ID
+  title: string;
+  channel: string; // 公式チャンネル名（oEmbed で確認済み）
+}
 
 export interface Lesson {
   id: string;
   title: string;
   minutes: number;
-  video?: string;
+  section: string; // コース内のまとまり（目次の見出し）
+  summary: string; // 1〜2文の概要（動画の下に表示）
+  video?: VideoRef;
   blocks: LessonBlock[];
 }
 
@@ -31,6 +40,8 @@ export interface Course {
   summary: string;
   icon: string;
   color: string; // カード上部の背景（Tailwind クラス）
+  outcomes: string[]; // このコースで学べること
+  referenceVideo?: VideoRef;
   lessons: Lesson[];
   quiz: QuizQuestion[];
 }
@@ -45,11 +56,20 @@ export const courses: Course[] = [
     summary: "Antigravity のしくみから、インストール・サインイン・安全設定・最初の依頼までを一通り体験します。",
     icon: "🚀",
     color: "bg-sky-100",
+    outcomes: [
+      "Antigravity 2.0・IDE・CLI の役割の違いを説明できる",
+      "Windows に Antigravity をインストールし、会社アカウントでサインインできる",
+      "Security Preset と Plan Review Policy を安全な設定にできる",
+      "作業フォルダを登録して、最初の依頼を出せる",
+    ],
     lessons: [
       {
         id: "what",
         title: "Antigravity とは",
         minutes: 5,
+        section: "はじめに",
+        summary: "Antigravity でできることと、業務で使うときの前提（会社の Google Cloud 経由）を押さえます。",
+        video: { id: "6C0FjHoN3qE", title: "Google Antigravity 2.0 Beginner's Guide", channel: "Google Antigravity" },
         blocks: [
           { type: "p", text: "Google Antigravity は、AI エージェントに開発や調査などの作業を任せるためのツールです。自分の PC のフォルダを「プロジェクト」として登録し、チャットで依頼すると、エージェントがファイルを読み書きしたりコマンドを実行したりして作業を進めます。" },
           { type: "steps", items: [
@@ -65,7 +85,10 @@ export const courses: Course[] = [
         id: "install",
         title: "インストールする",
         minutes: 5,
+        section: "セットアップ",
+        summary: "公式サイトからインストーラーを入手して、Windows にインストールします。",
         blocks: [
+          { type: "h", id: "download", text: "ダウンロード" },
           { type: "p", text: "必要な環境は Windows 10（64bit）以降です。公式サイトからインストーラーをダウンロードします。" },
           { type: "steps", items: [
             "https://antigravity.google/download を開く",
@@ -73,6 +96,7 @@ export const courses: Course[] = [
             "ダウンロードした Antigravity-x64.exe を実行し、「インストールしています…」の画面が終わるまで待つ",
           ] },
           { type: "image", file: "G1-download-app.png", alt: "ダウンロードページ" },
+          { type: "h", id: "run-installer", text: "インストーラーの実行" },
           { type: "image", file: "G2-install.png", alt: "ダウンロード完了とインストール中の画面" },
           { type: "tip", text: "「Windows によって PC が保護されました」と出たら、公式サイトから入手したファイルであることを確認したうえで「詳細情報」→「実行」を選びます。" },
         ],
@@ -81,6 +105,8 @@ export const courses: Course[] = [
         id: "signin",
         title: "サインインと初期設定",
         minutes: 5,
+        section: "セットアップ",
+        summary: "会社アカウントでサインインし、初期設定を済ませます。",
         blocks: [
           { type: "steps", items: [
             "スタートメニューから Antigravity を起動",
@@ -94,13 +120,17 @@ export const courses: Course[] = [
         id: "safety",
         title: "最初に必ず：安全設定",
         minutes: 5,
+        section: "セットアップ",
+        summary: "エージェントに任せる範囲を決める2つの設定を、安全な状態にします。",
         blocks: [
           { type: "p", text: "左下の「Settings」→「General」で、エージェントにどこまで任せるかを決めます。慣れるまでは、必ず確認が入る設定にしておきます。" },
+          { type: "h", id: "recommended", text: "おすすめの設定" },
           { type: "steps", items: [
             "Security Preset：「Default」を選ぶ（ターミナルのコマンド実行と、作業フォルダの外のファイル操作の前に確認が入る）",
             "Plan Review Policy：「Always Ask」を選ぶ（作業を始める前に計画を見せて確認を求める）",
           ] },
           { type: "image", file: "G6-settings-options.png", alt: "Security Preset と Plan Review Policy の選択肢" },
+          { type: "h", id: "avoid", text: "業務で使わない設定" },
           { type: "warn", text: "「Full machine」は PC 内のどのファイルでも読み書きでき、「Turbo mode」は安全のための確認がすべて無くなります。業務では使わないでください。" },
         ],
       },
@@ -108,6 +138,8 @@ export const courses: Course[] = [
         id: "first-task",
         title: "はじめての依頼",
         minutes: 5,
+        section: "使ってみる",
+        summary: "作業フォルダを登録して、はじめての依頼を出してみます。",
         blocks: [
           { type: "steps", items: [
             "左側「Projects」の右にあるフォルダ＋のアイコンから、作業させたいフォルダを登録する",
@@ -134,11 +166,21 @@ export const courses: Course[] = [
     summary: "伝わる頼み方、計画の確認、変更のチェックと取り消し、エラー対応まで、仕事で使うための基本動作を身につけます。",
     icon: "🛠️",
     color: "bg-amber-100",
+    outcomes: [
+      "目的・対象・条件・完了の形をそろえて依頼できる",
+      "作業前に計画を作らせて、方針を確認してから任せられる",
+      "Git で AI の変更を確認し、必要なら取り消せる",
+      "エラーが出たときに、必要な情報をそろえて相談できる",
+    ],
+    referenceVideo: { id: "Dk4MD6TNiWE", title: "Inside Google Antigravity 2.0: The complete developer guide", channel: "Google Cloud Tech" },
     lessons: [
       {
         id: "ask",
         title: "伝わる頼み方（4点セット）",
         minutes: 5,
+        section: "依頼のしかた",
+        summary: "やり直しを減らす「4点セット」の頼み方を身につけます。",
+        video: { id: "bSp-foRDH5M", title: "How to build apps and automate tasks with Google Antigravity 2.0", channel: "Google" },
         blocks: [
           { type: "p", text: "AI への依頼は「目的・対象・条件・完了の形」の4点をそろえると、やり直しが減ります。" },
           { type: "steps", items: [
@@ -154,6 +196,8 @@ export const courses: Course[] = [
         id: "plan",
         title: "計画を確認してから任せる",
         minutes: 5,
+        section: "依頼のしかた",
+        summary: "作業前に計画を作らせ、方針を確認してから任せる流れを学びます。",
         blocks: [
           { type: "p", text: "Plan Review Policy を「Always Ask」にしておくと、エージェントは作業の前に計画を見せてくれます。計画を読んで、方針が合っていれば進めてもらい、違えばその場で修正を伝えます。" },
           { type: "steps", items: [
@@ -167,6 +211,8 @@ export const courses: Course[] = [
         id: "git",
         title: "変更の確認と取り消し（Git）",
         minutes: 8,
+        section: "安全に進める",
+        summary: "AI の変更を Git で確認し、意図と違えば取り消す方法を学びます。",
         blocks: [
           { type: "p", text: "エージェントは複数のファイルを一度に書き換えます。作業前にブランチを切り、変更を差分で確認してから取り込むのが事故を防ぐ基本です。" },
           { type: "steps", items: [
@@ -181,6 +227,8 @@ export const courses: Course[] = [
         id: "error",
         title: "エラーが出たときの対処",
         minutes: 5,
+        section: "安全に進める",
+        summary: "エラーが出たときに、早く解決するための伝え方を学びます。",
         blocks: [
           { type: "steps", items: [
             "エラーメッセージを省略せず全文そのまま貼り、「原因と直し方を説明して」と頼む",
@@ -206,11 +254,18 @@ export const courses: Course[] = [
     summary: "扱うデータのレベル分けと、社内 AI 利用の注意事項5箇条（暫定版）を学びます。AI を使うすべての社員向けです。",
     icon: "🛡️",
     color: "bg-emerald-100",
+    outcomes: [
+      "扱うデータのレベル（Level 1〜3）に応じて入力先を選べる",
+      "社内AI利用の注意事項5箇条を説明できる",
+      "判断に迷ったときの相談先が分かる",
+    ],
     lessons: [
       {
         id: "levels",
         title: "データのレベル分け",
         minutes: 5,
+        section: "ルール",
+        summary: "入力してよいデータを、AI の種類ごとに3つのレベルで判断します。",
         blocks: [
           { type: "steps", items: [
             "Level 1（社内機密・コード入力可）：会社として契約し、入力データを学習に使わないことが担保されたAI（会社の Google Cloud 経由の Antigravity、Gemini Enterprise など）",
@@ -223,6 +278,8 @@ export const courses: Course[] = [
         id: "rules",
         title: "注意事項5箇条（暫定版）",
         minutes: 5,
+        section: "ルール",
+        summary: "社内AI利用の注意事項5箇条（暫定版）を確認します。",
         blocks: [
           { type: "steps", items: [
             "機密・個人情報は入力先を選ぶ",
@@ -238,6 +295,8 @@ export const courses: Course[] = [
         id: "help",
         title: "困ったときの相談先",
         minutes: 3,
+        section: "サポート",
+        summary: "困ったときにどこへ相談すればよいかを確認します。",
         blocks: [
           { type: "steps", items: [
             "Office Hour：画面上部の「AI Office Hour 予約」から",

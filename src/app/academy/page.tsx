@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Award, BookOpen, Clock, ListChecks } from "lucide-react";
 import { courses, courseMinutes } from "@/data/academy";
 import { loadProgress, type CourseProgress } from "@/lib/academyProgress";
+import { stepCounts } from "@/components/academy/useCourseProgress";
 
 export default function AcademyPage() {
   const [progress, setProgress] = useState<Record<string, CourseProgress>>({});
@@ -14,6 +15,11 @@ export default function AcademyPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setProgress(loadProgress());
   }, []);
+
+  const inProgress = courses.filter((c) => {
+    const p = progress[c.id];
+    return p && !p.completedAt && (p.lessonsDone.length > 0 || p.bestScore !== undefined);
+  });
 
   return (
     <div className="flex-1 flex flex-col bg-[#faf9f5] min-h-screen">
@@ -29,6 +35,37 @@ export default function AcademyPage() {
             ※ 学習の進み具合と修了証は、このブラウザにのみ保存されます。動画レッスンは順次追加予定です（現在はテキストと画面キャプチャで学べます）。
           </p>
         </header>
+
+        {inProgress.length > 0 && (
+          <section className="space-y-3">
+            <div>
+              <h2 className="text-2xl font-serif font-bold text-slate-900">おかえりなさい</h2>
+              <p className="text-sm text-slate-600">学習の続きから始めましょう・{inProgress.length} コース学習中</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {inProgress.map((c) => {
+                const { done, total } = stepCounts(c, progress[c.id]);
+                return (
+                  <Link key={c.id} href={`/academy/${c.id}`} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-md transition-all">
+                    <div className={`${c.color} h-24 px-4 flex items-center gap-4`}>
+                      <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white text-xs font-bold text-slate-700">
+                        <span className="w-12 h-1 bg-slate-200 rounded-full overflow-hidden">
+                          <span className="block h-full bg-blue-600" style={{ width: `${(done / total) * 100}%` }} />
+                        </span>
+                        {done} / {total}
+                      </span>
+                      <span className="text-4xl">{c.icon}</span>
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-serif font-bold text-slate-900 leading-snug">{c.title}</h3>
+                      <p className="text-xs text-slate-500 mt-1">コース・{c.lessons.length} レッスン・評価テスト・約 {courseMinutes(c)} 分</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <section className="space-y-4">
           <h2 className="text-xl font-serif font-bold text-slate-900">コース</h2>

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { courses } from "@/data/academy";
-import CourseView from "./CourseView";
+import CourseOverview from "@/components/academy/CourseOverview";
 
 export const dynamicParams = false;
 
@@ -12,5 +12,5 @@ export default async function CoursePage({ params }: { params: Promise<{ course:
   const { course: courseId } = await params;
   const course = courses.find((c) => c.id === courseId);
   if (!course) notFound();
-  return <CourseView course={course} />;
+  return <CourseOverview course={course} />;
 }
