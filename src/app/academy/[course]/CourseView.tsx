@@ -289,7 +289,7 @@ export default function CourseView({ course }: { course: Course }) {
                     <div className="text-xs text-slate-500 space-y-0.5 pt-2">
                       <p>修了日：{new Date(progress.completedAt).toLocaleDateString("ja-JP")}</p>
                       <p>修了証番号：{progress.certificateId}</p>
-                      <p className="pt-2 font-bold text-slate-700">MightyLINK AI CoE / AI Park</p>
+                      <p className="pt-2 font-bold text-slate-700">MightyLINK AI推進担当 / AI Park</p>
                     </div>
                   </div>
                 </div>

@@ -51,8 +51,8 @@ interface InterviewArticle {
 
 // 取材キット：取材の流れと質問項目（記事フォーマットの各欄に対応）
 const interviewFlow = [
-  { step: "立候補", desc: "下のボタンから立候補（GitHub Issue）。AI CoE に通知が届きます" },
-  { step: "日程調整", desc: "AI CoE 編集部から連絡し、30分の取材枠を調整（オンライン可）" },
+  { step: "立候補", desc: "下のボタンから立候補（GitHub Issue）。AI推進担当 に通知が届きます" },
+  { step: "日程調整", desc: "AI推進担当 編集部から連絡し、30分の取材枠を調整（オンライン可）" },
   { step: "取材", desc: "下の質問項目に沿ってお話を伺います。画面を見せながらでもOK" },
   { step: "原稿確認", desc: "ご本人と上長に原稿を確認いただき、社外秘の情報がないかをチェック" },
   { step: "公開", desc: "確認が取れた記事から「正式公開」として掲載します" },
@@ -273,7 +273,7 @@ ERROR: connection to server at "db.internal" failed: Connection timed out (0x000
       },
       {
         q: "今後の展望について教えてください。",
-        a: "抽出したデータを元に、AIが施策提案や売上予測レポートまで自動でスライド化してくれる仕組みをCoEと共同で検証中です。",
+        a: "抽出したデータを元に、AIが施策提案や売上予測レポートまで自動でスライド化してくれる仕組みをAI推進担当と共同で検証中です。",
       },
     ],
     advice: "データ構造を整えて適切なメタデータを付与しておけば、AIは世界で最も頼りになるデータアナリストになります。",
@@ -375,7 +375,7 @@ export default function InterviewsPage() {
           statusType="draft"
           title="📋 取材準備中・ドラフト事例モデル掲載"
           message="現在掲載されているインタビュー記事は、社内実務ユースケースに基づくモデルケース（ドラフト）です。正式な社内インタビューの取材・記事公開を順次準備しています。"
-          prepDetails="取材立候補を受付中（下の「取材に立候補する」から応募するとAI CoEに通知されます）。各記事の「モデルケース」「正式公開」バッジで区別できます"
+          prepDetails="取材立候補を受付中（下の「取材に立候補する」から応募するとAI推進担当に通知されます）。各記事の「モデルケース」「正式公開」バッジで区別できます"
           releaseDate="2026年10月16日(金)"
         />
 
@@ -392,7 +392,7 @@ export default function InterviewsPage() {
               あなたのチームのAI活用事例や工夫を社内ポータルに掲載しませんか？
             </h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              「自作プロンプトで作業を時短した」「Antigravityを導入してみた」など、小さな工夫でも大歓迎です。CoE編集部が取材・記事化をサポートします。
+              「自作プロンプトで作業を時短した」「Antigravityを導入してみた」など、小さな工夫でも大歓迎です。AI推進担当が取材・記事化をサポートします。
             </p>
           </div>
           <button
@@ -717,7 +717,7 @@ export default function InterviewsPage() {
                 活用インタビューへの立候補・情報提供
               </h3>
               <p className="text-xs text-slate-600 mt-0.5">
-                チーム内で試して効果があったAI活用の工夫やエピソードをお寄せください。CoE編集部が取材・記事化します。
+                チーム内で試して効果があったAI活用の工夫やエピソードをお寄せください。AI推進担当が取材・記事化します。
               </p>
             </div>
 
@@ -759,7 +759,7 @@ export default function InterviewsPage() {
               </div>
 
               <p className="text-slate-500 leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-2.5">
-                「立候補を送信」を押すと、入力内容が入った GitHub Issue の画面が開きます。そこで送信すると AI CoE に通知が届きます。
+                「立候補を送信」を押すと、入力内容が入った GitHub Issue の画面が開きます。そこで送信すると AI推進担当 に通知が届きます。
                 Issue は公開されるため、顧客名・案件名・社外秘の数値は書かずに概要だけご記入ください。
               </p>
 

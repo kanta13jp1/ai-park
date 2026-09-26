@@ -48,7 +48,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const makeGoogleCalendarUrl = () => {
     const title = encodeURIComponent(`【AI Office Hour】${topic} (${name}様)`);
     const details = encodeURIComponent(
-      `【MightyLINK AI CoE Office Hour】\n\n相談者: ${name} (${department})\n相談テーマ: ${topic}\n希望候補: ${preferredDate}\n事前メモ:\n${description}\n\n※オンライン会議URL（Google Meet）は担当CoEメンターより別途ご案内します。`
+      `【MightyLINK AI推進担当 Office Hour】\n\n相談者: ${name} (${department})\n相談テーマ: ${topic}\n希望候補: ${preferredDate}\n事前メモ:\n${description}\n\n※オンライン会議URL（Google Meet）は担当AI推進担当より別途ご案内します。`
     );
     const location = encodeURIComponent("Google Meet (社内オンライン相談)");
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}`;
@@ -87,10 +87,10 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
             <div className="space-y-1">
               <h4 className="text-lg font-bold text-slate-800">
-                予約リクエストを受け付けました！
+                予約メモができました（まだ送信されていません）
               </h4>
               <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto">
-                担当CoEメンターより、SlackまたはGoogle Meet招待にて日程確定のご連絡をお送りいたします。
+                下の「予約詳細メモをコピー」を押し、Google Chat で AI推進担当（担当：梅澤）に送ってください。日程が決まったら Google Meet の招待が届きます。
               </p>
             </div>
 
@@ -208,8 +208,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 <option value="Gemini 3.1 Pro / プロンプト活用相談">
                   Gemini 3.1 Pro / プロンプト活用相談
                 </option>
-                <option value="CoEメンター相談・壁打ちブレスト">
-                  その他（CoEメンターと壁打ち・ブレストしたい）
+                <option value="AI推進担当相談・壁打ちブレスト">
+                  その他（AI推進担当と壁打ち・ブレストしたい）
                 </option>
               </select>
             </div>

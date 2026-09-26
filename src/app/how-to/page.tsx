@@ -294,7 +294,7 @@ export default function HowToPage() {
               >
                 <span className="flex items-center gap-2">
                   <HelpCircle size={15} className="text-amber-300" />
-                  AI CoEへのお問い合わせ
+                  AI推進担当へのお問い合わせ
                 </span>
                 <ChevronRight size={14} className="text-slate-400" />
               </Link>

@@ -12,13 +12,13 @@ import {
 } from "@/lib/githubProjects";
 import { GITHUB_REPO } from "@/lib/githubFeedback";
 
-// ご意見TODO-04への対応。AI CoE が把握している実在プロジェクト（GitHub Issue 登録分と合わせて表示）
+// ご意見TODO-04への対応。AI推進担当 が把握している実在プロジェクト（GitHub Issue 登録分と合わせて表示）
 const coeProjects: AiProject[] = [
   {
     id: "COE-01",
     name: "AI Park（社内AIポータル）の構築・運用",
-    dept: "AI CoE",
-    owner: "AI CoE",
+    dept: "AI推進担当",
+    owner: "梅澤（AI推進担当）",
     stage: "本番運用中",
     tools: "Claude Code, GitHub Actions, Google Sheets",
     summary:
@@ -29,8 +29,8 @@ const coeProjects: AiProject[] = [
   {
     id: "COE-02",
     name: "Antigravity の業務利用（会社の Google Cloud 経由）",
-    dept: "AI CoE",
-    owner: "AI CoE",
+    dept: "AI推進担当",
+    owner: "梅澤（AI推進担当）",
     stage: "PoC中",
     tools: "Google Antigravity, Google Cloud",
     summary:
@@ -127,7 +127,7 @@ export default function AiProjectsPage() {
             <CircleDot size={13} />
             {syncState === "loading" && <span>GitHub から読み込み中...</span>}
             {syncState === "ok" && <span>GitHub 登録分 {issueProjects.length} 件を表示中</span>}
-            {syncState === "error" && <span className="text-rose-600">GitHub の読み込みに失敗しました（AI CoE 登録分のみ表示）</span>}
+            {syncState === "error" && <span className="text-rose-600">GitHub の読み込みに失敗しました（AI推進担当 登録分のみ表示）</span>}
             <button
               onClick={() => {
                 setSyncState("loading");
@@ -170,7 +170,7 @@ export default function AiProjectsPage() {
                     Issue を見る・更新する <ExternalLink size={11} />
                   </a>
                 ) : (
-                  <span>AI CoE 登録</span>
+                  <span>AI推進担当 登録</span>
                 )}
               </div>
             </article>

@@ -569,7 +569,7 @@ export default function LearningPage() {
               <div className="bg-sky-50/70 border border-sky-100 rounded-lg p-3 space-y-1">
                 <span className="font-bold text-sky-900 block">社内受講・費用精算について</span>
                 <p className="text-sky-800 leading-relaxed">
-                  社内Udemy Businessのアカウントから無償で直接受講可能です。資格試験の受験料はAI CoEの全額補助制度をご利用ください。
+                  社内Udemy Businessのアカウントから無償で直接受講可能です。資格試験の受験料はAI推進担当の全額補助制度をご利用ください。
                 </p>
               </div>
             </div>

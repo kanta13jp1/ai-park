@@ -144,7 +144,7 @@ export default function Sidebar() {
 
         {/* フッター情報 */}
         <div className="p-3 border-t border-slate-600/40 text-xs text-slate-400 text-center">
-          © MightyLINK AI CoE
+          © MightyLINK AI推進担当（担当：梅澤）
         </div>
       </aside>
     </>

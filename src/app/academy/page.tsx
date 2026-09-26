@@ -19,7 +19,7 @@ export default function AcademyPage() {
     <div className="flex-1 flex flex-col bg-[#faf9f5] min-h-screen">
       <div className="max-w-5xl w-full mx-auto px-4 py-10 space-y-8">
         <header className="space-y-3">
-          <p className="text-xs font-bold text-orange-700 tracking-wide">MightyLINK AI CoE</p>
+          <p className="text-xs font-bold text-orange-700 tracking-wide">MightyLINK AI推進担当</p>
           <h1 className="text-3xl sm:text-4xl font-serif font-bold text-slate-900">Antigravity Academy</h1>
           <p className="text-sm text-slate-600 leading-relaxed max-w-3xl">
             レッスンと評価テストを備えた体系的な学習パスで、Antigravity を仕事で安全に使うための知識を身につけます。

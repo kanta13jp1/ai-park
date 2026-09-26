@@ -92,10 +92,10 @@ const userSteps: GuideStep[] = [
       "Antigravity を起動し「Sign in」をクリック",
       "「Business account」→「Continue with Google Cloud」を選ぶ",
       "ブラウザが開くので、会社の Google アカウントでログイン",
-      "プロジェクトの選択画面で「Other」を選び、AI CoE から案内されたプロジェクト ID を入力",
+      "プロジェクトの選択画面で「Other」を選び、AI推進担当 から案内されたプロジェクト ID を入力",
       "ロケーションは「global」を選んで完了",
     ],
-    note: "「権限がない」「billing を有効にしてください」と表示された場合は、A1〜A3 が終わっていない可能性があります。画面のエラー文をそのまま AI CoE に送ってください。",
+    note: "「権限がない」「billing を有効にしてください」と表示された場合は、A1〜A3 が終わっていない可能性があります。画面のエラー文をそのまま AI推進担当 に送ってください。",
     imageAlt: "Antigravity のサインイン画面（Business account）",
   },
 ];
@@ -143,7 +143,7 @@ export default function GcpSetupGuide() {
         </ol>
         <p className="text-xs text-indigo-800 flex items-start gap-1.5 pt-1">
           <AlertTriangle size={13} className="shrink-0 mt-0.5" />
-          上限は全員の合計です。1人で枠を使い切らないよう、月の途中で使いすぎに気づいたら AI CoE に共有してください。
+          上限は全員の合計です。1人で枠を使い切らないよう、月の途中で使いすぎに気づいたら AI推進担当 に共有してください。
         </p>
       </div>
     </section>

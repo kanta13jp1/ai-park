@@ -36,10 +36,10 @@ interface Ambassador {
 
 // 第1期アンバサダー制度（案）。社内決裁後に「案」を外す
 const programDraft = [
-  { label: "役割", text: "自チームのAI活用の相談役。困りごとを拾ってAI CoEにつなぎ、うまくいった工夫をAI Parkで共有する" },
+  { label: "役割", text: "自チームのAI活用の相談役。困りごとを拾ってAI推進担当につなぎ、うまくいった工夫をAI Parkで共有する" },
   { label: "人数・任期", text: "各事業部から1名程度、任期は半年（第1期：2026年10月〜2027年3月）" },
   { label: "活動量の目安", text: "月2時間程度（月1回のアンバサダー会＋チーム内での相談対応）" },
-  { label: "選び方", text: "自薦・他薦を受け付け、AI CoE と各事業部リーダーで相談して決定。専門資格やAI開発経験は不問" },
+  { label: "選び方", text: "自薦・他薦を受け付け、AI推進担当 と各事業部リーダーで相談して決定。専門資格やAI開発経験は不問" },
   { label: "相談窓口", text: "開設までは Office Hour と Google Chat の「AI勉強会」スペースで受け付け" },
 ];
 
@@ -60,7 +60,7 @@ const initialAmbassadors: Ambassador[] = [
     id: 1,
     name: "高橋 誠",
     dept: "クラウド基盤推進部",
-    role: "Antigravity CoE テクニカルリード",
+    role: "AI推進担当 テクニカルリード",
     avatarColor: "bg-blue-600 text-white",
     specialties: ["Google Antigravity", "Subagents並列実行", "MCPツール連携", "Terraform"],
     recentAchievement: "インフラ自動プロビジョニング用MCPサーバーを開発し全社展開中",
@@ -198,7 +198,7 @@ export default function AmbassadorsPage() {
         <UnderConstructionAlert
           statusType="draft"
           title="📋 公募準備中・モデルプロフィール掲載中"
-          message="掲載中のアンバサダーは「モデル（架空）」のプロフィールです。第1期の応募受付を開始しました（応募は AI CoE に通知されます）。選定・正式登録と相談窓口の開設を準備中です。"
+          message="掲載中のアンバサダーは「モデル（架空）」のプロフィールです。第1期の応募受付を開始しました（応募は AI推進担当 に通知されます）。選定・正式登録と相談窓口の開設を準備中です。"
           prepDetails="社内アンバサダー選定基準の策定および各事業部からの公募受付フェーズ"
           releaseDate="2026年10月23日(金)"
         />
@@ -392,7 +392,7 @@ export default function AmbassadorsPage() {
                 AIアンバサダーへの参加応募
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                自チームのAI推進をリードし、全社CoEと連携して知見やSkillsを共有するアンバサダーを募集しています。専門資格や高度なAI開発経験は不問です。
+                自チームのAI推進をリードし、AI推進担当と連携して知見やSkillsを共有するアンバサダーを募集しています。専門資格や高度なAI開発経験は不問です。
               </p>
             </div>
 
@@ -403,8 +403,8 @@ export default function AmbassadorsPage() {
                 </div>
                 <h4 className="font-bold text-emerald-950 text-base">応募フォームを開きました</h4>
                 <p className="text-xs text-emerald-800 leading-relaxed">
-                  別タブで開いた GitHub の画面で「Submit new issue」を押すと応募が完了し、AI CoE に通知が届きます。
-                  選定後、AI CoE から Google Chat でご連絡します。
+                  別タブで開いた GitHub の画面で「Submit new issue」を押すと応募が完了し、AI推進担当 に通知が届きます。
+                  選定後、AI推進担当 から Google Chat でご連絡します。
                 </p>
                 <button
                   type="button"

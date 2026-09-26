@@ -57,10 +57,10 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["mcp", "model context protocol", "外部ツール", "google drive", "データベース", "連携", "サーバー"],
   },
   {
-    title: "Antigravity情報局 (CoE相談室)",
+    title: "Antigravity情報局 （AI推進担当 相談窓口）",
     category: "サポート",
     href: "/antigravity-info",
-    description: "AI CoE相談デスク、Office Hour予約、マンツーマンでの導入支援とブレスト",
+    description: "AI推進担当相談デスク、Office Hour予約、マンツーマンでの導入支援とブレスト",
     keywords: ["情報局", "相談", "office hour", "予約", "coe", "メンター", "サポート", "カレンダー"],
   },
   {

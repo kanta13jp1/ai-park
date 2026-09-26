@@ -132,7 +132,7 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     priority: "中",
     status: "done",
     feedbackQuote: "「・社内のAIを使ったビジネスモデルの提案(懸賞とかあったらいいな)」",
-    actionPlan: "【暫定版で告知】アイデア宣言ボードに「社内AIビジネスモデル提案コンテスト」を掲載。応募期間 2026/11/2〜12/18、審査員は社長・杉村さん・AI CoE、応募は社外秘保護のため Google Chat で AI CoE へ提出（暫定）。賞品を含む詳細は社長・杉村さんと協議のうえ正式決定します。",
+    actionPlan: "【暫定版で告知】アイデア宣言ボードに「社内AIビジネスモデル提案コンテスト」を掲載。応募期間 2026/11/2〜12/18、審査員は社長・杉村さん・AI推進担当、応募は社外秘保護のため Google Chat で AI推進担当 へ提出（暫定）。賞品を含む詳細は社長・杉村さんと協議のうえ正式決定します。",
     relatedLink: "/idea-board",
     relatedLinkText: "コンテスト（暫定版）を見る",
   },

@@ -39,9 +39,9 @@ export default function AntigravityInfoPage() {
 
       {/* メインコンテンツエリア */}
       <div className="flex-1 max-w-5xl w-full mx-auto px-4 py-8 md:py-12 space-y-12">
-        {/* 1. Antigravity CoE 相談デスク セクション */}
+        {/* 1. AI推進担当 相談デスク セクション */}
         <section className="flex flex-col items-center text-center">
-          {/* CoE ビジュアルカード */}
+          {/* AI推進担当 ビジュアルカード */}
           <div className="relative p-6 bg-gradient-to-b from-slate-50 to-blue-50/50 border-2 border-blue-200/80 shadow-md rounded-2xl max-w-[320px] w-full transform hover:scale-[1.01] transition-transform duration-200">
             <div className="relative w-24 h-24 mx-auto rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white flex items-center justify-center shadow-lg shadow-blue-500/20 mb-3">
               <Bot size={48} className="animate-pulse" />
@@ -49,7 +49,7 @@ export default function AntigravityInfoPage() {
                 <Sparkles size={14} />
               </div>
             </div>
-            <h4 className="font-bold text-slate-800 text-base">Antigravity CoE Desk</h4>
+            <h4 className="font-bold text-slate-800 text-base">AI推進担当 相談デスク</h4>
             <p className="text-xs text-blue-600 font-semibold mt-0.5">MightyLINK AI推進チーム</p>
             <div className="mt-3 pt-3 border-t border-blue-100 flex items-center justify-center space-x-2 text-[11px] text-slate-500">
               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
@@ -60,7 +60,7 @@ export default function AntigravityInfoPage() {
           <div className="mt-6 space-y-2">
             <div className="inline-flex items-center space-x-1 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full mb-1">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>Antigravity CoE / メンター相談窓口</span>
+              <span>AI推進担当 / 相談窓口</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 tracking-tight">
               Antigravity 相談室（Office Hour）
@@ -74,7 +74,7 @@ export default function AntigravityInfoPage() {
                 className="inline-flex items-center space-x-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-all hover:shadow-md cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4" />
-                <span>CoEメンターに個別相談する（Office Hour 予約）</span>
+                <span>AI推進担当に個別相談する（Office Hour 予約）</span>
               </button>
             </div>
           </div>
@@ -308,7 +308,7 @@ export default function AntigravityInfoPage() {
         {/* フッター情報 */}
         <div className="pt-8 border-t border-slate-100 flex items-center space-x-2 text-xs text-slate-400">
           <Info size={16} />
-          <span>当ページは社内専用ポータル「AI Park」の公式情報局コンテンツです。Google Antigravity CoEが運営しています。</span>
+          <span>当ページは社内専用ポータル「AI Park」の公式情報局コンテンツです。AI推進担当（担当：梅澤）が運営しています。</span>
         </div>
       </div>
 

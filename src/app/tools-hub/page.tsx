@@ -137,7 +137,7 @@ const aiGuidelines = [
   },
   {
     title: "迷ったら使う前に相談する",
-    body: "新しいツールの業務利用や、扱ってよいデータか判断できない場合は、利用前にAI CoE（お問い合わせ・Office Hour）へ相談してください。",
+    body: "新しいツールの業務利用や、扱ってよいデータか判断できない場合は、利用前にAI推進担当（お問い合わせ・Office Hour）へ相談してください。",
   },
 ];
 
@@ -223,7 +223,7 @@ export default function ToolsHubPage() {
               <Lock className="w-5 h-5 text-emerald-600" />
               <span>社内データ取り扱いセキュリティ基準 (早見表)</span>
             </h3>
-            <span className="text-xs text-slate-400">セキュリティ統括 CoE 監修</span>
+            <span className="text-xs text-slate-400">AI推進担当 作成</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">

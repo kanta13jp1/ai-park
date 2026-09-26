@@ -192,7 +192,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     href: "/ai-projects",
     isVerified: true,
     status: "verified",
-    evidence: "AI CoEが進める実在プロジェクト2件を掲載。ai-projectラベル付きGitHub Issueの登録・自動掲載・Google Chat通知を実装",
+    evidence: "AI推進担当が進める実在プロジェクト2件を掲載。ai-projectラベル付きGitHub Issueの登録・自動掲載・Google Chat通知を実装",
     currentBadge: "β版",
     disclaimer: "",
     releaseDate: "2026年10月2日(金)",
@@ -220,7 +220,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     currentBadge: "β版",
     disclaimer: "",
     releaseDate: "2026年10月16日(金)",
-    releaseCondition: "動画レッスンの収録・追加と、修了者の社内記録（AI CoE での管理）方法の決定",
+    releaseCondition: "動画レッスンの収録・追加と、修了者の社内記録（AI推進担当 での管理）方法の決定",
   },
   {
     id: "idea-board",

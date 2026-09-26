@@ -75,7 +75,7 @@ const jumpSections: JumpSection[] = [
     bgActive: "bg-rose-50/60 border-rose-500",
     items: [
       { name: "社内AIアンバサダー", href: "/ambassadors", desc: "各部署のAI推進リーダー一覧・第1期応募受付", badge: "📋 準備中" },
-      { name: "Office Hour (CoE相談)", href: "/antigravity-info", desc: "マンツーマンでの導入・エージェント開発相談", badge: "おすすめ" },
+      { name: "Office Hour （AI推進担当）", href: "/antigravity-info", desc: "マンツーマンでの導入・エージェント開発相談", badge: "おすすめ" },
       { name: "開発ロードマップ", href: "/roadmap", desc: "AI Parkの機能拡充計画と進捗スケジュール" },
       { name: "AIガバナンス (🌐公式)", href: "https://antigravity.google/docs/permissions", desc: "モデルの権限・セキュリティガイドライン", badge: "外部リンク" },
     ],

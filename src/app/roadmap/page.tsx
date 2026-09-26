@@ -165,10 +165,10 @@ const tasksData: TaskItem[] = [
     targetDate: "2026年9月18日(金)",
     status: "completed",
     currentVerificationBadge: "公開中",
-    releaseCondition: "AI CoE相談デスクの予約完了画面からGoogleカレンダーへの仮予定追加リンク生成の実機確認完了",
+    releaseCondition: "AI推進担当相談デスクの予約完了画面からGoogleカレンダーへの仮予定追加リンク生成の実機確認完了",
     category: "interaction",
     icon: "📅",
-    description: "AI CoE相談デスクの予約完了画面から、ワンクリックでGoogleカレンダーに仮予定を追加できるリンク生成および予約メモコピー機能を実装しました。",
+    description: "AI推進担当相談デスクの予約完了画面から、ワンクリックでGoogleカレンダーに仮予定を追加できるリンク生成および予約メモコピー機能を実装しました。",
     items: [
       { text: "予約スロット選択時のGoogle Calendar追加リンク生成", done: true },
       { text: "予約確認メッセージ・事前質問の詳細メモコピー機能", done: true },

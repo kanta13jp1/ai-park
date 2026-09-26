@@ -28,7 +28,7 @@ export default function AgentToolsHubPage() {
       badge: "β版運用中",
       badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
       statusType: "active",
-      tags: ["#アイデア起票", "#メンバー募集", "#CoEフィードバック"],
+      tags: ["#アイデア起票", "#メンバー募集", "#AI推進担当へのフィードバック"],
     },
     {
       id: "agent-cases",
@@ -96,7 +96,7 @@ export default function AgentToolsHubPage() {
     {
       num: "01",
       title: "アイデアを宣言する",
-      desc: "「アイデア宣言ボード」に現場の課題や自動化したい業務を投稿。CoEや他部署からのアドバイス・協力者を募ります。",
+      desc: "「アイデア宣言ボード」に現場の課題や自動化したい業務を投稿。AI推進担当や他部署からのアドバイス・協力者を募ります。",
       linkText: "アイデア宣言ボードへ",
       href: "/idea-board",
     },

@@ -39,7 +39,7 @@ const initialSkills: SkillItem[] = [
     name: "accidental-data-loss-prevention",
     title: "不可逆データ損失防止ガード",
     category: "セキュリティ",
-    author: "セキュリティ統括 CoE",
+    author: "AI推進担当",
     stars: 128,
     desc: "DROP TABLE、TRUNCATE、全件DELETE、GCSバケット削除などの破壊的コマンド実行前に必ずユーザー確認を強制する安全ガードスキル。",
     recommendedModel: "Flash / Pro",
@@ -97,7 +97,7 @@ description: Enforce partitioning, clustering, mandatory query labels, and SQL c
     name: "oss-first-architect",
     title: "車輪の再発明防止（OSS探索・選定）",
     category: "設計・アーキテクチャ",
-    author: "AI CoE アーキテクト",
+    author: "AI推進担当 アーキテクト",
     stars: 76,
     desc: "機能開発前にGitHub上の高品質・成熟した既存OSSライブラリを探索し、車輪の再発明を防いで最もシンプルなMVP設計を提案するスキル。",
     recommendedModel: "Pro",
@@ -482,7 +482,7 @@ description: ${formDesc || "ここにスキルの目的・用途を記載しま�
             <div className="space-y-1">
               <div className="flex items-center space-x-2">
                 <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-bold rounded">
-                  MightyLINK CoE
+                  MightyLINK AI推進担当
                 </span>
               </div>
               <h3 className="text-lg font-bold text-slate-900">自作Skillの社内登録申請</h3>
@@ -498,7 +498,7 @@ description: ${formDesc || "ここにスキルの目的・用途を記載しま�
                 </div>
                 <h4 className="font-bold text-emerald-950 text-base">登録申請を受け付けました！</h4>
                 <p className="text-xs text-emerald-800">
-                  カタログ一覧に即時反映されました。CoEメンバーによる動作確認後、公式リポジトリにも同期されます。
+                  カタログ一覧に即時反映されました。AI推進担当による動作確認後、公式リポジトリにも同期されます。
                 </p>
               </div>
             ) : (

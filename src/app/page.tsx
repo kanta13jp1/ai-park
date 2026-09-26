@@ -389,13 +389,13 @@ export default function Home() {
         <section className="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-2xl p-8 shadow-sm relative overflow-hidden">
           <div className="relative z-10 max-w-2xl space-y-4">
             <span className="text-xs font-semibold px-3 py-1 rounded-full bg-blue-700/60 border border-blue-400/30 text-blue-200 inline-block">
-              AI CoE サポートデスク
+              AI推進担当 サポートデスク
             </span>
             <h3 className="text-2xl font-bold">
               AI導入の疑問や自チームへの適用相談をお待ちしています
             </h3>
             <p className="text-xs md:text-sm text-blue-100 leading-relaxed">
-              「自チームの業務にエージェントを組み込みたい」「カスタムSkillsの作り方を教えてほしい」など、AI推進CoEメンターがOffice Hourで個別に対応します。
+              「自チームの業務にエージェントを組み込みたい」「カスタムSkillsの作り方を教えてほしい」など、AI推進担当がOffice Hourで個別に対応します。
             </p>
             <div className="pt-2">
               <Link

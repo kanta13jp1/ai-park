@@ -464,7 +464,7 @@ export default function IdeaBoardPage() {
               <p><span className="font-bold text-slate-900">対象：</span>全社員（個人・チームどちらでも可、1人何件でも応募可）</p>
               <p><span className="font-bold text-slate-900">応募期間：</span>2026年11月2日（月）〜12月18日（金）</p>
               <p><span className="font-bold text-slate-900">審査・表彰：</span>2027年1月中に審査し、全社の場で表彰</p>
-              <p><span className="font-bold text-slate-900">審査員：</span>社長・杉村さん・AI CoE</p>
+              <p><span className="font-bold text-slate-900">審査員：</span>社長・杉村さん・AI推進担当</p>
               <p><span className="font-bold text-slate-900">審査の観点：</span>顧客にとっての価値／実現できるか／収益につながるか／AIならではの活かし方</p>
               <p><span className="font-bold text-slate-900">賞：</span>最優秀賞 1件・優秀賞 2件・アイデア賞（件数自由）。賞品の内容は協議のうえ決定</p>
             </div>
@@ -472,7 +472,7 @@ export default function IdeaBoardPage() {
               <p className="font-bold text-amber-900">応募方法（社内のみで受付）</p>
               <p className="text-amber-900">
                 アイデアには社外秘が含まれうるため、このサイトや GitHub では受け付けません。下の項目を記入し、
-                Google Chat で AI CoE に DM で送ってください。
+                Google Chat で AI推進担当 に DM で送ってください。
               </p>
               <ol className="list-decimal pl-5 space-y-1 text-amber-900">
                 <li>タイトル（ひとことで）</li>
@@ -679,7 +679,7 @@ export default function IdeaBoardPage() {
             <div className="space-y-2 border-b border-slate-100 pb-4">
               <h3 className="text-lg font-black text-slate-900">🎉 エージェント完成報告フロー</h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                アイデア宣言したエージェントが完成し、実際に業務で稼働を開始した際は、こちらの完成報告を行ってください。CoEによるセキュリティ確認後、「AI Agent Case」や社内カタログへの公式登録、全社表彰の対象となります。
+                アイデア宣言したエージェントが完成し、実際に業務で稼働を開始した際は、こちらの完成報告を行ってください。AI推進担当によるセキュリティ確認後、「AI Agent Case」や社内カタログへの公式登録、全社表彰の対象となります。
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -692,7 +692,7 @@ export default function IdeaBoardPage() {
               </div>
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
                 <span className="text-xs font-bold text-blue-600 font-mono">STEP 2</span>
-                <h4 className="font-bold text-sm text-slate-800">AI CoE 簡易レビュー</h4>
+                <h4 className="font-bold text-sm text-slate-800">AI推進担当 簡易レビュー</h4>
                 <p className="text-xs text-slate-500">
                   個人情報・機密データの取り扱いおよびAPIキーの安全な管理（Secret Manager等）を確認します。
                 </p>
