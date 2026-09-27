@@ -74,11 +74,11 @@ export default function Home() {
     },
     {
       title: "Gemini利用率",
-      description: "各部署のGemini利用回数統計（最大値・中央値・平均値・人数）・CSV出力",
+      description: "各部署のGemini利用回数統計（実データ連携の準備中）",
       icon: "✦",
       href: "/gemini-stats",
-      badge: "最新集計",
-      badgeColor: "bg-cyan-100 text-cyan-800",
+      badge: "🚧 工事中",
+      badgeColor: "bg-amber-100 text-amber-800",
     },
     {
       title: "社内AI活用状況 & ROI",

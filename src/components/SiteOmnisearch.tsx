@@ -88,7 +88,7 @@ const siteSearchIndex: SearchIndexItem[] = [
     title: "Gemini利用率",
     category: "統計分析",
     href: "/gemini-stats",
-    description: "部署別Gemini利用回数統計（最大値・中央値・平均値・人数）、双方向ソート、CSVダウンロード",
+    description: "部署別Gemini利用回数統計（工事中：実データ連携の準備中）",
     keywords: ["統計", "ダッシュボード", "利用率", "gemini", "中央値", "平均値", "プロンプト", "csv", "部署", "エクスポート"],
   },
   {

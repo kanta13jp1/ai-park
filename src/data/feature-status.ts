@@ -158,7 +158,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "🚧 工事中",
-    disclaimer: "【工事中】現在表示されているMAUや部署別統計データはサンプル・シミュレーション値です。社内BigQuery利用ログ実データ連携を準備中です。",
+    disclaimer: "【工事中】社内BigQuery利用ログとの実データ連携を準備中です。連携までは統計の数値を表示しません。",
     releaseDate: "2026年11月20日(金)",
     releaseCondition: "社内BigQuery利用ログデータパイプライン接続 & 日次MAU実データ自動集計バッチの稼働",
   },

@@ -62,7 +62,7 @@ const jumpSections: JumpSection[] = [
       { name: "社内AIプロジェクト一覧", href: "/ai-projects", desc: "各部署の実践事例・進捗可視化・自動掲載", badge: "新着" },
       { name: "アイデア宣言ボード", href: "/idea-board", desc: "AI活用のアイデア起票・共創・いいね応援", badge: "共創" },
       { name: "Subagents活用事例", href: "/agent-cases", desc: "自律並列エージェント（SRE・調達・QA）構成図", badge: "注目" },
-      { name: "Gemini利用率", href: "/gemini-stats", desc: "部署別利用回数（最大値・中央値・平均値）・CSV出力", badge: "統計" },
+      { name: "Gemini利用率", href: "/gemini-stats", desc: "部署別利用回数の統計（実データ連携の準備中）", badge: "🚧 工事中" },
       { name: "社内AI活用状況 & ROI", href: "/adoption", desc: "全社フェーズ進捗・削減工数リアルタイム試算" },
       { name: "AI Tools Hub", href: "/tools-hub", desc: "社内公認ツール一覧・セキュリティ基準・申請" },
     ],
