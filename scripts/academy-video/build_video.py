@@ -25,6 +25,7 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[2]
 IMAGES = ROOT / "public" / "images" / "guide"
 OUT_DIR = ROOT / "public" / "videos" / "academy"
+FALLBACK_MODEL = {"gemini-3.8-flash-tts": "gemini-3.8-flash-lite-tts", "gemini-3.8-flash-lite-tts": "gemini-3.8-flash-tts"}
 CACHE_DIR = Path(os.environ.get("ACADEMY_TTS_CACHE", Path.home() / ".cache" / "ai-park-academy-tts"))
 W, H = 1280, 720
 BG, INK, SUB, ACCENT = (250, 249, 245), (20, 20, 19), (90, 90, 88), (217, 119, 87)
@@ -115,6 +116,10 @@ def speak_gemini(text, cfg, wav_path):
         except urllib.error.HTTPError as e:
             detail = e.read().decode(errors="replace")
             if e.code == 429 and "per day" in detail:
+                # 1日の上限に達したら、もう一方の TTS モデル（Flash ⇔ Flash-Lite）で1回だけ試す
+                alt = FALLBACK_MODEL.get(cfg.get("model", "gemini-3.8-flash-tts"))
+                if alt and not cfg.get("_fallback"):
+                    return speak_gemini(text, {**cfg, "model": alt, "_fallback": True}, wav_path)
                 raise SystemExit(f"TTS の1日の利用上限に達しました（{body['model']}）: {detail[:200]}")
             if e.code in (429, 500, 503) and attempt < 3:
                 time.sleep(20 * (attempt + 1))
