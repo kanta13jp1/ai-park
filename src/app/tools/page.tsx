@@ -54,7 +54,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-blue-600 text-white",
     name: "Dify",
     form: "アプリ基盤",
-    manualUrl: "/learning",
+XXDEL
     status: "リストアップ",
     dev: { score: 0, note: "" },
     doc: { score: 0, note: "" },
@@ -109,7 +109,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-amber-600 text-white",
     name: "Google Workspace Studio",
     form: "ノーコード自動化 / AIエージェント",
-    manualUrl: "/learning",
+XXDEL
     status: "リストアップ",
     dev: { score: 0, note: "" },
     doc: { score: 0, note: "" },
@@ -128,7 +128,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-fuchsia-600 text-white",
     name: "Jitora",
     form: "Webプラットフォーム / VS Code拡張",
-    manualUrl: "/learning",
+XXDEL
     status: "リストアップ",
     dev: { score: 0, note: "" },
     doc: { score: 0, note: "" },
