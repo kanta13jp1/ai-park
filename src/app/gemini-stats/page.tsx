@@ -23,7 +23,6 @@ export default function GeminiStatsPage() {
           title="🚧 工事中：実データの連携を準備しています"
           message="社内の利用ログと連携できるまでは、統計の数値は表示しません。"
           prepDetails="社内BigQuery利用ログデータパイプライン接続 & 日次MAU実データ自動集計バッチの稼働"
-          releaseDate="2026年11月20日(金)"
         />
 
         <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 space-y-3">

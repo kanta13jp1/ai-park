@@ -27,8 +27,8 @@ export const navigationSections: NavSection[] = [
       { name: "Antigravity Academy", href: "/academy", icon: "🎓", badge: "β版" },
       { name: "教育用コンテンツ", href: "/learning", icon: "✍️" },
       { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️", badge: "📋 準備中" },
-      { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️" },
-      { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "β版" },
+      { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️", badge: "🚧 工事中" },
+      { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "🚧 工事中" },
     ]
   },
   {
@@ -36,9 +36,9 @@ export const navigationSections: NavSection[] = [
     href: "/agent-tools",
     items: [
       { name: "社内AIプロジェクト一覧", href: "/ai-projects", icon: "🏢", badge: "β版" },
-      { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β版" },
-      { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "🧪 PoC中" },
-      { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "🧪 PoC中" },
+      { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "🚧 工事中" },
+      { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "🚧 工事中" },
+      { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "🚧 工事中" },
       { name: "Gemini利用率", href: "/gemini-stats", icon: "✦", badge: "🚧 工事中" },
       { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "🚧 工事中" },
     ]

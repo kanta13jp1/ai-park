@@ -55,80 +55,8 @@ function buildApplyIssueUrl(fields: { author: string; dept: string; specialty: s
   return `https://github.com/${GITHUB_REPO}/issues/new?${params.toString()}`;
 }
 
-const initialAmbassadors: Ambassador[] = [
-  {
-    id: 1,
-    name: "高橋 誠",
-    dept: "クラウド基盤推進部",
-    role: "AI推進担当 テクニカルリード",
-    avatarColor: "bg-blue-600 text-white",
-    specialties: ["Google Antigravity", "Subagents並列実行", "MCPツール連携", "Terraform"],
-    recentAchievement: "インフラ自動プロビジョニング用MCPサーバーを開発し全社展開中",
-    availableTopics: ["CLI/IDE環境構築", "カスタムMCPサーバー作成", "破壊的操作防止ルール設定"],
-    isModel: true,
-    slackHandle: "#ask-coe-takahashi",
-  },
-  {
-    id: 2,
-    name: "佐藤 恵美",
-    dept: "DXソリューション部",
-    role: "業務自動化推進アンバサダー",
-    avatarColor: "bg-purple-600 text-white",
-    specialties: ["プロンプトエンジニアリング", "Gemini 3.1 Pro", "Document AI", "業務フロー改善"],
-    recentAchievement: "調達見積書のPDF自動抽出・比較AIエージェントのPoCを主導",
-    availableTopics: ["非エンジニア向けプロンプト作成", "PDF・画像解析", "議事録自動化"],
-    isModel: true,
-    slackHandle: "#ask-coe-sato",
-  },
-  {
-    id: 3,
-    name: "田中 健一",
-    dept: "品質保証・セキュリティ統括部",
-    role: "AIガバナンス & 安全利用アンバサダー",
-    avatarColor: "bg-emerald-600 text-white",
-    specialties: ["社内AI利用規約", "機密情報保護", "データマスキング", "著作権・ライセンス"],
-    recentAchievement: "全社向け「生成AI利用セキュリティチェックシート」の策定と運用自動化",
-    availableTopics: ["社内データ取扱い可否", "商用利用リスク", "外部API連携審査"],
-    isModel: true,
-    slackHandle: "#ask-coe-tanaka",
-  },
-  {
-    id: 4,
-    name: "鈴木 大樹",
-    dept: "システム開発第一部 (ECプラットフォーム)",
-    role: "プロダクト開発AI推進アンバサダー",
-    avatarColor: "bg-amber-600 text-white",
-    specialties: ["Next.js / TypeScript", "Playwright自動テスト", "コード自動レビュー", "Skills開発"],
-    recentAchievement: "プルリクエスト自動レビューAgentをチームに導入しレビュー時間を半減",
-    availableTopics: ["フロントエンドAI駆動開発", "E2Eテスト自動生成", "自作Skillの配布"],
-    isModel: true,
-    slackHandle: "#ask-coe-suzuki",
-  },
-  {
-    id: 5,
-    name: "中村 陽子",
-    dept: "データソリューション部",
-    role: "データ分析 & BQ推進アンバサダー",
-    avatarColor: "bg-cyan-600 text-white",
-    specialties: ["BigQuery", "SQL最適化", "Vertex AI", "Python / pandas"],
-    recentAchievement: "BigQuery SQL自動最適化Skillを作成し社内カタログにて公開",
-    availableTopics: ["大量データ高速集計", "BQコスト削減", "データ分析自動化"],
-    isModel: true,
-    slackHandle: "#ask-coe-nakamura",
-  },
-  {
-    id: "6" as any,
-    name: "渡辺 翔太",
-    dept: "SRE推進室",
-    role: "障害対応 & 運用自動化アンバサダー",
-    avatarColor: "bg-rose-600 text-white",
-    specialties: ["オブザーバビリティ", "ログ解析Agent", "Slack Bot", "障害復旧支援"],
-    recentAchievement: "システム障害時のログ自動要約Botを社内Slackへ導入",
-    availableTopics: ["アラート自動解析", "Datadog / Cloud Logging連携", "オンコール自動化"],
-    isModel: true,
-    slackHandle: "#ask-coe-watanabe",
-  },
-];
+// 選定・正式登録が済んだアンバサダーだけを追加する
+const initialAmbassadors: Ambassador[] = [];
 
 const filterCategories = [
   "すべて",
@@ -142,7 +70,7 @@ const filterCategories = [
 ];
 
 export default function AmbassadorsPage() {
-  const [ambassadors, setAmbassadors] = useState<Ambassador[]>(initialAmbassadors);
+  const [ambassadors] = useState<Ambassador[]>(initialAmbassadors);
   const [selectedCategory, setSelectedCategory] = useState("すべて");
   const [searchQuery, setSearchQuery] = useState("");
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
@@ -197,8 +125,8 @@ export default function AmbassadorsPage() {
       <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
         <UnderConstructionAlert
           statusType="draft"
-          title="📋 公募準備中・モデルプロフィール掲載中"
-          message="掲載中のアンバサダーは「モデル（架空）」のプロフィールです。第1期の応募受付を開始しました（応募は AI推進担当 に通知されます）。選定・正式登録と相談窓口の開設を準備中です。"
+          title="📋 準備中：第1期アンバサダーを募集しています"
+          message="アンバサダーはまだ決まっていません。第1期の応募を受け付けています（応募は AI推進担当 に通知されます）。"
           prepDetails="社内アンバサダー選定基準の策定および各事業部からの公募受付フェーズ"
           releaseDate="2026年10月23日(金)"
         />
@@ -367,8 +295,8 @@ export default function AmbassadorsPage() {
 
         {filteredAmbassadors.length === 0 && (
           <div className="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-500 space-y-2">
-            <p className="text-sm font-semibold">該当するアンバサダーが見つかりませんでした。</p>
-            <p className="text-xs text-slate-400">検索条件を変更するか、右上の「アンバサダーに応募する」からご参加ください。</p>
+            <p className="text-sm font-semibold">{ambassadors.length === 0 ? "🚧 準備中：アンバサダーはまだ決まっていません" : "該当するアンバサダーが見つかりませんでした。"}</p>
+            <p className="text-xs text-slate-400">{ambassadors.length === 0 ? "選定が済み次第、ここに紹介します。" : "検索条件を変更してください。"}右上の「アンバサダーに応募する」から応募できます。</p>
           </div>
         )}
       </div>

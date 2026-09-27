@@ -25,10 +25,10 @@ export default function HowToPage() {
       icon: <Bot className="text-sky-600" size={32} />,
       iconBg: "bg-sky-50 border-sky-100",
       href: "/tools",
-      badge: "公認ツールカタログ",
+      badge: "AIツール一覧",
       badgeColor: "bg-sky-100 text-sky-700",
-      tags: ["利用可否判定", "セキュリティLevel 1-3", "ライセンス申請"],
-      highlights: "Gemini Enterprise、Antigravity、Claude 3.5 Sonnet などの利用基準とスペック一覧",
+      tags: ["ツール一覧", "セキュリティLevel 1-3"],
+      highlights: "AIツールの一覧と、扱ってよいデータの基準（Level 1〜3）",
     },
     {
       id: "learning",
@@ -39,8 +39,8 @@ export default function HowToPage() {
       href: "/learning",
       badge: "体系的カリキュラム",
       badgeColor: "bg-amber-100 text-amber-800",
-      tags: ["動画・スライド", "初級〜上級", "勉強会アーカイブ"],
-      highlights: "全5回オンデマンド講義、過去の全社勉強会動画アーカイブ、出張勉強会の相談窓口",
+      tags: ["Antigravity Academy", "チートシート"],
+      highlights: "Antigravity Academy（動画12レッスン・修了証）と初級編チートシート",
     },
     {
       id: "interviews",
@@ -49,10 +49,10 @@ export default function HowToPage() {
       icon: <Mic className="text-indigo-600" size={32} />,
       iconBg: "bg-indigo-50 border-indigo-100",
       href: "/interviews",
-      badge: "現場の生の声",
+      badge: "📋 準備中",
       badgeColor: "bg-indigo-100 text-indigo-700",
-      tags: ["定量削減効果", "インフラ/QA/情シス", "取材立候補"],
-      highlights: "現場エンジニアやバックオフィスによるリアルな導入成果とプロンプト工夫の連載",
+      tags: ["取材立候補", "準備中"],
+      highlights: "社内のAI活用事例の取材記事（準備中。取材の立候補を受付中）",
     },
     {
       id: "aws-info",
@@ -61,10 +61,10 @@ export default function HowToPage() {
       icon: <Cloud className="text-cyan-600" size={32} />,
       iconBg: "bg-cyan-50 border-cyan-100",
       href: "/aws-info",
-      badge: "技術ナレッジ",
+      badge: "🚧 工事中",
       badgeColor: "bg-cyan-100 text-cyan-700",
-      tags: ["AWS & Google Cloud", "アーキテクチャ", "ベストプラクティス"],
-      highlights: "クラウドネイティブAIアーキテクチャ、セキュリティ設計、最新アップデート解説",
+      tags: ["準備中"],
+      highlights: "社内での AWS・クラウド活用の情報（準備中）",
     },
   ];
 
@@ -250,7 +250,7 @@ export default function HowToPage() {
                 日々の開発・業務を加速するリソース集
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                Antigravityの社内環境接続情報やプロンプト逆引き、Subagents用Skillsカタログへのショートカットです。
+                導入ガイド・社内Skillsカタログ（準備中）・Antigravity情報局（準備中）へのショートカットです。
               </p>
             </div>
 
@@ -261,7 +261,7 @@ export default function HowToPage() {
               >
                 <span className="flex items-center gap-2">
                   <FileText size={15} className="text-sky-300" />
-                  プロンプト逆引きガイド
+                  Antigravity 導入ガイド
                 </span>
                 <ChevronRight size={14} className="text-slate-400" />
               </Link>

@@ -533,11 +533,6 @@ export default function ToolsPage() {
               <span className="w-1.5 h-1.5 rounded-full bg-sky-600 mr-1.5"></span>
               利用可能
             </span>
-            {tool.licenseCount && (
-              <span className="text-[10.5px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200">
-                {tool.licenseCount}
-              </span>
-            )}
           </div>
         );
       case "社内セキュア網":
@@ -581,8 +576,8 @@ export default function ToolsPage() {
 
           <UnderConstructionAlert
             statusType="poc"
-            title="🧪 PoC検証中・サンプルデータ表示"
-            message="マトリクスは社内マスターGoogle Sheets（AIツールマスター）から自動同期しています。ただし適合度・残ライセンス数の値は社内確認前のサンプルデータです。残ライセンス枠・申請フロー連携を準備中です。"
+            title="🧪 PoC検証中：内容は社内でまだ確認していません"
+            message="表は社内マスターシート（AIツールマスター）の登録内容を表示しています。利用ステータスや適合度は社内での確認がまだ済んでいません。業務で使う前に、AI推進担当に確認してください。"
             prepDetails="スプレッドシート連携APIおよび権限管理仕様の策定フェーズ"
             releaseDate="2026年10月9日(金)"
           />

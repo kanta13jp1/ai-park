@@ -50,27 +50,27 @@ export default function Home() {
     },
     {
       title: "社内Skillsカタログ",
-      description: "テスト自動化、規約ガード、BigQuery分析など社内公認スキル集の配布・申請",
+      description: "社内で共有する Antigravity の Skills（準備中）",
       icon: "🛠️",
       href: "/skills-hub",
-      badge: "β公開中",
-      badgeColor: "bg-emerald-100 text-emerald-800",
+      badge: "🚧 工事中",
+      badgeColor: "bg-amber-100 text-amber-800",
     },
     {
       title: "MCP外部ツール連携",
-      description: "社内DB、Google Drive、ブラウザ検証をAntigravityに直結する設定ガイド",
+      description: "Antigravity と外部ツールをつなぐ設定（準備中）",
       icon: "🔌",
       href: "/mcp-hub",
-      badge: "公開中",
-      badgeColor: "bg-purple-100 text-purple-800",
+      badge: "🚧 工事中",
+      badgeColor: "bg-amber-100 text-amber-800",
     },
     {
       title: "Subagents活用事例",
-      description: "自律並列サブエージェント（SRE・調達・QA自動化）による工数削減事例",
+      description: "社内でのエージェント活用事例（準備中）",
       icon: "🟣",
       href: "/agent-cases",
-      badge: "PoC検証中",
-      badgeColor: "bg-purple-100 text-purple-800",
+      badge: "🚧 工事中",
+      badgeColor: "bg-amber-100 text-amber-800",
     },
     {
       title: "Gemini利用率",
@@ -81,12 +81,12 @@ export default function Home() {
       badgeColor: "bg-amber-100 text-amber-800",
     },
     {
-      title: "社内AI活用状況 & ROI",
-      description: "全社フェーズ進捗、チーム人数に応じた削減工数・コストROIの試算",
+      title: "社内AI活用状況",
+      description: "全社・部署ごとの AI 活用状況（実データ連携の準備中）",
       icon: "👀",
       href: "/adoption",
-      badge: "PoC検証中",
-      badgeColor: "bg-emerald-100 text-emerald-800",
+      badge: "🚧 工事中",
+      badgeColor: "bg-amber-100 text-amber-800",
     },
   ];
 
@@ -277,16 +277,15 @@ export default function Home() {
         <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-[#3b4856] rounded-2xl p-5 md:p-6 text-white shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 border border-slate-700/60">
           <div className="space-y-1 max-w-2xl">
             <div className="flex items-center space-x-2">
-              <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 rounded text-[11px] font-semibold">
-                進捗率 90%
+              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-400/30 rounded text-[11px] font-semibold">
+                開発中
               </span>
-              <span className="text-xs text-slate-300 font-mono">Phase 1〜3 公開完了 / Phase 4 進行中</span>
             </div>
             <h3 className="font-bold text-base md:text-lg text-white">
               準備中機能の実装スケジュール & 開発ロードマップ
             </h3>
             <p className="text-xs text-slate-300 leading-relaxed">
-              社内Skillsカタログ、アイデア宣言ボード、アンバサダー紹介、利用状況ダッシュボードの動的連携がすべて完了しました。
+              工事中・準備中のページの公開予定と、公開に必要な条件をまとめています。
             </p>
           </div>
           <Link
@@ -346,14 +345,14 @@ export default function Home() {
           <div className="max-w-2xl space-y-3 relative z-10">
             <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>MightyLINK AI Center of Excellence</span>
+              <span>AI推進担当（担当：梅澤）</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
               コードを書くだけの時代から、AIエージェントと共創する開発へ。
             </h2>
             <p className="text-sm text-slate-600 leading-relaxed">
               AI Parkは、MightyLINK社員のための次世代AIプラットフォームです。
-              Google Antigravity（IDE / CLI）の社内導入、業務特化Skillsの共有、MCP連携、そしてエキスパートによる個別相談（Office Hour）までをトータルでサポートします。
+              Google Antigravity の社内導入と使い方の学習を中心に、AI推進担当がサポートします。
             </p>
           </div>
           <div className="absolute right-4 -bottom-6 opacity-10 pointer-events-none hidden md:block">

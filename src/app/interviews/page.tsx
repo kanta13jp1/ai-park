@@ -89,229 +89,8 @@ function ArticleStatusBadge({ published }: { published?: boolean }) {
   );
 }
 
-const interviewArticles: InterviewArticle[] = [
-  {
-    id: "network-sre-gemini",
-    issueNumber: "#05",
-    sectionTitle: "🎤 Gemini活用事例インタビュー #05",
-    initial: "T",
-    initialBg: "bg-indigo-600 text-white",
-    title: "ログ解析からクラウド構築まで！「丸投げしない」AI活用術",
-    interviewee: "高橋 誠 さん",
-    role: "クラウド基盤推進部 ネットワーク・インフラ担当",
-    date: "2026.09.12",
-    tag: "インフラ & SRE",
-    tagColor: "bg-indigo-100 text-indigo-800",
-    summary:
-      "パケットキャプチャやエラーログといった「ファクト（事実）」をベースにしたAIの活用法から、AIの回答精度を高めるための「言語化能力」の重要性など、インフラエンジニアならではの実践的なノウハウをご紹介します。",
-    metrics: "障害切り分け・ログ解析時間 25分 → 2分 に短縮 (92% 削減)",
-    slideTheme: {
-      bgGradient: "from-indigo-900 via-slate-900 to-purple-950",
-      catchphrase: "Gemini活用術：\n丸投げから主体的な協働へ",
-      subCatchphrase: "ファクトベースのログ解析とプロンプト言語化",
-    },
-    highlights: [
-      "エラーログやパケットキャプチャの生データをそのまま渡し、前提条件を言語化して与える",
-      "「何が起きているか」と「何が正常か」の差分を指示することでハルシネーションを防止",
-      "AIの出力を鵜呑みにせず、TerraformやAWS CLIコマンドのdry-runで必ず検証する文化を徹底",
-    ],
-    qna: [
-      {
-        q: "AIを活用し始めたきっかけと、現場で直面した最初の壁は何でしたか？",
-        a: "大規模なネットワーク切り替え作業で、数万行に及ぶ分散ログから原因エラーを特定するのに膨大な時間がかかっていました。当初は『このエラー直して』と曖昧に丸投げしてしまい、的外れな回答が返ってくる壁にぶつかりました。",
-      },
-      {
-        q: "「丸投げしない活用術」とは具体的にどのようなアプローチですか？",
-        a: "AIは『前提条件と事実（ファクト）』を与えて初めて最高の能力を発揮します。エラーログの直前の正常リクエスト、期待するネットワークトポロジー、利用しているOSバージョンを箇条書きで言語化してプロンプトにインプットするアプローチへ変えたところ、解決策の的中率が劇的に跳ね上がりました。",
-      },
-      {
-        q: "インフラエンジニアにとって、生成AI時代に求められるスキルは何だと思いますか？",
-        a: "『自分の意図やシステムの前提を正確に言葉にする力（言語化能力）』です。コマンドを丸暗記することよりも、システムがどう振る舞うべきかをAIへロジカルに指示できるエンジニアが圧倒的な成果を出せる時代になっています。",
-      },
-    ],
-    promptTemplate: {
-      title: "【高橋さん直伝】インフラ障害ログ解析プロンプト",
-      content: `あなたはインフラSREエンジニアです。以下のシステム構成とエラーログから、根本原因の候補と確認すべきコマンドを3つ提示してください。
-
-【システム環境】
-- クラウド: AWS (VPC内 ECS Fargate + RDS PostgreSQL)
-- 発生事象: APIゲートウェイで504 Gateway Timeoutがスパイク
-
-【直前ログ（正常）】
-GET /api/v1/health -> 200 OK (5ms)
-
-【エラーログ】
-ERROR: connection to server at "db.internal" failed: Connection timed out (0x0000274c)
-
-【回答フォーマット】
-1. 推定される根本原因（確信度つき）
-2. 即時確認すべきCLIコマンド / クエリ
-3. 一時緩和策`,
-    },
-    advice: "AIへの丸投げを卒業し、自分の思考の補助輪としてファクトを渡す習慣をつけてみてください。世界が変わります！",
-  },
-  {
-    id: "architect-ai-driven",
-    issueNumber: "#04",
-    sectionTitle: "🎤 Gemini活用事例インタビュー #04",
-    initial: "HK",
-    initialBg: "bg-slate-700 text-white",
-    title: "AIは「記憶が1日で消える超優秀なエンジニア」！アーキテクトが語るAI駆動開発",
-    interviewee: "HK さん",
-    role: "基幹システム開発部 アーキテクト",
-    date: "2026.09.05",
-    tag: "設計 & アーキテクチャ",
-    tagColor: "bg-sky-100 text-sky-800",
-    summary:
-      "コンテキストの制限や仕様の誤認を前提とした「タスク細分化（Divide & Conquer）」の設計思想や、設計書・コードレビューにおけるガードレールの重要性など、アーキテクト視点でのAI共創開発論を語っていただきました。",
-    metrics: "新規マイクロサービス設計〜PoC工数 3週間 → 5日 (75% 圧縮)",
-    slideTheme: {
-      bgGradient: "from-slate-900 via-blue-950 to-slate-900",
-      catchphrase: "Geminiエンジニアリングと\nリスク管理の極意",
-      subCatchphrase: "記憶が消える超優秀な相棒をどう指揮するか",
-    },
-    highlights: [
-      "AIは超優秀だがコンテキストが流れる。だからこそ「1タスク＝1責務」に分解して渡す",
-      "社内共通のRules / Guidelines（AGENTS.md等）をあらかじめ定義し、設計ブレを防止",
-      "「コードを書かせる前」に必ずアーキテクチャ設計とテスト計画をレビュー・合意させる",
-    ],
-    qna: [
-      {
-        q: "「記憶が1日で消える超優秀なエンジニア」という表現の意図を教えてください。",
-        a: "AIは世界中の技術知識を持つ天才エンジニアですが、会話セッションが変われば過去の議論を忘れ、文脈が長くなれば細部を見落とします。だからこそ、人間側が『プロジェクトの文脈やルール』を外付けメモリ（Rulesやプロンプト指示）として常に提供してあげる設計が必要不可欠なのです。",
-      },
-      {
-        q: "AI駆動開発で最も失敗しやすいパターンは何ですか？",
-        a: "『この仕様でシステム全体を一気に作って』と巨大な要件を一度に渡してしまうことです。必ず要件定義 → データモデリング → インターフェース定義 → 単体実装 → テスト、とステップごとに刻んでレビューを入れることが最も手戻りを防ぐ近道です。",
-      },
-      {
-        q: "社内エンジニアへ向けたメッセージをお願いします。",
-        a: "コードを書く作業自体はAIが肩代わりしてくれる時代になりました。だからこそ、アーキテクチャの整合性、非機能要件、セキュリティ境界といった『本質的な設計力』を磨くことが、エンジニアにとって最大の差別化になります。",
-      },
-    ],
-    promptTemplate: {
-      title: "【HKさん直伝】設計レビュー用ガードレールプロンプト",
-      content: `あなたはシニアシステムアーキテクトです。提示された新機能のインターフェース設計案について、以下の観点から厳格にコードレビューを行ってください。
-
-【レビュー観点】
-1. べき等性（Idempotency）が担保されているか（ネットワーク断・二重送信への耐性）
-2. 下位互換性（Breaking Changesがないか）
-3. エラーハンドリングの分類（クライアント起因4xx vs サーバ起因5xx）
-4. パフォーマンスのボトルネック（N+1問題、過剰なメモリ消費）
-
-【インターフェース案】
-(ここにOpenAPI仕様やTypeScript型定義をペースト)`,
-    },
-    advice: "AIを単なるタイピング代行機にするのではなく、最上位のペアプログラミングパートナーとして議論をぶつけてみてください。",
-  },
-  {
-    id: "helpdesk-slack-gemini",
-    issueNumber: "#03",
-    sectionTitle: "🎤 Gemini活用事例インタビュー #03",
-    initial: "SM",
-    initialBg: "bg-emerald-600 text-white",
-    title: "「月間40時間の問い合わせを85%削減」Slack × Gemini によるヘルプデスク自動化",
-    interviewee: "佐藤 恵美 さん",
-    role: "DXソリューション部 課長代理",
-    date: "2026.08.22",
-    tag: "全社DX推進",
-    tagColor: "bg-emerald-100 text-emerald-800",
-    summary:
-      "社内FAQやマニュアルをRAG連携し、Slack上で回答ドラフトを即時生成。確信度スコア付きで安全にエスカレーションする仕組みを構築し、現場のサポート工数を激減させた取り組みを伺いました。",
-    metrics: "問い合わせ一次対応時間 85% 削減 (月40時間 → 6時間)",
-    slideTheme: {
-      bgGradient: "from-emerald-950 via-slate-900 to-teal-950",
-      catchphrase: "全社ヘルプデスク革命：\nSlack × Gemini RAG自動化",
-      subCatchphrase: "確信度スコア付きの安心エスカレーション設計",
-    },
-    highlights: [
-      "社内規程・PCセットアップ手順をベクトル検索で瞬時に引き当て",
-      "確信度が80%未満の場合は『担当者へエスカレーション』する安全フェイルセーフ",
-      "回答末尾に必ず参照した社内ポータルのURLを明記し、社内信頼を獲得",
-    ],
-    qna: [
-      {
-        q: "導入前に現場が抱えていた最大の課題は何でしたか？",
-        a: "『VPNが繋がらない』『パスワードを再発行したい』といった過去何百回も回答してきた質問に、エンジニアやサポート担当者が都度手作業でチャットを返信しており、本来の開発業務が分断されていたことです。",
-      },
-      {
-        q: "運用の定着化で工夫されたポイントは？",
-        a: "最初から100点の完全自動回答を目指さず、『回答のドラフトをまずAIが提示し、担当者がボタン一つで確認・送信できる半自動化』からスタートしたことです。これにより誤回答のリスクを防ぎつつ、現場の心理的ハードルをゼロにできました。",
-      },
-    ],
-    advice: "まずは『毎日10分使っている定型業務』を1つ選んでAIに任せてみることが、組織DX成功への最短ルートです！",
-  },
-  {
-    id: "data-democracy-bigquery",
-    issueNumber: "#02",
-    sectionTitle: "🎤 Gemini活用事例インタビュー #02",
-    initial: "NY",
-    initialBg: "bg-blue-600 text-white",
-    title: "「SQLが書けなくてもデータ分析」BigQuery × Gemini で実現した全社データ民主化",
-    interviewee: "中村 陽子 さん",
-    role: "データソリューション部 シニアアナリスト",
-    date: "2026.08.10",
-    tag: "データ分析 & BI",
-    tagColor: "bg-blue-100 text-blue-800",
-    summary:
-      "マーケティングや営業推進の非エンジニアメンバーが、自然言語で質問するだけでBigQueryから必要なデータを抽出し、SQLの最適化まで自動で行うワークフローを整備した実績をインタビュー。",
-    metrics: "データ抽出依頼チケットの消化スピード 3倍向上",
-    slideTheme: {
-      bgGradient: "from-blue-950 via-slate-900 to-indigo-950",
-      catchphrase: "自然言語でSQL生成：\n全社データ民主化の軌跡",
-      subCatchphrase: "コスト爆発を防ぐ社内Skillガードレール",
-    },
-    highlights: [
-      "非エンジニアでも『先月の部署別利用トレンドを出して』と打つだけでSQLを生成",
-      "PB単位のフルスキャン事故を防ぐため、パーティション指定を強制するSkillを標準配備",
-      "データ抽出待ちのボトルネックを解消し、現場が自律的に仮説検証できる体制へ",
-    ],
-    qna: [
-      {
-        q: "データ民主化において最も重視した安全対策は何ですか？",
-        a: "誰でもクエリを実行できるようにしつつ、莫大なクラウド費用が発生しないよう、社内Skill (`bigquery-sql-optimization`) でパーティション指定を強制したことです。",
-      },
-      {
-        q: "今後の展望について教えてください。",
-        a: "抽出したデータを元に、AIが施策提案や売上予測レポートまで自動でスライド化してくれる仕組みをAI推進担当と共同で検証中です。",
-      },
-    ],
-    advice: "データ構造を整えて適切なメタデータを付与しておけば、AIは世界で最も頼りになるデータアナリストになります。",
-  },
-  {
-    id: "subagents-frontend-automation",
-    issueNumber: "#01",
-    sectionTitle: "🎤 Gemini活用事例インタビュー #01",
-    initial: "YY",
-    initialBg: "bg-rose-600 text-white",
-    title: "自律並列Subagentsで挑むフロントエンド自動テスト & コードレビュー",
-    interviewee: "山本 雄二 さん",
-    role: "デジタルサービス推進部 開発リーダー",
-    date: "2026.07.25",
-    tag: "テスト自動化",
-    tagColor: "bg-rose-100 text-rose-800",
-    summary:
-      "画面変更のたびに発生していた手動回帰テストを、Playwrightと連携する自律型Subagentsで自動化。単一プロンプトの限界を突破した自律並列エージェントの実践知見を公開します。",
-    metrics: "リリース前リグレッションテスト工数 60% 削減",
-    slideTheme: {
-      bgGradient: "from-rose-950 via-slate-900 to-slate-950",
-      catchphrase: "自律並列エージェントで\nフロントエンドE2Eを革新",
-      subCatchphrase: "探索・テスト・レポートの完全自動化パイプライン",
-    },
-    highlights: [
-      "仕様探索エージェントとテスト実行エージェントを分離して並列稼働",
-      "UIの破壊的変更をスクリーンショット差分検知で自動レポート",
-      "PR作成時にレビューコメントと修正コード案を自動提示",
-    ],
-    qna: [
-      {
-        q: "Subagents（並列エージェント）を導入した決め手は？",
-        a: "1つのAIセッションでコードを読み、テストを書き、ブラウザを操作させると途中でコンテキストが混乱していました。探索役、実装役、レビュアー役に分担させることで、人間チームと同じ役割分担を実現できました。",
-      },
-    ],
-    advice: "小さなスコープからエージェントを走らせてみてください。チームに優秀なジュニアエンジニアが数人加わったような感覚が得られます。",
-  },
-];
+// 実際に取材し、本人と上長の原稿確認が済んだ記事だけを追加する
+const interviewArticles: InterviewArticle[] = [];
 
 export default function InterviewsPage() {
   const [selectedArticle, setSelectedArticle] = useState<InterviewArticle | null>(null);
@@ -373,9 +152,9 @@ export default function InterviewsPage() {
         {/* デプロイ品質ゲート連動アラート */}
         <UnderConstructionAlert
           statusType="draft"
-          title="📋 取材準備中・ドラフト事例モデル掲載"
-          message="現在掲載されているインタビュー記事は、社内実務ユースケースに基づくモデルケース（ドラフト）です。正式な社内インタビューの取材・記事公開を順次準備しています。"
-          prepDetails="取材立候補を受付中（下の「取材に立候補する」から応募するとAI推進担当に通知されます）。各記事の「モデルケース」「正式公開」バッジで区別できます"
+          title="📋 準備中：取材を始める準備をしています"
+          message="インタビュー記事はまだありません。取材の立候補を受け付けています。"
+          prepDetails="下の「取材に立候補する」から応募すると AI推進担当に通知されます"
           releaseDate="2026年10月16日(金)"
         />
 
@@ -384,7 +163,7 @@ export default function InterviewsPage() {
           <div className="space-y-1">
             <div className="flex items-center space-x-2">
               <span className="px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 text-[10px] font-bold border border-cyan-400/30">
-                次回 #06 取材募集中
+                取材募集中
               </span>
               <span className="text-xs text-slate-300">次回インタビューの主役はあなたです！</span>
             </div>
@@ -437,6 +216,12 @@ export default function InterviewsPage() {
 
         {/* 連載インタビュー一覧（参考サイト再現：通し番号見出し ＋ 2カラムメディアカード） */}
         <div className="space-y-8">
+          {interviewArticles.length === 0 && (
+            <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-8 text-center text-slate-500 space-y-1">
+              <p className="text-sm font-bold text-slate-700">🚧 工事中：記事はまだありません</p>
+              <p className="text-xs">実際に取材し、本人と上長の確認が済んだ記事から掲載します。</p>
+            </div>
+          )}
           {[...interviewArticles]
             .sort((a, b) => Number(Boolean(b.published)) - Number(Boolean(a.published)))
             .map((article) => (

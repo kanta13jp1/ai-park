@@ -4,6 +4,7 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import Link from "next/link";
 import { useState } from "react";
+import { featureStatusMaster } from "@/data/feature-status";
 import {
   Calendar,
   CheckCircle2,
@@ -51,169 +52,88 @@ interface UnverifiedReleaseMilestone {
   phase: string;
 }
 
-const unverifiedReleaseSchedule: UnverifiedReleaseMilestone[] = [
-  {
-    date: "2026年10月2日(金)",
-    pageName: "ご意見・改善ToDoボード",
-    href: "/feedback-todo",
-    currentStatus: "β版",
-    badgeColor: "bg-sky-100 text-sky-800 border-sky-300",
-    condition: "Google Chat / GitHub Issue 双方向自動同期の稼働をもって正式運用へ移行",
-    phase: "Phase 1",
-  },
-  {
-    date: "2026年10月9日(金)",
-    pageName: "AIツール検証マトリックス",
-    href: "/tools",
-    currentStatus: "🧪 PoC中",
-    badgeColor: "bg-purple-100 text-purple-800 border-purple-300",
-    condition: "社内Google SheetsマスターAPI自動同期 & 残ライセンス枠・申請フロー連携の完了",
-    phase: "Phase 2",
-  },
-  {
-    date: "2026年10月16日(金)",
-    pageName: "現場のAI活用インタビュー",
-    href: "/interviews",
-    currentStatus: "📋 準備中",
-    badgeColor: "bg-sky-100 text-sky-800 border-sky-300",
-    condition: "デジタル推進部・クラウド開発チーム2編の実取材完了と第1弾記事の正式公開",
-    phase: "Phase 2",
-  },
-  {
-    date: "2026年10月23日(金)",
-    pageName: "社内AIアンバサダー",
-    href: "/ambassadors",
-    currentStatus: "📋 準備中",
-    badgeColor: "bg-sky-100 text-sky-800 border-sky-300",
-    condition: "第1期アンバサダー公募選定・各事業部リーダーの正式登録と相談窓口の開設",
-    phase: "Phase 2",
-  },
-  {
-    date: "2026年10月30日(金)",
-    pageName: "Subagents活用事例",
-    href: "/agent-cases",
-    currentStatus: "🧪 PoC中",
-    badgeColor: "bg-purple-100 text-purple-800 border-purple-300",
-    condition: "実運用コードレビュー・障害解析エージェントの社内本番稼働実績・定量効果データの反映",
-    phase: "Phase 2",
-  },
-  {
-    date: "2026年11月13日(金)",
-    pageName: "社内AI活用状況 & ROIシミュレータ",
-    href: "/adoption",
-    currentStatus: "🧪 PoC中",
-    badgeColor: "bg-purple-100 text-purple-800 border-purple-300",
-    condition: "2026年Q3全社AI利用アンケートの集計結果および部署別実測ROIの反映",
-    phase: "Phase 3",
-  },
-  {
-    date: "2026年11月20日(金)",
-    pageName: "利用状況ダッシュボード",
-    href: "/gemini-stats",
-    currentStatus: "🚧 工事中",
-    badgeColor: "bg-amber-100 text-amber-800 border-amber-300",
-    condition: "社内BigQuery利用ログデータパイプライン接続 & 日次MAU実データ自動集計バッチの稼働",
-    phase: "Phase 3",
-  },
-  {
-    date: "2026年11月27日(金)",
-    pageName: "AI Tools Hub & 申請フロー",
-    href: "/tools-hub",
-    currentStatus: "🚧 工事中",
-    badgeColor: "bg-amber-100 text-amber-800 border-amber-300",
-    condition: "社内ワークフロー基盤（承認ルート・Slack通知）との本番接続・即時利用申請受付の開始",
-    phase: "Phase 3",
-  },
-  {
-    date: "2026年12月11日(金)",
-    pageName: "全社共通基盤連携（SSO・Slack Bot）",
-    href: "/",
-    currentStatus: "進行中",
-    badgeColor: "bg-blue-100 text-blue-800 border-blue-300",
-    condition: "全社SSO統合・Slack Bot更新自動通知・GitHub Discussions同期基盤の全面稼働",
-    phase: "Phase 4",
-  },
-];
+// 工事中・準備中・PoC中の機能は feature-status.ts を唯一の情報源にする
+const badgeColorOf = (badge: string) =>
+  badge.includes("工事中")
+    ? "bg-amber-100 text-amber-800 border-amber-300"
+    : badge.includes("PoC")
+      ? "bg-purple-100 text-purple-800 border-purple-300"
+      : badge.includes("準備中")
+        ? "bg-slate-100 text-slate-700 border-slate-300"
+        : "bg-sky-100 text-sky-800 border-sky-300";
+
+const unverifiedReleaseSchedule: UnverifiedReleaseMilestone[] = featureStatusMaster
+  .filter((f) => !f.isVerified)
+  .map((f) => ({
+    date: f.releaseDate,
+    pageName: f.name,
+    href: f.href,
+    currentStatus: f.currentBadge,
+    badgeColor: badgeColorOf(f.currentBadge),
+    condition: f.releaseCondition,
+    phase: "",
+  }));
 
 const tasksData: TaskItem[] = [
-  // Phase 1: 完了・初期リリース
+  // Phase 1: 初期公開
   {
     id: "portal-launch",
-    title: "ポータル初期公開 & 生成AI学習コンテンツ",
-    pageName: "生成AI学習コンテンツ",
-    href: "/learning",
+    title: "ポータル初期公開 & 導入ガイド",
+    pageName: "Antigravity導入ガイド",
+    href: "/guide",
     phase: "Phase 1",
     targetDate: "2026年9月18日(金)",
     status: "completed",
     currentVerificationBadge: "公開中",
-    releaseCondition: "全社員向けUdemy推奨講座・資格試験補助案内・基礎ガイドの公開完了",
+    releaseCondition: "トップ・導入ガイド・初級編チートシートの公開",
     category: "interaction",
-    icon: "✍️",
-    description: "全社AI利用推進のための社内ポータル基盤を構築し、Udemy人気講座やGUGA/JDLA資格情報、Antigravity導入ガイドを公開しました。",
+    icon: "🚀",
+    description: "ポータルのトップと、画面キャプチャ付きの Antigravity 導入ガイド・会社の Google Cloud で使うための手順を公開しました。",
     items: [
-      { text: "ポータルトップ・3ステップクイックスタートナビゲーション", done: true },
-      { text: "Udemyおすすめ講座（Dify・エージェント）& 現場つまずき回避Tips", done: true },
-      { text: "資格受験料補助案内（生成AIパスポート、G検定等）", done: true },
+      { text: "トップ・はじめての方向け3ステップ導線", done: true },
+      { text: "Antigravity 導入ガイド（画面キャプチャ付き）と会社の Google Cloud 利用手順", done: true },
+      { text: "初級編チートシート（頼み方・編集の流れ・エラー対処）", done: true },
     ],
   },
   {
     id: "calendar-integration",
-    title: "Office Hour予約のGoogleカレンダー連携",
-    pageName: "Antigravity情報局",
-    href: "/antigravity-info",
+    title: "Office Hour 相談のGoogleカレンダー仮予定リンク",
+    pageName: "お問い合わせ",
+    href: "/contact",
     phase: "Phase 1",
     targetDate: "2026年9月18日(金)",
     status: "completed",
     currentVerificationBadge: "公開中",
-    releaseCondition: "AI推進担当相談デスクの予約完了画面からGoogleカレンダーへの仮予定追加リンク生成の実機確認完了",
+    releaseCondition: "相談内容のコピーと、Googleカレンダーへの仮予定追加リンクの確認",
     category: "interaction",
     icon: "📅",
-    description: "AI推進担当相談デスクの予約完了画面から、ワンクリックでGoogleカレンダーに仮予定を追加できるリンク生成および予約メモコピー機能を実装しました。",
+    description: "Office Hour の相談内容をコピーして Google Chat で送れるようにし、Googleカレンダーに仮予定を追加できるリンクを用意しました。",
     items: [
-      { text: "予約スロット選択時のGoogle Calendar追加リンク生成", done: true },
-      { text: "予約確認メッセージ・事前質問の詳細メモコピー機能", done: true },
-      { text: "入力項目（所属部署・相談テーマ・事前メモ）のUI最適化", done: true },
+      { text: "Googleカレンダーへの仮予定追加リンク", done: true },
+      { text: "相談内容（所属・テーマ・事前メモ）のコピー", done: true },
     ],
   },
+  // Phase 2: 進行中
   {
-    id: "skills-hub-filter",
-    title: "社内Skillsカタログの検索・申請機能",
-    pageName: "社内Skillsカタログ",
-    href: "/skills-hub",
-    phase: "Phase 1",
-    targetDate: "2026年10月2日(金)",
-    status: "completed",
+    id: "academy",
+    title: "Antigravity Academy",
+    pageName: "Antigravity Academy",
+    href: "/academy",
+    phase: "Phase 2",
+    targetDate: "2026年10月16日(金)",
+    status: "in-progress",
     currentVerificationBadge: "β版",
-    releaseCondition: "Skill登録申請と社内プライベートレジストリ自動配信の接続完了",
+    releaseCondition: "修了者の社内記録（AI推進担当での管理）方法の決定",
     category: "interaction",
-    icon: "🛠️",
-    description: "現在社内で推奨されている主要Skillsを、カテゴリタブやキーワードで絞り込める検索機能および、エンジニアが自作SKILL.mdを共有・登録申請できるモーダルUIを実装しました。",
+    icon: "🎓",
+    description: "3コース・12レッスンの動画付き学習コースと評価テスト・修了証を公開しました。",
     items: [
-      { text: "キーワード & カテゴリ（開発・分析・インフラ・セキュリティ）フィルター", done: true },
-      { text: "新規Skill登録申請フォーム（モーダル） & テンプレート即時挿入", done: true },
-      { text: "導入コマンド（agy CLI） & SKILL.md 定義内容ワンクリックコピー", done: true },
+      { text: "3コース・12レッスン（画面キャプチャ付き）", done: true },
+      { text: "全レッスンの動画（読み上げ・字幕付き）", done: true },
+      { text: "評価テストと修了証（ブラウザ内保存）", done: true },
+      { text: "修了者の社内記録方法の決定", done: false },
     ],
   },
-  {
-    id: "idea-board-interact",
-    title: "アイデア宣言ボードの投稿・いいね機能",
-    pageName: "アイデア宣言ボード",
-    href: "/idea-board",
-    phase: "Phase 1",
-    targetDate: "2026年10月2日(金)",
-    status: "completed",
-    currentVerificationBadge: "β版",
-    releaseCondition: "全社バックエンドDB永続化およびSlack共創通知連携の完了",
-    category: "interaction",
-    icon: "💡",
-    description: "社内メンバーが自らAI活用のアイデアを起票し、いいねリアクションを送信できるUIを実装しました。検索・ステータス絞り込み機能も備えています。",
-    items: [
-      { text: "アイデア新規投稿フォーム（タイトル・概要・タグ・ステータス）", done: true },
-      { text: "リアルタイムいいねカウント & トグルリアクション", done: true },
-      { text: "ステータス別（検証中 / アイデア募集中 / 本番開発中）タブ切替 & キーワード検索", done: true },
-    ],
-  },
-
   {
     id: "feedback-github-sync",
     title: "ご意見・改善ToDoボードのGitHub Issue / Google Chat連携",
@@ -234,9 +154,7 @@ const tasksData: TaskItem[] = [
       { text: "Google Chat Webhook（GOOGLE_CHAT_WEBHOOK_URL）の本番設定と通知の実機確認", done: true },
       { text: "Google Chat 投稿からのIssue自動起票（Chatアプリ / GCP側の受け口整備）", done: false },
     ],
-  },
-  // Phase 2: ツール連携 & コミュニティ（現在進行中）
-  {
+  },  {
     id: "tools-sheets-sync",
     title: "AIツール検証マトリックスの社内シート自動同期",
     pageName: "AIツール一覧",
@@ -245,17 +163,16 @@ const tasksData: TaskItem[] = [
     targetDate: "2026年10月9日(金)",
     status: "in-progress",
     currentVerificationBadge: "🧪 PoC中",
-    releaseCondition: "社内Google SheetsマスターAPI自動同期 & 残ライセンス枠・申請フロー連携の完了",
+    releaseCondition: "社内マスターシートの内容（利用ステータス・適合度）の社内確認",
     category: "data",
     icon: "🤖",
-    description: "19種類のAIツールの適合度評価・残ライセンス枠・セキュリティ区分を、社内Google SheetsマスターAPIから日次自動同期し、リアルタイム残枠を反映します。",
+    description: "AIツールの一覧を、社内マスターシート（AIツールマスター）から自動で表示します。シートの内容は社内での確認がまだ済んでいません。",
     items: [
-      { text: "マトリクス適合度・4象限ポジションUIプロトタイプ構築", done: true },
+      { text: "マトリクス表示・4象限ポジションの画面", done: true },
       { text: "社内Google Sheets（AIツールマスター）公開CSVからのマトリクス自動同期", done: true },
-      { text: "ライセンス残枠のリアルタイム取得 & 各部署向け枠管理連携", done: false },
+      { text: "シートの内容（利用ステータス・適合度）の社内確認", done: false },
     ],
-  },
-  {
+  },  {
     id: "interviews-first-edition",
     title: "現場のAI活用インタビュー 第1弾（2編）取材・公開",
     pageName: "AI活用インタビュー",
@@ -264,18 +181,17 @@ const tasksData: TaskItem[] = [
     targetDate: "2026年10月16日(金)",
     status: "in-progress",
     currentVerificationBadge: "📋 準備中",
-    releaseCondition: "デジタル推進部・クラウド開発チーム2編の実取材完了と第1弾記事の正式公開",
+    releaseCondition: "実際の取材と、本人・上長の原稿確認が済んだ記事の公開",
     category: "community",
     icon: "🎙️",
-    description: "社内業務でAIツールを実践導入している社員への直接取材を実施し、実際の工数削減成果、直面した課題、プロンプトの工夫をインタビュー記事として正式公開します。",
+    description: "社内で AI を使っている人に取材し、工夫や効果を記事にして公開します。",
     items: [
-      { text: "インタビュー記事フォーマット & 取材立候補フォームUI構築", done: true },
+      { text: "記事フォーマットと取材立候補フォーム", done: true },
       { text: "取材立候補のGitHub Issue受付・Google Chat通知 & 取材キット（流れ・質問項目）公開", done: true },
-      { text: "デジタル推進部・クラウド開発チームへの実務取材実施（2件）", done: false },
+      { text: "社内での実際の取材（2件）", done: false },
       { text: "記事校正・関係者レビュー完了後の正式公開", done: false },
     ],
-  },
-  {
+  },  {
     id: "ambassadors-kickoff",
     title: "社内AIアンバサダー 第1期公募選定 & 相談窓口開設",
     pageName: "AIアンバサダー",
@@ -287,111 +203,118 @@ const tasksData: TaskItem[] = [
     releaseCondition: "第1期アンバサダー公募選定・各事業部リーダーの正式登録と相談窓口の開設",
     category: "community",
     icon: "🤝",
-    description: "各事業部・開発チームでAI活用をリードする「AIアンバサダー」を正式公募・選定し、各メンバーの得意技術（LLM、プロンプト、MCP）と Google Chat での相談窓口を開設します。",
+    description: "各事業部で AI 活用の相談役になる「AIアンバサダー」を募集・選定し、相談窓口を開きます。",
     items: [
-      { text: "アンバサダー紹介UI & 公募応募フォームのプロトタイプ構築", done: true },
+      { text: "アンバサダー紹介の画面と応募フォーム", done: true },
       { text: "応募のGitHub Issue受付・Google Chat通知 & 第1期制度（案）の公開", done: true },
-      { text: "第1期アンバサダーの全社公募・選定（各事業部より6名）", done: false },
+      { text: "第1期アンバサダーの全社公募・選定", done: false },
       { text: "アンバサダーへの相談窓口（Google Chat）の正式稼働", done: false },
     ],
-  },
-  {
-    id: "subagent-cases",
-    title: "Subagents活用事例の実運用ログ & 定量効果データ反映",
-    pageName: "Subagents活用事例",
-    href: "/agent-cases",
+  },  {
+    id: "ai-calendar",
+    title: "AI Park カレンダーとAI勉強会アジェンダの自動追加",
+    pageName: "AI Park カレンダー",
+    href: "/calendar",
     phase: "Phase 2",
-    targetDate: "2026年10月30日(金)",
+    targetDate: "未定",
     status: "in-progress",
-    currentVerificationBadge: "🧪 PoC中",
-    releaseCondition: "実運用コードレビュー・障害解析エージェントの社内本番稼働実績・定量効果データの反映",
+    currentVerificationBadge: "🚧 工事中",
+    releaseCondition: "「AI Park イベント」カレンダーの作成・共有とカレンダーIDの設定",
     category: "community",
-    icon: "🟣",
-    description: "MightyLINK社内の本番CI/CDやSRE環境で稼働する自律並列Subagentsの実行ログと、実測された月間削減時間・一次切り分け精度データを反映します。",
+    icon: "🗓️",
+    description: "AI勉強会の予定を登録すると、説明欄にアジェンダが自動で入る仕組みと、サイトでの予定表示を用意します。",
     items: [
-      { text: "4ステップ自律エージェント処理フロー & プロンプト構成UI構築", done: true },
-      { text: "SRE障害調査エージェントの本番実測メトリクス（月間削減時間等）集計", done: false },
-      { text: "全社事例投稿・ナレッジ共有ワークフローの本番稼働", done: false },
+      { text: "アジェンダ自動追加の Apps Script", done: true },
+      { text: "「AI Park イベント」カレンダーの作成とIDの設定", done: false },
     ],
   },
-
-  // Phase 3: データ可視化 & 申請承認基盤（準備中）
+  // Phase 3: 工事中（内容の準備待ち）
   {
-    id: "adoption-metrics",
-    title: "全社AI活用状況 2026年Q3アンケート集計 & 実測ROI反映",
-    pageName: "社内AI活用状況",
-    href: "/adoption",
-    phase: "Phase 3",
-    targetDate: "2026年11月13日(金)",
-    status: "planned",
-    currentVerificationBadge: "🧪 PoC中",
-    releaseCondition: "2026年Q3全社AI利用アンケートの集計結果および部署別実測ROIの反映",
-    category: "data",
-    icon: "👀",
-    description: "2026年Q3に全社員を対象に実施するAI活用実態アンケートの集計結果と、部署別の年間削減工数・コストROI実測値をダッシュボードに反映します。",
-    items: [
-      { text: "リアルタイムROI試算シミュレータUIの実装完了", done: true },
-      { text: "2026年Q3全社AI活用アンケートの実施・回収（目標回収率80%）", done: false },
-      { text: "部署別アクティブ活用率および社員満足度実データの正式反映", done: false },
-    ],
-  },
-  {
-    id: "gemini-stats-realtime",
-    title: "利用状況ダッシュボードの社内BigQueryパイプライン本番接続",
-    pageName: "利用状況ダッシュボード",
+    id: "usage-data",
+    title: "利用状況（Gemini利用率・社内AI活用状況）の実データ連携",
+    pageName: "Gemini利用率・社内AI活用状況",
     href: "/gemini-stats",
     phase: "Phase 3",
-    targetDate: "2026年11月20日(金)",
+    targetDate: "未定",
     status: "planned",
     currentVerificationBadge: "🚧 工事中",
-    releaseCondition: "社内BigQuery利用ログデータパイプライン接続 & 日次MAU実データ自動集計バッチの稼働",
+    releaseCondition: "利用ログやアンケートなどの実データとの連携",
     category: "data",
-    icon: "💎",
-    description: "Gemini Enterprise および Antigravity の監査ログを格納する社内BigQueryと接続し、日次・月次の実アクティブユーザー数（MAU）やプロンプト消費推移を自動集計します。",
+    icon: "📊",
+    description: "実データと連携できるまでは数値を表示しません。",
     items: [
-      { text: "集計期間切替・部署フィルタ・CSV入出力UIの実装完了", done: true },
-      { text: "BigQuery監査ログ集計マテリアライズドビューの構築", done: false },
-      { text: "日次データ同期パイプライン（Cloud Composer / Cloud Functions）本番稼働", done: false },
+      { text: "利用ログ・アンケートなど、使うデータの決定", done: false },
+      { text: "データとの連携と表示", done: false },
     ],
   },
   {
-    id: "tools-hub-guide",
-    title: "AI Tools Hubの社内申請承認基盤（Slack連携）本番接続",
+    id: "cases-skills",
+    title: "社内の活用事例・Skills の収集と掲載",
+    pageName: "Subagents活用事例・社内Skillsカタログ",
+    href: "/agent-cases",
+    phase: "Phase 3",
+    targetDate: "未定",
+    status: "planned",
+    currentVerificationBadge: "🚧 工事中",
+    releaseCondition: "社内の実際の事例と Skills がそろうこと",
+    category: "community",
+    icon: "🟣",
+    description: "社内で実際に使っているエージェントの事例と、共有できる Skills を集めて掲載します。",
+    items: [
+      { text: "実際の活用事例の収集（効果は実測値）", done: false },
+      { text: "社内で共有する Skills の作成・確認", done: false },
+    ],
+  },
+  {
+    id: "idea-board",
+    title: "アイデア宣言ボードの受付開始",
+    pageName: "アイデア宣言ボード",
+    href: "/idea-board",
+    phase: "Phase 3",
+    targetDate: "未定",
+    status: "planned",
+    currentVerificationBadge: "🚧 工事中",
+    releaseCondition: "宣言を保存・共有できる仕組み（GitHub Issues など）との連携",
+    category: "interaction",
+    icon: "💡",
+    description: "アイデアの宣言を保存・共有できるようにします。それまでは Google Chat の「AI勉強会」スペースで受け付けます。",
+    items: [{ text: "宣言を保存・共有できる仕組みとの連携", done: false }],
+  },
+  {
+    id: "tools-policy",
+    title: "会社として使えるAIツールと申請方法の決定",
     pageName: "AI Tools Hub",
     href: "/tools-hub",
     phase: "Phase 3",
-    targetDate: "2026年11月27日(金)",
+    targetDate: "未定",
     status: "planned",
     currentVerificationBadge: "🚧 工事中",
-    releaseCondition: "社内ワークフロー基盤（承認ルート・Slack通知）との本番接続・即時利用申請受付の開始",
-    category: "data",
+    releaseCondition: "利用を認めるツールと申請方法の社内決定",
+    category: "system",
     icon: "📍",
-    description: "公認AIツールの利用申請フォームを社内ワークフロー基盤および承認Slack通知と接続し、申請からライセンス即時発行までの自動承認ルートを稼働させます。",
+    description: "会社として利用を認めるAIツールと、その申請方法を決めて掲載します。",
     items: [
-      { text: "セキュリティ基準早見表 & 申請モーダルUIの実装完了", done: true },
-      { text: "社内ワークフローAPI（マネージャー承認ルート）とのWebhook接続", done: false },
-      { text: "Slackでのワンクリック承認 & ライセンスキー自動発行Bot稼働", done: false },
+      { text: "セキュリティ基準（Level 1〜3）と注意事項5箇条（暫定版）", done: true },
+      { text: "利用を認めるツールと申請方法の決定", done: false },
     ],
   },
-
-  // Phase 4: 全社システム連携基盤（準備中）
   {
-    id: "slack-github-integration",
-    title: "全社共通基盤連携（SSO・Slack Bot通知・GitHub同期）",
-    pageName: "全社連携基盤",
-    href: "/",
-    phase: "Phase 4",
-    targetDate: "2026年12月11日(金)",
+    id: "info-pages",
+    title: "AWS・MCP・Antigravity情報局の内容準備",
+    pageName: "AWS・クラウド情報局 ほか",
+    href: "/aws-info",
+    phase: "Phase 3",
+    targetDate: "未定",
     status: "planned",
-    currentVerificationBadge: "進行中",
-    releaseCondition: "全社SSO統合・Slack Bot更新自動通知・GitHub Discussions同期基盤の全面稼働",
+    currentVerificationBadge: "🚧 工事中",
+    releaseCondition: "社内ルール・相談窓口・使ってよいツールの決定",
     category: "system",
-    icon: "⚡",
-    description: "社内Slack（#ai-park）への更新通知Botや、GitHub Discussions / Issueとの自動双方向同期、社内SSO組織マスターとの権限連携を整備します。",
+    icon: "☁️",
+    description: "社内の AWS 利用ルール、使ってよい MCP サーバー、Antigravity の社内向けお知らせを準備します。",
     items: [
-      { text: "新規Skill・事例公開時のSlack自動アナウンスBot", done: false },
-      { text: "アイデア宣言ボードとGitHub Discussionsの双方向同期", done: false },
-      { text: "社内SSO / 組織マスターとのアクセス制御連携", done: false },
+      { text: "社内の AWS 利用ルールと相談窓口", done: false },
+      { text: "使ってよい MCP サーバーと設定方法", done: false },
+      { text: "Antigravity の社内向けお知らせ・よくある質問", done: false },
     ],
   },
 ];
@@ -435,7 +358,7 @@ export default function RoadmapPage() {
                 AI Park 機能実装マイルストーン
               </h2>
               <p className="text-xs text-slate-600 mt-0.5">
-                準備中・PoC中・工事中となっている箇所を、優先度順に具体的な期日をもって順次本番機能としてリリースしていきます。
+                準備中・PoC中・工事中となっている箇所を、内容がそろったものから順に公開していきます（予定日が「未定」のものは、決まり次第お知らせします）。
               </p>
             </div>
 
@@ -470,7 +393,7 @@ export default function RoadmapPage() {
                 <span>Phase 1〜4 全体進行度</span>
               </span>
               <span className="font-bold text-cyan-700">
-                {progressPercentage}% 完了 (Phase 1 完了 / Phase 2 進行中)
+                {progressPercentage}% 完了
               </span>
             </div>
             <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/60">
@@ -492,7 +415,7 @@ export default function RoadmapPage() {
                 <span className="text-[10px] text-emerald-600 font-medium">9月下旬</span>
               </div>
               <h4 className="font-bold text-slate-800 text-xs mt-1">ポータル公開・学習基盤</h4>
-              <p className="text-[11px] text-slate-600">トップ、Udemy学習教材、OfficeHour連携、Skills/アイデアUI</p>
+              <p className="text-[11px] text-slate-600">トップ、導入ガイド、初級編チートシート、Office Hour</p>
             </div>
 
             <div className="p-3.5 rounded-xl border border-blue-200 bg-blue-50/60 space-y-1 ring-2 ring-blue-500/20">
@@ -503,8 +426,8 @@ export default function RoadmapPage() {
                 </span>
                 <span className="text-[10px] text-blue-600 font-medium">10月中</span>
               </div>
-              <h4 className="font-bold text-slate-800 text-xs mt-1">ツール連携 & コミュニティ</h4>
-              <p className="text-[11px] text-slate-600">Sheets自動同期、インタビュー取材公開、アンバサダー、Subagents実測</p>
+              <h4 className="font-bold text-slate-800 text-xs mt-1">学習・ツール連携 & コミュニティ</h4>
+              <p className="text-[11px] text-slate-600">Academy、ご意見ボード、ツールシート同期、取材、アンバサダー、カレンダー</p>
             </div>
 
             <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/50 space-y-1">
@@ -514,8 +437,8 @@ export default function RoadmapPage() {
                 </span>
                 <span className="text-[10px] text-amber-600 font-medium">11月中</span>
               </div>
-              <h4 className="font-bold text-slate-800 text-xs mt-1">データ可視化 & 申請承認基盤</h4>
-              <p className="text-[11px] text-slate-600">全社AI活用アンケート、BigQueryログ接続、ToolsHub承認基盤</p>
+              <h4 className="font-bold text-slate-800 text-xs mt-1">工事中ページの内容準備</h4>
+              <p className="text-[11px] text-slate-600">利用状況の実データ、事例・Skills、アイデアボード、ツール方針</p>
             </div>
 
             <div className="p-3.5 rounded-xl border border-purple-200 bg-purple-50/50 space-y-1">
@@ -525,8 +448,8 @@ export default function RoadmapPage() {
                 </span>
                 <span className="text-[10px] text-purple-600 font-medium">12月中旬〜</span>
               </div>
-              <h4 className="font-bold text-slate-800 text-xs mt-1">全社システム連携基盤</h4>
-              <p className="text-[11px] text-slate-600">全社SSO統合、Slack Bot自動通知、Discussions同期</p>
+              <h4 className="font-bold text-slate-800 text-xs mt-1">（未定）</h4>
+              <p className="text-[11px] text-slate-600">Phase 3 の後に検討します</p>
             </div>
           </div>
         </div>
@@ -550,7 +473,7 @@ export default function RoadmapPage() {
               </p>
             </div>
             <span className="text-xs font-mono bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 text-slate-300 shrink-0 self-start sm:self-auto">
-              全 {unverifiedReleaseSchedule.length} 機能の期日設定完了
+              全 {unverifiedReleaseSchedule.length} 機能
             </span>
           </div>
 
