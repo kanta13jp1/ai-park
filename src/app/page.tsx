@@ -25,12 +25,28 @@ import {
 export default function Home() {
   const quickLinks = [
     {
+      title: "Antigravity Academy",
+      description: "動画と実践で学ぶ全12レッスン・評価テスト・ブラウザ内修了証発行",
+      icon: "🎓",
+      href: "/academy",
+      badge: "おすすめ",
+      badgeColor: "bg-indigo-100 text-indigo-800",
+    },
+    {
       title: "Antigravity導入ガイド",
       description: "IDE / CLI (agy) の社内セットアップ手順、スラッシュコマンド活用法",
       icon: "🚀",
       href: "/guide",
       badge: "公開中",
       badgeColor: "bg-emerald-100 text-emerald-800",
+    },
+    {
+      title: "社内AIプロジェクト一覧",
+      description: "社内各部署の実践事例・課題・効果・進捗を一覧化し自動掲載",
+      icon: "🏢",
+      href: "/ai-projects",
+      badge: "β版",
+      badgeColor: "bg-blue-100 text-blue-800",
     },
     {
       title: "社内Skillsカタログ",
@@ -53,23 +69,23 @@ export default function Home() {
       description: "自律並列サブエージェント（SRE・調達・QA自動化）による工数削減事例",
       icon: "🟣",
       href: "/agent-cases",
-      badge: "公開中",
+      badge: "PoC検証中",
       badgeColor: "bg-purple-100 text-purple-800",
     },
     {
-      title: "利用状況ダッシュボード",
-      description: "各部署のAntigravity / Gemini 活用率・プロンプト推移・CSV入出力分析",
-      icon: "💎",
+      title: "Gemini利用率",
+      description: "各部署のGemini利用回数統計（最大値・中央値・平均値・人数）・CSV出力",
+      icon: "✦",
       href: "/gemini-stats",
-      badge: "稼働中",
-      badgeColor: "bg-blue-100 text-blue-800",
+      badge: "最新集計",
+      badgeColor: "bg-cyan-100 text-cyan-800",
     },
     {
       title: "社内AI活用状況 & ROI",
       description: "全社フェーズ進捗、チーム人数に応じた削減工数・コストROIの試算",
       icon: "👀",
       href: "/adoption",
-      badge: "公開中",
+      badge: "PoC検証中",
       badgeColor: "bg-emerald-100 text-emerald-800",
     },
   ];
@@ -291,7 +307,7 @@ export default function Home() {
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickLinks.map((item) => (
               <Link
                 key={item.href}

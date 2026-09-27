@@ -40,6 +40,7 @@ const jumpSections: JumpSection[] = [
     borderColor: "border-blue-200 hover:border-blue-400",
     bgActive: "bg-blue-50/60 border-blue-500",
     items: [
+      { name: "Antigravity Academy", href: "/academy", desc: "動画と実践で学ぶ全12レッスン・修了テスト", badge: "おすすめ" },
       { name: "使い方・学び 総合ハブ", href: "/how-to", desc: "ツール・教育・インタビュー・クラウドの全体ポータル", badge: "総合" },
       { name: "AIツール一覧", href: "/tools", desc: "社内公認AIツールのスペック・利用可否判定", badge: "公認" },
       { name: "教育用コンテンツ", href: "/learning", desc: "全社カリキュラム・過去勉強会アーカイブ動画", badge: "人気" },
@@ -58,9 +59,10 @@ const jumpSections: JumpSection[] = [
     borderColor: "border-purple-200 hover:border-purple-400",
     bgActive: "bg-purple-50/60 border-purple-500",
     items: [
+      { name: "社内AIプロジェクト一覧", href: "/ai-projects", desc: "各部署の実践事例・進捗可視化・自動掲載", badge: "新着" },
       { name: "アイデア宣言ボード", href: "/idea-board", desc: "AI活用のアイデア起票・共創・いいね応援", badge: "共創" },
       { name: "Subagents活用事例", href: "/agent-cases", desc: "自律並列エージェント（SRE・調達・QA）構成図", badge: "注目" },
-      { name: "利用状況ダッシュボード", href: "/gemini-stats", desc: "部署別MAU・プロンプト推移・CSV入出力", badge: "🚧 工事中" },
+      { name: "Gemini利用率", href: "/gemini-stats", desc: "部署別利用回数（最大値・中央値・平均値）・CSV出力", badge: "統計" },
       { name: "社内AI活用状況 & ROI", href: "/adoption", desc: "全社フェーズ進捗・削減工数リアルタイム試算" },
       { name: "AI Tools Hub", href: "/tools-hub", desc: "社内公認ツール一覧・セキュリティ基準・申請" },
     ],
@@ -74,6 +76,8 @@ const jumpSections: JumpSection[] = [
     borderColor: "border-rose-200 hover:border-rose-400",
     bgActive: "bg-rose-50/60 border-rose-500",
     items: [
+      { name: "AI Park カレンダー", href: "/calendar", desc: "社内AI勉強会・イベント予定・アジェンダ共有", badge: "予定" },
+      { name: "ご意見・改善ToDo", href: "/feedback-todo", desc: "社員からのご意見・改善要望の管理ボード", badge: "β版" },
       { name: "社内AIアンバサダー", href: "/ambassadors", desc: "各部署のAI推進リーダー一覧・第1期応募受付", badge: "📋 準備中" },
       { name: "Office Hour （AI推進担当）", href: "/antigravity-info", desc: "マンツーマンでの導入・エージェント開発相談", badge: "おすすめ" },
       { name: "開発ロードマップ", href: "/roadmap", desc: "AI Parkの機能拡充計画と進捗スケジュール" },
