@@ -63,10 +63,17 @@ LESSONS = {
         h("business", "業務で使う場合（会社アカウント）"),
         steps(
             "「Use business account」を選ぶ",
-            "ブラウザが開くので、会社の Google アカウントでログインする",
+            "「Sign in with business account」の画面で「Continue with Google Cloud」をクリック（「Use advanced SSO config」は使いません）",
+        ),
+        img("S2-business-cloud.png", "Continue with Google Cloud を選ぶ画面"),
+        p("ボタンが「Awaiting Authentication...」に変わり、ブラウザでのログイン待ちになります。"),
+        img("S4-awaiting.png", "ブラウザでの認証を待っている画面"),
+        steps(
+            "ブラウザに「アカウントを選択してください」と表示されるので、会社のアカウント（@ml-mightylink.com）を選ぶ",
             "会社の Google Cloud プロジェクトを選ぶ（プロジェクト ID は AI推進担当から案内されます）",
             "ブラウザに表示される「Open Antigravity」をクリックしてアプリに戻る",
         ),
+        img("S3-account-chooser.png", "ブラウザでアカウントを選ぶ画面"),
         tip("「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。"),
         link("https://kanta13jp1.github.io/ai-park/guide", "会社の Google Cloud で使うための手順（導入ガイド）"),
         h("personal", "個人で学習する場合"),

@@ -50,9 +50,7 @@
       "title": "業務で使う場合（会社アカウント）",
       "bullets": [
         "「Use business account」を選ぶ",
-        "ブラウザが開くので、会社の Google アカウントでログインする",
-        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
-        "ブラウザに表示される「Open Antigravity」をクリック…"
+        "「Sign in with business account」の画…"
       ],
       "highlight": 0,
       "say": "「Use business account」を選ぶ。"
@@ -61,39 +59,55 @@
       "title": "業務で使う場合（会社アカウント）",
       "bullets": [
         "「Use business account」を選ぶ",
-        "ブラウザが開くので、会社の Google アカウントでログインする",
+        "「Sign in with business account」の画…"
+      ],
+      "highlight": 1,
+      "say": "「Sign in with business account」の画面で「Continue with Google Cloud」をクリック（「Use advanced SSO config」は使いません）。"
+    },
+    {
+      "title": "業務で使う場合（会社アカウント）",
+      "say": "ボタンが「Awaiting Authentication...」に変わり、ブラウザでのログイン待ちになります。",
+      "image": "S2-business-cloud.png"
+    },
+    {
+      "title": "サインインと初期設定",
+      "say": "画面では、このように表示されます。",
+      "image": "S4-awaiting.png"
+    },
+    {
+      "title": "サインインと初期設定",
+      "bullets": [
+        "ブラウザに「アカウントを選択してください」と表示されるので、会社の…",
+        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
+        "ブラウザに表示される「Open Antigravity」をクリック…"
+      ],
+      "highlight": 0,
+      "say": "ブラウザに「アカウントを選択してください」と表示されるので、会社のアカウント（@ml-mightylink.com）を選ぶ。"
+    },
+    {
+      "title": "サインインと初期設定",
+      "bullets": [
+        "ブラウザに「アカウントを選択してください」と表示されるので、会社の…",
         "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
         "ブラウザに表示される「Open Antigravity」をクリック…"
       ],
       "highlight": 1,
-      "say": "ブラウザが開くので、会社の Google アカウントでログインする。"
+      "say": "会社の Google Cloud プロジェクトを選ぶ（プロジェクト ID は AI推進担当から案内されます）。"
     },
     {
-      "title": "業務で使う場合（会社アカウント）",
+      "title": "サインインと初期設定",
       "bullets": [
-        "「Use business account」を選ぶ",
-        "ブラウザが開くので、会社の Google アカウントでログインする",
+        "ブラウザに「アカウントを選択してください」と表示されるので、会社の…",
         "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
         "ブラウザに表示される「Open Antigravity」をクリック…"
       ],
       "highlight": 2,
-      "say": "会社の Google Cloud プロジェクトを選ぶ（プロジェクト ID は AI推進担当から案内されます）。"
-    },
-    {
-      "title": "業務で使う場合（会社アカウント）",
-      "bullets": [
-        "「Use business account」を選ぶ",
-        "ブラウザが開くので、会社の Google アカウントでログインする",
-        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
-        "ブラウザに表示される「Open Antigravity」をクリック…"
-      ],
-      "highlight": 3,
       "say": "ブラウザに表示される「Open Antigravity」をクリックしてアプリに戻る。"
     },
     {
-      "title": "業務で使う場合（会社アカウント）",
+      "title": "サインインと初期設定",
       "say": "ポイントです。「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。",
-      "lead": "ポイントです。「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。"
+      "image": "S3-account-chooser.png"
     },
     {
       "title": "個人で学習する場合",

@@ -90,12 +90,13 @@ const userSteps: GuideStep[] = [
     who: "利用者",
     actions: [
       "Antigravity を起動し「Sign in」をクリック",
-      "「Business account」→「Continue with Google Cloud」を選ぶ",
+      "「Use business account」→「Continue with Google Cloud」を選ぶ",
       "ブラウザが開くので、会社の Google アカウントでログイン",
       "プロジェクトの選択画面で「Other」を選び、AI推進担当 から案内されたプロジェクト ID を入力",
       "ロケーションは「global」を選んで完了",
     ],
     note: "「権限がない」「billing を有効にしてください」と表示された場合は、A1〜A3 が終わっていない可能性があります。画面のエラー文をそのまま AI推進担当 に送ってください。",
+    image: ["S2-business-cloud.png", "S3-account-chooser.png"],
     imageAlt: "Antigravity のサインイン画面（Business account）",
   },
 ];

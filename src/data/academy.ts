@@ -260,10 +260,35 @@ export const courses: Course[] = [
             "type": "steps",
             "items": [
               "「Use business account」を選ぶ",
-              "ブラウザが開くので、会社の Google アカウントでログインする",
+              "「Sign in with business account」の画面で「Continue with Google Cloud」をクリック（「Use advanced SSO config」は使いません）"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "S2-business-cloud.png",
+            "alt": "Continue with Google Cloud を選ぶ画面"
+          },
+          {
+            "type": "p",
+            "text": "ボタンが「Awaiting Authentication...」に変わり、ブラウザでのログイン待ちになります。"
+          },
+          {
+            "type": "image",
+            "file": "S4-awaiting.png",
+            "alt": "ブラウザでの認証を待っている画面"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "ブラウザに「アカウントを選択してください」と表示されるので、会社のアカウント（@ml-mightylink.com）を選ぶ",
               "会社の Google Cloud プロジェクトを選ぶ（プロジェクト ID は AI推進担当から案内されます）",
               "ブラウザに表示される「Open Antigravity」をクリックしてアプリに戻る"
             ]
+          },
+          {
+            "type": "image",
+            "file": "S3-account-chooser.png",
+            "alt": "ブラウザでアカウントを選ぶ画面"
           },
           {
             "type": "tip",
