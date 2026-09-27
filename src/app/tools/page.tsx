@@ -55,7 +55,7 @@ const matrixTools: MatrixTool[] = [
     name: "Dify",
     form: "アプリ基盤",
     manualUrl: "/learning",
-    status: "全社員利用可能",
+    status: "リストアップ",
     dev: { score: 2, note: "API連携" },
     doc: { score: 2, note: "プロンプト" },
     research: { score: 2, note: "RAG" },
@@ -63,7 +63,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "全社標準のLLMアプリケーション開発基盤。ドラッグ＆ドロップでRAG検索や自律ワークフローを構築可能。",
-    securityLevel: "Level 1: 社内機密・文書投入可",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 9,
     easeScore: 8,
   },
@@ -73,7 +73,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-emerald-600 text-white",
     name: "Gemini for Workspace",
     form: "サイドパネル / Gems",
-    status: "全社員利用可能",
+    status: "リストアップ",
     dev: { score: 1, note: "補助" },
     doc: { score: 3, note: "作成・要約" },
     research: { score: 3, note: "DeepResearch" },
@@ -81,7 +81,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "Google Docs/Gmail/Sheetsに直接統合された対話型AI。全社員の日常業務での文章作成とメール要約に即時利用可能。",
-    securityLevel: "Level 1: 社内機密・文書投入可",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 10,
   },
@@ -91,7 +91,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-teal-600 text-white",
     name: "NotebookLM",
     form: "リサーチノート",
-    status: "全社員利用可能",
+    status: "リストアップ",
     dev: { score: 1, note: "仕様参照" },
     doc: { score: 3, note: "要約・ノート" },
     research: { score: 3, note: "DeepResearch" },
@@ -99,7 +99,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "3/4",
     coverageRatio: 0.75,
     description: "アップロードした社内PDF・仕様書・議事録に基づき、ハルシネーションなく正確に質疑応答・要約・音声解説を生成。",
-    securityLevel: "Level 1: 社内機密・文書投入可",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 9,
   },
@@ -110,7 +110,7 @@ const matrixTools: MatrixTool[] = [
     name: "Google Workspace Studio",
     form: "ノーコード自動化 / AIエージェント",
     manualUrl: "/learning",
-    status: "全社員利用可能",
+    status: "リストアップ",
     dev: { score: 2, note: "AppSheet連携" },
     doc: { score: 2, note: "ドラフト生成" },
     research: { score: 1, note: "Drive検索" },
@@ -118,7 +118,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "フォーム入力トリガーによる自動メール送信、承認フロー、Driveファイル自動仕分けなどのノーコード自動化。",
-    securityLevel: "Level 1: 社内機密・文書投入可",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 7,
     easeScore: 8,
   },
@@ -129,8 +129,7 @@ const matrixTools: MatrixTool[] = [
     name: "Jitora",
     form: "Webプラットフォーム / VS Code拡張",
     manualUrl: "/learning",
-    status: "利用可能",
-    licenseCount: "残22/30",
+    status: "リストアップ",
     dev: { score: 3, note: "生成" },
     doc: { score: 2, note: "ドキュメント" },
     research: { score: 1, note: "コード検索" },
@@ -138,7 +137,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "3/4",
     coverageRatio: 0.75,
     description: "業務要件からReact/Next.js/Node.js等のフルスタックコードと画面設計書を自動生成する開発プラットフォーム。",
-    securityLevel: "Level 2: マスキング必須",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 6,
   },
@@ -149,7 +148,7 @@ const matrixTools: MatrixTool[] = [
     name: "Claude Code",
     form: "Code / Cowork / API",
     applyRequired: true,
-    status: "社内セキュア網",
+    status: "リストアップ",
     dev: { score: 3, note: "Code" },
     doc: { score: 3, note: "Cowork" },
     research: { score: 2, note: "Cowork" },
@@ -157,7 +156,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "ターミナル上で自律的にバグ修正・リファクタリング・テスト実行を完結するAnthropic社最新のコーディングエージェント。",
-    securityLevel: "Level 1: 社内セキュア網内限定",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 9,
     easeScore: 5,
   },
@@ -168,7 +167,7 @@ const matrixTools: MatrixTool[] = [
     name: "Google Antigravity",
     form: "次世代IDE / CLI (agy)",
     manualUrl: "/guide",
-    status: "全社員利用可能",
+    status: "利用可能",
     dev: { score: 3, note: "自律Agent" },
     doc: { score: 2, note: "設計書" },
     research: { score: 3, note: "コード探索" },
@@ -176,7 +175,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "自律並列サブエージェント、Skills/Rules自動適用、MCP連携を標準装備した全社推奨の開発・エージェント基盤。",
-    securityLevel: "Level 1: 社内機密・コード投入可",
+    securityLevel: "Level 1: 会社のGoogle Cloudプロジェクト経由のみ",
     impactScore: 10,
     easeScore: 7,
   },
@@ -187,8 +186,7 @@ const matrixTools: MatrixTool[] = [
     name: "GitHub Copilot Enterprise",
     form: "IDE拡張 / PRレビュー",
     applyRequired: true,
-    status: "利用可能",
-    licenseCount: "残15/50",
+    status: "リストアップ",
     dev: { score: 3, note: "補完・PR" },
     doc: { score: 2, note: "Markdown" },
     research: { score: 2, note: "Chat" },
@@ -196,7 +194,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "VS Code / IntelliJ 内でのリアルタイムコード補完、GitHub pull request 自動要約・コードレビュー。",
-    securityLevel: "Level 1: 社内機密・コード投入可",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 9,
   },
@@ -207,8 +205,7 @@ const matrixTools: MatrixTool[] = [
     name: "Cursor",
     form: "AI統合エディタ",
     applyRequired: true,
-    status: "利用可能",
-    licenseCount: "残8/20",
+    status: "リストアップ",
     dev: { score: 3, note: "Composer" },
     doc: { score: 2, note: "設計メモ" },
     research: { score: 3, note: "Codebase" },
@@ -216,7 +213,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "リポジトリ全体をインデックス化し、複数ファイルにまたがるコード編集をComposerで一括適用できる開発エディタ。",
-    securityLevel: "Level 2: マスキング推奨",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 9,
     easeScore: 7,
   },
@@ -227,8 +224,7 @@ const matrixTools: MatrixTool[] = [
     name: "ChatGPT Enterprise",
     form: "Web対話 / Code Interpreter",
     applyRequired: true,
-    status: "利用可能",
-    licenseCount: "残35/100",
+    status: "リストアップ",
     dev: { score: 2, note: "Python実行" },
     doc: { score: 3, note: "高度推論" },
     research: { score: 3, note: "DeepSearch" },
@@ -236,7 +232,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "OpenAI GPT-4o / o1 を搭載したエンタープライズ対話基盤。データ分析、高度推論、カスタムGPTs作成に対応。",
-    securityLevel: "Level 2: マスキング推奨",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 9,
   },
@@ -246,8 +242,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-cyan-700 text-white",
     name: "Perplexity Enterprise",
     form: "AI検索エンジン",
-    status: "利用可能",
-    licenseCount: "全社枠あり",
+    status: "リストアップ",
     dev: { score: 1, note: "エラー調査" },
     doc: { score: 2, note: "市場レポート" },
     research: { score: 3, note: "リアルタイム" },
@@ -265,7 +260,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-black text-white",
     name: "v0 by Vercel",
     form: "UIコンポーネント生成",
-    status: "検証中",
+    status: "リストアップ",
     dev: { score: 3, note: "React/Tailwind" },
     doc: { score: 1, note: "デザイン定義" },
     research: { score: 1, note: "UIギャラリー" },
@@ -273,7 +268,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "2/4",
     coverageRatio: 0.5,
     description: "テキスト指示から即座にNext.js / Tailwind CSS / shadcn/ui準拠のUIプロトタイプを生成するフロントエンド支援ツール。",
-    securityLevel: "Level 2: マスキング必須",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 8,
   },
@@ -283,7 +278,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-orange-600 text-white",
     name: "Bolt.new",
     form: "フルスタックWeb自動構築",
-    status: "検証中",
+    status: "リストアップ",
     dev: { score: 3, note: "Node/WebContainer" },
     doc: { score: 1, note: "README" },
     research: { score: 1, note: "パッケージ調査" },
@@ -291,7 +286,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "2/4",
     coverageRatio: 0.5,
     description: "ブラウザ内のWebContainer上でフロントエンド・バックエンド・DBを同時構築し即時実行・デプロイできるツール。",
-    securityLevel: "Level 2: マスキング必須",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 7,
   },
@@ -301,7 +296,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-blue-700 text-white",
     name: "Glean",
     form: "社内横断エンタープライズ検索",
-    status: "検証中",
+    status: "リストアップ",
     dev: { score: 2, note: "GitLab/GitHub" },
     doc: { score: 2, note: "社内Wiki検索" },
     research: { score: 3, note: "全社横断" },
@@ -309,7 +304,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "Google Drive, Slack, GitHub, Jira など社内全ツールを横断してセキュアにナレッジを検索・回答するAI検索基盤。",
-    securityLevel: "Level 1: 社内機密・文書投入可",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 9,
     easeScore: 8,
   },
@@ -319,7 +314,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-purple-800 text-white",
     name: "Midjourney / Imagen 3",
     form: "画像生成 / クリエイティブ",
-    status: "検証中",
+    status: "リストアップ",
     dev: { score: 1, note: "UIアセット" },
     doc: { score: 3, note: "プレゼン素材" },
     research: { score: 1, note: "参照" },
@@ -337,7 +332,7 @@ const matrixTools: MatrixTool[] = [
     initialBg: "bg-amber-700 text-white",
     name: "Amazon Q Developer",
     form: "AWSクラウド特化AI",
-    status: "検証中",
+    status: "リストアップ",
     dev: { score: 3, note: "AWS Java/TS" },
     doc: { score: 2, note: "アーキ解説" },
     research: { score: 2, note: "AWSドキュメント" },
@@ -345,7 +340,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "3/4",
     coverageRatio: 0.75,
     description: "AWSリソースへのアクセス最適化、IAMポリシー生成、レガシーJava言語の自動バージョンアップを支援するAI。",
-    securityLevel: "Level 1: AWS VPC内限定",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 6,
   },
@@ -363,7 +358,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "3/4",
     coverageRatio: 0.75,
     description: "チームのドキュメント作成・議事録の要約・タスク管理を自動支援するワークスペースAI。",
-    securityLevel: "Level 2: マスキング推奨",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 7,
     easeScore: 8,
   },
@@ -381,7 +376,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "4/4",
     coverageRatio: 1.0,
     description: "200kトークンの大容量コンテキストと優れたコーディング・論理的推論力を誇る次世代マルチモーダル基盤モデル。",
-    securityLevel: "Level 1: セキュアAPIゲートウェイ経由",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 10,
     easeScore: 5,
   },
@@ -399,7 +394,7 @@ const matrixTools: MatrixTool[] = [
     coverage: "3/4",
     coverageRatio: 0.75,
     description: "完全社内インフラ環境にホストされたオープン推論モデル。極めて高難度の数学・アルゴリズム検証をセキュアに実行。",
-    securityLevel: "Level 1: 完全社内オンプレミス",
+    securityLevel: "Level 3: 一般公開情報のみ",
     impactScore: 8,
     easeScore: 4,
   },
@@ -586,15 +581,15 @@ export default function ToolsPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
               <span className="text-xs font-medium text-slate-500 block">掲載ツール数</span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1 block">19</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1 block">{tools.length}</span>
             </div>
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
               <span className="text-xs font-medium text-slate-500 block">利用可能</span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-sky-600 mt-1 block">7</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-sky-600 mt-1 block">{tools.filter((t) => t.status === "全社員利用可能" || t.status === "利用可能" || t.status === "社内セキュア網").length}</span>
             </div>
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs">
               <span className="text-xs font-medium text-slate-500 block">全社員利用可能</span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-emerald-600 mt-1 block">4</span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-emerald-600 mt-1 block">{tools.filter((t) => t.status === "全社員利用可能").length}</span>
             </div>
             <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-2xs flex flex-col justify-between">
               <span className="text-xs font-medium text-slate-500 block">同期ステータス</span>
@@ -695,7 +690,7 @@ export default function ToolsPage() {
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  すべて (19)
+                  すべて ({tools.length})
                 </button>
                 <button
                   onClick={() => setStatusFilter("available")}
@@ -705,7 +700,7 @@ export default function ToolsPage() {
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  利用可能 (7)
+                  利用可能 ({tools.filter((t) => t.status === "全社員利用可能" || t.status === "利用可能" || t.status === "社内セキュア網").length})
                 </button>
                 <button
                   onClick={() => setStatusFilter("verifying")}
@@ -715,7 +710,7 @@ export default function ToolsPage() {
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  検証中 (5)
+                  検証中 ({tools.filter((t) => t.status === "検証中").length})
                 </button>
                 <button
                   onClick={() => setStatusFilter("listup")}
@@ -725,7 +720,7 @@ export default function ToolsPage() {
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  リストアップ (7)
+                  リストアップ ({tools.filter((t) => t.status === "リストアップ").length})
                 </button>
               </div>
 
@@ -854,347 +849,12 @@ export default function ToolsPage() {
         )}
 
         {/* 2. クアドラントビュー */}
-        {activeTab === "quadrant" && (
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Compass className="text-indigo-600" size={20} />
-                AIツール 2軸クアドラントマップ（導入容易性 × 業務インパクト）
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                右上に位置するツールほど「導入が手軽で、かつ高い業務インパクト」を創出します。
-              </p>
-            </div>
-
-            {/* 2軸マッピング平面 */}
-            <div className="relative w-full h-[520px] bg-slate-50/70 border border-slate-200 rounded-2xl p-6 overflow-hidden">
-              {/* 軸ラベル */}
-              <div className="absolute top-4 left-6 text-xs font-bold text-slate-400">
-                ▲ 業務インパクト・自律化深度（高）
-              </div>
-              <div className="absolute bottom-4 right-6 text-xs font-bold text-slate-400">
-                導入容易性・即時性（高） ▶
-              </div>
-
-              {/* 十字線 */}
-              <div className="absolute top-0 bottom-0 left-1/2 w-px bg-slate-200 border-dashed" />
-              <div className="absolute left-0 right-0 top-1/2 h-px bg-slate-200 border-dashed" />
-
-              {/* 象限ラベル */}
-              <div className="absolute top-6 right-6 text-right opacity-30 text-xs font-extrabold text-emerald-700 uppercase">
-                Quick Win / 全社即効（最優先推奨）
-              </div>
-              <div className="absolute top-6 left-6 text-left opacity-30 text-xs font-extrabold text-indigo-700 uppercase">
-                High Impact / 高度自動化（開発・専門領域）
-              </div>
-              <div className="absolute bottom-6 right-6 text-right opacity-30 text-xs font-extrabold text-slate-600 uppercase">
-                Standard / 日常サポート
-              </div>
-
-              {/* ツールプロットバブル */}
-              {tools.map((tool) => {
-                const leftPercent = Math.min(Math.max((tool.easeScore / 10) * 88 + 6, 6), 92);
-                const bottomPercent = Math.min(Math.max((tool.impactScore / 10) * 85 + 6, 6), 92);
-
-                return (
-                  <button
-                    key={tool.id}
-                    onClick={() => setSelectedTool(tool)}
-                    style={{ left: `${leftPercent}%`, bottom: `${bottomPercent}%` }}
-                    className="absolute -translate-x-1/2 translate-y-1/2 flex items-center space-x-1.5 px-2.5 py-1.5 bg-white border border-slate-200/90 rounded-full shadow-xs hover:shadow-md hover:scale-110 hover:border-indigo-500 hover:z-20 transition-all cursor-pointer group"
-                  >
-                    <span
-                      className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black ${tool.initialBg}`}
-                    >
-                      {tool.initial}
-                    </span>
-                    <span className="text-xs font-bold text-slate-800 whitespace-nowrap">
-                      {tool.name}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* 3. カバレッジビュー */}
-        {activeTab === "coverage" && (
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-8">
-            <div>
-              <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <BarChart3 className="text-indigo-600" size={20} />
-                4大業務領域の全社AIカバレッジと推奨スタック
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                業務目的ごとに整備されている公認AIツール群の充実度とベストプラクティスです。
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* 開発・コード */}
-              <div className="border border-slate-200 rounded-xl p-5 space-y-3 bg-slate-50/50">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
-                    開発・エンジニアリング領域
-                  </h3>
-                  <span className="text-xs font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">
-                    カバレッジ: 100%
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  自律コーディング・コードレビュー・テスト自動化を完全カバー。
-                </p>
-                <div className="text-xs space-y-1.5 pt-2 border-t border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">全社推奨スタック:</span>
-                    <span className="text-slate-900 font-bold">Google Antigravity / GitHub Copilot</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">ターミナル自律修正:</span>
-                    <span className="text-slate-900 font-bold">Claude Code (社内網)</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 文書・資料作成 */}
-              <div className="border border-slate-200 rounded-xl p-5 space-y-3 bg-slate-50/50">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-                    文書・資料・メール作成領域
-                  </h3>
-                  <span className="text-xs font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">
-                    カバレッジ: 100%
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  日常のビジネス文書作成、議事録要約、企画書ドラフトを即時支援。
-                </p>
-                <div className="text-xs space-y-1.5 pt-2 border-t border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">全社推奨スタック:</span>
-                    <span className="text-slate-900 font-bold">Gemini for Workspace</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">仕様書・PDF要約:</span>
-                    <span className="text-slate-900 font-bold">NotebookLM</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 調査・分析 */}
-              <div className="border border-slate-200 rounded-xl p-5 space-y-3 bg-slate-50/50">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-600"></span>
-                    調査・市場分析・社内検索領域
-                  </h3>
-                  <span className="text-xs font-extrabold text-cyan-700 bg-cyan-100 px-2 py-0.5 rounded">
-                    カバレッジ: 95%
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  リアルタイムWeb検索と社内ナレッジのハルシネーションなき抽出。
-                </p>
-                <div className="text-xs space-y-1.5 pt-2 border-t border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">外部Web調査:</span>
-                    <span className="text-slate-900 font-bold">Perplexity Enterprise</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">社内文書照会:</span>
-                    <span className="text-slate-900 font-bold">NotebookLM / Glean (検証中)</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 業務自動化 */}
-              <div className="border border-slate-200 rounded-xl p-5 space-y-3 bg-slate-50/50">
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-slate-900 text-sm flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
-                    業務自動化・ノーコードエージェント
-                  </h3>
-                  <span className="text-xs font-extrabold text-purple-700 bg-purple-100 px-2 py-0.5 rounded">
-                    カバレッジ: 90%
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  定常タスクの自動トリガー実行、承認連動、自律ワークフロー構築。
-                </p>
-                <div className="text-xs space-y-1.5 pt-2 border-t border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">RAG・アプリ基盤:</span>
-                    <span className="text-slate-900 font-bold">Dify</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-700">ノーコード連携:</span>
-                    <span className="text-slate-900 font-bold">Google Workspace Studio</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 4. ツール診断ビュー */}
-        {activeTab === "diagnosis" && (
-          <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-8">
-            <div className="text-center max-w-xl mx-auto space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-100 shadow-2xs">
-                <Sparkles size={24} />
-              </div>
-              <h2 className="text-xl font-bold text-slate-900">
-                3問でわかる！ あなたの業務に最適なAIツール診断
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-500">
-                選択肢をタップするだけで、社内規定に適合した最適な公認ツールをご案内します。
-              </p>
-            </div>
-
-            <div className="max-w-2xl mx-auto space-y-6">
-              {/* 質問1 */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-700 block">
-                  Q1. 最も効率化したい主な業務は何ですか？
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {[
-                    { id: "dev", label: "ソースコード実装・レビュー・テスト" },
-                    { id: "doc", label: "メール作成・企画書ドラフト・議事録" },
-                    { id: "research", label: "大量の社内PDFや外部市場の調査・分析" },
-                    { id: "auto", label: "定常フローや業務システムの自動化" },
-                  ].map((opt) => (
-                    <button
-                      key={opt.id}
-                      onClick={() =>
-                        setDiagnosisAnswers({ ...diagnosisAnswers, purpose: opt.id })
-                      }
-                      className={`p-3 rounded-xl border text-xs font-bold text-left transition-all cursor-pointer ${
-                        diagnosisAnswers.purpose === opt.id
-                          ? "border-indigo-600 bg-indigo-50/70 text-indigo-900 ring-2 ring-indigo-500/20"
-                          : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 質問2 */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-700 block">
-                  Q2. どの環境で利用したいですか？
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {[
-                    { id: "browser", label: "ブラウザ上で手軽に使いたい" },
-                    { id: "ide", label: "VS Code / IDEエディタと一体化したい" },
-                  ].map((opt) => (
-                    <button
-                      key={opt.id}
-                      onClick={() =>
-                        setDiagnosisAnswers({ ...diagnosisAnswers, skillLevel: opt.id })
-                      }
-                      className={`p-3 rounded-xl border text-xs font-bold text-left transition-all cursor-pointer ${
-                        diagnosisAnswers.skillLevel === opt.id
-                          ? "border-indigo-600 bg-indigo-50/70 text-indigo-900 ring-2 ring-indigo-500/20"
-                          : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
-                      }`}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 診断結果表示 */}
-              {diagnosisAnswers.purpose && diagnosisAnswers.skillLevel && (
-                <div className="pt-6 border-t border-slate-200 animate-in fade-in zoom-in-95 duration-200 space-y-4">
-                  <div className="bg-gradient-to-br from-indigo-50 via-sky-50 to-blue-50 border border-indigo-200/80 rounded-2xl p-6 space-y-4">
-                    <span className="text-xs font-bold text-indigo-700 flex items-center gap-1.5">
-                      <CheckCircle2 size={16} />
-                      あなたにおすすめの社内公認AIツール
-                    </span>
-
-                    <div className="space-y-3">
-                      {diagnosisAnswers.purpose === "dev" && diagnosisAnswers.skillLevel === "ide" && (
-                        <div className="bg-white rounded-xl p-4 border border-indigo-100 shadow-2xs space-y-1.5">
-                          <div className="flex items-center justify-between">
-                            <h4 className="font-extrabold text-slate-900 text-base">
-                              Google Antigravity (IDE / CLI)
-                            </h4>
-                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">
-                              全社員利用可能
-                            </span>
-                          </div>
-                          <p className="text-xs text-slate-600">
-                            並列サブエージェントとSkills/Rulesにより、社内規約に則った安全かつ爆速な開発が可能です。
-                          </p>
-                          <Link
-                            href="/guide"
-                            className="inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-700 pt-1"
-                          >
-                            導入ガイドを見る <ChevronRight size={14} />
-                          </Link>
-                        </div>
-                      )}
-
-                      {diagnosisAnswers.purpose === "doc" && (
-                        <div className="bg-white rounded-xl p-4 border border-indigo-100 shadow-2xs space-y-1.5">
-                          <div className="flex items-center justify-between">
-                            <h4 className="font-extrabold text-slate-900 text-base">
-                              Gemini for Workspace
-                            </h4>
-                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">
-                              全社員利用可能
-                            </span>
-                          </div>
-                          <p className="text-xs text-slate-600">
-                            DocsやGmailのサイドパネルから申請不要で即座に文書作成・メール推敲を行えます。
-                          </p>
-                        </div>
-                      )}
-
-                      {diagnosisAnswers.purpose === "research" && (
-                        <div className="bg-white rounded-xl p-4 border border-indigo-100 shadow-2xs space-y-1.5">
-                          <div className="flex items-center justify-between">
-                            <h4 className="font-extrabold text-slate-900 text-base">
-                              NotebookLM
-                            </h4>
-                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">
-                              全社員利用可能
-                            </span>
-                          </div>
-                          <p className="text-xs text-slate-600">
-                            社内資料を放り込むだけで、根拠の明示された高精度な要約・FAQ回答を即時生成します。
-                          </p>
-                        </div>
-                      )}
-
-                      {diagnosisAnswers.purpose === "auto" && (
-                        <div className="bg-white rounded-xl p-4 border border-indigo-100 shadow-2xs space-y-1.5">
-                          <div className="flex items-center justify-between">
-                            <h4 className="font-extrabold text-slate-900 text-base">
-                              Dify / Google Workspace Studio
-                            </h4>
-                            <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-100 text-emerald-800">
-                              全社員利用可能
-                            </span>
-                          </div>
-                          <p className="text-xs text-slate-600">
-                            社内RAG検索アプリや承認ワークフローをノーコードで迅速に構築・自動化できます。
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+        {activeTab !== "matrix" && (
+          <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 space-y-2">
+            <p className="text-sm font-bold text-slate-700">🚧 工事中：社内での確認が済むまで表示しません</p>
+            <p className="text-xs">
+              クアドラント・カバレッジ・ツール診断は、ツールの評価や「おすすめ」を含むため、社内で内容を確認してから公開します。
+            </p>
           </div>
         )}
       </div>
