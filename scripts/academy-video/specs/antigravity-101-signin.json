@@ -77,37 +77,109 @@
     {
       "title": "サインインと初期設定",
       "bullets": [
-        "ブラウザに「アカウントを選択してください」と表示されるので、会社の…",
-        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
-        "ブラウザに表示される「Open Antigravity」をクリック…"
+        "ブラウザに「アカウントを選択してください」と表示されるので、会社の…"
       ],
       "highlight": 0,
       "say": "ブラウザに「アカウントを選択してください」と表示されるので、会社のアカウント（@ml-mightylink.com）を選ぶ。"
     },
     {
       "title": "サインインと初期設定",
+      "say": "「You have successfully authenticated.」と表示され、アプリを開くかどうか聞かれます。",
+      "image": "S3-account-chooser.png"
+    },
+    {
+      "title": "サインインと初期設定",
       "bullets": [
-        "ブラウザに「アカウントを選択してください」と表示されるので、会社の…",
-        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
-        "ブラウザに表示される「Open Antigravity」をクリック…"
+        "「Antigravity - Agentic Desktop Ap…"
+      ],
+      "highlight": 0,
+      "say": "「Antigravity - Agentic Desktop Application を開く」をクリックしてアプリに戻る。"
+    },
+    {
+      "title": "サインインと初期設定",
+      "say": "画面では、このように表示されます。",
+      "image": "S5-open-app.png"
+    },
+    {
+      "title": "プロジェクトを指定する（Select your license）",
+      "bullets": [
+        "「Provide Google Cloud Project」の欄に…",
+        "「Next」をクリック"
+      ],
+      "highlight": 0,
+      "say": "「Provide Google Cloud Project」の欄に、AI推進担当から案内されたプロジェクト ID を入力する。"
+    },
+    {
+      "title": "プロジェクトを指定する（Select your license）",
+      "bullets": [
+        "「Provide Google Cloud Project」の欄に…",
+        "「Next」をクリック"
       ],
       "highlight": 1,
-      "say": "会社の Google Cloud プロジェクトを選ぶ（プロジェクト ID は AI推進担当から案内されます）。"
+      "say": "「Next」をクリック。"
     },
     {
-      "title": "サインインと初期設定",
+      "title": "プロジェクトを指定する（Select your license）",
+      "say": "画面では、このように表示されます。",
+      "image": "S6-project-id.png"
+    },
+    {
+      "title": "プロジェクトを指定する（Select your license）",
       "bullets": [
-        "ブラウザに「アカウントを選択してください」と表示されるので、会社の…",
-        "会社の Google Cloud プロジェクトを選ぶ（プロジェクト…",
-        "ブラウザに表示される「Open Antigravity」をクリック…"
+        "「Choose Region」は「Global」のままにする",
+        "その下にある「Use Agent Platform instead…",
+        "「Next」をクリック"
+      ],
+      "highlight": 0,
+      "say": "「Choose Region」は「Global」のままにする。"
+    },
+    {
+      "title": "プロジェクトを指定する（Select your license）",
+      "bullets": [
+        "「Choose Region」は「Global」のままにする",
+        "その下にある「Use Agent Platform instead…",
+        "「Next」をクリック"
+      ],
+      "highlight": 1,
+      "say": "その下にある「Use Agent Platform instead」をクリックして選ぶ。"
+    },
+    {
+      "title": "プロジェクトを指定する（Select your license）",
+      "bullets": [
+        "「Choose Region」は「Global」のままにする",
+        "その下にある「Use Agent Platform instead…",
+        "「Next」をクリック"
       ],
       "highlight": 2,
-      "say": "ブラウザに表示される「Open Antigravity」をクリックしてアプリに戻る。"
+      "say": "「Next」をクリック。"
     },
     {
-      "title": "サインインと初期設定",
-      "say": "ポイントです。「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。",
-      "image": "S3-account-chooser.png"
+      "title": "プロジェクトを指定する（Select your license）",
+      "say": "ポイントです。赤い「No license available for this project and location」は、会社が Gemini Enterprise のライセンスを契約していないという意味です。当社は使った分だけ払う Agent Platform で利用するので、表示されたままで問題ありません。ポイントです。「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。",
+      "image": "S7-agent-platform.png"
+    },
+    {
+      "title": "利用規約を確認して完了",
+      "bullets": [
+        "「Terms of Service & Data Use」の内容を…",
+        "「Finish」をクリックすると、メイン画面が開く"
+      ],
+      "highlight": 0,
+      "say": "「Terms of Service & Data Use」の内容を確認する。"
+    },
+    {
+      "title": "利用規約を確認して完了",
+      "bullets": [
+        "「Terms of Service & Data Use」の内容を…",
+        "「Finish」をクリックすると、メイン画面が開く"
+      ],
+      "highlight": 1,
+      "say": "「Finish」をクリックすると、メイン画面が開く。"
+    },
+    {
+      "title": "利用規約を確認して完了",
+      "say": "注意してください。利用規約にもあるとおり、AI エージェントにはコードの自動実行や情報流出などのリスクがあります。エージェントの操作は必ず自分で確認してください。",
+      "image": "S8-terms-finish.png"
     },
     {
       "title": "個人で学習する場合",
@@ -115,54 +187,10 @@
       "lead": "「Continue with Google」を選び、個人の Google アカウントでログインします。業務の情報は入力しないでください。"
     },
     {
-      "title": "初期設定",
-      "bullets": [
-        "テーマ（画面の色）を選ぶ",
-        "Google プラグインの選択は、分からなければ何も選ばずに進む",
-        "利用規約を確認して「Accept」",
-        "「Finish」をクリックすると、メイン画面が開く"
-      ],
-      "highlight": 0,
-      "say": "テーマ（画面の色）を選ぶ。"
-    },
-    {
-      "title": "初期設定",
-      "bullets": [
-        "テーマ（画面の色）を選ぶ",
-        "Google プラグインの選択は、分からなければ何も選ばずに進む",
-        "利用規約を確認して「Accept」",
-        "「Finish」をクリックすると、メイン画面が開く"
-      ],
-      "highlight": 1,
-      "say": "Google プラグインの選択は、分からなければ何も選ばずに進む。"
-    },
-    {
-      "title": "初期設定",
-      "bullets": [
-        "テーマ（画面の色）を選ぶ",
-        "Google プラグインの選択は、分からなければ何も選ばずに進む",
-        "利用規約を確認して「Accept」",
-        "「Finish」をクリックすると、メイン画面が開く"
-      ],
-      "highlight": 2,
-      "say": "利用規約を確認して「Accept」。"
-    },
-    {
-      "title": "初期設定",
-      "bullets": [
-        "テーマ（画面の色）を選ぶ",
-        "Google プラグインの選択は、分からなければ何も選ばずに進む",
-        "利用規約を確認して「Accept」",
-        "「Finish」をクリックすると、メイン画面が開く"
-      ],
-      "highlight": 3,
-      "say": "「Finish」をクリックすると、メイン画面が開く。"
-    },
-    {
       "title": "まとめ",
-      "say": "まとめです。業務では「Use business account」で会社アカウントにサインインし、会社のプロジェクトを選びます。初期設定はテーマ選択 → プラグイン（飛ばしてOK）→ Accept → Finish の順です。",
-      "lead": "業務では「Use business account」で会社アカウントにサインインし、会社のプロジェクトを選びます。初期設定はテーマ選択 → プラグイン（飛ばしてOK）→ Accept → Finish の順です。",
-      "speak": "まとめです。業務では「Use business account」で会社アカウントにサインインし、会社のプロジェクトを選びます。初期設定はテーマ選択、プラグイン（飛ばしてOK）、Accept、Finish の順です。"
+      "say": "まとめです。業務では「Use business account」→「Continue with Google Cloud」で会社アカウントにサインインします。アプリに戻ったらプロジェクト ID を入力し、「Use Agent Platform instead」を選んで、利用規約を確認して「Finish」です。",
+      "lead": "業務では「Use business account」→「Continue with Google Cloud」で会社アカウントにサインインします。アプリに戻ったらプロジェクト ID を入力し、「Use Agent Platform instead」を選んで、利用規約を確認して「Finish」です。",
+      "speak": "まとめです。業務では「Use business account」、「Continue with Google Cloud」で会社アカウントにサインインします。アプリに戻ったらプロジェクト ID を入力し、「Use Agent Platform instead」を選んで、利用規約を確認して「Finish」です。"
     }
   ]
 }

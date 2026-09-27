@@ -280,9 +280,7 @@ export const courses: Course[] = [
           {
             "type": "steps",
             "items": [
-              "ブラウザに「アカウントを選択してください」と表示されるので、会社のアカウント（@ml-mightylink.com）を選ぶ",
-              "会社の Google Cloud プロジェクトを選ぶ（プロジェクト ID は AI推進担当から案内されます）",
-              "ブラウザに表示される「Open Antigravity」をクリックしてアプリに戻る"
+              "ブラウザに「アカウントを選択してください」と表示されるので、会社のアカウント（@ml-mightylink.com）を選ぶ"
             ]
           },
           {
@@ -291,8 +289,78 @@ export const courses: Course[] = [
             "alt": "ブラウザでアカウントを選ぶ画面"
           },
           {
+            "type": "p",
+            "text": "「You have successfully authenticated.」と表示され、アプリを開くかどうか聞かれます。"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "「Antigravity - Agentic Desktop Application を開く」をクリックしてアプリに戻る"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "S5-open-app.png",
+            "alt": "認証が終わり、アプリを開くか聞かれる画面"
+          },
+          {
+            "type": "h",
+            "id": "license",
+            "text": "プロジェクトを指定する（Select your license）"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "「Provide Google Cloud Project」の欄に、AI推進担当から案内されたプロジェクト ID を入力する",
+              "「Next」をクリック"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "S6-project-id.png",
+            "alt": "プロジェクト ID を入力する画面（ID は伏せています）"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "「Choose Region」は「Global」のままにする",
+              "その下にある「Use Agent Platform instead」をクリックして選ぶ",
+              "「Next」をクリック"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "S7-agent-platform.png",
+            "alt": "Use Agent Platform instead を選ぶ画面"
+          },
+          {
+            "type": "tip",
+            "text": "赤い「No license available for this project and location」は、会社が Gemini Enterprise のライセンスを契約していないという意味です。当社は使った分だけ払う Agent Platform で利用するので、表示されたままで問題ありません。"
+          },
+          {
             "type": "tip",
             "text": "「権限がない」などと表示された場合は、管理者側の設定（導入ガイドの A1〜A3）が終わっていない可能性があります。表示されたメッセージをそのまま AI推進担当に送ってください。"
+          },
+          {
+            "type": "h",
+            "id": "terms",
+            "text": "利用規約を確認して完了"
+          },
+          {
+            "type": "steps",
+            "items": [
+              "「Terms of Service & Data Use」の内容を確認する",
+              "「Finish」をクリックすると、メイン画面が開く"
+            ]
+          },
+          {
+            "type": "image",
+            "file": "S8-terms-finish.png",
+            "alt": "利用規約の確認と Finish の画面"
+          },
+          {
+            "type": "warn",
+            "text": "利用規約にもあるとおり、AI エージェントにはコードの自動実行や情報流出などのリスクがあります。エージェントの操作は必ず自分で確認してください。"
           },
           {
             "type": "link",
@@ -310,31 +378,12 @@ export const courses: Course[] = [
           },
           {
             "type": "h",
-            "id": "setup",
-            "text": "初期設定"
-          },
-          {
-            "type": "steps",
-            "items": [
-              "テーマ（画面の色）を選ぶ",
-              "Google プラグインの選択は、分からなければ何も選ばずに進む",
-              "利用規約を確認して「Accept」",
-              "「Finish」をクリックすると、メイン画面が開く"
-            ]
-          },
-          {
-            "type": "shot",
-            "alt": "テーマ選択〜Finish の画面",
-            "todo": "初回起動時に表示されるテーマ選択・プラグイン選択・利用規約・Finish の各画面"
-          },
-          {
-            "type": "h",
             "id": "recap",
             "text": "まとめ"
           },
           {
             "type": "p",
-            "text": "業務では「Use business account」で会社アカウントにサインインし、会社のプロジェクトを選びます。初期設定はテーマ選択 → プラグイン（飛ばしてOK）→ Accept → Finish の順です。"
+            "text": "業務では「Use business account」→「Continue with Google Cloud」で会社アカウントにサインインします。アプリに戻ったらプロジェクト ID を入力し、「Use Agent Platform instead」を選んで、利用規約を確認して「Finish」です。"
           }
         ],
       },
