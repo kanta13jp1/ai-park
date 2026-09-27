@@ -21,6 +21,7 @@ const clip = (t, n) => (t.length > n ? `${t.slice(0, n - 1)}…` : t);
 // 読み上げ専用の置き換え（字幕は正しい表記のまま）
 const forSpeech = (t) =>
   t
+    .replace(/Worked for (\d+)s/g, "Worked for $1秒")
     .replace(/\bagy\b/g, "エー・ジー・ワイ")
     .replace(/git add \. && git commit -m "\.\.\."/g, "git add と git commit")
     .replace(/ -c feature\/xxx/g, "")
@@ -50,7 +51,11 @@ for (const course of courses) {
       if (b.type === "h") {
         push();
         cur = { title: b.text, bullets: [], say: "" };
-      } else if (b.type === "p") ensure().say += sentence(b.text);
+      } else if (b.type === "p") {
+        // 画像の説明が済んだあとの段落は、次の画像のためのスライドに分ける
+        if (cur?.image && cur.say) push();
+        ensure().say += sentence(b.text);
+      }
       else if (b.type === "steps") {
         // 手順は1項目ずつスライドを分け、読んでいる項目を強調表示する
         // 直前の説明文は、画像があれば画像のスライドに残し、無ければ最初の手順のスライドで読む

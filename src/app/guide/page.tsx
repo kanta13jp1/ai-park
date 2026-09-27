@@ -79,7 +79,7 @@ export default function GuidePage() {
         "入力欄の下の「Local」は自分の PC のフォルダで作業するという意味です。最初はそのままでOK",
       ],
       note: "頼み方のコツは「教育用コンテンツ」の初級編チートシートを参照。右上の「Open IDE」は STEP 7 で IDE を入れた場合に使います。",
-      image: "G5-main.png",
+      image: ["G5-main.png", "L4-running.png", "L5-answer.png"],
       imageAlt: "メイン画面（プロジェクト追加・New Conversation・Settings の場所）",
     },
     {
