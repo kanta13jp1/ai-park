@@ -5,7 +5,8 @@
 export const TOOLS_SHEET_CSV_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vR49_QiMXyFDle6USwoDRRIzfjljOR0QRHpEWJN-ncHMoxOxR3VdasIjgixvyz43JkQ2aAEGO_aFqCk/pub?gid=895015812&single=true&output=csv";
 
-type Score = 1 | 2 | 3;
+// 0 = 未評価（シートの点数が空欄）
+type Score = 0 | 1 | 2 | 3;
 
 export interface SheetTool {
   id: number;
@@ -73,8 +74,9 @@ export function parseCsv(text: string): string[][] {
 }
 
 const toScore = (v: string): Score => {
+  if (v.trim() === "") return 0;
   const n = Number(v);
-  return n >= 3 ? 3 : n >= 2 ? 2 : 1;
+  return n >= 3 ? 3 : n >= 2 ? 2 : n >= 1 ? 1 : 0;
 };
 
 const toNumber = (v: string, fallback: number) => {
