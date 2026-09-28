@@ -45,21 +45,31 @@ function addAgendaToStudySessions() {
   });
 }
 
-/** GitHub の公開 Issue から AI Park の状況を集める（test ラベルは除外） */
+/**
+ * AI Park の状況（公開 Issue の一覧）を集める（test ラベルは除外）
+ * GitHub API を直接呼ぶと Google の共有 IP の上限（403）に当たりやすいため、
+ * サイトが公開している park-status.json を優先して読み、失敗したときだけ GitHub API を使う。
+ */
 function fetchParkStatus_() {
-  const url =
-    "https://api.github.com/repos/" + CONFIG.GITHUB_REPO + "/issues?state=open&per_page=100&sort=created&direction=desc";
-  const res = UrlFetchApp.fetch(url, {
-    headers: { Accept: "application/vnd.github+json" },
-    muteHttpExceptions: true,
-  });
-  if (res.getResponseCode() !== 200) {
-    console.warn("GitHub API " + res.getResponseCode());
-    return null;
+  const sources = [
+    CONFIG.SITE_URL + "/park-status.json",
+    "https://api.github.com/repos/" + CONFIG.GITHUB_REPO + "/issues?state=open&per_page=100&sort=created&direction=desc",
+  ];
+  let issues = null;
+  for (const url of sources) {
+    const res = UrlFetchApp.fetch(url, {
+      headers: { Accept: "application/vnd.github+json" },
+      muteHttpExceptions: true,
+    });
+    if (res.getResponseCode() === 200) {
+      issues = JSON.parse(res.getContentText()).filter(
+        (i) => !i.pull_request && !i.labels.some((l) => l.name === "test")
+      );
+      break;
+    }
+    console.warn(url + " -> " + res.getResponseCode());
   }
-  const issues = JSON.parse(res.getContentText()).filter(
-    (i) => !i.pull_request && !i.labels.some((l) => l.name === "test")
-  );
+  if (!issues) return null;
   const byLabel = (name) => issues.filter((i) => i.labels.some((l) => l.name === name));
   return {
     feedback: byLabel("feedback"),

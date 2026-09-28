@@ -76,7 +76,7 @@ const jumpSections: JumpSection[] = [
     borderColor: "border-rose-200 hover:border-rose-400",
     bgActive: "bg-rose-50/60 border-rose-500",
     items: [
-      { name: "AI Park カレンダー", href: "/calendar", desc: "社内AI勉強会・イベントの予定（カレンダー接続の準備中）", badge: "🚧 工事中" },
+      { name: "AI Park カレンダー", href: "/calendar", desc: "社内AI勉強会・イベントの予定（社内アカウントで表示）", badge: "β版" },
       { name: "ご意見・改善ToDo", href: "/feedback-todo", desc: "社員からのご意見・改善要望の管理ボード", badge: "β版" },
       { name: "社内AIアンバサダー", href: "/ambassadors", desc: "第1期アンバサダーの応募受付", badge: "📋 準備中" },
       { name: "AI推進担当に相談する", href: "/contact", desc: "導入や使い方の相談・お問い合わせ" },

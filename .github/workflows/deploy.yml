@@ -3,10 +3,14 @@ name: Deploy Next.js site to GitHub Pages
 on:
   push:
     branches: ["main"]
+  # AI勉強会アジェンダ用の状況ファイル（park-status.json）を最新に保つため、Issue の変化でも再デプロイする
+  issues:
+    types: [opened, edited, closed, reopened, labeled, unlabeled]
   workflow_dispatch:
 
 permissions:
   contents: read
+  issues: read
   pages: write
   id-token: write
 
@@ -55,6 +59,17 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.runner }} next build --webpack
         env:
           NODE_ENV: production
+
+      # Google Apps Script から GitHub API を直接呼ぶと共有 IP の上限（403）に当たるため、
+      # 公開 Issue の一覧をサイトの静的ファイルとして出しておく（test ラベルは除外）
+      - name: Export park status for the agenda script
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/${{ github.repository }}/issues?state=open&per_page=100&sort=created&direction=desc" \
+            | jq '[.[] | select(.pull_request | not) | select([.labels[].name] | index("test") | not)
+                   | {number, title, labels: [.labels[] | {name}]}]' > out/park-status.json
+          echo "open issues: $(jq length out/park-status.json)"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

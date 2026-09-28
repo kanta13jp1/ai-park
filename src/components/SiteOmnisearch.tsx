@@ -109,7 +109,7 @@ const siteSearchIndex: SearchIndexItem[] = [
     title: "AI Park カレンダー",
     category: "コミュニティ・イベント",
     href: "/calendar",
-    description: "社内AI勉強会などのイベント予定（工事中：カレンダー接続の準備中）",
+    description: "社内AI勉強会などのイベント予定（社内アカウントで表示）、AI勉強会アジェンダの自動追加",
     keywords: ["カレンダー", "予定", "勉強会", "イベント", "スケジュール", "アジェンダ", "gas", "office hour"],
   },
   {
