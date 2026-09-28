@@ -123,7 +123,7 @@ const tasksData: TaskItem[] = [
     targetDate: "2026年10月16日(金)",
     status: "in-progress",
     currentVerificationBadge: "β版",
-    releaseCondition: "修了者の社内記録（AI推進担当での管理）方法の決定",
+    releaseCondition: "修了報告の受付（Google Chat）と AI推進担当 での記録",
     category: "interaction",
     icon: "🎓",
     description: "3コース・12レッスンの動画付き学習コースと評価テスト・修了証を公開しました。",
@@ -131,7 +131,7 @@ const tasksData: TaskItem[] = [
       { text: "3コース・12レッスン（画面キャプチャ付き）", done: true },
       { text: "全レッスンの動画（読み上げ・字幕付き）", done: true },
       { text: "評価テストと修了証（ブラウザ内保存）", done: true },
-      { text: "修了者の社内記録方法の決定", done: false },
+      { text: "修了報告（報告文をコピーして Google Chat で AI推進担当 に送る）", done: true },
     ],
   },
   {

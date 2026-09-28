@@ -32,6 +32,79 @@ function CodeBlock({ label, text }: { label?: string; text: string }) {
   );
 }
 
+// 修了の社内記録：公開の GitHub には載せず、報告文をコピーして Google Chat で AI推進担当 に送ってもらう
+function CompletionReport({
+  courseTitle,
+  learnerName,
+  score,
+  completedAt,
+  certificateId,
+}: {
+  courseTitle: string;
+  learnerName: string;
+  score: number;
+  completedAt: string;
+  certificateId: string;
+}) {
+  const [dept, setDept] = useState("");
+  const [copied, setCopied] = useState(false);
+  const text = [
+    "【Antigravity Academy 修了報告】",
+    `コース: ${courseTitle}`,
+    `氏名: ${learnerName}`,
+    `部署: ${dept}`,
+    `評価テスト: ${Math.round(score * 100)}%`,
+    `修了日: ${new Date(completedAt).toLocaleDateString("ja-JP")}`,
+    `修了証番号: ${certificateId}`,
+  ].join("\n");
+  const ready = learnerName.trim() !== "" && dept.trim() !== "";
+  return (
+    <div className="print:hidden bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
+      <div className="space-y-1">
+        <h3 className="font-bold text-sm text-slate-900">修了を AI推進担当 に報告する</h3>
+        <p className="text-xs text-slate-600 leading-relaxed">
+          報告すると、AI推進担当 が修了者として記録します（記録は社内のみで、このサイトには載りません）。報告文をコピーして、Google Chat で AI推進担当（担当：梅澤）に送ってください。
+          このボタンだけでは送信されません。
+        </p>
+      </div>
+      <div className="flex flex-wrap items-end gap-3">
+        <label className="text-xs text-slate-700 space-y-1">
+          <span className="font-bold block">部署</span>
+          <input
+            value={dept}
+            onChange={(e) => setDept(e.target.value)}
+            placeholder="例: クラウド開発部"
+            className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
+          />
+        </label>
+        <button
+          onClick={() =>
+            navigator.clipboard?.writeText(text).then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 2000);
+            })
+          }
+          disabled={!ready}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-bold disabled:opacity-40 cursor-pointer"
+        >
+          {copied ? <Check size={15} /> : <Copy size={15} />}
+          {copied ? "コピーしました" : "報告文をコピー"}
+        </button>
+        <a
+          href="https://chat.google.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:underline"
+        >
+          Google Chat を開く <ExternalLink size={12} />
+        </a>
+      </div>
+      {!ready && <p className="text-[11px] text-slate-500">上の「修了証に載せる氏名」と部署を入力すると、報告文をコピーできます。</p>}
+      <pre className="text-xs text-slate-700 bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 whitespace-pre-wrap font-sans">{text}</pre>
+    </div>
+  );
+}
+
 function PromptCard({ label, text }: { label?: string; text: string }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -394,6 +467,13 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                     <p className="pt-2 font-bold text-slate-700">MightyLINK AI推進担当 / AI Park</p>
                   </div>
                 </div>
+                <CompletionReport
+                  courseTitle={course.title}
+                  learnerName={progress.learnerName ?? ""}
+                  score={progress.bestScore ?? 0}
+                  completedAt={progress.completedAt}
+                  certificateId={progress.certificateId}
+                />
               </div>
             ) : (
               <div className="bg-white border border-slate-200 rounded-2xl text-center py-12 space-y-2">

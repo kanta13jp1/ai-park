@@ -216,11 +216,11 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     href: "/academy",
     isVerified: true,
     status: "verified",
-    evidence: "導入ガイド・注意事項と同じ公式ドキュメント／実機画面で確認済みの内容で3コース・12レッスン・評価テスト15問を公開。進捗と修了証はブラウザ内保存",
+    evidence: "導入ガイド・注意事項と同じ公式ドキュメント／実機画面で確認済みの内容で3コース・12レッスン・評価テスト15問・全レッスンの動画を公開。進捗と修了証はブラウザ内保存、修了報告は報告文をコピーして Google Chat で送る",
     currentBadge: "β版",
     disclaimer: "",
     releaseDate: "2026年10月16日(金)",
-    releaseCondition: "動画レッスンの収録・追加と、修了者の社内記録（AI推進担当 での管理）方法の決定",
+    releaseCondition: "修了報告の受付（Google Chat）と AI推進担当 での記録",
   },
   {
     id: "idea-board",
