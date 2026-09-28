@@ -270,15 +270,19 @@ const tasksData: TaskItem[] = [
     title: "アイデア宣言ボードの受付開始",
     pageName: "アイデア宣言ボード",
     href: "/idea-board",
-    phase: "Phase 3",
-    targetDate: "未定",
-    status: "planned",
-    currentVerificationBadge: "🚧 工事中",
-    releaseCondition: "宣言を保存・共有できる仕組み（GitHub Issues など）との連携",
+    phase: "Phase 2",
+    targetDate: "2026年9月28日(月)",
+    status: "completed",
+    currentVerificationBadge: "β版",
+    releaseCondition: "宣言を保存・共有できる仕組み（GitHub Issues）との連携",
     category: "interaction",
     icon: "💡",
-    description: "アイデアの宣言を保存・共有できるようにします。それまでは Google Chat の「AI勉強会」スペースで受け付けます。",
-    items: [{ text: "宣言を保存・共有できる仕組みとの連携", done: false }],
+    description: "アイデアの宣言を GitHub Issue で受け付け、ボードに自動掲載し、Google Chat に通知するようにしました。",
+    items: [
+      { text: "宣言フォーム（GitHub Issue フォーム）", done: true },
+      { text: "ボードへの自動掲載・状況と協力者募集での絞り込み・キーワード検索", done: true },
+      { text: "宣言・終了時の Google Chat 通知", done: true },
+    ],
   },
   {
     id: "tools-policy",
@@ -438,7 +442,7 @@ export default function RoadmapPage() {
                 <span className="text-[10px] text-amber-600 font-medium">11月中</span>
               </div>
               <h4 className="font-bold text-slate-800 text-xs mt-1">工事中ページの内容準備</h4>
-              <p className="text-[11px] text-slate-600">利用状況の実データ、事例・Skills、アイデアボード、ツール方針</p>
+              <p className="text-[11px] text-slate-600">利用状況の実データ、事例・Skills、ツール方針</p>
             </div>
 
             <div className="p-3.5 rounded-xl border border-purple-200 bg-purple-50/50 space-y-1">

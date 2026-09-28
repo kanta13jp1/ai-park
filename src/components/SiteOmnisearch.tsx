@@ -67,7 +67,7 @@ const siteSearchIndex: SearchIndexItem[] = [
     title: "アイデア宣言ボード",
     category: "共創",
     href: "/idea-board",
-    description: "AI活用のアイデアを宣言して協力者を募る場所（工事中）、AIビジネスモデル提案コンテスト（暫定版）",
+    description: "AI活用のアイデアを宣言して協力者を募る場所（GitHub Issue で受付・Google Chat に通知）、AIビジネスモデル提案コンテスト（暫定版）",
     keywords: ["アイデア", "宣言", "ボード", "共創", "いいね", "poc", "slack", "提案"],
   },
   {

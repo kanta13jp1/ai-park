@@ -1,0 +1,61 @@
+name: AIアイデア宣言
+description: AIで自動化したい業務や、作りたいエージェントのアイデアを宣言します（アイデア宣言ボードに自動掲載されます）
+title: "[アイデア] "
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        このリポジトリは公開されています。顧客名・個人情報・案件のコードネーム・社外秘の数値は書かず、一般化した業務名でご記入ください。
+        構想段階でもOKです。宣言したからといって、必ず作る義務はありません。
+        進み具合が変わったら、この Issue を編集して「状況」を更新してください。やめる・完成して報告も済んだら Close してください。
+  - type: input
+    id: dept
+    attributes:
+      label: 部署 / チーム
+      placeholder: 例: クラウド開発部
+    validations:
+      required: true
+  - type: input
+    id: author
+    attributes:
+      label: 宣言者
+      placeholder: 例: 山田（チームでの宣言なら代表者）
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: 状況
+      options:
+        - アイデア段階
+        - 作っている
+        - 完成・使っている
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 困っていること（誰が・どんな作業で・どのくらい時間がかかっているか）
+      placeholder: 例: 週次定例の前に、各案件のチケットを見て進み具合をまとめる作業に毎週2時間かかっている
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: AIにどうさせたいか
+      placeholder: 例: チケットの更新内容を毎朝まとめて、遅れていそうな案件を箇条書きで Chat に投稿する
+    validations:
+      required: true
+  - type: input
+    id: tools
+    attributes:
+      label: 使いたいAIツール（分かれば）
+      placeholder: 例: Antigravity, Gemini
+  - type: dropdown
+    id: help
+    attributes:
+      label: 協力者を募集しますか？
+      options:
+        - 募集する
+        - 今は募集しない

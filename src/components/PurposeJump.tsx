@@ -60,7 +60,7 @@ const jumpSections: JumpSection[] = [
     bgActive: "bg-purple-50/60 border-purple-500",
     items: [
       { name: "社内AIプロジェクト一覧", href: "/ai-projects", desc: "各部署の実践事例・進捗可視化・自動掲載", badge: "新着" },
-      { name: "アイデア宣言ボード", href: "/idea-board", desc: "AI活用のアイデアを宣言して協力者を募る場所", badge: "🚧 工事中" },
+      { name: "アイデア宣言ボード", href: "/idea-board", desc: "AI活用のアイデアを宣言して協力者を募る場所", badge: "β版" },
       { name: "Subagents活用事例", href: "/agent-cases", desc: "社内でのエージェント活用事例", badge: "🚧 工事中" },
       { name: "Gemini利用率", href: "/gemini-stats", desc: "部署別利用回数の統計（実データ連携の準備中）", badge: "🚧 工事中" },
       { name: "社内AI活用状況", href: "/adoption", desc: "全社・部署ごとの AI 活用状況（実データ連携の準備中）", badge: "🚧 工事中" },

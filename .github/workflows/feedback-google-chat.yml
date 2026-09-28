@@ -13,7 +13,8 @@ jobs:
       contains(github.event.issue.labels.*.name, 'feedback') ||
       contains(github.event.issue.labels.*.name, 'interview') ||
       contains(github.event.issue.labels.*.name, 'ai-project') ||
-      contains(github.event.issue.labels.*.name, 'ambassador')
+      contains(github.event.issue.labels.*.name, 'ambassador') ||
+      contains(github.event.issue.labels.*.name, 'idea')
     runs-on: ubuntu-latest
     steps:
       - name: Post to Google Chat
@@ -28,18 +29,22 @@ jobs:
           IS_INTERVIEW: ${{ contains(github.event.issue.labels.*.name, 'interview') }}
           IS_PROJECT: ${{ contains(github.event.issue.labels.*.name, 'ai-project') }}
           IS_AMBASSADOR: ${{ contains(github.event.issue.labels.*.name, 'ambassador') }}
+          IS_IDEA: ${{ contains(github.event.issue.labels.*.name, 'idea') }}
         run: |
           if [ -z "$WEBHOOK_URL" ]; then
             echo "GOOGLE_CHAT_WEBHOOK_URL が未設定のため通知をスキップします"
             exit 0
           fi
           SITE="https://${GITHUB_REPOSITORY_OWNER}.github.io/ai-park"
-          if [ "$IS_AMBASSADOR" = "true" ]; then KIND=ambassador; PAGE="$SITE/ambassadors"
+          if [ "$IS_IDEA" = "true" ]; then KIND=idea; PAGE="$SITE/idea-board"
+          elif [ "$IS_AMBASSADOR" = "true" ]; then KIND=ambassador; PAGE="$SITE/ambassadors"
           elif [ "$IS_PROJECT" = "true" ]; then KIND=project; PAGE="$SITE/ai-projects"
           elif [ "$IS_INTERVIEW" = "true" ]; then KIND=interview; PAGE="$SITE/interviews"
           else KIND=feedback; PAGE="$SITE/feedback-todo"; fi
 
           case "$KIND:$ACTION" in
+            idea:opened)        HEAD="💡 AIアイデアが宣言されました" ;;
+            idea:closed)        HEAD="🏁 AIアイデアの宣言が終了しました" ;;
             ambassador:opened)  HEAD="🤝 AIアンバサダーへの応募がありました" ;;
             ambassador:closed)  HEAD="✅ アンバサダー応募の対応が完了しました" ;;
             project:opened)     HEAD="🏢 社内AIプロジェクトが登録されました" ;;
