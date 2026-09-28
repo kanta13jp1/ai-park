@@ -3,7 +3,7 @@ import { CalendarDays, Lock, Sparkles } from "lucide-react";
 
 // 「AI Park イベント」カレンダーのカレンダーID（社内限定で共有。gas/ai-study-agenda/README.md 参照）
 // 未設定の間は設定待ちの案内を表示する
-const AI_PARK_CALENDAR_ID = "";
+const AI_PARK_CALENDAR_ID = "c_54efbf0cb034ce399450784c14c91910006003253eb98ca8ff161f5ba16ad1a7@group.calendar.google.com";
 
 const embedUrl = (mode: "MONTH" | "AGENDA") =>
   `https://calendar.google.com/calendar/embed?${new URLSearchParams({

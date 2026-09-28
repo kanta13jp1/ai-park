@@ -10,7 +10,7 @@
 // ===== 設定 =====
 const CONFIG = {
   // 「AI Park イベント」カレンダーのカレンダーID（カレンダーの設定 →「カレンダーの統合」に表示）
-  CALENDAR_ID: "",
+  CALENDAR_ID: "c_54efbf0cb034ce399450784c14c91910006003253eb98ca8ff161f5ba16ad1a7@group.calendar.google.com",
   // この文字列をタイトルに含む予定を対象にする
   TITLE_KEYWORD: "AI勉強会",
   // 何日先までの予定を確認するか
@@ -66,12 +66,13 @@ function fetchParkStatus_() {
     projects: byLabel("ai-project"),
     interviews: byLabel("interview"),
     ambassadors: byLabel("ambassador"),
+    ideas: byLabel("idea"),
   };
 }
 
 /**
  * アジェンダ本文を組み立てる（外部 API を使わない純粋関数）
- * @param {?{feedback: Object[], projects: Object[], interviews: Object[], ambassadors: Object[]}} status
+ * @param {?{feedback: Object[], projects: Object[], interviews: Object[], ambassadors: Object[], ideas: Object[]}} status
  * @param {Date} start 予定の開始日時
  * @param {string} siteUrl
  */
@@ -97,6 +98,7 @@ function buildAgenda(status, start, siteUrl) {
       "4. 社内AIプロジェクトの共有（" + status.projects.length + "件・10分）",
       list(status.projects, "新しい登録はありません"),
       "・一覧：" + siteUrl + "/ai-projects",
+      "・アイデア宣言 " + status.ideas.length + "件：" + siteUrl + "/idea-board",
       "",
       "5. 取材立候補・アンバサダー応募の確認（5分）",
       "・取材立候補 " + status.interviews.length + "件 / アンバサダー応募 " + status.ambassadors.length + "件"
