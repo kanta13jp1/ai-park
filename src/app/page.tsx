@@ -227,6 +227,36 @@ export default function Home() {
             </Link>
           </div>
 
+          {/* Antigravity Academy 特設バナー */}
+          <Link
+            href="/academy"
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-gradient-to-r from-indigo-950 via-indigo-900 to-purple-950 text-white border border-indigo-700/60 shadow-sm hover:shadow-md transition-all group"
+          >
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center shrink-0 text-white text-2xl shadow-inner group-hover:scale-105 transition-transform">
+                🎓
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 font-bold border border-cyan-400/30">
+                    公式おすすめコース
+                  </span>
+                  <span className="text-xs text-indigo-200">動画全12レッスン ＆ 修了証発行</span>
+                </div>
+                <h4 className="font-bold text-sm sm:text-base text-white">
+                  Antigravity Academy — 体系的に学ぶ実践チュートリアル
+                </h4>
+                <p className="text-xs text-slate-300">
+                  基本操作から実践タスク、自律エージェントの安全な利用まで、動画とテストで着実に習得できます。
+                </p>
+              </div>
+            </div>
+            <div className="inline-flex items-center space-x-1.5 px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold rounded-xl text-xs transition-colors shrink-0 self-start sm:self-center">
+              <span>Academy を受講する</span>
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+
           {/* 注目のサブ導線（ビジネスモデル懸賞 ＆ 注意事項） */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             <Link
