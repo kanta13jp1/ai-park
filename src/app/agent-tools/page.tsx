@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import {
@@ -11,10 +11,26 @@ import {
   ArrowRight,
   Calendar,
   TrendingUp,
+  Building2,
 } from "lucide-react";
 
 export default function AgentToolsHubPage() {
   const hubCards = [
+    {
+      id: "ai-projects",
+      title: "社内AIプロジェクト一覧",
+      desc: "各部署の実際の活用事例・取り組みを知りたい方はこちら！",
+      detail:
+        "各部署で進行中のAI活用プロジェクトの概要、使っているツール、効果、課題を一覧で確認できます。GitHub Issue 起票で自動掲載されます。",
+      icon: Building2,
+      iconColor: "text-blue-600",
+      iconBg: "bg-blue-50 border-blue-200",
+      href: "/ai-projects",
+      badge: "β版",
+      badgeColor: "bg-blue-100 text-blue-800 border-blue-200",
+      statusType: "active",
+      tags: ["#社内事例", "#自動掲載", "#GitHub Issue連携"],
+    },
     {
       id: "idea-board",
       title: "アイデア宣言ボード",
@@ -102,10 +118,10 @@ export default function AgentToolsHubPage() {
     },
     {
       num: "02",
-      title: "先行事例を参考に開発・PoC",
-      desc: "「AI Agent Case」や「AI Tool Hub」から社内の既存エージェント設計やプロンプトを活用し、迅速にプロトタイプを構築します。",
-      linkText: "Agent Caseを見る",
-      href: "/agent-cases",
+      title: "社内プロジェクトを参考に開発・PoC",
+      desc: "「社内AIプロジェクト一覧」から他部署の既存事例やツール構成、課題と効果を参考にし、迅速にプロトタイプを構築します。",
+      linkText: "社内プロジェクト一覧を見る",
+      href: "/ai-projects",
     },
     {
       num: "03",

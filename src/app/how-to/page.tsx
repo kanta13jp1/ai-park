@@ -14,6 +14,8 @@ import {
   HelpCircle,
   Lightbulb,
   Terminal,
+  GraduationCap,
+  Wrench,
 } from "lucide-react";
 
 export default function HowToPage() {
@@ -31,16 +33,28 @@ export default function HowToPage() {
       highlights: "AIツールの一覧と、扱ってよいデータの基準（Level 1〜3）",
     },
     {
+      id: "academy",
+      title: "Antigravity Academy",
+      desc: "動画と実践でAntigravityを体系的に学びたい方はこちら！",
+      icon: <GraduationCap className="text-indigo-600" size={32} />,
+      iconBg: "bg-indigo-50 border-indigo-100",
+      href: "/academy",
+      badge: "おすすめ・β版",
+      badgeColor: "bg-indigo-100 text-indigo-800",
+      tags: ["全12レッスン", "動画解説", "評価テスト", "修了証"],
+      highlights: "Claude Academy スタイルの動画付き実践チュートリアルと修了証発行",
+    },
+    {
       id: "learning",
       title: "教育用コンテンツ",
-      desc: "AIについて学びたい方はこちら！",
+      desc: "初級編チートシートや基礎知識を学びたい方はこちら！",
       icon: <FileText className="text-amber-600" size={32} />,
       iconBg: "bg-amber-50 border-amber-100",
       href: "/learning",
-      badge: "体系的カリキュラム",
+      badge: "基礎チートシート",
       badgeColor: "bg-amber-100 text-amber-800",
-      tags: ["Antigravity Academy", "チートシート"],
-      highlights: "Antigravity Academy（動画12レッスン・修了証）と初級編チートシート",
+      tags: ["プロンプトの基本", "初級編チートシート"],
+      highlights: "頼み方の基本、ファイル編集を任せる流れ、エラー対処のチートシート",
     },
     {
       id: "interviews",
@@ -65,6 +79,18 @@ export default function HowToPage() {
       badgeColor: "bg-cyan-100 text-cyan-700",
       tags: ["準備中"],
       highlights: "社内での AWS・クラウド活用の情報（準備中）",
+    },
+    {
+      id: "skills-hub",
+      title: "社内Skillsカタログ",
+      desc: "社内で共有する Antigravity の Skills はこちら！",
+      icon: <Wrench className="text-purple-600" size={32} />,
+      iconBg: "bg-purple-50 border-purple-100",
+      href: "/skills-hub",
+      badge: "🚧 工事中",
+      badgeColor: "bg-purple-100 text-purple-700",
+      tags: ["準備中", "Skills"],
+      highlights: "社内で共有する Antigravity の Skills カタログ（準備中）",
     },
   ];
 
