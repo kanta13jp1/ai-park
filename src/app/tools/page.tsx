@@ -170,7 +170,7 @@ const matrixTools: MatrixTool[] = [
     auto: { score: 0, note: "" },
     coverage: "",
     coverageRatio: 0,
-    description: "Google のエージェント型開発環境（IDE / CLI）。サブエージェント、Skills・Rules、MCP 連携に対応。",
+    description: "Google のエージェント型開発環境（IDE / CLI）。サブエージェント、Skills・Rules、MCP 連携に対応。Antigravity Academy で全12レッスンの動画学習と修了テストを受講できます。",
     securityLevel: "Level 1: 会社のGoogle Cloudプロジェクト経由のみ",
     impactScore: 0,
     easeScore: 0,
@@ -784,6 +784,15 @@ export default function ToolsPage() {
                                 <span className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
                                   {tool.name}
                                 </span>
+                                {tool.id === 7 && (
+                                  <Link
+                                    href="/academy"
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded font-medium hover:bg-indigo-100 transition-colors"
+                                  >
+                                    🎓 Academy
+                                  </Link>
+                                )}
                                 {tool.manualUrl && (
                                   <span className="text-[10px] px-1.5 py-0.2 bg-blue-50 text-blue-700 border border-blue-200 rounded font-medium">
                                     マニュアル
@@ -911,13 +920,22 @@ export default function ToolsPage() {
             </div>
 
             <div className="pt-3 border-t border-slate-100 flex items-center justify-end space-x-3">
+              {selectedTool.id === 7 && (
+                <Link
+                  href="/academy"
+                  onClick={() => setSelectedTool(null)}
+                  className="px-4 py-2 rounded-lg bg-indigo-600 text-xs font-bold text-white hover:bg-indigo-700 transition-colors shadow-xs"
+                >
+                  🎓 Academyで学ぶ（全12レッスン）
+                </Link>
+              )}
               {selectedTool.manualUrl && (
                 <Link
                   href={selectedTool.manualUrl}
                   onClick={() => setSelectedTool(null)}
                   className="px-4 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
                 >
-                  マニュアル・利用方法
+                  導入ガイドを見る
                 </Link>
               )}
               {selectedTool.applyRequired ? (
