@@ -105,6 +105,99 @@ export default function ToolsHubPage() {
           </ol>
         </div>
 
+        {/* データ種別ごとの入力可否判定表 */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+          <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <h3 className="font-bold text-slate-900 text-base flex items-center space-x-2">
+              <ShieldCheck className="w-5 h-5 text-blue-600" />
+              <span>データ種別ごとの入力可否判定表</span>
+            </h3>
+            <span className="text-xs text-slate-400">迷ったらここを確認</span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-200 bg-slate-50 text-slate-700">
+                  <th className="py-2.5 px-3 font-bold">データ種別</th>
+                  <th className="py-2.5 px-3 font-bold text-emerald-700">Level 1 (会社契約)</th>
+                  <th className="py-2.5 px-3 font-bold text-amber-700">Level 2 (確認中ツール)</th>
+                  <th className="py-2.5 px-3 font-bold text-rose-700">Level 3 (個人アカウント)</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-600">
+                <tr>
+                  <td className="py-2.5 px-3 font-semibold text-slate-900">社内ソースコード（独自ロジック）</td>
+                  <td className="py-2.5 px-3 text-emerald-700 font-medium">⭕ 入力可</td>
+                  <td className="py-2.5 px-3 text-amber-700 font-medium">⚠️ 固有識別子を置換</td>
+                  <td className="py-2.5 px-3 text-rose-700 font-medium">❌ 入力禁止</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 px-3 font-semibold text-slate-900">社内設計書・技術仕様メモ</td>
+                  <td className="py-2.5 px-3 text-emerald-700 font-medium">⭕ 入力可</td>
+                  <td className="py-2.5 px-3 text-amber-700 font-medium">⚠️ 顧客名・案件名を置換</td>
+                  <td className="py-2.5 px-3 text-rose-700 font-medium">❌ 入力禁止</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 px-3 font-semibold text-slate-900">顧客情報（個人名・電話・メール・契約内容）</td>
+                  <td className="py-2.5 px-3 text-rose-700 font-medium">❌ 原則禁止（要事前承認）</td>
+                  <td className="py-2.5 px-3 text-rose-700 font-medium">❌ 入力禁止</td>
+                  <td className="py-2.5 px-3 text-rose-700 font-medium">❌ 入力禁止</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 px-3 font-semibold text-slate-900">社内連絡文・メール下書き（定型文作成）</td>
+                  <td className="py-2.5 px-3 text-emerald-700 font-medium">⭕ 入力可</td>
+                  <td className="py-2.5 px-3 text-emerald-700 font-medium">⭕ 氏名伏せ字で可</td>
+                  <td className="py-2.5 px-3 text-amber-700 font-medium">⚠️ 完全一般化して可</td>
+                </tr>
+                <tr>
+                  <td className="py-2.5 px-3 font-semibold text-slate-900">一般技術の調査・言語仕様・エラー調査</td>
+                  <td className="py-2.5 px-3 text-emerald-700 font-medium">⭕ 入力可</td>
+                  <td className="py-2.5 px-3 text-emerald-700 font-medium">⭕ 入力可</td>
+                  <td className="py-2.5 px-3 text-emerald-700 font-medium">⭕ 入力可</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* マスキング実践ガイド */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+          <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <h3 className="font-bold text-slate-900 text-base flex items-center space-x-2">
+              <Lock className="w-5 h-5 text-indigo-600" />
+              <span>実践！マスキングの具体例 (Before / After)</span>
+            </h3>
+            <span className="text-xs text-slate-400">入力前のセルフチェック</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div className="p-4 rounded-xl border border-rose-200 bg-rose-50/30 space-y-2">
+              <span className="font-bold text-rose-800 flex items-center gap-1.5">
+                <XCircle size={15} /> 危険な入力例（NG）
+              </span>
+              <div className="p-3 bg-white rounded-lg border border-rose-200 font-mono text-[11px] text-slate-700 space-y-1">
+                <p>「〇〇商事の佐藤部長（sato@example.com）から受領した受注テーブルのデータ移行SQLを書いて。接続先は 192.168.1.100、パスワードは P@ssw0rd です」</p>
+              </div>
+              <p className="text-[11px] text-rose-700 leading-relaxed">
+                ※顧客企業名、担当者個人名、メールアドレス、内部IPアドレス、認証情報が生のまま含まれており重大インシデントに直結します。
+              </p>
+            </div>
+
+            <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 space-y-2">
+              <span className="font-bold text-emerald-800 flex items-center gap-1.5">
+                <CheckCircle2 size={15} /> 安全な入力例（OK）
+              </span>
+              <div className="p-3 bg-white rounded-lg border border-emerald-200 font-mono text-[11px] text-slate-700 space-y-1">
+                <p>「顧客A社の受注テーブル（カラム: id, amount, created_at）から新テーブルへデータ移行するPostgreSQLのSQLを作成してください。接続情報は環境変数から読み込む前提です」</p>
+              </div>
+              <p className="text-[11px] text-emerald-700 leading-relaxed">
+                ※企業名を抽象化し、個人情報や認証情報を完全に除外。必要なスキーマ構造のみを渡しているため安全です。
+              </p>
+            </div>
+          </div>
+        </div>
+
         <UnderConstructionAlert
           statusType="construction"
           title="🚧 工事中：会社として使えるAIツールの一覧を準備しています"

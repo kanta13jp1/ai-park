@@ -294,9 +294,97 @@ export default function AmbassadorsPage() {
         </div>
 
         {filteredAmbassadors.length === 0 && (
-          <div className="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-500 space-y-2">
-            <p className="text-sm font-semibold">{ambassadors.length === 0 ? "🚧 準備中：アンバサダーはまだ決まっていません" : "該当するアンバサダーが見つかりませんでした。"}</p>
-            <p className="text-xs text-slate-400">{ambassadors.length === 0 ? "選定が済み次第、ここに紹介します。" : "検索条件を変更してください。"}右上の「アンバサダーに応募する」から応募できます。</p>
+          <div className="space-y-6">
+            <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center text-slate-600 space-y-3">
+              <div className="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto">
+                <Users size={24} />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-base font-bold text-slate-900">
+                  第1期 社内AIアンバサダー 公募中
+                </h4>
+                <p className="text-xs text-slate-500 max-w-lg mx-auto leading-relaxed">
+                  アンバサダーは現在選定準備中です。各事業部・開発チームからAI活用を盛り上げてくださる推進メンバー（自薦・他薦問わず）をお待ちしています。
+                </p>
+              </div>
+              <button
+                onClick={() => setIsApplyModalOpen(true)}
+                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+              >
+                <UserPlus size={14} />
+                <span>アンバサダーに応募・立候補する</span>
+              </button>
+            </div>
+
+            {/* アンバサダー参加の4大メリット */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-amber-500" />
+                <span>アンバサダー参加の4大メリット</span>
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                  <span className="font-bold text-slate-900 flex items-center gap-1.5">
+                    🚀 先行トライアル
+                  </span>
+                  <p className="text-slate-600 text-[11px] leading-relaxed">
+                    最新のAIモデルや新規検証ツールの優先利用アカウントやPoC環境を先行提供します。
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                  <span className="font-bold text-slate-900 flex items-center gap-1.5">
+                    🤝 推進担当と直結
+                  </span>
+                  <p className="text-slate-600 text-[11px] leading-relaxed">
+                    AI推進担当（梅澤）や各事業部のキーマンと月1回の定例会で最新知見を直接共有できます。
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                  <span className="font-bold text-slate-900 flex items-center gap-1.5">
+                    🎓 勉強会開催サポート
+                  </span>
+                  <p className="text-slate-600 text-[11px] leading-relaxed">
+                    自チーム向けのハンズオンや勉強会を開く際、資料作成や進行を推進担当がバックアップします。
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                  <span className="font-bold text-slate-900 flex items-center gap-1.5">
+                    🏆 社内アピール
+                  </span>
+                  <p className="text-slate-600 text-[11px] leading-relaxed">
+                    チームでの取り組みや工夫をAI Parkインタビューや全社報で紹介し、社内実績として可視化します。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* よくある質問 (FAQ) */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
+              <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
+                <MessageCircle className="w-4 h-4 text-blue-600" />
+                <span>よくある質問 (FAQ)</span>
+              </h3>
+              <div className="space-y-3 text-xs">
+                <div className="p-3.5 rounded-xl border border-slate-100 bg-slate-50 space-y-1">
+                  <p className="font-bold text-slate-900">Q. プログラミングやAIの専門知識に自信がなくても応募できますか？</p>
+                  <p className="text-slate-600 leading-relaxed text-[11px]">
+                    A. もちろん大歓迎です！文章作成、リサーチ、議事録要約など、業務効率化の工夫やチームメンバーの困りごとを拾い上げていただく役割ですので、専門資格や開発スキルは不要です。
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl border border-slate-100 bg-slate-50 space-y-1">
+                  <p className="font-bold text-slate-900">Q. 業務との両立や拘束時間はどの程度ですか？</p>
+                  <p className="text-slate-600 leading-relaxed text-[11px]">
+                    A. 月2時間程度（月1回のアンバサダー定例会 ＋ チーム内での簡単な質問受け付け）を想定しています。通常業務に支障が出ない範囲でご参加いただけます。
+                  </p>
+                </div>
+                <div className="p-3.5 rounded-xl border border-slate-100 bg-slate-50 space-y-1">
+                  <p className="font-bold text-slate-900">Q. 応募後の選考・決定フローはどうなりますか？</p>
+                  <p className="text-slate-600 leading-relaxed text-[11px]">
+                    A. 応募後、AI推進担当（梅澤）と15分ほどのカジュアルなオンライン面談を行い、関心分野や活動内容のすり合わせを行った上で決定いたします。
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -402,9 +490,22 @@ export default function AmbassadorsPage() {
                   />
                 </div>
 
-                <p className="text-slate-500 leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-2.5">
-                  「アンバサダーに応募する」を押すと入力内容が入った GitHub Issue の画面が開きます。応募内容は公開されるため、社外秘の情報は書かないでください。
-                </p>
+                <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
+                  <p className="text-slate-600 leading-relaxed text-[11px]">
+                    「アンバサダーに応募する」を押すと、入力内容が入った GitHub Issue の起票画面が開きます。Issue 送信後、自動的に AI推進担当 に通知が届きます。
+                  </p>
+                  <div className="pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[11px] text-slate-500">
+                    <span>GitHubアカウントをお持ちでない方:</span>
+                    <a
+                      href="https://mail.google.com/chat"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-emerald-700 hover:underline font-bold"
+                    >
+                      Google Chat（AI推進担当：梅澤）へ直接DM
+                    </a>
+                  </div>
+                </div>
 
                 <div className="pt-2 flex justify-end space-x-2">
                   <button

@@ -202,14 +202,46 @@ export default function InterviewsPage() {
             </ol>
           </div>
           <div className="space-y-3">
-            <h3 className="font-bold text-sm text-slate-900">🎤 取材でお聞きすること（所要30分）</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="font-bold text-sm text-slate-900">🎤 取材でお聞きすること（所要30分）</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  const sheetText = [
+                    "【AI活用インタビュー 事前アンケート雛形】",
+                    "1. お名前 / ご所属:",
+                    "2. どんな業務で、何に困っていましたか？（AI導入前の状況）:",
+                    "3. どのAIツールを、どう使いましたか？（使ったプロンプトや手順）:",
+                    "4. どれくらい効果がありましたか？（時間短縮・作業削減など数字で分かる範囲）:",
+                    "5. うまくいかなかったこと・つまずいた点:",
+                    "6. これから始める社員へのアドバイス:",
+                  ].join("\n");
+                  navigator.clipboard.writeText(sheetText);
+                  setCopiedPromptId("sheet");
+                  setTimeout(() => setCopiedPromptId(null), 2000);
+                }}
+                className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors"
+              >
+                {copiedPromptId === "sheet" ? (
+                  <>
+                    <Check size={12} className="text-emerald-600" />
+                    <span className="text-emerald-600 font-bold">コピー完了</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={12} />
+                    <span>質問シートをコピー</span>
+                  </>
+                )}
+              </button>
+            </div>
             <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-700 leading-relaxed">
               {interviewQuestions.map((q) => (
                 <li key={q}>{q}</li>
               ))}
             </ul>
             <p className="text-[11px] text-slate-500">
-              準備は不要です。顧客名・案件名などは記事では伏せ字にします。
+              準備は不要です。質問シートをコピーして事前メモに活用いただいても、当日の手ぶらインタビューでも問題ありません。顧客名等は伏せ字処理します。
             </p>
           </div>
         </div>
@@ -217,9 +249,50 @@ export default function InterviewsPage() {
         {/* 連載インタビュー一覧（参考サイト再現：通し番号見出し ＋ 2カラムメディアカード） */}
         <div className="space-y-8">
           {interviewArticles.length === 0 && (
-            <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-8 text-center text-slate-500 space-y-1">
-              <p className="text-sm font-bold text-slate-700">🚧 工事中：記事はまだありません</p>
-              <p className="text-xs">実際に取材し、本人と上長の確認が済んだ記事から掲載します。</p>
+            <div className="space-y-4">
+              {/* 第1弾 企画中ティザーカード */}
+              <div className="rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/50 via-white to-sky-50/50 p-6 shadow-xs space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center space-x-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-indigo-600 text-white text-[11px] font-bold">
+                      企画・執筆中
+                    </span>
+                    <span className="text-xs font-bold text-indigo-900">
+                      第1弾インタビュー予告
+                    </span>
+                  </div>
+                  <span className="text-xs font-mono text-slate-500">
+                    2026年10月16日(金) 公開予定
+                  </span>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                    「Antigravityで挑む社内開発の自動化とプロトタイピング超速検証（仮）」
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    DX推進・開発チームにおけるAntigravity導入と、Subagents / スラッシュコマンドを活用した実装検証のリアルな試行錯誤を総力取材中。原稿確認完了後に正式公開いたします。
+                  </p>
+                </div>
+
+                <div className="pt-2 border-t border-indigo-100/80 flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <span className="text-slate-500 text-[11px]">
+                    ※社内機密・顧客データ等の確認が完了した記事から順次掲載されます
+                  </span>
+                  <button
+                    onClick={() => setIsSubmitModalOpen(true)}
+                    className="text-indigo-600 hover:text-indigo-700 font-bold inline-flex items-center gap-1 text-xs"
+                  >
+                    <span>あなたのチームも取材を受けませんか？</span>
+                    <ArrowRight size={13} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-6 text-center text-slate-500 space-y-1">
+                <p className="text-xs font-bold text-slate-700">📋 正式記事は本人・上長確認が完了次第掲載されます</p>
+                <p className="text-[11px]">自薦・他薦問わず、小さな工夫でもお気軽にご応募ください。</p>
+              </div>
             </div>
           )}
           {[...interviewArticles]
@@ -543,10 +616,22 @@ export default function InterviewsPage() {
                 />
               </div>
 
-              <p className="text-slate-500 leading-relaxed bg-slate-50 border border-slate-200 rounded-lg p-2.5">
-                「立候補を送信」を押すと、入力内容が入った GitHub Issue の画面が開きます。そこで送信すると AI推進担当 に通知が届きます。
-                Issue は公開されるため、顧客名・案件名・社外秘の数値は書かずに概要だけご記入ください。
-              </p>
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 space-y-2">
+                <p className="text-slate-600 leading-relaxed text-[11px]">
+                  「立候補を送信」を押すと、入力内容が入った GitHub Issue の起票画面が開きます。Issue 送信後、自動的に AI推進担当 に通知が届き、日程調整のご連絡を差し上げます。
+                </p>
+                <div className="pt-1.5 border-t border-slate-200/80 flex items-center justify-between text-[11px] text-slate-500">
+                  <span>GitHubアカウントをお持ちでない方:</span>
+                  <a
+                    href="https://mail.google.com/chat"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline font-bold"
+                  >
+                    Google Chat（AI推進担当：梅澤）へ直接DM
+                  </a>
+                </div>
+              </div>
 
               <div className="pt-2 flex justify-end space-x-2">
                 <button
