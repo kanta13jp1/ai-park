@@ -33,7 +33,7 @@ export default function Sidebar() {
 
       {/* サイドバー本体 */}
       <aside
-        className={`fixed top-0 left-0 bottom-0 z-40 w-64 bg-gradient-to-b from-[#0a0f1d] via-[#0d1527] to-[#070a12] text-slate-100 flex flex-col transition-all duration-300 ease-in-out select-none shadow-2xl border-r border-slate-800/80 md:translate-x-0 ${
+        className={`fixed top-0 left-0 bottom-0 z-40 w-72 bg-gradient-to-b from-[#0a0f1d] via-[#0d1527] to-[#070a12] text-slate-100 flex flex-col transition-all duration-300 ease-in-out select-none shadow-2xl border-r border-slate-800/80 md:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -63,7 +63,7 @@ export default function Sidebar() {
           <Link
             href="/"
             onClick={() => setIsOpen(false)}
-            className="group flex items-center space-x-2"
+            className="group flex items-center space-x-2.5"
           >
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
               <Sparkles size={16} />
@@ -80,7 +80,7 @@ export default function Sidebar() {
         </div>
 
         {/* ナビゲーションリスト */}
-        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 text-sm z-10">
+        <nav className="flex-1 overflow-y-auto px-3.5 py-4 space-y-5 text-sm z-10">
           {navigationSections.map((section, secIdx) => (
             <div key={secIdx} className="space-y-1">
               {section.title && (
@@ -115,13 +115,13 @@ export default function Sidebar() {
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-white/5 hover:text-white transition-all text-[13px]"
+                        className="group flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-white/5 hover:text-white transition-all text-xs"
                       >
-                        <span className="flex items-center space-x-2.5 truncate">
+                        <span className="flex items-center space-x-2.5">
                           {item.icon && <span className="text-sm leading-none opacity-80 group-hover:opacity-100">{item.icon}</span>}
-                          <span className="truncate">{item.name}</span>
+                          <span>{item.name}</span>
                         </span>
-                        <ExternalLink size={13} className="opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <ExternalLink size={13} className="opacity-50 group-hover:opacity-100 transition-opacity shrink-0 ml-1.5" />
                       </a>
                     );
                   }
@@ -131,9 +131,9 @@ export default function Sidebar() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setIsOpen(false)}
-                      className={`group relative flex items-center justify-between px-3 py-2 rounded-xl transition-all text-[13px] font-medium ${
+                      className={`group relative flex items-center justify-between px-3 py-2 rounded-xl transition-all text-xs font-medium ${
                         isActive
-                          ? "bg-gradient-to-r from-blue-600/30 via-indigo-600/20 to-transparent text-white font-semibold border border-blue-500/30 shadow-xs"
+                          ? "bg-gradient-to-r from-blue-600/30 via-indigo-600/20 to-transparent text-white font-bold border border-blue-500/30 shadow-xs"
                           : "text-slate-300 hover:bg-white/5 hover:text-white"
                       }`}
                     >
@@ -142,18 +142,18 @@ export default function Sidebar() {
                         <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-r shadow-[0_0_8px_rgba(56,189,248,0.6)]" />
                       )}
 
-                      <span className="flex items-center space-x-2.5 truncate">
+                      <span className="flex items-center space-x-2.5">
                         {item.icon && (
-                          <span className="text-sm leading-none opacity-90 group-hover:scale-110 transition-transform">
+                          <span className="text-sm leading-none opacity-90 group-hover:scale-110 transition-transform shrink-0">
                             {item.icon}
                           </span>
                         )}
-                        <span className="truncate">{item.name}</span>
+                        <span className="leading-snug">{item.name}</span>
                       </span>
 
                       {item.badge && (
                         <span
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-medium shrink-0 ml-1.5 transition-colors ${
+                          className={`text-[9.5px] px-2 py-0.5 rounded-full font-medium shrink-0 ml-1.5 transition-colors whitespace-nowrap ${
                             isActive
                               ? "bg-cyan-500/20 text-cyan-200 border border-cyan-400/40"
                               : "bg-slate-800/80 text-slate-300 border border-slate-700/50 group-hover:border-slate-600"
