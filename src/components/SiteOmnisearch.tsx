@@ -176,24 +176,27 @@ export default function SiteOmnisearch() {
     : [];
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
-      {/* 検索ヘッダーバー (参考サイトに合わせたブルーグラデーション) */}
-      <div className="bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-600 text-white px-6 py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div className="flex items-center space-x-2.5">
-          <div className="p-1.5 bg-white/20 rounded-lg">
-            <Search size={18} className="text-white" />
+    <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-3xl overflow-hidden shadow-xs">
+      {/* 検索ヘッダーバー (ラグジュアリー・サイバーグラデーション) */}
+      <div className="bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 text-white px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-blue-900/40">
+        <div className="flex items-center space-x-3">
+          <div className="p-2.5 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl text-slate-950 shadow-md shadow-cyan-500/20">
+            <Search size={18} />
           </div>
           <div>
-            <h3 className="font-bold text-base">サイト内横断検索</h3>
-            <p className="text-xs text-blue-100">
-              AI Park 内のガイド、Skills、事例、アンバサダー、規程を横断検索します
+            <h3 className="font-black text-base sm:text-lg tracking-tight">サイト内横断検索</h3>
+            <p className="text-xs text-slate-300 font-light">
+              AI Park 内のガイド、Academy、事例、アンバサダー、利用規約を瞬時に横断検索
             </p>
           </div>
+        </div>
+        <div className="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-slate-300 font-mono">
+          <span>Search Engine v2.0</span>
         </div>
       </div>
 
       {/* 検索フォーム & サジェストタグ */}
-      <div className="p-6 space-y-4">
+      <div className="p-6 sm:p-8 space-y-4">
         <div className="relative flex items-center">
           <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" />
           <input
@@ -201,7 +204,7 @@ export default function SiteOmnisearch() {
             placeholder="探したい機能やキーワードを入力（例: Skills, プロンプト, 障害, アンバサダー, 申請...）"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-12 pr-10 py-3 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-inner"
+            className="w-full pl-12 pr-10 py-3.5 text-sm bg-slate-50/80 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-inner"
           />
           {query && (
             <button
@@ -214,16 +217,16 @@ export default function SiteOmnisearch() {
         </div>
 
         {/* 人気の検索キーワード */}
-        <div className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500">
-          <span className="font-semibold text-slate-700 flex items-center space-x-1 mr-1">
-            <Tag size={12} />
-            <span>よく検索されるキーワード:</span>
+        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+          <span className="font-bold text-slate-700 flex items-center space-x-1 mr-1">
+            <Tag size={12} className="text-blue-600" />
+            <span>クイック検索タグ:</span>
           </span>
           {popularTags.map((tag) => (
             <button
               key={tag}
               onClick={() => setQuery(tag)}
-              className="px-2.5 py-1 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors font-medium border border-slate-200/80"
+              className="px-3 py-1 bg-slate-100/80 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 rounded-full transition-all font-medium border border-slate-200/80 cursor-pointer shadow-2xs hover:scale-105 active:scale-95"
             >
               #{tag}
             </button>
@@ -241,36 +244,36 @@ export default function SiteOmnisearch() {
             </div>
 
             {searchResults.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {searchResults.map((result) => (
                   <Link
                     key={result.title}
                     href={result.href}
-                    className="p-3.5 bg-slate-50/70 hover:bg-blue-50/60 border border-slate-200 hover:border-blue-300 rounded-xl transition-all flex flex-col justify-between group space-y-1.5"
+                    className="p-4 bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50/40 border border-slate-200/90 hover:border-blue-400 rounded-2xl transition-all duration-200 flex flex-col justify-between group space-y-2.5 shadow-2xs hover:shadow-md hover:-translate-y-0.5"
                   >
-                    <div>
-                      <div className="flex items-center space-x-2 mb-1">
-                        <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] font-bold rounded">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center space-x-2">
+                        <span className="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-bold rounded-full border border-blue-200/60 font-mono">
                           {result.category}
                         </span>
                       </div>
-                      <h4 className="font-bold text-slate-900 text-xs group-hover:text-blue-700 transition-colors">
+                      <h4 className="font-extrabold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
                         {result.title}
                       </h4>
-                      <p className="text-[11px] text-slate-600 leading-snug mt-1">
+                      <p className="text-xs text-slate-600 leading-relaxed font-normal">
                         {result.description}
                       </p>
                     </div>
 
-                    <div className="pt-1 flex items-center justify-end text-[11px] text-blue-600 font-semibold space-x-1 group-hover:translate-x-0.5 transition-transform">
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-end text-xs text-blue-600 font-bold space-x-1 group-hover:translate-x-1 transition-transform">
                       <span>ページを開く</span>
-                      <ArrowRight size={12} />
+                      <ArrowRight size={13} />
                     </div>
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8 text-xs text-slate-400 bg-slate-50 rounded-xl">
+              <div className="text-center py-10 text-xs text-slate-400 bg-slate-50/80 rounded-2xl border border-slate-200/60">
                 「{query}」に一致するコンテンツは見つかりませんでした。別のキーワードをお試しください。
               </div>
             )}

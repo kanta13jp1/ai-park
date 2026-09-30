@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Sparkles } from "lucide-react";
+import { Search, Sparkles, Command } from "lucide-react";
 import { useState } from "react";
 
 interface HeroBannerProps {
@@ -19,18 +19,18 @@ export default function HeroBanner({
 
   return (
     <div
-      className={`relative w-full overflow-hidden flex items-center justify-center select-none shadow-md ${
-        isHome ? "h-56 md:h-64 bg-[#142823]" : "h-44 md:h-48 bg-[#1f2937]"
+      className={`relative w-full overflow-hidden flex items-center justify-center select-none shadow-xl border-b border-slate-800/60 ${
+        isHome ? "h-64 sm:h-72 md:h-80 bg-[#07130e]" : "h-48 sm:h-52 md:h-56 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950"
       }`}
     >
       {isHome ? (
         <>
-          {/* デジタルAIツリー（知恵の樹）の背景グラデーション & アートワーク */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0e1e1a] via-[#1a382e] to-[#12241e]" />
+          {/* 深碧・サイバーオーロラ背景 */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050e0a] via-[#0b1f17] to-[#06120c]" />
 
-          {/* グロー光彩エフェクト */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[320px] bg-radial from-emerald-500/25 via-cyan-500/15 to-transparent blur-3xl pointer-events-none" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[180px] bg-radial from-amber-400/20 via-emerald-600/10 to-transparent blur-2xl pointer-events-none" />
+          {/* 多層オーロラ・グロー光彩 */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[360px] bg-gradient-to-r from-emerald-500/20 via-teal-400/15 to-cyan-500/20 blur-3xl pointer-events-none rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[200px] bg-gradient-to-r from-amber-400/15 via-emerald-400/20 to-sky-400/15 blur-2xl pointer-events-none" />
 
           {/* デジタルAIツリー SVG アートワーク */}
           <svg
@@ -40,7 +40,7 @@ export default function HeroBanner({
             preserveAspectRatio="xMidYMid slice"
           >
             {/* 樹の幹と主枝（回路パターン） */}
-            <g stroke="#34d399" strokeWidth="2.5" fill="none" opacity="0.8">
+            <g stroke="#34d399" strokeWidth="2.5" fill="none" opacity="0.85">
               {/* 幹 */}
               <path d="M 600 400 L 600 240 M 590 400 L 590 260 M 610 400 L 610 260" stroke="#10b981" strokeWidth="3" />
               {/* 主枝・左 */}
@@ -60,7 +60,7 @@ export default function HeroBanner({
             </g>
 
             {/* 回路ノード（接続ポイント） */}
-            <g fill="#6ee7b7" opacity="0.9">
+            <g fill="#6ee7b7" opacity="0.95">
               <circle cx="280" cy="140" r="5" fill="#fbbf24" />
               <circle cx="220" cy="260" r="4.5" fill="#38bdf8" />
               <circle cx="350" cy="70" r="5" fill="#34d399" />
@@ -76,11 +76,11 @@ export default function HeroBanner({
             </g>
 
             {/* デジタルリーフ（木の葉）のクラスター */}
-            <g fill="#10b981" opacity="0.35">
+            <g fill="#10b981" opacity="0.25">
               <circle cx="320" cy="100" r="30" />
               <circle cx="420" cy="80" r="40" />
               <circle cx="520" cy="50" r="45" />
-              <circle cx="600" cy="45" r="50" fill="#34d399" opacity="0.4" />
+              <circle cx="600" cy="45" r="50" fill="#34d399" opacity="0.3" />
               <circle cx="680" cy="50" r="45" />
               <circle cx="780" cy="80" r="40" />
               <circle cx="880" cy="100" r="30" />
@@ -89,18 +89,20 @@ export default function HeroBanner({
             </g>
           </svg>
 
-          {/* 自然光・ホタル風パーティクル */}
-          <div className="absolute inset-0 bg-[radial-gradient(#6ee7b7_1px,transparent_1px)] [background-size:32px_32px] opacity-30 pointer-events-none" />
+          {/* 微細なスターダスト・グリッド */}
+          <div className="absolute inset-0 bg-[radial-gradient(#34d399_1px,transparent_1px)] [background-size:28px_28px] opacity-25 pointer-events-none" />
         </>
       ) : (
         <>
-          {/* 個別ページのモダンダーク背景 */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800 to-[#3b4856]" />
-          <div className="absolute inset-0 bg-[radial-gradient(#ffffff0a_1px,transparent_1px)] [background-size:20px_20px] opacity-40 pointer-events-none" />
+          {/* 個別ページのダークフューチャリスティック背景 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950" />
+          <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:20px_20px] opacity-60 pointer-events-none" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
         </>
       )}
 
-      {/* 右上の検索バー/アイコン */}
+      {/* 右上の検索バー/トリガー */}
       <div className="absolute top-4 right-5 z-20">
         {isSearching ? (
           <div className="relative flex items-center animate-in fade-in zoom-in-95 duration-150">
@@ -111,30 +113,48 @@ export default function HeroBanner({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onBlur={() => !searchQuery && setIsSearching(false)}
-              className="bg-black/60 text-white placeholder-slate-300 text-xs px-3 py-1.5 pr-8 rounded-full border border-white/30 focus:outline-none focus:ring-1 focus:ring-emerald-400 w-52 transition-all shadow-md"
+              className="bg-slate-950/80 backdrop-blur-md text-white placeholder-slate-400 text-xs px-3.5 py-1.5 pr-8 rounded-full border border-slate-700/80 focus:outline-none focus:ring-2 focus:ring-emerald-400 w-56 transition-all shadow-xl"
             />
-            <Search className="w-3.5 h-3.5 text-slate-300 absolute right-2.5 pointer-events-none" />
+            <Search className="w-3.5 h-3.5 text-slate-400 absolute right-3 pointer-events-none" />
           </div>
         ) : (
           <button
             onClick={() => setIsSearching(true)}
-            className="p-2 rounded-full text-white/90 hover:text-white hover:bg-white/10 transition-colors"
+            className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 text-slate-200 hover:text-white transition-all shadow-md group"
             title="サイト内検索"
           >
-            <Search size={20} />
+            <Search size={14} className="text-cyan-300 group-hover:scale-110 transition-transform" />
+            <span className="text-xs font-medium">Search</span>
+            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white/15 rounded text-slate-300">
+              /
+            </kbd>
           </button>
         )}
       </div>
 
-      {/* 中央タイトル */}
-      <div className="relative z-10 text-center px-4 max-w-2xl">
-        <h1 className="text-3xl md:text-5xl font-black text-white tracking-wide drop-shadow-lg">
-          {title}
+      {/* 中央タイトル & コンテンツ */}
+      <div className="relative z-10 text-center px-4 max-w-3xl space-y-3">
+        {isHome && (
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-500/15 backdrop-blur-md border border-emerald-400/30 text-emerald-300 text-xs font-semibold tracking-wide shadow-sm animate-float-slow">
+            <Sparkles size={13} className="text-emerald-400 animate-pulse" />
+            <span>MightyLINK Enterprise AI Playground</span>
+          </div>
+        )}
+
+        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight drop-shadow-2xl">
+          {isHome ? (
+            <span className="bg-gradient-to-r from-white via-emerald-100 to-cyan-300 bg-clip-text text-transparent">
+              {title}
+            </span>
+          ) : (
+            title
+          )}
         </h1>
+
         {subtitle && (
           <p
-            className={`mt-2.5 text-xs md:text-sm font-medium tracking-wide drop-shadow ${
-              isHome ? "text-emerald-200/95 font-semibold text-sm md:text-base" : "text-slate-300"
+            className={`text-xs sm:text-sm md:text-base font-light tracking-wide max-w-2xl mx-auto leading-relaxed ${
+              isHome ? "text-emerald-100/90 font-medium" : "text-slate-300"
             }`}
           >
             {subtitle}

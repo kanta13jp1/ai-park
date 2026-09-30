@@ -94,21 +94,21 @@ export default function PurposeJump() {
   const currentSection = jumpSections.find((s) => s.id === activeCategory);
 
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
-      <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
-        <div className="p-2 bg-rose-100 text-rose-600 rounded-xl">
+    <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+      <div className="flex items-center space-x-3 border-b border-slate-100 pb-4">
+        <div className="p-2.5 bg-gradient-to-br from-rose-500 to-amber-500 text-white rounded-2xl shadow-sm shadow-rose-500/20">
           <Rocket size={20} />
         </div>
         <div>
-          <h3 className="font-bold text-slate-900 text-base flex items-center space-x-2">
+          <h3 className="font-black text-slate-900 text-lg sm:text-xl flex items-center space-x-2 tracking-tight">
             <span>何がしたい？</span>
-            <span className="text-xs text-slate-500 font-normal">目的に合わせてページへジャンプ</span>
+            <span className="text-xs text-slate-500 font-normal">目的に合わせて最短アクセス</span>
           </h3>
         </div>
       </div>
 
       {/* 3大カテゴリセレクターカード */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {jumpSections.map((sec) => {
           const Icon = sec.icon;
           const isSelected = activeCategory === sec.id;
@@ -117,31 +117,31 @@ export default function PurposeJump() {
             <button
               key={sec.id}
               onClick={() => setActiveCategory(isSelected ? null : sec.id)}
-              className={`p-5 rounded-2xl border text-center transition-all flex flex-col items-center justify-between space-y-3 relative group ${
+              className={`p-6 rounded-2xl border text-center transition-all duration-300 flex flex-col items-center justify-between space-y-4 relative group cursor-pointer ${
                 isSelected
-                  ? `${sec.bgActive} shadow-sm ring-2 ring-blue-500/20`
-                  : `bg-slate-50/70 ${sec.borderColor} hover:bg-white hover:shadow-sm`
+                  ? `${sec.bgActive} shadow-lg shadow-blue-500/5 ring-2 ring-blue-500/30 scale-[1.02]`
+                  : `bg-slate-50/60 ${sec.borderColor} hover:bg-white hover:shadow-md hover:-translate-y-1`
               }`}
             >
               <div
-                className={`w-14 h-14 rounded-full flex items-center justify-center transition-transform group-hover:scale-105 shadow-2xs ${
-                  isSelected ? "bg-white" : "bg-white/90"
+                className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm ${
+                  isSelected ? "bg-white shadow-md" : "bg-white"
                 }`}
               >
                 <Icon size={28} className={sec.color} />
               </div>
 
-              <div className="space-y-0.5">
-                <h4 className="font-bold text-slate-900 text-base">{sec.title}</h4>
-                <p className="text-[11px] text-slate-500">{sec.subtitle}</p>
+              <div className="space-y-1">
+                <h4 className="font-extrabold text-slate-900 text-base tracking-tight">{sec.title}</h4>
+                <p className="text-xs text-slate-500 font-normal leading-relaxed">{sec.subtitle}</p>
               </div>
 
               <div
-                className={`text-xs font-semibold flex items-center space-x-1 ${
+                className={`text-xs font-bold flex items-center space-x-1.5 transition-colors ${
                   isSelected ? sec.color : "text-slate-400 group-hover:text-slate-700"
                 }`}
               >
-                <span>{isSelected ? "▲ 閉じる" : "▼ 選んでジャンプ"}</span>
+                <span>{isSelected ? "▲ 選択中（閉じる）" : "▼ クリックして開く"}</span>
               </div>
             </button>
           );
