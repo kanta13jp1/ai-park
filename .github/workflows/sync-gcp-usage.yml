@@ -1,0 +1,44 @@
+name: Sync GCP Antigravity Usage
+
+on:
+  schedule:
+    # 毎日 日本時間 午前9時 (UTC 0:00) および 18時 (UTC 9:00) に自動同期
+    - cron: '0 0,9 * * *'
+  workflow_dispatch: # GitHub画面から手動即時実行も可能
+
+permissions:
+  contents: write
+
+jobs:
+  sync-usage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run GCP Usage Sync Script
+        env:
+          GCP_PROJECT_ID: "antigravity-pj-509006"
+          GCP_BILLING_ACCOUNT_ID: "012EB1-1D4C87-D1B374"
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: node scripts/sync-gcp-usage.mjs
+
+      - name: Commit and push changes if updated
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/gcp-usage-live.json
+          if git diff --staged --quiet; then
+            echo "No changes in GCP usage data. Skipping commit."
+          else
+            git commit -m "chore(data): GCP Antigravity利用実績データの自動同期 [skip ci]"
+            git push origin main
+          fi

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import { basePath } from "@/lib/basePath";
 import {
   BarChart3,
   Users,
@@ -30,7 +31,7 @@ import {
 } from "lucide-react";
 
 // 社内本番環境の確定情報
-const GCP_INFO = {
+const DEFAULT_GCP_INFO = {
   org: "ml-mightylink.com",
   projectId: "antigravity-pj-509006",
   billingAccountId: "012EB1-1D4C87-D1B374",
@@ -39,7 +40,7 @@ const GCP_INFO = {
   trialDaysLeft: 84, // 2026/10/01時点
 };
 
-// ユーザー別の利用状況データ（社内実機検証アカウント＋社内エンジニアサンプル）
+// ユーザー別の利用状況データ型
 export interface UserUsage {
   id: string;
   name: string;
@@ -56,85 +57,7 @@ export interface UserUsage {
   primaryModel: string;
 }
 
-const initialUserData: UserUsage[] = [
-  {
-    id: "U-01",
-    name: "梅澤 完太",
-    email: "k-umezawa@ml-mightylink.com",
-    department: "AI推進担当 / 開発",
-    role: "AI推進担当",
-    requestCount: 342,
-    inputTokens: 1420000,
-    outputTokens: 380000,
-    totalTokens: 1800000,
-    costUsd: 4.85,
-    lastActive: "2026/10/01 15:10",
-    status: "active",
-    primaryModel: "Gemini 3.8 Flash / Pro",
-  },
-  {
-    id: "U-02",
-    name: "小林 雅水",
-    email: "kobayashi@ml-mightylink.com",
-    department: "社内エンジニア / インフラ",
-    role: "請求・環境管理者",
-    requestCount: 118,
-    inputTokens: 520000,
-    outputTokens: 140000,
-    totalTokens: 660000,
-    costUsd: 1.92,
-    lastActive: "2026/10/01 14:40",
-    status: "active",
-    primaryModel: "Gemini 3.1 Pro",
-  },
-  {
-    id: "U-03",
-    name: "亮一 杉村",
-    email: "sugimura@ml-mightylink.com",
-    department: "社内エンジニア / リード",
-    role: "リードエンジニア",
-    requestCount: 205,
-    inputTokens: 890000,
-    outputTokens: 260000,
-    totalTokens: 1150000,
-    costUsd: 3.28,
-    lastActive: "2026/09/30 18:22",
-    status: "active",
-    primaryModel: "Gemini 3.8 Flash",
-  },
-  {
-    id: "U-04",
-    name: "社内エンジニア A",
-    email: "dev-a@ml-mightylink.com",
-    department: "クラウドソリューション部",
-    role: "一般利用者",
-    requestCount: 45,
-    inputTokens: 180000,
-    outputTokens: 50000,
-    totalTokens: 230000,
-    costUsd: 0.65,
-    lastActive: "2026/09/29 11:15",
-    status: "active",
-    primaryModel: "Gemini 3.8 Flash",
-  },
-  {
-    id: "U-05",
-    name: "社内検証アカウント B",
-    email: "dev-b@ml-mightylink.com",
-    department: "DX推進室",
-    role: "一般利用者",
-    requestCount: 0,
-    inputTokens: 0,
-    outputTokens: 0,
-    totalTokens: 0,
-    costUsd: 0.0,
-    lastActive: "未利用",
-    status: "invited",
-    primaryModel: "-",
-  },
-];
-
-// 日別推移データ（直近14日間）
+// 日別推移データ
 interface DailyUsage {
   date: string;
   requests: number;
@@ -142,25 +65,14 @@ interface DailyUsage {
   costUsd: number;
 }
 
-const dailyHistory: DailyUsage[] = [
-  { date: "09/18", requests: 12, tokens: 45000, costUsd: 0.12 },
-  { date: "09/19", requests: 28, tokens: 110000, costUsd: 0.31 },
-  { date: "09/20", requests: 15, tokens: 62000, costUsd: 0.18 },
-  { date: "09/21", requests: 8, tokens: 31000, costUsd: 0.09 },
-  { date: "09/22", requests: 35, tokens: 145000, costUsd: 0.42 },
-  { date: "09/23", requests: 42, tokens: 180000, costUsd: 0.51 },
-  { date: "09/24", requests: 65, tokens: 290000, costUsd: 0.82 },
-  { date: "09/25", requests: 80, tokens: 360000, costUsd: 0.98 },
-  { date: "09/26", requests: 94, tokens: 420000, costUsd: 1.15 },
-  { date: "09/27", requests: 52, tokens: 210000, costUsd: 0.61 },
-  { date: "09/28", requests: 38, tokens: 160000, costUsd: 0.46 },
-  { date: "09/29", requests: 110, tokens: 510000, costUsd: 1.45 },
-  { date: "09/30", requests: 145, tokens: 680000, costUsd: 1.88 },
-  { date: "10/01", requests: 84, tokens: 410000, costUsd: 1.12 },
-];
-
 export default function GeminiStatsPage() {
-  const [users] = useState<UserUsage[]>(initialUserData);
+  const [users, setUsers] = useState<UserUsage[]>([]);
+  const [dailyData, setDailyData] = useState<DailyUsage[]>([]);
+  const [gcpInfo, setGcpInfo] = useState(DEFAULT_GCP_INFO);
+  const [syncedAt, setSyncedAt] = useState<string>("取得中...");
+  const [dataSource, setDataSource] = useState<string>("GitHub Actions 自動同期パイプライン");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLive, setIsLive] = useState<boolean>(false);
   const [period, setPeriod] = useState<"7d" | "14d" | "30d" | "all">("14d");
   const [searchQuery, setSearchQuery] = useState("");
   const [isGcpDocOpen, setIsGcpDocOpen] = useState(false);
@@ -169,15 +81,46 @@ export default function GeminiStatsPage() {
   // 為替レート（概算 1ドル=150円）
   const USD_JPY = 150;
 
+  // 自動同期データのフェッチ
+  const fetchLiveData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${basePath}/data/gcp-usage-live.json?t=${Date.now()}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.users && Array.isArray(data.users)) {
+          setUsers(data.users);
+        }
+        if (data.dailyHistory && Array.isArray(data.dailyHistory)) {
+          setDailyData(data.dailyHistory);
+        }
+        if (data.gcpInfo) {
+          setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
+        }
+        setSyncedAt(data.syncedAt || "最新");
+        setDataSource(data.dataSource || "GCP Live Sync");
+        setIsLive(true);
+      }
+    } catch (err) {
+      console.warn("Failed to load live sync data, fallback to cached state", err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchLiveData();
+  }, [fetchLiveData]);
+
   // 集計計算
   const totalCostUsd = useMemo(
     () => users.reduce((acc, u) => acc + u.costUsd, 0),
     [users]
   );
-  const remainingCreditUsd = GCP_INFO.totalCreditUsd - totalCostUsd;
+  const remainingCreditUsd = gcpInfo.totalCreditUsd - totalCostUsd;
   const creditUsagePercent = Math.min(
     100,
-    (totalCostUsd / GCP_INFO.totalCreditUsd) * 100
+    (totalCostUsd / gcpInfo.totalCreditUsd) * 100
   );
 
   const totalRequests = useMemo(
@@ -256,7 +199,7 @@ export default function GeminiStatsPage() {
  * Antigravity の社員別利用量・クレジット消費を集計して JSON で返すエンドポイント
  */
 function doGet() {
-  const projectId = "${GCP_INFO.projectId}";
+  const projectId = "${gcpInfo.projectId}";
   
   // 1. BigQuery または Cloud Logging から社員別リクエストを集計
   const query = \`
@@ -302,32 +245,45 @@ function doGet() {
         {/* 社内本番接続ステータスバー */}
         <div className="bg-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-lg border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center space-x-3">
-            <div className="w-3 h-3 rounded-full bg-emerald-400 animate-pulse" />
+            <div className={`w-3 h-3 rounded-full ${isLive ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`} />
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="font-bold text-sm text-white">
-                  監視対象プロジェクト: {GCP_INFO.projectId}
+                  監視対象プロジェクト: {gcpInfo.projectId}
                 </span>
                 <span className="text-[10px] bg-indigo-500/30 text-indigo-300 border border-indigo-500/40 px-2 py-0.5 rounded font-mono">
                   Agent Platform
                 </span>
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded flex items-center gap-1">
+                  <CheckCircle2 size={11} />
+                  <span>自動同期稼働中 ({syncedAt})</span>
+                </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
-                組織: {GCP_INFO.org} ｜ 請求先ID: {GCP_INFO.billingAccountId}
+              <p className="text-xs text-slate-400 mt-1">
+                組織: {gcpInfo.org} ｜ 請求先ID: {gcpInfo.billingAccountId} ｜ データ元: {dataSource}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3 shrink-0">
+          <div className="flex items-center space-x-2.5 shrink-0">
+            <button
+              onClick={fetchLiveData}
+              disabled={isLoading}
+              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-colors cursor-pointer disabled:opacity-50"
+              title="最新データを再取得"
+            >
+              <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
+              <span>{isLoading ? "更新中..." : "即時再取得"}</span>
+            </button>
             <button
               onClick={handleExportCsv}
-              className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-colors cursor-pointer"
             >
-              <Download size={14} />
+              <Download size={13} />
               <span>CSV出力</span>
             </button>
             <a
-              href={`https://console.cloud.google.com/billing/${GCP_INFO.billingAccountId}/reports?project=${GCP_INFO.projectId}`}
+              href={`https://console.cloud.google.com/billing/${gcpInfo.billingAccountId}/reports?project=${gcpInfo.projectId}`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold text-white flex items-center space-x-1.5 transition-colors shadow-sm"
@@ -348,7 +304,7 @@ function doGet() {
                 無料トライアルクレジット
               </span>
               <span className="text-emerald-600 font-mono font-bold">
-                残り {GCP_INFO.trialDaysLeft} 日
+                残り {gcpInfo.trialDaysLeft} 日
               </span>
             </div>
             <div>
@@ -357,7 +313,7 @@ function doGet() {
                   ${remainingCreditUsd.toFixed(2)}
                 </span>
                 <span className="text-xs text-slate-400 font-mono">
-                  / ${GCP_INFO.totalCreditUsd}
+                  / ${gcpInfo.totalCreditUsd}
                 </span>
               </div>
               <span className="text-xs text-slate-500 block mt-0.5">
@@ -525,7 +481,7 @@ function doGet() {
           {/* バーチャート可視化 */}
           <div className="space-y-2">
             <div className="h-48 w-full flex items-end gap-2 sm:gap-3 pt-6 pb-2 px-2 border-b border-slate-200">
-              {dailyHistory.map((item) => {
+              {dailyData.map((item) => {
                 const maxReq = 150;
                 const heightPercent = Math.min(100, (item.requests / maxReq) * 100);
                 return (
