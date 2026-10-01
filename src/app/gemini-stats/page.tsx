@@ -81,31 +81,51 @@ export default function GeminiStatsPage() {
   // 為替レート（概算 1ドル=150円）
   const USD_JPY = 150;
 
-  // 自動同期データのフェッチ
+  // GAS Web API エンドポイント
+  const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbxzfXm8cga5nX-kuIXWXoh1E5FIw0EcRWeaTYNf20LWVgsaM5DtrI2t-nyCE_dyGPiQDQ/exec";
+
+  // 自動同期データのフェッチ (GAS Live API -> 静的JSONフォールバック)
   const fetchLiveData = useCallback(async () => {
     setIsLoading(true);
+    let loaded = false;
+
+    // 1. まず GAS Live Web API からのリアルタイム取得を試行
     try {
-      const res = await fetch(`${basePath}/data/gcp-usage-live.json?t=${Date.now()}`);
-      if (res.ok) {
-        const data = await res.json();
+      const gasRes = await fetch(GAS_ENDPOINT_URL, { redirect: "follow" });
+      if (gasRes.ok) {
+        const data = await gasRes.json();
         if (data.users && Array.isArray(data.users)) {
           setUsers(data.users);
+          if (data.dailyHistory) setDailyData(data.dailyHistory);
+          if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
+          setSyncedAt(data.syncedAt || "リアルタイム同期");
+          setDataSource(data.dataSource || "GAS Live API");
+          setIsLive(true);
+          loaded = true;
         }
-        if (data.dailyHistory && Array.isArray(data.dailyHistory)) {
-          setDailyData(data.dailyHistory);
-        }
-        if (data.gcpInfo) {
-          setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
-        }
-        setSyncedAt(data.syncedAt || "最新");
-        setDataSource(data.dataSource || "GCP Live Sync");
-        setIsLive(true);
       }
-    } catch (err) {
-      console.warn("Failed to load live sync data, fallback to cached state", err);
-    } finally {
-      setIsLoading(false);
+    } catch {
+      // GASフェッチ失敗時はフォールバックへ進む
     }
+
+    // 2. フォールバック: 静的 JSON ファイルから読み込み
+    if (!loaded) {
+      try {
+        const res = await fetch(`${basePath}/data/gcp-usage-live.json?t=${Date.now()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.users && Array.isArray(data.users)) setUsers(data.users);
+          if (data.dailyHistory && Array.isArray(data.dailyHistory)) setDailyData(data.dailyHistory);
+          if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
+          setSyncedAt(data.syncedAt || "最新");
+          setDataSource(data.dataSource || "GCP Verified Data");
+          setIsLive(true);
+        }
+      } catch (err) {
+        console.warn("Failed to load sync data", err);
+      }
+    }
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
