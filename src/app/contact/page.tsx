@@ -29,6 +29,21 @@ const accountFaqs = [
     source: { label: "Google Cloud 無料トライアル FAQ", href: "https://cloud.google.com/signup-faqs" },
   },
   {
+    q: "90日無料トライアルが適用できているか、どうやって確認すればよいですか？",
+    a: "Google Cloud コンソール（console.cloud.google.com）にログインし、左上メニューの「お支払い (Billing)」を選択してください。「概要」画面上部に「無料トライアル クレジット: 〇〇円 / $300 のうち残り〇〇円（残り〇〇日）」と緑色のバーが表示されていれば正常に適用されています。Antigravity側では、IDE右上のステータスバーに会社アカウントまたはプロジェクト名が表示されていれば接続完了です。",
+    source: { label: "Google Cloud 請求先アカウント確認", href: "https://console.cloud.google.com/billing" },
+  },
+  {
+    q: "300ドルを使い切った後、毎月の課金はどれくらいかかりますか？",
+    a: "Antigravity（Gemini 1.5 Pro / Flash、Gemini 3.1 Pro）のAPI利用料はトークン従量課金です。小規模なコード生成やプロンプト質問であれば月数百円、日常的な開発・レビューでも月1,000円〜2,000円程度に収まるケースが一般的です。300ドルのクレジットがあれば、一般的な開発業務では数ヶ月〜半年程度は十分に検証可能です。下の「開発規模別コスト目安表」をご確認ください。",
+    source: { label: "Google Cloud Vertex AI 料金表", href: "https://cloud.google.com/vertex-ai/pricing" },
+  },
+  {
+    q: "予期せぬ高額課金を防ぐために、月の利用上限は設定できますか？",
+    a: "はい、Google Cloudの「予算とアラート（Budgets & Alerts）」機能で月額の上限（例: 月3,000円）を設定できます。50%, 90%, 100% 達成時にメールやGoogle Chatへ自動通知を飛ばすことができ、管理者がAPIの一時停止を設定することも可能です。",
+    source: { label: "Cloud Billing 予算とアラートの設定", href: "https://cloud.google.com/billing/docs/how-to/budgets" },
+  },
+  {
     q: "個人アカウントで Antigravity を業務に使ってもよいですか？",
     a: "個人アカウントには個人向けの利用規約が適用されます。顧客情報・社内機密・未公開ソースコードは入力せず、公開情報での学習・試用にとどめてください。業務では会社のGoogle Cloudプロジェクト経由で利用してください。",
     source: { label: "社内AI利用の注意事項", href: "/tools-hub#ai-guidelines", internal: true },
@@ -184,6 +199,108 @@ export default function ContactPage() {
                 </div>
               </details>
             ))}
+          </div>
+        </section>
+
+        {/* 開発規模ごとのコスト目安 & 予算上限設定ガイド（ご意見TODO-09への対応） */}
+        <section id="cost-guidelines" className="mt-8 bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-xs space-y-6 scroll-mt-6">
+          <div className="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono uppercase">
+                COST MANAGEMENT
+              </span>
+              <h3 className="font-bold text-slate-900 text-base mt-1">
+                Antigravity 開発規模別コスト目安表 & 予算アラート設定
+              </h3>
+            </div>
+            <span className="text-xs text-slate-400">社内エンジニア向け（小林さんご意見反映）</span>
+          </div>
+
+          <p className="text-xs text-slate-600 leading-relaxed">
+            Google Cloud の無料トライアル（$300クレジット・約45,000円相当）期間中は、このクレジットから利用料が差し引かれます。
+            一般的な開発業務における月額コストの目安は以下の通りです。
+          </p>
+
+          {/* コスト目安テーブル */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr className="border-b border-slate-200 bg-slate-50 text-slate-700">
+                  <th className="py-2.5 px-3 font-bold">開発規模・利用シーン</th>
+                  <th className="py-2.5 px-3 font-bold">主な作業内容</th>
+                  <th className="py-2.5 px-3 font-bold text-indigo-700">月間想定コスト</th>
+                  <th className="py-2.5 px-3 font-bold text-emerald-700">$300枠での稼働目安</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-600">
+                <tr>
+                  <td className="py-3 px-3 font-semibold text-slate-900">
+                    🟢 小規模・ライト利用
+                  </td>
+                  <td className="py-3 px-3">
+                    単体関数の作成、エラーログの質問、簡単なSQL・正規表現の作成（週数回）
+                  </td>
+                  <td className="py-3 px-3 text-indigo-700 font-bold font-mono">
+                    $0.5〜$2 / 月<br /><span className="text-[10px] font-normal text-slate-500">(約75〜300円)</span>
+                  </td>
+                  <td className="py-3 px-3 text-emerald-700 font-semibold">
+                    1年以上十分にカバー
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 px-3 font-semibold text-slate-900">
+                    🔵 中規模・日常開発
+                  </td>
+                  <td className="py-3 px-3">
+                    複数ファイルの修正、機能追加、ユニットテスト作成、日常的なコードレビュー（毎日）
+                  </td>
+                  <td className="py-3 px-3 text-indigo-700 font-bold font-mono">
+                    $3〜$10 / 月<br /><span className="text-[10px] font-normal text-slate-500">(約450〜1,500円)</span>
+                  </td>
+                  <td className="py-3 px-3 text-emerald-700 font-semibold">
+                    半年〜1年程度カバー
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-3 px-3 font-semibold text-slate-900">
+                    🟣 大規模・エージェント並列
+                  </td>
+                  <td className="py-3 px-3">
+                    Subagentsの常時並列実行、大規模リファクタリング、全自動E2Eテスト反復実行
+                  </td>
+                  <td className="py-3 px-3 text-indigo-700 font-bold font-mono">
+                    $15〜$30 / 月<br /><span className="text-[10px] font-normal text-slate-500">(約2,250〜4,500円)</span>
+                  </td>
+                  <td className="py-3 px-3 text-emerald-700 font-semibold">
+                    約3〜5ヶ月程度カバー
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* 予算上限・アラート設定手順 */}
+          <div className="bg-slate-50 rounded-xl p-5 border border-slate-200/80 space-y-3 text-xs">
+            <h4 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+              <span>🛡️ 予期せぬ課金を防ぐ「予算アラート」の3ステップ設定</span>
+            </h4>
+            <ol className="list-decimal pl-5 space-y-1.5 text-slate-700 leading-relaxed">
+              <li>
+                <a href="https://console.cloud.google.com/billing" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">
+                  Google Cloud コンソール「お支払い (Billing)」
+                </a>
+                を開き、左メニューの「<strong>予算とアラート</strong>」をクリックします。
+              </li>
+              <li>
+                「<strong>予算を作成</strong>」を押し、予算名（例: <code>Antigravity開発月額上限</code>）と目標金額（例: <code>3,000円</code> または <code>$20</code>）を入力します。
+              </li>
+              <li>
+                アラートしきい値（デフォルトで50%, 90%, 100%）を確認し、通知先に自身のメールアドレスまたは社内Chat通知Webhookを指定して「終了」を押します。
+              </li>
+            </ol>
+            <p className="text-[11px] text-slate-500 pt-1 border-t border-slate-200/60">
+              ※社内管理プロジェクトでは、管理者がプロジェクト単位のハードリミット（Spend Cap）を設定することも可能です。上限設定の代行希望は AI推進担当（担当：梅澤）へご連絡ください。
+            </p>
           </div>
         </section>
       </div>

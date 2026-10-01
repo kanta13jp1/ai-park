@@ -164,6 +164,20 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     relatedLink: "/contact",
     relatedLinkText: "アカウントFAQを見る",
   },
+  {
+    id: "TODO-09",
+    title: "【課金・予算管理】Google Cloud 90日無料トライアルの適用確認と予算上限・規模別コスト目安表の公開",
+    category: "アカウント運用",
+    author: "小林雅水 さん",
+    authorDept: "社内エンジニア",
+    date: "2026/10/01",
+    priority: "高",
+    status: "in_progress",
+    feedbackQuote: "「こちら了解です。３００ドルをどれくらいの期間で使い切るかにはよりますが、これが毎月の課金となると正直厳しいです。一旦３００ドルをどれくらいで消化するのかみてみますね。アップグレードしてからは予算の上限は決めれるようなので、どれくらいの規模のものを作る際にどれくらいの予算が必要なのかちょっと様子見という感じですね。おそらく９０日の無料トライアルにの登録はできたと思うので使用できているか確認お願いします」",
+    actionPlan: "【対応中】①Google Cloud請求先アカウントにて小林さんの90日無料トライアル（$300クレジット）適用状況とAntigravityサインイン確認を実施。②予期せぬ課金を防ぐ「予算とアラート（Budgets & Alerts）」の上限設定手順をガイドに追加。③開発規模（小規模スクリプト作成、日常的なコードレビュー、大規模リファクタリング）ごとの想定トークン消費量と月額費用の目安表を公開します。",
+    relatedLink: "/contact#cost-guidelines",
+    relatedLinkText: "コスト目安表・予算設定を見る",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));
