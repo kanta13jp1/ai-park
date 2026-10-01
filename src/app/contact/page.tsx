@@ -49,6 +49,16 @@ const accountFaqs = [
     source: { label: "社内AI利用の注意事項", href: "/tools-hub#ai-guidelines", internal: true },
   },
   {
+    q: "Google Cloud コンソールで「追加のアクセス権が必要です（billing.resourceCosts.get）」と表示され、クレジット残高が見られません",
+    a: "一般利用者アカウントには請求先レポートの閲覧権限がないための正常なセキュリティ制限です。Antigravityでの開発には支障ありませんが、AI推進担当として残高や利用金額をモニタリングしたい場合は、請求管理者に「請求先アカウント閲覧者（roles/billing.viewer）」のロール付与を依頼してください（設定変更等はできない安全な閲覧権限です）。",
+    source: { label: "Cloud Billing ロールの詳細", href: "https://cloud.google.com/billing/docs/how-to/billing-access" },
+  },
+  {
+    q: "Antigravity IDE でチャット送信時に「You can prompt the model to try again...」とエラーになり応答しません",
+    a: "プロジェクト側で「Cloud AI Companion API（cloudaicompanion.googleapis.com）」または「Vertex AI API」が未有効化であるか、アカウントに「Cloud AI Companion ユーザー（roles/cloudaicompanion.user）」ロールが付与されていない可能性があります。管理者にプロジェクト設定を確認してもらうか、IDE側で新規チャット（＋ボタン）の開始・サインアウトからの再ログインをお試しください。",
+    source: { label: "Google Cloud 導入手順書", href: "/guide#company-setup", internal: true },
+  },
+  {
     q: "（個人利用の場合）無料プランと Google AI Pro では何が違いますか？",
     a: "どちらもGeminiモデルと主要機能を利用できます。違いは利用上限で、無料（Base）プランは週単位、Google AI Pro は5時間ごとにクォータが回復し上限も高く設定されています。",
     source: { label: "Antigravity Plans", href: "https://antigravity.google/docs/plans/" },
