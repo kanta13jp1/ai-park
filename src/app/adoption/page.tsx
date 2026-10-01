@@ -2,6 +2,8 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import SpotlightCard from "@/components/SpotlightCard";
+import { playCyberClick } from "@/lib/sound";
 import {
   Users,
   TrendingUp,

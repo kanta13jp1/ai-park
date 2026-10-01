@@ -2,9 +2,11 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
-import { Mail, MessageSquare, Send, HelpCircle, ExternalLink } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import { Mail, MessageSquare, Send, HelpCircle, ExternalLink, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
+import { playCyberSuccess, playCyberClick } from "@/lib/sound";
 
 // ご意見TODO-08への対応（Google公式情報 2026/09/25 確認）
 const accountFaqs = [
@@ -69,161 +71,195 @@ export default function ContactPage() {
   const [sent, setSent] = useState(false);
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="お問い合わせ"
         subtitle="AI Park運営・AI推進担当へのご意見・ご質問"
       />
       <OfficeHourBanner />
 
-      <div className="max-w-2xl w-full mx-auto px-4 py-8">
-        <div className="bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-xs space-y-6">
-          <div className="space-y-1">
-            <h3 className="font-bold text-slate-900 text-lg">AI推進担当（担当：梅澤）へのお問い合わせ</h3>
-            <p className="text-xs text-slate-500">
-              ツールの新規申請相談、バグ報告、機能リクエスト等、お気軽にお問い合わせください。
-            </p>
-          </div>
-
-          {sent ? (
-            <div className="p-6 bg-emerald-50 text-emerald-800 rounded-lg text-center space-y-2">
-              <h4 className="font-bold">問い合わせ内容をコピーしました（まだ送信されていません）</h4>
-              <p className="text-xs leading-relaxed">
-                Google Chat で AI推進担当（担当：梅澤）に貼り付けて送ってください。内容を確認して折り返しご連絡します。
+      <div className="max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <SpotlightCard
+          spotlightColor="rgba(99, 102, 241, 0.15)"
+          className="bg-white border-slate-200/90 shadow-sm"
+        >
+          <div className="p-6 sm:p-8 space-y-6">
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200/60">
+                <MessageSquare size={13} />
+                <span>AI推進担当（担当：梅澤）へのお問い合わせ</span>
+              </div>
+              <h3 className="font-black text-slate-900 text-xl tracking-tight">
+                ご意見・ご相談窓口
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 font-normal">
+                ツールの新規申請相談、バグ報告、機能リクエスト等、お気軽にお問い合わせください。
               </p>
-              <button type="button" onClick={() => setSent(false)} className="text-xs underline">
-                入力画面に戻る
-              </button>
             </div>
-          ) : (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                // サーバーが無いため送信はせず、Google Chat に貼り付けられるよう内容をコピーする
-                const f = new FormData(e.currentTarget);
-                const text = [
-                  "【AI Park お問い合わせ】",
-                  `お名前: ${f.get("name")}`,
-                  `メール: ${f.get("email")}`,
-                  `種別: ${f.get("kind")}`,
-                  "内容:",
-                  String(f.get("body") ?? ""),
-                ].join("\n");
-                navigator.clipboard?.writeText(text).catch(() => {});
-                setSent(true);
-              }}
-              className="space-y-4 text-sm"
-            >
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  お名前
-                </label>
-                <input
-                  name="name"
-                  type="text"
-                  required
-                  placeholder="山田 太郎"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  メールアドレス (社内メール)
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="taro.yamada@mightylink.co.jp"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+            {sent ? (
+              <div className="p-6 bg-emerald-500/10 border border-emerald-400/30 text-emerald-900 rounded-3xl text-center space-y-3">
+                <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mx-auto text-emerald-600">
+                  <CheckCircle2 size={24} />
+                </div>
+                <h4 className="font-extrabold text-base text-emerald-950">
+                  問い合わせ内容をクリップボードにコピーしました！
+                </h4>
+                <p className="text-xs text-emerald-800 leading-relaxed max-w-md mx-auto">
+                  Google Chat で <strong>AI推進担当（担当：梅澤）</strong> に貼り付けてそのまま送信してください。内容を確認のうえ迅速に折り返しご連絡いたします。
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playCyberClick();
+                    setSent(false);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-white text-emerald-700 font-bold text-xs border border-emerald-200 hover:bg-emerald-50 transition-colors cursor-pointer"
+                >
+                  入力画面に戻る
+                </button>
               </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  お問い合わせ種別
-                </label>
-                <select name="kind" className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                  <option>ツールの新規利用申請について</option>
-                  <option>AI Parkの掲載内容について</option>
-                  <option>セキュリティ・利用規定の確認</option>
-                  <option>その他・ご要望</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  内容
-                </label>
-                <textarea
-                  name="body"
-                  rows={4}
-                  required
-                  placeholder="お問い合わせ内容をご記入ください"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm flex items-center justify-center space-x-2 transition-colors cursor-pointer"
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  // サーバーが無いため送信はせず、Google Chat に貼り付けられるよう内容をコピーする
+                  const f = new FormData(e.currentTarget);
+                  const text = [
+                    "【AI Park お問い合わせ】",
+                    `お名前: ${f.get("name")}`,
+                    `メール: ${f.get("email")}`,
+                    `種別: ${f.get("kind")}`,
+                    "内容:",
+                    String(f.get("body") ?? ""),
+                  ].join("\n");
+                  navigator.clipboard?.writeText(text).catch(() => {});
+                  playCyberSuccess();
+                  setSent(true);
+                }}
+                className="space-y-4 text-xs sm:text-sm"
               >
-                <Send size={15} />
-                <span>内容をコピーして Google Chat で送る</span>
-              </button>
-            </form>
-          )}
-        </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    お名前 <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    name="name"
+                    type="text"
+                    required
+                    placeholder="山田 太郎"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 text-xs font-medium"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    メールアドレス (社内メール) <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    name="email"
+                    type="email"
+                    required
+                    placeholder="taro.yamada@mightylink.co.jp"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 text-xs font-medium"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    お問い合わせ種別
+                  </label>
+                  <select
+                    name="kind"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 text-xs font-medium"
+                  >
+                    <option>ツールの新規利用申請について</option>
+                    <option>AI Parkの掲載内容について</option>
+                    <option>セキュリティ・利用規定の確認</option>
+                    <option>その他・ご要望</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                    内容 <span className="text-rose-500">*</span>
+                  </label>
+                  <textarea
+                    name="body"
+                    rows={4}
+                    required
+                    placeholder="お問い合わせ内容をご記入ください"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 text-xs font-medium leading-relaxed"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-all cursor-pointer active:scale-98"
+                >
+                  <Send size={15} />
+                  <span>内容をコピーして Google Chat で送る</span>
+                </button>
+              </form>
+            )}
+          </div>
+        </SpotlightCard>
 
         {/* アカウント・ライセンスFAQ */}
-        <section className="mt-8 bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-xs space-y-4">
-          <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-            <HelpCircle className="w-5 h-5 text-indigo-600" />
-            <h3 className="font-bold text-slate-900 text-base">よくある質問：アカウント・ライセンス</h3>
+        <SpotlightCard
+          spotlightColor="rgba(99, 102, 241, 0.12)"
+          className="bg-white border-slate-200/90 shadow-sm"
+        >
+          <div className="p-6 sm:p-8 space-y-5">
+            <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3.5">
+              <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200/60 flex items-center justify-center text-indigo-600">
+                <HelpCircle size={18} />
+              </div>
+              <h3 className="font-extrabold text-slate-900 text-lg">よくある質問：アカウント・ライセンス</h3>
+            </div>
+            <div className="space-y-3">
+              {accountFaqs.map((f) => (
+                <details key={f.q} className="group rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 transition-colors p-4">
+                  <summary className="cursor-pointer font-bold text-xs sm:text-sm text-slate-900 list-none flex items-start gap-2.5">
+                    <span className="text-indigo-600 font-mono font-black">Q.</span>
+                    <span className="flex-1">{f.q}</span>
+                  </summary>
+                  <div className="mt-2.5 pl-6 space-y-2 border-t border-slate-200/40 pt-2.5">
+                    <p className="text-xs text-slate-700 leading-relaxed">{f.a}</p>
+                    {f.source.internal ? (
+                      <Link href={f.source.href} className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:underline">
+                        {f.source.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={f.source.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:underline"
+                      >
+                        出典: {f.source.label}
+                        <ExternalLink size={11} />
+                      </a>
+                    )}
+                  </div>
+                </details>
+              ))}
+            </div>
           </div>
-          <div className="space-y-3">
-            {accountFaqs.map((f) => (
-              <details key={f.q} className="group rounded-lg border border-slate-200 bg-slate-50/60 p-4">
-                <summary className="cursor-pointer font-bold text-sm text-slate-900 list-none flex items-start gap-2">
-                  <span className="text-indigo-600">Q.</span>
-                  <span>{f.q}</span>
-                </summary>
-                <div className="mt-2 pl-5 space-y-2">
-                  <p className="text-xs text-slate-700 leading-relaxed">{f.a}</p>
-                  {f.source.internal ? (
-                    <Link href={f.source.href} className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 hover:underline">
-                      {f.source.label}
-                    </Link>
-                  ) : (
-                    <a
-                      href={f.source.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 hover:underline"
-                    >
-                      出典: {f.source.label}
-                      <ExternalLink size={11} />
-                    </a>
-                  )}
-                </div>
-              </details>
-            ))}
-          </div>
-        </section>
+        </SpotlightCard>
 
         {/* 開発規模ごとのコスト目安 & 予算上限設定ガイド（ご意見TODO-09への対応） */}
-        <section id="cost-guidelines" className="mt-8 bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-xs space-y-6 scroll-mt-6">
-          <div className="border-b border-slate-100 pb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <section id="cost-guidelines" className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 scroll-mt-6">
+          <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono uppercase">
+              <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 font-mono uppercase tracking-wider">
                 COST MANAGEMENT
               </span>
-              <h3 className="font-bold text-slate-900 text-base mt-1">
+              <h3 className="font-extrabold text-slate-900 text-lg mt-1.5">
                 Antigravity 開発規模別コスト目安表 & 予算アラート設定
               </h3>
             </div>
-            <span className="text-xs text-slate-400">社内エンジニア向け（小林さんご意見反映）</span>
+            <span className="text-xs text-slate-400 font-medium">社内エンジニア向け（小林さんご意見反映）</span>
           </div>
 
           <p className="text-xs text-slate-600 leading-relaxed">

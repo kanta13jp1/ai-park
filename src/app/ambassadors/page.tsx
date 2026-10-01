@@ -55,8 +55,43 @@ function buildApplyIssueUrl(fields: { author: string; dept: string; specialty: s
   return `https://github.com/${GITHUB_REPO}/issues/new?${params.toString()}`;
 }
 
-// 選定・正式登録が済んだアンバサダーだけを追加する
-const initialAmbassadors: Ambassador[] = [];
+// 選定・正式登録が済んだ第1期アンバサダー
+const initialAmbassadors: Ambassador[] = [
+  {
+    id: 1,
+    name: "梅澤 寛太",
+    dept: "AI推進部 / DXソリューション",
+    role: "AI推進リーダー / フロントエンド・エージェント開発",
+    avatarColor: "bg-indigo-600 text-white",
+    specialties: ["Google Antigravity", "Subagents並列実行", "Next.js / TypeScript", "MCPツール連携"],
+    recentAchievement: "Antigravity 2.0を駆使し、社内ポータル『AI Park』の企画から本番デプロイまでを3日で構築完了",
+    availableTopics: [
+      "Antigravity IDEの初期セットアップと日常の使い方",
+      "Subagentsによる並列タスク処理とプロンプトのコツ",
+      "社内Skills（本番デプロイ・UIレビュー等）の呼び出し方",
+      "Next.js / Tailwind CSS / Reactコンポーネント開発の自動化"
+    ],
+    slackHandle: "@k-umezawa",
+    isModel: false
+  },
+  {
+    id: 2,
+    name: "小林 雅水",
+    dept: "インフラ・情シスチーム",
+    role: "プロジェクトオーナー / クラウドインフラ統制",
+    avatarColor: "bg-blue-600 text-white",
+    specialties: ["Google Cloud", "BigQuery", "社内AI利用規約", "AWS・インフラ統制"],
+    recentAchievement: "組織ml-mightylink.com配下にAgent Platform安全利用環境を立ち上げ、IAMと課金監視を一元化",
+    availableTopics: [
+      "会社のGCPプロジェクト権限（Agent Platformユーザー・閲覧者）の申請・付与",
+      "社内データ取り扱いセキュリティ基準（Level 1〜3）の判断",
+      "Cloud Loggingおよび課金バッチの集計仕様",
+      "AWS / GCP アカウント発行および予算アラート設定"
+    ],
+    slackHandle: "@kobayashi_masami",
+    isModel: false
+  }
+];
 
 const filterCategories = [
   "すべて",
@@ -123,13 +158,25 @@ export default function AmbassadorsPage() {
       <OfficeHourBanner />
 
       <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
-        <UnderConstructionAlert
-          statusType="draft"
-          title="📋 準備中：第1期アンバサダーを募集しています"
-          message="アンバサダーはまだ決まっていません。第1期の応募を受け付けています（応募は AI推進担当 に通知されます）。"
-          prepDetails="社内アンバサダー選定基準の策定および各事業部からの公募受付フェーズ"
-          releaseDate="2026年10月23日(金)"
-        />
+        <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-4 shadow-xs flex items-center justify-between text-emerald-950">
+          <div className="flex items-center space-x-3 text-xs">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <div>
+              <span className="font-bold text-sm text-emerald-900">
+                第1期 AIアンバサダーが活動を開始しました
+              </span>
+              <p className="text-emerald-700 text-[11px] mt-0.5">
+                AI推進担当・インフラオーナーへの個別相談を受け付けています。各部署からの追加立候補も継続募集中です。
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setIsApplyModalOpen(true)}
+            className="shrink-0 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-colors"
+          >
+            追加立候補する
+          </button>
+        </div>
 
         {/* バナー: アンバサダー稼働中 */}
         <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-950">
