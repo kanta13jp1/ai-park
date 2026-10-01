@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-10-01T07:35:00.000Z",
-  "syncedAt": "2026/10/01 16:35",
+  "updatedAt": "2026-10-01T15:48:37.475Z",
+  "syncedAt": "2026-10-02 00:48",
   "dataSource": "Google Cloud Billing & IAM Live Verified",
   "isLive": true,
   "gcpInfo": {
@@ -26,13 +26,48 @@
     "totalUsers": 2
   },
   "dailyHistory": [
-    { "date": "09/25", "requests": 0, "tokens": 0, "costUsd": 0.00 },
-    { "date": "09/26", "requests": 0, "tokens": 0, "costUsd": 0.00 },
-    { "date": "09/27", "requests": 0, "tokens": 0, "costUsd": 0.00 },
-    { "date": "09/28", "requests": 0, "tokens": 0, "costUsd": 0.00 },
-    { "date": "09/29", "requests": 0, "tokens": 0, "costUsd": 0.00 },
-    { "date": "09/30", "requests": 2, "tokens": 9000, "costUsd": 0.05 },
-    { "date": "10/01", "requests": 16, "tokens": 77000, "costUsd": 0.38 }
+    {
+      "date": "09/25",
+      "requests": 0,
+      "tokens": 0,
+      "costUsd": 0
+    },
+    {
+      "date": "09/26",
+      "requests": 0,
+      "tokens": 0,
+      "costUsd": 0
+    },
+    {
+      "date": "09/27",
+      "requests": 0,
+      "tokens": 0,
+      "costUsd": 0
+    },
+    {
+      "date": "09/28",
+      "requests": 0,
+      "tokens": 0,
+      "costUsd": 0
+    },
+    {
+      "date": "09/29",
+      "requests": 0,
+      "tokens": 0,
+      "costUsd": 0
+    },
+    {
+      "date": "09/30",
+      "requests": 2,
+      "tokens": 9000,
+      "costUsd": 0.05
+    },
+    {
+      "date": "10/01",
+      "requests": 16,
+      "tokens": 77000,
+      "costUsd": 0.38
+    }
   ],
   "users": [
     {
