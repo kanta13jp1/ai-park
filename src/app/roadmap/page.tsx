@@ -2,6 +2,8 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import SpotlightCard from "@/components/SpotlightCard";
+import { playCyberClick } from "@/lib/sound";
 import Link from "next/link";
 import { useState } from "react";
 import { featureStatusMaster } from "@/data/feature-status";
@@ -341,234 +343,255 @@ export default function RoadmapPage() {
   );
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="開発ロードマップ & 実装スケジュール"
         subtitle="MightyLINK 社内AIポータル「AI Park」の機能拡充計画と進捗ステータス"
       />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* 全体進捗サマリーカード */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div className="flex items-center space-x-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-cyan-100 text-cyan-800 text-xs font-semibold">
-                  Project Schedule
-                </span>
-                <span className="text-xs text-slate-500">最終更新: 2026年9月25日</span>
+        <SpotlightCard
+          spotlightColor="rgba(6, 182, 212, 0.15)"
+          className="bg-white border-slate-200/90 shadow-sm"
+        >
+          <div className="p-6 sm:p-8 space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center space-x-2">
+                  <span className="px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200/60 text-xs font-bold font-mono tracking-wider uppercase">
+                    Project Schedule
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">最終更新: 2026年9月25日</span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1.5 tracking-tight">
+                  AI Park 機能実装マイルストーン
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
+                  準備中・PoC中・工事中となっている箇所を、内容がそろったものから順に公開していきます（予定日が「未定」のものは、決まり次第お知らせします）。
+                </p>
               </div>
-              <h2 className="text-xl font-bold text-slate-900 mt-1">
-                AI Park 機能実装マイルストーン
-              </h2>
-              <p className="text-xs text-slate-600 mt-0.5">
-                準備中・PoC中・工事中となっている箇所を、内容がそろったものから順に公開していきます（予定日が「未定」のものは、決まり次第お知らせします）。
-              </p>
+
+              <div className="flex items-center space-x-3 sm:space-x-4 bg-slate-50/80 border border-slate-200/90 p-3.5 rounded-2xl shrink-0">
+                <div className="text-center px-2">
+                  <div className="text-[11px] text-slate-500 font-semibold">全体タスク</div>
+                  <div className="text-lg font-black text-slate-800 font-mono">{totalTasks} 件</div>
+                </div>
+                <div className="w-px h-8 bg-slate-200" />
+                <div className="text-center px-2">
+                  <div className="text-[11px] text-emerald-600 font-semibold">初期完了</div>
+                  <div className="text-lg font-black text-emerald-600 font-mono">{completedTasks} 件</div>
+                </div>
+                <div className="w-px h-8 bg-slate-200" />
+                <div className="text-center px-2">
+                  <div className="text-[11px] text-blue-600 font-semibold">進行中</div>
+                  <div className="text-lg font-black text-blue-600 font-mono">{inProgressTasks} 件</div>
+                </div>
+                <div className="w-px h-8 bg-slate-200" />
+                <div className="text-center px-2">
+                  <div className="text-[11px] text-amber-600 font-semibold">準備中</div>
+                  <div className="text-lg font-black text-amber-600 font-mono">{plannedTasks} 件</div>
+                </div>
+              </div>
             </div>
 
-            <div className="flex items-center space-x-4 bg-slate-50 border border-slate-200/80 p-3 rounded-xl">
-              <div className="text-center px-2">
-                <div className="text-xs text-slate-500 font-medium">全体タスク</div>
-                <div className="text-lg font-bold text-slate-800">{totalTasks} 件</div>
+            {/* プログレスバー */}
+            <div className="space-y-2">
+              <div className="flex justify-between items-center text-xs">
+                <span className="font-bold text-slate-700 flex items-center space-x-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-cyan-600" />
+                  <span>Phase 1〜4 全体進行度</span>
+                </span>
+                <span className="font-black text-cyan-700 font-mono">
+                  {progressPercentage}% 完了
+                </span>
               </div>
-              <div className="w-px h-8 bg-slate-200" />
-              <div className="text-center px-2">
-                <div className="text-xs text-emerald-600 font-medium">初期完了</div>
-                <div className="text-lg font-bold text-emerald-600">{completedTasks} 件</div>
+              <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/80">
+                <div
+                  className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full transition-all duration-700 shadow-xs"
+                  style={{ width: `${progressPercentage}%` }}
+                />
               </div>
-              <div className="w-px h-8 bg-slate-200" />
-              <div className="text-center px-2">
-                <div className="text-xs text-blue-600 font-medium">進行中</div>
-                <div className="text-lg font-bold text-blue-600">{inProgressTasks} 件</div>
+            </div>
+
+            {/* フェーズ概要バナー */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-2">
+              <div className="p-4 rounded-2xl border border-emerald-200/90 bg-emerald-50/50 space-y-1.5 transition-all hover:bg-emerald-50/80">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-emerald-800 px-2.5 py-0.5 bg-emerald-100/80 rounded-full border border-emerald-200 font-mono flex items-center space-x-1">
+                    <span>✓</span>
+                    <span>Phase 1 (完了)</span>
+                  </span>
+                  <span className="text-[11px] text-emerald-600 font-mono font-semibold">9月下旬</span>
+                </div>
+                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">ポータル公開・学習基盤</h4>
+                <p className="text-[11px] text-slate-600 leading-relaxed">トップ、導入ガイド、初級編チートシート、Office Hour</p>
               </div>
-              <div className="w-px h-8 bg-slate-200" />
-              <div className="text-center px-2">
-                <div className="text-xs text-amber-600 font-medium">準備中</div>
-                <div className="text-lg font-bold text-amber-600">{plannedTasks} 件</div>
+
+              <div className="p-4 rounded-2xl border border-blue-200/90 bg-blue-50/60 space-y-1.5 ring-2 ring-blue-500/20 transition-all hover:bg-blue-50/90">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-blue-800 px-2.5 py-0.5 bg-blue-100/80 rounded-full border border-blue-200 font-mono flex items-center space-x-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping mr-0.5" />
+                    <span>Phase 2 (進行中)</span>
+                  </span>
+                  <span className="text-[11px] text-blue-600 font-mono font-semibold">10月中</span>
+                </div>
+                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">学習・ツール連携 & コミュニティ</h4>
+                <p className="text-[11px] text-slate-600 leading-relaxed">Academy、ご意見ボード、ツールシート同期、取材、アンバサダー、カレンダー</p>
+              </div>
+
+              <div className="p-4 rounded-2xl border border-amber-200/90 bg-amber-50/50 space-y-1.5 transition-all hover:bg-amber-50/80">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-amber-800 px-2.5 py-0.5 bg-amber-100/80 rounded-full border border-amber-200 font-mono">
+                    Phase 3 (準備中)
+                  </span>
+                  <span className="text-[11px] text-amber-600 font-mono font-semibold">11月中</span>
+                </div>
+                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">工事中ページの内容準備</h4>
+                <p className="text-[11px] text-slate-600 leading-relaxed">利用状況の実データ、事例・Skills、ツール方針</p>
+              </div>
+
+              <div className="p-4 rounded-2xl border border-purple-200/90 bg-purple-50/50 space-y-1.5 transition-all hover:bg-purple-50/80">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-purple-800 px-2.5 py-0.5 bg-purple-100/80 rounded-full border border-purple-200 font-mono">
+                    Phase 4 (企画中)
+                  </span>
+                  <span className="text-[11px] text-purple-600 font-mono font-semibold">12月中旬〜</span>
+                </div>
+                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">（未定）</h4>
+                <p className="text-[11px] text-slate-600 leading-relaxed">Phase 3 の後に検討します</p>
               </div>
             </div>
           </div>
-
-          {/* プログレスバー */}
-          <div className="space-y-2">
-            <div className="flex justify-between items-center text-xs">
-              <span className="font-semibold text-slate-700 flex items-center space-x-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-cyan-600" />
-                <span>Phase 1〜4 全体進行度</span>
-              </span>
-              <span className="font-bold text-cyan-700">
-                {progressPercentage}% 完了
-              </span>
-            </div>
-            <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/60">
-              <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full transition-all duration-500"
-                style={{ width: `${progressPercentage}%` }}
-              />
-            </div>
-          </div>
-
-          {/* フェーズ概要バナー */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2">
-            <div className="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-emerald-800 px-2 py-0.5 bg-emerald-100 rounded flex items-center space-x-1">
-                  <span>✓</span>
-                  <span>Phase 1 (完了)</span>
-                </span>
-                <span className="text-[10px] text-emerald-600 font-medium">9月下旬</span>
-              </div>
-              <h4 className="font-bold text-slate-800 text-xs mt-1">ポータル公開・学習基盤</h4>
-              <p className="text-[11px] text-slate-600">トップ、導入ガイド、初級編チートシート、Office Hour</p>
-            </div>
-
-            <div className="p-3.5 rounded-xl border border-blue-200 bg-blue-50/60 space-y-1 ring-2 ring-blue-500/20">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-blue-800 px-2 py-0.5 bg-blue-100 rounded flex items-center space-x-1">
-                  <span>🔵</span>
-                  <span>Phase 2 (進行中)</span>
-                </span>
-                <span className="text-[10px] text-blue-600 font-medium">10月中</span>
-              </div>
-              <h4 className="font-bold text-slate-800 text-xs mt-1">学習・ツール連携 & コミュニティ</h4>
-              <p className="text-[11px] text-slate-600">Academy、ご意見ボード、ツールシート同期、取材、アンバサダー、カレンダー</p>
-            </div>
-
-            <div className="p-3.5 rounded-xl border border-amber-200 bg-amber-50/50 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-amber-800 px-2 py-0.5 bg-amber-100 rounded">
-                  Phase 3 (準備中)
-                </span>
-                <span className="text-[10px] text-amber-600 font-medium">11月中</span>
-              </div>
-              <h4 className="font-bold text-slate-800 text-xs mt-1">工事中ページの内容準備</h4>
-              <p className="text-[11px] text-slate-600">利用状況の実データ、事例・Skills、ツール方針</p>
-            </div>
-
-            <div className="p-3.5 rounded-xl border border-purple-200 bg-purple-50/50 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-[11px] font-bold text-purple-800 px-2 py-0.5 bg-purple-100 rounded">
-                  Phase 4 (企画中)
-                </span>
-                <span className="text-[10px] text-purple-600 font-medium">12月中旬〜</span>
-              </div>
-              <h4 className="font-bold text-slate-800 text-xs mt-1">（未定）</h4>
-              <p className="text-[11px] text-slate-600">Phase 3 の後に検討します</p>
-            </div>
-          </div>
-        </div>
+        </SpotlightCard>
 
         {/* 📅 準備中・PoC中・工事中機能の正式稼働（解除）スケジュール（最重要セクション） */}
-        <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white border border-slate-700/80 rounded-2xl p-6 shadow-md space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700/70 pb-4">
+        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
             <div>
               <div className="flex items-center space-x-2">
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center space-x-1">
+                <span className="px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold font-mono flex items-center space-x-1.5">
                   <Calendar size={13} className="text-emerald-400" />
-                  <span>Release Timeline</span>
+                  <span>RELEASE TIMELINE</span>
                 </span>
                 <span className="text-xs text-slate-400">具体的なリリース目標日（昇順）</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-extrabold text-white mt-1">
+              <h3 className="text-lg sm:text-2xl font-black text-white mt-1.5 tracking-tight">
                 📌 準備中・PoC中・工事中機能の正式稼働スケジュール
               </h3>
-              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
                 現在ポータル上で「準備中」「PoC中」「工事中」となっている全機能について、いつ正式稼働し注意書きが解除されるかのロードマップです。
               </p>
             </div>
-            <span className="text-xs font-mono bg-white/10 px-3 py-1.5 rounded-lg border border-white/10 text-slate-300 shrink-0 self-start sm:self-auto">
+            <span className="text-xs font-mono bg-white/10 px-3.5 py-1.5 rounded-xl border border-white/10 text-slate-300 shrink-0 self-start sm:self-auto font-bold">
               全 {unverifiedReleaseSchedule.length} 機能
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
             {unverifiedReleaseSchedule.map((item, idx) => (
-              <div
+              <SpotlightCard
                 key={idx}
-                className="bg-slate-800/80 hover:bg-slate-800 border border-slate-700 rounded-xl p-4 transition-all flex flex-col justify-between space-y-3"
+                spotlightColor="rgba(56, 189, 248, 0.12)"
+                className="bg-slate-900/90 border-slate-800 hover:border-slate-700 shadow-sm"
               >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-extrabold text-emerald-400 font-mono flex items-center space-x-1">
-                      <Clock size={12} />
-                      <span>{item.date}</span>
-                    </span>
-                    <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${item.badgeColor}`}
-                    >
-                      {item.currentStatus}
-                    </span>
+                <div className="p-4 sm:p-5 flex flex-col justify-between space-y-3.5 h-full">
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-black text-emerald-400 font-mono flex items-center space-x-1.5">
+                        <Clock size={13} />
+                        <span>{item.date}</span>
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border font-mono ${item.badgeColor}`}
+                      >
+                        {item.currentStatus}
+                      </span>
+                    </div>
+
+                    <h4 className="font-extrabold text-white text-sm sm:text-base">
+                      {item.pageName}
+                    </h4>
+
+                    <p className="text-[11px] text-slate-300 leading-relaxed bg-black/40 p-3 rounded-xl border border-white/5">
+                      <span className="text-slate-400 font-semibold block mb-0.5 font-mono">🔑 解除マイルストーン:</span>
+                      {item.condition}
+                    </p>
                   </div>
 
-                  <h4 className="font-bold text-white text-sm">
-                    {item.pageName}
-                  </h4>
-
-                  <p className="text-[11px] text-slate-300 leading-relaxed bg-black/30 p-2.5 rounded-lg border border-white/5">
-                    <span className="text-slate-400 font-semibold block mb-0.5">🔑 解除マイルストーン:</span>
-                    {item.condition}
-                  </p>
+                  <div className="pt-2.5 border-t border-slate-800 flex items-center justify-between text-xs">
+                    <span className="text-[10px] text-slate-400 font-mono font-medium">{item.phase}</span>
+                    <Link
+                      href={item.href}
+                      onClick={() => playCyberClick()}
+                      className="inline-flex items-center space-x-1 text-cyan-300 hover:text-cyan-200 font-bold transition-colors"
+                    >
+                      <span>該当画面を見る</span>
+                      <ArrowRight size={13} />
+                    </Link>
+                  </div>
                 </div>
-
-                <div className="pt-2 border-t border-slate-700/60 flex items-center justify-between text-xs">
-                  <span className="text-[10px] text-slate-400 font-medium">{item.phase}</span>
-                  <Link
-                    href={item.href}
-                    className="inline-flex items-center space-x-1 text-cyan-300 hover:text-cyan-200 font-semibold transition-colors"
-                  >
-                    <span>該当画面を見る</span>
-                    <ArrowRight size={12} />
-                  </Link>
-                </div>
-              </div>
+              </SpotlightCard>
             ))}
           </div>
         </div>
 
         {/* フィルターバー */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
-          <div className="flex items-center space-x-2 text-sm font-semibold text-slate-800">
-            <Filter className="w-4 h-4 text-slate-500" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
+          <div className="flex items-center space-x-2 text-sm font-bold text-slate-800">
+            <Filter className="w-4 h-4 text-cyan-600" />
             <span>開発タスク詳細一覧 ({filteredTasks.length}件)</span>
           </div>
 
-          <div className="flex items-center space-x-1.5 bg-slate-200/70 p-1 rounded-lg text-xs font-medium self-start sm:self-auto">
+          <div className="flex items-center space-x-1.5 bg-slate-200/80 p-1 rounded-xl text-xs font-medium self-start sm:self-auto font-mono">
             <button
-              onClick={() => setSelectedStatus("all")}
-              className={`px-3 py-1.5 rounded-md transition-all ${
+              onClick={() => {
+                playCyberClick();
+                setSelectedStatus("all");
+              }}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
                 selectedStatus === "all"
-                  ? "bg-white text-slate-900 shadow-xs font-semibold"
+                  ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
               すべて ({totalTasks})
             </button>
             <button
-              onClick={() => setSelectedStatus("in-progress")}
-              className={`px-3 py-1.5 rounded-md transition-all ${
+              onClick={() => {
+                playCyberClick();
+                setSelectedStatus("in-progress");
+              }}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
                 selectedStatus === "in-progress"
-                  ? "bg-blue-600 text-white shadow-xs font-semibold"
+                  ? "bg-blue-600 text-white shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
               進行中 ({inProgressTasks})
             </button>
             <button
-              onClick={() => setSelectedStatus("planned")}
-              className={`px-3 py-1.5 rounded-md transition-all ${
+              onClick={() => {
+                playCyberClick();
+                setSelectedStatus("planned");
+              }}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
                 selectedStatus === "planned"
-                  ? "bg-amber-500 text-white shadow-xs font-semibold"
+                  ? "bg-amber-500 text-white shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
               準備中 ({plannedTasks})
             </button>
             <button
-              onClick={() => setSelectedStatus("completed")}
-              className={`px-3 py-1.5 rounded-md transition-all ${
+              onClick={() => {
+                playCyberClick();
+                setSelectedStatus("completed");
+              }}
+              className={`px-3 py-1.5 rounded-lg transition-all ${
                 selectedStatus === "completed"
-                  ? "bg-emerald-600 text-white shadow-xs font-semibold"
+                  ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
               }`}
             >
@@ -584,122 +607,125 @@ export default function RoadmapPage() {
             const isCompleted = task.status === "completed";
 
             return (
-              <div
+              <SpotlightCard
                 key={task.id}
-                className="bg-white border border-slate-200 hover:border-slate-300 rounded-xl p-5 shadow-xs transition-all flex flex-col justify-between space-y-4"
+                spotlightColor="rgba(6, 182, 212, 0.12)"
+                className="bg-white border-slate-200/90 shadow-sm"
               >
-                <div className="space-y-3">
-                  {/* ヘッダー */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xl p-1.5 bg-slate-100 rounded-lg shrink-0">
-                        {task.icon}
-                      </span>
-                      <div>
-                        <div className="flex flex-wrap items-center gap-1.5">
-                          <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                              task.phase === "Phase 1"
-                                ? "bg-emerald-100 text-emerald-800"
-                                : task.phase === "Phase 2"
-                                ? "bg-blue-100 text-blue-800"
-                                : task.phase === "Phase 3"
-                                ? "bg-amber-100 text-amber-800"
-                                : "bg-purple-100 text-purple-800"
-                            }`}
-                          >
-                            {task.phase}
-                          </span>
-                          <span className="text-[11px] font-semibold text-slate-600 flex items-center space-x-1">
-                            <Clock className="w-3 h-3 text-slate-400" />
-                            <span>{task.targetDate}</span>
-                          </span>
-                          {task.currentVerificationBadge && (
-                            <span className="text-[10px] font-bold px-1.5 py-0.2 rounded border bg-slate-50 text-slate-700 border-slate-200">
-                              現在: {task.currentVerificationBadge}
+                <div className="p-6 flex flex-col justify-between space-y-4 h-full">
+                  <div className="space-y-3.5">
+                    {/* ヘッダー */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center space-x-2.5">
+                        <span className="text-xl p-2 bg-slate-100/90 border border-slate-200/70 rounded-xl shrink-0 shadow-2xs">
+                          {task.icon}
+                        </span>
+                        <div>
+                          <div className="flex flex-wrap items-center gap-1.5 font-mono">
+                            <span
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                                task.phase === "Phase 1"
+                                  ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                                  : task.phase === "Phase 2"
+                                  ? "bg-blue-50 text-blue-800 border-blue-200"
+                                  : task.phase === "Phase 3"
+                                  ? "bg-amber-50 text-amber-800 border-amber-200"
+                                  : "bg-purple-50 text-purple-800 border-purple-200"
+                              }`}
+                            >
+                              {task.phase}
                             </span>
-                          )}
+                            <span className="text-[11px] font-bold text-slate-500 flex items-center space-x-1">
+                              <Clock className="w-3 h-3 text-slate-400" />
+                              <span>{task.targetDate}</span>
+                            </span>
+                            {task.currentVerificationBadge && (
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border bg-slate-50 text-slate-700 border-slate-200">
+                                現在: {task.currentVerificationBadge}
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="font-extrabold text-slate-900 text-base mt-1.5">
+                            {task.title}
+                          </h3>
                         </div>
-                        <h3 className="font-bold text-slate-900 text-sm mt-1">
-                          {task.title}
-                        </h3>
+                      </div>
+
+                      <div className="shrink-0 font-mono">
+                        {isProgress && (
+                          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs animate-pulse">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1" />
+                            <span>進行中</span>
+                          </span>
+                        )}
+                        {task.status === "planned" && (
+                          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 shadow-2xs">
+                            <span>🚧 準備中</span>
+                          </span>
+                        )}
+                        {isCompleted && (
+                          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
+                            <span>完了</span>
+                          </span>
+                        )}
                       </div>
                     </div>
 
-                    <div>
-                      {isProgress && (
-                        <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200 shrink-0 animate-pulse">
-                          <span>🔵</span>
-                          <span>進行中</span>
+                    {/* 概要 */}
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {task.description}
+                    </p>
+
+                    {/* 本番解除マイルストーン */}
+                    {task.releaseCondition && (
+                      <div className="bg-slate-50/90 rounded-xl p-3 border border-slate-200/80 text-xs space-y-1">
+                        <span className="text-[11px] font-bold text-slate-800 flex items-center space-x-1 font-mono">
+                          <span>🎯</span>
+                          <span>本番稼働（解除）マイルストーン:</span>
                         </span>
-                      )}
-                      {task.status === "planned" && (
-                        <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 shrink-0">
-                          <span>🚧</span>
-                          <span>準備中</span>
-                        </span>
-                      )}
-                      {isCompleted && (
-                        <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
-                          <CheckCircle2 className="w-3 h-3" />
-                          <span>完了</span>
-                        </span>
-                      )}
+                        <p className="text-[11px] text-slate-600 leading-relaxed font-mono">
+                          {task.releaseCondition}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* チェックリスト */}
+                    <div className="bg-slate-50/60 rounded-xl p-3.5 border border-slate-200/70 space-y-2">
+                      <div className="text-[11px] font-bold text-slate-800 font-mono">主な実装項目:</div>
+                      <div className="space-y-1.5">
+                        {task.items.map((item, idx) => (
+                          <div key={idx} className="flex items-start space-x-2 text-xs">
+                            {item.done ? (
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                            ) : (
+                              <div className="w-3.5 h-3.5 rounded-full border border-slate-300 shrink-0 mt-0.5 bg-white" />
+                            )}
+                            <span
+                              className={item.done ? "text-slate-400 line-through" : "text-slate-700 font-medium"}
+                            >
+                              {item.text}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  {/* 概要 */}
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {task.description}
-                  </p>
-
-                  {/* 本番解除マイルストーン */}
-                  {task.releaseCondition && (
-                    <div className="bg-slate-100/70 rounded-lg p-2.5 border border-slate-200 text-xs space-y-1">
-                      <span className="text-[11px] font-bold text-slate-700 flex items-center space-x-1">
-                        <span>🎯</span>
-                        <span>本番稼働（解除）マイルストーン:</span>
-                      </span>
-                      <p className="text-[11px] text-slate-600 leading-relaxed">
-                        {task.releaseCondition}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* チェックリスト */}
-                  <div className="bg-slate-50/80 rounded-lg p-3 border border-slate-100 space-y-2">
-                    <div className="text-[11px] font-semibold text-slate-700">主な実装項目:</div>
-                    <div className="space-y-1.5">
-                      {task.items.map((item, idx) => (
-                        <div key={idx} className="flex items-start space-x-2 text-xs">
-                          {item.done ? (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                          ) : (
-                            <div className="w-3.5 h-3.5 rounded-full border border-slate-300 shrink-0 mt-0.5 bg-white" />
-                          )}
-                          <span
-                            className={item.done ? "text-slate-500 line-through" : "text-slate-700 font-medium"}
-                          >
-                            {item.text}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
+                  {/* フッター / 画面リンク */}
+                  <div className="pt-3.5 border-t border-slate-100 flex items-center justify-between">
+                    <span className="text-xs text-slate-400 font-medium font-mono">対象機能: {task.pageName}</span>
+                    <Link
+                      href={task.href}
+                      onClick={() => playCyberClick()}
+                      className="inline-flex items-center space-x-1 text-xs font-bold text-cyan-700 hover:text-cyan-800 transition-colors"
+                    >
+                      <span>該当画面へ</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
                 </div>
-
-                {/* フッター / 画面リンク */}
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs text-slate-500 font-medium">対象機能: {task.pageName}</span>
-                  <Link
-                    href={task.href}
-                    className="inline-flex items-center space-x-1 text-xs font-semibold text-cyan-700 hover:text-cyan-800 transition-colors"
-                  >
-                    <span>該当画面へ</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
+              </SpotlightCard>
             );
           })}
         </div>

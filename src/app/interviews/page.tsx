@@ -89,103 +89,8 @@ function ArticleStatusBadge({ published }: { published?: boolean }) {
   );
 }
 
-// 実際に取材し、本人と上長の原稿確認が済んだ記事
-const interviewArticles: InterviewArticle[] = [
-  {
-    id: "interview-01",
-    issueNumber: "#01",
-    sectionTitle: "🎤 Gemini活用事例インタビュー #01",
-    initial: "梅澤",
-    initialBg: "bg-indigo-600 text-white",
-    title: "「Antigravityの自律並列処理で挑む、社内ポータル開発とPoC爆速化の舞台裏」",
-    interviewee: "梅澤 寛太",
-    role: "AI推進担当 / DXソリューション",
-    date: "2026/10/01",
-    tag: "Antigravity / Next.js",
-    tagColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
-    summary: "Antigravity 2.0 と Gemini 3.8 / 3.1 Pro を社内業務に本格導入。手動で数週間かかっていた社内ポータル『AI Park』のフルスタック構築を、Subagents並列実行とSkillsを駆使してわずか数日で本番運用まで導いた実践録。",
-    metrics: "開発リードタイム 80% 短縮 / プロトタイプ検証 4倍速",
-    slideTheme: {
-      bgGradient: "from-indigo-950 via-slate-900 to-blue-950",
-      catchphrase: "「単なるチャットではなく、自律して並行作業するチームを手に入れた感覚です」",
-      subCatchphrase: "Antigravity Subagents × Next.js による社内DXの最前線"
-    },
-    highlights: [
-      "親エージェントが子エージェントを並行起動し、テスト・UI修正・型検査を同時実行",
-      "社内Skills（本番デプロイ自動化、厳格UI/UXレビュー）で属人化を排除",
-      "GCP Cloud LoggingおよびGAS Web APIと連携したリアルタイム利用監視を実現"
-    ],
-    qna: [
-      {
-        q: "どんな業務で、何に困っていましたか？",
-        a: "社内のAI活用事例や利用ルールが散在しており、社員が『どのツールをどう使えばいいか』迷う状況がありました。また、社内ポータルを作ろうにも専任エンジニアのリソースが足りず、開発期間の長期化が課題でした。"
-      },
-      {
-        q: "どのAIツールを、どう使いましたか？",
-        a: "Google Antigravity 2.0 をフル活用しました。単にコードを書かせるだけでなく、Subagentsを使ってリサーチ・CSS調整・テスト実行を並列で走らせ、人間は設計の意思決定とレビューに集中しました。"
-      },
-      {
-        q: "どれくらい効果がありましたか？",
-        a: "要件定義から48ページのフルスタックポータル構築、Cloud Logging連携、GitHub Pages本番デプロイまでをわずか実働3日で完遂しました。通常の受託開発換算で約1.5人月分の工数を削減できた感覚です。"
-      },
-      {
-        q: "つまずいた点や乗り越え方は？",
-        a: "GCPの課金反映バッチのタイムラグや、アカウントごとの権限スコープの違いに直面しました。ログを詳細に出力させて根本原因を1つずつ解明することで、安全なフォールバック設計を確立できました。"
-      }
-    ],
-    promptTemplate: {
-      title: "ポータル開発で常用している標準指示プロンプト",
-      content: "親エージェントとして全体の仕様と型安全性を担保しつつ、サブエージェントを起動してコンポーネントのUI崩れ検知と自動修正パッチの作成を並行で実行して"
-    },
-    advice: "最初から100点のプロンプトを目指すのではなく、AIにツールの実行権限とフィードバックループ（テストやビルド）を渡し、自律修正させるのがAntigravityを使いこなす最大のコツです。",
-    published: true
-  },
-  {
-    id: "interview-02",
-    issueNumber: "#02",
-    sectionTitle: "🎤 Gemini活用事例インタビュー #02",
-    initial: "小林",
-    initialBg: "bg-blue-600 text-white",
-    title: "「Google Cloud組織統合とAgent Platform連携によるセキュアなAI基盤設計」",
-    interviewee: "小林 雅水",
-    role: "社内エンジニア / インフラ基盤オーナー",
-    date: "2026/10/01",
-    tag: "Google Cloud / インフラ統制",
-    tagColor: "bg-blue-50 text-blue-700 border-blue-200",
-    summary: "社内組織（ml-mightylink.com）配下にAntigravity用GCPプロジェクトを新設し、IAM権限・Cloud Billing・監査ログを安全に一元管理。社員が安心してAIを使えるセキュアな基盤作りの全容を明かします。",
-    metrics: "環境払い出し 10分完了 / 組織セキュリティ統制 100%",
-    slideTheme: {
-      bgGradient: "from-slate-950 via-blue-950 to-slate-900",
-      catchphrase: "「セキュリティと現場の開発速度は、正しい権限設計で両立できます」",
-      subCatchphrase: "GCP Agent Platform × IAM最小特権による安全なAI活用基盤"
-    },
-    highlights: [
-      "個人クレジットカードでの野良AI利用を防止し、会社請求（月額予算・アラート）に統一",
-      "Agent Platformユーザー権限と閲覧者ロールによる最小特権アクセスの徹底",
-      "Cloud Loggingと自動監視APIによる透明性の高い利用状況の可視化"
-    ],
-    qna: [
-      {
-        q: "どんな業務で、何に困っていましたか？",
-        a: "各社員が個人アカウントでAIを試すと、機密情報漏洩リスクやコストのブラックボックス化が懸念されていました。会社として公式にバックアップしつつ、ガバナンスを効かせる仕組みが必要でした。"
-      },
-      {
-        q: "どのAIツールを、どう使いましたか？",
-        a: "Google Cloud組織配下にプロジェクト『antigravity-pj-509006』を立ち上げ、Agent Platformユーザーロールを整備しました。また、社内メンバーへの権限付与フローをドキュメント化して標準化しました。"
-      },
-      {
-        q: "どれくらい効果がありましたか？",
-        a: "アカウント申請から最短10分で安全な開発環境を提供できるようになり、全社のAIクレジット残高や月額コストが一目で把握できるようになりました。"
-      }
-    ],
-    promptTemplate: {
-      title: "インフラチーム推奨のセキュリティ事前確認プロンプト",
-      content: "本番デプロイを行う前に、機密情報やAPIキーがハードコードされていないか、およびIAM最小特権に反していないか監査して"
-    },
-    advice: "AI導入を禁止するのではなく、会社が安全な土台を用意して現場に渡すことがDX推進の最も確実な近道です。",
-    published: true
-  }
-];
+// 実際に取材し、本人と上長の原稿確認が済んだ記事（現在は取材準備中）
+const interviewArticles: InterviewArticle[] = [];
 
 export default function InterviewsPage() {
   const [selectedArticle, setSelectedArticle] = useState<InterviewArticle | null>(null);
@@ -245,25 +150,13 @@ export default function InterviewsPage() {
 
       <div className="max-w-5xl w-full mx-auto px-4 py-8 space-y-8">
         {/* デプロイ品質ゲート連動アラート */}
-        <div className="bg-emerald-50/70 border border-emerald-200 rounded-xl p-4 shadow-xs flex items-center justify-between text-emerald-950">
-          <div className="flex items-center space-x-3 text-xs">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-            <div>
-              <span className="font-bold text-sm text-emerald-900">
-                ✅ 実践インタビュー 第1弾・第2弾を正式公開しました
-              </span>
-              <p className="text-emerald-700 text-[11px] mt-0.5">
-                AI推進担当（梅澤）およびインフラ基盤オーナー（小林）のAntigravity導入・GCP連携の生事例を掲載中。
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setIsSubmitModalOpen(true)}
-            className="shrink-0 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition-colors"
-          >
-            取材に立候補する
-          </button>
-        </div>
+        <UnderConstructionAlert
+          statusType="draft"
+          title="📋 準備中：取材を始める準備をしています"
+          message="インタビュー記事はまだありません。取材の立候補を受け付けています。"
+          prepDetails="下の「取材に立候補する」から応募すると AI推進担当に通知されます"
+          releaseDate="2026年10月16日(金)"
+        />
 
         {/* 取材立候補案内バナー */}
         <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-indigo-700/50">

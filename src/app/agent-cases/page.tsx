@@ -6,300 +6,208 @@ import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
 import { playCyberClick } from "@/lib/sound";
 import {
-  Users,
   Bot,
   Sparkles,
-  ArrowRight,
-  TrendingDown,
-  Clock,
-  CheckCircle2,
-  Workflow,
+  GitFork,
   Cpu,
-  Layers,
-  ChevronDown,
-  ChevronUp,
-  FileText,
-  GitBranch,
-  ShieldAlert,
-  Play
+  Clock,
+  ArrowRight,
+  TrendingUp,
+  ShieldCheck,
+  CheckCircle2,
+  FileCode2,
+  Users
 } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
 
-interface SubagentCase {
+interface AgentCase {
   id: string;
   title: string;
-  category: "エンジニアリング" | "データ分析" | "リサーチ・企画" | "品質保証";
-  durationBefore: string;
-  durationAfter: string;
-  reductionRate: string;
+  department: string;
   summary: string;
-  agentsArchitecture: {
-    role: string;
-    description: string;
-    model: string;
-  }[];
-  workflowSteps: {
-    step: number;
-    title: string;
-    detail: string;
-  }[];
-  promptExample: string;
-  impact: string[];
+  subagentRoles: string[];
+  estimatedHoursSaved: string;
+  status: "PoC検証中" | "試作モデルケース";
+  keyBenefits: string[];
 }
 
-const CASES_DATA: SubagentCase[] = [
+const AGENT_CASES: AgentCase[] = [
   {
-    id: "case-01",
-    title: "自律E2Eテスト作成 ＆ UI/UXバグ自動修復パイプライン",
-    category: "エンジニアリング",
-    durationBefore: "16 時間 / スプリント",
-    durationAfter: "45 分",
-    reductionRate: "95% 削減",
-    summary: "新機能リリース前のPlaywrightテストスクリプト作成、ビジュアルリグレッション検知、およびレイアウト崩れ箇所のコード自動修復を3つの専門サブエージェントが自律分散で実行。",
-    agentsArchitecture: [
-      { role: "Test Architect (Parent)", description: "テストシナリオの設計と各子エージェントへのタスク分割・統合", model: "Gemini 3.1 Pro" },
-      { role: "Playwright Runner (Subagent)", description: "ヘッドレスブラウザを駆動し実機DOMとスクリーンショットを撮影・検証", model: "Gemini 3.8 Flash" },
-      { role: "Code Fixer (Subagent)", description: "検知されたCSSの破綻や非推奨API呼び出しを即座にピンポイント修正", model: "Gemini 3.1 Pro" }
-    ],
-    workflowSteps: [
-      { step: 1, title: "テストシナリオ策定", detail: "親エージェントが変更対象PRの差分を読み込み、網羅すべき検証項目を洗い出し" },
-      { step: 2, title: "並列ブラウザテスト実行", detail: "子エージェントがChrome / モバイルビューで各画面のレンダリングを自動巡回" },
-      { step: 3, title: "自動差分修復 & PR更新", detail: "エラーが発生した行を特定し、最小限の修正パッチを生成してGitコミット" }
-    ],
-    promptExample: "親エージェントとして、新規追加されたお問い合わせフォームのE2Eテストを作成し、サブエージェントを起動してモバイル表示での崩れがないか自律修復して",
-    impact: [
-      "手動でのクロスブラウザ確認工数がほぼゼロに",
-      "リリース前日のUI崩れ発見による緊急残業の根絶",
-      "テストカバレッジ 42% → 89% に向上"
+    id: "case-legacy-refactor",
+    title: "レガシーNext.js/TSコードの型安全リファクタリング",
+    department: "開発第1グループ",
+    summary: "親エージェントが全体依存関係を解析し、Subagentが各モジュールの型定義修正とユニットテスト実行を並列で自律処理。",
+    subagentRoles: ["Codebase Inspector (Flash)", "Type Refactorer (Pro)", "Test Runner (CLI)"],
+    estimatedHoursSaved: "月間約 38 時間削減（PoC試算）",
+    status: "PoC検証中",
+    keyBenefits: [
+      "20ファイル以上の型エラーを一括解消",
+      "Gitコミット履歴を汚さない安全なブランチ実行",
+      "人的レビュー時間を約65%圧縮"
     ]
   },
   {
-    id: "case-02",
-    title: "マルチリポジトリ横断コード解析 ＆ ドキュメント自動同期",
-    category: "エンジニアリング",
-    durationBefore: "24 時間 / 案件",
-    durationAfter: "2 時間",
-    reductionRate: "91% 削減",
-    summary: "フロントエンド（Next.js）、バックエンド（Python/FastAPI）、インフラ（Terraform）の3つのリポジトリを同時に読み込み、仕様の食い違いを自動検知して社内ポータルへ同期。",
-    agentsArchitecture: [
-      { role: "Doc Orchestrator (Parent)", description: "全体の進捗管理と統合API仕様書の生成", model: "Gemini 3.1 Pro" },
-      { role: "Repo Scanner A (Subagent)", description: "フロントエンドのAPIリクエスト型定義を全走査", model: "Gemini 3.8 Flash" },
-      { role: "Repo Scanner B (Subagent)", description: "バックエンドのPydanticモデルとDBスキーマを走査", model: "Gemini 3.8 Flash" }
-    ],
-    workflowSteps: [
-      { step: 1, title: "3つのリポジトリを並行クローン", detail: "独立したサンドボックス環境で各リポジトリのAST（構文木）を解析" },
-      { step: 2, title: "型の不一致・不整合の自動抽出", detail: "フロントエンドが期待するJSONキーとバックエンドのレスポンス定義の差異を検出" },
-      { step: 3, title: "AI ParkポータルへのMarkdown自動更新", detail: "最新のAPI仕様書をMarkdownとしてビルドし自動デプロイ" }
-    ],
-    promptExample: "frontとapiの各リポジトリを並行で走査し、リクエスト型の食い違いがあるエンドポイントを特定してレポートを生成して",
-    impact: [
-      "手作業によるAPIドキュメント作成・更新の廃止",
-      "フロントとバックエンドの型不一致によるバグ流出ゼロ",
-      "新メンバーのオンボーディング期間を3日から半日に短縮"
+    id: "case-sql-optimization",
+    title: "BigQuery複雑クエリのコスト最適化 & インデックス設計",
+    department: "データ基盤チーム",
+    summary: "実行ログからスキャンバイト数の多い重いクエリを特定し、パーティショニングとクラスタリングを最適化。",
+    subagentRoles: ["Query Profiler (Flash)", "BigQuery Optimizer (Pro)"],
+    estimatedHoursSaved: "月間約 24 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "DRY-RUN検証によるクエリスキャン量の半減",
+      "日次バッチ処理時間を42分から18分に短縮",
+      "クラウド利用コストの削減に寄与"
     ]
   },
   {
-    id: "case-03",
-    title: "BigQueryデータマッピング ＆ クエリ自動最適化",
-    category: "データ分析",
-    durationBefore: "8 時間 / クエリ",
-    durationAfter: "30 分",
-    reductionRate: "93% 削減",
-    summary: "数千列におよぶ業務ログテーブルから、ビジネス指標に必要なカラムの自動マッピングを行い、クエリ実行コストを最小化するSQLXパイプラインを自動生成。",
-    agentsArchitecture: [
-      { role: "Data Lead (Parent)", description: "KPI定義と全体マッピング仕様書の承認", model: "Gemini 3.1 Pro" },
-      { role: "Schema Inspector (Subagent)", description: "メタデータと情報スキーマを高速分析", model: "Gemini 3.8 Flash" },
-      { role: "SQL Optimizer (Subagent)", description: "パーティションとクラスタリングを最適化したSQLXを出力", model: "Gemini 3.1 Pro" }
-    ],
-    workflowSteps: [
-      { step: 1, title: "スキーマ定義の取得", detail: "情報スキーマからデータ型とパーティションキーを抽出" },
-      { step: 2, title: "クエリスキャンの最小化設計", detail: "不要なSELECT * を排除し、必要な列のみをクラスタリング指定" },
-      { step: 3, title: "Dataform / dbt 定義の自動生成", detail: "テスト済みのデータパイプラインコードとして出力" }
-    ],
-    promptExample: "この売上テーブルのスキーマを調査し、月次集計に必要な最適化されたクエリとDataformコードを生成して",
-    impact: [
-      "月間BigQueryクエリ課金を約40%削減",
-      "データ分析チームの定型データ抽出依頼の工数半減",
-      "データカタログの自動更新化"
+    id: "case-playwright-e2e",
+    title: "Playwright E2E UIリグレッション自動テスト生成",
+    department: "QA・品質管理部",
+    summary: "画面仕様書とDOM構造からPlaywrightテストシナリオを自動合成し、ヘッドレスブラウザで視覚差分を検証。",
+    subagentRoles: ["DOM Crawler (Flash)", "Scenario Synthesizer (Pro)", "Visual Diff Checker"],
+    estimatedHoursSaved: "月間約 30 時間削減（PoC検証中）",
+    status: "PoC検証中",
+    keyBenefits: [
+      "回帰テストのスクリプト作成工数をゼロ化",
+      "PR作成時の自動CI連携による不具合即時検知",
+      "主要画面40パターンのクロスブラウザ検証"
     ]
   }
 ];
 
 export default function AgentCasesPage() {
-  const [expandedId, setExpandedId] = useState<string>("case-01");
-
-  const toggleExpand = (id: string) => {
-    setExpandedId(expandedId === id ? "" : id);
-  };
-
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
-        title="Subagents活用事例"
-        subtitle="Antigravity 2.0 の並列自律エージェントを活用した業務改革の実測事例集"
+        title="Subagents 活用事例集"
+        subtitle="Antigravity 2.0 の並列自律エージェントを活用した社内実測モデルケース"
       />
       <OfficeHourBanner />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           statusType="poc"
-          title="🧪 PoC検証中・シミュレーション表示"
-          message="本活用事例は社内PoC環境におけるシミュレーションおよび初期検証に基づく参考モデルケースです。本番運用展開に向けた実測データの追加検証を継続中です。"
-          prepDetails="社内パイロットチームにおける実測工数削減率のヒアリングおよび安全なサブエージェント設定ガイドラインを策定しています。"
-          releaseDate="2026年Q4予定"
+          title="🧪 PoC検証中・試作モデルケース表示"
+          message="現在社内パイロットプロジェクトにてSubagents（自律サブエージェント協調）の実測効果をヒアリング・検証中です。正式運用データが揃い次第更新します。"
+          prepDetails="社内パイロットチームでの工数削減実績・安全な権限設定ガイドラインの客観評価を取りまとめています。"
+          releaseDate="2026年11月上旬予定"
         />
 
-        {/* Subagentsとは */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-purple-800/40">
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30 text-xs font-semibold">
-                <Bot size={14} />
-                <span>Antigravity 2.0 Multi-Agent Architecture</span>
+        {/* HUDハイライトカード */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="space-y-3 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30 text-xs font-mono font-bold tracking-wider uppercase">
+                <Bot size={14} className="text-purple-400" />
+                <span>MULTI-AGENT ARCHITECTURE</span>
               </div>
-              <h2 className="text-xl md:text-2xl font-bold tracking-tight">
-                「1人のAI」から「複数の専門AIチーム」へ
+              <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+                単一プロンプトから「自律協調チーム」への進化
               </h2>
-              <p className="text-purple-200 text-xs leading-relaxed">
-                Subagents（サブエージェント）機能により、親エージェントが複数の子エージェントをバックグラウンドで並行起動し、
-                リサーチ・テスト・コーディングを分業して一気にタスクを完了させます。人間は「指示を出して待つだけ」の自律協調ワークフローを実現します。
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                Antigravity 2.0 の Subagents 機能により、親エージェントがタスクを分割し、調査役（Flash）・実装役（Pro）・テスト実行役（CLI）をバックグラウンドで並列起動。
+                開発者は複雑な指示を待つことなく、完成された差分とテストログを受け取ることが可能になります。
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl text-xs space-y-2 shrink-0">
-              <div className="font-bold flex items-center gap-1.5 text-purple-200">
-                <Workflow size={14} />
-                <span>社内平均効果（実測）</span>
+
+            <div className="p-4.5 rounded-2xl bg-white/5 border border-white/10 shrink-0 font-mono text-xs space-y-2">
+              <div className="text-purple-400 font-bold flex items-center gap-1.5">
+                <Sparkles size={14} />
+                <span>POC HIGHLIGHTS</span>
               </div>
-              <div className="text-2xl font-black text-amber-300">
-                90% 以上 <span className="text-xs text-white font-normal">の作業工数削減</span>
-              </div>
-              <p className="text-[11px] text-purple-200">
-                単一プロンプトでの対話に比べ、手戻りと検証時間が劇的に激減
-              </p>
+              <div className="text-slate-200">・並列実行による待ち時間 70% 削減</div>
+              <div className="text-slate-200">・独立ブランチでの安全なサンドボックス実行</div>
+              <div className="text-slate-200">・Flashモデル併用によるトークンコスト半減</div>
             </div>
           </div>
         </div>
 
-        {/* 事例一覧 */}
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-indigo-600" />
-              <span>社内実践ケーススタディ一覧</span>
-            </h3>
-            <span className="text-xs text-slate-400">実務で検証済みのケースのみ掲載</span>
+        {/* 事例カード一覧 */}
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
+            <div>
+              <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
+                <GitFork className="w-5 h-5 text-purple-600" />
+                <span>社内パイロット先行事例・モデルケース</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+                各部署で進行中のPoC検証シナリオと想定工数削減効果
+              </p>
+            </div>
+            <span className="text-xs font-mono font-bold text-purple-700 bg-purple-50 px-3 py-1 rounded-full border border-purple-200/80">
+              全 {AGENT_CASES.length} 事例
+            </span>
           </div>
 
-          <div className="space-y-4">
-            {CASES_DATA.map((c) => {
-              const isExpanded = expandedId === c.id;
-              return (
-                <div
-                  key={c.id}
-                  className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs hover:border-indigo-300 transition-all"
-                >
-                  {/* ヘッダーカード */}
-                  <div
-                    onClick={() => toggleExpand(c.id)}
-                    className="p-5 cursor-pointer flex flex-col md:flex-row items-start md:items-center justify-between gap-4 select-none"
-                  >
-                    <div className="space-y-2 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-                          {c.category}
-                        </span>
-                        <span className="text-xs font-bold text-emerald-700 flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                          <TrendingDown size={12} />
-                          {c.reductionRate}
-                        </span>
-                      </div>
-                      <h4 className="text-base font-bold text-slate-900 hover:text-indigo-600 transition-colors">
-                        {c.title}
-                      </h4>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        {c.summary}
-                      </p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {AGENT_CASES.map((item) => (
+              <SpotlightCard
+                key={item.id}
+                spotlightColor="rgba(168, 85, 247, 0.12)"
+                className="bg-white border-slate-200/90 shadow-sm"
+              >
+                <div className="p-6 flex flex-col justify-between h-full space-y-4">
+                  <div className="space-y-3.5">
+                    <div className="flex items-center justify-between gap-2 font-mono">
+                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                        {item.status}
+                      </span>
+                      <span className="text-[11px] font-bold text-slate-500">
+                        {item.department}
+                      </span>
                     </div>
 
-                    <div className="flex items-center gap-6 shrink-0 self-end md:self-center">
-                      <div className="text-right text-xs">
-                        <div className="text-slate-400 text-[10px]">作業時間変化</div>
-                        <div className="font-bold text-slate-800">
-                          <span className="line-through text-slate-400 mr-1.5">{c.durationBefore}</span>
-                          <span className="text-indigo-600 font-extrabold">{c.durationAfter}</span>
+                    <h4 className="font-extrabold text-slate-900 text-base leading-snug">
+                      {item.title}
+                    </h4>
+
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {item.summary}
+                    </p>
+
+                    <div className="bg-slate-50/80 rounded-xl p-3 border border-slate-200/70 space-y-1.5 font-mono">
+                      <div className="text-[10px] font-bold text-slate-500 uppercase">Subagent Roles</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {item.subagentRoles.map((role, idx) => (
+                          <span
+                            key={idx}
+                            className="text-[10px] bg-white px-2 py-0.5 rounded-md border border-slate-200 text-slate-700 font-semibold"
+                          >
+                            {role}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-1.5 pt-1">
+                      <div className="text-[11px] font-bold text-slate-700 font-mono">主要な検証成果:</div>
+                      {item.keyBenefits.map((b, idx) => (
+                        <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-600">
+                          <CheckCircle2 size={13} className="text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{b}</span>
                         </div>
-                      </div>
-                      <div className="p-2 rounded-xl bg-slate-100 text-slate-600">
-                        {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-                      </div>
+                      ))}
                     </div>
                   </div>
 
-                  {/* 展開時詳細エリア */}
-                  {isExpanded && (
-                    <div className="border-t border-slate-100 bg-slate-50/50 p-6 space-y-6 animate-in fade-in duration-200">
-                      {/* エージェント体制図 */}
-                      <div className="space-y-3">
-                        <h5 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                          <Cpu size={14} className="text-indigo-600" />
-                          <span>サブエージェント編成アーキテクチャ</span>
-                        </h5>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                          {c.agentsArchitecture.map((agent, i) => (
-                            <div
-                              key={i}
-                              className="bg-white border border-slate-200 rounded-xl p-3.5 space-y-1.5 shadow-2xs"
-                            >
-                              <div className="flex items-center justify-between">
-                                <span className="font-bold text-slate-900 text-xs">
-                                  {agent.role}
-                                </span>
-                                <span className="text-[10px] font-mono px-1.5 py-0.5 bg-slate-100 rounded text-slate-500">
-                                  {agent.model}
-                                </span>
-                              </div>
-                              <p className="text-[11px] text-slate-600 leading-relaxed">
-                                {agent.description}
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* 実行プロンプト例 */}
-                      <div className="space-y-2">
-                        <h5 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                          <Play size={14} className="text-emerald-600" />
-                          <span>実際に使用した親プロンプト</span>
-                        </h5>
-                        <div className="bg-slate-900 text-slate-200 rounded-xl p-3.5 font-mono text-xs leading-relaxed">
-                          &ldquo;{c.promptExample}&rdquo;
-                        </div>
-                      </div>
-
-                      {/* 導入後のビジネス効果 */}
-                      <div className="space-y-2">
-                        <h5 className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                          <CheckCircle2 size={14} className="text-indigo-600" />
-                          <span>実測されたビジネス成果</span>
-                        </h5>
-                        <ul className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                          {c.impact.map((imp, idx) => (
-                            <li
-                              key={idx}
-                              className="bg-white border border-emerald-100 rounded-lg p-2.5 text-xs text-slate-700 flex items-start gap-2"
-                            >
-                              <CheckCircle2 size={14} className="text-emerald-600 shrink-0 mt-0.5" />
-                              <span>{imp}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  )}
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between font-mono">
+                    <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                      <Clock size={12} />
+                      <span>{item.estimatedHoursSaved}</span>
+                    </span>
+                    <Link
+                      href="/how-to"
+                      onClick={() => playCyberClick()}
+                      className="inline-flex items-center gap-1 text-xs font-bold text-purple-700 hover:text-purple-800"
+                    >
+                      <span>操作手順を見る</span>
+                      <ArrowRight size={13} />
+                    </Link>
+                  </div>
                 </div>
-              );
-            })}
+              </SpotlightCard>
+            ))}
           </div>
         </div>
       </div>

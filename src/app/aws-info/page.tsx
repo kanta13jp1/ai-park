@@ -2,225 +2,211 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
+import SpotlightCard from "@/components/SpotlightCard";
+import { playCyberClick } from "@/lib/sound";
 import {
   Cloud,
   ShieldCheck,
   Server,
-  Key,
+  Layers,
+  ArrowRight,
   ExternalLink,
-  AlertTriangle,
-  HelpCircle,
-  FileText,
-  DollarSign,
-  CheckCircle2,
   Lock,
-  Sparkles,
-  ArrowRight
+  Database,
+  Cpu,
+  FileCheck2,
+  CheckCircle2,
+  FileText
 } from "lucide-react";
 import Link from "next/link";
 
-interface CloudService {
-  name: string;
-  provider: "AWS" | "GCP";
-  category: string;
-  policy: string;
-  securityLevel: "Level 1" | "Level 2" | "Level 3";
-  description: string;
+interface CloudComparisonItem {
+  serviceType: string;
+  awsService: string;
+  gcpService: string;
+  internalGuideline: string;
 }
 
-const CLOUD_SERVICES: CloudService[] = [
+const CLOUD_COMPARISONS: CloudComparisonItem[] = [
   {
-    name: "Amazon Bedrock (Claude 3.5 / Llama 3)",
-    provider: "AWS",
-    category: "生成AI基盤",
-    policy: "社内利用可（データ学習不使用契約）",
-    securityLevel: "Level 1",
-    description: "AWSのマネージド生成AI。社内AWSアカウント配下のVPCエンドポイント経由で利用可能。入力データはモデルの学習に一切使用されません。"
+    serviceType: "生成AI基盤モデル",
+    awsService: "Amazon Bedrock (Claude / Titan)",
+    gcpService: "Vertex AI (Gemini 3.1 Pro / Flash)",
+    internalGuideline: "社内コード支援は Gemini Code Assist 推奨。固有LLM検証時は事前申請。"
   },
   {
-    name: "Google Agent Platform / Vertex AI",
-    provider: "GCP",
-    category: "エージェント基盤",
-    policy: "社内標準（Antigravity利用環境）",
-    securityLevel: "Level 1",
-    description: "Antigravity IDEの公式バックエンド。組織（ml-mightylink.com）配下で管理され、安全な社内コード・ドキュメントの解析が可能です。"
+    serviceType: "オブジェクトストレージ",
+    awsService: "Amazon S3",
+    gcpService: "Google Cloud Storage (GCS)",
+    internalGuideline: "原則としてパブリックアクセス防止（PAB）および社内組織ポリシー適用必須。"
   },
   {
-    name: "AWS Lambda / ECS / Fargate",
-    provider: "AWS",
-    category: "コンテナ・サーバーレス",
-    policy: "申請制（本番・PoC環境）",
-    securityLevel: "Level 1",
-    description: "社内ウェブアプリやAI APIの実行基盤。インフラチームによるTerraformコードレビューを経て自動デプロイされます。"
+    serviceType: "サーバーレス実行環境",
+    awsService: "AWS Lambda",
+    gcpService: "Cloud Functions / Cloud Run",
+    internalGuideline: "コンテナ化されたワークロードは Cloud Run / ECS への集約を推奨。"
   },
   {
-    name: "Google BigQuery / Cloud Storage",
-    provider: "GCP",
-    category: "データウェアハウス・分析",
-    policy: "社内データ統合基盤",
-    securityLevel: "Level 1",
-    description: "全社的な分析・ログ集計基盤。権限管理（IAM）に基づき、必要最小限のアクセス権が付与されます。"
-  }
-];
-
-const APPLICATION_STEPS = [
-  {
-    step: 1,
-    title: "利用目的と月額予算の確認",
-    detail: "PoC利用か本番運用かを明確にし、月額の想定コスト（例: 月 $50 以内）を試算します。"
-  },
-  {
-    step: 2,
-    title: "社内申請（GitHub Issue または Office Hour）",
-    detail: "インフラチームへ利用サービスとアカウント発行を依頼します。通常1〜2営業日で発行されます。"
-  },
-  {
-    step: 3,
-    title: "IAM権限とMFA（二要素認証）の設定",
-    detail: "会社のGoogle Workspace SSOまたはAWS IAM Identity Center経由で安全にログインします。"
-  },
-  {
-    step: 4,
-    title: "予算アラートの設定",
-    detail: "予算の80%および100%に達した際にSlack/メールへ通知するアラートを設定して利用開始します。"
+    serviceType: "データウェアハウス",
+    awsService: "Amazon Redshift",
+    gcpService: "Google BigQuery",
+    internalGuideline: "社内共通分析基盤は BigQuery に統合。クエリ課金上限アラート必須。"
   }
 ];
 
 export default function AwsInfoPage() {
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
-        title="AWS・クラウド情報局"
-        subtitle="社内におけるAWS・Google Cloud環境の利用ガイドライン・申請手順・セキュリティ基準"
+        title="AWS・マルチクラウド情報局"
+        subtitle="社内クラウド利用ガイドライン・申請フロー・セキュア環境構築ポータル"
       />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
-        {/* クラウド利用基本方針 */}
-        <div className="bg-gradient-to-r from-sky-900 to-indigo-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 border border-sky-400/30 text-xs font-semibold">
-                <Cloud size={14} />
-                <span>社内マルチクラウド運用方針</span>
+      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <UnderConstructionAlert
+          statusType="construction"
+          title="🚧 工事中・利用規程策定中（準備中）"
+          message="社内における AWS およびマルチクラウドの利用ルール・申請フロー・相談窓口を策定中です。情シス・セキュリティ委員会での公式規程制定後、正確な情報を掲載します。"
+          prepDetails="社内クラウド利用規程およびデータ分類レベル基準の公式策定、アカウント払い出しワークフローの整備を進めています。"
+          releaseDate="未定（社内規程決定次第）"
+        />
+
+        {/* クラウドガバナンスHUDバナー */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+            <div className="space-y-3 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-mono font-bold tracking-wider uppercase">
+                <Cloud size={14} className="text-cyan-400" />
+                <span>ENTERPRISE CLOUD GOVERNANCE</span>
               </div>
-              <h2 className="text-xl md:text-2xl font-bold tracking-tight">
-                安心・安全なクラウド基盤で、迅速なAI・開発PoCを加速する
+              <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+                セキュアで迅速なマルチクラウド活用へ
               </h2>
-              <p className="text-sky-200 text-xs leading-relaxed">
-                当社では、生成AIエージェント基盤として **Google Cloud (Agent Platform / Antigravity)** を、
-                社内システムおよび本番インフラとして **AWS (Amazon Web Services)** を適材適所で活用しています。
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                MightyLINK では、Google Cloud と AWS を適材適所で安全に活用するための統合ガバナンスを推進しています。
+                環境の払い出し、踏み台接続、権限管理（IAM）、月次コストモニタリングを一元管理し、開発者の自由な試作と企業のセキュリティ要件を両立させます。
               </p>
             </div>
-            <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-xl text-xs space-y-2 shrink-0">
-              <div className="font-bold flex items-center gap-1.5 text-sky-200">
+
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 shrink-0 font-mono text-xs space-y-2">
+              <div className="text-emerald-400 font-bold flex items-center gap-1.5">
                 <ShieldCheck size={14} />
-                <span>社内統制・セキュリティ遵守</span>
+                <span>SECURITY LEVEL: CLASS-A</span>
               </div>
-              <ul className="space-y-1 text-slate-200 text-[11px]">
-                <li>• 個人クレカでの会社業務利用禁止</li>
-                <li>• 全アカウントでMFA（二要素認証）必須</li>
-                <li>• 予算アラートによるコスト超過防止</li>
-              </ul>
+              <div className="text-slate-300">・組織SCP（サービスコントロールポリシー）適用</div>
+              <div className="text-slate-300">・SSO（シングルサインオン）連携必須</div>
+              <div className="text-slate-300">・月次利用料金アラートの自動通知</div>
             </div>
           </div>
         </div>
 
-        {/* 主要クラウドサービス一覧とセキュリティ水準 */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
-          <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-            <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-              <Server className="w-5 h-5 text-indigo-600" />
-              <span>認定クラウドサービス ＆ 利用可能範囲</span>
-            </h3>
-            <span className="text-xs text-slate-400">インフラ管理部 承認済み</span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {CLOUD_SERVICES.map((srv) => (
-              <div
-                key={srv.name}
-                className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-indigo-300 transition-all space-y-2"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${
-                        srv.provider === "AWS"
-                          ? "bg-amber-100 text-amber-800 border border-amber-300"
-                          : "bg-blue-100 text-blue-800 border border-blue-300"
-                      }`}>
-                        {srv.provider}
-                      </span>
-                      <span className="text-xs font-semibold text-slate-500">{srv.category}</span>
-                    </div>
-                    <h4 className="font-bold text-slate-900 text-sm">
-                      {srv.name}
-                    </h4>
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
-                    {srv.securityLevel}
-                  </span>
-                </div>
-
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {srv.description}
-                </p>
-
-                <div className="pt-2 border-t border-slate-200/60 text-[11px] text-slate-500 font-medium">
-                  運用ポリシー: <span className="text-slate-800 font-bold">{srv.policy}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* クラウド環境の申請・利用開始フロー */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-6">
-          <div className="border-b border-slate-100 pb-3">
-            <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-              <Key className="w-5 h-5 text-indigo-600" />
-              <span>クラウド環境・アカウント申請の流れ (4ステップ)</span>
+        {/* 比較テーブル */}
+        <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
+          <div className="border-b border-slate-100 pb-3.5">
+            <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
+              <Layers className="w-5 h-5 text-indigo-600" />
+              <span>主要クラウドサービス社内マッピング（参考）</span>
             </h3>
             <p className="text-xs text-slate-500 mt-0.5">
-              新しくAWSやGCPのリソースを使いたい場合の社内標準フロー
+              AWS と Google Cloud の主要プロダクト対応表および社内利用ガイドライン
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {APPLICATION_STEPS.map((step) => (
-              <div
-                key={step.step}
-                className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2 relative"
-              >
-                <div className="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">
-                  {step.step}
-                </div>
-                <h4 className="font-bold text-slate-900 text-xs">
-                  {step.title}
-                </h4>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
-                  {step.detail}
-                </p>
-              </div>
-            ))}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm border-collapse">
+              <thead>
+                <tr className="border-b border-slate-200 bg-slate-50/80 font-mono text-slate-700">
+                  <th className="py-3 px-4 rounded-l-xl">領域</th>
+                  <th className="py-3 px-4">AWS (Amazon Web Services)</th>
+                  <th className="py-3 px-4">Google Cloud (GCP)</th>
+                  <th className="py-3 px-4 rounded-r-xl">社内方針・注意事項</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-600">
+                {CLOUD_COMPARISONS.map((row, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
+                    <td className="py-3.5 px-4 font-bold text-slate-800 font-mono">{row.serviceType}</td>
+                    <td className="py-3.5 px-4 font-mono text-amber-700 font-semibold">{row.awsService}</td>
+                    <td className="py-3.5 px-4 font-mono text-blue-700 font-semibold">{row.gcpService}</td>
+                    <td className="py-3.5 px-4 text-xs leading-relaxed">{row.internalGuideline}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+        </div>
 
-          <div className="p-4 rounded-xl bg-indigo-50/60 border border-indigo-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="text-xs text-indigo-950 space-y-0.5">
-              <div className="font-bold">申請や構成で迷ったときは？</div>
-              <p className="text-[11px] text-indigo-800">
-                毎週水曜のOffice Hourまたはお問い合わせ窓口にて、インフラ担当者が直接構成相談を受け付けています。
-              </p>
+        {/* 申請フローと相談窓口 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <SpotlightCard
+            spotlightColor="rgba(6, 182, 212, 0.12)"
+            className="bg-white border-slate-200/90 shadow-sm"
+          >
+            <div className="p-6 flex flex-col justify-between h-full space-y-4">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600">
+                  <FileCheck2 size={20} />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-base">
+                  クラウド環境利用申請（準備中）
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  新規開発プロジェクトやPoC（概念実証）で専用のクラウド環境（AWS Account / GCP Project）が必要な場合、正式ワークフローが制定され次第こちらから申請可能になります。
+                </p>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-500">
+                  <span>ステータス: 申請フロー設計中（情シス協議中）</span>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs text-slate-400 font-mono">受付開始予定: 2026年Q4</span>
+                <Link
+                  href="/contact"
+                  onClick={() => playCyberClick()}
+                  className="inline-flex items-center gap-1 text-xs font-bold text-cyan-700 hover:text-cyan-800 font-mono"
+                >
+                  <span>個別事前相談はこちら</span>
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
             </div>
-            <Link
-              href="/contact"
-              className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs transition-colors"
-            >
-              <span>利用・構成の相談をする</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
+          </SpotlightCard>
+
+          <SpotlightCard
+            spotlightColor="rgba(99, 102, 241, 0.12)"
+            className="bg-white border-slate-200/90 shadow-sm"
+          >
+            <div className="p-6 flex flex-col justify-between h-full space-y-4">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600">
+                  <ShieldCheck size={20} />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-base">
+                  社内セキュリティ・コスト監視
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Google Cloud の社内利用状況および $300 無料クレジットの残高・推移は「社内利用状況（Gemini利用モニタ）」からリアルタイムで確認可能です。
+                </p>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-500">
+                  <span>監視基盤: Gemini Live Monitoring API 稼働中</span>
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs text-slate-400 font-mono">更新間隔: リアルタイム</span>
+                <Link
+                  href="/gemini-stats"
+                  onClick={() => playCyberClick()}
+                  className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800 font-mono"
+                >
+                  <span>モニタ画面を見る</span>
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
+            </div>
+          </SpotlightCard>
         </div>
       </div>
     </div>
