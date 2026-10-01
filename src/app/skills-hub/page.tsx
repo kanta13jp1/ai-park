@@ -2,6 +2,9 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
+import SpotlightCard from "@/components/SpotlightCard";
+import { playCyberClick } from "@/lib/sound";
 import {
   Wrench,
   Search,
@@ -167,16 +170,24 @@ export default function SkillsHubPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="社内Skillsカタログ"
         subtitle="Antigravity 2.0 で即戦力として呼び出せる社内認定スキル集"
       />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <UnderConstructionAlert
+          statusType="poc"
+          title="🧪 PoC検証中・社内Skillsカタログ"
+          message="本カタログに掲載されているSkillsは社内PoC環境における検証済みサンプルモジュールです。全社展開に向けたセキュリティ監査・権限分離ガイドラインの策定を継続中です。"
+          prepDetails="社内独自MCPサーバー連携およびSkillsの自動デプロイワークフローを整備しています。"
+          releaseDate="2026年Q4予定"
+        />
+
         {/* スキル概要と利用方法ガイド */}
-        <div className="bg-gradient-to-r from-indigo-900 to-slate-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+        <div className="relative overflow-hidden bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-semibold">

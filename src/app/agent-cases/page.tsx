@@ -2,6 +2,9 @@
 
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import UnderConstructionAlert from "@/components/UnderConstructionAlert";
+import SpotlightCard from "@/components/SpotlightCard";
+import { playCyberClick } from "@/lib/sound";
 import {
   Users,
   Bot,
@@ -130,16 +133,24 @@ export default function AgentCasesPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="Subagents活用事例"
         subtitle="Antigravity 2.0 の並列自律エージェントを活用した業務改革の実測事例集"
       />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <UnderConstructionAlert
+          statusType="poc"
+          title="🧪 PoC検証中・シミュレーション表示"
+          message="本活用事例は社内PoC環境におけるシミュレーションおよび初期検証に基づく参考モデルケースです。本番運用展開に向けた実測データの追加検証を継続中です。"
+          prepDetails="社内パイロットチームにおける実測工数削減率のヒアリングおよび安全なサブエージェント設定ガイドラインを策定しています。"
+          releaseDate="2026年Q4予定"
+        />
+
         {/* Subagentsとは */}
-        <div className="bg-gradient-to-r from-purple-900 to-indigo-900 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+        <div className="relative overflow-hidden bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-purple-800/40">
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30 text-xs font-semibold">
