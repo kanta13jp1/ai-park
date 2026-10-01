@@ -2,7 +2,20 @@
 
 import { useEffect, useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
-import { Building2, CircleDot, ExternalLink, Plus, RefreshCw, User, Wrench } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import {
+  Building2,
+  CircleDot,
+  ExternalLink,
+  Plus,
+  RefreshCw,
+  User,
+  Wrench,
+  Sparkles,
+  ArrowRight,
+  Layers,
+  FolderGit2,
+} from "lucide-react";
 import {
   buildNewProjectUrl,
   fetchProjectIssues,
@@ -40,11 +53,31 @@ const coeProjects: AiProject[] = [
   },
 ];
 
-const stageStyle: Record<ProjectStage, string> = {
-  検討中: "bg-slate-100 text-slate-700 border-slate-300",
-  PoC中: "bg-purple-100 text-purple-800 border-purple-300",
-  本番運用中: "bg-emerald-100 text-emerald-800 border-emerald-300",
-  終了: "bg-slate-200 text-slate-500 border-slate-300",
+const stageStyle: Record<ProjectStage, { bg: string; text: string; border: string; glow: string }> = {
+  検討中: {
+    bg: "bg-slate-500/10",
+    text: "text-slate-600",
+    border: "border-slate-300",
+    glow: "rgba(100, 116, 139, 0.12)",
+  },
+  PoC中: {
+    bg: "bg-purple-500/10",
+    text: "text-purple-700",
+    border: "border-purple-300/80",
+    glow: "rgba(168, 85, 247, 0.15)",
+  },
+  本番運用中: {
+    bg: "bg-emerald-500/10",
+    text: "text-emerald-700",
+    border: "border-emerald-300/80",
+    glow: "rgba(16, 185, 129, 0.15)",
+  },
+  終了: {
+    bg: "bg-slate-200/50",
+    text: "text-slate-500",
+    border: "border-slate-300/60",
+    glow: "rgba(148, 163, 184, 0.1)",
+  },
 };
 
 export default function AiProjectsPage() {
@@ -75,47 +108,60 @@ export default function AiProjectsPage() {
   const shown = stageFilter === "all" ? all : all.filter((p) => p.stage === stageFilter);
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/70 min-h-screen">
       <HeroBanner
         title="社内AIプロジェクト一覧"
-        subtitle="AIに聞いてもわからない「社内のどこで、誰が、何をしているか」を共有する台帳"
+        subtitle="AIに聞いてもわからない「社内のどこで、誰が、何をしているか」を共有する共創台帳"
       />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
-        {/* 登録案内 */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1 text-xs text-slate-600 leading-relaxed">
-            <h2 className="font-bold text-sm text-slate-900">あなたのチームのAIプロジェクトを登録してください</h2>
-            <p>
-              検討中・PoC中の小さな取り組みでも歓迎です。登録すると一覧に自動で載り、Google Chat で共有されます。
-              状況が変わったら登録した Issue を編集し、終わったら Close してください。
+      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* プロジェクト登録アナウンスバナー（グラスモーフィズム） */}
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 border border-indigo-700/50 p-6 sm:p-7 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="absolute top-0 right-1/3 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative z-10 space-y-2 max-w-2xl">
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 tracking-wider">
+                COMMUNITY DRIVEN
+              </span>
+              <span className="text-xs text-indigo-200">GitHub Issue & Google Chat 自動連携</span>
+            </div>
+            <h2 className="font-black text-lg sm:text-xl text-white tracking-tight">
+              自チームのAI活用プロジェクトを登録・共有しませんか？
+            </h2>
+            <p className="text-xs text-slate-300 leading-relaxed font-light">
+              検討中・PoC中の小さな試みでも大歓迎です。登録するとこの一覧に即時反映され、社内Google Chatにも共有されます。社内の知見をオープンにし、無駄な車輪の再発明を防ぎましょう。
             </p>
-            <p className="text-amber-800">
-              ※ 登録内容は公開されます。顧客名・契約情報・社外秘の数値は書かないでください。
+            <p className="text-[11px] text-amber-300/90 font-medium">
+              ※ 社外公開リポジトリのIssueに登録されます。顧客名・契約情報・機密データは記載しないでください。
             </p>
           </div>
+
           <a
             href={buildNewProjectUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-xs"
+            className="relative z-10 shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 text-xs font-black transition-all shadow-md active:scale-95 self-start md:self-center"
           >
             <Plus size={15} />
-            プロジェクトを登録する
+            <span>プロジェクトを登録する</span>
           </a>
         </div>
 
-        {/* フィルター & 同期状況 */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        {/* フィルター & リアルタイム同期状況バー */}
+        <div className="bg-white/80 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex flex-wrap gap-2">
             {(["all", ...projectStages] as const).map((s) => {
               const count = s === "all" ? all.length : all.filter((p) => p.stage === s).length;
+              const isSelected = stageFilter === s;
               return (
                 <button
                   key={s}
                   onClick={() => setStageFilter(s)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer ${
-                    stageFilter === s ? "bg-slate-900 text-white" : "bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    isSelected
+                      ? "bg-slate-900 text-white shadow-xs"
+                      : "bg-slate-100/80 text-slate-600 hover:bg-slate-200/70"
                   }`}
                 >
                   {s === "all" ? "すべて" : s} ({count})
@@ -123,72 +169,119 @@ export default function AiProjectsPage() {
               );
             })}
           </div>
-          <div className="flex items-center gap-2 text-xs text-slate-500">
-            <CircleDot size={13} />
-            {syncState === "loading" && <span>GitHub から読み込み中...</span>}
-            {syncState === "ok" && <span>GitHub 登録分 {issueProjects.length} 件を表示中</span>}
-            {syncState === "error" && <span className="text-rose-600">GitHub の読み込みに失敗しました（AI推進担当 登録分のみ表示）</span>}
+
+          <div className="flex items-center gap-3 text-xs text-slate-500 font-medium self-end md:self-center">
+            <div className="flex items-center gap-1.5">
+              <CircleDot size={13} className={syncState === "loading" ? "animate-spin text-cyan-600" : "text-emerald-500"} />
+              {syncState === "loading" && <span>GitHub 同期中...</span>}
+              {syncState === "ok" && <span>GitHub 登録 {issueProjects.length} 件 同期中</span>}
+              {syncState === "error" && <span className="text-rose-600">GitHub 同期失敗（CoE登録分のみ表示）</span>}
+            </div>
             <button
               onClick={() => {
                 setSyncState("loading");
                 load();
               }}
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 font-semibold cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-[11px] font-bold text-slate-700 shadow-2xs cursor-pointer transition-colors"
             >
-              <RefreshCw size={12} />
-              再読込
+              <RefreshCw size={11} />
+              <span>更新</span>
             </button>
           </div>
         </div>
 
-        {/* 一覧 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {shown.map((p) => (
-            <article key={p.id} className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs space-y-3">
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="font-bold text-slate-900 text-sm leading-snug">{p.name}</h3>
-                <span className={`shrink-0 text-[11px] font-bold px-2 py-0.5 rounded border ${stageStyle[p.stage]}`}>
-                  {p.stage}
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-500">
-                <span className="inline-flex items-center gap-1"><Building2 size={12} />{p.dept}</span>
-                {p.owner && <span className="inline-flex items-center gap-1"><User size={12} />{p.owner}</span>}
-                {p.tools && <span className="inline-flex items-center gap-1"><Wrench size={12} />{p.tools}</span>}
-              </div>
-              <p className="text-xs text-slate-700 leading-relaxed">{p.summary}</p>
-              {p.effect && (
-                <p className="text-xs text-slate-600 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 leading-relaxed">
-                  <span className="font-bold text-slate-700">成果・課題：</span>
-                  {p.effect}
-                </p>
-              )}
-              <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1">
-                <span>更新: {p.updated}</span>
-                {p.issueUrl ? (
-                  <a href={p.issueUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-indigo-700 font-semibold hover:underline">
-                    Issue を見る・更新する <ExternalLink size={11} />
-                  </a>
-                ) : (
-                  <span>AI推進担当 登録</span>
-                )}
-              </div>
-            </article>
-          ))}
+        {/* プロジェクト一覧カードグリッド（SpotlightCard適用） */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {shown.map((p) => {
+            const currentStage = stageStyle[p.stage] ?? stageStyle["検討中"];
+            return (
+              <SpotlightCard
+                key={p.id}
+                spotlightColor={currentStage.glow}
+                className="bg-white border-slate-200/90"
+              >
+                <article className="p-6 flex flex-col justify-between h-full space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-extrabold text-slate-900 text-base leading-snug tracking-tight">
+                        {p.name}
+                      </h3>
+                      <span
+                        className={`shrink-0 text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${currentStage.bg} ${currentStage.text} ${currentStage.border}`}
+                      >
+                        {p.stage}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-wrap gap-x-3 gap-y-1.5 text-[11px] text-slate-500">
+                      <span className="inline-flex items-center gap-1 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md">
+                        <Building2 size={12} className="text-slate-400" />
+                        {p.dept}
+                      </span>
+                      {p.owner && (
+                        <span className="inline-flex items-center gap-1 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md">
+                          <User size={12} className="text-slate-400" />
+                          {p.owner}
+                        </span>
+                      )}
+                      {p.tools && (
+                        <span className="inline-flex items-center gap-1 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-md text-indigo-700 font-mono">
+                          <Wrench size={12} className="text-indigo-500" />
+                          {p.tools}
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      {p.summary}
+                    </p>
+
+                    {p.effect && (
+                      <div className="text-xs text-slate-700 bg-indigo-50/40 border border-indigo-100/70 rounded-xl p-3 leading-relaxed">
+                        <span className="font-bold text-indigo-900 block mb-0.5">成果・課題：</span>
+                        {p.effect}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-slate-400 pt-3 border-t border-slate-100">
+                    <span className="font-mono">更新: {p.updated}</span>
+                    {p.issueUrl ? (
+                      <a
+                        href={p.issueUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-indigo-600 font-bold hover:text-indigo-700 transition-colors"
+                      >
+                        <span>GitHub Issue を見る</span>
+                        <ExternalLink size={12} />
+                      </a>
+                    ) : (
+                      <span className="font-mono text-slate-500">推進担当 公式登録</span>
+                    )}
+                  </div>
+                </article>
+              </SpotlightCard>
+            );
+          })}
+
           {shown.length === 0 && (
-            <p className="text-xs text-slate-500 md:col-span-2 text-center py-10">該当するプロジェクトはありません。</p>
+            <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center text-slate-500 md:col-span-2 space-y-2">
+              <FolderGit2 size={36} className="mx-auto text-slate-300" />
+              <p className="text-xs font-semibold">該当するステータスのプロジェクトはありません。</p>
+            </div>
           )}
         </div>
 
-        <p className="text-[11px] text-slate-400 text-center">
-          登録データ：
+        <p className="text-[11px] text-slate-400 text-center font-mono">
+          登録データ同期先：
           <a
             href={`https://github.com/${GITHUB_REPO}/issues?q=label%3Aai-project`}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline"
+            className="underline hover:text-slate-600 transition-colors ml-1"
           >
-            GitHub Issue（ai-project ラベル）
+            GitHub Issue (label: ai-project)
           </a>
         </p>
       </div>

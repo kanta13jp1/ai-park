@@ -135,37 +135,40 @@ export default function GcpSetupGuide() {
       </div>
 
       {/* 社内本番環境の確定情報カード */}
-      <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-xl p-5 border border-indigo-900/50 shadow-sm space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-2.5">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <h4 className="font-bold text-sm text-white">社内本番環境 接続情報</h4>
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-7 border border-indigo-500/30 shadow-xl space-y-4">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
+          <div className="flex items-center gap-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
+            <h4 className="font-extrabold text-sm sm:text-base text-white tracking-tight">社内本番環境 接続情報</h4>
           </div>
-          <span className="text-[11px] text-indigo-300 font-mono">Managed by your organization</span>
+          <span className="text-[11px] text-cyan-300 font-mono px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30">
+            Managed by your organization
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
-          <div className="bg-white/5 rounded-lg p-2.5 border border-white/10">
-            <span className="text-slate-400 block text-[11px]">Google Cloud 組織</span>
-            <span className="font-bold text-slate-100 font-mono">{COMPANY_GCP_INFO.org}</span>
+        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 text-xs">
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10 space-y-1">
+            <span className="text-slate-400 block text-[11px] font-mono">Google Cloud 組織</span>
+            <span className="font-bold text-slate-100 font-mono text-sm">{COMPANY_GCP_INFO.org}</span>
           </div>
-          <div className="bg-white/5 rounded-lg p-2.5 border border-white/10 flex items-center justify-between">
-            <div>
-              <span className="text-slate-400 block text-[11px]">社内プロジェクトID（U1入力用）</span>
-              <span className="font-bold text-emerald-300 font-mono">{COMPANY_GCP_INFO.projectId}</span>
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex items-center justify-between">
+            <div className="space-y-1">
+              <span className="text-slate-400 block text-[11px] font-mono">社内プロジェクトID（U1入力用）</span>
+              <span className="font-bold text-emerald-300 font-mono text-sm tracking-wide">{COMPANY_GCP_INFO.projectId}</span>
             </div>
             <button
               onClick={handleCopyProjectId}
-              className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white font-bold text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-emerald-500 hover:text-slate-950 text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
               title="プロジェクトIDをコピー"
             >
-              {copied ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+              {copied ? <Check size={13} className="text-emerald-300" /> : <Copy size={13} />}
               <span>{copied ? "コピー済" : "コピー"}</span>
             </button>
           </div>
-          <div className="bg-white/5 rounded-lg p-2.5 border border-white/10">
-            <span className="text-slate-400 block text-[11px]">ライセンスプラン</span>
-            <span className="font-bold text-indigo-300 font-mono">{COMPANY_GCP_INFO.plan}</span>
+          <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10 space-y-1">
+            <span className="text-slate-400 block text-[11px] font-mono">ライセンスプラン</span>
+            <span className="font-bold text-indigo-300 font-mono text-sm">{COMPANY_GCP_INFO.plan}</span>
           </div>
         </div>
       </div>
@@ -189,38 +192,38 @@ export default function GcpSetupGuide() {
       </div>
 
       {/* 実機トラブルシューティング（実機検証で判明した2大エラーと解消法） */}
-      <div className="bg-amber-50/80 border border-amber-200 rounded-xl p-5 space-y-4">
-        <div className="flex items-center gap-2 border-b border-amber-200 pb-2">
-          <Wrench className="w-4 h-4 text-amber-700" />
-          <h4 className="font-bold text-sm text-amber-950">
+      <div className="bg-amber-500/5 border border-amber-300/80 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
+        <div className="flex items-center gap-2.5 border-b border-amber-200/80 pb-3">
+          <Wrench className="w-5 h-5 text-amber-600" />
+          <h4 className="font-extrabold text-sm sm:text-base text-amber-950 tracking-tight">
             実機トラブルシューティング：セットアップ時のよくあるエラーと解消法
           </h4>
         </div>
 
-        <div className="space-y-3 text-xs leading-relaxed text-amber-950">
-          <div className="bg-white/80 rounded-lg p-3.5 border border-amber-200/80 space-y-1.5">
-            <div className="flex items-start gap-1.5 font-bold text-rose-800">
-              <ShieldAlert size={14} className="shrink-0 mt-0.5" />
+        <div className="space-y-3.5 text-xs leading-relaxed text-amber-950">
+          <div className="bg-white/95 rounded-2xl p-4 sm:p-5 border border-amber-200/80 space-y-2 shadow-2xs">
+            <div className="flex items-start gap-2 font-extrabold text-rose-800 text-sm">
+              <ShieldAlert size={16} className="shrink-0 mt-0.5 text-rose-600" />
               <span>エラー①：Google Cloud コンソールで「追加のアクセス権が必要です（billing.resourceCosts.get / getIamPolicy）」と表示される</span>
             </div>
-            <p className="text-slate-700">
-              <strong>原因：</strong>一般利用者アカウントには、他人の権限一覧（IAM）や請求先全体のレポートを見る管理者権限がないためです。セキュリティ上の正常な保護動作です。
+            <p className="text-slate-700 leading-relaxed">
+              <strong className="text-slate-900">原因：</strong>一般利用者アカウントには、他人の権限一覧（IAM）や請求先全体のレポートを見る管理者権限がないためです。セキュリティ上の正常な保護動作です。
             </p>
-            <p className="text-slate-700">
-              <strong>対処法：</strong>Antigravity による開発・コード生成はそのまま行えます。もしAI推進担当者として「クレジット残高や利用金額レポート」を確認したい場合は、請求管理者に「<strong>請求先アカウント閲覧者（roles/billing.viewer）</strong>」の付与を依頼してください（設定変更はできない安全な閲覧権限です）。
+            <p className="text-slate-700 leading-relaxed">
+              <strong className="text-slate-900">対処法：</strong>Antigravity による開発・コード生成はそのまま行えます。もしAI推進担当者として「クレジット残高や利用金額レポート」を確認したい場合は、請求管理者に「<strong>請求先アカウント閲覧者（roles/billing.viewer）</strong>」の付与を依頼してください（設定変更はできない安全な閲覧権限です）。
             </p>
           </div>
 
-          <div className="bg-white/80 rounded-lg p-3.5 border border-amber-200/80 space-y-1.5">
-            <div className="flex items-start gap-1.5 font-bold text-rose-800">
-              <ShieldAlert size={14} className="shrink-0 mt-0.5" />
+          <div className="bg-white/95 rounded-2xl p-4 sm:p-5 border border-amber-200/80 space-y-2 shadow-2xs">
+            <div className="flex items-start gap-2 font-extrabold text-rose-800 text-sm">
+              <ShieldAlert size={16} className="shrink-0 mt-0.5 text-rose-600" />
               <span>エラー②：チャット送信時に「You can prompt the model to try again...」と出て応答が返らない</span>
             </div>
-            <p className="text-slate-700">
-              <strong>原因：</strong>プロジェクト側で必要なAPI（Cloud AI Companion API / Vertex AI API）が無効であるか、ユーザーにモデル実行ロールが付与されていない可能性があります。
+            <p className="text-slate-700 leading-relaxed">
+              <strong className="text-slate-900">原因：</strong>プロジェクト側で必要なAPI（Cloud AI Companion API / Vertex AI API）が無効であるか、ユーザーにモデル実行ロールが付与されていない可能性があります。
             </p>
-            <p className="text-slate-700">
-              <strong>対処法：</strong>
+            <p className="text-slate-700 leading-relaxed">
+              <strong className="text-slate-900">対処法：</strong>
               <br />1. 管理者にプロジェクト「<code>antigravity-pj-509006</code>」で <code>cloudaicompanion.googleapis.com</code> の有効化と、自身のアカウントへ「<code>Cloud AI Companion ユーザー</code>（または Vertex AI ユーザー）」のロール付与を依頼する。
               <br />2. IDE側で「New Conversation（＋）」を開いて新規スレッドにするか、Settings &gt; Account から一度 Sign Out して再ログインする。
             </p>
@@ -228,17 +231,18 @@ export default function GcpSetupGuide() {
         </div>
       </div>
 
-      <div className="bg-indigo-50 border border-indigo-200 rounded-xl p-5 space-y-2">
-        <h4 className="font-bold text-sm text-indigo-900 flex items-center gap-1.5">
-          <UserPlus size={15} /> 利用者が増えたとき（毎回この2つだけ）
+      <div className="bg-indigo-50/70 border border-indigo-200/80 rounded-3xl p-6 sm:p-7 space-y-3 shadow-xs">
+        <h4 className="font-extrabold text-sm sm:text-base text-indigo-950 flex items-center gap-2 tracking-tight">
+          <UserPlus size={16} className="text-indigo-600" />
+          <span>利用者が増えたとき（毎回この2つだけ）</span>
         </h4>
-        <ol className="list-decimal pl-5 text-xs text-indigo-950 space-y-1 leading-relaxed">
+        <ol className="list-decimal pl-5 text-xs text-indigo-950 space-y-1.5 leading-relaxed font-medium">
           <li>A3 の手順で、新しい利用者に「Cloud AI Companion ユーザー（または Vertex AI ユーザー）」を付ける</li>
           <li>A4 で作った予算を開き、目標金額を「3,000円 × 新しい人数」に変更する</li>
         </ol>
-        <p className="text-xs text-indigo-800 flex items-start gap-1.5 pt-1">
-          <AlertTriangle size={13} className="shrink-0 mt-0.5" />
-          上限は全員の合計です。1人で枠を使い切らないよう、月の途中で使いすぎに気づいたら AI推進担当 に共有してください。
+        <p className="text-xs text-indigo-800 flex items-start gap-1.5 pt-1.5">
+          <AlertTriangle size={14} className="shrink-0 mt-0.5 text-indigo-600" />
+          <span>上限は全員の合計です。1人で枠を使い切らないよう、月の途中で使いすぎに気づいたら AI推進担当 に共有してください。</span>
         </p>
       </div>
     </section>

@@ -156,7 +156,7 @@ function Block({ block }: { block: LessonBlock }) {
       );
     case "h":
       return (
-        <h3 id={block.id} className="scroll-mt-6 font-serif font-bold text-2xl text-slate-900 pt-6">
+        <h3 id={block.id} className="scroll-mt-6 font-bold text-xl sm:text-2xl text-slate-900 pt-6 tracking-tight">
           {block.text}
         </h3>
       );
@@ -238,22 +238,22 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
   const passed = score >= PASS_RATE;
 
   return (
-    <div className="flex-1 flex flex-col bg-[#faf9f5] min-h-screen">
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8">
-        <main className="space-y-5 min-w-0">
-          <nav className="flex flex-wrap items-center gap-1.5 text-xs text-slate-600 print:hidden">
+    <div className="flex-1 flex flex-col bg-slate-50/70 min-h-screen">
+      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
+        <main className="space-y-6 min-w-0">
+          <nav className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 print:hidden">
             <ArrowLeft size={13} />
-            <Link href="/academy" className="hover:underline">Academy</Link>
+            <Link href="/academy" className="hover:text-indigo-600 transition-colors">Academy</Link>
             <span>/</span>
-            <Link href={`/academy/${course.id}`} className="hover:underline">{course.title}</Link>
+            <Link href={`/academy/${course.id}`} className="hover:text-indigo-600 transition-colors">{course.title}</Link>
           </nav>
 
           {lesson && (
             <>
-              <h1 className="font-serif font-bold text-3xl text-slate-900">{lesson.title}</h1>
+              <h1 className="font-black text-2xl sm:text-3xl text-slate-900 tracking-tight leading-snug">{lesson.title}</h1>
               <div className="flex gap-2 text-xs">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-slate-300 bg-white"><BookOpen size={13} />レッスン {index + 1}</span>
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border border-slate-300 bg-white"><Clock size={13} />{lesson.minutes} 分</span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-slate-200 bg-white font-mono text-[11px] font-bold text-slate-700 shadow-2xs"><BookOpen size={13} className="text-indigo-600" />レッスン {index + 1}</span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-slate-200 bg-white font-mono text-[11px] font-bold text-slate-700 shadow-2xs"><Clock size={13} className="text-amber-500" />{lesson.minutes} 分</span>
               </div>
 
               <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">

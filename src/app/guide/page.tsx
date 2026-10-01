@@ -1,23 +1,64 @@
 "use client";
 
+import { useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import Link from "next/link";
 import GcpSetupGuide from "@/components/GcpSetupGuide";
 import StepCard, { type GuideStep } from "@/components/GuideStepCard";
-import { Terminal, Download, Languages, GitBranch, AlertTriangle, ExternalLink } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import {
+  Terminal,
+  Download,
+  Languages,
+  GitBranch,
+  AlertTriangle,
+  ExternalLink,
+  Copy,
+  Check,
+  CheckCircle2,
+  Sparkles,
+  Layers,
+  ShieldCheck,
+} from "lucide-react";
 
 // 手順は Google Antigravity 公式ドキュメント（2026年9月25日確認）に基づく
 const officialLinks = [
   { label: "ダウンロード", href: "https://antigravity.google/download" },
   { label: "Getting Started", href: "https://antigravity.google/docs/getting-started" },
   { label: "CLI インストール", href: "https://antigravity.google/docs/cli/install/" },
-  { label: "プラン", href: "https://antigravity.google/docs/plans/" },
-  { label: "FAQ", href: "https://antigravity.google/docs/faq/" },
+  { label: "プラン & クォータ", href: "https://antigravity.google/docs/plans/" },
+  { label: "FAQ・よくある質問", href: "https://antigravity.google/docs/faq/" },
 ];
 
+function CopyableCode({ code, label }: { code: string; label?: string }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard?.writeText(code).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  return (
+    <div className="space-y-1">
+      {label && <span className="text-[11px] font-bold text-slate-700 font-mono">{label}</span>}
+      <div className="relative flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 group shadow-inner">
+        <code className="font-mono text-xs text-cyan-300 break-all select-all mr-2">{code}</code>
+        <button
+          onClick={handleCopy}
+          className="shrink-0 p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
+          title="コードをコピー"
+        >
+          {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function GuidePage() {
-  // 手順は公式ドキュメント・公式 codelab（2026/09/26 確認）に基づく。アプリ画面のキャプチャは順次追加
   const steps: GuideStep[] = [
     {
       id: "STEP 1",
@@ -113,11 +154,11 @@ export default function GuidePage() {
   const japaneseSteps = [
     {
       title: "日本語言語パックを入れる",
-      desc: "左側の拡張機能アイコンを開き「Japanese Language Pack」を検索して「Japanese Language Pack for Visual Studio Code」をインストールします。",
+      desc: "左側の拡張機能アイコン（Ctrl+Shift+X）を開き「Japanese Language Pack」を検索して「Japanese Language Pack for Visual Studio Code」をインストールします。",
     },
     {
       title: "表示言語を切り替えて再起動",
-      desc: "インストール後に表示される「言語を変更して再起動」を押します。表示されない場合は「View → Command Palette」から「Configure Display Language」を実行し「ja」を選んで再起動します。",
+      desc: "インストール後に表示される「言語を変更して再起動」を押します。表示されない場合は「View → Command Palette (Ctrl+Shift+P)」から「Configure Display Language」を実行し「ja」を選んで再起動します。",
     },
     {
       title: "AIの回答も日本語にする",
@@ -135,17 +176,21 @@ export default function GuidePage() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="Antigravity 導入ガイド（AI導入編）"
-        subtitle="インストール・日本語化・Git連携までの手順（公式ドキュメント準拠）"
+        subtitle="公式ドキュメント準拠のセットアップ・安全設定・IDE日本語化・Git連携完全マニュアル"
       />
       <OfficeHourBanner />
 
-      <div className="max-w-5xl w-full mx-auto px-4 py-8 space-y-10">
-        {/* 公式ドキュメント */}
-        <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center gap-3 text-xs">
-          <span className="font-bold text-slate-700 shrink-0">公式ドキュメント（2026/09/26 確認）</span>
+      <div className="max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+        {/* 公式ドキュメントリンク HUD バー */}
+        <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+          <div className="flex items-center space-x-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="font-extrabold text-slate-900 tracking-tight">Google 公式ドキュメント</span>
+            <span className="text-slate-400 font-mono text-[11px]">| 2026/09/26 確認済み</span>
+          </div>
           <div className="flex flex-wrap gap-2">
             {officialLinks.map((l) => (
               <a
@@ -153,111 +198,129 @@ export default function GuidePage() {
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 font-bold transition-all text-[11px]"
               >
-                {l.label}
+                <span>{l.label}</span>
                 <ExternalLink size={11} />
               </a>
             ))}
           </div>
         </div>
 
-        {/* アカウントの注意 */}
-        <div className="bg-amber-50 border border-amber-300 rounded-xl p-4 flex items-start gap-3 text-xs text-amber-900 leading-relaxed">
-          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" />
-          <p>
-            <span className="font-bold">業務で使う前に：</span>
-            業務では会社のGoogle Cloudプロジェクト経由で利用します（料金は会社の請求に従量課金でまとまり、個人のPro加入は不要）。
-            個人アカウントで利用する場合は個人向けの利用規約が適用されます。扱ってよいデータは、必ず
-            <Link href="/tools-hub#ai-guidelines" className="underline font-bold mx-0.5">社内AI利用の注意事項</Link>
-            を確認してください。
-          </p>
+        {/* アカウント利用に関するセキュリティ注意バナー */}
+        <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-300/80 rounded-2xl p-5 flex items-start gap-3.5 text-xs text-amber-950 leading-relaxed shadow-2xs">
+          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <h4 className="font-extrabold text-amber-900 text-sm">業務で使う前に必ずご確認ください</h4>
+            <p className="text-slate-700 leading-relaxed">
+              業務利用時は会社の Google Cloud プロジェクト経由で利用します（従量課金・個人のPro加入は不要）。
+              個人アカウント利用時は個人向け規約が適用されます。取り扱ってよいデータ範囲は、必ず
+              <Link href="/tools-hub#ai-guidelines" className="underline font-bold text-amber-900 mx-1 hover:text-amber-700">
+                社内AI利用のセキュリティ基準（Level 1〜3）
+              </Link>
+              を遵守してください。
+            </p>
+          </div>
         </div>
 
-        {/* セットアップステップ */}
+        {/* 初期導入ステップ一覧 */}
         <section className="space-y-4">
-          <h3 className="font-bold text-slate-800 text-lg flex items-center space-x-2">
-            <Download className="w-5 h-5 text-blue-600" />
-            <span>初期導入ステップ（はじめての方はここから・所要15〜20分）</span>
-          </h3>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            上から順番に進めれば使い始められます。右側の画像の赤枠の場所をクリックしてください。
-            表示が英語の画面もありますが、ボタン名は手順に書いた文字と同じです（バージョンによって見た目が少し違うことがあります）。
+          <div className="flex items-center space-x-2">
+            <Download className="w-5 h-5 text-indigo-600" />
+            <h3 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
+              初期導入ステップ（はじめての方はここから・所要15〜20分）
+            </h3>
+          </div>
+          <p className="text-xs text-slate-600 leading-relaxed font-normal">
+            上から順番に進めるだけで即日エージェント開発環境が整います。画像の赤枠の場所を順番にクリックしてください。
           </p>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {steps.map((s) => (
               <StepCard key={s.id} step={s} />
             ))}
           </div>
         </section>
 
+        {/* GCP 連携ガイド */}
         <GcpSetupGuide />
 
-        {/* 日本語化 */}
-        <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
-          <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
+        {/* IDE 日本語化ガイド */}
+        <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex items-center space-x-2.5 border-b border-slate-100 pb-4">
             <Languages className="w-5 h-5 text-emerald-600" />
-            <h3 className="font-bold text-slate-800 text-base">IDEの日本語化（STEP 7 で IDE を入れた方向け・3つの設定）</h3>
+            <div>
+              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+                IDE の日本語化（STEP 7 で IDE を入れた方向け・3つの設定）
+              </h3>
+              <p className="text-xs text-slate-500 font-normal">UIメニューとAIエージェントの返答言語の両方を日本語に最適化します</p>
+            </div>
           </div>
-          <ol className="space-y-3">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {japaneseSteps.map((s, i) => (
-              <li key={s.title} className="flex items-start gap-3">
-                <span className="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center shrink-0">
-                  {i + 1}
-                </span>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">{s.title}</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed mt-0.5">{s.desc}</p>
+              <div key={s.title} className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/70 space-y-2 relative">
+                <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-xs font-mono font-bold flex items-center justify-center shadow-xs">
+                  0{i + 1}
                 </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        {/* CLI */}
-        <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
-          <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
-            <Terminal className="w-5 h-5 text-amber-500" />
-            <h3 className="font-bold text-slate-800 text-base">CLI（agy）のインストール（任意）</h3>
-          </div>
-          <p className="text-xs text-slate-500">
-            ターミナルからエージェントを使いたい場合のみ。インストール後はブラウザが開いてサインインを求められます。
-          </p>
-          <div className="space-y-2 text-xs">
-            <div>
-              <span className="font-bold text-slate-700">Windows（PowerShell）</span>
-              <pre className="mt-1 p-2 bg-slate-900 text-slate-200 rounded font-mono text-[11px] overflow-x-auto">
-                irm https://antigravity.google/cli/install.ps1 | iex
-              </pre>
-            </div>
-            <div>
-              <span className="font-bold text-slate-700">macOS / Linux</span>
-              <pre className="mt-1 p-2 bg-slate-900 text-slate-200 rounded font-mono text-[11px] overflow-x-auto">
-                curl -fsSL https://antigravity.google/cli/install.sh | bash
-              </pre>
-            </div>
-          </div>
-        </section>
-
-        {/* Git 連携 */}
-        <section className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
-          <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
-            <GitBranch className="w-5 h-5 text-orange-600" />
-            <h3 className="font-bold text-slate-800 text-base">Git / GitHub との付き合い方</h3>
-          </div>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            AIエージェントは複数のファイルを一度に書き換えます。<span className="font-bold">作業前にブランチを切り、変更をGitで確認してから取り込む</span>
-            のが事故を防ぐいちばんの方法です。IDE左側の「ソース管理」からも同じ操作をGUIで行えます。
-            Gitが未インストールの場合は <a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer" className="underline text-blue-700">git-scm.com</a> から導入してください。
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {gitBasics.map((g) => (
-              <div key={g.cmd} className="p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-1">
-                <code className="text-xs font-bold text-orange-800 bg-orange-100/70 px-2 py-0.5 rounded font-mono break-all">
-                  {g.cmd}
-                </code>
-                <p className="text-xs text-slate-600 leading-snug">{g.desc}</p>
+                <h4 className="font-extrabold text-slate-900 text-sm leading-snug">{s.title}</h4>
+                <p className="text-xs text-slate-600 leading-relaxed font-normal">{s.desc}</p>
               </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CLI インストールガイド */}
+        <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
+          <div className="flex items-center space-x-2.5 border-b border-slate-100 pb-4">
+            <Terminal className="w-5 h-5 text-cyan-600" />
+            <div>
+              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+                CLI（agy）のワンクリック・インストール（任意）
+              </h3>
+              <p className="text-xs text-slate-500 font-normal">ターミナルからエージェントを直接呼び出したい場合に使用します</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <CopyableCode
+              label="Windows (PowerShell)"
+              code="irm https://antigravity.google/cli/install.ps1 | iex"
+            />
+            <CopyableCode
+              label="macOS / Linux (Bash)"
+              code="curl -fsSL https://antigravity.google/cli/install.sh | bash"
+            />
+          </div>
+        </section>
+
+        {/* Git 連携プラクティス */}
+        <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex items-center space-x-2.5 border-b border-slate-100 pb-4">
+            <GitBranch className="w-5 h-5 text-orange-600" />
+            <div>
+              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+                Git / GitHub との付き合い方（事故を防ぐ必須ルール）
+              </h3>
+              <p className="text-xs text-slate-500 font-normal">
+                AIエージェントは複数ファイルを一括生成・編集します。作業前ブランチの作成と変更確認を徹底してください。
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            {gitBasics.map((g) => (
+              <SpotlightCard
+                key={g.cmd}
+                spotlightColor="rgba(249, 115, 22, 0.12)"
+                className="bg-slate-50/60 border-slate-200/80"
+              >
+                <div className="p-4 space-y-2 h-full flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <CopyableCode code={g.cmd} />
+                    <p className="text-xs text-slate-600 leading-snug pt-1">{g.desc}</p>
+                  </div>
+                </div>
+              </SpotlightCard>
             ))}
           </div>
         </section>

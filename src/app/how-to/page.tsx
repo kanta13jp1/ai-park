@@ -17,6 +17,7 @@ import {
   GraduationCap,
   Wrench,
 } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
 
 export default function HowToPage() {
   const mainHubCards = [
@@ -119,14 +120,15 @@ export default function HowToPage() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       {/* 参考サイト風 ブルーヘッダー領域 */}
-      <div className="bg-gradient-to-r from-sky-600 via-sky-500 to-blue-600 text-white shadow-md">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10">
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-sky-950 to-indigo-950 text-white shadow-md border-b border-sky-900/40">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-10 relative z-10">
           {/* ホームに戻るリンク */}
           <Link
             href="/"
-            className="inline-flex items-center text-xs font-semibold text-sky-100 hover:text-white mb-6 group transition-colors"
+            className="inline-flex items-center text-xs font-semibold text-sky-200 hover:text-white mb-6 group transition-colors"
           >
             <ArrowLeft
               size={14}
@@ -137,14 +139,14 @@ export default function HowToPage() {
 
           {/* 📖 タイトルバッジ */}
           <div className="flex items-center space-x-4">
-            <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-inner">
-              <BookOpen className="text-white" size={30} />
+            <div className="w-14 h-14 rounded-2xl bg-sky-500/20 backdrop-blur-md flex items-center justify-center border border-sky-400/30 shadow-inner text-cyan-300">
+              <BookOpen size={30} />
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
                 使い方・学び
               </h1>
-              <p className="text-sm sm:text-base text-sky-100 mt-1 font-medium">
+              <p className="text-sm sm:text-base text-slate-300 mt-1 font-light">
                 社内で使えるAIツールの基本操作から実務活用、他部署事例まで体系的に学べるナレッジハブ
               </p>
             </div>
@@ -161,121 +163,132 @@ export default function HowToPage() {
               <Sparkles className="text-sky-500" size={20} />
               ナレッジ・コンテンツ一覧
             </h2>
-            <span className="text-xs text-slate-500">目的のカードをクリックして移動</span>
+            <span className="text-xs text-slate-500 font-mono">Select any module to begin</span>
           </div>
 
-          <div className="grid grid-cols-1 gap-5">
+          <div className="grid grid-cols-1 gap-4">
             {mainHubCards.map((card) => (
-              <Link
+              <SpotlightCard
                 key={card.id}
-                href={card.href}
-                className="group block bg-white rounded-xl border border-slate-200/80 p-6 shadow-sm hover:shadow-md hover:border-sky-300 transition-all duration-200"
+                spotlightColor="rgba(14, 165, 233, 0.14)"
+                className="bg-white border-slate-200/90"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-start sm:items-center space-x-4">
-                    {/* アイコン */}
-                    <div
-                      className={`w-14 h-14 rounded-xl border flex items-center justify-center shrink-0 shadow-xs group-hover:scale-105 transition-transform ${card.iconBg}`}
-                    >
-                      {card.icon}
-                    </div>
-
-                    {/* タイトルと説明 */}
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="text-xl font-bold text-slate-900 group-hover:text-sky-600 transition-colors">
-                          {card.title}
-                        </h3>
-                        <span
-                          className={`text-xs px-2 py-0.5 rounded-full font-medium ${card.badgeColor}`}
-                        >
-                          {card.badge}
-                        </span>
+                <Link
+                  href={card.href}
+                  className="group block p-6 transition-all duration-200"
+                >
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-start sm:items-center space-x-4">
+                      {/* アイコン */}
+                      <div
+                        className={`w-14 h-14 rounded-2xl border flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform ${card.iconBg}`}
+                      >
+                        {card.icon}
                       </div>
-                      <p className="text-sm text-slate-600 font-medium">
-                        {card.desc}
-                      </p>
-                      <p className="text-xs text-slate-400 hidden sm:block">
-                        {card.highlights}
-                      </p>
-                    </div>
-                  </div>
 
-                  {/* 右側アクション */}
-                  <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                    <div className="flex flex-wrap gap-1.5">
-                      {card.tags.map((tag, tIdx) => (
-                        <span
-                          key={tIdx}
-                          className="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded"
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      {/* タイトルと説明 */}
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors tracking-tight">
+                            {card.title}
+                          </h3>
+                          <span
+                            className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${card.badgeColor}`}
+                          >
+                            {card.badge}
+                          </span>
+                        </div>
+                        <p className="text-sm text-slate-600 font-medium">
+                          {card.desc}
+                        </p>
+                        <p className="text-xs text-slate-400 hidden sm:block">
+                          {card.highlights}
+                        </p>
+                      </div>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-                      <ChevronRight size={18} />
+
+                    {/* 右側アクション */}
+                    <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                      <div className="flex flex-wrap gap-1.5">
+                        {card.tags.map((tag, tIdx) => (
+                          <span
+                            key={tIdx}
+                            className="text-[11px] bg-slate-100 font-mono text-slate-600 px-2.5 py-0.5 rounded-full"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-colors">
+                        <ChevronRight size={18} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </SpotlightCard>
             ))}
           </div>
         </section>
 
         {/* 初めての方におすすめのステップ */}
-        <section className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-2">
-            <CheckCircle2 className="text-emerald-500" size={22} />
-            はじめての社内AI活用 3ステップ
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-600 mb-6">
-            社内で生成AIを実務に導入する際の標準的な学習・ステップアップ手順です。
-          </p>
+        <section className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs space-y-6">
+          <div>
+            <h2 className="text-lg font-black text-slate-900 flex items-center gap-2 mb-1 tracking-tight">
+              <CheckCircle2 className="text-emerald-500" size={22} />
+              はじめての社内AI活用 3ステップ
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 font-normal">
+              社内で生成AIを実務に導入する際の標準的な学習・ステップアップ手順です。
+            </p>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {steps.map((item, idx) => (
-              <div
+              <SpotlightCard
                 key={idx}
-                className="relative bg-slate-50/70 border border-slate-200/80 rounded-xl p-5 flex flex-col justify-between"
+                spotlightColor="rgba(14, 165, 233, 0.15)"
+                className="bg-slate-50/70 border-slate-200/80"
               >
-                <div className="space-y-2">
-                  <span className="text-2xl font-extrabold text-sky-500/80 block">
-                    {item.step}
-                  </span>
-                  <h3 className="text-sm font-bold text-slate-800">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {item.desc}
-                  </p>
+                <div className="p-5 flex flex-col justify-between h-full">
+                  <div className="space-y-2">
+                    <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-sky-100 text-sky-700 inline-block">
+                      {item.step}
+                    </span>
+                    <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      {item.desc}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-200/80">
+                    <Link
+                      href={item.href}
+                      className="inline-flex items-center text-xs font-bold text-sky-600 hover:text-sky-700 group/lnk"
+                    >
+                      <span>{item.linkText}</span>
+                      <ChevronRight size={14} className="ml-1 group-hover/lnk:translate-x-0.5 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
-                <div className="mt-4 pt-3 border-t border-slate-200">
-                  <Link
-                    href={item.href}
-                    className="inline-flex items-center text-xs font-semibold text-sky-600 hover:text-sky-700"
-                  >
-                    {item.linkText}
-                    <ChevronRight size={14} className="ml-1" />
-                  </Link>
-                </div>
-              </div>
+              </SpotlightCard>
             ))}
           </div>
         </section>
 
         {/* クイックツール・ガイドへの直接アクセス */}
-        <section className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 sm:p-8 text-white shadow-md">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-900/40">
+          <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
             <div className="space-y-2 max-w-xl">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-300 text-xs font-semibold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-semibold border border-cyan-400/30">
                 <Lightbulb size={14} />
-                開発者 & 実務者向け便利リンク
+                <span>開発者 & 実務者向け便利リンク</span>
               </div>
-              <h3 className="text-xl font-bold">
+              <h3 className="text-xl sm:text-2xl font-black tracking-tight">
                 日々の開発・業務を加速するリソース集
               </h3>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
                 導入ガイド・社内Skillsカタログ（準備中）・Antigravity情報局（準備中）へのショートカットです。
               </p>
             </div>
@@ -283,46 +296,46 @@ export default function HowToPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 shrink-0">
               <Link
                 href="/guide"
-                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-xs font-medium text-white transition-colors"
+                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
               >
                 <span className="flex items-center gap-2">
-                  <FileText size={15} className="text-sky-300" />
+                  <FileText size={16} className="text-sky-300" />
                   Antigravity 導入ガイド
                 </span>
-                <ChevronRight size={14} className="text-slate-400" />
+                <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
               </Link>
 
               <Link
                 href="/skills-hub"
-                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-xs font-medium text-white transition-colors"
+                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
               >
                 <span className="flex items-center gap-2">
-                  <Terminal size={15} className="text-emerald-300" />
+                  <Terminal size={16} className="text-emerald-300" />
                   社内Skillsカタログ
                 </span>
-                <ChevronRight size={14} className="text-slate-400" />
+                <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
               </Link>
 
               <Link
                 href="/antigravity-info"
-                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-xs font-medium text-white transition-colors"
+                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
               >
                 <span className="flex items-center gap-2">
-                  <Cloud size={15} className="text-cyan-300" />
+                  <Cloud size={16} className="text-cyan-300" />
                   Antigravity社内情報局
                 </span>
-                <ChevronRight size={14} className="text-slate-400" />
+                <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
               </Link>
 
               <Link
                 href="/contact"
-                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-lg text-xs font-medium text-white transition-colors"
+                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
               >
                 <span className="flex items-center gap-2">
-                  <HelpCircle size={15} className="text-amber-300" />
+                  <HelpCircle size={16} className="text-amber-300" />
                   AI推進担当へのお問い合わせ
                 </span>
-                <ChevronRight size={14} className="text-slate-400" />
+                <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
               </Link>
             </div>
           </div>

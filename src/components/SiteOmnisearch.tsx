@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   ArrowRight,
@@ -163,6 +163,23 @@ const popularTags = [
 export default function SiteOmnisearch() {
   const [query, setQuery] = useState("");
 
+  // '/' キーでインライン検索窓にフォーカス
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "/" && document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
+        e.preventDefault();
+        const input = document.getElementById("site-omnisearch-input");
+        if (input) {
+          input.focus();
+          input.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const searchResults = query.trim()
     ? siteSearchIndex.filter((item) => {
         const q = query.toLowerCase();
@@ -190,8 +207,16 @@ export default function SiteOmnisearch() {
             </p>
           </div>
         </div>
-        <div className="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-slate-300 font-mono">
-          <span>Search Engine v2.0</span>
+        <div className="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-slate-300 font-mono">
+          <span className="flex items-center space-x-1">
+            <kbd className="px-1.5 py-0.5 text-[10px] bg-white/15 rounded">/</kbd>
+            <span className="text-[11px] text-slate-400">フォーカス</span>
+          </span>
+          <span className="text-slate-600">|</span>
+          <span className="flex items-center space-x-1">
+            <kbd className="px-1.5 py-0.5 text-[10px] bg-white/15 rounded">⌘K</kbd>
+            <span className="text-[11px] text-slate-400">パレット</span>
+          </span>
         </div>
       </div>
 
@@ -200,6 +225,7 @@ export default function SiteOmnisearch() {
         <div className="relative flex items-center">
           <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" />
           <input
+            id="site-omnisearch-input"
             type="text"
             placeholder="探したい機能やキーワードを入力（例: Skills, プロンプト, 障害, アンバサダー, 申請...）"
             value={query}

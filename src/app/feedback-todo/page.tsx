@@ -371,14 +371,15 @@ export default function FeedbackTodoPage() {
   const doneCount = allItems.filter((t) => t.status === "done").length;
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       {/* ページヘッダー */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border-b border-slate-800 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10 space-y-6">
+      <div className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white border-b border-slate-800 shadow-md">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10 space-y-6 relative z-10">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold border border-indigo-500/30">
-                <MessageSquarePlus size={14} />
+                <MessageSquarePlus size={14} className="text-cyan-300" />
                 <span>みんなのフィードバックからつくるAI広場</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">

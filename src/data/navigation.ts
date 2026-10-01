@@ -23,12 +23,12 @@ export const navigationSections: NavSection[] = [
     title: "■ 使い方・学び",
     href: "/how-to",
     items: [
-      { name: "AIツール一覧", href: "/tools", icon: "🤖", badge: "🧪 PoC中" },
+      { name: "AIツール一覧", href: "/tools", icon: "🤖", badge: "β版" },
       { name: "Antigravity Academy", href: "/academy", icon: "🎓", badge: "β版" },
       { name: "教育用コンテンツ", href: "/learning", icon: "✍️" },
-      { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️", badge: "📋 準備中" },
-      { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️", badge: "🚧 工事中" },
-      { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "🚧 工事中" },
+      { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️", badge: "β版" },
+      { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️", badge: "NEW" },
+      { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "NEW" },
     ]
   },
   {
@@ -37,16 +37,16 @@ export const navigationSections: NavSection[] = [
     items: [
       { name: "社内AIプロジェクト一覧", href: "/ai-projects", icon: "🏢", badge: "β版" },
       { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β版" },
-      { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "🚧 工事中" },
-      { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "🚧 工事中" },
+      { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "NEW" },
+      { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "NEW" },
       { name: "Antigravity利用監視", href: "/gemini-stats", icon: "📊", badge: "β版" },
-      { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "🚧 工事中" },
+      { name: "AI Tools Hub", href: "/tools-hub", icon: "📍", badge: "β版" },
     ]
   },
   {
     title: "🗨️ コミュニティ",
     items: [
-      { name: "AIアンバサダー", href: "/ambassadors", icon: "🤝", badge: "📋 準備中" },
+      { name: "AIアンバサダー", href: "/ambassadors", icon: "🤝", badge: "β版" },
       { name: "AI Park カレンダー", href: "/calendar", icon: "🗓️", badge: "β版" },
       { name: "ご意見・改善ToDo", href: "/feedback-todo", icon: "📋", badge: "β版" },
     ]

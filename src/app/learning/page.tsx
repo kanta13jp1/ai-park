@@ -1,34 +1,59 @@
 import Link from "next/link";
+import HeroBanner from "@/components/HeroBanner";
 import BeginnerCheatsheet from "@/components/BeginnerCheatsheet";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
-import { GraduationCap } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
+import { GraduationCap, ArrowRight, Sparkles, BookOpen } from "lucide-react";
 
 export default function LearningPage() {
   return (
-    <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
-      <div className="bg-white border-b border-slate-200/90 pt-10 pb-8 px-4 sm:px-6 lg:px-8 text-center shadow-2xs">
-        <div className="max-w-4xl mx-auto space-y-3">
-          <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-            生成AI <span className="text-sky-600">学習コンテンツ</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">AI エージェントを使い始めるための学習リソース</p>
-        </div>
-      </div>
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
+      <HeroBanner
+        title="生成AI 学習コンテンツ"
+        subtitle="初級チートシート・プロンプト実例集・体系的カリキュラム（Antigravity Academy 連携）"
+      />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-6">
-        <Link
-          href="/academy"
-          className="flex items-center gap-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl p-5 shadow-sm transition-colors"
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-8">
+        {/* Academy への誘導ハイライト SpotlightCard */}
+        <SpotlightCard
+          spotlightColor="rgba(99, 102, 241, 0.25)"
+          className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 border-indigo-700/50 shadow-xl overflow-hidden"
         >
-          <GraduationCap className="w-8 h-8 shrink-0" />
-          <span>
-            <span className="block font-black">Antigravity Academy</span>
-            <span className="block text-xs text-indigo-100">動画と実践で学ぶ全12レッスン。評価テストに合格すると修了証を発行できます。</span>
-          </span>
-        </Link>
+          <Link
+            href="/academy"
+            className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 sm:p-8 gap-5 group"
+          >
+            <div className="flex items-start sm:items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center shrink-0 text-cyan-300 shadow-inner group-hover:scale-105 transition-transform">
+                <GraduationCap className="w-8 h-8" />
+              </div>
+              <div className="space-y-1 text-white">
+                <div className="flex items-center space-x-2">
+                  <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30">
+                    おすすめ公式カリキュラム
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">全12レッスン + 修了証</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight group-hover:text-cyan-300 transition-colors">
+                  Antigravity Academy
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed font-light">
+                  動画と実践で学ぶ全12レッスン。受講後の評価テストに合格すると、ブラウザ内で即時修了証（SVG証明書）を発行・印刷できます。
+                </p>
+              </div>
+            </div>
 
+            <div className="shrink-0 flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-cyan-400 text-slate-950 font-bold text-xs group-hover:bg-cyan-300 transition-colors shadow-md">
+              <span>受講を開始する</span>
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </div>
+          </Link>
+        </SpotlightCard>
+
+        {/* 初心者チートシート */}
         <BeginnerCheatsheet />
 
+        {/* 工事中アラート */}
         <UnderConstructionAlert
           statusType="construction"
           title="🚧 工事中：おすすめ講座・資格の一覧を準備しています"

@@ -77,6 +77,23 @@ export default function Sidebar() {
               </span>
             </div>
           </Link>
+
+          {/* クイック検索ボタン（Cmd+K誘導） */}
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
+            }}
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800/80 border border-slate-700/50 text-slate-400 hover:text-slate-200 transition-all text-xs group cursor-pointer"
+          >
+            <div className="flex items-center space-x-2">
+              <Search size={13} className="text-cyan-400 group-hover:scale-110 transition-transform" />
+              <span>サイト内を横断検索...</span>
+            </div>
+            <kbd className="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 text-slate-400 border border-slate-700 rounded shadow-xs">
+              ⌘K
+            </kbd>
+          </button>
         </div>
 
         {/* ナビゲーションリスト */}

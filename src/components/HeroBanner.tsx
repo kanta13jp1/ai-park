@@ -14,9 +14,6 @@ export default function HeroBanner({
   subtitle = "みんなでつくるAI広場",
   isHome = false,
 }: HeroBannerProps) {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
-
   return (
     <div
       className={`relative w-full overflow-hidden flex items-center justify-center select-none shadow-xl border-b border-slate-800/60 ${
@@ -104,40 +101,33 @@ export default function HeroBanner({
 
       {/* 右上の検索バー/トリガー */}
       <div className="absolute top-4 right-5 z-20">
-        {isSearching ? (
-          <div className="relative flex items-center animate-in fade-in zoom-in-95 duration-150">
-            <input
-              type="text"
-              autoFocus
-              placeholder="サイト内を検索..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onBlur={() => !searchQuery && setIsSearching(false)}
-              className="bg-slate-950/80 backdrop-blur-md text-white placeholder-slate-400 text-xs px-3.5 py-1.5 pr-8 rounded-full border border-slate-700/80 focus:outline-none focus:ring-2 focus:ring-emerald-400 w-56 transition-all shadow-xl"
-            />
-            <Search className="w-3.5 h-3.5 text-slate-400 absolute right-3 pointer-events-none" />
-          </div>
-        ) : (
-          <button
-            onClick={() => setIsSearching(true)}
-            className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 text-slate-200 hover:text-white transition-all shadow-md group"
-            title="サイト内検索"
-          >
-            <Search size={14} className="text-cyan-300 group-hover:scale-110 transition-transform" />
-            <span className="text-xs font-medium">Search</span>
-            <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white/15 rounded text-slate-300">
-              /
-            </kbd>
-          </button>
-        )}
+        <button
+          onClick={() => {
+            window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
+          }}
+          className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 text-slate-200 hover:text-white transition-all shadow-md group cursor-pointer"
+          title="サイト内横断検索 (⌘K)"
+        >
+          <Search size={14} className="text-cyan-300 group-hover:scale-110 transition-transform" />
+          <span className="text-xs font-medium">Search</span>
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white/15 rounded text-slate-300">
+            ⌘K
+          </kbd>
+        </button>
       </div>
 
       {/* 中央タイトル & コンテンツ */}
-      <div className="relative z-10 text-center px-4 max-w-3xl space-y-3">
+      <div className="relative z-10 text-center px-4 max-w-4xl space-y-4">
         {isHome && (
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-500/15 backdrop-blur-md border border-emerald-400/30 text-emerald-300 text-xs font-semibold tracking-wide shadow-sm animate-float-slow">
-            <Sparkles size={13} className="text-emerald-400 animate-pulse" />
-            <span>MightyLINK Enterprise AI Playground</span>
+          <div className="flex flex-wrap items-center justify-center gap-2 animate-float-slow">
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-500/15 backdrop-blur-md border border-emerald-400/40 text-emerald-300 text-xs font-semibold tracking-wide shadow-sm">
+              <Sparkles size={13} className="text-emerald-400 animate-pulse" />
+              <span>MightyLINK Enterprise AI Playground</span>
+            </div>
+            <div className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-cyan-500/10 backdrop-blur-md border border-cyan-400/30 text-cyan-300 text-[11px] font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+              <span>Gemini 3.1 Pro & Google Antigravity</span>
+            </div>
           </div>
         )}
 
@@ -153,12 +143,29 @@ export default function HeroBanner({
 
         {subtitle && (
           <p
-            className={`text-xs sm:text-sm md:text-base font-light tracking-wide max-w-2xl mx-auto leading-relaxed ${
-              isHome ? "text-emerald-100/90 font-medium" : "text-slate-300"
+            className={`text-xs sm:text-sm md:text-base font-normal tracking-wide max-w-2xl mx-auto leading-relaxed ${
+              isHome ? "text-emerald-100/90" : "text-slate-300"
             }`}
           >
             {subtitle}
           </p>
+        )}
+
+        {isHome && (
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-slate-300 text-xs font-mono">
+            <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-700/60 backdrop-blur-md">
+              <span className="text-cyan-400 font-bold">12</span>
+              <span className="text-slate-400 text-[11px]">Academy Lessons</span>
+            </div>
+            <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-700/60 backdrop-blur-md">
+              <span className="text-emerald-400 font-bold">LIVE</span>
+              <span className="text-slate-400 text-[11px]">Issue & Task Sync</span>
+            </div>
+            <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-700/60 backdrop-blur-md">
+              <span className="text-amber-400 font-bold">CoE</span>
+              <span className="text-slate-400 text-[11px]">Weekly Office Hour</span>
+            </div>
+          </div>
         )}
       </div>
     </div>
