@@ -15,6 +15,11 @@ import {
   ArrowRight,
   Layers,
   FolderGit2,
+  Briefcase,
+  Code2,
+  Users,
+  CheckCircle2,
+  Zap,
 } from "lucide-react";
 import {
   buildNewProjectUrl,
@@ -24,6 +29,59 @@ import {
   type ProjectStage,
 } from "@/lib/githubProjects";
 import { GITHUB_REPO } from "@/lib/githubFeedback";
+
+// 部署別の実践活用カード定義
+interface DeptPractice {
+  dept: string;
+  deptIcon: typeof Building2;
+  title: string;
+  targetTask: string;
+  workflow: string[];
+  recommendedModel: string;
+  effect: string;
+}
+
+const DEPT_PRACTICES: DeptPractice[] = [
+  {
+    dept: "開発・エンジニア",
+    deptIcon: Code2,
+    title: "TypeScript / Python のテスト作成＆リファクタリング",
+    targetTask: "既存ロジックの単体テスト作成、例外処理・型安全性の向上",
+    workflow: [
+      "1. 対象関数と要件をプロンプト集からコピペ",
+      "2. Antigravity または Gemini 3.1 Pro にテストコード（Vitest / Jest）を生成させる",
+      "3. 境界値（null, undefined）が網羅されているかレビューしてコミット",
+    ],
+    recommendedModel: "Gemini 3.1 Pro (思考型)",
+    effect: "テスト記述工数を約60%削減、型エラーの早期発見",
+  },
+  {
+    dept: "営業・企画",
+    deptIcon: Briefcase,
+    title: "提案骨子・比較表の高速ドラフト作成",
+    targetTask: "クライアント課題に対するソリューション比較表・導入メリットの整理",
+    workflow: [
+      "1. 顧客の課題感（個人情報はマスキング）を箇条書きで入力",
+      "2. 自社サービスの強みと競合比較のマトリクスを表形式で出力依頼",
+      "3. 叩き台をもとに提案スライドやメール文面に反映",
+    ],
+    recommendedModel: "Gemini 3.1 Flash / Pro",
+    effect: "企画初期ドラフトの作成時間を2時間 ➔ 20分に短縮",
+  },
+  {
+    dept: "人事・総務・バックオフィス",
+    deptIcon: Users,
+    title: "社内規程・申請ルールのQAボット＆通知文作成",
+    targetTask: "就業規則・経費精算ルールに関する社員からのよくある問い合わせ対応",
+    workflow: [
+      "1. 最新の社内規程PDFやテキストをGeminiに入力（会社アカウント環境必須）",
+      "2. 「社員からの質問：◯◯の申請期限はいつまで？」に対する回答案を出力",
+      "3. 規程条文の該当箇所を引用させ、誤答（ハルシネーション）を二重チェック",
+    ],
+    recommendedModel: "Gemini 3.1 Pro",
+    effect: "問い合わせ対応の初動迅速化、社内案内文の品質均一化",
+  },
+];
 
 // ご意見TODO-04への対応。AI推進担当 が把握している実在プロジェクト（GitHub Issue 登録分と合わせて表示）
 const coeProjects: AiProject[] = [
@@ -84,6 +142,7 @@ export default function AiProjectsPage() {
   const [issueProjects, setIssueProjects] = useState<AiProject[]>([]);
   const [syncState, setSyncState] = useState<"loading" | "ok" | "error">("loading");
   const [stageFilter, setStageFilter] = useState<ProjectStage | "all">("all");
+  const [deptFilter, setDeptFilter] = useState<string>("all");
 
   const load = (signal?: AbortSignal) =>
     fetchProjectIssues(signal).then(
@@ -105,7 +164,13 @@ export default function AiProjectsPage() {
   }, []);
 
   const all = [...issueProjects, ...coeProjects];
-  const shown = stageFilter === "all" ? all : all.filter((p) => p.stage === stageFilter);
+  const departments = Array.from(new Set(all.map((p) => p.dept).filter(Boolean)));
+
+  const shown = all.filter((p) => {
+    const matchesStage = stageFilter === "all" || p.stage === stageFilter;
+    const matchesDept = deptFilter === "all" || p.dept === deptFilter;
+    return matchesStage && matchesDept;
+  });
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/70 min-h-screen">
@@ -150,7 +215,7 @@ export default function AiProjectsPage() {
 
         {/* フィルター & リアルタイム同期状況バー */}
         <div className="bg-white/80 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {(["all", ...projectStages] as const).map((s) => {
               const count = s === "all" ? all.length : all.filter((p) => p.stage === s).length;
               const isSelected = stageFilter === s;
@@ -168,6 +233,25 @@ export default function AiProjectsPage() {
                 </button>
               );
             })}
+
+            {/* 部署別フィルター */}
+            {departments.length > 0 && (
+              <div className="flex items-center gap-1.5 ml-1 pl-2 border-l border-slate-200">
+                <span className="text-[11px] font-bold text-slate-500">部署:</span>
+                <select
+                  value={deptFilter}
+                  onChange={(e) => setDeptFilter(e.target.value)}
+                  className="px-2.5 py-1 rounded-xl text-xs font-bold bg-slate-100/90 border border-slate-200 text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                >
+                  <option value="all">全社・全部署</option>
+                  {departments.map((d) => (
+                    <option key={d} value={d}>
+                      {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-3 text-xs text-slate-500 font-medium self-end md:self-center">
@@ -272,6 +356,73 @@ export default function AiProjectsPage() {
             </div>
           )}
         </div>
+
+        {/* 部署別 実務ベストプラクティス・実践フロー */}
+        <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-indigo-600" />
+                <h3 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
+                  部署別 実務ベストプラクティス・実践フロー
+                </h3>
+              </div>
+              <p className="text-xs text-slate-500 mt-1">
+                「自分の部署では具体的に何から始めればいい？」を解決する、真似して始められる業務効率化モデルです。
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200/60 self-start sm:self-auto">
+              <span>💡 すぐ試せるワークフロー</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {DEPT_PRACTICES.map((dp) => {
+              const Icon = dp.deptIcon;
+              return (
+                <div
+                  key={dp.dept}
+                  className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 flex flex-col justify-between space-y-4 hover:border-indigo-300 transition-all shadow-2xs"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-800 shadow-2xs">
+                        <Icon size={14} className="text-indigo-600" />
+                        <span>{dp.dept}</span>
+                      </span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        {dp.recommendedModel}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 text-sm leading-snug">
+                        {dp.title}
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-1">
+                        対象業務: {dp.targetTask}
+                      </p>
+                    </div>
+
+                    <div className="bg-white p-3 rounded-xl border border-slate-200/70 space-y-1.5">
+                      <span className="text-[11px] font-bold text-slate-700 block">実践フロー:</span>
+                      <ul className="space-y-1 text-[11px] text-slate-600 leading-relaxed font-mono">
+                        {dp.workflow.map((w, i) => (
+                          <li key={i}>{w}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-200/60 flex items-center gap-1.5 text-xs text-emerald-700 font-bold">
+                    <CheckCircle2 size={13} className="shrink-0" />
+                    <span>効果: {dp.effect}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
         <p className="text-[11px] text-slate-400 text-center font-mono">
           登録データ同期先：

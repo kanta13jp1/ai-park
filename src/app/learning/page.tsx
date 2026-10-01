@@ -2,6 +2,8 @@ import Link from "next/link";
 import HeroBanner from "@/components/HeroBanner";
 import BeginnerCheatsheet from "@/components/BeginnerCheatsheet";
 import SafePromptingRules from "@/components/SafePromptingRules";
+import SafetySelfChecker from "@/components/SafetySelfChecker";
+import InteractivePromptLibrary from "@/components/InteractivePromptLibrary";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
 import { GraduationCap, ArrowRight, Sparkles, BookOpen } from "lucide-react";
@@ -56,6 +58,12 @@ export default function LearningPage() {
 
         {/* 社内AI安全利用ルール & 入力早見表 */}
         <SafePromptingRules />
+
+        {/* 社内AI入力セルフチェック診断ツール */}
+        <SafetySelfChecker />
+
+        {/* 実務プロンプト集（穴埋め入力＆ワンクリックコピー） */}
+        <InteractivePromptLibrary />
 
         {/* 工事中アラート */}
         <UnderConstructionAlert

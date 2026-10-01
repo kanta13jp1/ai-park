@@ -6,6 +6,7 @@ import OfficeHourBanner from "@/components/OfficeHourBanner";
 import Link from "next/link";
 import GcpSetupGuide from "@/components/GcpSetupGuide";
 import WindowsAntigravityGuide from "@/components/WindowsAntigravityGuide";
+import SafetySelfChecker from "@/components/SafetySelfChecker";
 import StepCard, { type GuideStep } from "@/components/GuideStepCard";
 import SpotlightCard from "@/components/SpotlightCard";
 import {
@@ -247,6 +248,9 @@ export default function GuidePage() {
 
         {/* Windows 実践Tips & MCP活用ガイド */}
         <WindowsAntigravityGuide />
+
+        {/* 社内AI入力セルフチェック診断ツール */}
+        <SafetySelfChecker />
 
         {/* IDE 日本語化ガイド */}
         <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">

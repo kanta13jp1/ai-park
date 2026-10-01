@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import GeminiStatsSyncStatus from "@/components/GeminiStatsSyncStatus";
 import { basePath } from "@/lib/basePath";
 import { playCyberClick } from "@/lib/sound";
 import {
@@ -323,19 +324,18 @@ function doGet() {
           </div>
         </div>
 
-        {/* GCPメトリクス反映仕様についての注記 */}
-        <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-4 text-xs flex items-start gap-3 text-blue-950">
-          <AlertCircle className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-          <div className="space-y-1">
-            <span className="font-bold text-blue-900">
-              📊 利用実績の反映サイクルについて（Google Cloud 公式仕様）
-            </span>
-            <p className="text-blue-800 text-[11px] leading-relaxed">
-              Google Cloud の Cloud Billing および Cloud Logging による利用量集計は、プロンプト送信ごとの即時リアルタイム加算ではなく、
-              <strong>数時間〜日次の確定バッチ処理</strong>により計上されます。Antigravity利用直後は一時的に数値が増加しない場合がありますが、次回のGCPバッチ処理完了後にまとめて確定反映されます。
-            </p>
-          </div>
-        </div>
+        {/* データ同期ステータス & 反映トラブルシューティングFAQ */}
+        <GeminiStatsSyncStatus
+          syncedAt={syncedAt}
+          dataSource={dataSource}
+          isLive={isLive}
+          isLoading={isLoading}
+          onRefresh={() => {
+            playCyberClick();
+            fetchLiveData();
+          }}
+          projectId={gcpInfo.projectId}
+        />
 
         {/* 4大KPIメトリクス */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

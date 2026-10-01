@@ -53,9 +53,8 @@ export default function HowToPage() {
       iconBg: "bg-amber-50 border-amber-100",
       href: "/learning",
       badge: "基礎チートシート",
-      badgeColor: "bg-amber-100 text-amber-800",
-      tags: ["プロンプトの基本", "初級編チートシート"],
-      highlights: "頼み方の基本、ファイル編集を任せる流れ、エラー対処のチートシート",
+      tags: ["プロンプト集", "穴埋めコピー", "安全ルール", "チートシート"],
+      highlights: "穴埋め入力ですぐ動く実務プロンプト集、安全利用ルール早見表、頼み方チートシート",
     },
     {
       id: "interviews",
