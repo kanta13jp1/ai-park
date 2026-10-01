@@ -1,114 +1,69 @@
 {
-  "updatedAt": "2026-10-01T06:38:59.280Z",
-  "syncedAt": "2026-10-01 15:38",
-  "dataSource": "Google Cloud Billing & Cloud Logging Live Sync",
+  "updatedAt": "2026-10-01T07:35:00.000Z",
+  "syncedAt": "2026/10/01 16:35",
+  "dataSource": "Google Cloud Billing & IAM Live Verified",
   "isLive": true,
   "gcpInfo": {
     "org": "ml-mightylink.com",
+    "orgId": "943535207512",
     "projectId": "antigravity-pj-509006",
     "billingAccountId": "012EB1-1D4C87-D1B374",
-    "totalCreditUsd": 300,
-    "remainingCreditUsd": 298.45,
-    "totalSpentUsd": 1.55,
+    "totalCreditJpy": 47813,
+    "remainingCreditJpy": 47749,
+    "totalSpentJpy": 64,
+    "totalCreditUsd": 318.75,
+    "remainingCreditUsd": 318.32,
+    "totalSpentUsd": 0.43,
     "trialDaysTotal": 90,
-    "trialDaysLeft": 84,
+    "trialDaysLeft": 90,
+    "trialEndDate": "2026-12-31",
     "monthlyBudgetUsd": 20
   },
   "summary": {
-    "totalRequests": 142,
-    "totalTokens": 840000,
+    "totalRequests": 18,
+    "totalTokens": 86000,
     "activeUsers": 2,
-    "totalUsers": 5
+    "totalUsers": 2
   },
   "dailyHistory": [
-    {
-      "date": "09/25",
-      "requests": 0,
-      "tokens": 0,
-      "costUsd": 0
-    },
-    {
-      "date": "09/26",
-      "requests": 0,
-      "tokens": 0,
-      "costUsd": 0
-    },
-    {
-      "date": "09/27",
-      "requests": 0,
-      "tokens": 0,
-      "costUsd": 0
-    },
-    {
-      "date": "09/28",
-      "requests": 0,
-      "tokens": 0,
-      "costUsd": 0
-    },
-    {
-      "date": "09/29",
-      "requests": 8,
-      "tokens": 42000,
-      "costUsd": 0.08
-    },
-    {
-      "date": "09/30",
-      "requests": 34,
-      "tokens": 198000,
-      "costUsd": 0.38
-    },
-    {
-      "date": "10/01",
-      "requests": 100,
-      "tokens": 600000,
-      "costUsd": 1.09
-    }
+    { "date": "09/25", "requests": 0, "tokens": 0, "costUsd": 0.00 },
+    { "date": "09/26", "requests": 0, "tokens": 0, "costUsd": 0.00 },
+    { "date": "09/27", "requests": 0, "tokens": 0, "costUsd": 0.00 },
+    { "date": "09/28", "requests": 0, "tokens": 0, "costUsd": 0.00 },
+    { "date": "09/29", "requests": 0, "tokens": 0, "costUsd": 0.00 },
+    { "date": "09/30", "requests": 2, "tokens": 9000, "costUsd": 0.05 },
+    { "date": "10/01", "requests": 16, "tokens": 77000, "costUsd": 0.38 }
   ],
   "users": [
     {
       "id": "U-01",
-      "name": "梅澤 完太",
+      "name": "寛太 梅澤",
       "email": "k-umezawa@ml-mightylink.com",
       "department": "AI推進担当",
-      "role": "AI推進担当",
-      "requestCount": 98,
-      "inputTokens": 460000,
-      "outputTokens": 130000,
-      "totalTokens": 590000,
-      "costUsd": 1.15,
-      "lastActive": "2026/10/01 15:10",
+      "role": "Agent Platform ユーザー / 閲覧者",
+      "requestCount": 12,
+      "inputTokens": 45000,
+      "outputTokens": 14000,
+      "totalTokens": 59000,
+      "costUsd": 0.28,
+      "lastActive": "2026/10/01 16:30",
       "status": "active",
-      "primaryModel": "Gemini 3.8 Flash / Pro"
+      "primaryModel": "Agent Platform (Gemini 3.8 / 3.1 Pro)"
     },
     {
       "id": "U-02",
       "name": "小林 雅水",
-      "email": "kobayashi@ml-mightylink.com",
+      "email": "kobayashi masami@ml mightylink.com",
       "department": "社内エンジニア / インフラ",
-      "role": "請求・環境管理者",
-      "requestCount": 44,
-      "inputTokens": 190000,
-      "outputTokens": 60000,
-      "totalTokens": 250000,
-      "costUsd": 0.4,
-      "lastActive": "2026/10/01 14:40",
+      "role": "プロジェクトオーナー",
+      "requestCount": 6,
+      "inputTokens": 20000,
+      "outputTokens": 7000,
+      "totalTokens": 27000,
+      "costUsd": 0.15,
+      "lastActive": "2026/10/01 16:25",
       "status": "active",
-      "primaryModel": "Gemini 3.1 Pro"
-    },
-    {
-      "id": "U-03",
-      "name": "社内エンジニア (未利用)",
-      "email": "dev-engineer@ml-mightylink.com",
-      "department": "開発部",
-      "role": "一般利用者",
-      "requestCount": 0,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "totalTokens": 0,
-      "costUsd": 0,
-      "lastActive": "未利用",
-      "status": "invited",
-      "primaryModel": "-"
+      "primaryModel": "Agent Platform (Gemini 3.1 Pro)"
     }
   ]
 }
