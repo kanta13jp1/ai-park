@@ -34,13 +34,20 @@ console.log(`📋 事実確認・未完了（未連携・検証中）の対象�
 unverifiedHrefs.forEach((href) => console.log(`   - ${href}`));
 console.log("");
 
-// 2. ナビゲーション類の検査（未確認機能が「稼働中」「公開中」になっていないか）
-//    サイドバー（navigation.ts）に加え、目的別ナビ（PurposeJump.tsx）も対象にする
-const navContent = ["src/data/navigation.ts", "src/components/PurposeJump.tsx"]
+// 2. ナビゲーション類の検査（未確認機能が「稼働中」「公開中」「NEW」「β版」になっていないか）
+//    サイドバー（navigation.ts, Sidebar.tsx）、目的別ナビ（PurposeJump.tsx）、コマンドパレット（CommandPalette.tsx）を対象にする
+const navFiles = [
+  "src/data/navigation.ts",
+  "src/components/PurposeJump.tsx",
+  "src/components/Sidebar.tsx",
+  "src/components/CommandPalette.tsx",
+];
+const navContent = navFiles
+  .filter((rel) => fs.existsSync(path.join(rootDir, rel)))
   .map((rel) => fs.readFileSync(path.join(rootDir, rel), "utf-8"))
   .join("\n");
 
-const forbiddenProductionBadges = ["稼働中", "公開中", "正式運用", "本番稼働", "運用中"];
+const forbiddenProductionBadges = ["稼働中", "公開中", "正式運用", "本番稼働", "運用中", "NEW", "β版", "おすすめ"];
 
 unverifiedHrefs.forEach((href) => {
   // 同じ href が複数のナビに載ることがあるため、すべての出現箇所の badge を検査する
