@@ -5,6 +5,7 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import Link from "next/link";
 import GcpSetupGuide from "@/components/GcpSetupGuide";
+import WindowsAntigravityGuide from "@/components/WindowsAntigravityGuide";
 import StepCard, { type GuideStep } from "@/components/GuideStepCard";
 import SpotlightCard from "@/components/SpotlightCard";
 import {
@@ -243,6 +244,9 @@ export default function GuidePage() {
 
         {/* GCP 連携ガイド */}
         <GcpSetupGuide />
+
+        {/* Windows 実践Tips & MCP活用ガイド */}
+        <WindowsAntigravityGuide />
 
         {/* IDE 日本語化ガイド */}
         <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">

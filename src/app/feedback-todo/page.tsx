@@ -25,6 +25,8 @@ import {
   CircleDot,
   RefreshCw,
   ExternalLink,
+  LayoutGrid,
+  List,
 } from "lucide-react";
 import {
   GITHUB_REPO,
@@ -192,6 +194,48 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     relatedLink: "/guide#company-setup",
     relatedLinkText: "実機トラブルシューティングを見る",
   },
+  {
+    id: "TODO-11",
+    title: "【AI導入編】Windows環境向けAntigravity実践操作＆MCP連携ガイドの拡充",
+    category: "AI導入編",
+    author: "社内ユーザー提案",
+    authorDept: "全社開発・AI推進",
+    date: "2026/10/01",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「Windows (PowerShell) 環境での具体的なプロンプトの渡し方や、社内環境でのMCPサーバー設定手順、よくある権限トラブルの対処法をまとめてほしい」",
+    actionPlan: "【反映済み】①PowerShellでの特殊文字・パス指定・文字化け対策（UTF-8）、②Chrome DevTools / Puppeteer / Context7等の社内MCP活用ガイド、③実機トラブルシューティング集を導入ガイドへ追加しました。",
+    relatedLink: "/guide#windows-powershell-tips",
+    relatedLinkText: "Antigravity導入ガイドを見る",
+  },
+  {
+    id: "TODO-12",
+    title: "【AI初級編】社内業務で安全に使うためのプロンプト基本ルール＆禁止入力早見表",
+    category: "AI初級編",
+    author: "社内ユーザー提案",
+    authorDept: "全社開発・AI推進",
+    date: "2026/10/01",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「Gemini 3.1 Pro / Flash を社内業務で安全に使うためのプロンプト記述基本ルールや、顧客データ・個人情報ガードの早見表がほしい」",
+    actionPlan: "【反映済み】①機密データ・個人情報の入力禁止早見表（OK/NG対比）、②実務で使える安全なプロンプト記述3大テクニック（プレースホルダー置換・スコープ限定・根拠提示）を教育コンテンツに新設しました。",
+    relatedLink: "/learning#safe-prompting-rules",
+    relatedLinkText: "教育用コンテンツを見る",
+  },
+  {
+    id: "TODO-13",
+    title: "【UI/UX】ご意見・改善ToDoボードのステータス推移と一覧性のUI改善",
+    category: "UI/UX",
+    author: "社内ユーザー提案",
+    authorDept: "全社開発・AI推進",
+    date: "2026/10/01",
+    priority: "中",
+    status: "done",
+    feedbackQuote: "「社員から投稿された要望や課題の対応ステータス（未着手・進行中・完了）が直感的にわかるようにボードの整理をしてほしい」",
+    actionPlan: "【反映済み】①ステータスカンバンボード表示（3列：検討中・対応中・反映済み）とリスト表示のワンクリック切り替え、②全社カテゴリ絞り込みセレクター、③ボード上でのステータス移動ボタンを実装しました。",
+    relatedLink: "/feedback-todo",
+    relatedLinkText: "改善ToDoボードを見る",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));
@@ -199,6 +243,8 @@ const seedIds = new Set(initialFeedbackList.map((t) => t.id));
 export default function FeedbackTodoPage() {
   const [todos, setTodos] = useState<FeedbackTodoItem[]>(initialFeedbackList);
   const [statusFilter, setStatusFilter] = useState<"all" | "todo" | "in_progress" | "done">("all");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [viewMode, setViewMode] = useState<"list" | "kanban">("list");
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -352,8 +398,11 @@ export default function FeedbackTodoPage() {
   };
 
   // フィルタリング
+  const categories = ["all", ...Array.from(new Set(allItems.map((t) => t.category)))];
+
   const filteredTodos = allItems.filter((item) => {
     if (statusFilter !== "all" && item.status !== statusFilter) return false;
+    if (categoryFilter !== "all" && item.category !== categoryFilter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       return (
@@ -488,19 +537,63 @@ export default function FeedbackTodoPage() {
             </button>
           </div>
 
-          {/* 検索ボックス */}
-          <div className="relative w-full md:w-72">
-            <Search
-              size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-            />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="ご意見やキーワードで検索..."
-              className="w-full pl-9 pr-4 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-            />
+          {/* 検索・カテゴリ・表示モード */}
+          <div className="flex items-center space-x-2.5 flex-wrap gap-y-2">
+            {/* カテゴリ選択 */}
+            <select
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              aria-label="カテゴリで絞り込み"
+              className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+            >
+              <option value="all">全カテゴリ ({allItems.length})</option>
+              {categories.filter((c) => c !== "all").map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat} ({allItems.filter((t) => t.category === cat).length})
+                </option>
+              ))}
+            </select>
+
+            {/* 検索ボックス */}
+            <div className="relative w-full sm:w-60">
+              <Search
+                size={15}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="キーワード検索..."
+                className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+              />
+            </div>
+
+            {/* ビュー切替（リスト / カンバン） */}
+            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/80">
+              <button
+                onClick={() => setViewMode("list")}
+                title="リスト表示"
+                className={`p-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                  viewMode === "list"
+                    ? "bg-white text-slate-900 shadow-xs"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <List size={14} />
+              </button>
+              <button
+                onClick={() => setViewMode("kanban")}
+                title="カンバンボード表示"
+                className={`p-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                  viewMode === "kanban"
+                    ? "bg-white text-slate-900 shadow-xs"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <LayoutGrid size={14} />
+              </button>
+            </div>
           </div>
         </div>
 
@@ -546,24 +639,171 @@ export default function FeedbackTodoPage() {
           </div>
         </div>
 
-        {/* ToDoカード一覧 */}
-        <div className="space-y-4">
-          {filteredTodos.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-400 space-y-2">
-              <AlertCircle size={32} className="mx-auto text-slate-300" />
-              <p className="text-sm font-semibold text-slate-600">
-                該当するご意見・ToDoは見つかりませんでした
-              </p>
-              <p className="text-xs text-slate-400">
-                検索条件を変更するか、右上の「ご意見を起票する」から新しく追加してください。
-              </p>
+        {/* カンバンボード表示 または リスト表示 */}
+        {viewMode === "kanban" ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
+            {/* カラム 1: 検討中 / ToDo */}
+            <div className="bg-slate-100/80 rounded-2xl p-4 border border-slate-200/90 space-y-3.5">
+              <div className="flex items-center justify-between pb-1 border-b border-slate-200">
+                <span className="font-extrabold text-xs text-amber-800 flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                  📥 検討中 / ToDo
+                </span>
+                <span className="text-xs font-mono font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
+                  {filteredTodos.filter((t) => t.status === "todo").length}
+                </span>
+              </div>
+              <div className="space-y-3">
+                {filteredTodos
+                  .filter((t) => t.status === "todo")
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-xl p-4 border border-slate-200 shadow-2xs hover:shadow-xs space-y-2.5 transition-all"
+                    >
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-mono font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                          {item.id}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold">
+                          {item.category}
+                        </span>
+                      </div>
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h4>
+                      <p className="text-[11px] text-slate-500 line-clamp-2 italic">{item.feedbackQuote}</p>
+                      <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-100">
+                        <span>{item.author}</span>
+                        {!item.issueNumber && (
+                          <button
+                            onClick={() => handleStatusChange(item.id, "in_progress")}
+                            className="text-sky-700 hover:text-sky-900 font-bold bg-sky-50 hover:bg-sky-100 px-2 py-0.5 rounded transition-colors"
+                          >
+                            対応中へ ➔
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+              </div>
             </div>
-          ) : (
-            filteredTodos.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all duration-200 space-y-4"
-              >
+
+            {/* カラム 2: 対応中 / 進行中 */}
+            <div className="bg-sky-50/70 rounded-2xl p-4 border border-sky-200/80 space-y-3.5">
+              <div className="flex items-center justify-between pb-1 border-b border-sky-200">
+                <span className="font-extrabold text-xs text-sky-800 flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-sky-500" />
+                  🚧 対応中 / 進行中
+                </span>
+                <span className="text-xs font-mono font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full">
+                  {filteredTodos.filter((t) => t.status === "in_progress").length}
+                </span>
+              </div>
+              <div className="space-y-3">
+                {filteredTodos
+                  .filter((t) => t.status === "in_progress")
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-xl p-4 border border-sky-200 shadow-2xs hover:shadow-xs space-y-2.5 transition-all"
+                    >
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-mono font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                          {item.id}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 font-bold">
+                          {item.category}
+                        </span>
+                      </div>
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h4>
+                      <p className="text-[11px] text-slate-600 line-clamp-2">{item.actionPlan}</p>
+                      <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-100">
+                        <span>{item.author}</span>
+                        {!item.issueNumber && (
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() => handleStatusChange(item.id, "todo")}
+                              className="text-slate-600 hover:text-slate-800 font-bold bg-slate-100 px-1.5 py-0.5 rounded"
+                            >
+                              ⬅ 戻す
+                            </button>
+                            <button
+                              onClick={() => handleStatusChange(item.id, "done")}
+                              className="text-emerald-700 hover:text-emerald-900 font-bold bg-emerald-50 hover:bg-emerald-100 px-1.5 py-0.5 rounded"
+                            >
+                              完了 ➔
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* カラム 3: 反映済み / 完了 */}
+            <div className="bg-emerald-50/70 rounded-2xl p-4 border border-emerald-200/80 space-y-3.5">
+              <div className="flex items-center justify-between pb-1 border-b border-emerald-200">
+                <span className="font-extrabold text-xs text-emerald-800 flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  ✅ 反映済み / 完了
+                </span>
+                <span className="text-xs font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                  {filteredTodos.filter((t) => t.status === "done").length}
+                </span>
+              </div>
+              <div className="space-y-3">
+                {filteredTodos
+                  .filter((t) => t.status === "done")
+                  .map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-xl p-4 border border-emerald-200 shadow-2xs hover:shadow-xs space-y-2.5 transition-all"
+                    >
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="font-mono font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                          {item.id}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold">
+                          {item.category}
+                        </span>
+                      </div>
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h4>
+                      <p className="text-[11px] text-slate-600 line-clamp-2">{item.actionPlan}</p>
+                      <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-100">
+                        <span>{item.author}</span>
+                        {item.relatedLink && (
+                          <Link
+                            href={item.relatedLink}
+                            className="text-indigo-600 hover:text-indigo-800 font-bold text-[10px]"
+                          >
+                            ページ確認 ➔
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          /* ToDoカード一覧 (リスト表示) */
+          <div className="space-y-4">
+            {filteredTodos.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-400 space-y-2">
+                <AlertCircle size={32} className="mx-auto text-slate-300" />
+                <p className="text-sm font-semibold text-slate-600">
+                  該当するご意見・ToDoは見つかりませんでした
+                </p>
+                <p className="text-xs text-slate-400">
+                  検索条件を変更するか、右上の「ご意見を起票する」から新しく追加してください。
+                </p>
+              </div>
+            ) : (
+              filteredTodos.map((item) => (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs hover:shadow-md hover:border-indigo-300 transition-all duration-200 space-y-4"
+                >
                 {/* カード上部：タグ、ID、ステータス */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                   <div className="flex items-center space-x-2 flex-wrap gap-y-1.5">
@@ -710,6 +950,7 @@ export default function FeedbackTodoPage() {
             ))
           )}
         </div>
+        )}
       </div>
 
       {/* 新規ご意見起票モーダル */}
