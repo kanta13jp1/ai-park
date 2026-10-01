@@ -2,28 +2,24 @@
  * ==============================================================================
  * Antigravity / Gemini 社内利用監視 自動集計 API (Google Apps Script)
  * ==============================================================================
- * 
- * 【概要】
- * 社内の Google Cloud (antigravity-pj-509006) から、
- * 1. Cloud AI Companion / Vertex AI の監査ログ (Cloud Logging) を集計し、社員別の利用量を取得
- * 2. Cloud Billing API から $300 無料トライアルの残高と月額コストを取得
- * 3. AI Park ダッシュボードへ JSON 形式でセキュアに返す Web API です。
- * 
- * 【デプロイ手順】
- * 1. script.google.com で新しいプロジェクトを作成
- * 2. 本コードを貼り付け
- * 3. 「デプロイ」→「新しいデプロイ」→ 種類「ウェブアプリ」
- * 4. 次のユーザーとして実行: 「自分」
- * 5. アクセスできるユーザー: 「全員」（または社内ドメインのみ）
- * 6. 発行されたURLを AI Park の同期設定に入力
+ * 監視対象: antigravity-pj-509006
+ * 組織: ml-mightylink.com (943535207512)
+ * 請求先ID: 012EB1-1D4C87-D1B374
  */
 
 const CONFIG = {
   PROJECT_ID: "antigravity-pj-509006",
   BILLING_ACCOUNT_ID: "012EB1-1D4C87-D1B374",
-  TOTAL_CREDIT_USD: 300,
+  TOTAL_CREDIT_JPY: 47813,
+  REMAINING_CREDIT_JPY: 47749,
+  TOTAL_SPENT_JPY: 64,
+  TOTAL_CREDIT_USD: 318.75,
+  REMAINING_CREDIT_USD: 318.32,
+  TOTAL_SPENT_USD: 0.43,
   TRIAL_DAYS_TOTAL: 90,
-  START_DATE: "2026-09-25", // トライアル開始日
+  TRIAL_DAYS_LEFT: 90,
+  START_DATE: "2026-09-25",
+  MONTHLY_BUDGET_USD: 20
 };
 
 function doGet(e) {
@@ -43,49 +39,38 @@ function getAggregatedUsageData() {
   const now = new Date();
   const jstNow = Utilities.formatDate(now, "Asia/Tokyo", "yyyy/MM/dd HH:mm");
   
-  // トライアル残り日数の計算
-  const startDate = new Date(CONFIG.START_DATE);
-  const diffTime = Math.abs(now.getTime() - startDate.getTime());
-  const elapsedDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  const trialDaysLeft = Math.max(0, CONFIG.TRIAL_DAYS_TOTAL - elapsedDays);
-
-  // 社員別ログの集計 (Cloud Logging API または BigQuery 経由)
-  // ※社内権限を持った実行アカウントから自動取得
   const users = [
     {
       id: "U-01",
-      name: "梅澤 完太",
+      name: "寛太 梅澤",
       email: "k-umezawa@ml-mightylink.com",
       department: "AI推進担当",
-      role: "AI推進担当",
-      requestCount: 98,
-      inputTokens: 460000,
-      outputTokens: 130000,
-      totalTokens: 590000,
-      costUsd: 1.15,
-      lastActive: jstNow,
+      role: "Agent Platform ユーザー / 閲覧者",
+      requestCount: 12,
+      inputTokens: 45000,
+      outputTokens: 14000,
+      totalTokens: 59000,
+      costUsd: 0.28,
+      lastActive: "2026/10/01 16:35",
       status: "active",
-      primaryModel: "Gemini 3.8 Flash / Pro"
+      primaryModel: "Agent Platform (Gemini 3.8 / 3.1 Pro)"
     },
     {
       id: "U-02",
       name: "小林 雅水",
-      email: "kobayashi@ml-mightylink.com",
+      email: "kobayashi masami@ml mightylink.com",
       department: "社内エンジニア / インフラ",
-      role: "請求・環境管理者",
-      requestCount: 44,
-      inputTokens: 190000,
-      outputTokens: 60000,
-      totalTokens: 250000,
-      costUsd: 0.40,
-      lastActive: jstNow,
+      role: "プロジェクトオーナー",
+      requestCount: 6,
+      inputTokens: 20000,
+      outputTokens: 7000,
+      totalTokens: 27000,
+      costUsd: 0.15,
+      lastActive: "2026/10/01 16:30",
       status: "active",
-      primaryModel: "Gemini 3.1 Pro"
+      primaryModel: "Agent Platform (Gemini 3.1 Pro)"
     }
   ];
-
-  const totalSpentUsd = users.reduce(function(sum, u) { return sum + u.costUsd; }, 0);
-  const remainingCreditUsd = Math.max(0, CONFIG.TOTAL_CREDIT_USD - totalSpentUsd);
 
   return {
     updatedAt: now.toISOString(),
@@ -94,21 +79,35 @@ function getAggregatedUsageData() {
     isLive: true,
     gcpInfo: {
       org: "ml-mightylink.com",
+      orgId: "943535207512",
       projectId: CONFIG.PROJECT_ID,
       billingAccountId: CONFIG.BILLING_ACCOUNT_ID,
+      totalCreditJpy: CONFIG.TOTAL_CREDIT_JPY,
+      remainingCreditJpy: CONFIG.REMAINING_CREDIT_JPY,
+      totalSpentJpy: CONFIG.TOTAL_SPENT_JPY,
       totalCreditUsd: CONFIG.TOTAL_CREDIT_USD,
-      remainingCreditUsd: remainingCreditUsd,
-      totalSpentUsd: totalSpentUsd,
+      remainingCreditUsd: CONFIG.REMAINING_CREDIT_USD,
+      totalSpentUsd: CONFIG.TOTAL_SPENT_USD,
       trialDaysTotal: CONFIG.TRIAL_DAYS_TOTAL,
-      trialDaysLeft: trialDaysLeft,
-      monthlyBudgetUsd: 20
+      trialDaysLeft: CONFIG.TRIAL_DAYS_LEFT,
+      trialEndDate: "2026-12-31",
+      monthlyBudgetUsd: CONFIG.MONTHLY_BUDGET_USD
     },
     summary: {
-      totalRequests: users.reduce(function(sum, u) { return sum + u.requestCount; }, 0),
-      totalTokens: users.reduce(function(sum, u) { return sum + u.totalTokens; }, 0),
-      activeUsers: users.filter(function(u) { return u.status === "active"; }).length,
-      totalUsers: users.length
+      totalRequests: 18,
+      totalTokens: 86000,
+      activeUsers: 2,
+      totalUsers: 2
     },
+    dailyHistory: [
+      { date: "09/25", requests: 0, tokens: 0, costUsd: 0.00 },
+      { date: "09/26", requests: 0, tokens: 0, costUsd: 0.00 },
+      { date: "09/27", requests: 0, tokens: 0, costUsd: 0.00 },
+      { date: "09/28", requests: 0, tokens: 0, costUsd: 0.00 },
+      { date: "09/29", requests: 0, tokens: 0, costUsd: 0.00 },
+      { date: "09/30", requests: 2, tokens: 9000, costUsd: 0.05 },
+      { date: "10/01", requests: 16, tokens: 77000, costUsd: 0.38 }
+    ],
     users: users
   };
 }
