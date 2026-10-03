@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 import {
   ShieldCheck,
   ShieldAlert,
@@ -102,12 +103,27 @@ export default function SafetySelfChecker() {
   });
 
   const handleSelect = (qId: number, optIdx: number) => {
-    setAnswers((prev) => ({ ...prev, [qId]: optIdx }));
+    playCyberClick();
+    const nextAnswers = { ...answers, [qId]: optIdx };
+    setAnswers(nextAnswers);
+
+    // 3問すべて回答完了した瞬間
+    const nextCompleted = nextAnswers[1] !== null && nextAnswers[2] !== null && nextAnswers[3] !== null;
+    if (nextCompleted) {
+      const isClean = nextAnswers[3] === 0 && nextAnswers[2] === 1 && nextAnswers[1] === 1;
+      if (isClean) {
+        setTimeout(() => playCyberSuccess(), 180);
+      }
+    }
   };
 
   const handleReset = () => {
+    playCyberClick();
     setAnswers({ 1: null, 2: null, 3: null });
   };
+
+  const answeredCount = [answers[1], answers[2], answers[3]].filter((a) => a !== null).length;
+  const progressPercent = Math.round((answeredCount / 3) * 100);
 
   const isCompleted = answers[1] !== null && answers[2] !== null && answers[3] !== null;
 
@@ -133,11 +149,35 @@ export default function SafetySelfChecker() {
         </div>
         <button
           onClick={handleReset}
+          onMouseEnter={() => playCyberHover()}
           className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 self-start sm:self-auto px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
         >
           <RotateCcw size={13} />
           <span>リセット</span>
         </button>
+      </div>
+
+      {/* 回答進捗HUDバー */}
+      <div className="bg-slate-50/90 border border-slate-200/80 rounded-2xl p-3.5 space-y-2">
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <span className="font-mono font-bold text-[10px] px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-700 border border-indigo-200">
+              HUD PROGRESS
+            </span>
+            <span className="text-slate-600 font-semibold text-[11px]">
+              診断進捗：{answeredCount} / 3 問回答完了
+            </span>
+          </div>
+          <span className="font-mono font-bold text-indigo-600 text-xs">
+            {progressPercent}%
+          </span>
+        </div>
+        <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-gradient-to-r from-cyan-400 via-indigo-500 to-emerald-500 transition-all duration-500 ease-out"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
       </div>
 
       {/* 設問カード */}
@@ -174,6 +214,7 @@ export default function SafetySelfChecker() {
                         <button
                           key={idx}
                           onClick={() => handleSelect(q.id, idx)}
+                          onMouseEnter={() => playCyberHover()}
                           className={`p-3 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-between gap-1 ${
                             isSelected
                               ? opt.isRisk
@@ -208,7 +249,7 @@ export default function SafetySelfChecker() {
 
       {/* 診断結果の表示 */}
       {isCompleted ? (
-        <div className="pt-2">
+        <div className="pt-2 animate-in fade-in zoom-in-95 duration-500">
           {hasAccountRisk ? (
             /* 私用アカウントによるNG */
             <div className="p-5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-950 space-y-3">

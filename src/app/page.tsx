@@ -7,7 +7,8 @@ import ExperienceSelector from "@/components/ExperienceSelector";
 import PurposeJump from "@/components/PurposeJump";
 import SiteOmnisearch from "@/components/SiteOmnisearch";
 import SpotlightCard from "@/components/SpotlightCard";
-import { playCyberClick } from "@/lib/sound";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   Sparkles,
   ArrowRight,
@@ -193,106 +194,112 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Step 1: 導入編 */}
-            <SpotlightCard
-              spotlightColor="rgba(14, 165, 233, 0.15)"
-              className="border-sky-200/80 bg-gradient-to-b from-sky-50/50 via-white to-sky-50/20 hover:border-sky-400"
-            >
-              <Link
-                href="/guide"
-                onClick={() => playCyberClick()}
-                className="group flex flex-col justify-between h-full p-6 space-y-4"
+            <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(14, 165, 233, 0.15)"
+                className="border-sky-200/80 bg-gradient-to-b from-sky-50/50 via-white to-sky-50/20 hover:border-sky-400 h-full"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-black text-sky-700 bg-sky-100/80 px-2.5 py-0.5 rounded-full border border-sky-300/50">
-                      STEP 01
-                    </span>
-                    <span className="text-xs text-slate-400 font-medium">所要 10分</span>
+                <Link
+                  href="/guide"
+                  onClick={() => playCyberClick()}
+                  className="group flex flex-col justify-between h-full p-6 space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-black text-sky-700 bg-sky-100/80 px-2.5 py-0.5 rounded-full border border-sky-300/50">
+                        STEP 01
+                      </span>
+                      <span className="text-xs text-slate-400 font-medium">所要 10分</span>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-extrabold text-slate-900 group-hover:text-sky-600 text-base flex items-center space-x-2 transition-colors">
+                        <span className="text-xl">🔰</span>
+                        <span>AI環境セットアップ</span>
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Google Antigravity のインストールと VS Code / IDE の日本語化。迷わず安全に使える開発環境を最速で構築します。
+                      </p>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="font-extrabold text-slate-900 group-hover:text-sky-600 text-base flex items-center space-x-2 transition-colors">
-                      <span className="text-xl">🔰</span>
-                      <span>AI環境セットアップ</span>
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Google Antigravity のインストールと VS Code / IDE の日本語化。迷わず安全に使える開発環境を最速で構築します。
-                    </p>
+                  <div className="pt-3 border-t border-sky-100 flex items-center justify-between text-xs font-bold text-sky-600 group-hover:text-sky-700">
+                    <span>導入手順書を見る</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
                   </div>
-                </div>
-                <div className="pt-3 border-t border-sky-100 flex items-center justify-between text-xs font-bold text-sky-600 group-hover:text-sky-700">
-                  <span>導入手順書を見る</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
-                </div>
-              </Link>
-            </SpotlightCard>
+                </Link>
+              </SpotlightCard>
+            </TiltCard>
 
             {/* Step 2: 初級編 */}
-            <SpotlightCard
-              spotlightColor="rgba(245, 158, 11, 0.15)"
-              className="border-amber-200/80 bg-gradient-to-b from-amber-50/50 via-white to-amber-50/20 hover:border-amber-400"
-            >
-              <Link
-                href="/learning"
-                onClick={() => playCyberClick()}
-                className="group flex flex-col justify-between h-full p-6 space-y-4"
+            <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(245, 158, 11, 0.15)"
+                className="border-amber-200/80 bg-gradient-to-b from-amber-50/50 via-white to-amber-50/20 hover:border-amber-400 h-full"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-black text-amber-800 bg-amber-100/80 px-2.5 py-0.5 rounded-full border border-amber-300/50">
-                      STEP 02
-                    </span>
-                    <span className="text-xs text-slate-400 font-medium">初心者・非エンジニア向け</span>
+                <Link
+                  href="/learning"
+                  onClick={() => playCyberClick()}
+                  className="group flex flex-col justify-between h-full p-6 space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-black text-amber-800 bg-amber-100/80 px-2.5 py-0.5 rounded-full border border-amber-300/50">
+                        STEP 02
+                      </span>
+                      <span className="text-xs text-slate-400 font-medium">初心者・非エンジニア向け</span>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-extrabold text-slate-900 group-hover:text-amber-700 text-base flex items-center space-x-2 transition-colors">
+                        <span className="text-xl">📖</span>
+                        <span>基本プロンプト & 指示法</span>
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        Antigravityへの的確な指示出し、ファイル編集の依頼法、エラー解決の基本手順書（チートシート）を習得します。
+                      </p>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="font-extrabold text-slate-900 group-hover:text-amber-700 text-base flex items-center space-x-2 transition-colors">
-                      <span className="text-xl">📖</span>
-                      <span>基本プロンプト & 指示法</span>
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      Antigravityへの的確な指示出し、ファイル編集の依頼法、エラー解決の基本手順書（チートシート）を習得します。
-                    </p>
+                  <div className="pt-3 border-t border-amber-100 flex items-center justify-between text-xs font-bold text-amber-700 group-hover:text-amber-800">
+                    <span>基本手順書を見る</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
                   </div>
-                </div>
-                <div className="pt-3 border-t border-amber-100 flex items-center justify-between text-xs font-bold text-amber-700 group-hover:text-amber-800">
-                  <span>基本手順書を見る</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
-                </div>
-              </Link>
-            </SpotlightCard>
+                </Link>
+              </SpotlightCard>
+            </TiltCard>
 
             {/* Step 3: 実践編 */}
-            <SpotlightCard
-              spotlightColor="rgba(99, 102, 241, 0.15)"
-              className="border-indigo-200/80 bg-gradient-to-b from-indigo-50/50 via-white to-indigo-50/20 hover:border-indigo-400"
-            >
-              <Link
-                href="/ai-projects"
-                onClick={() => playCyberClick()}
-                className="group flex flex-col justify-between h-full p-6 space-y-4"
+            <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(99, 102, 241, 0.15)"
+                className="border-indigo-200/80 bg-gradient-to-b from-indigo-50/50 via-white to-indigo-50/20 hover:border-indigo-400 h-full"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-black text-indigo-800 bg-indigo-100/80 px-2.5 py-0.5 rounded-full border border-indigo-300/50">
-                      STEP 03
-                    </span>
-                    <span className="text-xs text-slate-400 font-medium">社内実践事例</span>
+                <Link
+                  href="/ai-projects"
+                  onClick={() => playCyberClick()}
+                  className="group flex flex-col justify-between h-full p-6 space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-black text-indigo-800 bg-indigo-100/80 px-2.5 py-0.5 rounded-full border border-indigo-300/50">
+                        STEP 03
+                      </span>
+                      <span className="text-xs text-slate-400 font-medium">社内実践事例</span>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-extrabold text-slate-900 group-hover:text-indigo-600 text-base flex items-center space-x-2 transition-colors">
+                        <span className="text-xl">🏢</span>
+                        <span>社内プロジェクト実践</span>
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        各事業部が何のツールでどんな業務改善を行っているかをリアルタイム一覧で確認し、自チームの業務へ横展開します。
+                      </p>
+                    </div>
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="font-extrabold text-slate-900 group-hover:text-indigo-600 text-base flex items-center space-x-2 transition-colors">
-                      <span className="text-xl">🏢</span>
-                      <span>社内プロジェクト実践</span>
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      各事業部が何のツールでどんな業務改善を行っているかをリアルタイム一覧で確認し、自チームの業務へ横展開します。
-                    </p>
+                  <div className="pt-3 border-t border-indigo-100 flex items-center justify-between text-xs font-bold text-indigo-700 group-hover:text-indigo-800">
+                    <span>プロジェクト一覧を見る</span>
+                    <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
                   </div>
-                </div>
-                <div className="pt-3 border-t border-indigo-100 flex items-center justify-between text-xs font-bold text-indigo-700 group-hover:text-indigo-800">
-                  <span>プロジェクト一覧を見る</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
-                </div>
-              </Link>
-            </SpotlightCard>
+                </Link>
+              </SpotlightCard>
+            </TiltCard>
           </div>
 
           {/* Antigravity Academy 特設キーノートバナー（圧倒的クオリティ） */}
@@ -414,15 +421,22 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
             {quickLinks.map((item) => (
-              <SpotlightCard
+              <TiltCard
                 key={item.href}
-                spotlightColor={item.spotlightColor}
-                className="hover:border-indigo-400/80"
+                maxTilt={6}
+                glareOpacity={0.12}
+                className="h-full rounded-2xl"
               >
-                <Link
-                  href={item.href}
-                  className="group relative flex flex-col justify-between h-full p-6 space-y-4"
+                <SpotlightCard
+                  spotlightColor={item.spotlightColor}
+                  className="hover:border-indigo-400/80 h-full"
                 >
+                  <Link
+                    href={item.href}
+                    onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
+                    className="group relative flex flex-col justify-between h-full p-6 space-y-4"
+                  >
                   {/* ホバー時の上部アクセントライン */}
                   <div
                     className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${item.accentGradient} opacity-0 group-hover:opacity-100 transition-opacity`}
@@ -458,6 +472,7 @@ export default function Home() {
                   </div>
                 </Link>
               </SpotlightCard>
+            </TiltCard>
             ))}
           </div>
         </section>

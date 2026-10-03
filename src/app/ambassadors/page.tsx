@@ -5,6 +5,7 @@ import OfficeHourBanner from "@/components/OfficeHourBanner";
 import BookingModal from "@/components/BookingModal";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
 import { playCyberClick, playCyberHover, playCyberOpen } from "@/lib/sound";
 import {
   Users,
@@ -215,10 +216,15 @@ export default function AmbassadorsPage() {
         {/* アンバサダーグリッド */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredAmbassadors.map((amb) => (
-            <div
+            <TiltCard
               key={amb.id}
-              className="bg-white border border-slate-200 hover:border-slate-300 rounded-xl p-5 shadow-xs transition-all flex flex-col justify-between space-y-4"
+              maxTilt={6}
+              glareOpacity={0.12}
+              className="h-full rounded-2xl"
             >
+              <div
+                className="bg-white border border-slate-200 hover:border-slate-300 rounded-2xl p-5 shadow-xs transition-all flex flex-col justify-between space-y-4 h-full"
+              >
               <div className="space-y-3">
                 {/* ヘッダー */}
                 <div className="flex items-start space-x-3">
@@ -278,7 +284,7 @@ export default function AmbassadorsPage() {
               {/* アクションボタン */}
               <div className="pt-3 border-t border-slate-100 flex items-center space-x-2">
                 <button
-                  onClick={() => setIsBookingModalOpen(true)}
+                  onClick={() => { playCyberOpen(); setIsBookingModalOpen(true); }} onMouseEnter={() => playCyberHover()}
                   className="flex-1 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-lg text-xs transition-colors border border-blue-200 text-center"
                 >
                   Office Hourで相談
@@ -293,6 +299,7 @@ export default function AmbassadorsPage() {
                 )}
               </div>
             </div>
+          </TiltCard>
           ))}
         </div>
 
