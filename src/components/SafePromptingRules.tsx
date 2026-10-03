@@ -1,25 +1,53 @@
 "use client";
 
-import { ShieldCheck, ShieldAlert, CheckCircle2, XCircle, Lock, EyeOff, AlertTriangle, FileText } from "lucide-react";
+import { ShieldCheck, ShieldAlert, CheckCircle2, XCircle, Lock, EyeOff, AlertTriangle, FileText, Printer, Sparkles } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
-import { playCyberClick, playCyberHover } from "@/lib/sound";
+import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
 
 export default function SafePromptingRules() {
+  const handlePrint = () => {
+    playCyberSuccess();
+    if (typeof window !== "undefined") {
+      window.print();
+    }
+  };
+
   return (
-    <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6" id="safe-prompting-rules">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+    <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6 print:border-none print:shadow-none print:p-0 print:m-0" id="safe-prompting-rules">
+      {/* 印刷時専用ヘッダー */}
+      <div className="hidden print:block border-b-2 border-slate-900 pb-3 mb-4">
+        <div className="flex items-center justify-between text-xs text-slate-500 font-mono">
+          <span>株式会社マイティリンク 社内AI利用ガイドライン（2026年改訂版）</span>
+          <span>社内デスク常備・研修配布用 A4早見表</span>
+        </div>
+      </div>
+
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4 print:pb-2">
         <div className="flex items-center space-x-2.5">
-          <div className="p-2 rounded-xl bg-emerald-100 text-emerald-700">
-            <ShieldCheck className="w-5 h-5" />
+          <div className="p-2 rounded-xl bg-emerald-100 text-emerald-700 print:bg-transparent print:p-0">
+            <ShieldCheck className="w-5 h-5 print:w-6 print:h-6" />
           </div>
           <div>
-            <h2 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+            <h2 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight print:text-xl">
               社内AI安全利用ルール ＆ 入力データ早見表
             </h2>
             <p className="text-xs text-slate-500 font-normal">
               機密漏洩・セキュリティ事故を未然に防ぐための入力ガイドライン（全社員必読）
             </p>
           </div>
+        </div>
+
+        {/* 画面表示時の「A4印刷 / PDF保存」ボタン（印刷時は非表示） */}
+        <div className="flex items-center gap-2 print:hidden shrink-0">
+          <button
+            onClick={handlePrint}
+            onMouseEnter={() => playCyberHover()}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs shadow-md hover:shadow-indigo-500/25 transition-all cursor-pointer active:scale-95"
+            title="A4用紙1枚で印刷・PDF保存"
+          >
+            <Printer size={14} className="text-cyan-300" />
+            <span>A4印刷 / PDF保存</span>
+          </button>
         </div>
       </div>
 
@@ -144,6 +172,20 @@ export default function SafePromptingRules() {
               </p>
             </div>
           </TiltCard>
+        </div>
+      </div>
+
+      {/* 印刷時専用フッター（社内問合せ先・署名欄） */}
+      <div className="hidden print:block pt-4 border-t-2 border-slate-900 mt-6">
+        <div className="flex items-center justify-between text-[11px] text-slate-600">
+          <div>
+            <p><strong>問合せ先:</strong> AI推進担当 / 法務・コンプライアンス室（Google Chat「AI Park 相談窓口」）</p>
+            <p><strong>社内ポータル:</strong> MightyLINK AI Park（https://kanta13jp1.github.io/ai-park/）</p>
+          </div>
+          <div className="text-right">
+            <p>配付・受講確認印 / サイン欄: ____________________</p>
+            <p className="text-[10px] text-slate-400">※本用紙は個人情報保護方針および情報セキュリティ基本規程に基づきます</p>
+          </div>
         </div>
       </div>
     </section>
