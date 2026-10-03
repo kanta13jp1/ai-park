@@ -4,10 +4,11 @@ import { useState, useMemo, useEffect, useCallback } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
 import GeminiStatsSyncStatus from "@/components/GeminiStatsSyncStatus";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { basePath } from "@/lib/basePath";
-import { playCyberClick } from "@/lib/sound";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   BarChart3,
   Users,
@@ -372,63 +373,71 @@ function doGet() {
 
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* 社内本番接続ステータスバー */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-indigo-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center space-x-3.5">
-            <div className={`w-3.5 h-3.5 rounded-full ${isLive ? "bg-emerald-400 animate-pulse shadow-[0_0_10px_#34d399]" : "bg-amber-400"}`} />
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="font-extrabold text-sm sm:text-base text-white tracking-tight">
-                  監視対象プロジェクト: <span className="font-mono text-cyan-300">{gcpInfo.projectId}</span>
-                </span>
-                <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 px-2.5 py-0.5 rounded-full font-mono">
-                  Agent Platform
-                </span>
-                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1 font-mono">
-                  <CheckCircle2 size={11} />
-                  <span>自動同期稼働中 ({syncedAt})</span>
-                </span>
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <div
+            onMouseEnter={() => playCyberHover()}
+            className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-indigo-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-default"
+          >
+            <div className="flex items-center space-x-3.5">
+              <div className={`w-3.5 h-3.5 rounded-full ${isLive ? "bg-emerald-400 animate-pulse shadow-[0_0_10px_#34d399]" : "bg-amber-400"}`} />
+              <div>
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-extrabold text-sm sm:text-base text-white tracking-tight">
+                    監視対象プロジェクト: <span className="font-mono text-cyan-300">{gcpInfo.projectId}</span>
+                  </span>
+                  <span className="text-[10px] bg-indigo-500/20 text-indigo-300 border border-indigo-500/40 px-2.5 py-0.5 rounded-full font-mono">
+                    Agent Platform
+                  </span>
+                  <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1 font-mono">
+                    <CheckCircle2 size={11} />
+                    <span>自動同期稼働中 ({syncedAt})</span>
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1 font-mono">
+                  組織: {gcpInfo.org} ｜ 請求先ID: {gcpInfo.billingAccountId} ｜ データ元: {dataSource}
+                </p>
               </div>
-              <p className="text-xs text-slate-400 mt-1 font-mono">
-                組織: {gcpInfo.org} ｜ 請求先ID: {gcpInfo.billingAccountId} ｜ データ元: {dataSource}
-              </p>
+            </div>
+
+            <div className="flex items-center space-x-2.5 shrink-0">
+              <button
+                onMouseEnter={() => playCyberHover()}
+                onClick={() => {
+                  playCyberClick();
+                  fetchLiveData();
+                }}
+                disabled={isLoading}
+                className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 disabled:opacity-50"
+                title="最新データを再取得"
+              >
+                <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
+                <span>{isLoading ? "更新中..." : "即時再取得"}</span>
+              </button>
+              <button
+                onMouseEnter={() => playCyberHover()}
+                onClick={() => {
+                  playCyberClick();
+                  handleExportCsv();
+                }}
+                className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95"
+              >
+                <Download size={13} />
+                <span>CSV出力</span>
+              </button>
+              <a
+                href={`https://console.cloud.google.com/billing/${gcpInfo.billingAccountId}/reports?project=${gcpInfo.projectId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={() => playCyberHover()}
+                onClick={() => playCyberClick()}
+                className="px-4 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center space-x-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
+              >
+                <span>Cloud Billing コンソール</span>
+                <ExternalLink size={12} />
+              </a>
             </div>
           </div>
-
-          <div className="flex items-center space-x-2.5 shrink-0">
-            <button
-              onClick={() => {
-                playCyberClick();
-                fetchLiveData();
-              }}
-              disabled={isLoading}
-              className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 disabled:opacity-50"
-              title="最新データを再取得"
-            >
-              <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
-              <span>{isLoading ? "更新中..." : "即時再取得"}</span>
-            </button>
-            <button
-              onClick={() => {
-                playCyberClick();
-                handleExportCsv();
-              }}
-              className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95"
-            >
-              <Download size={13} />
-              <span>CSV出力</span>
-            </button>
-            <a
-              href={`https://console.cloud.google.com/billing/${gcpInfo.billingAccountId}/reports?project=${gcpInfo.projectId}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => playCyberClick()}
-              className="px-4 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center space-x-1.5 transition-all shadow-md active:scale-95"
-            >
-              <span>Cloud Billing コンソール</span>
-              <ExternalLink size={12} />
-            </a>
-          </div>
-        </div>
+        </TiltCard>
 
         {/* データ同期ステータス & 反映トラブルシューティングFAQ */}
         <GeminiStatsSyncStatus
@@ -448,162 +457,182 @@ function doGet() {
         {/* 4大KPIメトリクス */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* ① 300ドル無料クレジット残高 */}
-          <SpotlightCard
-            spotlightColor="rgba(16, 185, 129, 0.15)"
-            className="bg-white border-slate-200/90"
-          >
-            <div className="p-5 space-y-3">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
-                <span className="flex items-center gap-1.5">
-                  <CreditCard size={15} className="text-emerald-600" />
-                  無料トライアルクレジット
-                </span>
-                <span className="text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/60 text-[11px]">
-                  残り {gcpInfo.trialDaysLeft} 日
-                </span>
-              </div>
-              <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
-                    <AnimatedCounter value={remainingCreditUsd} decimals={2} prefix="$" />
+          <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(16, 185, 129, 0.15)"
+              className="bg-white border-slate-200/90 h-full rounded-2xl"
+            >
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-5 space-y-3 h-full cursor-default"
+              >
+                <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
+                  <span className="flex items-center gap-1.5">
+                    <CreditCard size={15} className="text-emerald-600" />
+                    無料トライアルクレジット
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">
-                    / ${gcpInfo.totalCreditUsd}
+                  <span className="text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/60 text-[11px]">
+                    残り {gcpInfo.trialDaysLeft} 日
                   </span>
                 </div>
-                <span className="text-xs text-slate-500 block mt-0.5">
-                  約<AnimatedCounter value={gcpInfo.remainingCreditJpy || Math.round(remainingCreditUsd * USD_JPY)} /> 円 残（元: ¥{gcpInfo.totalCreditJpy.toLocaleString()}）
-                </span>
-              </div>
-              <div className="space-y-1">
-                <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="bg-emerald-500 h-2 rounded-full transition-all duration-500"
-                    style={{ width: `${100 - creditUsagePercent}%` }}
-                  />
+                <div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
+                      <AnimatedCounter value={remainingCreditUsd} decimals={2} prefix="$" />
+                    </span>
+                    <span className="text-xs text-slate-400 font-mono">
+                      / ${gcpInfo.totalCreditUsd}
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-500 block mt-0.5">
+                    約<AnimatedCounter value={gcpInfo.remainingCreditJpy || Math.round(remainingCreditUsd * USD_JPY)} /> 円 残（元: ¥{gcpInfo.totalCreditJpy.toLocaleString()}）
+                  </span>
                 </div>
-                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                  <span>消化: <AnimatedCounter value={totalCostUsd} decimals={2} prefix="$" /> ({creditUsagePercent.toFixed(1)}%)</span>
-                  <span>残り: {(100 - creditUsagePercent).toFixed(1)}%</span>
+                <div className="space-y-1">
+                  <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                    <div
+                      className="bg-emerald-500 h-2 rounded-full transition-all duration-500"
+                      style={{ width: `${100 - creditUsagePercent}%` }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                    <span>消化: <AnimatedCounter value={totalCostUsd} decimals={2} prefix="$" /> ({creditUsagePercent.toFixed(1)}%)</span>
+                    <span>残り: {(100 - creditUsagePercent).toFixed(1)}%</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
           {/* ② 今月の累計利用金額 */}
-          <SpotlightCard
-            spotlightColor="rgba(99, 102, 241, 0.15)"
-            className="bg-white border-slate-200/90"
-          >
-            <div className="p-5 space-y-3">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
-                <span className="flex items-center gap-1.5">
-                  <TrendingUp size={15} className="text-indigo-600" />
-                  今月の累計利用金額
-                </span>
-                <span className="text-[11px] bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full font-bold border border-indigo-200/60">
-                  実質0円(枠内)
-                </span>
-              </div>
-              <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-2xl sm:text-3xl font-black text-indigo-900 font-mono tracking-tight">
-                    <AnimatedCounter value={totalCostUsd} decimals={2} prefix="$" />
+          <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(99, 102, 241, 0.15)"
+              className="bg-white border-slate-200/90 h-full rounded-2xl"
+            >
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-5 space-y-3 h-full cursor-default"
+              >
+                <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
+                  <span className="flex items-center gap-1.5">
+                    <TrendingUp size={15} className="text-indigo-600" />
+                    今月の累計利用金額
                   </span>
-                  <span className="text-xs text-slate-400">
-                    （約<AnimatedCounter value={Math.round(totalCostUsd * USD_JPY)} />円）
+                  <span className="text-[11px] bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-full font-bold border border-indigo-200/60">
+                    実質0円(枠内)
                   </span>
                 </div>
-                <span className="text-xs text-slate-500 block mt-0.5">
-                  全額 $300 クレジットから相殺中
-                </span>
-              </div>
-              <div className="space-y-1">
-                <div className="flex justify-between text-[11px] text-slate-600 font-semibold">
-                  <span>月額上限予算 ($20 / 3,000円)</span>
-                  <span className="font-mono text-indigo-700">
-                    {budgetUsagePercent.toFixed(1)}%
+                <div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl sm:text-3xl font-black text-indigo-900 font-mono tracking-tight">
+                      <AnimatedCounter value={totalCostUsd} decimals={2} prefix="$" />
+                    </span>
+                    <span className="text-xs text-slate-400">
+                      （約<AnimatedCounter value={Math.round(totalCostUsd * USD_JPY)} />円）
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-500 block mt-0.5">
+                    全額 $300 クレジットから相殺中
                   </span>
                 </div>
-                <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                  <div
-                    className={`h-2 rounded-full transition-all duration-500 ${
-                      budgetUsagePercent > 80 ? "bg-amber-500" : "bg-indigo-600"
-                    }`}
-                    style={{ width: `${Math.min(100, budgetUsagePercent)}%` }}
-                  />
+                <div className="space-y-1">
+                  <div className="flex justify-between text-[11px] text-slate-600 font-semibold">
+                    <span>月額上限予算 ($20 / 3,000円)</span>
+                    <span className="font-mono text-indigo-700">
+                      {budgetUsagePercent.toFixed(1)}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                    <div
+                      className={`h-2 rounded-full transition-all duration-500 ${
+                        budgetUsagePercent > 80 ? "bg-amber-500" : "bg-indigo-600"
+                      }`}
+                      style={{ width: `${Math.min(100, budgetUsagePercent)}%` }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
           {/* ③ アクティブ利用社員数 */}
-          <SpotlightCard
-            spotlightColor="rgba(59, 130, 246, 0.15)"
-            className="bg-white border-slate-200/90"
-          >
-            <div className="p-5 space-y-3">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
-                <span className="flex items-center gap-1.5">
-                  <Users size={15} className="text-blue-600" />
-                  利用社員アカウント
-                </span>
-                <span className="text-blue-700 font-bold text-xs bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/60">
-                  {activeUserCount} 名 稼働中
-                </span>
-              </div>
-              <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
-                    <AnimatedCounter value={activeUserCount} />
-                    <span className="text-xs font-normal text-slate-400 ml-1">/ {users.length} 名</span>
+          <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(59, 130, 246, 0.15)"
+              className="bg-white border-slate-200/90 h-full rounded-2xl"
+            >
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-5 space-y-3 h-full cursor-default"
+              >
+                <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
+                  <span className="flex items-center gap-1.5">
+                    <Users size={15} className="text-blue-600" />
+                    利用社員アカウント
+                  </span>
+                  <span className="text-blue-700 font-bold text-xs bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/60">
+                    {activeUserCount} 名 稼働中
                   </span>
                 </div>
-                <span className="text-xs text-slate-500 block mt-0.5">
-                  招待中 / 待機: {users.length - activeUserCount} 名
-                </span>
+                <div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
+                      <AnimatedCounter value={activeUserCount} />
+                      <span className="text-xs font-normal text-slate-400 ml-1">/ {users.length} 名</span>
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-500 block mt-0.5">
+                    招待中 / 待機: {users.length - activeUserCount} 名
+                  </span>
+                </div>
+                <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-600">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>本日利用: 2名（梅澤, 小林）</span>
+                </div>
               </div>
-              <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-600">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>本日利用: 2名（梅澤, 小林）</span>
-              </div>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
           {/* ④ 総リクエスト・トークン量 */}
-          <SpotlightCard
-            spotlightColor="rgba(245, 158, 11, 0.15)"
-            className="bg-white border-slate-200/90"
-          >
-            <div className="p-5 space-y-3">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
-                <span className="flex items-center gap-1.5">
-                  <Zap size={15} className="text-amber-600" />
-                  総AIリクエスト数
-                </span>
-                <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-bold font-mono border border-amber-200/60">
-                  API Calls
-                </span>
-              </div>
-              <div>
-                <div className="flex items-baseline justify-between">
-                  <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
-                    <AnimatedCounter value={totalRequests} />
-                    <span className="text-xs font-normal text-slate-400 ml-1">回</span>
+          <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(245, 158, 11, 0.15)"
+              className="bg-white border-slate-200/90 h-full rounded-2xl"
+            >
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-5 space-y-3 h-full cursor-default"
+              >
+                <div className="flex items-center justify-between text-xs text-slate-500 font-semibold">
+                  <span className="flex items-center gap-1.5">
+                    <Zap size={15} className="text-amber-600" />
+                    総AIリクエスト数
+                  </span>
+                  <span className="text-[10px] bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-bold font-mono border border-amber-200/60">
+                    API Calls
                   </span>
                 </div>
-                <span className="text-xs text-slate-500 block mt-0.5">
-                  総消費トークン: <AnimatedCounter value={totalTokens / 1000000} decimals={2} suffix="M トークン" />
-                </span>
+                <div>
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
+                      <AnimatedCounter value={totalRequests} />
+                      <span className="text-xs font-normal text-slate-400 ml-1">回</span>
+                    </span>
+                  </div>
+                  <span className="text-xs text-slate-500 block mt-0.5">
+                    総消費トークン: <AnimatedCounter value={totalTokens / 1000000} decimals={2} suffix="M トークン" />
+                  </span>
+                </div>
+                <div className="pt-2 text-xs text-slate-600 flex items-center justify-between">
+                  <span>平均単価</span>
+                  <span className="font-mono font-bold text-slate-800">
+                    約 0.014 ドル / 回 (約2円)
+                  </span>
+                </div>
               </div>
-              <div className="pt-2 text-xs text-slate-600 flex items-center justify-between">
-                <span>平均単価</span>
-                <span className="font-mono font-bold text-slate-800">
-                  約 0.014 ドル / 回 (約2円)
-                </span>
-              </div>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
         </div>
 
         {/* 期間別利用推移チャート */}

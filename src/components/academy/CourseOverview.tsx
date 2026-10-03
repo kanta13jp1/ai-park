@@ -4,6 +4,8 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, Award, BookOpen, CheckCircle2, ChevronRight, Circle, Clock, ListChecks, PlayCircle, Sparkles } from "lucide-react";
 import { courseMinutes, PASS_RATE, type Course } from "@/data/academy";
 import { stepCounts, useCourseProgress } from "./useCourseProgress";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 export default function CourseOverview({ course }: { course: Course }) {
   const { progress, nextStep } = useCourseProgress(course);
@@ -21,7 +23,12 @@ export default function CourseOverview({ course }: { course: Course }) {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 md:grid-cols-[1fr_220px] gap-6 items-center relative z-10">
           <div className="space-y-4">
             <nav className="flex items-center gap-2 text-xs text-slate-300">
-              <Link href="/academy" className="inline-flex items-center gap-1 hover:text-cyan-300 transition-colors">
+              <Link
+                href="/academy"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="inline-flex items-center gap-1 hover:text-cyan-300 transition-colors"
+              >
                 <ArrowLeft size={13} />
                 <span>Academy トップ</span>
               </Link>
@@ -78,7 +85,9 @@ export default function CourseOverview({ course }: { course: Course }) {
             <div className="pt-2">
               <Link
                 href={`/academy/${course.id}/${nextStep}`}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 text-xs font-black transition-all shadow-md active:scale-95"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 text-xs font-black transition-all shadow-md active:scale-95 cursor-pointer"
               >
                 <span>{progress.completedAt ? "修了証を見る" : done === 0 ? "レッスンを始める" : "レッスンを続ける"}</span>
                 <ArrowRight size={14} />
@@ -86,8 +95,15 @@ export default function CourseOverview({ course }: { course: Course }) {
             </div>
           </div>
 
-          <div className="hidden md:flex w-44 h-44 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur-md items-center justify-center text-7xl justify-self-center shadow-2xl">
-            {course.icon}
+          <div className="hidden md:block justify-self-center">
+            <TiltCard maxTilt={6} glareOpacity={0.12} className="rounded-3xl">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="w-44 h-44 rounded-3xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur-md flex items-center justify-center text-7xl shadow-2xl cursor-default"
+              >
+                {course.icon}
+              </div>
+            </TiltCard>
           </div>
         </div>
       </div>
@@ -96,22 +112,27 @@ export default function CourseOverview({ course }: { course: Course }) {
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
         <div className="space-y-8 min-w-0">
           {/* このコースで学べること */}
-          <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
-            <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
-              <Sparkles size={18} className="text-indigo-600" />
-              <h2 className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">
-                このコースで習得できること
-              </h2>
-            </div>
-            <ul className="space-y-3">
-              {course.outcomes.map((o) => (
-                <li key={o} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
-                  <span>{o}</span>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <TiltCard maxTilt={3} glareOpacity={0.05} className="rounded-3xl">
+            <section
+              onMouseEnter={() => playCyberHover()}
+              className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs space-y-4 cursor-default"
+            >
+              <div className="flex items-center space-x-2 border-b border-slate-100 pb-3">
+                <Sparkles size={18} className="text-indigo-600" />
+                <h2 className="font-extrabold text-base sm:text-lg text-slate-900 tracking-tight">
+                  このコースで習得できること
+                </h2>
+              </div>
+              <ul className="space-y-3">
+                {course.outcomes.map((o) => (
+                  <li key={o} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    <CheckCircle2 size={16} className="text-emerald-500 shrink-0 mt-0.5" />
+                    <span>{o}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </TiltCard>
 
           {/* 公式参考動画 */}
           {course.referenceVideo && (
@@ -141,66 +162,74 @@ export default function CourseOverview({ course }: { course: Course }) {
 
         {/* 右サイドバー：レッスン目次 */}
         <aside className="space-y-6">
-          <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xs space-y-5">
-            <h3 className="font-black text-sm text-slate-900 border-b border-slate-100 pb-3 uppercase tracking-wider font-mono">
-              CURRICULUM SYLLABUS
-            </h3>
+          <TiltCard maxTilt={4} glareOpacity={0.06} className="rounded-3xl">
+            <div className="bg-white border border-slate-200/90 rounded-3xl p-6 shadow-xs space-y-5">
+              <h3 className="font-black text-sm text-slate-900 border-b border-slate-100 pb-3 uppercase tracking-wider font-mono">
+                CURRICULUM SYLLABUS
+              </h3>
 
-            {sections.map((sec) => (
-              <div key={sec} className="space-y-2">
-                <p className="text-[11px] font-bold text-slate-400 font-mono tracking-wide">{sec}</p>
+              {sections.map((sec) => (
+                <div key={sec} className="space-y-2">
+                  <p className="text-[11px] font-bold text-slate-400 font-mono tracking-wide">{sec}</p>
+                  <div className="space-y-1">
+                    {course.lessons
+                      .filter((l) => l.section === sec)
+                      .map((l) => {
+                        const isDone = progress.lessonsDone.includes(l.id);
+                        return (
+                          <Link
+                            key={l.id}
+                            href={`/academy/${course.id}/${l.id}`}
+                            onClick={() => playCyberClick()}
+                            onMouseEnter={() => playCyberHover()}
+                            className="flex items-start gap-2.5 p-2 rounded-xl text-xs text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition-colors cursor-pointer"
+                          >
+                            {isDone ? (
+                              <CheckCircle2 size={15} className="text-emerald-500 shrink-0 mt-0.5" />
+                            ) : (
+                              <Circle size={15} className="text-slate-300 shrink-0 mt-0.5" />
+                            )}
+                            <span className={isDone ? "text-slate-500 line-through" : "font-medium"}>
+                              {l.title}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                  </div>
+                </div>
+              ))}
+
+              <div className="space-y-2 pt-3 border-t border-slate-100">
+                <p className="text-[11px] font-bold text-slate-400 font-mono tracking-wide">COMPLETION</p>
                 <div className="space-y-1">
-                  {course.lessons
-                    .filter((l) => l.section === sec)
-                    .map((l) => {
-                      const isDone = progress.lessonsDone.includes(l.id);
-                      return (
-                        <Link
-                          key={l.id}
-                          href={`/academy/${course.id}/${l.id}`}
-                          className="flex items-start gap-2.5 p-2 rounded-xl text-xs text-slate-700 hover:bg-slate-50 hover:text-indigo-600 transition-colors"
-                        >
-                          {isDone ? (
-                            <CheckCircle2 size={15} className="text-emerald-500 shrink-0 mt-0.5" />
-                          ) : (
-                            <Circle size={15} className="text-slate-300 shrink-0 mt-0.5" />
-                          )}
-                          <span className={isDone ? "text-slate-500 line-through" : "font-medium"}>
-                            {l.title}
-                          </span>
-                        </Link>
-                      );
-                    })}
+                  <Link
+                    href={`/academy/${course.id}/quiz`}
+                    onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
+                    className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 hover:text-indigo-600 transition-colors cursor-pointer"
+                  >
+                    <ListChecks
+                      size={16}
+                      className={(progress.bestScore ?? 0) >= PASS_RATE ? "text-emerald-500" : "text-cyan-600"}
+                    />
+                    <span>評価テスト ({course.quiz.length}問)</span>
+                  </Link>
+                  <Link
+                    href={`/academy/${course.id}/certificate`}
+                    onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
+                    className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 hover:text-indigo-600 transition-colors cursor-pointer"
+                  >
+                    <Award
+                      size={16}
+                      className={progress.completedAt ? "text-emerald-500" : "text-amber-500"}
+                    />
+                    <span>修了証の発行</span>
+                  </Link>
                 </div>
               </div>
-            ))}
-
-            <div className="space-y-2 pt-3 border-t border-slate-100">
-              <p className="text-[11px] font-bold text-slate-400 font-mono tracking-wide">COMPLETION</p>
-              <div className="space-y-1">
-                <Link
-                  href={`/academy/${course.id}/quiz`}
-                  className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 hover:text-indigo-600 transition-colors"
-                >
-                  <ListChecks
-                    size={16}
-                    className={(progress.bestScore ?? 0) >= PASS_RATE ? "text-emerald-500" : "text-cyan-600"}
-                  />
-                  <span>評価テスト ({course.quiz.length}問)</span>
-                </Link>
-                <Link
-                  href={`/academy/${course.id}/certificate`}
-                  className="flex items-center gap-2.5 p-2 rounded-xl text-xs font-bold text-slate-800 hover:bg-slate-50 hover:text-indigo-600 transition-colors"
-                >
-                  <Award
-                    size={16}
-                    className={progress.completedAt ? "text-emerald-500" : "text-amber-500"}
-                  />
-                  <span>修了証の発行</span>
-                </Link>
-              </div>
             </div>
-          </div>
+          </TiltCard>
         </aside>
       </div>
     </div>
