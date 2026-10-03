@@ -39,7 +39,18 @@ import {
 export interface FeedbackTodoItem {
   id: string;
   title: string;
-  category: "UI/UX" | "AI導入編" | "AI初級編" | "AI実践編" | "ガイドライン" | "企画・懸賞" | "開発環境" | "アカウント運用";
+  category:
+    | "UI/UX"
+    | "AI導入編"
+    | "AI初級編"
+    | "AI実践編"
+    | "ガイドライン"
+    | "企画・懸賞"
+    | "開発環境"
+    | "アカウント運用"
+    | "プロンプト"
+    | "運用・管理"
+    | "活用事例";
   author: string;
   authorDept: string;
   date: string;
@@ -1082,6 +1093,9 @@ export default function FeedbackTodoPage() {
                     <option value="企画・懸賞">企画・ビジネスモデル懸賞</option>
                     <option value="開発環境">開発環境・Git連携</option>
                     <option value="アカウント運用">アカウント運用・ライセンス</option>
+                    <option value="プロンプト">プロンプト・実務テンプレ</option>
+                    <option value="運用・管理">運用・管理・ダッシュボード</option>
+                    <option value="活用事例">活用事例・社内事例集</option>
                   </select>
                 </div>
                 <div className="space-y-1.5">
