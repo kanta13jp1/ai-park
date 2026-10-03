@@ -3,6 +3,8 @@
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
+import { playCyberHover } from "@/lib/sound";
 import { Mail, MessageSquare, Send, HelpCircle, ExternalLink, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
@@ -79,10 +81,11 @@ export default function ContactPage() {
       <OfficeHourBanner />
 
       <div className="max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <SpotlightCard
-          spotlightColor="rgba(99, 102, 241, 0.15)"
-          className="bg-white border-slate-200/90 shadow-sm"
-        >
+        <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-3xl">
+          <SpotlightCard
+            spotlightColor="rgba(99, 102, 241, 0.15)"
+            className="bg-white border-slate-200/90 shadow-sm rounded-3xl"
+          >
           <div className="p-6 sm:p-8 space-y-6">
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200/60">
@@ -204,12 +207,14 @@ export default function ContactPage() {
             )}
           </div>
         </SpotlightCard>
+      </TiltCard>
 
         {/* アカウント・ライセンスFAQ */}
-        <SpotlightCard
-          spotlightColor="rgba(99, 102, 241, 0.12)"
-          className="bg-white border-slate-200/90 shadow-sm"
-        >
+        <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-3xl">
+          <SpotlightCard
+            spotlightColor="rgba(99, 102, 241, 0.12)"
+            className="bg-white border-slate-200/90 shadow-sm rounded-3xl"
+          >
           <div className="p-6 sm:p-8 space-y-5">
             <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3.5">
               <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200/60 flex items-center justify-center text-indigo-600">
@@ -219,7 +224,7 @@ export default function ContactPage() {
             </div>
             <div className="space-y-3">
               {accountFaqs.map((f) => (
-                <details key={f.q} className="group rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 transition-colors p-4">
+                <details key={f.q} onMouseEnter={() => playCyberHover()} className="group rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 transition-colors p-4">
                   <summary className="cursor-pointer font-bold text-xs sm:text-sm text-slate-900 list-none flex items-start gap-2.5">
                     <span className="text-indigo-600 font-mono font-black">Q.</span>
                     <span className="flex-1">{f.q}</span>
@@ -247,9 +252,11 @@ export default function ContactPage() {
             </div>
           </div>
         </SpotlightCard>
+      </TiltCard>
 
         {/* 開発規模ごとのコスト目安 & 予算上限設定ガイド（ご意見TODO-09への対応） */}
-        <section id="cost-guidelines" className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 scroll-mt-6">
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <section id="cost-guidelines" className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 scroll-mt-6">
           <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 font-mono uppercase tracking-wider">
@@ -349,6 +356,7 @@ export default function ContactPage() {
             </p>
           </div>
         </section>
+      </TiltCard>
       </div>
     </div>
   );

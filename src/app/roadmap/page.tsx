@@ -5,7 +5,7 @@ import OfficeHourBanner from "@/components/OfficeHourBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
-import { playCyberClick } from "@/lib/sound";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import Link from "next/link";
 import { useState } from "react";
 import { featureStatusMaster } from "@/data/feature-status";
@@ -509,48 +509,58 @@ export default function RoadmapPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
             {unverifiedReleaseSchedule.map((item, idx) => (
-              <SpotlightCard
+              <TiltCard
                 key={idx}
-                spotlightColor="rgba(56, 189, 248, 0.12)"
-                className="bg-slate-900/90 border-slate-800 hover:border-slate-700 shadow-sm"
+                maxTilt={5}
+                glareOpacity={0.08}
+                className="h-full rounded-2xl"
               >
-                <div className="p-4 sm:p-5 flex flex-col justify-between space-y-3.5 h-full">
-                  <div className="space-y-2.5">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-black text-emerald-400 font-mono flex items-center space-x-1.5">
-                        <Clock size={13} />
-                        <span>{item.date}</span>
-                      </span>
-                      <span
-                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border font-mono ${item.badgeColor}`}
-                      >
-                        {item.currentStatus}
-                      </span>
+                <SpotlightCard
+                  spotlightColor="rgba(56, 189, 248, 0.12)"
+                  className="bg-slate-900/90 border-slate-800 hover:border-slate-700 shadow-sm h-full rounded-2xl"
+                >
+                  <div
+                    onMouseEnter={() => playCyberHover()}
+                    className="p-4 sm:p-5 flex flex-col justify-between space-y-3.5 h-full cursor-default"
+                  >
+                    <div className="space-y-2.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-black text-emerald-400 font-mono flex items-center space-x-1.5">
+                          <Clock size={13} />
+                          <span>{item.date}</span>
+                        </span>
+                        <span
+                          className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border font-mono ${item.badgeColor}`}
+                        >
+                          {item.currentStatus}
+                        </span>
+                      </div>
+
+                      <h4 className="font-extrabold text-white text-sm sm:text-base">
+                        {item.pageName}
+                      </h4>
+
+                      <p className="text-[11px] text-slate-300 leading-relaxed bg-black/40 p-3 rounded-xl border border-white/5">
+                        <span className="text-slate-400 font-semibold block mb-0.5 font-mono">🔑 解除マイルストーン:</span>
+                        {item.condition}
+                      </p>
                     </div>
 
-                    <h4 className="font-extrabold text-white text-sm sm:text-base">
-                      {item.pageName}
-                    </h4>
-
-                    <p className="text-[11px] text-slate-300 leading-relaxed bg-black/40 p-3 rounded-xl border border-white/5">
-                      <span className="text-slate-400 font-semibold block mb-0.5 font-mono">🔑 解除マイルストーン:</span>
-                      {item.condition}
-                    </p>
+                    <div className="pt-2.5 border-t border-slate-800 flex items-center justify-between text-xs">
+                      <span className="text-[10px] text-slate-400 font-mono font-medium">{item.phase}</span>
+                      <Link
+                        href={item.href}
+                        onClick={() => playCyberClick()}
+                        onMouseEnter={() => playCyberHover()}
+                        className="inline-flex items-center space-x-1 text-cyan-300 hover:text-cyan-200 font-bold transition-colors cursor-pointer"
+                      >
+                        <span>該当画面を見る</span>
+                        <ArrowRight size={13} />
+                      </Link>
+                    </div>
                   </div>
-
-                  <div className="pt-2.5 border-t border-slate-800 flex items-center justify-between text-xs">
-                    <span className="text-[10px] text-slate-400 font-mono font-medium">{item.phase}</span>
-                    <Link
-                      href={item.href}
-                      onClick={() => playCyberClick()}
-                      className="inline-flex items-center space-x-1 text-cyan-300 hover:text-cyan-200 font-bold transition-colors"
-                    >
-                      <span>該当画面を見る</span>
-                      <ArrowRight size={13} />
-                    </Link>
-                  </div>
-                </div>
-              </SpotlightCard>
+                </SpotlightCard>
+              </TiltCard>
             ))}
           </div>
         </div>

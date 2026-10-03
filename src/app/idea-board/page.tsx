@@ -287,8 +287,12 @@ export default function IdeaBoardPage() {
         </p>
 
         {/* 社内AIビジネスモデル提案コンテスト（暫定版） */}
-        <details className="bg-white border border-amber-300/80 rounded-3xl p-6 shadow-xs group transition-all">
-          <summary className="cursor-pointer list-none flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <details className="bg-white border border-amber-300/80 rounded-3xl p-6 shadow-xs group transition-all">
+            <summary
+              onMouseEnter={() => playCyberHover()}
+              className="cursor-pointer list-none flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+            >
             <div className="flex items-center space-x-2.5">
               <Trophy className="w-5 h-5 text-amber-500 shrink-0" />
               <span className="font-black text-sm sm:text-base text-slate-900 tracking-tight">
@@ -324,6 +328,7 @@ export default function IdeaBoardPage() {
             </div>
           </div>
         </details>
+      </TiltCard>
 
         {/* 宣言時のルール */}
         <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-4">
