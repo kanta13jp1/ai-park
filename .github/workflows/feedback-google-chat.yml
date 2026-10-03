@@ -30,6 +30,7 @@ jobs:
           IS_PROJECT: ${{ contains(github.event.issue.labels.*.name, 'ai-project') }}
           IS_AMBASSADOR: ${{ contains(github.event.issue.labels.*.name, 'ambassador') }}
           IS_IDEA: ${{ contains(github.event.issue.labels.*.name, 'idea') }}
+          THREAD_KEY: ${{ secrets.GOOGLE_CHAT_THREAD_KEY }}
         run: |
           if [ -z "$WEBHOOK_URL" ]; then
             echo "GOOGLE_CHAT_WEBHOOK_URL が未設定のため通知をスキップします"
@@ -60,6 +61,17 @@ jobs:
             *) echo "通知対象外のイベント: $KIND:$ACTION"; exit 0 ;;
           esac
 
+          # スレッドIDの決定（デフォルト: ai-park-feedback-notifications に集約）
+          THREAD_ID="${THREAD_KEY:-ai-park-feedback-notifications}"
+
+          # Webhook URL にスレッド返信パラメータ（存在しない場合は新スレッド作成）を付加
+          TARGET_URL="$WEBHOOK_URL"
+          if [[ "$TARGET_URL" == *"?"* ]]; then
+            TARGET_URL="${TARGET_URL}&messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+          else
+            TARGET_URL="${TARGET_URL}?messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+          fi
+
           TEXT=$(printf '%s\n*#%s %s*\n%s\n(by %s) ページ: %s' "$HEAD" "$NUMBER" "$TITLE" "$ISSUE_URL" "$ACTOR" "$PAGE")
-          jq -n --arg text "$TEXT" '{text: $text}' \
-            | curl -sSf -X POST -H 'Content-Type: application/json; charset=UTF-8' --data @- "$WEBHOOK_URL"
+          jq -n --arg text "$TEXT" --arg threadKey "$THREAD_ID" '{text: $text, thread: {threadKey: $threadKey}}' \
+            | curl -sSf -X POST -H 'Content-Type: application/json; charset=UTF-8' --data @- "$TARGET_URL"
