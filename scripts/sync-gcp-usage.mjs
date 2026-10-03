@@ -16,8 +16,32 @@ const PROJECT_ID = process.env.GCP_PROJECT_ID || 'antigravity-pj-509006';
 const BILLING_ACCOUNT_ID = process.env.GCP_BILLING_ACCOUNT_ID || '012EB1-1D4C87-D1B374';
 const TARGET_FILE = path.join(__dirname, '..', 'public', 'data', 'gcp-usage-live.json');
 
-// サービスアカウント JSON から Google OAuth2 アクセストークンを生成 (外部ライブラリ不要)
+// サービスアカウント (JWT) または ユーザー認証情報 (ADC / refresh_token) から Google OAuth2 アクセストークンを生成
 async function getGcpAccessToken(saKey) {
+  // 1. ユーザー認証情報 (authorized_user / ADC) の場合
+  if (saKey.type === 'authorized_user' || saKey.refresh_token) {
+    console.log('[INFO] Detected User Credentials (authorized_user). Refreshing token...');
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: saKey.client_id,
+        client_secret: saKey.client_secret,
+        refresh_token: saKey.refresh_token,
+        grant_type: 'refresh_token',
+      }),
+    });
+
+    if (!tokenRes.ok) {
+      const errorText = await tokenRes.text();
+      throw new Error(`Failed to refresh Google user OAuth token: ${tokenRes.status} ${errorText}`);
+    }
+
+    const tokenData = await tokenRes.json();
+    return tokenData.access_token;
+  }
+
+  // 2. サービスアカウント (service_account / JWT署名) の場合
   const now = Math.floor(Date.now() / 1000);
   const header = { alg: 'RS256', typ: 'JWT' };
   const claim = {

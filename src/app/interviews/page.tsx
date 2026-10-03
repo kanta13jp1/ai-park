@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { GITHUB_REPO } from "@/lib/githubFeedback";
+import { playCyberClick, playCyberHover, playCyberOpen, playCyberSuccess } from "@/lib/sound";
 
 interface InterviewArticle {
   id: string;
@@ -175,8 +176,12 @@ export default function InterviewsPage() {
             </p>
           </div>
           <button
-            onClick={() => setIsSubmitModalOpen(true)}
-            className="shrink-0 px-4 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center space-x-1.5 self-end sm:self-center"
+            onClick={() => {
+              playCyberOpen();
+              setIsSubmitModalOpen(true);
+            }}
+            onMouseEnter={() => playCyberHover()}
+            className="shrink-0 px-4 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 rounded-xl text-xs font-bold shadow-sm transition-colors flex items-center space-x-1.5 self-end sm:self-center cursor-pointer active:scale-95"
           >
             <PlusCircle size={15} />
             <span>取材に立候補する</span>
@@ -206,6 +211,7 @@ export default function InterviewsPage() {
               <h3 className="font-bold text-sm text-slate-900">🎤 取材でお聞きすること（所要30分）</h3>
               <button
                 type="button"
+                onMouseEnter={() => playCyberHover()}
                 onClick={() => {
                   const sheetText = [
                     "【AI活用インタビュー 事前アンケート雛形】",
@@ -217,6 +223,7 @@ export default function InterviewsPage() {
                     "6. これから始める社員へのアドバイス:",
                   ].join("\n");
                   navigator.clipboard.writeText(sheetText);
+                  playCyberSuccess();
                   setCopiedPromptId("sheet");
                   setTimeout(() => setCopiedPromptId(null), 2000);
                 }}
@@ -636,14 +643,19 @@ export default function InterviewsPage() {
               <div className="pt-2 flex justify-end space-x-2">
                 <button
                   type="button"
-                  onClick={() => setIsSubmitModalOpen(false)}
-                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 font-semibold transition-colors"
+                  onClick={() => {
+                    playCyberClick();
+                    setIsSubmitModalOpen(false);
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-100 font-semibold transition-colors cursor-pointer"
                 >
                   キャンセル
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow-xs transition-colors flex items-center space-x-1.5"
+                  onMouseEnter={() => playCyberHover()}
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow-xs transition-colors flex items-center space-x-1.5 cursor-pointer active:scale-95"
                 >
                   <Send size={13} />
                   <span>立候補を送信</span>

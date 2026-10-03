@@ -1,6 +1,6 @@
 /**
  * register-sa-key.mjs
- * Google Cloud コンソールからダウンロードしたサービスアカウント JSON キーを
+ * Google Cloud サービスアカウント JSON または ユーザー認証情報 (ADC) を
  * GitHub Secrets (GCP_SA_KEY) に安全に一発登録するスクリプト
  */
 
@@ -8,13 +8,15 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 
-// 引数でファイルパスを受け取るか、Downloads フォルダから自動検出
+// 引数でファイルパスを受け取るか、自動検出
 const args = process.argv.slice(2);
 let keyPath = args[0];
 
+const userProfile = process.env.USERPROFILE || process.env.HOME || '';
+const adcPath = path.join(process.env.APPDATA || path.join(userProfile, '.config'), 'gcloud', 'application_default_credentials.json');
+
 if (!keyPath) {
-  // ユーザーの Downloads フォルダから最新の antigravity / service-account JSON を探索
-  const userProfile = process.env.USERPROFILE || process.env.HOME || '';
+  // 1. Downloads フォルダから最新の JSON を探索
   const downloadsDir = path.join(userProfile, 'Downloads');
   if (fs.existsSync(downloadsDir)) {
     const files = fs.readdirSync(downloadsDir)
@@ -26,6 +28,12 @@ if (!keyPath) {
       keyPath = files[0];
       console.log(`🔍 Downloads フォルダから最新のキーファイルを自動検出しました: ${keyPath}`);
     }
+  }
+
+  // 2. Downloads になければ gcloud ADC を探索
+  if (!keyPath && fs.existsSync(adcPath)) {
+    keyPath = adcPath;
+    console.log(`🔍 gcloud アプリケーション認証情報 (ADC) を自動検出しました: ${keyPath}`);
   }
 }
 
@@ -39,18 +47,23 @@ if (!keyPath || !fs.existsSync(keyPath)) {
 try {
   const content = fs.readFileSync(keyPath, 'utf-8');
   const parsed = JSON.parse(content);
-  if (!parsed.client_email || !parsed.private_key) {
-    throw new Error('有効なサービスアカウント JSON キーではありません (client_email または private_key が不足しています)');
+
+  const isServiceAccount = parsed.client_email && parsed.private_key;
+  const isAuthorizedUser = parsed.type === 'authorized_user' || parsed.refresh_token;
+
+  if (!isServiceAccount && !isAuthorizedUser) {
+    throw new Error('有効な Google Cloud 認証キーではありません (サービスアカウントキーまたは ADC 認証情報が必要です)');
   }
 
-  console.log(`\n🔑 サービスアカウントを検出: ${parsed.client_email}`);
+  const identity = isServiceAccount ? `サービスアカウント: ${parsed.client_email}` : `ユーザーアカウント: ${parsed.account || 'authorized_user'}`;
+  console.log(`\n🔑 認証情報を検出: ${identity}`);
   console.log('⏳ GitHub Secrets (GCP_SA_KEY) へ暗号化登録中...');
 
   execSync(`gh secret set GCP_SA_KEY < "${keyPath}"`, { shell: true, stdio: 'inherit' });
 
   console.log('\n=================================================');
   console.log('🎉 GitHub Secrets (GCP_SA_KEY) への登録が完了しました！');
-  console.log('これで定期ワークフロー (sync-gcp-usage.yml) がログを自動取得できるようになりました。');
+  console.log('これで定期ワークフロー (sync-gcp-usage.yml) が利用データを自動更新できるようになりました。');
   console.log('=================================================\n');
 } catch (err) {
   console.error('❌ 登録エラー:', err.message);

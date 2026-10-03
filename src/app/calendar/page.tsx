@@ -1,5 +1,6 @@
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
 import { CalendarDays, Lock, Sparkles, Calendar as CalendarIcon, CheckCircle2 } from "lucide-react";
 
 // 「AI Park イベント」カレンダーのカレンダーID（社内限定で共有。gas/ai-study-agenda/README.md 参照）
@@ -26,39 +27,43 @@ export default function CalendarPage() {
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* ガイドインフォメーションカード */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-          <SpotlightCard
-            spotlightColor="rgba(99, 102, 241, 0.15)"
-            className="bg-white border-slate-200/90"
-          >
-            <div className="p-5 flex gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600 shadow-2xs">
-                <Sparkles className="w-5 h-5" />
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(99, 102, 241, 0.15)"
+              className="bg-white border-slate-200/90 h-full rounded-2xl"
+            >
+              <div className="p-5 flex gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600 shadow-2xs">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">AI勉強会のアジェンダは自動で入ります</h4>
+                  <p className="text-slate-600 leading-relaxed font-normal">
+                    タイトルに「AI勉強会」を含む予定を登録すると、GASによって予定の説明欄にアジェンダ（最新の改善要望・進行中プロジェクト）が自動付与されます。
+                  </p>
+                </div>
               </div>
-              <div className="space-y-1">
-                <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">AI勉強会のアジェンダは自動で入ります</h4>
-                <p className="text-slate-600 leading-relaxed font-normal">
-                  タイトルに「AI勉強会」を含む予定を登録すると、GASによって予定の説明欄にアジェンダ（最新の改善要望・進行中プロジェクト）が自動付与されます。
-                </p>
-              </div>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard
-            spotlightColor="rgba(16, 185, 129, 0.15)"
-            className="bg-white border-slate-200/90"
-          >
-            <div className="p-5 flex gap-3.5">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0 text-emerald-600 shadow-2xs">
-                <Lock className="w-5 h-5" />
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(16, 185, 129, 0.15)"
+              className="bg-white border-slate-200/90 h-full rounded-2xl"
+            >
+              <div className="p-5 flex gap-3.5">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0 text-emerald-600 shadow-2xs">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">予定は社内限定公開です</h4>
+                  <p className="text-slate-600 leading-relaxed font-normal">
+                    会社の Google Workspace アカウントでログインしている時だけ表示されます。表示されない場合は、ブラウザで会社アカウントにログインした状態で再読み込みしてください。
+                  </p>
+                </div>
               </div>
-              <div className="space-y-1">
-                <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">予定は社内限定公開です</h4>
-                <p className="text-slate-600 leading-relaxed font-normal">
-                  会社の Google Workspace アカウントでログインしている時だけ表示されます。表示されない場合は、ブラウザで会社アカウントにログインした状態で再読み込みしてください。
-                </p>
-              </div>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
         </div>
 
         {AI_PARK_CALENDAR_ID ? (

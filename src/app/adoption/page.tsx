@@ -4,7 +4,9 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
-import { playCyberClick } from "@/lib/sound";
+import TiltCard from "@/components/TiltCard";
+import AnimatedCounter from "@/components/AnimatedCounter";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   TrendingUp,
   Users,
@@ -83,69 +85,77 @@ export default function AdoptionPage() {
 
         {/* 4大KPIカード */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <SpotlightCard
-            spotlightColor="rgba(6, 182, 212, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <div className="p-5 space-y-2">
-              <div className="flex items-center justify-between text-slate-500 font-mono text-xs">
-                <span>全社AI導入率 (PoC)</span>
-                <TrendingUp size={16} className="text-cyan-600" />
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(6, 182, 212, 0.15)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+            >
+              <div className="p-5 space-y-2">
+                <div className="flex items-center justify-between text-slate-500 font-mono text-xs">
+                  <span>全社AI導入率 (PoC)</span>
+                  <TrendingUp size={16} className="text-cyan-600" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+                  <AnimatedCounter value={68.4} decimals={1} suffix="%" />
+                </div>
+                <p className="text-[11px] text-slate-500 font-mono">対象社員 120名中 82名活用中</p>
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
-                68.4<span className="text-lg text-slate-500">%</span>
-              </div>
-              <p className="text-[11px] text-slate-500 font-mono">対象社員 120名中 82名活用中</p>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard
-            spotlightColor="rgba(99, 102, 241, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <div className="p-5 space-y-2">
-              <div className="flex items-center justify-between text-slate-500 font-mono text-xs">
-                <span>月間削減時間 (試算)</span>
-                <Clock size={16} className="text-indigo-600" />
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(99, 102, 241, 0.15)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+            >
+              <div className="p-5 space-y-2">
+                <div className="flex items-center justify-between text-slate-500 font-mono text-xs">
+                  <span>月間削減時間 (試算)</span>
+                  <Clock size={16} className="text-indigo-600" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+                  <AnimatedCounter value={653} decimals={0} suffix="h" />
+                </div>
+                <p className="text-[11px] text-slate-500 font-mono">1人あたり月平均 約8.0時間</p>
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
-                653<span className="text-lg text-slate-500">h</span>
-              </div>
-              <p className="text-[11px] text-slate-500 font-mono">1人あたり月平均 約8.0時間</p>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard
-            spotlightColor="rgba(16, 185, 129, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <div className="p-5 space-y-2">
-              <div className="flex items-center justify-between text-slate-500 font-mono text-xs">
-                <span>アクティブ部署数</span>
-                <Building2 size={16} className="text-emerald-600" />
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(16, 185, 129, 0.15)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+            >
+              <div className="p-5 space-y-2">
+                <div className="flex items-center justify-between text-slate-500 font-mono text-xs">
+                  <span>アクティブ部署数</span>
+                  <Building2 size={16} className="text-emerald-600" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+                  <AnimatedCounter value={8} decimals={0} suffix=" / 10 部署" />
+                </div>
+                <p className="text-[11px] text-slate-500 font-mono">主要開発・分析部門は100%導入</p>
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
-                8<span className="text-lg text-slate-500"> / 10 部署</span>
-              </div>
-              <p className="text-[11px] text-slate-500 font-mono">主要開発・分析部門は100%導入</p>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard
-            spotlightColor="rgba(168, 85, 247, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <div className="p-5 space-y-2">
-              <div className="flex items-center justify-between text-slate-500 font-mono text-xs">
-                <span>月次試算価値創出</span>
-                <Sparkles size={16} className="text-purple-600" />
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(168, 85, 247, 0.15)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+            >
+              <div className="p-5 space-y-2">
+                <div className="flex items-center justify-between text-slate-500 font-mono text-xs">
+                  <span>月次試算価値創出</span>
+                  <Sparkles size={16} className="text-purple-600" />
+                </div>
+                <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+                  <AnimatedCounter value={3.26} decimals={2} prefix="¥" suffix="M" />
+                </div>
+                <p className="text-[11px] text-slate-500 font-mono">社内人時単価換算による効果</p>
               </div>
-              <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
-                ¥3.26<span className="text-lg text-slate-500">M</span>
-              </div>
-              <p className="text-[11px] text-slate-500 font-mono">社内人時単価換算による効果</p>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
         </div>
 
         {/* 部署別ランキング */}
