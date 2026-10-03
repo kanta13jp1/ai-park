@@ -75,33 +75,38 @@ export default function AwsInfoPage() {
         />
 
         {/* クラウドガバナンスHUDバナー */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
-          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-mono font-bold tracking-wider uppercase">
-                <Cloud size={14} className="text-cyan-400" />
-                <span>ENTERPRISE CLOUD GOVERNANCE</span>
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <div
+            onMouseEnter={() => playCyberHover()}
+            className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40 cursor-default"
+          >
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              <div className="space-y-3 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-mono font-bold tracking-wider uppercase">
+                  <Cloud size={14} className="text-cyan-400" />
+                  <span>ENTERPRISE CLOUD GOVERNANCE</span>
+                </div>
+                <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+                  セキュアで迅速なマルチクラウド活用へ
+                </h2>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  MightyLINK では、Google Cloud と AWS を適材適所で安全に活用するための統合ガバナンスを推進しています。
+                  環境の払い出し、踏み台接続、権限管理（IAM）、月次コストモニタリングを一元管理し、開発者の自由な試作と企業のセキュリティ要件を両立させます。
+                </p>
               </div>
-              <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
-                セキュアで迅速なマルチクラウド活用へ
-              </h2>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                MightyLINK では、Google Cloud と AWS を適材適所で安全に活用するための統合ガバナンスを推進しています。
-                環境の払い出し、踏み台接続、権限管理（IAM）、月次コストモニタリングを一元管理し、開発者の自由な試作と企業のセキュリティ要件を両立させます。
-              </p>
-            </div>
 
-            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 shrink-0 font-mono text-xs space-y-2">
-              <div className="text-emerald-400 font-bold flex items-center gap-1.5">
-                <ShieldCheck size={14} />
-                <span>SECURITY LEVEL: CLASS-A</span>
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 shrink-0 font-mono text-xs space-y-2">
+                <div className="text-emerald-400 font-bold flex items-center gap-1.5">
+                  <ShieldCheck size={14} />
+                  <span>SECURITY LEVEL: CLASS-A</span>
+                </div>
+                <div className="text-slate-300">・組織SCP（サービスコントロールポリシー）適用</div>
+                <div className="text-slate-300">・SSO（シングルサインオン）連携必須</div>
+                <div className="text-slate-300">・月次利用料金アラートの自動通知</div>
               </div>
-              <div className="text-slate-300">・組織SCP（サービスコントロールポリシー）適用</div>
-              <div className="text-slate-300">・SSO（シングルサインオン）連携必須</div>
-              <div className="text-slate-300">・月次利用料金アラートの自動通知</div>
             </div>
           </div>
-        </div>
+        </TiltCard>
 
         {/* 比較テーブル */}
         <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">

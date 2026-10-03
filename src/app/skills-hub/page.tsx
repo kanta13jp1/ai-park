@@ -102,33 +102,38 @@ export default function SkillsHubPage() {
         />
 
         {/* HUDハイライト */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
-          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-mono font-bold tracking-wider uppercase">
-                <Wrench size={14} className="text-indigo-400" />
-                <span>ANTIGRAVITY EXTENSIONS</span>
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <div
+            onMouseEnter={() => playCyberHover()}
+            className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40 cursor-default"
+          >
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              <div className="space-y-3 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-mono font-bold tracking-wider uppercase">
+                  <Wrench size={14} className="text-indigo-400" />
+                  <span>ANTIGRAVITY EXTENSIONS</span>
+                </div>
+                <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+                  チームのナレッジをエージェントの「即戦力スキル」へ
+                </h2>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  Antigravity Skills は、プロジェクトで培った定常業務・品質規約・デプロイ手順をMarkdownおよびスクリプトとしてパッケージ化したものです。
+                  リポジトリ内に配置するだけで、エージェントが必要なタイミングで自律的にスキルをロードし、高品質な成果物を生成します。
+                </p>
               </div>
-              <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
-                チームのナレッジをエージェントの「即戦力スキル」へ
-              </h2>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Antigravity Skills は、プロジェクトで培った定常業務・品質規約・デプロイ手順をMarkdownおよびスクリプトとしてパッケージ化したものです。
-                リポジトリ内に配置するだけで、エージェントが必要なタイミングで自律的にスキルをロードし、高品質な成果物を生成します。
-              </p>
-            </div>
 
-            <div className="p-4.5 rounded-2xl bg-white/5 border border-white/10 shrink-0 font-mono text-xs space-y-2">
-              <div className="text-cyan-400 font-bold flex items-center gap-1.5">
-                <ShieldCheck size={14} />
-                <span>CERTIFIED CRITERIA</span>
+              <div className="p-4.5 rounded-2xl bg-white/5 border border-white/10 shrink-0 font-mono text-xs space-y-2">
+                <div className="text-cyan-400 font-bold flex items-center gap-1.5">
+                  <ShieldCheck size={14} />
+                  <span>CERTIFIED CRITERIA</span>
+                </div>
+                <div className="text-slate-200">・シークレット・APIキー非含有の検証済</div>
+                <div className="text-slate-200">・破壊的コマンド（DROP/RM）の遮断</div>
+                <div className="text-slate-200">・標準入出力（stdio）準拠の安全設計</div>
               </div>
-              <div className="text-slate-200">・シークレット・APIキー非含有の検証済</div>
-              <div className="text-slate-200">・破壊的コマンド（DROP/RM）の遮断</div>
-              <div className="text-slate-200">・標準入出力（stdio）準拠の安全設計</div>
             </div>
           </div>
-        </div>
+        </TiltCard>
 
         {/* スキル一覧 */}
         <div className="space-y-4">

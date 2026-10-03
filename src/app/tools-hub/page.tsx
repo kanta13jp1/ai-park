@@ -198,29 +198,39 @@ export default function ToolsHubPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div className="p-4 rounded-xl border border-rose-200 bg-rose-50/30 space-y-2">
-              <span className="font-bold text-rose-800 flex items-center gap-1.5">
-                <XCircle size={15} /> 危険な入力例（NG）
-              </span>
-              <div className="p-3 bg-white rounded-lg border border-rose-200 font-mono text-[11px] text-slate-700 space-y-1">
-                <p>「〇〇商事の佐藤部長（sato@example.com）から受領した受注テーブルのデータ移行SQLを書いて。接続先は 192.168.1.100、パスワードは P@ssw0rd です」</p>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-xl">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-4 rounded-xl border border-rose-200 bg-rose-50/30 space-y-2 h-full cursor-default"
+              >
+                <span className="font-bold text-rose-800 flex items-center gap-1.5">
+                  <XCircle size={15} /> 危険な入力例（NG）
+                </span>
+                <div className="p-3 bg-white rounded-lg border border-rose-200 font-mono text-[11px] text-slate-700 space-y-1">
+                  <p>「〇〇商事の佐藤部長（sato@example.com）から受領した受注テーブルのデータ移行SQLを書いて。接続先は 192.168.1.100、パスワードは P@ssw0rd です」</p>
+                </div>
+                <p className="text-[11px] text-rose-700 leading-relaxed">
+                  ※顧客企業名、担当者個人名、メールアドレス、内部IPアドレス、認証情報が生のまま含まれており重大インシデントに直結します。
+                </p>
               </div>
-              <p className="text-[11px] text-rose-700 leading-relaxed">
-                ※顧客企業名、担当者個人名、メールアドレス、内部IPアドレス、認証情報が生のまま含まれており重大インシデントに直結します。
-              </p>
-            </div>
+            </TiltCard>
 
-            <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 space-y-2">
-              <span className="font-bold text-emerald-800 flex items-center gap-1.5">
-                <CheckCircle2 size={15} /> 安全な入力例（OK）
-              </span>
-              <div className="p-3 bg-white rounded-lg border border-emerald-200 font-mono text-[11px] text-slate-700 space-y-1">
-                <p>「顧客A社の受注テーブル（カラム: id, amount, created_at）から新テーブルへデータ移行するPostgreSQLのSQLを作成してください。接続情報は環境変数から読み込む前提です」</p>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-xl">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 space-y-2 h-full cursor-default"
+              >
+                <span className="font-bold text-emerald-800 flex items-center gap-1.5">
+                  <CheckCircle2 size={15} /> 安全な入力例（OK）
+                </span>
+                <div className="p-3 bg-white rounded-lg border border-emerald-200 font-mono text-[11px] text-slate-700 space-y-1">
+                  <p>「顧客A社の受注テーブル（カラム: id, amount, created_at）から新テーブルへデータ移行するPostgreSQLのSQLを作成してください。接続情報は環境変数から読み込む前提です」</p>
+                </div>
+                <p className="text-[11px] text-emerald-700 leading-relaxed">
+                  ※企業名を抽象化し、個人情報や認証情報を完全に除外。必要なスキーマ構造のみを渡しているため安全です。
+                </p>
               </div>
-              <p className="text-[11px] text-emerald-700 leading-relaxed">
-                ※企業名を抽象化し、個人情報や認証情報を完全に除外。必要なスキーマ構造のみを渡しているため安全です。
-              </p>
-            </div>
+            </TiltCard>
           </div>
         </div>
 
