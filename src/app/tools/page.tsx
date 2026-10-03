@@ -24,7 +24,7 @@ import {
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
 import { TOOLS_SHEET_CSV_URL, fetchSheetTools } from "@/lib/toolsSheet";
-import { playCyberClick } from "@/lib/sound";
+import { playCyberClick, playCyberHover, playCyberOpen } from "@/lib/sound";
 
 interface MatrixTool {
   id: number;
@@ -665,7 +665,8 @@ export default function ToolsPage() {
                       <tr
                         key={tool.id}
                         className="hover:bg-slate-50/70 transition-colors cursor-pointer group"
-                        onClick={() => setSelectedTool(tool)}
+                        onMouseEnter={() => playCyberHover()}
+                        onClick={() => { playCyberOpen(); setSelectedTool(tool); }}
                       >
                         {/* # */}
                         <td className="py-4 px-3 text-center text-xs font-bold text-slate-400">
@@ -792,7 +793,7 @@ export default function ToolsPage() {
                 </div>
               </div>
               <button
-                onClick={() => setSelectedTool(null)}
+                onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
                 className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
               >
                 <X size={20} />
@@ -824,7 +825,7 @@ export default function ToolsPage() {
               {selectedTool.id === 7 && (
                 <Link
                   href="/academy"
-                  onClick={() => setSelectedTool(null)}
+                  onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
                   className="px-4 py-2 rounded-lg bg-indigo-600 text-xs font-bold text-white hover:bg-indigo-700 transition-colors shadow-xs"
                 >
                   🎓 Academyで学ぶ（全12レッスン）
@@ -833,7 +834,7 @@ export default function ToolsPage() {
               {selectedTool.manualUrl && (
                 <Link
                   href={selectedTool.manualUrl}
-                  onClick={() => setSelectedTool(null)}
+                  onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
                   className="px-4 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
                 >
                   導入ガイドを見る
@@ -842,14 +843,14 @@ export default function ToolsPage() {
               {selectedTool.applyRequired ? (
                 <Link
                   href="/tools-hub"
-                  onClick={() => setSelectedTool(null)}
+                  onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
                   className="px-4 py-2 rounded-lg bg-indigo-600 text-xs font-bold text-white hover:bg-indigo-700 transition-colors shadow-xs"
                 >
                   利用ライセンスを申請
                 </Link>
               ) : (
                 <button
-                  onClick={() => setSelectedTool(null)}
+                  onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
                   className="px-4 py-2 rounded-lg bg-slate-900 text-xs font-bold text-white hover:bg-slate-800 transition-colors"
                 >
                   閉じる

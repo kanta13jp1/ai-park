@@ -4,7 +4,8 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
-import { playCyberClick } from "@/lib/sound";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   Bot,
   Sparkles,
@@ -142,71 +143,78 @@ export default function AgentCasesPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {AGENT_CASES.map((item) => (
-              <SpotlightCard
+              <TiltCard
                 key={item.id}
-                spotlightColor="rgba(168, 85, 247, 0.12)"
-                className="bg-white border-slate-200/90 shadow-sm"
+                maxTilt={6}
+                glareOpacity={0.12}
+                className="h-full rounded-2xl"
               >
-                <div className="p-6 flex flex-col justify-between h-full space-y-4">
-                  <div className="space-y-3.5">
-                    <div className="flex items-center justify-between gap-2 font-mono">
-                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
-                        {item.status}
-                      </span>
-                      <span className="text-[11px] font-bold text-slate-500">
-                        {item.department}
-                      </span>
-                    </div>
+                <SpotlightCard
+                  spotlightColor="rgba(168, 85, 247, 0.15)"
+                  className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+                >
+                  <div className="p-6 flex flex-col justify-between h-full space-y-4">
+                    <div className="space-y-3.5">
+                      <div className="flex items-center justify-between gap-2 font-mono">
+                        <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                          {item.status}
+                        </span>
+                        <span className="text-[11px] font-bold text-slate-500">
+                          {item.department}
+                        </span>
+                      </div>
 
-                    <h4 className="font-extrabold text-slate-900 text-base leading-snug">
-                      {item.title}
-                    </h4>
+                      <h4 className="font-extrabold text-slate-900 text-base leading-snug">
+                        {item.title}
+                      </h4>
 
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {item.summary}
-                    </p>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {item.summary}
+                      </p>
 
-                    <div className="bg-slate-50/80 rounded-xl p-3 border border-slate-200/70 space-y-1.5 font-mono">
-                      <div className="text-[10px] font-bold text-slate-500 uppercase">Subagent Roles</div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {item.subagentRoles.map((role, idx) => (
-                          <span
-                            key={idx}
-                            className="text-[10px] bg-white px-2 py-0.5 rounded-md border border-slate-200 text-slate-700 font-semibold"
-                          >
-                            {role}
-                          </span>
+                      <div className="bg-slate-50/80 rounded-xl p-3 border border-slate-200/70 space-y-1.5 font-mono">
+                        <div className="text-[10px] font-bold text-slate-500 uppercase">Subagent Roles</div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {item.subagentRoles.map((role, idx) => (
+                            <span
+                              key={idx}
+                              className="text-[10px] bg-white px-2 py-0.5 rounded-md border border-slate-200 text-slate-700 font-semibold"
+                            >
+                              {role}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="space-y-1.5 pt-1">
+                        <div className="text-[11px] font-bold text-slate-700 font-mono">主要な検証成果:</div>
+                        {item.keyBenefits.map((b, idx) => (
+                          <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-600">
+                            <CheckCircle2 size={13} className="text-emerald-600 shrink-0 mt-0.5" />
+                            <span>{b}</span>
+                          </div>
                         ))}
                       </div>
                     </div>
 
-                    <div className="space-y-1.5 pt-1">
-                      <div className="text-[11px] font-bold text-slate-700 font-mono">主要な検証成果:</div>
-                      {item.keyBenefits.map((b, idx) => (
-                        <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-600">
-                          <CheckCircle2 size={13} className="text-emerald-600 shrink-0 mt-0.5" />
-                          <span>{b}</span>
-                        </div>
-                      ))}
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between font-mono">
+                      <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                        <Clock size={12} />
+                        <span>{item.estimatedHoursSaved}</span>
+                      </span>
+                      <Link
+                        href="/how-to"
+                        onClick={() => playCyberClick()}
+                        onMouseEnter={() => playCyberHover()}
+                        className="inline-flex items-center gap-1 text-xs font-bold text-purple-700 hover:text-purple-800 transition-colors"
+                      >
+                        <span>操作手順を見る</span>
+                        <ArrowRight size={13} />
+                      </Link>
                     </div>
                   </div>
-
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between font-mono">
-                    <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
-                      <Clock size={12} />
-                      <span>{item.estimatedHoursSaved}</span>
-                    </span>
-                    <Link
-                      href="/how-to"
-                      onClick={() => playCyberClick()}
-                      className="inline-flex items-center gap-1 text-xs font-bold text-purple-700 hover:text-purple-800"
-                    >
-                      <span>操作手順を見る</span>
-                      <ArrowRight size={13} />
-                    </Link>
-                  </div>
-                </div>
-              </SpotlightCard>
+                </SpotlightCard>
+              </TiltCard>
             ))}
           </div>
         </div>

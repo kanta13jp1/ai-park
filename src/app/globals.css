@@ -67,6 +67,26 @@ body {
   animation: pulse-subtle 3s ease-in-out infinite;
 }
 
+/* サイバー音響イコライザー波形 */
+@keyframes cyber-equalizer {
+  0%, 100% {
+    height: 3px;
+  }
+  50% {
+    height: 12px;
+  }
+}
+
+.animate-equalizer-1 {
+  animation: cyber-equalizer 0.8s ease-in-out infinite;
+}
+.animate-equalizer-2 {
+  animation: cyber-equalizer 0.5s ease-in-out infinite 0.15s;
+}
+.animate-equalizer-3 {
+  animation: cyber-equalizer 0.7s ease-in-out infinite 0.3s;
+}
+
 /* ガラス質感・グラスモーフィズム */
 .glass-panel {
   background: rgba(255, 255, 255, 0.75);
