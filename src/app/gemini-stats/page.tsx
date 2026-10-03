@@ -961,10 +961,14 @@ function doGet() {
                 <div className="bg-black/60 rounded-xl p-3.5 border border-white/10 space-y-2 font-mono text-[11px]">
                   <div className="flex items-center justify-between text-slate-400">
                     <span className="text-slate-300 font-bold flex items-center gap-1.5">
-                      💻 PowerShell 一括自動セットアップ（管理者用）:
+                      💻 一括自動セットアップ（管理者用コマンド）:
                     </span>
                   </div>
                   <pre className="text-emerald-400 overflow-x-auto whitespace-pre-wrap select-all py-1">
+# 推奨: npm 経由で実行（クロスプラットフォーム）
+npm run setup:gcp
+
+# または PowerShell スクリプト直接実行
 powershell -ExecutionPolicy Bypass -File ./scripts/setup-gcp-sa.ps1
                   </pre>
                   <p className="text-[10px] text-slate-400 font-sans border-t border-white/10 pt-1.5">
