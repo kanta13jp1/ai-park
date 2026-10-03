@@ -71,8 +71,12 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             <h3 className="font-bold text-base md:text-lg">AI Office Hour 予約</h3>
           </div>
           <button
-            onClick={handleResetAndClose}
-            className="text-slate-300 hover:text-white p-1 rounded-lg transition-colors"
+            onClick={() => {
+              playCyberClick();
+              handleResetAndClose();
+            }}
+            onMouseEnter={() => playCyberHover()}
+            className="text-slate-300 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -118,7 +122,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 href={makeGoogleCalendarUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-xs transition-colors"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="w-full inline-flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-98 cursor-pointer"
               >
                 <Calendar size={14} />
                 <span>Google カレンダーに仮予定を追加</span>
@@ -127,8 +133,12 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
               <button
                 type="button"
-                onClick={handleCopyMemo}
-                className="w-full inline-flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-colors border border-slate-200"
+                onClick={() => {
+                  playCyberClick();
+                  handleCopyMemo();
+                }}
+                onMouseEnter={() => playCyberHover()}
+                className="w-full inline-flex items-center justify-center space-x-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-all border border-slate-200 active:scale-98 cursor-pointer"
               >
                 {copiedMemo ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
                 <span>{copiedMemo ? "予約メモをコピーしました" : "予約詳細メモをコピー"}</span>
@@ -137,8 +147,12 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
             <div className="pt-2">
               <button
-                onClick={handleResetAndClose}
-                className="px-6 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+                onClick={() => {
+                  playCyberClick();
+                  handleResetAndClose();
+                }}
+                onMouseEnter={() => playCyberHover()}
+                className="px-6 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
               >
                 閉じる
               </button>
@@ -244,14 +258,20 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             <div className="flex justify-end space-x-2 pt-2">
               <button
                 type="button"
-                onClick={handleResetAndClose}
-                className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition-colors"
+                onClick={() => {
+                  playCyberClick();
+                  handleResetAndClose();
+                }}
+                onMouseEnter={() => playCyberHover()}
+                className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-semibold transition-colors cursor-pointer"
               >
                 キャンセル
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-xs flex items-center space-x-1.5 transition-colors"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-lg shadow-md flex items-center space-x-1.5 transition-all active:scale-98 cursor-pointer"
               >
                 <Send size={14} />
                 <span>予約リクエストを送信</span>
