@@ -3,6 +3,7 @@
 import { useState } from "react";
 import BookingModal from "./BookingModal";
 import { Calendar, ArrowRight, Sparkles, Clock } from "lucide-react";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 export default function OfficeHourBanner() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,8 +26,12 @@ export default function OfficeHourBanner() {
           </div>
 
           <button
-            onClick={() => setModalOpen(true)}
-            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-xs py-1.5 px-4 rounded-xl shadow-xs transition-all active:scale-95 cursor-pointer group shrink-0"
+            onClick={() => {
+              playCyberClick();
+              setModalOpen(true);
+            }}
+            onMouseEnter={() => playCyberHover()}
+            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-xs py-1.5 px-4 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer group shrink-0"
           >
             <Calendar className="w-3.5 h-3.5" />
             <span>15分個別相談を予約する</span>

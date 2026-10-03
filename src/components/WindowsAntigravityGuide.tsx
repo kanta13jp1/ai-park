@@ -11,11 +11,14 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 function CopyableCodeSnippet({ code, label }: { code: string; label?: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
+    playCyberClick();
     navigator.clipboard?.writeText(code).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -29,6 +32,7 @@ function CopyableCodeSnippet({ code, label }: { code: string; label?: string }) 
         <code className="font-mono text-xs text-cyan-300 break-all select-all mr-2">{code}</code>
         <button
           onClick={handleCopy}
+          onMouseEnter={() => playCyberHover()}
           className="shrink-0 p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
           title="コードをコピー"
         >
@@ -50,7 +54,7 @@ export default function WindowsAntigravityGuide() {
       <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
         <div
           className="flex items-center justify-between border-b border-slate-100 pb-4 cursor-pointer select-none"
-          onClick={() => setIsPsOpen(!isPsOpen)}
+          onClick={() => { playCyberClick(); setIsPsOpen(!isPsOpen); }} onMouseEnter={() => playCyberHover()}
         >
           <div className="flex items-center space-x-2.5">
             <div className="p-2 rounded-xl bg-sky-100 text-sky-700">
@@ -142,7 +146,7 @@ export default function WindowsAntigravityGuide() {
       <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
         <div
           className="flex items-center justify-between border-b border-slate-100 pb-4 cursor-pointer select-none"
-          onClick={() => setIsMcpOpen(!isMcpOpen)}
+          onClick={() => { playCyberClick(); setIsMcpOpen(!isMcpOpen); }} onMouseEnter={() => playCyberHover()}
         >
           <div className="flex items-center space-x-2.5">
             <div className="p-2 rounded-xl bg-purple-100 text-purple-700">
@@ -169,35 +173,50 @@ export default function WindowsAntigravityGuide() {
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
-              <div className="p-4 rounded-2xl bg-purple-50/60 border border-purple-200/70 space-y-2">
-                <div className="flex items-center space-x-2">
-                  <span className="font-mono text-xs font-extrabold text-purple-900">chrome_devtools</span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-200/60 text-purple-800">検証用</span>
+              <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl">
+                <div
+                  onMouseEnter={() => playCyberHover()}
+                  className="p-4 rounded-2xl bg-purple-50/60 border border-purple-200/70 space-y-2 h-full cursor-default"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="font-mono text-xs font-extrabold text-purple-900">chrome_devtools</span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-200/60 text-purple-800">検証用</span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    ローカルのブラウザ画面のスナップショット取得、クリック・スクロール・フォーム自動入力・パフォーマンストレースの実行。
+                  </p>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  ローカルのブラウザ画面のスナップショット取得、クリック・スクロール・フォーム自動入力・パフォーマンストレースの実行。
-                </p>
-              </div>
+              </TiltCard>
 
-              <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-200/70 space-y-2">
-                <div className="flex items-center space-x-2">
-                  <span className="font-mono text-xs font-extrabold text-indigo-900">puppeteer</span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-200/60 text-indigo-800">自動化</span>
+              <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl">
+                <div
+                  onMouseEnter={() => playCyberHover()}
+                  className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-200/70 space-y-2 h-full cursor-default"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="font-mono text-xs font-extrabold text-indigo-900">puppeteer</span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-200/60 text-indigo-800">自動化</span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    ヘッドレスブラウザによるE2E画面操作、HTMLレンダリング後のテキスト抽出、スクリーンショット自動保存。
+                  </p>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  ヘッドレスブラウザによるE2E画面操作、HTMLレンダリング後のテキスト抽出、スクリーンショット自動保存。
-                </p>
-              </div>
+              </TiltCard>
 
-              <div className="p-4 rounded-2xl bg-cyan-50/60 border border-cyan-200/70 space-y-2">
-                <div className="flex items-center space-x-2">
-                  <span className="font-mono text-xs font-extrabold text-cyan-900">context7</span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-cyan-200/60 text-cyan-800">公式ドキュメント</span>
+              <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl">
+                <div
+                  onMouseEnter={() => playCyberHover()}
+                  className="p-4 rounded-2xl bg-cyan-50/60 border border-cyan-200/70 space-y-2 h-full cursor-default"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="font-mono text-xs font-extrabold text-cyan-900">context7</span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-cyan-200/60 text-cyan-800">公式ドキュメント</span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    最新のオープンソースライブラリやフレームワーク（Next.js, React, Tailwind等）の公式最新ドキュメント検索・参照。
+                  </p>
                 </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  最新のオープンソースライブラリやフレームワーク（Next.js, React, Tailwind等）の公式最新ドキュメント検索・参照。
-                </p>
-              </div>
+              </TiltCard>
             </div>
 
             <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-2 text-xs text-amber-950">
@@ -224,7 +243,7 @@ export default function WindowsAntigravityGuide() {
       <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
         <div
           className="flex items-center justify-between border-b border-slate-100 pb-4 cursor-pointer select-none"
-          onClick={() => setIsFaqOpen(!isFaqOpen)}
+          onClick={() => { playCyberClick(); setIsFaqOpen(!isFaqOpen); }} onMouseEnter={() => playCyberHover()}
         >
           <div className="flex items-center space-x-2.5">
             <div className="p-2 rounded-xl bg-amber-100 text-amber-700">

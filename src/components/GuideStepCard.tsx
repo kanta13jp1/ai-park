@@ -1,5 +1,7 @@
 import { basePath } from "@/lib/basePath";
 import { ImageIcon, ExternalLink, ZoomIn, Sparkles, CheckCircle2 } from "lucide-react";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 // 導入ガイドの手順カード（左：手順、右：画面キャプチャ）
 export interface GuideStep {
@@ -16,8 +18,12 @@ export interface GuideStep {
 
 export default function StepCard({ step }: { step: GuideStep }) {
   return (
-    <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md transition-all duration-300 grid grid-cols-1 lg:grid-cols-2 gap-6 relative overflow-hidden group">
-      {/* 左サイド：手順解説 */}
+    <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+      <div
+        onMouseEnter={() => playCyberHover()}
+        className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs hover:shadow-md transition-all duration-300 grid grid-cols-1 lg:grid-cols-2 gap-6 relative overflow-hidden group h-full cursor-default"
+      >
+        {/* 左サイド：手順解説 */}
       <div className="space-y-4 flex flex-col justify-between">
         <div className="space-y-3.5">
           <div className="flex items-center gap-2.5 flex-wrap">
@@ -59,7 +65,9 @@ export default function StepCard({ step }: { step: GuideStep }) {
               href={step.link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-all w-fit shadow-2xs"
+              onClick={() => playCyberClick()}
+              onMouseEnter={() => playCyberHover()}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition-all w-fit shadow-2xs cursor-pointer active:scale-95"
             >
               <span>{step.link.label}</span>
               <ExternalLink size={12} />
@@ -85,7 +93,9 @@ export default function StepCard({ step }: { step: GuideStep }) {
                 href={`${basePath}/images/guide/${file}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative block rounded-2xl overflow-hidden border border-slate-200 shadow-2xs group/img hover:border-indigo-400 transition-all cursor-zoom-in"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="relative block rounded-2xl overflow-hidden border border-slate-200 shadow-2xs group/img hover:border-indigo-400 transition-all cursor-zoom-in active:scale-98"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -110,7 +120,8 @@ export default function StepCard({ step }: { step: GuideStep }) {
             <span className="text-[11px] text-slate-400 max-w-xs leading-normal">{step.imageAlt}</span>
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </TiltCard>
   );
 }
