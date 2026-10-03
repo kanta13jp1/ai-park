@@ -128,7 +128,7 @@ async function syncUsageData() {
     }
   }
 
-  // Google Cloud 認証環境の確認 (GCP_SA_KEY または GOOGLE_APPLICATION_CREDENTIALS)
+  // Google Cloud 認証環境の確認 (GCP_SA_KEY または GOOGLE_APPLICATION_CREDENTIALS または ローカル ADC)
   let saKeyJson = null;
   if (process.env.GCP_SA_KEY) {
     try {
@@ -140,10 +140,26 @@ async function syncUsageData() {
     }
   } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS && fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
     saKeyJson = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, 'utf-8'));
+  } else {
+    // ローカル開発環境の ADC 自動探索
+    const userProfile = process.env.USERPROFILE || process.env.HOME || '';
+    const localAdcPath = path.join(process.env.APPDATA || path.join(userProfile, '.config'), 'gcloud', 'application_default_credentials.json');
+    if (fs.existsSync(localAdcPath)) {
+      try {
+        saKeyJson = JSON.parse(fs.readFileSync(localAdcPath, 'utf-8'));
+      } catch {}
+    }
   }
 
-  if (saKeyJson && saKeyJson.client_email && saKeyJson.private_key) {
-    console.log(`[INFO] GCP Service Account detected: ${saKeyJson.client_email}`);
+  const isValidAuth = saKeyJson && (
+    (saKeyJson.client_email && saKeyJson.private_key) ||
+    saKeyJson.type === 'authorized_user' ||
+    saKeyJson.refresh_token
+  );
+
+  if (isValidAuth) {
+    const authIdentity = saKeyJson.client_email || saKeyJson.account || 'authorized_user';
+    console.log(`[INFO] Google Cloud Credentials detected: ${authIdentity}`);
     try {
       const accessToken = await getGcpAccessToken(saKeyJson);
       console.log('[INFO] Successfully obtained GCP OAuth2 access token.');
