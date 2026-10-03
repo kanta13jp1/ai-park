@@ -7,6 +7,8 @@ import { ArrowLeft, ArrowRight, Award, BookOpen, Camera, Check, Clock, Copy, Ext
 import { basePath } from "@/lib/basePath";
 import { PASS_RATE, type Course, type LessonBlock } from "@/data/academy";
 import { useCourseProgress } from "./useCourseProgress";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 function CodeBlock({ label, text }: { label?: string; text: string }) {
   const [copied, setCopied] = useState(false);
@@ -17,11 +19,13 @@ function CodeBlock({ label, text }: { label?: string; text: string }) {
         <code className="flex-1 font-mono text-[13px] text-slate-800 break-all whitespace-pre-wrap">{text}</code>
         <button
           onClick={() => {
+            playCyberClick();
             navigator.clipboard?.writeText(text).then(() => {
               setCopied(true);
               setTimeout(() => setCopied(false), 1500);
             });
           }}
+          onMouseEnter={() => playCyberHover()}
           className="shrink-0 text-slate-500 hover:text-slate-900 cursor-pointer"
           title="コピー"
         >
@@ -78,12 +82,14 @@ function CompletionReport({
           />
         </label>
         <button
-          onClick={() =>
+          onClick={() => {
+            playCyberClick();
             navigator.clipboard?.writeText(text).then(() => {
               setCopied(true);
               setTimeout(() => setCopied(false), 2000);
-            })
-          }
+            });
+          }}
+          onMouseEnter={() => playCyberHover()}
           disabled={!ready}
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-bold disabled:opacity-40 cursor-pointer"
         >
@@ -108,29 +114,36 @@ function CompletionReport({
 function PromptCard({ label, text }: { label?: string; text: string }) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-      <div className="flex items-center gap-1.5 px-4 pt-3">
-        <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-        <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-        {label && <span className="ml-2 text-xs font-bold text-slate-500">{label}</span>}
+    <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
+      <div
+        onMouseEnter={() => playCyberHover()}
+        className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden cursor-default"
+      >
+        <div className="flex items-center gap-1.5 px-4 pt-3">
+          <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+          {label && <span className="ml-2 text-xs font-bold text-slate-500">{label}</span>}
+        </div>
+        <p className="mx-3 mt-2 border border-slate-200 rounded-xl px-4 py-3 text-[15px] text-slate-800 leading-relaxed whitespace-pre-wrap">{text}</p>
+        <div className="flex justify-end px-4 py-3">
+          <button
+            onClick={() => {
+              playCyberClick();
+              navigator.clipboard?.writeText(text).then(() => {
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1500);
+              });
+            }}
+            onMouseEnter={() => playCyberHover()}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer transition-all active:scale-95"
+          >
+            {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
+            <span>{copied ? "コピーしました" : "プロンプトをコピー"}</span>
+          </button>
+        </div>
       </div>
-      <p className="mx-3 mt-2 border border-slate-200 rounded-xl px-4 py-3 text-[15px] text-slate-800 leading-relaxed whitespace-pre-wrap">{text}</p>
-      <div className="flex justify-end px-4 py-3">
-        <button
-          onClick={() =>
-            navigator.clipboard?.writeText(text).then(() => {
-              setCopied(true);
-              setTimeout(() => setCopied(false), 1500);
-            })
-          }
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer"
-        >
-          {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
-          {copied ? "コピーしました" : "プロンプトをコピー"}
-        </button>
-      </div>
-    </div>
+    </TiltCard>
   );
 }
 
@@ -207,10 +220,26 @@ function Helpful({ lessonKey }: { lessonKey: string }) {
         </Link>
       ) : (
         <div className="flex gap-2">
-          <button onClick={() => choose("up")} title="役に立った" className="w-9 h-9 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-50 cursor-pointer">
+          <button
+            onClick={() => {
+              playCyberClick();
+              choose("up");
+            }}
+            onMouseEnter={() => playCyberHover()}
+            title="役に立った"
+            className="w-9 h-9 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-50 cursor-pointer transition-transform active:scale-90"
+          >
             <ThumbsUp size={16} />
           </button>
-          <button onClick={() => choose("down")} title="分かりにくかった" className="w-9 h-9 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-50 cursor-pointer">
+          <button
+            onClick={() => {
+              playCyberClick();
+              choose("down");
+            }}
+            onMouseEnter={() => playCyberHover()}
+            title="分かりにくかった"
+            className="w-9 h-9 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-50 cursor-pointer transition-transform active:scale-90"
+          >
             <ThumbsDown size={16} />
           </button>
         </div>
@@ -243,9 +272,23 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
         <main className="space-y-6 min-w-0">
           <nav className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 print:hidden">
             <ArrowLeft size={13} />
-            <Link href="/academy" className="hover:text-indigo-600 transition-colors">Academy</Link>
+            <Link
+              href="/academy"
+              onClick={() => playCyberClick()}
+              onMouseEnter={() => playCyberHover()}
+              className="hover:text-indigo-600 transition-colors cursor-pointer"
+            >
+              Academy
+            </Link>
             <span>/</span>
-            <Link href={`/academy/${course.id}`} className="hover:text-indigo-600 transition-colors">{course.title}</Link>
+            <Link
+              href={`/academy/${course.id}`}
+              onClick={() => playCyberClick()}
+              onMouseEnter={() => playCyberHover()}
+              className="hover:text-indigo-600 transition-colors cursor-pointer"
+            >
+              {course.title}
+            </Link>
           </nav>
 
           {lesson && (
@@ -318,8 +361,12 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
               <div className="pt-6 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {index > 0 ? (
                   <button
-                    onClick={() => go(steps[index - 1].id)}
-                    className="flex items-center gap-3 text-left bg-white border border-slate-200 rounded-xl px-4 py-4 hover:border-slate-400 cursor-pointer"
+                    onClick={() => {
+                      playCyberClick();
+                      go(steps[index - 1].id);
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className="flex items-center gap-3 text-left bg-white border border-slate-200 rounded-xl px-4 py-4 hover:border-slate-400 cursor-pointer transition-all active:scale-98 shadow-xs hover:shadow-md"
                   >
                     <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0"><ArrowLeft size={15} /></span>
                     <span>
@@ -332,10 +379,12 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                 )}
                 <button
                   onClick={() => {
+                    playCyberClick();
                     markLessonDone(lesson.id);
                     go(steps[index + 1].id);
                   }}
-                  className="flex items-center justify-end gap-3 text-right bg-slate-900 hover:bg-slate-700 text-white rounded-xl px-4 py-4 cursor-pointer"
+                  onMouseEnter={() => playCyberHover()}
+                  className="flex items-center justify-end gap-3 text-right bg-gradient-to-r from-slate-900 to-indigo-950 hover:from-slate-800 hover:to-indigo-900 text-white rounded-xl px-4 py-4 cursor-pointer transition-all active:scale-98 shadow-sm hover:shadow-lg"
                 >
                   <span>
                     <span className="block text-xs text-slate-300">完了して次へ</span>
@@ -362,7 +411,8 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                         return (
                           <label
                             key={c}
-                            className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg border cursor-pointer ${
+                            onMouseEnter={() => playCyberHover()}
+                            className={`flex items-center gap-2 text-sm px-3 py-2 rounded-lg border cursor-pointer transition-colors ${
                               state === "correct"
                                 ? "border-emerald-400 bg-emerald-50"
                                 : state === "wrong"
@@ -377,7 +427,10 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                               name={`q${qi}`}
                               checked={chosen}
                               disabled={submitted}
-                              onChange={() => setAnswers(answers.map((a, i) => (i === qi ? ci : a)))}
+                              onChange={() => {
+                                playCyberClick();
+                                setAnswers(answers.map((a, i) => (i === qi ? ci : a)));
+                              }}
                             />
                             {c}
                           </label>
@@ -396,16 +449,25 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                       {passed && !allLessonsDone && "（未完了のレッスンを終えると修了証を発行できます）"}
                     </p>
                     {passed && allLessonsDone ? (
-                      <button onClick={() => go("certificate")} className="px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-bold cursor-pointer">
+                      <button
+                        onClick={() => {
+                          playCyberClick();
+                          go("certificate");
+                        }}
+                        onMouseEnter={() => playCyberHover()}
+                        className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold cursor-pointer transition-all active:scale-95 shadow-md"
+                      >
                         修了証を見る
                       </button>
                     ) : (
                       <button
                         onClick={() => {
+                          playCyberClick();
                           setAnswers(course.quiz.map(() => null));
                           setSubmitted(false);
                         }}
-                        className="px-5 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-bold cursor-pointer"
+                        onMouseEnter={() => playCyberHover()}
+                        className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold cursor-pointer transition-all active:scale-95 shadow-md"
                       >
                         もう一度解く
                       </button>
@@ -414,11 +476,13 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                 ) : (
                   <button
                     onClick={() => {
+                      playCyberClick();
                       setSubmitted(true);
                       recordQuizScore(score);
                     }}
+                    onMouseEnter={() => playCyberHover()}
                     disabled={answers.some((a) => a === null)}
-                    className="px-5 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-bold disabled:opacity-40 cursor-pointer"
+                    className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold disabled:opacity-40 cursor-pointer transition-all active:scale-95 shadow-md"
                   >
                     採点する
                   </button>
@@ -441,14 +505,22 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                     />
                   </label>
                   <button
-                    onClick={() => window.print()}
+                    onClick={() => {
+                      playCyberClick();
+                      window.print();
+                    }}
+                    onMouseEnter={() => playCyberHover()}
                     disabled={!progress.learnerName}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-bold disabled:opacity-40 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-bold disabled:opacity-40 cursor-pointer transition-all active:scale-95"
                   >
                     <Printer size={15} /> 印刷・PDF で保存
                   </button>
                 </div>
-                <div className="print-area border-8 border-double border-orange-300 rounded-2xl p-10 text-center space-y-4 bg-[#fffdf8]">
+                <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl">
+                  <div
+                    onMouseEnter={() => playCyberHover()}
+                    className="print-area border-8 border-double border-orange-300 rounded-2xl p-10 text-center space-y-4 bg-[#fffdf8] cursor-default shadow-lg"
+                  >
                   <p className="text-xs tracking-[0.3em] text-orange-700 font-bold">CERTIFICATE OF COMPLETION</p>
                   <h1 className="font-serif text-3xl font-bold text-slate-900">修了証</h1>
                   <p className="text-2xl font-serif text-slate-900 border-b border-slate-300 inline-block px-8 pb-1">
@@ -467,6 +539,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                     <p className="pt-2 font-bold text-slate-700">MightyLINK AI推進担当 / AI Park</p>
                   </div>
                 </div>
+              </TiltCard>
                 <CompletionReport
                   courseTitle={course.title}
                   learnerName={progress.learnerName ?? ""}
@@ -515,7 +588,12 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
               ))}
             </nav>
           )}
-          <Link href={`/academy/${course.id}`} className="flex items-center gap-1.5 text-xs text-slate-500 hover:underline">
+          <Link
+            href={`/academy/${course.id}`}
+            onClick={() => playCyberClick()}
+            onMouseEnter={() => playCyberHover()}
+            className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-indigo-600 transition-colors cursor-pointer"
+          >
             <ListChecks size={13} /> コースの目次に戻る
           </Link>
         </aside>
