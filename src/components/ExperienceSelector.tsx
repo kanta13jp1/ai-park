@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   GraduationCap,
   Briefcase,
@@ -194,11 +196,15 @@ export default function ExperienceSelector() {
             return (
               <button
                 key={mode.id}
-                onClick={() => setActiveTab(mode.id)}
-                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 select-none ${
+                onClick={() => {
+                  playCyberClick();
+                  setActiveTab(mode.id);
+                }}
+                onMouseEnter={() => playCyberHover()}
+                className={`flex items-center space-x-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all duration-200 select-none cursor-pointer active:scale-95 ${
                   isActive
-                    ? "bg-white text-slate-900 shadow-sm shadow-slate-200 border border-slate-200/60 scale-[1.02]"
-                    : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
+                    ? "bg-white text-slate-900 shadow-md shadow-slate-200 border border-slate-200/80 scale-[1.02]"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                 }`}
               >
                 <Icon size={14} className={isActive ? "text-indigo-600" : "text-slate-400"} />
@@ -215,40 +221,43 @@ export default function ExperienceSelector() {
           const Icon = item.icon;
 
           return (
-            <Link
-              key={idx}
-              href={item.href}
-              className="group relative flex flex-col justify-between p-5 rounded-2xl border border-slate-200/90 bg-white hover:border-indigo-300 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
-            >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div
-                    className={`w-10 h-10 rounded-xl bg-gradient-to-br ${currentMode.accent} text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform`}
-                  >
-                    <Icon size={18} />
+            <TiltCard key={idx} maxTilt={4} glareOpacity={0.08} className="rounded-2xl h-full">
+              <Link
+                href={item.href}
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="group relative flex flex-col justify-between p-5 rounded-2xl border border-slate-200/90 bg-white hover:border-indigo-300 hover:shadow-lg transition-all duration-300 h-full cursor-pointer"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div
+                      className={`w-10 h-10 rounded-xl bg-gradient-to-br ${currentMode.accent} text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform`}
+                    >
+                      <Icon size={18} />
+                    </div>
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${currentMode.badgeColor}`}
+                    >
+                      {item.tag}
+                    </span>
                   </div>
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${currentMode.badgeColor}`}
-                  >
-                    {item.tag}
-                  </span>
+
+                  <div>
+                    <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-indigo-600 transition-colors flex items-center justify-between">
+                      <span>{item.title}</span>
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-indigo-600 transition-colors flex items-center justify-between">
-                    <span>{item.title}</span>
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed line-clamp-2">
-                    {item.description}
-                  </p>
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400 group-hover:text-indigo-600 transition-colors">
+                  <span>詳しく見る</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </div>
-              </div>
-
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-400 group-hover:text-indigo-600 transition-colors">
-                <span>詳しく見る</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
+              </Link>
+            </TiltCard>
           );
         })}
       </div>

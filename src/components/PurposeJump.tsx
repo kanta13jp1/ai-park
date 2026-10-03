@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   Rocket,
   BookOpen,
@@ -116,10 +118,14 @@ export default function PurposeJump() {
           return (
             <button
               key={sec.id}
-              onClick={() => setActiveCategory(isSelected ? null : sec.id)}
-              className={`p-6 rounded-2xl border text-center transition-all duration-300 flex flex-col items-center justify-between space-y-4 relative group cursor-pointer ${
+              onClick={() => {
+                playCyberClick();
+                setActiveCategory(isSelected ? null : sec.id);
+              }}
+              onMouseEnter={() => playCyberHover()}
+              className={`p-6 rounded-2xl border text-center transition-all duration-300 flex flex-col items-center justify-between space-y-4 relative group cursor-pointer active:scale-95 ${
                 isSelected
-                  ? `${sec.bgActive} shadow-lg shadow-blue-500/5 ring-2 ring-blue-500/30 scale-[1.02]`
+                  ? `${sec.bgActive} shadow-lg shadow-blue-500/10 ring-2 ring-blue-500/30 scale-[1.02]`
                   : `bg-slate-50/60 ${sec.borderColor} hover:bg-white hover:shadow-md hover:-translate-y-1`
               }`}
             >
@@ -166,12 +172,46 @@ export default function PurposeJump() {
 
                 if (isExternal) {
                   return (
-                    <a
-                      key={item.name}
+                    <TiltCard key={item.name} maxTilt={3} glareOpacity={0.06} className="rounded-2xl h-full">
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={() => playCyberClick()}
+                        onMouseEnter={() => playCyberHover()}
+                        className="bg-white border border-slate-200/90 hover:border-slate-300 rounded-2xl p-4 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group space-y-3 h-full cursor-pointer"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between gap-2">
+                            <h5 className="font-extrabold text-slate-900 text-xs group-hover:text-blue-600 transition-colors">
+                              {item.name}
+                            </h5>
+                            {item.badge && (
+                              <span className="text-[9.5px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold border border-slate-200/60 shrink-0">
+                                {item.badge}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-slate-500 leading-relaxed mt-1">
+                            {item.desc}
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-end text-slate-400 group-hover:text-blue-600 text-[11px] font-bold space-x-1 pt-2 border-t border-slate-100">
+                          <span>開く</span>
+                          <ExternalLink size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                        </div>
+                      </a>
+                    </TiltCard>
+                  );
+                }
+
+                return (
+                  <TiltCard key={item.name} maxTilt={3} glareOpacity={0.06} className="rounded-2xl h-full">
+                    <Link
                       href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-white border border-slate-200/90 hover:border-slate-300 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between group space-y-3"
+                      onClick={() => playCyberClick()}
+                      onMouseEnter={() => playCyberHover()}
+                      className="bg-white border border-slate-200/90 hover:border-blue-400 rounded-2xl p-4 shadow-2xs hover:shadow-md transition-all duration-200 flex flex-col justify-between group space-y-3 h-full cursor-pointer"
                     >
                       <div>
                         <div className="flex items-center justify-between gap-2">
@@ -179,7 +219,7 @@ export default function PurposeJump() {
                             {item.name}
                           </h5>
                           {item.badge && (
-                            <span className="text-[9.5px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold border border-slate-200/60 shrink-0">
+                            <span className="text-[9.5px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200/60 shrink-0">
                               {item.badge}
                             </span>
                           )}
@@ -189,39 +229,11 @@ export default function PurposeJump() {
                         </p>
                       </div>
                       <div className="flex items-center justify-end text-slate-400 group-hover:text-blue-600 text-[11px] font-bold space-x-1 pt-2 border-t border-slate-100">
-                        <span>開く</span>
-                        <ExternalLink size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                        <span>ページへ進む</span>
+                        <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                       </div>
-                    </a>
-                  );
-                }
-
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="bg-white border border-slate-200/90 hover:border-blue-400 rounded-2xl p-4 shadow-2xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between group space-y-3"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between gap-2">
-                        <h5 className="font-extrabold text-slate-900 text-xs group-hover:text-blue-600 transition-colors">
-                          {item.name}
-                        </h5>
-                        {item.badge && (
-                          <span className="text-[9.5px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200/60 shrink-0">
-                            {item.badge}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-[11px] text-slate-500 leading-relaxed mt-1">
-                        {item.desc}
-                      </p>
-                    </div>
-                    <div className="flex items-center justify-end text-slate-400 group-hover:text-blue-600 text-[11px] font-bold space-x-1 pt-2 border-t border-slate-100">
-                      <span>ページへ進む</span>
-                      <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </Link>
+                    </Link>
+                  </TiltCard>
                 );
               })}
             </div>

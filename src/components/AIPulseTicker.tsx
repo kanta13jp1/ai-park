@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Activity, Sparkles, Terminal, CheckCircle2, Flame, Bot, Cpu } from "lucide-react";
+import { Activity, Sparkles, Terminal, CheckCircle2, Flame, Bot, Cpu, Pause } from "lucide-react";
 import Link from "next/link";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 interface PulseItem {
   id: string;
@@ -61,8 +62,11 @@ const pulseEvents: PulseItem[] = [
 export default function AIPulseTicker() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (isPaused) return;
+
     const timer = setInterval(() => {
       setIsFading(true);
       setTimeout(() => {
@@ -72,13 +76,20 @@ export default function AIPulseTicker() {
     }, 4500);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isPaused]);
 
   const current = pulseEvents[currentIndex];
   const IconComponent = current.icon;
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-[#0d1424] to-slate-950 border border-slate-800/80 px-4 py-2.5 sm:px-5 sm:py-3 shadow-lg select-none backdrop-blur-md">
+    <div
+      onMouseEnter={() => {
+        setIsPaused(true);
+        playCyberHover();
+      }}
+      onMouseLeave={() => setIsPaused(false)}
+      className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-[#0d1424] to-slate-950 border border-slate-800/80 px-4 py-2.5 sm:px-5 sm:py-3 shadow-lg select-none backdrop-blur-md transition-all hover:border-cyan-500/40"
+    >
       {/* 背景の走査線と光彩 */}
       <div className="absolute top-0 right-1/4 w-96 h-full bg-cyan-500/10 blur-2xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/3 w-64 h-full bg-indigo-500/10 blur-2xl pointer-events-none" />
@@ -95,8 +106,17 @@ export default function AIPulseTicker() {
           </div>
 
           <div className="hidden sm:flex items-center text-slate-400 font-mono text-[11px] space-x-1">
-            <Activity size={12} className="text-cyan-400 animate-pulse" />
-            <span>LIVE FEED</span>
+            {isPaused ? (
+              <>
+                <Pause size={12} className="text-amber-400" />
+                <span className="text-amber-300">PAUSED</span>
+              </>
+            ) : (
+              <>
+                <Activity size={12} className="text-cyan-400 animate-pulse" />
+                <span>LIVE FEED</span>
+              </>
+            )}
           </div>
         </div>
 
@@ -123,7 +143,9 @@ export default function AIPulseTicker() {
           {current.href && current.linkText && (
             <Link
               href={current.href}
-              className="text-xs font-bold text-cyan-300 hover:text-cyan-100 underline decoration-cyan-400/50 hover:decoration-cyan-300 transition-colors flex items-center gap-1"
+              onClick={() => playCyberClick()}
+              onMouseEnter={() => playCyberHover()}
+              className="text-xs font-bold text-cyan-300 hover:text-cyan-100 underline decoration-cyan-400/50 hover:decoration-cyan-300 transition-colors flex items-center gap-1 cursor-pointer active:scale-95"
             >
               <span>{current.linkText}</span>
               <span className="text-[10px]">→</span>
