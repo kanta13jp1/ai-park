@@ -150,10 +150,10 @@ export default function AiNewsPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title={
-          <span className="break-keep inline-block">
-            <span className="inline-block">最新AIニュース</span>
-            <span className="inline-block mx-1.5 sm:mx-2 text-cyan-300 font-mono text-xl sm:text-2xl md:text-3xl">&</span>
-            <span className="inline-block">リリースレーダー</span>
+          <span className="break-keep inline-flex flex-wrap items-center justify-center gap-x-2">
+            <span className="whitespace-nowrap">最新AIニュース</span>
+            <span className="text-cyan-300 font-mono text-xl sm:text-2xl md:text-3xl">&</span>
+            <span className="whitespace-nowrap">リリースレーダー</span>
           </span>
         }
         subtitle="社内外の生成AI・エージェント・基盤モデル・社内AI Parkの最新公式アップデートを一括キャッチアップ"
@@ -162,24 +162,24 @@ export default function AiNewsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-8">
         {/* KPIサマリーカード */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-3 sm:space-x-3.5">
+          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
             <div className="p-2.5 sm:p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
               <Newspaper className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div className="min-w-0">
-              <p className="text-xs text-slate-500 font-medium whitespace-nowrap">配信中ニュース</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">配信中ニュース</p>
               <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
                 {aiNewsMaster.length} <span className="text-xs font-normal text-slate-500">件</span>
               </p>
             </div>
           </div>
 
-          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-3 sm:space-x-3.5">
+          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
             <div className="p-2.5 sm:p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
               <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div className="min-w-0">
-              <p className="text-xs text-slate-500 font-medium whitespace-nowrap">社内リリース</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">社内リリース</p>
               <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
                 {aiNewsMaster.filter((n) => n.category === "internal").length}{" "}
                 <span className="text-xs font-normal text-slate-500">件</span>
@@ -187,12 +187,12 @@ export default function AiNewsPage() {
             </div>
           </div>
 
-          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-3 sm:space-x-3.5">
+          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
             <div className="p-2.5 sm:p-3 bg-sky-50 text-sky-600 rounded-xl shrink-0">
               <GlobeIcon className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div className="min-w-0">
-              <p className="text-xs text-slate-500 font-medium whitespace-nowrap">Google / 一次情報</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">Google / 一次情報</p>
               <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
                 {aiNewsMaster.filter((n) => n.category !== "internal").length}{" "}
                 <span className="text-xs font-normal text-slate-500">件</span>
@@ -200,12 +200,12 @@ export default function AiNewsPage() {
             </div>
           </div>
 
-          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center space-x-3 sm:space-x-3.5">
+          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
             <div className="p-2.5 sm:p-3 bg-purple-50 text-purple-600 rounded-xl shrink-0">
               <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div className="min-w-0">
-              <p className="text-xs text-slate-500 font-medium whitespace-nowrap">情報更新日</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">情報更新日</p>
               <p className="text-sm sm:text-base font-black text-slate-900 tracking-tight font-mono">
                 2026/10/03
               </p>
