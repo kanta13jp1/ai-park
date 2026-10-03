@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Sparkles, ExternalLink, ShieldCheck, Heart, Terminal, Compass, BookOpen, Layers } from "lucide-react";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
+import SoundToggle from "@/components/SoundToggle";
 
 export default function Footer() {
   return (
@@ -136,7 +137,11 @@ export default function Footer() {
 
         {/* コピーライトとクレジット */}
         <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs text-slate-500 font-mono">
-          <p>© 2026 MightyLINK Co., Ltd. Internal AI Promotion Office.</p>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <p>© 2026 MightyLINK Co., Ltd. Internal AI Promotion Office.</p>
+            <span className="hidden sm:inline text-slate-700">•</span>
+            <SoundToggle />
+          </div>
           <div className="flex items-center space-x-4">
             <span className="flex items-center space-x-1">
               <span>Crafted for Enterprise Innovation</span>

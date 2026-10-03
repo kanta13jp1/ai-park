@@ -160,7 +160,9 @@ export default function Home() {
 
             <Link
               href="/feedback-todo"
-              className="shrink-0 inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black rounded-xl text-xs transition-all shadow-md hover:shadow-cyan-400/25 active:scale-95 self-start sm:self-center"
+              onClick={() => playCyberClick()}
+              onMouseEnter={() => playCyberHover()}
+              className="shrink-0 inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black rounded-xl text-xs transition-all shadow-lg hover:shadow-cyan-400/25 active:scale-95 self-start sm:self-center cursor-pointer"
             >
               <span>改善ToDoボードを見る</span>
               <ArrowRight size={14} />
@@ -505,50 +507,62 @@ export default function Home() {
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <SpotlightCard
-              spotlightColor="rgba(59, 130, 246, 0.16)"
-              className="bg-white border-slate-200/90"
-            >
-              <div className="p-6 space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold shadow-2xs border border-blue-100">
-                  <Boxes size={22} />
-                </div>
-                <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">自律型Subagentsの並列協調</h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                  単一プロンプトにとどまらず、リサーチ・設計・テスト生成など専門役割を持つサブエージェントを自律的に並列実行できます。
-                </p>
+            <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl h-full">
+              <div onMouseEnter={() => playCyberHover()} className="h-full">
+                <SpotlightCard
+                  spotlightColor="rgba(59, 130, 246, 0.16)"
+                  className="bg-white border-slate-200/90 h-full cursor-default"
+                >
+                  <div className="p-6 space-y-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold shadow-2xs border border-blue-100">
+                      <Boxes size={22} />
+                    </div>
+                    <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">自律型Subagentsの並列協調</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      単一プロンプトにとどまらず、リサーチ・設計・テスト生成など専門役割を持つサブエージェントを自律的に並列実行できます。
+                    </p>
+                  </div>
+                </SpotlightCard>
               </div>
-            </SpotlightCard>
+            </TiltCard>
 
-            <SpotlightCard
-              spotlightColor="rgba(16, 185, 129, 0.16)"
-              className="bg-white border-slate-200/90"
-            >
-              <div className="p-6 space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shadow-2xs border border-emerald-100">
-                  <Terminal size={22} />
-                </div>
-                <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">Skills & Rules による社内統制</h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                  破壊的コマンド実行防止や独自のコーディング規約を `SKILL.md` や `RULE` として定義し、社内標準をAIに確実に遵守させます。
-                </p>
+            <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl h-full">
+              <div onMouseEnter={() => playCyberHover()} className="h-full">
+                <SpotlightCard
+                  spotlightColor="rgba(16, 185, 129, 0.16)"
+                  className="bg-white border-slate-200/90 h-full cursor-default"
+                >
+                  <div className="p-6 space-y-3">
+                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shadow-2xs border border-emerald-100">
+                      <Terminal size={22} />
+                    </div>
+                    <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">Skills & Rules による社内統制</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      破壊的コマンド実行防止や独自のコーディング規約を `SKILL.md` や `RULE` として定義し、社内標準をAIに確実に遵守させます。
+                    </p>
+                  </div>
+                </SpotlightCard>
               </div>
-            </SpotlightCard>
+            </TiltCard>
 
-            <SpotlightCard
-              spotlightColor="rgba(168, 85, 247, 0.16)"
-              className="bg-white border-slate-200/90"
-            >
-              <div className="p-6 space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold shadow-2xs border border-purple-100">
-                  <Plug size={22} />
-                </div>
-                <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">オープン標準 MCP ツール連携</h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                  社内データベース、GitHub、ブラウザテストツールを直結し、エージェントが必要な外部ツールを自律的に呼び出せます。
-                </p>
+            <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl h-full">
+              <div onMouseEnter={() => playCyberHover()} className="h-full">
+                <SpotlightCard
+                  spotlightColor="rgba(168, 85, 247, 0.16)"
+                  className="bg-white border-slate-200/90 h-full cursor-default"
+                >
+                  <div className="p-6 space-y-3">
+                    <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold shadow-2xs border border-purple-100">
+                      <Plug size={22} />
+                    </div>
+                    <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">オープン標準 MCP ツール連携</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                      社内データベース、GitHub、ブラウザテストツールを直結し、エージェントが必要な外部ツールを自律的に呼び出せます。
+                    </p>
+                  </div>
+                </SpotlightCard>
               </div>
-            </SpotlightCard>
+            </TiltCard>
           </div>
         </section>
 
@@ -569,7 +583,9 @@ export default function Home() {
             <div className="pt-2">
               <Link
                 href="/antigravity-info"
-                className="inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-xs rounded-xl transition-all shadow-md active:scale-95"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-xs rounded-xl transition-all shadow-lg hover:shadow-cyan-400/25 active:scale-95 cursor-pointer"
               >
                 <span>Antigravity情報局・相談予約へ</span>
                 <ArrowRight size={14} />

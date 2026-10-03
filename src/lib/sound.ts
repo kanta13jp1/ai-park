@@ -21,7 +21,12 @@ function getAudioContext(): AudioContext | null {
 
 export function isSoundEnabled(): boolean {
   if (typeof window === "undefined") return false;
-  return soundEnabled || localStorage.getItem("ai_park_sound") === "true";
+  const stored = localStorage.getItem("ai_park_sound");
+  if (stored !== null) {
+    return stored === "true";
+  }
+  // デフォルトで触覚音響を有効化（ユーザーが明示的にOFFにした場合のみ無効）
+  return true;
 }
 
 export function setSoundEnabled(enabled: boolean) {
