@@ -4,7 +4,8 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
-import { playCyberClick } from "@/lib/sound";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   Sparkles,
   HelpCircle,
@@ -116,86 +117,95 @@ export default function AntigravityInfoPage() {
 
         {/* 関連学習・ナビゲーション */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <SpotlightCard
-            spotlightColor="rgba(6, 182, 212, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <Link
-              href="/guide"
-              onClick={() => playCyberClick()}
-              className="p-5 flex flex-col justify-between h-full space-y-3 group"
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(6, 182, 212, 0.12)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
             >
-              <div className="space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600">
-                  <Terminal size={20} />
+              <Link
+                href="/guide"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="p-5 flex flex-col justify-between h-full space-y-3 group cursor-pointer"
+              >
+                <div className="space-y-2">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600">
+                    <Terminal size={20} />
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-cyan-600 transition-colors">
+                    Antigravity 導入ガイド
+                  </h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    環境構築からVS Code拡張のインストール、CLI設定までの全手順
+                  </p>
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-cyan-600 transition-colors">
-                  Antigravity 導入ガイド
-                </h4>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  環境構築からVS Code拡張のインストール、CLI設定までの全手順
-                </p>
-              </div>
-              <div className="flex items-center text-xs font-bold text-cyan-700 font-mono">
-                <span>ガイドを見る</span>
-                <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-          </SpotlightCard>
+                <div className="flex items-center text-xs font-bold text-cyan-700 font-mono">
+                  <span>ガイドを見る</span>
+                  <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard
-            spotlightColor="rgba(99, 102, 241, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <Link
-              href="/academy"
-              onClick={() => playCyberClick()}
-              className="p-5 flex flex-col justify-between h-full space-y-3 group"
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(99, 102, 241, 0.12)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
             >
-              <div className="space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600">
-                  <BookOpen size={20} />
+              <Link
+                href="/academy"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="p-5 flex flex-col justify-between h-full space-y-3 group cursor-pointer"
+              >
+                <div className="space-y-2">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600">
+                    <BookOpen size={20} />
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-indigo-600 transition-colors">
+                    Antigravity Academy
+                  </h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    3コース・12レッスンで基礎から実践・安全活用を体系的に習得
+                  </p>
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-indigo-600 transition-colors">
-                  Antigravity Academy
-                </h4>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  3コース・12レッスンで基礎から実践・安全活用を体系的に習得
-                </p>
-              </div>
-              <div className="flex items-center text-xs font-bold text-indigo-700 font-mono">
-                <span>講座を始める</span>
-                <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-          </SpotlightCard>
+                <div className="flex items-center text-xs font-bold text-indigo-700 font-mono">
+                  <span>講座を始める</span>
+                  <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard
-            spotlightColor="rgba(168, 85, 247, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <Link
-              href="/contact"
-              onClick={() => playCyberClick()}
-              className="p-5 flex flex-col justify-between h-full space-y-3 group"
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(168, 85, 247, 0.12)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
             >
-              <div className="space-y-2">
-                <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600">
-                  <MessageSquare size={20} />
+              <Link
+                href="/contact"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="p-5 flex flex-col justify-between h-full space-y-3 group cursor-pointer"
+              >
+                <div className="space-y-2">
+                  <div className="w-10 h-10 rounded-xl bg-purple-50 border border-purple-200 flex items-center justify-center text-purple-600">
+                    <MessageSquare size={20} />
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-purple-600 transition-colors">
+                    アカウント・お問い合わせ
+                  </h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">
+                    ライセンス申請、GCP利用枠の拡張、技術的な相談窓口
+                  </p>
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-sm sm:text-base group-hover:text-purple-600 transition-colors">
-                  アカウント・お問い合わせ
-                </h4>
-                <p className="text-xs text-slate-500 leading-relaxed">
-                  ライセンス申請、GCP利用枠の拡張、技術的な相談窓口
-                </p>
-              </div>
-              <div className="flex items-center text-xs font-bold text-purple-700 font-mono">
-                <span>窓口へ進む</span>
-                <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-          </SpotlightCard>
+                <div className="flex items-center text-xs font-bold text-purple-700 font-mono">
+                  <span>窓口へ進む</span>
+                  <ArrowRight size={14} className="ml-1 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+            </SpotlightCard>
+          </TiltCard>
         </div>
 
         {/* よくある質問 (FAQ) アコーディオン */}
@@ -225,6 +235,7 @@ export default function AntigravityInfoPage() {
                 >
                   <button
                     onClick={() => toggleFaq(idx)}
+                    onMouseEnter={() => playCyberHover()}
                     className="w-full text-left p-4.5 flex items-center justify-between gap-4 font-bold text-slate-800 text-sm sm:text-base cursor-pointer"
                   >
                     <div className="flex items-center gap-2.5">

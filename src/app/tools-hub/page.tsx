@@ -1,7 +1,11 @@
+"use client";
+
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
+import TiltCard from "@/components/TiltCard";
 import { AlertTriangle, CheckCircle2, Lock, ShieldCheck, XCircle } from "lucide-react";
+import { playCyberHover } from "@/lib/sound";
 
 const aiGuidelines = [
   {
@@ -44,38 +48,53 @@ export default function ToolsHubPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-            <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/40 space-y-2">
-              <div className="flex items-center space-x-2 text-emerald-800 font-bold">
-                <CheckCircle2 size={16} className="text-emerald-600" />
-                <span>Level 1: 社内機密・コード入力可</span>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-xl">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/40 space-y-2 h-full"
+              >
+                <div className="flex items-center space-x-2 text-emerald-800 font-bold">
+                  <CheckCircle2 size={16} className="text-emerald-600" />
+                  <span>Level 1: 社内機密・コード入力可</span>
+                </div>
+                <p className="text-slate-600 text-[11px] leading-relaxed">
+                  対象: <strong>会社契約のAI（会社の Google Cloud プロジェクト経由の Antigravity 等）</strong><br />
+                  会社として契約し、入力データをモデル学習に使わないことが契約上担保されているサービス。社内ソースコードや設計書の投入が可能です。
+                </p>
               </div>
-              <p className="text-slate-600 text-[11px] leading-relaxed">
-                対象: <strong>会社契約のAI（会社の Google Cloud プロジェクト経由の Antigravity 等）</strong><br />
-                会社として契約し、入力データをモデル学習に使わないことが契約上担保されているサービス。社内ソースコードや設計書の投入が可能です。
-              </p>
-            </div>
+            </TiltCard>
 
-            <div className="p-4 rounded-xl border border-amber-200 bg-amber-50/40 space-y-2">
-              <div className="flex items-center space-x-2 text-amber-800 font-bold">
-                <AlertTriangle size={16} className="text-amber-600" />
-                <span>Level 2: マスキング必須</span>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-xl">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-4 rounded-xl border border-amber-200 bg-amber-50/40 space-y-2 h-full"
+              >
+                <div className="flex items-center space-x-2 text-amber-800 font-bold">
+                  <AlertTriangle size={16} className="text-amber-600" />
+                  <span>Level 2: マスキング必須</span>
+                </div>
+                <p className="text-slate-600 text-[11px] leading-relaxed">
+                  対象: <strong>確認中（会社として利用を認めたツールが決まり次第掲載）</strong><br />
+                  個人情報（氏名、電話番号等）や特定顧客の識別情報は必ず別の文字に置き換えて（マスキングして）から入力してください。
+                </p>
               </div>
-              <p className="text-slate-600 text-[11px] leading-relaxed">
-                対象: <strong>確認中（会社として利用を認めたツールが決まり次第掲載）</strong><br />
-                個人情報（氏名、電話番号等）や特定顧客の識別情報は必ず別の文字に置き換えて（マスキングして）から入力してください。
-              </p>
-            </div>
+            </TiltCard>
 
-            <div className="p-4 rounded-xl border border-rose-200 bg-rose-50/40 space-y-2">
-              <div className="flex items-center space-x-2 text-rose-800 font-bold">
-                <XCircle size={16} className="text-rose-600" />
-                <span>Level 3: 一般公開情報のみ</span>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-xl">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="p-4 rounded-xl border border-rose-200 bg-rose-50/40 space-y-2 h-full"
+              >
+                <div className="flex items-center space-x-2 text-rose-800 font-bold">
+                  <XCircle size={16} className="text-rose-600" />
+                  <span>Level 3: 一般公開情報のみ</span>
+                </div>
+                <p className="text-slate-600 text-[11px] leading-relaxed">
+                  対象: <strong>個人アカウントのAIツール（個人アカウントの Antigravity を含む）</strong><br />
+                  個人向け規約が適用されるため、顧客情報・社内機密・未公開ソースコードは入力しないでください。公開情報を使った学習・試用にとどめます。
+                </p>
               </div>
-              <p className="text-slate-600 text-[11px] leading-relaxed">
-                対象: <strong>個人アカウントのAIツール（個人アカウントの Antigravity を含む）</strong><br />
-                個人向け規約が適用されるため、顧客情報・社内機密・未公開ソースコードは入力しないでください。公開情報を使った学習・試用にとどめます。
-              </p>
-            </div>
+            </TiltCard>
           </div>
         </div>
 
@@ -90,16 +109,23 @@ export default function ToolsHubPage() {
               暫定版（2026/09/26〜）：詳細は社長・杉村さんと協議のうえ正式決定します
             </span>
           </div>
-          <ol className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <ol className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs list-none p-0">
             {aiGuidelines.map((g, i) => (
-              <li key={g.title} className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
-                <div className="flex items-center gap-2 font-bold text-slate-900">
-                  <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] flex items-center justify-center shrink-0">
-                    {i + 1}
-                  </span>
-                  <span>{g.title}</span>
-                </div>
-                <p className="text-slate-600 leading-relaxed">{g.body}</p>
+              <li key={g.title}>
+                <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-xl">
+                  <div
+                    onMouseEnter={() => playCyberHover()}
+                    className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5 h-full cursor-default"
+                  >
+                    <div className="flex items-center gap-2 font-bold text-slate-900">
+                      <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] flex items-center justify-center shrink-0">
+                        {i + 1}
+                      </span>
+                      <span>{g.title}</span>
+                    </div>
+                    <p className="text-slate-600 leading-relaxed">{g.body}</p>
+                  </div>
+                </TiltCard>
               </li>
             ))}
           </ol>

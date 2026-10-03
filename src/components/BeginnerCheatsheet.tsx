@@ -1,6 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import SpotlightCard from "@/components/SpotlightCard";
-import { BookOpen, MessageSquareText, FileCheck2, LifeBuoy, Sparkles } from "lucide-react";
+import TiltCard from "@/components/TiltCard";
+import { BookOpen, MessageSquareText, FileCheck2, LifeBuoy, Sparkles, Copy, Check } from "lucide-react";
+import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 
 // ご意見TODO-03「ここ見てやってみて」と言える AI初級編 チートシート
 const sections = [
@@ -47,6 +52,16 @@ const sections = [
 ];
 
 export default function BeginnerCheatsheet() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyExample = (text: string) => {
+    navigator.clipboard?.writeText(text).then(() => {
+      playCyberSuccess();
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   return (
     <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
@@ -59,10 +74,24 @@ export default function BeginnerCheatsheet() {
           </div>
           <p className="text-xs text-slate-500 mt-1 font-normal">
             インストールがまだの方は先に
-            <Link href="/guide" className="underline font-bold text-indigo-600 mx-1 hover:text-indigo-700">導入ガイド</Link>
+            <Link
+              href="/guide"
+              onClick={() => playCyberClick()}
+              onMouseEnter={() => playCyberHover()}
+              className="underline font-bold text-indigo-600 mx-1 hover:text-indigo-700 cursor-pointer"
+            >
+              導入ガイド
+            </Link>
             へ。AIエージェントに仕事を頼むときの基本を1枚に凝縮しました。
             体系的に学んで修了証を取りたい方は
-            <Link href="/academy" className="underline font-bold text-cyan-600 mx-1 hover:text-cyan-700">Antigravity Academy</Link>
+            <Link
+              href="/academy"
+              onClick={() => playCyberClick()}
+              onMouseEnter={() => playCyberHover()}
+              className="underline font-bold text-cyan-600 mx-1 hover:text-cyan-700 cursor-pointer"
+            >
+              Antigravity Academy
+            </Link>
             へ。
           </p>
         </div>
@@ -70,37 +99,65 @@ export default function BeginnerCheatsheet() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {sections.map((s) => (
-          <SpotlightCard
+          <TiltCard
             key={s.title}
-            spotlightColor={s.spotlightColor}
-            className="bg-slate-50/60 border-slate-200/80"
+            maxTilt={6}
+            glareOpacity={0.12}
+            className="h-full rounded-2xl"
           >
-            <div className="p-5 space-y-3 h-full flex flex-col justify-between">
-              <div className="space-y-3">
-                <div className="flex items-center space-x-2.5">
-                  <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${s.bgIcon} shadow-2xs`}>
-                    <s.icon className="w-4 h-4" />
+            <SpotlightCard
+              spotlightColor={s.spotlightColor}
+              className="bg-slate-50/60 border-slate-200/80 h-full rounded-2xl"
+            >
+              <div className="p-5 space-y-3 h-full flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2.5">
+                    <div className={`w-9 h-9 rounded-xl border flex items-center justify-center shrink-0 ${s.bgIcon} shadow-2xs`}>
+                      <s.icon className="w-4 h-4" />
+                    </div>
+                    <h3 className="font-extrabold text-sm text-slate-900 leading-snug tracking-tight">
+                      {s.title}
+                    </h3>
                   </div>
-                  <h3 className="font-extrabold text-sm text-slate-900 leading-snug tracking-tight">
-                    {s.title}
-                  </h3>
+
+                  <ul className="space-y-2 text-xs text-slate-600 leading-relaxed list-disc pl-4 font-normal">
+                    {s.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
                 </div>
 
-                <ul className="space-y-2 text-xs text-slate-600 leading-relaxed list-disc pl-4 font-normal">
-                  {s.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
+                {s.example && (
+                  <div className="mt-2 text-xs bg-white/90 border border-sky-200/80 rounded-xl p-3 text-slate-700 leading-relaxed shadow-2xs space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-sky-700">プロンプト入力例:</span>
+                      <button
+                        onClick={() => handleCopyExample(s.example!)}
+                        onMouseEnter={() => playCyberHover()}
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-600 hover:text-sky-800 transition-colors cursor-pointer"
+                        title="プロンプト例をコピー"
+                      >
+                        {copied ? (
+                          <>
+                            <Check size={12} className="text-emerald-600" />
+                            <span className="text-emerald-600 font-mono">コピー完了</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={12} />
+                            <span className="font-mono">コピー</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <p className="italic text-slate-600 select-all font-mono text-[11px] bg-sky-50/50 p-2 rounded-lg border border-sky-100">
+                      &ldquo;{s.example}&rdquo;
+                    </p>
+                  </div>
+                )}
               </div>
-
-              {s.example && (
-                <div className="mt-2 text-xs bg-white/90 border border-sky-200/80 rounded-xl p-3 text-slate-700 leading-relaxed shadow-2xs">
-                  <span className="font-bold text-sky-700 block mb-1">プロンプト入力例:</span>
-                  <span className="italic text-slate-600">&ldquo;{s.example}&rdquo;</span>
-                </div>
-              )}
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
         ))}
       </div>
     </section>
