@@ -22,6 +22,14 @@ interface SearchIndexItem {
 
 const siteSearchIndex: SearchIndexItem[] = [
   {
+    title: "最新AIニュース & リリースレーダー",
+    category: "ニュース・速報",
+    href: "/news",
+    description: "社内外の生成AI・エージェント・基盤モデル・社内AI Parkの最新公式動向を一括キャッチアップ",
+    keywords: ["ニュース", "news", "速報", "deepmind", "gemini", "mcp", "リリース", "アップデート", "公式発表", "trend"],
+  },
+
+  {
     title: "ご意見・改善ToDoボード",
     category: "フィードバック",
     href: "/feedback-todo",

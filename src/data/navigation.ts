@@ -16,6 +16,7 @@ export const navigationSections: NavSection[] = [
   {
     items: [
       { name: "ホーム", href: "/" },
+      { name: "最新AIニュース", href: "/news", icon: "📰", badge: "NEW" },
       { name: "開発ロードマップ", href: "/roadmap", icon: "🗺️", badge: "進行中" }
     ]
   },
