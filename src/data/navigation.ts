@@ -25,9 +25,11 @@ export const navigationSections: NavSection[] = [
     href: "/how-to",
     items: [
       { name: "AIツール一覧", href: "/tools", icon: "🤖", badge: "🧪 PoC中" },
+      { name: "Antigravity導入ガイド", href: "/guide", icon: "📖", badge: "必読" },
       { name: "Antigravity Academy", href: "/academy", icon: "🎓", badge: "おすすめ" },
       { name: "教育用コンテンツ", href: "/learning", icon: "✍️" },
       { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️", badge: "📋 準備中" },
+      { name: "Antigravity Q&A・情報局", href: "/antigravity-info", icon: "💡", badge: "🚧 工事中" },
       { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️", badge: "🚧 工事中" },
       { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "🚧 工事中" },
     ]
@@ -38,6 +40,7 @@ export const navigationSections: NavSection[] = [
     items: [
       { name: "社内AIプロジェクト一覧", href: "/ai-projects", icon: "🏢", badge: "β版" },
       { name: "アイデア宣言ボード", href: "/idea-board", icon: "💡", badge: "β版" },
+      { name: "MCP連携ハブ", href: "/mcp-hub", icon: "🔌", badge: "🚧 工事中" },
       { name: "Subagents活用事例", href: "/agent-cases", icon: "🟣", badge: "🚧 工事中" },
       { name: "社内AI活用状況", href: "/adoption", icon: "👀", badge: "🚧 工事中" },
       { name: "Antigravity利用監視", href: "/gemini-stats", icon: "📊", badge: "β版" },
@@ -50,6 +53,7 @@ export const navigationSections: NavSection[] = [
       { name: "AIアンバサダー", href: "/ambassadors", icon: "🤝", badge: "📋 準備中" },
       { name: "AI Park カレンダー", href: "/calendar", icon: "🗓️", badge: "β版" },
       { name: "ご意見・改善ToDo", href: "/feedback-todo", icon: "📋", badge: "β版" },
+      { name: "UAT品質ゲート管理", href: "/preflight", icon: "🛡️", badge: "推進専用" },
     ]
   },
   {
