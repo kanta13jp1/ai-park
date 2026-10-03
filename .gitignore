@@ -42,3 +42,10 @@ next-env.d.ts
 
 # local ide / tool data
 .claude/
+
+# credentials & secrets
+*credentials*.json
+*sa-key*.json
+*.secret*
+*.key.json
+

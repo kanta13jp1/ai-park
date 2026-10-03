@@ -505,6 +505,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 25,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/25",
   },
+  {
+    id: "TODO-31",
+    title: "【自動集計・インフラ】GCPサービスアカウント（Logging閲覧者）連携による完全自動利用集計のワークフロー化",
+    category: "運用・管理",
+    author: "社内ユーザー提案",
+    authorDept: "全社開発・AI推進 / インフラ部",
+    date: "2026/10/03",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「画面の数字が、社員が Gemini や Antigravity を使うたびに GCP から完全自動でリアルタイム集計・更新されるようにするため、GCPサービスアカウント（Logging閲覧者）の発行とGitHub SecretsへのGCP_SA_KEY登録手順をワークフロー化・整備してほしい」",
+    actionPlan: "【反映済み】GCPサービスアカウント自動作成・キー出力用セットアップスクリプト（scripts/setup-gcp-sa.ps1）の提供、利用監視ダッシュボード（/gemini-stats）の技術仕様アコーディオンへのSecrets設定手順HUD追加、および.github/workflows/sync-gcp-usage.ymlの連携完了。",
+    relatedLink: "/gemini-stats",
+    relatedLinkText: "Gemini利用統計を見る",
+    issueNumber: 26,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/26",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

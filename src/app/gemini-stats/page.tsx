@@ -907,6 +907,71 @@ function doGet() {
                   ※このGASを社内Google Workspace上で「Webアプリ」として公開すると、認証付きJSON APIとして本ダッシュボードから直接自動同期できるようになります。
                 </p>
               </div>
+
+              {/* GitHub Secrets 連携による完全自動リアルタイム同期の手順 */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-950 text-white border border-indigo-700/50 space-y-4 shadow-lg">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono mb-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      RECOMMENDED AUTOMATION (TODO-31)
+                    </div>
+                    <h4 className="font-bold text-base text-white flex items-center gap-2">
+                      <span>⚡ 1分で完了: GitHub Secrets 連携による完全自動リアルタイム同期</span>
+                    </h4>
+                    <p className="text-xs text-indigo-200/80 mt-1">
+                      手動更新作業をゼロにし、社員が Gemini / Antigravity を使うたびに GCP から自動で数字を集計・更新します。
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-cyan-300">
+                      <span>STEP 1: SA 発行</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-cyan-950/80 border border-cyan-800 text-cyan-200">GCP</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-snug">
+                      GCPコンソールで「読み取り専用」のサービスアカウントを作成し、ロール <code className="text-cyan-300 font-mono">Logging 閲覧者</code> を付与して JSON キーを発行します。
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-amber-300">
+                      <span>STEP 2: Secrets 登録</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-950/80 border border-amber-800 text-amber-200">GitHub</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-snug">
+                      GitHubリポジトリの Settings &gt; Secrets に <code className="text-amber-300 font-mono font-bold">GCP_SA_KEY</code> として、発行された JSON の中身をそのまま登録します。
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-emerald-300">
+                      <span>STEP 3: 自動同期稼働</span>
+                      <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-950/80 border border-emerald-800 text-emerald-200">Actions</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-snug">
+                      定期ワークフロー（毎日 9:00 / 18:00 JST）が自動でログをクエリし、ダッシュボードの利用数やクレジット残高を完全自動更新します。
+                    </p>
+                  </div>
+                </div>
+
+                {/* 自動セットアップコマンドボックス */}
+                <div className="bg-black/60 rounded-xl p-3.5 border border-white/10 space-y-2 font-mono text-[11px]">
+                  <div className="flex items-center justify-between text-slate-400">
+                    <span className="text-slate-300 font-bold flex items-center gap-1.5">
+                      💻 PowerShell 一括自動セットアップ（管理者用）:
+                    </span>
+                  </div>
+                  <pre className="text-emerald-400 overflow-x-auto whitespace-pre-wrap select-all py-1">
+powershell -ExecutionPolicy Bypass -File ./scripts/setup-gcp-sa.ps1
+                  </pre>
+                  <p className="text-[10px] text-slate-400 font-sans border-t border-white/10 pt-1.5">
+                    ※ サービスアカウントの作成・最小権限（Logging閲覧者）付与・GitHub Secrets 登録・一時キーの安全削除まで一括で自動実行されます。
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>
