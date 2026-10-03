@@ -40,16 +40,16 @@ const DEFAULT_GCP_INFO = {
   projectId: "antigravity-pj-509006",
   billingAccountId: "012EB1-1D4C87-D1B374",
   totalCreditJpy: 47813,
-  remainingCreditJpy: 44547,
-  totalSpentJpy: 3266,
-  grossCostJpy: 5818,
+  remainingCreditJpy: 42808,
+  totalSpentJpy: 5005,
+  grossCostJpy: 7105,
   netCostJpy: 0,
   totalCreditUsd: 318.75,
-  remainingCreditUsd: 296.98,
-  totalSpentUsd: 21.77,
-  grossCostUsd: 38.79,
+  remainingCreditUsd: 285.39,
+  totalSpentUsd: 33.36,
+  grossCostUsd: 47.37,
   trialDaysTotal: 90,
-  trialDaysLeft: 89, // 2026/10/03 Cloud Billing 実画面確定
+  trialDaysLeft: 88, // 2026/10/03 Cloud Billing 実画面確定 (残り88日 / 2026-12-31終了)
   monthlyBudgetUsd: 50,
 };
 
@@ -201,9 +201,9 @@ export default function GeminiStatsPage() {
     // 2. モデル・SKU別コストサマリー
     lines.push("--- AIモデル / SKU別コストサマリー ---");
     lines.push("モデル・SKU名,利用金額(JPY),利用金額(USD),比率(%),備考");
-    lines.push('"Gemini 3.8 Flash Global Text Input",3446,22.97,59.2%,"最頻出・超高速推論"');
-    lines.push('"Vertex AI Agent Platform / 3.1 Pro",1293,8.62,22.2%,"Model Garden & 高推論エージェント"');
-    lines.push('"us-east7 リージョン基盤",1079,7.20,18.6%,"Cloud Run / Functions / 監査ログ"');
+    lines.push('"Gemini 3.8 Flash Global Text Input",4348,28.99,61.2%,"最頻出・超高速推論"');
+    lines.push('"Vertex AI Agent Platform / 3.1 Pro",1598,10.65,22.5%,"Model Garden & 高推論エージェント"');
+    lines.push('"us-east7 リージョン基盤",1159,7.73,16.3%,"Cloud Run / Functions / 監査ログ"');
     lines.push("");
 
     // 3. 社員別利用実績明細
@@ -665,14 +665,14 @@ function doGet() {
                   Gemini 3.8 Flash
                 </span>
                 <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded-md">
-                  59.2%
+                  61.2%
                 </span>
               </div>
               <div className="text-lg font-black font-mono text-slate-900">
-                ¥3,446 <span className="text-xs font-normal text-slate-500">($22.97)</span>
+                ¥4,348 <span className="text-xs font-normal text-slate-500">($28.99)</span>
               </div>
               <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: "59.2%" }} />
+                <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: "61.2%" }} />
               </div>
               <p className="text-[11px] text-slate-500">
                 Global Text Input - Predictions（最頻出・超高速コーディング推論）
@@ -687,14 +687,14 @@ function doGet() {
                   Agent Platform / 3.1 Pro
                 </span>
                 <span className="text-xs font-mono font-bold text-cyan-700 bg-cyan-100/70 px-2 py-0.5 rounded-md">
-                  22.2%
+                  22.5%
                 </span>
               </div>
               <div className="text-lg font-black font-mono text-slate-900">
-                ¥1,293 <span className="text-xs font-normal text-slate-500">($8.62)</span>
+                ¥1,598 <span className="text-xs font-normal text-slate-500">($10.65)</span>
               </div>
               <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-cyan-500 h-1.5 rounded-full" style={{ width: "22.2%" }} />
+                <div className="bg-cyan-500 h-1.5 rounded-full" style={{ width: "22.5%" }} />
               </div>
               <p className="text-[11px] text-slate-500">
                 Vertex AI Model Garden & 高推論自律エージェント呼び出し
@@ -709,14 +709,14 @@ function doGet() {
                   us-east7 リージョン基盤
                 </span>
                 <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/70 px-2 py-0.5 rounded-md">
-                  18.6%
+                  16.3%
                 </span>
               </div>
               <div className="text-lg font-black font-mono text-slate-900">
-                ¥1,079 <span className="text-xs font-normal text-slate-500">($7.20)</span>
+                ¥1,159 <span className="text-xs font-normal text-slate-500">($7.73)</span>
               </div>
               <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-slate-400 h-1.5 rounded-full" style={{ width: "18.6%" }} />
+                <div className="bg-slate-400 h-1.5 rounded-full" style={{ width: "16.3%" }} />
               </div>
               <p className="text-[11px] text-slate-500">
                 Cloud Run / Functions / 監査ログ転送トラフィック基盤
