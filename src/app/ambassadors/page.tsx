@@ -4,6 +4,8 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import BookingModal from "@/components/BookingModal";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
+import SpotlightCard from "@/components/SpotlightCard";
+import { playCyberClick, playCyberHover, playCyberOpen } from "@/lib/sound";
 import {
   Users,
   Sparkles,
@@ -154,7 +156,7 @@ export default function AmbassadorsPage() {
             </div>
           </div>
           <button
-            onClick={() => setIsApplyModalOpen(true)}
+            onClick={() => { playCyberOpen(); setIsApplyModalOpen(true); }} onMouseEnter={() => playCyberHover()}
             className="shrink-0 inline-flex items-center space-x-1.5 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors self-end sm:self-center"
           >
             <UserPlus size={14} />
@@ -197,7 +199,7 @@ export default function AmbassadorsPage() {
             {filterCategories.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => { playCyberClick(); setSelectedCategory(cat); }} onMouseEnter={() => playCyberHover()}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   selectedCategory === cat
                     ? "bg-slate-900 text-white shadow-xs font-semibold"
@@ -309,7 +311,7 @@ export default function AmbassadorsPage() {
                 </p>
               </div>
               <button
-                onClick={() => setIsApplyModalOpen(true)}
+                onClick={() => { playCyberOpen(); setIsApplyModalOpen(true); }} onMouseEnter={() => playCyberHover()}
                 className="inline-flex items-center space-x-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
               >
                 <UserPlus size={14} />
@@ -324,41 +326,52 @@ export default function AmbassadorsPage() {
                 <span>アンバサダー参加の4大メリット</span>
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                <SpotlightCard
+                  spotlightColor="rgba(56, 189, 248, 0.2)"
+                  className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5"
+                >
                   <span className="font-bold text-slate-900 flex items-center gap-1.5">
                     🚀 先行トライアル
                   </span>
                   <p className="text-slate-600 text-[11px] leading-relaxed">
                     最新のAIモデルや新規検証ツールの優先利用アカウントやPoC環境を先行提供します。
                   </p>
-                </div>
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                </SpotlightCard>
+                <SpotlightCard
+                  spotlightColor="rgba(99, 102, 241, 0.2)"
+                  className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5"
+                >
                   <span className="font-bold text-slate-900 flex items-center gap-1.5">
                     🤝 推進担当と直結
                   </span>
                   <p className="text-slate-600 text-[11px] leading-relaxed">
                     AI推進担当（梅澤）や各事業部のキーマンと月1回の定例会で最新知見を直接共有できます。
                   </p>
-                </div>
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                </SpotlightCard>
+                <SpotlightCard
+                  spotlightColor="rgba(16, 185, 129, 0.2)"
+                  className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5"
+                >
                   <span className="font-bold text-slate-900 flex items-center gap-1.5">
                     🎓 勉強会開催サポート
                   </span>
                   <p className="text-slate-600 text-[11px] leading-relaxed">
                     自チーム向けのハンズオンや勉強会を開く際、資料作成や進行を推進担当がバックアップします。
                   </p>
-                </div>
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5">
+                </SpotlightCard>
+                <SpotlightCard
+                  spotlightColor="rgba(245, 158, 11, 0.2)"
+                  className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-1.5"
+                >
                   <span className="font-bold text-slate-900 flex items-center gap-1.5">
                     🏆 社内アピール
                   </span>
                   <p className="text-slate-600 text-[11px] leading-relaxed">
                     チームでの取り組みや工夫をAI Parkインタビューや全社報で紹介し、社内実績として可視化します。
                   </p>
-                </div>
+                </SpotlightCard>
               </div>
             </div>
-
             {/* よくある質問 (FAQ) */}
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
               <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">

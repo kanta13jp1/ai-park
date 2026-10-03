@@ -18,7 +18,7 @@ import {
   ExternalLink,
   Bot,
 } from "lucide-react";
-import { playCyberOpen, playCyberClick } from "@/lib/sound";
+import { playCyberOpen, playCyberClick, playCyberHover } from "@/lib/sound";
 
 interface PaletteItem {
   id: string;
@@ -245,7 +245,10 @@ export default function CommandPalette() {
                 <div
                   key={item.id}
                   onClick={() => handleSelect(item)}
-                  onMouseEnter={() => setSelectedIndex(index)}
+                  onMouseEnter={() => {
+                    setSelectedIndex(index);
+                    playCyberHover();
+                  }}
                   className={`flex items-center justify-between p-3.5 rounded-2xl cursor-pointer transition-all duration-150 ${
                     isSelected
                       ? "bg-gradient-to-r from-cyan-500/20 via-blue-500/15 to-transparent border border-cyan-400/40 text-white"

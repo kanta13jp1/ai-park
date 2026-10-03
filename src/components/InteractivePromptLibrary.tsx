@@ -13,6 +13,7 @@ import {
   Lightbulb,
   ShieldAlert,
 } from "lucide-react";
+import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 
 interface PromptTemplate {
   id: string;
@@ -229,6 +230,7 @@ export default function InteractivePromptLibrary() {
   const currentTemplate = TEMPLATES.find((t) => t.id === selectedTemplateId) || TEMPLATES[0];
 
   const handleTemplateSelect = (tmpl: PromptTemplate) => {
+    playCyberClick();
     setSelectedTemplateId(tmpl.id);
     const newValues: Record<string, string> = {};
     tmpl.placeholders.forEach((p) => {
@@ -244,6 +246,7 @@ export default function InteractivePromptLibrary() {
   };
 
   const handleReset = () => {
+    playCyberClick();
     const defaultVals: Record<string, string> = {};
     currentTemplate.placeholders.forEach((p) => {
       defaultVals[p.key] = p.defaultValue;
@@ -255,6 +258,7 @@ export default function InteractivePromptLibrary() {
   const generatedPrompt = currentTemplate.templateFn(values);
 
   const handleCopy = async () => {
+    playCyberSuccess();
     try {
       await navigator.clipboard.writeText(generatedPrompt);
       setIsCopied(true);
@@ -301,6 +305,7 @@ export default function InteractivePromptLibrary() {
             <button
               key={tmpl.id}
               onClick={() => handleTemplateSelect(tmpl)}
+              onMouseEnter={() => playCyberHover()}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
                 isSelected
                   ? "bg-slate-900 text-white shadow-xs"
