@@ -1,6 +1,9 @@
+"use client";
+
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
+import { playCyberHover } from "@/lib/sound";
 import { CalendarDays, Lock, Sparkles, Calendar as CalendarIcon, CheckCircle2 } from "lucide-react";
 
 // 「AI Park イベント」カレンダーのカレンダーID（社内限定で共有。gas/ai-study-agenda/README.md 参照）
@@ -32,7 +35,7 @@ export default function CalendarPage() {
               spotlightColor="rgba(99, 102, 241, 0.15)"
               className="bg-white border-slate-200/90 h-full rounded-2xl"
             >
-              <div className="p-5 flex gap-3.5">
+              <div onMouseEnter={() => playCyberHover()} className="p-5 flex gap-3.5 cursor-default">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600 shadow-2xs">
                   <Sparkles className="w-5 h-5" />
                 </div>
@@ -51,7 +54,7 @@ export default function CalendarPage() {
               spotlightColor="rgba(16, 185, 129, 0.15)"
               className="bg-white border-slate-200/90 h-full rounded-2xl"
             >
-              <div className="p-5 flex gap-3.5">
+              <div onMouseEnter={() => playCyberHover()} className="p-5 flex gap-3.5 cursor-default">
                 <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0 text-emerald-600 shadow-2xs">
                   <Lock className="w-5 h-5" />
                 </div>
@@ -69,43 +72,53 @@ export default function CalendarPage() {
         {AI_PARK_CALENDAR_ID ? (
           <div className="space-y-6">
             {/* 月間カレンダービュー */}
-            <div className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden">
-              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
-                <div className="flex items-center space-x-2.5">
-                  <CalendarIcon className="w-4 h-4 text-cyan-400" />
-                  <span className="font-bold text-sm">月間スケジュールビュー</span>
+            <TiltCard maxTilt={2} glareOpacity={0.04} className="rounded-3xl">
+              <div className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden">
+                <div
+                  onMouseEnter={() => playCyberHover()}
+                  className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 cursor-default"
+                >
+                  <div className="flex items-center space-x-2.5">
+                    <CalendarIcon className="w-4 h-4 text-cyan-400" />
+                    <span className="font-bold text-sm">月間スケジュールビュー</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-xs text-slate-400 font-mono">Live Google Calendar</span>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span className="text-xs text-slate-400 font-mono">Live Google Calendar</span>
+                <div className="p-2 sm:p-4 bg-slate-50/50">
+                  <iframe
+                    title="AI Park カレンダー（月）"
+                    src={embedUrl("MONTH")}
+                    className="w-full h-[640px] border-0 rounded-2xl bg-white shadow-inner"
+                  />
                 </div>
               </div>
-              <div className="p-2 sm:p-4 bg-slate-50/50">
-                <iframe
-                  title="AI Park カレンダー（月）"
-                  src={embedUrl("MONTH")}
-                  className="w-full h-[640px] border-0 rounded-2xl bg-white shadow-inner"
-                />
-              </div>
-            </div>
+            </TiltCard>
 
             {/* リスト（アジェンダ）ビュー */}
-            <div className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden">
-              <div className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800">
-                <div className="flex items-center space-x-2.5">
-                  <CalendarDays className="w-4 h-4 text-indigo-400" />
-                  <span className="font-bold text-sm">直近の予定・アジェンダ一覧</span>
+            <TiltCard maxTilt={2} glareOpacity={0.04} className="rounded-3xl">
+              <div className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden">
+                <div
+                  onMouseEnter={() => playCyberHover()}
+                  className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 cursor-default"
+                >
+                  <div className="flex items-center space-x-2.5">
+                    <CalendarDays className="w-4 h-4 text-indigo-400" />
+                    <span className="font-bold text-sm">直近の予定・アジェンダ一覧</span>
+                  </div>
+                  <span className="text-xs text-slate-400 font-mono">Upcoming Events</span>
                 </div>
-                <span className="text-xs text-slate-400 font-mono">Upcoming Events</span>
+                <div className="p-2 sm:p-4 bg-slate-50/50">
+                  <iframe
+                    title="AI Park カレンダー（予定リスト）"
+                    src={embedUrl("AGENDA")}
+                    className="w-full h-[420px] border-0 rounded-2xl bg-white shadow-inner"
+                  />
+                </div>
               </div>
-              <div className="p-2 sm:p-4 bg-slate-50/50">
-                <iframe
-                  title="AI Park カレンダー（予定リスト）"
-                  src={embedUrl("AGENDA")}
-                  className="w-full h-[420px] border-0 rounded-2xl bg-white shadow-inner"
-                />
-              </div>
-            </div>
+            </TiltCard>
           </div>
         ) : (
           <div className="rounded-3xl border-2 border-dashed border-slate-300 bg-white p-12 text-center text-slate-500 space-y-3">

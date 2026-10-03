@@ -428,7 +428,7 @@ export default function RoadmapPage() {
             {/* フェーズ概要バナー */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-2">
               <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
-                <div className="p-4 rounded-2xl border border-emerald-200/90 bg-emerald-50/50 space-y-1.5 transition-all hover:bg-emerald-50/80 h-full">
+                <div onMouseEnter={() => playCyberHover()} className="p-4 rounded-2xl border border-emerald-200/90 bg-emerald-50/50 space-y-1.5 transition-all hover:bg-emerald-50/80 h-full cursor-default">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-emerald-800 px-2.5 py-0.5 bg-emerald-100/80 rounded-full border border-emerald-200 font-mono flex items-center space-x-1">
                       <span>✓</span>
@@ -442,7 +442,7 @@ export default function RoadmapPage() {
               </TiltCard>
 
               <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
-                <div className="p-4 rounded-2xl border border-blue-200/90 bg-blue-50/60 space-y-1.5 ring-2 ring-blue-500/20 transition-all hover:bg-blue-50/90 h-full">
+                <div onMouseEnter={() => playCyberHover()} className="p-4 rounded-2xl border border-blue-200/90 bg-blue-50/60 space-y-1.5 ring-2 ring-blue-500/20 transition-all hover:bg-blue-50/90 h-full cursor-default">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-blue-800 px-2.5 py-0.5 bg-blue-100/80 rounded-full border border-blue-200 font-mono flex items-center space-x-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping mr-0.5" />
@@ -456,7 +456,7 @@ export default function RoadmapPage() {
               </TiltCard>
 
               <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
-                <div className="p-4 rounded-2xl border border-amber-200/90 bg-amber-50/50 space-y-1.5 transition-all hover:bg-amber-50/80 h-full">
+                <div onMouseEnter={() => playCyberHover()} className="p-4 rounded-2xl border border-amber-200/90 bg-amber-50/50 space-y-1.5 transition-all hover:bg-amber-50/80 h-full cursor-default">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-amber-800 px-2.5 py-0.5 bg-amber-100/80 rounded-full border border-amber-200 font-mono">
                       Phase 3 (準備中)
@@ -469,7 +469,7 @@ export default function RoadmapPage() {
               </TiltCard>
 
               <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
-                <div className="p-4 rounded-2xl border border-purple-200/90 bg-purple-50/50 space-y-1.5 transition-all hover:bg-purple-50/80 h-full">
+                <div onMouseEnter={() => playCyberHover()} className="p-4 rounded-2xl border border-purple-200/90 bg-purple-50/50 space-y-1.5 transition-all hover:bg-purple-50/80 h-full cursor-default">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-purple-800 px-2.5 py-0.5 bg-purple-100/80 rounded-full border border-purple-200 font-mono">
                       Phase 4 (企画中)
@@ -574,6 +574,7 @@ export default function RoadmapPage() {
 
           <div className="flex items-center space-x-1.5 bg-slate-200/80 p-1 rounded-xl text-xs font-medium self-start sm:self-auto font-mono">
             <button
+              onMouseEnter={() => playCyberHover()}
               onClick={() => {
                 playCyberClick();
                 setSelectedStatus("all");
@@ -587,6 +588,7 @@ export default function RoadmapPage() {
               すべて ({totalTasks})
             </button>
             <button
+              onMouseEnter={() => playCyberHover()}
               onClick={() => {
                 playCyberClick();
                 setSelectedStatus("in-progress");
@@ -600,6 +602,7 @@ export default function RoadmapPage() {
               進行中 ({inProgressTasks})
             </button>
             <button
+              onMouseEnter={() => playCyberHover()}
               onClick={() => {
                 playCyberClick();
                 setSelectedStatus("planned");
@@ -613,6 +616,7 @@ export default function RoadmapPage() {
               準備中 ({plannedTasks})
             </button>
             <button
+              onMouseEnter={() => playCyberHover()}
               onClick={() => {
                 playCyberClick();
                 setSelectedStatus("completed");
@@ -635,12 +639,15 @@ export default function RoadmapPage() {
             const isCompleted = task.status === "completed";
 
             return (
-              <SpotlightCard
-                key={task.id}
-                spotlightColor="rgba(6, 182, 212, 0.12)"
-                className="bg-white border-slate-200/90 shadow-sm"
-              >
-                <div className="p-6 flex flex-col justify-between space-y-4 h-full">
+              <TiltCard key={task.id} maxTilt={4} glareOpacity={0.08} className="h-full rounded-2xl">
+                <SpotlightCard
+                  spotlightColor="rgba(6, 182, 212, 0.12)"
+                  className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+                >
+                  <div
+                    onMouseEnter={() => playCyberHover()}
+                    className="p-6 flex flex-col justify-between space-y-4 h-full cursor-default"
+                  >
                   <div className="space-y-3.5">
                     {/* ヘッダー */}
                     <div className="flex items-start justify-between gap-2">
@@ -746,7 +753,8 @@ export default function RoadmapPage() {
                     <Link
                       href={task.href}
                       onClick={() => playCyberClick()}
-                      className="inline-flex items-center space-x-1 text-xs font-bold text-cyan-700 hover:text-cyan-800 transition-colors"
+                      onMouseEnter={() => playCyberHover()}
+                      className="inline-flex items-center space-x-1 text-xs font-bold text-cyan-700 hover:text-cyan-800 transition-colors cursor-pointer"
                     >
                       <span>該当画面へ</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -754,6 +762,7 @@ export default function RoadmapPage() {
                   </div>
                 </div>
               </SpotlightCard>
+            </TiltCard>
             );
           })}
         </div>

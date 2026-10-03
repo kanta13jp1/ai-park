@@ -90,40 +90,46 @@ export default function IdeaBoardPage() {
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* 宣言の案内 SpotlightCard */}
-        <SpotlightCard
-          spotlightColor="rgba(99, 102, 241, 0.2)"
-          className="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white border-indigo-700/50 shadow-xl overflow-hidden"
-        >
-          <div className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-            <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-cyan-300 text-xs font-semibold border border-indigo-400/30">
-                <Sparkles size={14} className="text-cyan-300" />
-                <span>オープン共創プラットフォーム</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                「こんな作業をAIに任せたい」を気軽に宣言してください
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                構想段階でも大歓迎です。宣言すると下の一覧にリアルタイム連携され、Google Chat の「AI勉強会」スペースに自動通知されます。
-                進捗が変わったら Issue を編集し、完成・報告完了時に Close します。
-              </p>
-              <p className="text-xs text-amber-300/90 font-mono flex items-center gap-1.5 pt-1">
-                <span>⚠️ 宣言内容は全社公開されます。顧客名・個人情報・機密数値の記載は避けてください。</span>
-              </p>
-            </div>
-
-            <a
-              href={buildNewIdeaUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => playCyberClick()}
-              className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-black shadow-lg hover:shadow-cyan-400/20 transition-all duration-200 cursor-pointer active:scale-95"
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <SpotlightCard
+            spotlightColor="rgba(99, 102, 241, 0.2)"
+            className="bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white border-indigo-700/50 shadow-xl overflow-hidden rounded-3xl"
+          >
+            <div
+              onMouseEnter={() => playCyberHover()}
+              className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10 cursor-default"
             >
-              <Plus size={16} />
-              <span>アイデアを宣言する</span>
-            </a>
-          </div>
-        </SpotlightCard>
+              <div className="space-y-2 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-cyan-300 text-xs font-semibold border border-indigo-400/30">
+                  <Sparkles size={14} className="text-cyan-300" />
+                  <span>オープン共創プラットフォーム</span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+                  「こんな作業をAIに任せたい」を気軽に宣言してください
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
+                  構想段階でも大歓迎です。宣言すると下の一覧にリアルタイム連携され、Google Chat の「AI勉強会」スペースに自動通知されます。
+                  進捗が変わったら Issue を編集し、完成・報告完了時に Close します。
+                </p>
+                <p className="text-xs text-amber-300/90 font-mono flex items-center gap-1.5 pt-1">
+                  <span>⚠️ 宣言内容は全社公開されます。顧客名・個人情報・機密数値の記載は避けてください。</span>
+                </p>
+              </div>
+
+              <a
+                href={buildNewIdeaUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-cyan-400 hover:bg-cyan-300 text-slate-950 text-xs font-black shadow-lg hover:shadow-cyan-400/20 transition-all duration-200 cursor-pointer active:scale-95"
+              >
+                <Plus size={16} />
+                <span>アイデアを宣言する</span>
+              </a>
+            </div>
+          </SpotlightCard>
+        </TiltCard>
 
         {/* フィルター・検索 & 同期状況 */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/70 backdrop-blur-md p-4 rounded-3xl border border-slate-200/90 shadow-xs">
@@ -131,6 +137,7 @@ export default function IdeaBoardPage() {
             {filters.map((f) => (
               <button
                 key={f.key}
+                onMouseEnter={() => playCyberHover()}
                 onClick={() => handleFilterClick(f.key)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                   stageFilter === f.key
@@ -162,6 +169,7 @@ export default function IdeaBoardPage() {
               {syncState === "ok" && <span className="font-mono font-bold text-slate-700">{ideas.length} 件</span>}
               {syncState === "error" && <span className="text-rose-600 font-bold">同期エラー</span>}
               <button
+                onMouseEnter={() => playCyberHover()}
                 onClick={() => {
                   playCyberClick();
                   setSyncState("loading");
