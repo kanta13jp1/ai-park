@@ -41,7 +41,7 @@ export default function LearningPage() {
                   Antigravity Academy
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed font-light">
-                  動画と実践で学ぶ全12レッスン。受講後の評価テストに合格すると、ブラウザ内で即時修了証（SVG証明書）を発行・印刷できます。
+                  動画と実践で学ぶ全12レッスン。受講後の評価テストに合格すると、<span className="inline-block">ブラウザ内で即時修了証（SVG証明書）を発行・印刷できます。</span>
                 </p>
               </div>
             </div>
