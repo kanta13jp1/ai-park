@@ -118,7 +118,37 @@ const handleSelect = (idx) => {
 )}
 ```
 
-#### 3. 構文防衛ルール
+#### 3. KPIダッシュボード 60fps イージングカウントアップ標準パターン
+```tsx
+import AnimatedCounter from "@/components/AnimatedCounter";
+import TiltCard from "@/components/TiltCard";
+import SpotlightCard from "@/components/SpotlightCard";
+
+<TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+  <SpotlightCard
+    spotlightColor="rgba(6, 182, 212, 0.15)"
+    className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+  >
+    <div className="p-5 space-y-2">
+      <div className="text-2xl sm:text-3xl font-black text-slate-900 font-mono">
+        <AnimatedCounter value={68.4} decimals={1} suffix="%" />
+      </div>
+    </div>
+  </SpotlightCard>
+</TiltCard>
+```
+
+#### 4. 常駐サイバーイコライザー波形ビジュアライザー
+```tsx
+{/* 3本の周波数バーが生き生きと伸縮するCSSアニメーション */}
+<div className="flex items-end gap-0.5 h-3 px-0.5">
+  <span className="w-0.5 bg-cyan-400 rounded-full animate-equalizer-1 shadow-[0_0_4px_#22d3ee]" />
+  <span className="w-0.5 bg-cyan-300 rounded-full animate-equalizer-2 shadow-[0_0_4px_#22d3ee]" />
+  <span className="w-0.5 bg-cyan-400 rounded-full animate-equalizer-3 shadow-[0_0_4px_#22d3ee]" />
+</div>
+```
+
+#### 5. 構文防衛ルール
 - **重複インポート厳禁**: 同一モジュール（`@/lib/sound` 等）からのインポート重複を避ける（Webpackパースエラーの未然防止）。
 - **閉じタグの完全整合**: `TiltCard`, `SpotlightCard` などのネスト変更時は、開始タグと閉じタグの数が1対1で対応していることを確認する。
 
