@@ -495,12 +495,12 @@ export default function AiNewsPage() {
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-                  <p className="font-bold text-white text-xs flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 inline-block" />
-                    <span>MCPの標準化とエコシステム拡大</span>
+                  <p className="font-bold text-sky-300 text-xs flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-sky-400 inline-block" />
+                    <span>主要各社フロンティア加速（Claude / Manus / Codex）</span>
                   </p>
                   <p className="text-[11px] text-slate-300 pl-3">
-                    社内データベースやGitHubとのAI安全連携が標準プロトコルで迅速に構築可能に。
+                    Claude Opus 5.5の推論、Manus自律実行、Codex/Canvas dots、DeepSeek-R1など各社が激突。
                   </p>
                 </div>
 
