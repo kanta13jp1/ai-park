@@ -198,8 +198,8 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             id: "news-fact-01",
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
-            label: "Gemini 4 Argon, Claude Opus 5.5, DeepSeek-R1 等の事実性",
-            detail: "Google DeepMind（Gemini 4 Argon）、Anthropic（Claude Opus 5.5）、DeepSeek（R1/MoE）、xAI（Grok 3）の各社公式発表・技術仕様と完全一致していること。",
+            label: "Gemini 4 Argon, Claude Opus 5.5, DeepSeek-V4.1-Flash 等の事実性",
+            detail: "Google DeepMind（Gemini 4 Argon）、Anthropic（Claude Opus 5.5 / Fable 5.1）、DeepSeek（V4.1-Flash）、xAI（Grok 4.7）の各社公式発表・技術仕様と完全一致していること。",
             verified: true,
           },
           {
