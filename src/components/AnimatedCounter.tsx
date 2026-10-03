@@ -23,9 +23,11 @@ export default function AnimatedCounter({
   suffix = "",
   className = "",
 }: AnimatedCounterProps) {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(value);
   const elementRef = useRef<HTMLSpanElement>(null);
-  const hasAnimatedRef = useRef(false);
+  const isIntersectingRef = useRef(false);
+  const currentValRef = useRef(displayValue);
+  currentValRef.current = displayValue;
 
   useEffect(() => {
     // ユーザーがアニメーション低減を設定している場合は即座に目標値を表示
@@ -35,12 +37,35 @@ export default function AnimatedCounter({
       return;
     }
 
+    const startCountAnimation = (startVal: number, endVal: number) => {
+      const startTime = performance.now();
+
+      const tick = (now: number) => {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // easeOutExpo: 1 - 2^(-10 * progress)
+        const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        const current = startVal + (endVal - startVal) * easeProgress;
+
+        setDisplayValue(current);
+
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          setDisplayValue(endVal);
+        }
+      };
+
+      requestAnimationFrame(tick);
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
-        if (entry.isIntersecting && !hasAnimatedRef.current) {
-          hasAnimatedRef.current = true;
-          startCountAnimation();
+        isIntersectingRef.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          startCountAnimation(currentValRef.current, value);
         }
       },
       { threshold: 0.1 }
@@ -50,33 +75,13 @@ export default function AnimatedCounter({
       observer.observe(elementRef.current);
     }
 
+    // すでに画面内に表示されている状態で value が更新された場合もアニメーションを実行
+    if (isIntersectingRef.current && currentValRef.current !== value) {
+      startCountAnimation(currentValRef.current, value);
+    }
+
     return () => observer.disconnect();
   }, [value, duration]);
-
-  const startCountAnimation = () => {
-    const startTime = performance.now();
-    const startValue = 0;
-    const endValue = value;
-
-    const tick = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // easeOutExpo: 1 - 2^(-10 * progress)
-      const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      const current = startValue + (endValue - startValue) * easeProgress;
-
-      setDisplayValue(current);
-
-      if (progress < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        setDisplayValue(endValue);
-      }
-    };
-
-    requestAnimationFrame(tick);
-  };
 
   const formattedValue = displayValue.toLocaleString("ja-JP", {
     minimumFractionDigits: decimals,
