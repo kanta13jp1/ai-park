@@ -6,7 +6,8 @@ param(
     [string]$ProjectId = "antigravity-pj-509006",
     [string]$ServiceAccountName = "ai-park-usage-sync",
     [string]$DisplayName = "AI Park Usage Sync Service Account",
-    [string]$Role = "roles/logging.viewer"
+    [string]$Role = "roles/logging.viewer",
+    [string]$TargetAccount = "k-umezawa@ml-mightylink.com"
 )
 
 $ErrorActionPreference = "Stop"
@@ -16,14 +17,32 @@ Write-Host "  MightyLINK AI Park: GCP SA Setup Pipeline      " -ForegroundColor 
 Write-Host "=================================================" -ForegroundColor Cyan
 
 # 1. Prerequisite Check
-Write-Host "`n[Step 1/5] Checking prerequisites..." -ForegroundColor Yellow
+Write-Host "`n[Step 1/5] Checking prerequisites & active account..." -ForegroundColor Yellow
 if (-not (Get-Command "gcloud" -ErrorAction SilentlyContinue)) {
     Write-Error "Google Cloud SDK (gcloud) is not found. Please install it."
 }
 if (-not (Get-Command "gh" -ErrorAction SilentlyContinue)) {
     Write-Error "GitHub CLI (gh) is not found. Please install it."
 }
-Write-Host "  OK: Found gcloud and gh CLI." -ForegroundColor Green
+
+# Ensure company account is active
+$activeAccount = gcloud config get-value account 2>$null
+if ($activeAccount -ne $TargetAccount) {
+    Write-Host "  Switching gcloud account to $TargetAccount (currently: $activeAccount)..." -ForegroundColor Cyan
+    gcloud config set account $TargetAccount 2>$null
+}
+
+# Test authentication
+try {
+    $null = gcloud projects describe $ProjectId --format="value(projectId)" 2>$null
+} catch {
+    Write-Host "`n[!] Google Cloud の再認証が必要です。" -ForegroundColor Red
+    Write-Host "以下のコマンドを実行してブラウザでログインを完了してください:" -ForegroundColor Yellow
+    Write-Host "  gcloud auth login $TargetAccount" -ForegroundColor Cyan
+    exit 1
+}
+
+Write-Host "  OK: Authenticated as $TargetAccount for project $ProjectId." -ForegroundColor Green
 
 # 2. Check / Create Service Account
 $saEmail = "$ServiceAccountName@$ProjectId.iam.gserviceaccount.com"

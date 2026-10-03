@@ -13,6 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PROJECT_ID = process.env.GCP_PROJECT_ID || 'antigravity-pj-509006';
+const TARGET_ACCOUNT = process.env.GCP_ACCOUNT || 'k-umezawa@ml-mightylink.com';
 const SA_NAME = 'ai-park-usage-sync';
 const DISPLAY_NAME = 'AI Park Usage Sync Service Account';
 const ROLE = 'roles/logging.viewer';
@@ -36,13 +37,33 @@ async function main() {
   console.log('  MightyLINK AI Park: GCP SA Setup Pipeline      ');
   console.log('=================================================');
 
-  // 1. Check prerequisites
+  // 1. Check prerequisites & account
   try {
     execSync('gcloud --version', { stdio: 'ignore' });
     execSync('gh --version', { stdio: 'ignore' });
     console.log('✅ OK: gcloud and gh CLI are available.');
   } catch {
     console.error('❌ Missing prerequisite: Ensure gcloud and gh CLI are installed and in PATH.');
+    process.exit(1);
+  }
+
+  // Switch to company account if needed
+  try {
+    const activeAccount = execSync('gcloud config get-value account', { encoding: 'utf-8' }).trim();
+    if (activeAccount !== TARGET_ACCOUNT) {
+      console.log(`⏳ Switching gcloud account to ${TARGET_ACCOUNT} (was: ${activeAccount})...`);
+      execSync(`gcloud config set account ${TARGET_ACCOUNT}`, { stdio: 'ignore' });
+    }
+  } catch {}
+
+  // Test authentication
+  try {
+    execSync(`gcloud projects describe ${PROJECT_ID} --format="value(projectId)"`, { stdio: 'ignore' });
+    console.log(`✅ OK: Authenticated as ${TARGET_ACCOUNT} for project ${PROJECT_ID}.`);
+  } catch {
+    console.error(`\n❌ Google Cloud の再認証が必要です。`);
+    console.error(`以下のコマンドをターミナルで実行してブラウザでログインしてください:`);
+    console.error(`  gcloud auth login ${TARGET_ACCOUNT}\n`);
     process.exit(1);
   }
 
