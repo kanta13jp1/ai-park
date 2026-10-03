@@ -13,6 +13,7 @@ import {
   Check,
   Building,
 } from "lucide-react";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 interface BookingModalProps {
   isOpen: boolean;
