@@ -156,17 +156,66 @@ const siteSearchIndex: SearchIndexItem[] = [
     description: "AI Parkの全機能拡充スケジュール、フェーズ進捗、マイルストーン",
     keywords: ["ロードマップ", "スケジュール", "進捗", "マイルストーン", "計画", "フェーズ"],
   },
+  {
+    title: "Windows エラー解決早見表（確定コマンド集）",
+    category: "トラブル解決",
+    href: "/guide#troubleshooting-board",
+    description: "PowerShell実行ポリシー、GCPアカウント・プロジェクト切替、文字化け、ポート重複のワンクリック解決コマンド",
+    keywords: ["トラブル", "エラー", "windows", "powershell", "executionpolicy", "gcloud", "adc", "文字化け", "utf8", "heap", "ポート競合", "解決"],
+  },
+  {
+    title: "社内AI入力 セルフチェック診断ツール",
+    category: "ガバナンス",
+    href: "/guide#safety-checker",
+    description: "顧客データ・個人情報・未公開機密の入力可否を判定する3問の安全セルフチェック診断",
+    keywords: ["セルフチェック", "安全診断", "入力チェック", "機密", "個人情報", "判定", "3大チェック", "診断"],
+  },
+  {
+    title: "穴埋めプロンプト集（実務テンプレ）",
+    category: "プロンプト",
+    href: "/learning#fill-in-prompts",
+    description: "コピペですぐ使える要約・コード生成・エラー調査・メール作成の穴埋め型実務プロンプト集",
+    keywords: ["プロンプト", "穴埋め", "テンプレ", "コピペ", "要約", "コード生成", "エラー調査", "メール作成"],
+  },
+  {
+    title: "安全なプロンプト基本ルール＆禁止入力早見表",
+    category: "ガバナンス",
+    href: "/learning#safe-prompting-rules",
+    description: "個人情報・機密情報の禁止ルール（OK/NG対比）と安全な依頼3大テクニック",
+    keywords: ["安全ルール", "禁止入力", "機密漏洩防止", "プレースホルダー", "ガイドライン", "ルール"],
+  },
+  {
+    title: "Gemini利用統計 FAQ & データ仕様",
+    category: "統計分析",
+    href: "/gemini-stats#faq",
+    description: "全社・部署別Gemini利用回数、確定プロジェクト情報、集計期間・仕様FAQ",
+    keywords: ["gemini統計", "faq", "プライバシー", "集計期間", "更新頻度", "ログ仕様", "antigravity-pj-509006"],
+  },
+  {
+    title: "部署別実践テンプレ＆実務フロー",
+    category: "活用事例",
+    href: "/ai-projects#dept-templates",
+    description: "営業・開発・マーケ・人事・法務など各部署の具体的活用ステップと削減効果",
+    keywords: ["部署別", "テンプレ", "営業", "開発", "マーケティング", "人事", "総務", "法務", "財務", "実務フロー"],
+  },
+  {
+    title: "開発者手動UAT管理コンソール（プリフライト）",
+    category: "品質管理",
+    href: "/preflight",
+    description: "4大評価軸（仕様・デザイン・操作性・視認性）の社内受入テスト管理コンソール",
+    keywords: ["uat", "プリフライト", "受入テスト", "品質ゲート", "手動検証", "4大評価軸", "推進専用"],
+  },
 ];
 
 const popularTags = [
   "Skills",
   "Antigravity",
   "プロンプト",
-  "Office Hour",
-  "Subagents",
-  "アンバサダー",
+  "エラー解決",
+  "セルフチェック",
   "セキュリティ",
   "Academy",
+  "プリフライト",
 ];
 
 export default function SiteOmnisearch() {
