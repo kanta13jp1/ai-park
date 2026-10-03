@@ -533,8 +533,12 @@ export default function ToolsPage() {
         <div className="flex items-center justify-between flex-wrap gap-4 border-b border-slate-200 pb-3">
           <div className="flex space-x-1 sm:space-x-2">
             <button
-              onClick={() => setActiveTab("matrix")}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all ${
+              onClick={() => {
+                playCyberClick();
+                setActiveTab("matrix");
+              }}
+              onMouseEnter={() => playCyberHover()}
+              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 activeTab === "matrix"
                   ? "bg-indigo-600 text-white shadow-xs"
                   : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
@@ -544,8 +548,12 @@ export default function ToolsPage() {
               <span>マトリクス</span>
             </button>
             <button
-              onClick={() => setActiveTab("quadrant")}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all ${
+              onClick={() => {
+                playCyberClick();
+                setActiveTab("quadrant");
+              }}
+              onMouseEnter={() => playCyberHover()}
+              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 activeTab === "quadrant"
                   ? "bg-indigo-600 text-white shadow-xs"
                   : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
@@ -555,8 +563,12 @@ export default function ToolsPage() {
               <span>クアドラント</span>
             </button>
             <button
-              onClick={() => setActiveTab("coverage")}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all ${
+              onClick={() => {
+                playCyberClick();
+                setActiveTab("coverage");
+              }}
+              onMouseEnter={() => playCyberHover()}
+              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 activeTab === "coverage"
                   ? "bg-indigo-600 text-white shadow-xs"
                   : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
@@ -566,8 +578,12 @@ export default function ToolsPage() {
               <span>カバレッジ</span>
             </button>
             <button
-              onClick={() => setActiveTab("diagnosis")}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all ${
+              onClick={() => {
+                playCyberClick();
+                setActiveTab("diagnosis");
+              }}
+              onMouseEnter={() => playCyberHover()}
+              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
                 activeTab === "diagnosis"
                   ? "bg-indigo-600 text-white shadow-xs"
                   : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
@@ -584,7 +600,11 @@ export default function ToolsPage() {
               最終同期: {lastSynced}
             </span>
             <button
-              onClick={handleSync}
+              onClick={() => {
+                playCyberClick();
+                handleSync();
+              }}
+              onMouseEnter={() => playCyberHover()}
               disabled={isSyncing || !TOOLS_SHEET_CSV_URL}
               className="px-3 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center space-x-1.5 transition-all shadow-2xs cursor-pointer"
             >
@@ -605,40 +625,56 @@ export default function ToolsPage() {
               {/* ステータスフィルターピル */}
               <div className="flex items-center space-x-1.5 flex-wrap gap-y-1.5">
                 <button
-                  onClick={() => setStatusFilter("all")}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                  onClick={() => {
+                    playCyberClick();
+                    setStatusFilter("all");
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     statusFilter === "all"
-                      ? "bg-slate-800 text-white"
+                      ? "bg-slate-800 text-white shadow-2xs"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   すべて ({tools.length})
                 </button>
                 <button
-                  onClick={() => setStatusFilter("available")}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                  onClick={() => {
+                    playCyberClick();
+                    setStatusFilter("available");
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     statusFilter === "available"
-                      ? "bg-indigo-600 text-white"
+                      ? "bg-indigo-600 text-white shadow-2xs"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   利用可能 ({tools.filter((t) => t.status === "全社員利用可能" || t.status === "利用可能" || t.status === "社内セキュア網").length})
                 </button>
                 <button
-                  onClick={() => setStatusFilter("verifying")}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                  onClick={() => {
+                    playCyberClick();
+                    setStatusFilter("verifying");
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     statusFilter === "verifying"
-                      ? "bg-amber-600 text-white"
+                      ? "bg-amber-600 text-white shadow-2xs"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
                   検証中 ({tools.filter((t) => t.status === "検証中").length})
                 </button>
                 <button
-                  onClick={() => setStatusFilter("listup")}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                  onClick={() => {
+                    playCyberClick();
+                    setStatusFilter("listup");
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
                     statusFilter === "listup"
-                      ? "bg-slate-600 text-white"
+                      ? "bg-slate-600 text-white shadow-2xs"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >

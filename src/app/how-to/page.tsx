@@ -294,69 +294,82 @@ export default function HowToPage() {
         </section>
 
         {/* クイックツール・ガイドへの直接アクセス */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-900/40">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-            <div className="space-y-2 max-w-xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-semibold border border-cyan-400/30">
-                <Lightbulb size={14} />
-                <span>開発者 & 実務者向け便利リンク</span>
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <section
+            onMouseEnter={() => playCyberHover()}
+            className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-900/40"
+          >
+            <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+              <div className="space-y-2 max-w-xl">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-semibold border border-cyan-400/30">
+                  <Lightbulb size={14} />
+                  <span>開発者 & 実務者向け便利リンク</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight">
+                  日々の開発・業務を加速するリソース集
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
+                  導入ガイド・社内Skillsカタログ（準備中）・Antigravity情報局（準備中）へのショートカットです。
+                </p>
               </div>
-              <h3 className="text-xl sm:text-2xl font-black tracking-tight">
-                日々の開発・業務を加速するリソース集
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                導入ガイド・社内Skillsカタログ（準備中）・Antigravity情報局（準備中）へのショートカットです。
-              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 shrink-0">
+                <Link
+                  href="/guide"
+                  onClick={() => playCyberClick()}
+                  onMouseEnter={() => playCyberHover()}
+                  className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
+                >
+                  <span className="flex items-center gap-2">
+                    <FileText size={16} className="text-sky-300" />
+                    Antigravity 導入ガイド
+                  </span>
+                  <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/skills-hub"
+                  onClick={() => playCyberClick()}
+                  onMouseEnter={() => playCyberHover()}
+                  className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
+                >
+                  <span className="flex items-center gap-2">
+                    <Terminal size={16} className="text-emerald-300" />
+                    社内Skillsカタログ
+                  </span>
+                  <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/antigravity-info"
+                  onClick={() => playCyberClick()}
+                  onMouseEnter={() => playCyberHover()}
+                  className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
+                >
+                  <span className="flex items-center gap-2">
+                    <Cloud size={16} className="text-cyan-300" />
+                    Antigravity社内情報局
+                  </span>
+                  <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/contact"
+                  onClick={() => playCyberClick()}
+                  onMouseEnter={() => playCyberHover()}
+                  className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
+                >
+                  <span className="flex items-center gap-2">
+                    <HelpCircle size={16} className="text-amber-300" />
+                    AI推進担当へのお問い合わせ
+                  </span>
+                  <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
+                </Link>
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 shrink-0">
-              <Link
-                href="/guide"
-                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
-              >
-                <span className="flex items-center gap-2">
-                  <FileText size={16} className="text-sky-300" />
-                  Antigravity 導入ガイド
-                </span>
-                <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
-              </Link>
-
-              <Link
-                href="/skills-hub"
-                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
-              >
-                <span className="flex items-center gap-2">
-                  <Terminal size={16} className="text-emerald-300" />
-                  社内Skillsカタログ
-                </span>
-                <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
-              </Link>
-
-              <Link
-                href="/antigravity-info"
-                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
-              >
-                <span className="flex items-center gap-2">
-                  <Cloud size={16} className="text-cyan-300" />
-                  Antigravity社内情報局
-                </span>
-                <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
-              </Link>
-
-              <Link
-                href="/contact"
-                className="flex items-center justify-between gap-3 px-4 py-3 bg-white/5 hover:bg-white/15 border border-white/10 rounded-2xl text-xs font-bold text-white transition-all group/q active:scale-95 shadow-2xs"
-              >
-                <span className="flex items-center gap-2">
-                  <HelpCircle size={16} className="text-amber-300" />
-                  AI推進担当へのお問い合わせ
-                </span>
-                <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </section>
+          </section>
+        </TiltCard>
       </div>
     </div>
   );

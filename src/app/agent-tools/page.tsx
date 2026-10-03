@@ -283,29 +283,37 @@ export default function AgentToolsHubPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
               {steps.map((st) => (
-                <div
+                <TiltCard
                   key={st.num}
-                  className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:bg-white/15 transition-colors"
+                  maxTilt={6}
+                  glareOpacity={0.12}
+                  className="h-full rounded-2xl"
                 >
-                  <div className="space-y-2">
-                    <span className="text-2xl font-black text-sky-400 font-mono">
-                      {st.num}
-                    </span>
-                    <h4 className="text-sm font-bold text-white">
-                      {st.title}
-                    </h4>
-                    <p className="text-xs text-slate-300 leading-relaxed">
-                      {st.desc}
-                    </p>
-                  </div>
-                  <Link
-                    href={st.href}
-                    className="inline-flex items-center space-x-1 text-xs font-bold text-sky-300 hover:text-white transition-colors pt-2 border-t border-white/10"
+                  <div
+                    onMouseEnter={() => playCyberHover()}
+                    className="bg-white/10 backdrop-blur-xs border border-white/15 rounded-2xl p-5 flex flex-col justify-between space-y-4 hover:bg-white/15 transition-colors h-full"
                   >
-                    <span>{st.linkText}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
+                    <div className="space-y-2">
+                      <span className="text-2xl font-black text-sky-400 font-mono">
+                        {st.num}
+                      </span>
+                      <h4 className="text-sm font-bold text-white">
+                        {st.title}
+                      </h4>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        {st.desc}
+                      </p>
+                    </div>
+                    <Link
+                      href={st.href}
+                      onClick={() => playCyberClick()}
+                      className="inline-flex items-center space-x-1 text-xs font-bold text-sky-300 hover:text-white transition-colors pt-2 border-t border-white/10"
+                    >
+                      <span>{st.linkText}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </TiltCard>
               ))}
             </div>
           </div>
@@ -314,26 +322,32 @@ export default function AgentToolsHubPage() {
         {/* ======================================================== */}
         {/* 開発ロードマップ連携バナー */}
         {/* ======================================================== */}
-        <div className="p-5 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
-          <div className="space-y-1">
-            <div className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4 text-sky-600" />
-              <h4 className="text-sm font-bold text-slate-900">
-                PoC中・工事中機能の正式稼働スケジュール
-              </h4>
-            </div>
-            <p className="text-xs text-slate-500">
-              各機能の解除条件・本番データ連携予定日は「開発ロードマップ」にて具体的に公開されています。
-            </p>
-          </div>
-          <Link
-            href="/roadmap"
-            className="shrink-0 px-4 py-2 rounded-xl bg-slate-900 hover:bg-sky-600 text-white text-xs font-bold transition-colors inline-flex items-center space-x-1.5"
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
+          <div
+            onMouseEnter={() => playCyberHover()}
+            className="p-5 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs"
           >
-            <span>開発ロードマップを確認する</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
+            <div className="space-y-1">
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-4 h-4 text-sky-600" />
+                <h4 className="text-sm font-bold text-slate-900">
+                  PoC中・工事中機能の正式稼働スケジュール
+                </h4>
+              </div>
+              <p className="text-xs text-slate-500">
+                各機能の解除条件・本番データ連携予定日は「開発ロードマップ」にて具体的に公開されています。
+              </p>
+            </div>
+            <Link
+              href="/roadmap"
+              onClick={() => playCyberClick()}
+              className="shrink-0 px-4 py-2 rounded-xl bg-slate-900 hover:bg-sky-600 text-white text-xs font-bold transition-colors inline-flex items-center space-x-1.5"
+            >
+              <span>開発ロードマップを確認する</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </TiltCard>
       </div>
     </div>
   );
