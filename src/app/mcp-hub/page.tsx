@@ -4,7 +4,8 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
-import { playCyberClick, playCyberSuccess } from "@/lib/sound";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 import {
   Cpu,
   Server,
@@ -216,12 +217,17 @@ export default function McpHubPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {MCP_SERVERS.map((server) => (
-              <SpotlightCard
+              <TiltCard
                 key={server.id}
-                spotlightColor="rgba(99, 102, 241, 0.12)"
-                className="bg-white border-slate-200/90 shadow-sm"
+                maxTilt={6}
+                glareOpacity={0.12}
+                className="h-full rounded-2xl"
               >
-                <div className="p-6 flex flex-col justify-between space-y-4 h-full">
+                <SpotlightCard
+                  spotlightColor="rgba(99, 102, 241, 0.12)"
+                  className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+                >
+                  <div className="p-6 flex flex-col justify-between space-y-4 h-full">
                   <div className="space-y-3.5">
                     {/* カードヘッダー */}
                     <div className="flex items-start justify-between gap-2">
@@ -273,7 +279,8 @@ export default function McpHubPage() {
                         <span>設定例 (mcp_config.json)</span>
                         <button
                           onClick={() => handleCopy(server.id, server.sampleConfig)}
-                          className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold transition-colors"
+                          onMouseEnter={() => playCyberHover()}
+                          className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold transition-colors cursor-pointer"
                         >
                           {copiedId === server.id ? (
                             <>
@@ -295,6 +302,7 @@ export default function McpHubPage() {
                   </div>
                 </div>
               </SpotlightCard>
+              </TiltCard>
             ))}
           </div>
         </div>

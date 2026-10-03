@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
 import {
   Building2,
   CircleDot,
@@ -20,7 +21,7 @@ import {
 } from "lucide-react";
 import { buildNewIdeaUrl, fetchIdeaIssues, ideaStages, type Idea, type IdeaStage } from "@/lib/githubIdeas";
 import { GITHUB_REPO } from "@/lib/githubFeedback";
-import { playCyberClick } from "@/lib/sound";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 const stageStyle: Record<IdeaStage, string> = {
   アイデア段階: "bg-sky-500/10 text-sky-400 border-sky-400/30",
@@ -178,11 +179,16 @@ export default function IdeaBoardPage() {
         {/* アイデア一覧カードグリッド */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {shown.map((i) => (
-            <SpotlightCard
+            <TiltCard
               key={i.id}
-              spotlightColor={stageSpotlight[i.stage] || "rgba(99, 102, 241, 0.12)"}
-              className="bg-white border-slate-200/90"
+              maxTilt={6}
+              glareOpacity={0.12}
+              className="h-full rounded-2xl"
             >
+              <SpotlightCard
+                spotlightColor={stageSpotlight[i.stage] || "rgba(99, 102, 241, 0.12)"}
+                className="bg-white border-slate-200/90 h-full rounded-2xl shadow-sm"
+              >
               <div className="p-6 space-y-4 flex flex-col justify-between h-full">
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
@@ -244,6 +250,7 @@ export default function IdeaBoardPage() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
                     className="inline-flex items-center gap-1 text-indigo-600 font-extrabold hover:text-indigo-700 transition-colors"
                   >
                     <span>コメント・協力する</span>
@@ -252,6 +259,7 @@ export default function IdeaBoardPage() {
                 </div>
               </div>
             </SpotlightCard>
+            </TiltCard>
           ))}
 
           {syncState !== "loading" && shown.length === 0 && (

@@ -527,7 +527,7 @@ const seedIds = new Set(initialFeedbackList.map((t) => t.id));
 
 export default function FeedbackTodoPage() {
   const [todos, setTodos] = useState<FeedbackTodoItem[]>(initialFeedbackList);
-  const [statusFilter, setStatusFilter] = useState<"all" | "todo" | "in_progress" | "done">("all");
+  const [statusFilter, setStatusFilter] = useState<"unresolved" | "all" | "in_progress" | "todo" | "done">("unresolved");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [viewMode, setViewMode] = useState<"list" | "kanban">("list");
   const [searchQuery, setSearchQuery] = useState("");
@@ -682,11 +682,21 @@ export default function FeedbackTodoPage() {
     document.body.removeChild(link);
   };
 
+  // 集計カウント
+  const todoCount = allItems.filter((t) => t.status === "todo").length;
+  const inProgressCount = allItems.filter((t) => t.status === "in_progress").length;
+  const doneCount = allItems.filter((t) => t.status === "done").length;
+  const unresolvedCount = todoCount + inProgressCount;
+
   // フィルタリング
   const categories = ["all", ...Array.from(new Set(allItems.map((t) => t.category)))];
 
   const filteredTodos = allItems.filter((item) => {
-    if (statusFilter !== "all" && item.status !== statusFilter) return false;
+    if (statusFilter === "unresolved") {
+      if (item.status === "done") return false;
+    } else if (statusFilter !== "all") {
+      if (item.status !== statusFilter) return false;
+    }
     if (categoryFilter !== "all" && item.category !== categoryFilter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -699,10 +709,6 @@ export default function FeedbackTodoPage() {
     }
     return true;
   });
-
-  const todoCount = allItems.filter((t) => t.status === "todo").length;
-  const inProgressCount = allItems.filter((t) => t.status === "in_progress").length;
-  const doneCount = allItems.filter((t) => t.status === "done").length;
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
@@ -781,14 +787,14 @@ export default function FeedbackTodoPage() {
           {/* ステータス切り替えピル */}
           <div className="flex items-center space-x-2 flex-wrap gap-y-2">
             <button
-              onClick={() => setStatusFilter("all")}
+              onClick={() => setStatusFilter("unresolved")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                statusFilter === "all"
-                  ? "bg-slate-900 text-white shadow-xs"
+                statusFilter === "unresolved"
+                  ? "bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-400/30"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              すべて ({allItems.length})
+              ⚡ 未対応 ({unresolvedCount})
             </button>
             <button
               onClick={() => setStatusFilter("in_progress")}
@@ -819,6 +825,16 @@ export default function FeedbackTodoPage() {
               }`}
             >
               ✅ 反映済み ({doneCount})
+            </button>
+            <button
+              onClick={() => setStatusFilter("all")}
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                statusFilter === "all"
+                  ? "bg-slate-900 text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              }`}
+            >
+              すべて ({allItems.length})
             </button>
           </div>
 

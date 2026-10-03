@@ -3,6 +3,8 @@
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
+import AnimatedCounter from "@/components/AnimatedCounter";
 import { playCyberClick } from "@/lib/sound";
 import Link from "next/link";
 import { useState } from "react";
@@ -376,22 +378,30 @@ export default function RoadmapPage() {
               <div className="flex items-center space-x-3 sm:space-x-4 bg-slate-50/80 border border-slate-200/90 p-3.5 rounded-2xl shrink-0">
                 <div className="text-center px-2">
                   <div className="text-[11px] text-slate-500 font-semibold">全体タスク</div>
-                  <div className="text-lg font-black text-slate-800 font-mono">{totalTasks} 件</div>
+                  <div className="text-lg font-black text-slate-800 font-mono">
+                    <AnimatedCounter value={totalTasks} /> 件
+                  </div>
                 </div>
                 <div className="w-px h-8 bg-slate-200" />
                 <div className="text-center px-2">
                   <div className="text-[11px] text-emerald-600 font-semibold">初期完了</div>
-                  <div className="text-lg font-black text-emerald-600 font-mono">{completedTasks} 件</div>
+                  <div className="text-lg font-black text-emerald-600 font-mono">
+                    <AnimatedCounter value={completedTasks} /> 件
+                  </div>
                 </div>
                 <div className="w-px h-8 bg-slate-200" />
                 <div className="text-center px-2">
                   <div className="text-[11px] text-blue-600 font-semibold">進行中</div>
-                  <div className="text-lg font-black text-blue-600 font-mono">{inProgressTasks} 件</div>
+                  <div className="text-lg font-black text-blue-600 font-mono">
+                    <AnimatedCounter value={inProgressTasks} /> 件
+                  </div>
                 </div>
                 <div className="w-px h-8 bg-slate-200" />
                 <div className="text-center px-2">
                   <div className="text-[11px] text-amber-600 font-semibold">準備中</div>
-                  <div className="text-lg font-black text-amber-600 font-mono">{plannedTasks} 件</div>
+                  <div className="text-lg font-black text-amber-600 font-mono">
+                    <AnimatedCounter value={plannedTasks} /> 件
+                  </div>
                 </div>
               </div>
             </div>
@@ -404,7 +414,7 @@ export default function RoadmapPage() {
                   <span>Phase 1〜4 全体進行度</span>
                 </span>
                 <span className="font-black text-cyan-700 font-mono">
-                  {progressPercentage}% 完了
+                  <AnimatedCounter value={progressPercentage} suffix="%" /> 完了
                 </span>
               </div>
               <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200/80">
@@ -417,51 +427,59 @@ export default function RoadmapPage() {
 
             {/* フェーズ概要バナー */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-2">
-              <div className="p-4 rounded-2xl border border-emerald-200/90 bg-emerald-50/50 space-y-1.5 transition-all hover:bg-emerald-50/80">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-emerald-800 px-2.5 py-0.5 bg-emerald-100/80 rounded-full border border-emerald-200 font-mono flex items-center space-x-1">
-                    <span>✓</span>
-                    <span>Phase 1 (完了)</span>
-                  </span>
-                  <span className="text-[11px] text-emerald-600 font-mono font-semibold">9月下旬</span>
+              <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+                <div className="p-4 rounded-2xl border border-emerald-200/90 bg-emerald-50/50 space-y-1.5 transition-all hover:bg-emerald-50/80 h-full">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-emerald-800 px-2.5 py-0.5 bg-emerald-100/80 rounded-full border border-emerald-200 font-mono flex items-center space-x-1">
+                      <span>✓</span>
+                      <span>Phase 1 (完了)</span>
+                    </span>
+                    <span className="text-[11px] text-emerald-600 font-mono font-semibold">9月下旬</span>
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">ポータル公開・学習基盤</h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">トップ、導入ガイド、初級編チートシート、Office Hour</p>
                 </div>
-                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">ポータル公開・学習基盤</h4>
-                <p className="text-[11px] text-slate-600 leading-relaxed">トップ、導入ガイド、初級編チートシート、Office Hour</p>
-              </div>
+              </TiltCard>
 
-              <div className="p-4 rounded-2xl border border-blue-200/90 bg-blue-50/60 space-y-1.5 ring-2 ring-blue-500/20 transition-all hover:bg-blue-50/90">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-blue-800 px-2.5 py-0.5 bg-blue-100/80 rounded-full border border-blue-200 font-mono flex items-center space-x-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping mr-0.5" />
-                    <span>Phase 2 (進行中)</span>
-                  </span>
-                  <span className="text-[11px] text-blue-600 font-mono font-semibold">10月中</span>
+              <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+                <div className="p-4 rounded-2xl border border-blue-200/90 bg-blue-50/60 space-y-1.5 ring-2 ring-blue-500/20 transition-all hover:bg-blue-50/90 h-full">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-blue-800 px-2.5 py-0.5 bg-blue-100/80 rounded-full border border-blue-200 font-mono flex items-center space-x-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping mr-0.5" />
+                      <span>Phase 2 (進行中)</span>
+                    </span>
+                    <span className="text-[11px] text-blue-600 font-mono font-semibold">10月中</span>
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">学習・ツール連携 & コミュニティ</h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">Academy、ご意見ボード、ツールシート同期、取材、アンバサダー、カレンダー</p>
                 </div>
-                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">学習・ツール連携 & コミュニティ</h4>
-                <p className="text-[11px] text-slate-600 leading-relaxed">Academy、ご意見ボード、ツールシート同期、取材、アンバサダー、カレンダー</p>
-              </div>
+              </TiltCard>
 
-              <div className="p-4 rounded-2xl border border-amber-200/90 bg-amber-50/50 space-y-1.5 transition-all hover:bg-amber-50/80">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-amber-800 px-2.5 py-0.5 bg-amber-100/80 rounded-full border border-amber-200 font-mono">
-                    Phase 3 (準備中)
-                  </span>
-                  <span className="text-[11px] text-amber-600 font-mono font-semibold">11月中</span>
+              <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+                <div className="p-4 rounded-2xl border border-amber-200/90 bg-amber-50/50 space-y-1.5 transition-all hover:bg-amber-50/80 h-full">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-amber-800 px-2.5 py-0.5 bg-amber-100/80 rounded-full border border-amber-200 font-mono">
+                      Phase 3 (準備中)
+                    </span>
+                    <span className="text-[11px] text-amber-600 font-mono font-semibold">11月中</span>
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">工事中ページの内容準備</h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">利用状況の実データ、事例・Skills、ツール方針</p>
                 </div>
-                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">工事中ページの内容準備</h4>
-                <p className="text-[11px] text-slate-600 leading-relaxed">利用状況の実データ、事例・Skills、ツール方針</p>
-              </div>
+              </TiltCard>
 
-              <div className="p-4 rounded-2xl border border-purple-200/90 bg-purple-50/50 space-y-1.5 transition-all hover:bg-purple-50/80">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-purple-800 px-2.5 py-0.5 bg-purple-100/80 rounded-full border border-purple-200 font-mono">
-                    Phase 4 (企画中)
-                  </span>
-                  <span className="text-[11px] text-purple-600 font-mono font-semibold">12月中旬〜</span>
+              <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+                <div className="p-4 rounded-2xl border border-purple-200/90 bg-purple-50/50 space-y-1.5 transition-all hover:bg-purple-50/80 h-full">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-purple-800 px-2.5 py-0.5 bg-purple-100/80 rounded-full border border-purple-200 font-mono">
+                      Phase 4 (企画中)
+                    </span>
+                    <span className="text-[11px] text-purple-600 font-mono font-semibold">12月中旬〜</span>
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">（未定）</h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">Phase 3 の後に検討します</p>
                 </div>
-                <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">（未定）</h4>
-                <p className="text-[11px] text-slate-600 leading-relaxed">Phase 3 の後に検討します</p>
-              </div>
+              </TiltCard>
             </div>
           </div>
         </SpotlightCard>
