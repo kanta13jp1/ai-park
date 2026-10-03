@@ -11,6 +11,7 @@ jobs:
   notify:
     if: >-
       contains(github.event.issue.labels.*.name, 'feedback') ||
+      contains(github.event.issue.labels.*.name, 'enhancement') ||
       contains(github.event.issue.labels.*.name, 'interview') ||
       contains(github.event.issue.labels.*.name, 'ai-project') ||
       contains(github.event.issue.labels.*.name, 'ambassador') ||
