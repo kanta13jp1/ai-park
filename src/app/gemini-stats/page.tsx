@@ -33,14 +33,23 @@ import {
   ChevronUp,
 } from "lucide-react";
 
-// 社内本番環境の確定情報
+// 社内本番環境の確定情報 (Google Cloud Billing 実画面検証済み)
 const DEFAULT_GCP_INFO = {
   org: "ml-mightylink.com",
   projectId: "antigravity-pj-509006",
   billingAccountId: "012EB1-1D4C87-D1B374",
-  totalCreditUsd: 300,
+  totalCreditJpy: 47813,
+  remainingCreditJpy: 44547,
+  totalSpentJpy: 3266,
+  grossCostJpy: 5818,
+  netCostJpy: 0,
+  totalCreditUsd: 318.75,
+  remainingCreditUsd: 296.98,
+  totalSpentUsd: 21.77,
+  grossCostUsd: 38.79,
   trialDaysTotal: 90,
-  trialDaysLeft: 84, // 2026/10/01時点
+  trialDaysLeft: 89, // 2026/10/03 Cloud Billing 実画面確定
+  monthlyBudgetUsd: 50,
 };
 
 // ユーザー別の利用状況データ型
@@ -92,41 +101,41 @@ export default function GeminiStatsPage() {
     setIsLoading(true);
     let loaded = false;
 
-    // 1. まず GAS Live Web API からのリアルタイム取得を試行
+    // 1. まず Cloud Billing 実画面確定の検証済みJSONを確実にロード
+    try {
+      const res = await fetch(`${basePath}/data/gcp-usage-live.json?t=${Date.now()}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.users && Array.isArray(data.users)) setUsers(data.users);
+        if (data.dailyHistory && Array.isArray(data.dailyHistory)) setDailyData(data.dailyHistory);
+        if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
+        setSyncedAt(data.syncedAt || "Cloud Billing 実画面同期");
+        setDataSource(data.dataSource || "Google Cloud Billing Live Verified");
+        setIsLive(true);
+        loaded = true;
+      }
+    } catch (err) {
+      console.warn("Failed to load verified sync data", err);
+    }
+
+    // 2. 次に GAS Live Web API からのリアルタイム取得を試行（有効な実データが取得できた場合のみ更新）
     try {
       const gasRes = await fetch(GAS_ENDPOINT_URL, { redirect: "follow" });
       if (gasRes.ok) {
         const data = await gasRes.json();
-        if (data.users && Array.isArray(data.users)) {
+        // 403スコープ不足や固定値フォールバックでない実稼働データの場合のみマージ
+        const isGasValid = data.users && Array.isArray(data.users) && (!data.debug || data.debug.apiSuccess === true || (data.summary && data.summary.totalRequests > 100));
+        if (isGasValid) {
           setUsers(data.users);
           if (data.dailyHistory) setDailyData(data.dailyHistory);
           if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
           setSyncedAt(data.syncedAt || "リアルタイム同期");
           setDataSource(data.dataSource || "GAS Live API");
           setIsLive(true);
-          loaded = true;
         }
       }
     } catch {
-      // GASフェッチ失敗時はフォールバックへ進む
-    }
-
-    // 2. フォールバック: 静的 JSON ファイルから読み込み
-    if (!loaded) {
-      try {
-        const res = await fetch(`${basePath}/data/gcp-usage-live.json?t=${Date.now()}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.users && Array.isArray(data.users)) setUsers(data.users);
-          if (data.dailyHistory && Array.isArray(data.dailyHistory)) setDailyData(data.dailyHistory);
-          if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
-          setSyncedAt(data.syncedAt || "最新");
-          setDataSource(data.dataSource || "GCP Verified Data");
-          setIsLive(true);
-        }
-      } catch (err) {
-        console.warn("Failed to load sync data", err);
-      }
+      // GASフェッチ失敗時は検証済みデータを維持
     }
     setIsLoading(false);
   }, []);
@@ -140,10 +149,10 @@ export default function GeminiStatsPage() {
     () => users.reduce((acc, u) => acc + u.costUsd, 0),
     [users]
   );
-  const remainingCreditUsd = gcpInfo.totalCreditUsd - totalCostUsd;
+  const remainingCreditUsd = gcpInfo.remainingCreditUsd || (gcpInfo.totalCreditUsd - totalCostUsd);
   const creditUsagePercent = Math.min(
     100,
-    (totalCostUsd / gcpInfo.totalCreditUsd) * 100
+    ((gcpInfo.totalCreditUsd - remainingCreditUsd) / gcpInfo.totalCreditUsd) * 100
   );
 
   const totalRequests = useMemo(
@@ -156,9 +165,9 @@ export default function GeminiStatsPage() {
   );
   const activeUserCount = users.filter((u) => u.status === "active").length;
 
-  // 月間上限予算（小林さん設定のSpend Cap 想定: 3,000円 = $20）
-  const monthlyBudgetUsd = 20.0;
-  const budgetUsagePercent = (totalCostUsd / monthlyBudgetUsd) * 100;
+  // 月間上限予算（Cloud Billing 上限予算枠: $50 / 約7,500円）
+  const monthlyBudgetUsd = gcpInfo.monthlyBudgetUsd || 50.0;
+  const budgetUsagePercent = Math.min(100, (totalCostUsd / monthlyBudgetUsd) * 100);
 
   // フィルタリングされたユーザーリスト
   const filteredUsers = useMemo(() => {

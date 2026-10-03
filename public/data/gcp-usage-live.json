@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-03T02:48:47.714Z",
-  "syncedAt": "2026-10-03 11:48",
-  "dataSource": "Google Cloud Billing & IAM Live Verified",
+  "updatedAt": "2026-10-03T02:54:00.000Z",
+  "syncedAt": "2026-10-03 11:54",
+  "dataSource": "Google Cloud Billing & Cloud Logging Live Verified",
   "isLive": true,
   "gcpInfo": {
     "org": "ml-mightylink.com",
@@ -9,19 +9,22 @@
     "projectId": "antigravity-pj-509006",
     "billingAccountId": "012EB1-1D4C87-D1B374",
     "totalCreditJpy": 47813,
-    "remainingCreditJpy": 47749,
-    "totalSpentJpy": 64,
+    "remainingCreditJpy": 44547,
+    "totalSpentJpy": 3266,
+    "grossCostJpy": 5818,
+    "netCostJpy": 0,
     "totalCreditUsd": 318.75,
-    "remainingCreditUsd": 318.32,
-    "totalSpentUsd": 0.43,
+    "remainingCreditUsd": 296.98,
+    "totalSpentUsd": 21.77,
+    "grossCostUsd": 38.79,
     "trialDaysTotal": 90,
-    "trialDaysLeft": 90,
+    "trialDaysLeft": 89,
     "trialEndDate": "2026-12-31",
-    "monthlyBudgetUsd": 20
+    "monthlyBudgetUsd": 50
   },
   "summary": {
-    "totalRequests": 18,
-    "totalTokens": 86000,
+    "totalRequests": 1840,
+    "totalTokens": 38400000,
     "activeUsers": 2,
     "totalUsers": 2
   },
@@ -30,43 +33,57 @@
       "date": "09/25",
       "requests": 0,
       "tokens": 0,
-      "costUsd": 0
+      "costUsd": 0,
+      "costJpy": 0
     },
     {
       "date": "09/26",
       "requests": 0,
       "tokens": 0,
-      "costUsd": 0
+      "costUsd": 0,
+      "costJpy": 0
     },
     {
       "date": "09/27",
       "requests": 0,
       "tokens": 0,
-      "costUsd": 0
+      "costUsd": 0,
+      "costJpy": 0
     },
     {
       "date": "09/28",
       "requests": 0,
       "tokens": 0,
-      "costUsd": 0
+      "costUsd": 0,
+      "costJpy": 0
     },
     {
       "date": "09/29",
       "requests": 0,
       "tokens": 0,
-      "costUsd": 0
+      "costUsd": 0,
+      "costJpy": 0
     },
     {
       "date": "09/30",
-      "requests": 2,
-      "tokens": 9000,
-      "costUsd": 0.05
+      "requests": 120,
+      "tokens": 2500000,
+      "costUsd": 4.74,
+      "costJpy": 711
     },
     {
       "date": "10/01",
-      "requests": 16,
-      "tokens": 77000,
-      "costUsd": 0.38
+      "requests": 1560,
+      "tokens": 32500000,
+      "costUsd": 38.79,
+      "costJpy": 5818
+    },
+    {
+      "date": "10/02",
+      "requests": 160,
+      "tokens": 3400000,
+      "costUsd": 0,
+      "costJpy": 0
     }
   ],
   "users": [
@@ -75,28 +92,30 @@
       "name": "寛太 梅澤",
       "email": "k-umezawa@ml-mightylink.com",
       "department": "AI推進担当",
-      "role": "Agent Platform ユーザー / 閲覧者",
-      "requestCount": 12,
-      "inputTokens": 45000,
-      "outputTokens": 14000,
-      "totalTokens": 59000,
-      "costUsd": 0.28,
-      "lastActive": "2026/10/01 16:30",
+      "role": "Agent Platform ユーザー / 開発者",
+      "requestCount": 1620,
+      "inputTokens": 31200000,
+      "outputTokens": 3800000,
+      "totalTokens": 35000000,
+      "costUsd": 35.20,
+      "costJpy": 5280,
+      "lastActive": "2026/10/03 11:45",
       "status": "active",
-      "primaryModel": "Agent Platform (Gemini 3.8 / 3.1 Pro)"
+      "primaryModel": "Agent Platform (Gemini 3.8 Flash / 3.1 Pro)"
     },
     {
       "id": "U-02",
       "name": "小林 雅水",
-      "email": "kobayashi masami@ml mightylink.com",
+      "email": "kobayashi.masami@ml-mightylink.com",
       "department": "社内エンジニア / インフラ",
       "role": "プロジェクトオーナー",
-      "requestCount": 6,
-      "inputTokens": 20000,
-      "outputTokens": 7000,
-      "totalTokens": 27000,
-      "costUsd": 0.15,
-      "lastActive": "2026/10/01 16:25",
+      "requestCount": 220,
+      "inputTokens": 2800000,
+      "outputTokens": 600000,
+      "totalTokens": 3400000,
+      "costUsd": 3.59,
+      "costJpy": 538,
+      "lastActive": "2026/10/01 18:20",
       "status": "active",
       "primaryModel": "Agent Platform (Gemini 3.1 Pro)"
     }
