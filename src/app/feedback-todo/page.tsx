@@ -306,7 +306,7 @@ const initialFeedbackList: FeedbackTodoItem[] = [
   {
     id: "TODO-18",
     title: "【実務サポート】Antigravity Windows環境「トラブルシューティング＆エラー解決早見表」",
-    category: "環境構築・利用申請",
+    category: "開発環境",
     author: "社内ユーザー提案",
     authorDept: "開発部・情報システム部",
     date: "2026/10/03",
@@ -320,7 +320,7 @@ const initialFeedbackList: FeedbackTodoItem[] = [
   {
     id: "TODO-19",
     title: "【検索・即応性】Command Palette（Ctrl+K）＆ サイト内検索の完全同期",
-    category: "機能・UI改善",
+    category: "UI/UX",
     author: "社内ユーザー提案",
     authorDept: "AI推進事務局",
     date: "2026/10/03",
@@ -334,7 +334,7 @@ const initialFeedbackList: FeedbackTodoItem[] = [
   {
     id: "TODO-20",
     title: "【学習定着】Antigravity Academy の進捗バックアップ＆修了報告UI強化",
-    category: "教育・学習",
+    category: "AI実践編",
     author: "社内ユーザー提案",
     authorDept: "人材開発・各事業部",
     date: "2026/10/03",
@@ -348,7 +348,7 @@ const initialFeedbackList: FeedbackTodoItem[] = [
   {
     id: "TODO-21",
     title: "【ガバナンス・社内浸透】社内AI安全利用「1枚でわかる早見表」印刷/PDFエクスポートビュー",
-    category: "セキュリティ・規程",
+    category: "ガイドライン",
     author: "社内ユーザー提案",
     authorDept: "コンプライアンス・法務部",
     date: "2026/10/03",
