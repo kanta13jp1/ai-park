@@ -194,13 +194,13 @@ export default function GuidePage() {
 
       <div className="max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
         {/* 公式ドキュメントリンク HUD バー */}
-        <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-          <div className="flex items-center space-x-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-extrabold text-slate-900 tracking-tight">Google 公式ドキュメント</span>
-            <span className="text-slate-400 font-mono text-[11px]">| 2026/09/26 確認済み</span>
+        <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3.5 text-xs">
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <span className="font-extrabold text-slate-900 tracking-tight whitespace-nowrap">Google 公式ドキュメント</span>
+            <span className="text-slate-400 font-mono text-[11px] whitespace-nowrap">| 2026/09/26 確認済み</span>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {officialLinks.map((l) => (
               <a
                 key={l.href}
@@ -223,8 +223,10 @@ export default function GuidePage() {
             <h4 className="font-extrabold text-amber-900 text-sm">業務で使う前に必ずご確認ください</h4>
             <p className="text-slate-700 leading-relaxed">
               業務利用時は会社の Google Cloud プロジェクト経由で利用します（従量課金・個人のPro加入は不要）。
-              個人アカウント利用時は個人向け規約が適用されます。取り扱ってよいデータ範囲は、必ず
-              <Link href="/tools-hub#ai-guidelines" className="underline font-bold text-amber-900 mx-1 hover:text-amber-700">
+              個人アカウント利用時は個人向け規約が適用されます。
+              <span className="inline-block">取り扱ってよいデータ範囲は、</span>
+              必ず
+              <Link href="/tools-hub#ai-guidelines" className="underline font-bold text-amber-900 mx-1 hover:text-amber-700 whitespace-nowrap">
                 社内AI利用のセキュリティ基準（Level 1〜3）
               </Link>
               を遵守してください。
