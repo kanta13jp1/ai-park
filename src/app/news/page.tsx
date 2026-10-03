@@ -485,12 +485,12 @@ export default function AiNewsPage() {
 
               <div className="space-y-3.5 text-xs text-slate-300 font-light leading-relaxed">
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
-                  <p className="font-bold text-white text-xs flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 inline-block" />
-                    <span>Gemini 3.1 Pro 社内解禁</span>
+                  <p className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse inline-block" />
+                    <span>Gemini 4 Argon 発表 (DeepMind)</span>
                   </p>
                   <p className="text-[11px] text-slate-300 pl-3">
-                    長大コンテキストと推論強化により、複雑な設計書や全社規程の解析精度が向上。
+                    次世代フロンティア知能として公式公開。超大規模推論とマルチモーダル自律基盤を刷新。
                   </p>
                 </div>
 

@@ -25,6 +25,21 @@ export const aiNewsCategoryMaster = [
 
 export const aiNewsMaster: AINewsItem[] = [
   {
+    id: "news-20261003-gemini4",
+    title: "Google DeepMind: 次世代フロンティア知能「Gemini 4 Argon」を公式発表",
+    date: "2026/10/03",
+    category: "google",
+    categoryLabel: "Google / Antigravity",
+    importance: "hot",
+    importanceLabel: "HOT 🔥",
+    summary: "Google DeepMind公式（deepmind.google/models/gemini/）にて、次世代のフロンティア知能を担う最新フラッグシップモデル「Gemini 4 Argon」が正式公開されました。「Our next era of frontier intelligence」として、超大規模推論とマルチモーダル自律エージェント基盤を刷新しています。",
+    impactForStaff: "マルチステップ推論・コード生成・自律エージェント協調の能力が飛躍的に向上。全社での社内利用認可に向けたベンチマーク検証およびAPI利用計画の策定を推進窓口にて開始します。",
+    recommendedFor: ["全社員", "エンジニア", "企画・データ推進", "経営層"],
+    sourceName: "Google DeepMind Official",
+    sourceUrl: "https://deepmind.google/models/gemini/",
+    tags: ["Gemini 4 Argon", "Google DeepMind", "Frontier Intelligence", "基盤モデル", "HOT"],
+  },
+  {
     id: "news-20261003-01",
     title: "AI Park プリフライト受入テスト管理コンソール（/preflight）が全面稼働",
     date: "2026/10/03",

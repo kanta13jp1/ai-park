@@ -187,7 +187,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
         passed: true,
         checkedAt: "2026/10/03",
         inspector: "梅澤（AI推進担当）",
-        evidence: "実在する公式発表（DeepMind、Antigravity、Vertex AI、MCP、社内リリース）の一次ソースおよび実動機能との100%整合を確認",
+        evidence: "実在する公式発表（Google DeepMind Gemini 4 Argon、Gemini 3.1 Pro、Antigravity、Vertex AI、MCP、社内リリース）の一次ソースおよび実動機能との100%整合を確認",
         points: [
           "架空や推測のニュース・発表が含まれていないか",
           "社内リリース（preflight稼働、ToDoフィルター新設等）の事実性",
@@ -198,8 +198,8 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             id: "news-fact-01",
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
-            label: "Google DeepMind / Gemini 3.1 Pro 発表の事実性",
-            detail: "Gemini 3.1 Pro の推論強化およびマルチステップ推論ベンチマーク公式発表（deepmind.google）と完全一致していること。",
+            label: "Google DeepMind / Gemini 4 Argon & 3.1 Pro 発表の事実性",
+            detail: "Google DeepMind公式（deepmind.google/models/gemini/）の「Our next era of frontier intelligence: Gemini 4 Argon」発表および Gemini 3.1 Pro の推論強化と完全一致していること。",
             verified: true,
           },
           {
