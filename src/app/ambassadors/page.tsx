@@ -136,7 +136,8 @@ export default function AmbassadorsPage() {
         />
 
         {/* バナー: アンバサダー稼働中 */}
-        <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-950">
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-xl">
+          <div className="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-indigo-950">
           <div className="flex items-start space-x-3">
             <div className="p-2 bg-indigo-200/60 text-indigo-800 rounded-lg shrink-0 mt-0.5">
               <Award className="w-5 h-5 text-indigo-700" />
@@ -164,9 +165,11 @@ export default function AmbassadorsPage() {
             <span>アンバサダーに応募する</span>
           </button>
         </div>
+      </TiltCard>
 
         {/* 第1期 制度（案） */}
-        <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-3">
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-xl">
+          <div onMouseEnter={() => playCyberHover()} className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <h3 className="font-bold text-sm text-slate-900">第1期 AIアンバサダー制度</h3>
             <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 self-start">
@@ -182,6 +185,7 @@ export default function AmbassadorsPage() {
             ))}
           </dl>
         </div>
+      </TiltCard>
 
         {/* 検索 & フィルター */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">

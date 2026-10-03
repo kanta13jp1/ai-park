@@ -3,6 +3,9 @@
 import { useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
+import AnimatedCounter from "@/components/AnimatedCounter";
+import { playCyberHover, playCyberClick, playCyberSuccess } from "@/lib/sound";
 import {
   preflightChecklistMaster,
   type FeaturePreflightRecord,
@@ -128,77 +131,96 @@ export default function PreflightUatPage() {
 
         {/* 4大KPIカード */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <SpotlightCard spotlightColor="rgba(16, 185, 129, 0.15)" className="bg-white border-slate-200">
-            <div className="p-5 space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
-                <span className="flex items-center gap-1.5">
-                  <FileCheck2 size={15} className="text-emerald-600" />
-                  手動UAT 合格機能
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono">
-                  100% 承認
-                </span>
+          <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+            <SpotlightCard spotlightColor="rgba(16, 185, 129, 0.15)" className="bg-white border-slate-200 h-full rounded-2xl">
+              <div onMouseEnter={() => playCyberHover()} className="p-5 space-y-2 h-full flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <FileCheck2 size={15} className="text-emerald-600" />
+                      手動UAT 合格機能
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono">
+                      100% 承認
+                    </span>
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 font-mono flex items-baseline gap-1">
+                    <AnimatedCounter value={passedPreflightCount} duration={800} />
+                    <span className="text-xs font-normal text-slate-500">/ {records.length} 機能</span>
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-500">全4項目を手動検証済み</p>
               </div>
-              <div className="text-2xl font-black text-slate-900 font-mono">
-                {passedPreflightCount} <span className="text-xs font-normal text-slate-500">/ {records.length} 機能</span>
-              </div>
-              <p className="text-[11px] text-slate-500">全4項目を手動検証済み</p>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard spotlightColor="rgba(59, 130, 246, 0.15)" className="bg-white border-slate-200">
-            <div className="p-5 space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
-                <span className="flex items-center gap-1.5">
-                  <ShieldCheck size={15} className="text-blue-600" />
-                  公式公開中ページ
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-mono">
-                  VERIFIED
-                </span>
+          <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+            <SpotlightCard spotlightColor="rgba(59, 130, 246, 0.15)" className="bg-white border-slate-200 h-full rounded-2xl">
+              <div onMouseEnter={() => playCyberHover()} className="p-5 space-y-2 h-full flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <ShieldCheck size={15} className="text-blue-600" />
+                      公式公開中ページ
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-mono">
+                      VERIFIED
+                    </span>
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 font-mono flex items-baseline gap-1">
+                    <AnimatedCounter value={verifiedCount} duration={800} />
+                    <span className="text-xs font-normal text-slate-500">ページ</span>
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-500">事実確認・エビデンス担保済み</p>
               </div>
-              <div className="text-2xl font-black text-slate-900 font-mono">
-                {verifiedCount} <span className="text-xs font-normal text-slate-500">ページ</span>
-              </div>
-              <p className="text-[11px] text-slate-500">事実確認・エビデンス担保済み</p>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard spotlightColor="rgba(245, 158, 11, 0.15)" className="bg-white border-slate-200">
-            <div className="p-5 space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
-                <span className="flex items-center gap-1.5">
-                  <AlertTriangle size={15} className="text-amber-600" />
-                  工事中・PoCガード
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-mono">
-                  PROTECTED
-                </span>
+          <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+            <SpotlightCard spotlightColor="rgba(245, 158, 11, 0.15)" className="bg-white border-slate-200 h-full rounded-2xl">
+              <div onMouseEnter={() => playCyberHover()} className="p-5 space-y-2 h-full flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <AlertTriangle size={15} className="text-amber-600" />
+                      工事中・PoCガード
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-mono">
+                      PROTECTED
+                    </span>
+                  </div>
+                  <div className="text-2xl font-black text-slate-900 font-mono flex items-baseline gap-1">
+                    <AnimatedCounter value={underDevCount} duration={800} />
+                    <span className="text-xs font-normal text-slate-500">機能</span>
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-500">嘘の混入をゲートで阻止中</p>
               </div>
-              <div className="text-2xl font-black text-slate-900 font-mono">
-                {underDevCount} <span className="text-xs font-normal text-slate-500">機能</span>
-              </div>
-              <p className="text-[11px] text-slate-500">嘘の混入をゲートで阻止中</p>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
 
-          <SpotlightCard spotlightColor="rgba(168, 85, 247, 0.15)" className="bg-white border-slate-200">
-            <div className="p-5 space-y-2">
-              <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
-                <span className="flex items-center gap-1.5">
-                  <Laptop size={15} className="text-purple-600" />
-                  実機検証環境
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-mono">
-                  TESTBED
-                </span>
+          <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+            <SpotlightCard spotlightColor="rgba(168, 85, 247, 0.15)" className="bg-white border-slate-200 h-full rounded-2xl">
+              <div onMouseEnter={() => playCyberHover()} className="p-5 space-y-2 h-full flex flex-col justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <Laptop size={15} className="text-purple-600" />
+                      実機検証環境
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-mono">
+                      TESTBED
+                    </span>
+                  </div>
+                  <div className="text-sm font-bold text-slate-900 truncate">
+                    Win 11 / Chrome / 1080p
+                  </div>
+                </div>
+                <p className="text-[11px] text-slate-500">社内標準PC環境で全件確認</p>
               </div>
-              <div className="text-sm font-bold text-slate-900 truncate">
-                Win 11 / Chrome / 1080p
-              </div>
-              <p className="text-[11px] text-slate-500">社内標準PC環境で全件確認</p>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
         </div>
 
         {/* メイン検証コンソール（2カラム） */}
@@ -222,7 +244,8 @@ export default function PreflightUatPage() {
                   return (
                     <button
                       key={r.id}
-                      onClick={() => setSelectedFeatureId(r.id)}
+                      onClick={() => { playCyberClick(); setSelectedFeatureId(r.id); }}
+                      onMouseEnter={() => playCyberHover()}
                       className={`w-full p-3 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1 border ${
                         isSelected
                           ? "bg-slate-900 text-white border-slate-900 shadow-xs"

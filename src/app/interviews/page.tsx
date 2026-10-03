@@ -1,6 +1,7 @@
 "use client";
 
 import OfficeHourBanner from "@/components/OfficeHourBanner";
+import TiltCard from "@/components/TiltCard";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import {
   Sparkles,
@@ -160,7 +161,8 @@ export default function InterviewsPage() {
         />
 
         {/* 取材立候補案内バナー */}
-        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-indigo-700/50">
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
+          <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-indigo-700/50">
           <div className="space-y-1">
             <div className="flex items-center space-x-2">
               <span className="px-2 py-0.5 rounded bg-cyan-400/20 text-cyan-300 text-[10px] font-bold border border-cyan-400/30">
@@ -187,9 +189,11 @@ export default function InterviewsPage() {
             <span>取材に立候補する</span>
           </button>
         </div>
+      </TiltCard>
 
         {/* 取材キット：流れと質問項目 */}
-        <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
+          <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-xs grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="space-y-3">
             <h3 className="font-bold text-sm text-slate-900">🗓️ 取材から公開までの流れ</h3>
             <ol className="space-y-2">
@@ -252,6 +256,7 @@ export default function InterviewsPage() {
             </p>
           </div>
         </div>
+      </TiltCard>
 
         {/* 連載インタビュー一覧（参考サイト再現：通し番号見出し ＋ 2カラムメディアカード） */}
         <div className="space-y-8">
@@ -316,10 +321,12 @@ export default function InterviewsPage() {
               </div>
 
               {/* 2カラム・メディアカード */}
-              <div
-                onClick={() => setSelectedArticle(article)}
-                className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all cursor-pointer overflow-hidden group"
-              >
+              <TiltCard maxTilt={5} glareOpacity={0.1} className="rounded-2xl">
+                <div
+                  onClick={() => setSelectedArticle(article)}
+                  onMouseEnter={() => playCyberHover()}
+                  className="bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-slate-300 transition-all cursor-pointer overflow-hidden group"
+                >
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
                   {/* 左カラム：テキスト情報エリア (7 cols) */}
                   <div className="p-6 md:p-7 md:col-span-7 flex flex-col justify-between space-y-4">
@@ -398,6 +405,7 @@ export default function InterviewsPage() {
                   </div>
                 </div>
               </div>
+            </TiltCard>
             </div>
           ))}
         </div>

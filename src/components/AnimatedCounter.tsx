@@ -3,7 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 
 interface AnimatedCounterProps {
-  value: number;
+  value?: number;
+  end?: number; // エイリアスサポート
   duration?: number; // ミリ秒（デフォルト 1200ms）
   decimals?: number; // 小数点桁数
   prefix?: string; // 例: "¥", "+"
@@ -17,13 +18,15 @@ interface AnimatedCounterProps {
  */
 export default function AnimatedCounter({
   value,
+  end,
   duration = 1200,
   decimals = 0,
   prefix = "",
   suffix = "",
   className = "",
 }: AnimatedCounterProps) {
-  const [displayValue, setDisplayValue] = useState(value);
+  const targetValue = value ?? end ?? 0;
+  const [displayValue, setDisplayValue] = useState(targetValue);
   const elementRef = useRef<HTMLSpanElement>(null);
   const isIntersectingRef = useRef(false);
   const currentValRef = useRef(displayValue);
@@ -33,7 +36,7 @@ export default function AnimatedCounter({
     // ユーザーがアニメーション低減を設定している場合は即座に目標値を表示
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
-      setDisplayValue(value);
+      setDisplayValue(targetValue);
       return;
     }
 
@@ -65,7 +68,7 @@ export default function AnimatedCounter({
         const [entry] = entries;
         isIntersectingRef.current = entry.isIntersecting;
         if (entry.isIntersecting) {
-          startCountAnimation(currentValRef.current, value);
+          startCountAnimation(currentValRef.current, targetValue);
         }
       },
       { threshold: 0.1 }
@@ -77,11 +80,11 @@ export default function AnimatedCounter({
 
     // すでに画面内に表示されている状態で value が更新された場合もアニメーションを実行
     if (isIntersectingRef.current && currentValRef.current !== value) {
-      startCountAnimation(currentValRef.current, value);
+      startCountAnimation(currentValRef.current, targetValue);
     }
 
     return () => observer.disconnect();
-  }, [value, duration]);
+  }, [targetValue, duration]);
 
   const formattedValue = displayValue.toLocaleString("ja-JP", {
     minimumFractionDigits: decimals,
