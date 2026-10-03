@@ -4,7 +4,8 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
-import { playCyberClick, playCyberSuccess } from "@/lib/sound";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 import {
   Wrench,
   Sparkles,
@@ -148,63 +149,70 @@ export default function SkillsHubPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {SKILLS_CATALOG.map((skill) => (
-              <SpotlightCard
+              <TiltCard
                 key={skill.id}
-                spotlightColor="rgba(99, 102, 241, 0.12)"
-                className="bg-white border-slate-200/90 shadow-sm"
+                maxTilt={6}
+                glareOpacity={0.12}
+                className="h-full rounded-2xl"
               >
-                <div className="p-6 flex flex-col justify-between h-full space-y-4">
-                  <div className="space-y-3.5">
-                    <div className="flex items-center justify-between gap-2 font-mono">
-                      <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-                        {skill.status}
-                      </span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-                        {skill.category}
-                      </span>
+                <SpotlightCard
+                  spotlightColor="rgba(99, 102, 241, 0.12)"
+                  className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+                >
+                  <div className="p-6 flex flex-col justify-between h-full space-y-4">
+                    <div className="space-y-3.5">
+                      <div className="flex items-center justify-between gap-2 font-mono">
+                        <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                          {skill.status}
+                        </span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                          {skill.category}
+                        </span>
+                      </div>
+
+                      <h4 className="font-extrabold text-slate-900 text-base sm:text-lg">
+                        {skill.name}
+                      </h4>
+
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {skill.description}
+                      </p>
+
+                      {/* 呼び出し構文 */}
+                      <div className="space-y-1.5 font-mono">
+                        <div className="flex items-center justify-between text-[11px] text-slate-500">
+                          <span>呼び出しプロンプト構文:</span>
+                          <button
+                            onClick={() => handleCopy(skill.id, skill.triggerPhrase)}
+                            onMouseEnter={() => playCyberHover()}
+                            className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold transition-colors cursor-pointer"
+                          >
+                            {copiedId === skill.id ? (
+                              <>
+                                <Check size={12} className="text-emerald-600" />
+                                <span className="text-emerald-600">コピー完了</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy size={12} />
+                                <span>コピー</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                        <div className="bg-slate-950 text-cyan-300 p-3 rounded-xl text-xs overflow-x-auto border border-slate-800">
+                          <code>{skill.triggerPhrase}</code>
+                        </div>
+                      </div>
                     </div>
 
-                    <h4 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                      {skill.name}
-                    </h4>
-
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {skill.description}
-                    </p>
-
-                    {/* 呼び出し構文 */}
-                    <div className="space-y-1.5 font-mono">
-                      <div className="flex items-center justify-between text-[11px] text-slate-500">
-                        <span>呼び出しプロンプト構文:</span>
-                        <button
-                          onClick={() => handleCopy(skill.id, skill.triggerPhrase)}
-                          className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold transition-colors"
-                        >
-                          {copiedId === skill.id ? (
-                            <>
-                              <Check size={12} className="text-emerald-600" />
-                              <span className="text-emerald-600">コピー完了</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={12} />
-                              <span>コピー</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                      <div className="bg-slate-950 text-cyan-300 p-3 rounded-xl text-xs overflow-x-auto border border-slate-800">
-                        <code>{skill.triggerPhrase}</code>
-                      </div>
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between font-mono text-xs">
+                      <span className="text-slate-400">作成: {skill.author}</span>
+                      <span className="text-emerald-600 font-bold">審査ステータス: 適合 (PoC)</span>
                     </div>
                   </div>
-
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between font-mono text-xs">
-                    <span className="text-slate-400">作成: {skill.author}</span>
-                    <span className="text-emerald-600 font-bold">審査ステータス: 適合 (PoC)</span>
-                  </div>
-                </div>
-              </SpotlightCard>
+                </SpotlightCard>
+              </TiltCard>
             ))}
           </div>
         </div>

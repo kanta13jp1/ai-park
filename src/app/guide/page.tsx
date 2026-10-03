@@ -9,6 +9,8 @@ import WindowsAntigravityGuide from "@/components/WindowsAntigravityGuide";
 import SafetySelfChecker from "@/components/SafetySelfChecker";
 import StepCard, { type GuideStep } from "@/components/GuideStepCard";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 import {
   Terminal,
   Download,
@@ -38,6 +40,7 @@ function CopyableCode({ code, label }: { code: string; label?: string }) {
 
   const handleCopy = () => {
     navigator.clipboard?.writeText(code).then(() => {
+      playCyberSuccess();
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
@@ -50,6 +53,7 @@ function CopyableCode({ code, label }: { code: string; label?: string }) {
         <code className="font-mono text-xs text-cyan-300 break-all select-all mr-2">{code}</code>
         <button
           onClick={handleCopy}
+          onMouseEnter={() => playCyberHover()}
           className="shrink-0 p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
           title="コードをコピー"
         >
@@ -207,7 +211,9 @@ export default function GuidePage() {
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 font-bold transition-all text-[11px]"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 font-bold transition-all text-[11px] cursor-pointer"
               >
                 <span>{l.label}</span>
                 <ExternalLink size={11} />
@@ -275,13 +281,15 @@ export default function GuidePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {japaneseSteps.map((s, i) => (
-              <div key={s.title} className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/70 space-y-2 relative">
-                <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-xs font-mono font-bold flex items-center justify-center shadow-xs">
-                  0{i + 1}
+              <TiltCard key={s.title} maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+                <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/70 space-y-2 relative h-full">
+                  <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-xs font-mono font-bold flex items-center justify-center shadow-xs">
+                    0{i + 1}
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-sm leading-snug">{s.title}</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed font-normal">{s.desc}</p>
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-sm leading-snug">{s.title}</h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-normal">{s.desc}</p>
-              </div>
+              </TiltCard>
             ))}
           </div>
         </section>

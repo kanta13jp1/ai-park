@@ -4,7 +4,8 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
-import { playCyberClick } from "@/lib/sound";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   Cloud,
   ShieldCheck,
@@ -126,7 +127,11 @@ export default function AwsInfoPage() {
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-600">
                 {CLOUD_COMPARISONS.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-slate-50/60 transition-colors">
+                  <tr
+                    key={idx}
+                    onMouseEnter={() => playCyberHover()}
+                    className="hover:bg-slate-50/60 transition-colors cursor-default"
+                  >
                     <td className="py-3.5 px-4 font-bold text-slate-800 font-mono">{row.serviceType}</td>
                     <td className="py-3.5 px-4 font-mono text-amber-700 font-semibold">{row.awsService}</td>
                     <td className="py-3.5 px-4 font-mono text-blue-700 font-semibold">{row.gcpService}</td>
@@ -140,73 +145,79 @@ export default function AwsInfoPage() {
 
         {/* 申請フローと相談窓口 */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <SpotlightCard
-            spotlightColor="rgba(6, 182, 212, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <div className="p-6 flex flex-col justify-between h-full space-y-4">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600">
-                  <FileCheck2 size={20} />
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(6, 182, 212, 0.12)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+            >
+              <div className="p-6 flex flex-col justify-between h-full space-y-4">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-200 flex items-center justify-center text-cyan-600">
+                    <FileCheck2 size={20} />
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-base">
+                    クラウド環境利用申請（準備中）
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    新規開発プロジェクトやPoC（概念実証）で専用のクラウド環境（AWS Account / GCP Project）が必要な場合、正式ワークフローが制定され次第こちらから申請可能になります。
+                  </p>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-500">
+                    <span>ステータス: 申請フロー設計中（情シス協議中）</span>
+                  </div>
                 </div>
-                <h4 className="font-extrabold text-slate-900 text-base">
-                  クラウド環境利用申請（準備中）
-                </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  新規開発プロジェクトやPoC（概念実証）で専用のクラウド環境（AWS Account / GCP Project）が必要な場合、正式ワークフローが制定され次第こちらから申請可能になります。
-                </p>
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-500">
-                  <span>ステータス: 申請フロー設計中（情シス協議中）</span>
-                </div>
-              </div>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs text-slate-400 font-mono">受付開始予定: 2026年Q4</span>
-                <Link
-                  href="/contact"
-                  onClick={() => playCyberClick()}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-cyan-700 hover:text-cyan-800 font-mono"
-                >
-                  <span>個別事前相談はこちら</span>
-                  <ArrowRight size={13} />
-                </Link>
-              </div>
-            </div>
-          </SpotlightCard>
-
-          <SpotlightCard
-            spotlightColor="rgba(99, 102, 241, 0.12)"
-            className="bg-white border-slate-200/90 shadow-sm"
-          >
-            <div className="p-6 flex flex-col justify-between h-full space-y-4">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600">
-                  <ShieldCheck size={20} />
-                </div>
-                <h4 className="font-extrabold text-slate-900 text-base">
-                  社内セキュリティ・コスト監視
-                </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Google Cloud の社内利用状況および $300 無料クレジットの残高・推移は「社内利用状況（Gemini利用モニタ）」からリアルタイムで確認可能です。
-                </p>
-                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-500">
-                  <span>監視基盤: Gemini Live Monitoring API 稼働中</span>
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-mono">受付開始予定: 2026年Q4</span>
+                  <Link
+                    href="/contact"
+                    onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-cyan-700 hover:text-cyan-800 font-mono cursor-pointer"
+                  >
+                    <span>個別事前相談はこちら</span>
+                    <ArrowRight size={13} />
+                  </Link>
                 </div>
               </div>
+            </SpotlightCard>
+          </TiltCard>
 
-              <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs text-slate-400 font-mono">更新間隔: リアルタイム</span>
-                <Link
-                  href="/gemini-stats"
-                  onClick={() => playCyberClick()}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800 font-mono"
-                >
-                  <span>モニタ画面を見る</span>
-                  <ArrowRight size={13} />
-                </Link>
+          <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
+            <SpotlightCard
+              spotlightColor="rgba(99, 102, 241, 0.12)"
+              className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl"
+            >
+              <div className="p-6 flex flex-col justify-between h-full space-y-4">
+                <div className="space-y-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-600">
+                    <ShieldCheck size={20} />
+                  </div>
+                  <h4 className="font-extrabold text-slate-900 text-base">
+                    社内セキュリティ・コスト監視
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Google Cloud の社内利用状況および $300 無料クレジットの残高・推移は「社内利用状況（Gemini利用モニタ）」からリアルタイムで確認可能です。
+                  </p>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-500">
+                    <span>監視基盤: Gemini Live Monitoring API 稼働中</span>
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-mono">更新間隔: リアルタイム</span>
+                  <Link
+                    href="/gemini-stats"
+                    onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:text-indigo-800 font-mono cursor-pointer"
+                  >
+                    <span>モニタ画面を見る</span>
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
               </div>
-            </div>
-          </SpotlightCard>
+            </SpotlightCard>
+          </TiltCard>
         </div>
       </div>
     </div>
