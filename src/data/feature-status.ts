@@ -31,6 +31,19 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     releaseCondition: "初期バージョン公開完了",
   },
   {
+    id: "news",
+    name: "最新AIニュース & リリースレーダー",
+    href: "/news",
+    isVerified: true,
+    status: "verified",
+    evidence: "公式一次情報に基づくAIニュース10件・カテゴリ/重要度フィルター・実機検証完了",
+    currentBadge: "NEW",
+    disclaimer: "",
+    releaseDate: "公開済み",
+    releaseCondition: "初期バージョン公開完了",
+  },
+
+  {
     id: "how-to",
     name: "使い方・学び 総合ハブ",
     href: "/how-to",
