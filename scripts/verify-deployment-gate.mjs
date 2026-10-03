@@ -97,14 +97,76 @@ unverifiedHrefs.forEach((href) => {
   }
 });
 
+// 4. 開発者手動プリフライトチェック（UAT）全項目合格の検査
+console.log("\n-------------------------------------------------");
+console.log("🔍 開発者手動プリフライトチェック（UAT）検証の検査");
+console.log("-------------------------------------------------");
+
+const preflightPath = path.join(rootDir, "src", "data", "preflight-checklist.ts");
+if (!fs.existsSync(preflightPath)) {
+  console.error("❌ エラー: src/data/preflight-checklist.ts が見つかりません。");
+  process.exit(1);
+}
+
+const preflightContent = fs.readFileSync(preflightPath, "utf-8");
+
+// preflightChecklistMaster に登録された機能について、4大チェック項目（Fact & Spec, Design, Usability, Readability）が合格しているか検査
+const requiredChecks = ["factAndSpec", "designAndLayout", "usability", "readability"];
+
+// 簡易抽出：レコード内の passed: false または未定義をチェック
+const failedRecordRegex = /id:\s*["']([^"']+)["'][^}]*?overallStatus:\s*["'](needs_work|under_review)["']/gs;
+let failedMatch;
+while ((failedMatch = failedRecordRegex.exec(preflightContent)) !== null) {
+  console.error(`❌ UAT VIOLATION: 機能 "${failedMatch[1]}" は手動UATで「${failedMatch[2]}」となっており、未承認です！`);
+  hasErrors = true;
+}
+
+// 登録機能のチェック項目検証
+const recordBlockRegex = /{\s*id:\s*["']([^"']+)["'],\s*name:\s*["']([^"']+)["'],\s*path:\s*["']([^"']+)["'](.*?overallStatus:\s*["']passed["'].*?environment:\s*["']([^"']+)["'].*?)\}/gs;
+let recordMatch;
+let uatPassedCount = 0;
+
+while ((recordMatch = recordBlockRegex.exec(preflightContent)) !== null) {
+  const fId = recordMatch[1];
+  const fName = recordMatch[2];
+  const fPath = recordMatch[3];
+  const block = recordMatch[4];
+  const env = recordMatch[5];
+
+  // 4項目すべて passed: true かつ evidence が存在するか
+  let recordOk = true;
+  for (const c of requiredChecks) {
+    const cRegex = new RegExp(`${c}:\\s*\\{[^}]*?passed:\\s*true[^}]*?evidence:\\s*["']([^"']+)["']`, "s");
+    const cMatch = cRegex.exec(block);
+    if (!cMatch || !cMatch[1].trim()) {
+      console.error(`❌ UAT VIOLATION: "${fName}" (${fPath}) の手動チェック項目 "${c}" に合格エビデンスがありません！`);
+      hasErrors = true;
+      recordOk = false;
+    }
+  }
+
+  if (!env || !env.trim()) {
+    console.error(`❌ UAT VIOLATION: "${fName}" (${fPath}) に実機確認環境（environment）が記録されていません！`);
+    hasErrors = true;
+    recordOk = false;
+  }
+
+  if (recordOk) {
+    console.log(`✅ UAT合格: "${fName}" (${fPath}) [仕様・デザイン・操作性・視認性 手動確認済]`);
+    uatPassedCount++;
+  }
+}
+
+console.log(`\n📊 手動UAT承認完了機能: ${uatPassedCount} 件`);
+
 console.log("\n=================================================");
 if (hasErrors) {
-  console.error("🚨 品質ゲート不合格: 事実確認が未完了な項目が本番公開用として検出されました。");
-  console.error("   上記の指摘事項を修正後、再度ビルドを実行してください。");
+  console.error("🚨 品質ゲート不合格: 事実確認または手動UAT（プリフライトチェック）未完了の項目が検出されました。");
+  console.error("   開発者による実機確認を実施し、src/data/preflight-checklist.ts にエビデンスを記録してください。");
   console.error("=================================================");
   process.exit(1);
 } else {
-  console.log("🎉 品質ゲート通過: すべての未確認項目が誠実に「工事中 / 準備中 / PoC」として管理されています。");
+  console.log("🎉 品質ゲート通過: すべての未確認項目が誠実に管理され、公開機能の手動UATも全件合格しています。");
   console.log("   本番デプロイを承認します。");
   console.log("=================================================");
   process.exit(0);

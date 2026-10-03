@@ -114,6 +114,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/preflight" className="hover:text-cyan-300 transition-colors flex items-center gap-1 text-slate-400">
+                  <span>開発者手動UAT管理（プリフライト）</span>
+                </Link>
+              </li>
+              <li>
                 <a
                   href="https://antigravity.google/docs"
                   target="_blank"
