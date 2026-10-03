@@ -10,15 +10,20 @@ import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import AcademyProgressHUD from "@/components/academy/AcademyProgressHUD";
+import ProgressManager from "@/components/academy/ProgressManager";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 export default function AcademyPage() {
   const [progress, setProgress] = useState<Record<string, CourseProgress>>({});
 
+  const refreshProgress = () => {
+    setProgress(loadProgress());
+  };
+
   useEffect(() => {
     // localStorage はブラウザでのみ読めるため、表示後に反映する
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setProgress(loadProgress());
+    refreshProgress();
   }, []);
 
   const inProgress = courses.filter((c) => {
@@ -81,6 +86,12 @@ export default function AcademyPage() {
             </div>
           </div>
         </TiltCard>
+        {/* 進捗バックアップ・復元 & Google Chat報告マネージャー */}
+        <ProgressManager
+          totalLessons={totalLessons}
+          doneLessons={doneLessons}
+          onProgressUpdated={refreshProgress}
+        />
 
         {/* 学習再開セクション（進行中がある場合） */}
         {inProgress.length > 0 && (
