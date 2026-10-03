@@ -75,11 +75,24 @@ async function main() {
   } catch {}
 
   if (!saExists) {
-    run(
-      `gcloud iam service-accounts create ${SA_NAME} --project=${PROJECT_ID} --display-name="${DISPLAY_NAME}" --description="Antigravity usage sync"`,
-      `Creating Service Account: ${SA_NAME}`
-    );
-    console.log('✅ Created Service Account.');
+    try {
+      run(
+        `gcloud iam service-accounts create ${SA_NAME} --project=${PROJECT_ID} --display-name="${DISPLAY_NAME}" --description="Antigravity usage sync"`,
+        `Creating Service Account: ${SA_NAME}`
+      );
+      console.log('✅ Created Service Account.');
+    } catch (err) {
+      console.log('\n-------------------------------------------------');
+      console.log('ℹ️  社内権限の制限により、CLIからのサービスアカウント自動作成がスキップされました。');
+      console.log('お手数ですが、以下の Google Cloud コンソールから手動で1つ発行してください（1分で完了）:');
+      console.log(`\n👉 コンソールURL: https://console.cloud.google.com/iam-admin/serviceaccounts/create?project=${PROJECT_ID}`);
+      console.log('1. アカウント名: ai-park-usage-sync（任意）');
+      console.log('2. ロール: Logging > Logging 閲覧者（Logging Viewer）');
+      console.log('3. 作成後、サービスアカウントの「キー」タブから「鍵を追加」>「新しい鍵を作成 (JSON)」でダウンロード');
+      console.log('\nダウンロード後、以下のコマンドを実行すると GitHub Secrets に自動登録されます:');
+      console.log('  node scripts/register-sa-key.mjs\n-------------------------------------------------\n');
+      process.exit(0);
+    }
   } else {
     console.log(`✅ Existing Service Account found: ${SA_EMAIL}`);
   }

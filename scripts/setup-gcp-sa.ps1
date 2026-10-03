@@ -51,11 +51,25 @@ Write-Host "`n[Step 2/5] Checking service account: $saEmail" -ForegroundColor Ye
 $existingSa = gcloud iam service-accounts list --project=$ProjectId --filter="email:$saEmail" --format="value(email)" 2>$null
 if (-not $existingSa) {
     Write-Host "  Creating service account: $ServiceAccountName ..." -ForegroundColor Cyan
-    gcloud iam service-accounts create $ServiceAccountName `
-        --project=$ProjectId `
-        --display-name="$DisplayName" `
-        --description="Antigravity usage sync service account"
-    Write-Host "  OK: Service account created." -ForegroundColor Green
+    try {
+        gcloud iam service-accounts create $ServiceAccountName `
+            --project=$ProjectId `
+            --display-name="$DisplayName" `
+            --description="Antigravity usage sync service account"
+        Write-Host "  OK: Service account created." -ForegroundColor Green
+    } catch {
+        Write-Host "`n-------------------------------------------------" -ForegroundColor Yellow
+        Write-Host "ℹ️  社内権限の制限により、CLIからのサービスアカウント自動作成がスキップされました。" -ForegroundColor Cyan
+        Write-Host "以下の Google Cloud コンソールから手動で1つ発行してください（1分で完了）:" -ForegroundColor White
+        Write-Host "`n👉 コンソールURL: https://console.cloud.google.com/iam-admin/serviceaccounts/create?project=$ProjectId" -ForegroundColor Yellow
+        Write-Host "1. アカウント名: ai-park-usage-sync（任意）" -ForegroundColor White
+        Write-Host "2. ロール: Logging > Logging 閲覧者（Logging Viewer）" -ForegroundColor White
+        Write-Host "3. 作成後、サービスアカウントの「キー」タブから「鍵を追加」>「新しい鍵を作成 (JSON)」でダウンロード" -ForegroundColor White
+        Write-Host "`nダウンロード後、以下のコマンドを実行すると GitHub Secrets に自動登録されます:" -ForegroundColor White
+        Write-Host "  node scripts/register-sa-key.mjs" -ForegroundColor Green
+        Write-Host "-------------------------------------------------`n" -ForegroundColor Yellow
+        exit 0
+    }
 } else {
     Write-Host "  OK: Existing service account found." -ForegroundColor Green
 }
