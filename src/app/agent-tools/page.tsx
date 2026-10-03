@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   ArrowLeft,
   Lightbulb,
@@ -188,65 +190,73 @@ export default function AgentToolsHubPage() {
             {hubCards.map((card) => {
               const Icon = card.icon;
               return (
-                <Link
+                <TiltCard
                   key={card.id}
-                  href={card.href}
-                  className="block bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-2xs hover:shadow-md hover:border-sky-300 transition-all group relative overflow-hidden"
+                  maxTilt={4}
+                  glareOpacity={0.08}
+                  className="rounded-2xl"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                    <div className="flex items-start space-x-4">
-                      {/* アイコンバッジ */}
-                      <div
-                        className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border shadow-2xs group-hover:scale-105 transition-transform ${card.iconBg}`}
-                      >
-                        <Icon className={`w-6 h-6 ${card.iconColor}`} />
-                      </div>
-
-                      {/* テキスト情報 */}
-                      <div className="space-y-1.5 flex-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-sky-600 transition-colors">
-                            {card.title}
-                          </h3>
-                          <span
-                            className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${card.badgeColor}`}
-                          >
-                            {card.badge}
-                          </span>
+                  <Link
+                    href={card.href}
+                    onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
+                    className="block bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-2xs hover:shadow-md hover:border-sky-300 transition-all group relative overflow-hidden cursor-pointer"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                      <div className="flex items-start space-x-4">
+                        {/* アイコンバッジ */}
+                        <div
+                          className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 border shadow-2xs group-hover:scale-105 transition-transform ${card.iconBg}`}
+                        >
+                          <Icon className={`w-6 h-6 ${card.iconColor}`} />
                         </div>
 
-                        {/* 参考サイト完全再現のキャッチコピー */}
-                        <p className="text-xs sm:text-sm font-semibold text-slate-700">
-                          {card.desc}
-                        </p>
-
-                        {/* 詳細説明 */}
-                        <p className="text-xs text-slate-500 leading-relaxed pt-0.5">
-                          {card.detail}
-                        </p>
-
-                        {/* タグ一覧 */}
-                        <div className="flex flex-wrap items-center gap-1.5 pt-2">
-                          {card.tags.map((tag, tIdx) => (
+                        {/* テキスト情報 */}
+                        <div className="space-y-1.5 flex-1">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-sky-600 transition-colors">
+                              {card.title}
+                            </h3>
                             <span
-                              key={tIdx}
-                              className="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200"
+                              className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${card.badgeColor}`}
                             >
-                              {tag}
+                              {card.badge}
                             </span>
-                          ))}
+                          </div>
+
+                          {/* 参考サイト完全再現のキャッチコピー */}
+                          <p className="text-xs sm:text-sm font-semibold text-slate-700">
+                            {card.desc}
+                          </p>
+
+                          {/* 詳細説明 */}
+                          <p className="text-xs text-slate-500 leading-relaxed pt-0.5">
+                            {card.detail}
+                          </p>
+
+                          {/* タグ一覧 */}
+                          <div className="flex flex-wrap items-center gap-1.5 pt-2">
+                            {card.tags.map((tag, tIdx) => (
+                              <span
+                                key={tIdx}
+                                className="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 矢印アイコン */}
+                      <div className="shrink-0 self-end sm:self-center">
+                        <div className="w-9 h-9 rounded-xl bg-slate-50 group-hover:bg-sky-500 text-slate-400 group-hover:text-white flex items-center justify-center transition-colors shadow-2xs">
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                         </div>
                       </div>
                     </div>
-
-                    {/* 矢印アイコン */}
-                    <div className="shrink-0 self-end sm:self-center">
-                      <div className="w-9 h-9 rounded-xl bg-slate-50 group-hover:bg-sky-500 text-slate-400 group-hover:text-white flex items-center justify-center transition-colors shadow-2xs">
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                      </div>
-                    </div>
-                  </div>
-                </Link>
+                  </Link>
+                </TiltCard>
               );
             })}
           </div>

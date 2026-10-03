@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
+import AnimatedCounter from "@/components/AnimatedCounter";
 import { TOOLS_SHEET_CSV_URL, fetchSheetTools } from "@/lib/toolsSheet";
 import { playCyberClick, playCyberHover, playCyberOpen } from "@/lib/sound";
 
@@ -462,48 +464,65 @@ export default function ToolsPage() {
 
           {/* 4大KPIカード */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-1">
-            <SpotlightCard
-              spotlightColor="rgba(255, 255, 255, 0.1)"
-              className="bg-white/5 backdrop-blur-md border-white/10"
-            >
-              <div className="p-4">
-                <span className="text-xs font-mono text-slate-400 block">掲載ツール数</span>
-                <span className="text-2xl sm:text-3xl font-black text-white mt-1 block tracking-tight">{tools.length}</span>
-              </div>
-            </SpotlightCard>
-            <SpotlightCard
-              spotlightColor="rgba(14, 165, 233, 0.15)"
-              className="bg-white/5 backdrop-blur-md border-white/10"
-            >
-              <div className="p-4">
-                <span className="text-xs font-mono text-slate-400 block">利用可能</span>
-                <span className="text-2xl sm:text-3xl font-black text-sky-400 mt-1 block tracking-tight">{tools.filter((t) => t.status === "全社員利用可能" || t.status === "利用可能" || t.status === "社内セキュア網").length}</span>
-              </div>
-            </SpotlightCard>
-            <SpotlightCard
-              spotlightColor="rgba(16, 185, 129, 0.15)"
-              className="bg-white/5 backdrop-blur-md border-white/10"
-            >
-              <div className="p-4">
-                <span className="text-xs font-mono text-slate-400 block">全社員利用可能</span>
-                <span className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 block tracking-tight">{tools.filter((t) => t.status === "全社員利用可能").length}</span>
-              </div>
-            </SpotlightCard>
-            <SpotlightCard
-              spotlightColor="rgba(16, 185, 129, 0.2)"
-              className="bg-white/5 backdrop-blur-md border-white/10"
-            >
-              <div className="p-4 flex flex-col justify-between h-full">
-                <span className="text-xs font-mono text-slate-400 block">同期ステータス</span>
-                <div className="flex items-center space-x-2 mt-1.5">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(255, 255, 255, 0.1)"
+                className="bg-white/5 backdrop-blur-md border-white/10 h-full rounded-2xl"
+              >
+                <div className="p-4">
+                  <span className="text-xs font-mono text-slate-400 block">掲載ツール数</span>
+                  <span className="text-2xl sm:text-3xl font-black text-white mt-1 block tracking-tight font-mono">
+                    <AnimatedCounter value={tools.length} />
                   </span>
-                  <span className="text-sm font-bold text-emerald-300 font-mono">Sheet連携中</span>
                 </div>
-              </div>
-            </SpotlightCard>
+              </SpotlightCard>
+            </TiltCard>
+
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(14, 165, 233, 0.15)"
+                className="bg-white/5 backdrop-blur-md border-white/10 h-full rounded-2xl"
+              >
+                <div className="p-4">
+                  <span className="text-xs font-mono text-slate-400 block">利用可能</span>
+                  <span className="text-2xl sm:text-3xl font-black text-sky-400 mt-1 block tracking-tight font-mono">
+                    <AnimatedCounter value={tools.filter((t) => t.status === "全社員利用可能" || t.status === "利用可能" || t.status === "社内セキュア網").length} />
+                  </span>
+                </div>
+              </SpotlightCard>
+            </TiltCard>
+
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(16, 185, 129, 0.15)"
+                className="bg-white/5 backdrop-blur-md border-white/10 h-full rounded-2xl"
+              >
+                <div className="p-4">
+                  <span className="text-xs font-mono text-slate-400 block">全社員利用可能</span>
+                  <span className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 block tracking-tight font-mono">
+                    <AnimatedCounter value={tools.filter((t) => t.status === "全社員利用可能").length} />
+                  </span>
+                </div>
+              </SpotlightCard>
+            </TiltCard>
+
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(16, 185, 129, 0.2)"
+                className="bg-white/5 backdrop-blur-md border-white/10 h-full rounded-2xl"
+              >
+                <div className="p-4 flex flex-col justify-between h-full">
+                  <span className="text-xs font-mono text-slate-400 block">同期ステータス</span>
+                  <div className="flex items-center space-x-2 mt-1.5">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+                    </span>
+                    <span className="text-sm font-bold text-emerald-300 font-mono">Sheet連携中</span>
+                  </div>
+                </div>
+              </SpotlightCard>
+            </TiltCard>
           </div>
         </div>
       </div>

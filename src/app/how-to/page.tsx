@@ -18,6 +18,8 @@ import {
   Wrench,
 } from "lucide-react";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 export default function HowToPage() {
   const mainHubCards = [
@@ -167,64 +169,72 @@ export default function HowToPage() {
 
           <div className="grid grid-cols-1 gap-4">
             {mainHubCards.map((card) => (
-              <SpotlightCard
+              <TiltCard
                 key={card.id}
-                spotlightColor="rgba(14, 165, 233, 0.14)"
-                className="bg-white border-slate-200/90"
+                maxTilt={4}
+                glareOpacity={0.08}
+                className="rounded-2xl"
               >
-                <Link
-                  href={card.href}
-                  className="group block p-6 transition-all duration-200"
+                <SpotlightCard
+                  spotlightColor="rgba(14, 165, 233, 0.14)"
+                  className="bg-white border-slate-200/90 rounded-2xl"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-start sm:items-center space-x-4">
-                      {/* アイコン */}
-                      <div
-                        className={`w-14 h-14 rounded-2xl border flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform ${card.iconBg}`}
-                      >
-                        {card.icon}
-                      </div>
-
-                      {/* タイトルと説明 */}
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors tracking-tight">
-                            {card.title}
-                          </h3>
-                          <span
-                            className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${card.badgeColor}`}
-                          >
-                            {card.badge}
-                          </span>
+                  <Link
+                    href={card.href}
+                    onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
+                    className="group block p-6 transition-all duration-200 cursor-pointer"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-start sm:items-center space-x-4">
+                        {/* アイコン */}
+                        <div
+                          className={`w-14 h-14 rounded-2xl border flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform ${card.iconBg}`}
+                        >
+                          {card.icon}
                         </div>
-                        <p className="text-sm text-slate-600 font-medium">
-                          {card.desc}
-                        </p>
-                        <p className="text-xs text-slate-400 hidden sm:block">
-                          {card.highlights}
-                        </p>
-                      </div>
-                    </div>
 
-                    {/* 右側アクション */}
-                    <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                      <div className="flex flex-wrap gap-1.5">
-                        {card.tags.map((tag, tIdx) => (
-                          <span
-                            key={tIdx}
-                            className="text-[11px] bg-slate-100 font-mono text-slate-600 px-2.5 py-0.5 rounded-full"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                        {/* タイトルと説明 */}
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="text-lg sm:text-xl font-extrabold text-slate-900 group-hover:text-sky-600 transition-colors tracking-tight">
+                              {card.title}
+                            </h3>
+                            <span
+                              className={`text-xs px-2.5 py-0.5 rounded-full font-bold ${card.badgeColor}`}
+                            >
+                              {card.badge}
+                            </span>
+                          </div>
+                          <p className="text-sm text-slate-600 font-medium">
+                            {card.desc}
+                          </p>
+                          <p className="text-xs text-slate-400 hidden sm:block">
+                            {card.highlights}
+                          </p>
+                        </div>
                       </div>
-                      <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-colors">
-                        <ChevronRight size={18} />
+
+                      {/* 右側アクション */}
+                      <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                        <div className="flex flex-wrap gap-1.5">
+                          {card.tags.map((tag, tIdx) => (
+                            <span
+                              key={tIdx}
+                              className="text-[11px] bg-slate-100 font-mono text-slate-600 px-2.5 py-0.5 rounded-full"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-sky-500 group-hover:text-white transition-colors">
+                          <ChevronRight size={18} />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              </SpotlightCard>
+                  </Link>
+                </SpotlightCard>
+              </TiltCard>
             ))}
           </div>
         </section>
@@ -243,34 +253,42 @@ export default function HowToPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {steps.map((item, idx) => (
-              <SpotlightCard
+              <TiltCard
                 key={idx}
-                spotlightColor="rgba(14, 165, 233, 0.15)"
-                className="bg-slate-50/70 border-slate-200/80"
+                maxTilt={6}
+                glareOpacity={0.12}
+                className="h-full rounded-2xl"
               >
-                <div className="p-5 flex flex-col justify-between h-full">
-                  <div className="space-y-2">
-                    <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-sky-100 text-sky-700 inline-block">
-                      {item.step}
-                    </span>
-                    <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-slate-600 leading-relaxed font-normal">
-                      {item.desc}
-                    </p>
+                <SpotlightCard
+                  spotlightColor="rgba(14, 165, 233, 0.15)"
+                  className="bg-slate-50/70 border-slate-200/80 h-full rounded-2xl"
+                >
+                  <div className="p-5 flex flex-col justify-between h-full">
+                    <div className="space-y-2">
+                      <span className="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-sky-100 text-sky-700 inline-block">
+                        {item.step}
+                      </span>
+                      <h3 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                        {item.title}
+                      </h3>
+                      <p className="text-xs text-slate-600 leading-relaxed font-normal">
+                        {item.desc}
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-slate-200/80">
+                      <Link
+                        href={item.href}
+                        onClick={() => playCyberClick()}
+                        onMouseEnter={() => playCyberHover()}
+                        className="inline-flex items-center text-xs font-bold text-sky-600 hover:text-sky-700 group/lnk cursor-pointer"
+                      >
+                        <span>{item.linkText}</span>
+                        <ChevronRight size={14} className="ml-1 group-hover/lnk:translate-x-0.5 transition-transform" />
+                      </Link>
+                    </div>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-slate-200/80">
-                    <Link
-                      href={item.href}
-                      className="inline-flex items-center text-xs font-bold text-sky-600 hover:text-sky-700 group/lnk"
-                    >
-                      <span>{item.linkText}</span>
-                      <ChevronRight size={14} className="ml-1 group-hover/lnk:translate-x-0.5 transition-transform" />
-                    </Link>
-                  </div>
-                </div>
-              </SpotlightCard>
+                </SpotlightCard>
+              </TiltCard>
             ))}
           </div>
         </section>
