@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Trophy, Award, Flame, Sparkles, CheckCircle2 } from "lucide-react";
 import AnimatedCounter from "@/components/AnimatedCounter";
+import TiltCard from "@/components/TiltCard";
+import { playCyberHover } from "@/lib/sound";
 
 interface AcademyProgressHUDProps {
   totalLessons: number;
@@ -67,8 +69,12 @@ export default function AcademyProgressHUD({
   const rank = getRankBadge();
 
   return (
-    <div className="shrink-0 flex items-center gap-5 bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-2xl">
-      {/* 円形SVGサイバープログレスリング */}
+    <TiltCard maxTilt={5} glareOpacity={0.12} className="shrink-0 rounded-2xl">
+      <div
+        onMouseEnter={() => playCyberHover()}
+        className="flex items-center gap-5 bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 shadow-2xl cursor-default h-full"
+      >
+        {/* 円形SVGサイバープログレスリング */}
       <div className="relative flex items-center justify-center">
         <svg className="w-24 h-24 transform -rotate-90 drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">
           {/* 背景トラック */}
@@ -140,5 +146,6 @@ export default function AcademyProgressHUD({
         </div>
       </div>
     </div>
+  </TiltCard>
   );
 }

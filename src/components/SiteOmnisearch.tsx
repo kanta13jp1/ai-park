@@ -11,6 +11,7 @@ import {
   X,
   ExternalLink,
 } from "lucide-react";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 interface SearchIndexItem {
   title: string;
@@ -242,8 +243,12 @@ export default function SiteOmnisearch() {
           />
           {query && (
             <button
-              onClick={() => setQuery("")}
-              className="absolute right-3.5 p-1 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-200 transition-colors"
+              onClick={() => {
+                playCyberClick();
+                setQuery("");
+              }}
+              onMouseEnter={() => playCyberHover()}
+              className="absolute right-3.5 p-1 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-200 transition-colors cursor-pointer"
             >
               <X size={16} />
             </button>
@@ -259,7 +264,11 @@ export default function SiteOmnisearch() {
           {popularTags.map((tag) => (
             <button
               key={tag}
-              onClick={() => setQuery(tag)}
+              onClick={() => {
+                playCyberClick();
+                setQuery(tag);
+              }}
+              onMouseEnter={() => playCyberHover()}
               className="px-3 py-1 bg-slate-100/80 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300 rounded-full transition-all font-medium border border-slate-200/80 cursor-pointer shadow-2xs hover:scale-105 active:scale-95"
             >
               #{tag}
@@ -283,7 +292,9 @@ export default function SiteOmnisearch() {
                   <Link
                     key={result.title}
                     href={result.href}
-                    className="p-4 bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50/40 border border-slate-200/90 hover:border-blue-400 rounded-2xl transition-all duration-200 flex flex-col justify-between group space-y-2.5 shadow-2xs hover:shadow-md hover:-translate-y-0.5"
+                    onClick={() => playCyberClick()}
+                    onMouseEnter={() => playCyberHover()}
+                    className="p-4 bg-white hover:bg-gradient-to-br hover:from-white hover:to-blue-50/40 border border-slate-200/90 hover:border-blue-400 rounded-2xl transition-all duration-200 flex flex-col justify-between group space-y-2.5 shadow-2xs hover:shadow-md hover:-translate-y-0.5 cursor-pointer"
                   >
                     <div className="space-y-1.5">
                       <div className="flex items-center space-x-2">

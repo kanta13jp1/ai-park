@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Sparkles, ExternalLink, ShieldCheck, Heart, Terminal, Compass, BookOpen, Layers } from "lucide-react";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 export default function Footer() {
   return (
@@ -39,22 +40,22 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/academy" className="hover:text-cyan-300 transition-colors">
+                <Link href="/academy" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   Antigravity Academy (全12レッスン)
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="hover:text-cyan-300 transition-colors">
+                <Link href="/guide" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   Antigravity 導入ガイド
                 </Link>
               </li>
               <li>
-                <Link href="/learning" className="hover:text-cyan-300 transition-colors">
+                <Link href="/learning" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   初心者向けチートシート
                 </Link>
               </li>
               <li>
-                <Link href="/how-to" className="hover:text-cyan-300 transition-colors">
+                <Link href="/how-to" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   使い方・学び 総合ハブ
                 </Link>
               </li>
@@ -69,27 +70,27 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/ai-projects" className="hover:text-cyan-300 transition-colors">
+                <Link href="/ai-projects" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   社内AIプロジェクト一覧
                 </Link>
               </li>
               <li>
-                <Link href="/idea-board" className="hover:text-cyan-300 transition-colors">
+                <Link href="/idea-board" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   アイデア宣言ボード
                 </Link>
               </li>
               <li>
-                <Link href="/feedback-todo" className="hover:text-cyan-300 transition-colors">
+                <Link href="/feedback-todo" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   ご意見・改善ToDoボード
                 </Link>
               </li>
               <li>
-                <Link href="/calendar" className="hover:text-cyan-300 transition-colors">
+                <Link href="/calendar" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   AI Park カレンダー
                 </Link>
               </li>
               <li>
-                <Link href="/roadmap" className="hover:text-cyan-300 transition-colors">
+                <Link href="/roadmap" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   開発ロードマップ
                 </Link>
               </li>
@@ -104,17 +105,17 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/tools-hub" className="hover:text-cyan-300 transition-colors">
+                <Link href="/tools-hub" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   AIセキュリティ基準 (Level 1〜3)
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-cyan-300 transition-colors">
+                <Link href="/contact" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   AI推進担当（担当：梅澤）相談窓口
                 </Link>
               </li>
               <li>
-                <Link href="/preflight" className="hover:text-cyan-300 transition-colors flex items-center gap-1 text-slate-400">
+                <Link href="/preflight" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors flex items-center gap-1 text-slate-400 cursor-pointer">
                   <span>開発者手動UAT管理（プリフライト）</span>
                 </Link>
               </li>
@@ -123,7 +124,7 @@ export default function Footer() {
                   href="https://antigravity.google/docs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center space-x-1 hover:text-cyan-300 transition-colors"
+                  onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="inline-flex items-center space-x-1 hover:text-cyan-300 transition-colors cursor-pointer"
                 >
                   <span>Google Antigravity 公式Doc</span>
                   <ExternalLink size={11} />
