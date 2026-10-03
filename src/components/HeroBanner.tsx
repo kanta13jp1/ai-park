@@ -1,7 +1,8 @@
 "use client";
 
 import { Search, Sparkles, Command } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
+import { playCyberClick } from "@/lib/sound";
 
 interface HeroBannerProps {
   title: string;
@@ -14,9 +15,33 @@ export default function HeroBanner({
   subtitle = "みんなでつくるAI広場",
   isHome = false,
 }: HeroBannerProps) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const bannerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!bannerRef.current) return;
+    const rect = bannerRef.current.getBoundingClientRect();
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    // -15px 〜 +15px の範囲でスムーズな視差オフセット
+    const deltaX = ((mouseX - centerX) / centerX) * 16;
+    const deltaY = ((mouseY - centerY) / centerY) * 12;
+    setOffset({ x: deltaX, y: deltaY });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setOffset({ x: 0, y: 0 });
+  }, []);
+
   return (
     <div
-      className={`relative w-full overflow-hidden flex items-center justify-center select-none shadow-xl border-b border-slate-800/60 ${
+      ref={bannerRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`relative w-full overflow-hidden flex items-center justify-center select-none shadow-xl border-b border-slate-800/60 transition-colors duration-500 ${
         isHome ? "h-64 sm:h-72 md:h-80 bg-[#07130e]" : "h-48 sm:h-52 md:h-56 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950"
       }`}
     >
@@ -25,13 +50,26 @@ export default function HeroBanner({
           {/* 深碧・サイバーオーロラ背景 */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#050e0a] via-[#0b1f17] to-[#06120c]" />
 
-          {/* 多層オーロラ・グロー光彩 */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[360px] bg-gradient-to-r from-emerald-500/20 via-teal-400/15 to-cyan-500/20 blur-3xl pointer-events-none rounded-full" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[200px] bg-gradient-to-r from-amber-400/15 via-emerald-400/20 to-sky-400/15 blur-2xl pointer-events-none" />
+          {/* 多層オーロラ・グロー光彩（マウス連動視差） */}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[360px] bg-gradient-to-r from-emerald-500/20 via-teal-400/15 to-cyan-500/20 blur-3xl pointer-events-none rounded-full transition-transform duration-300 ease-out"
+            style={{
+              transform: `translate(calc(-50% + ${offset.x * 0.8}px), calc(-50% + ${offset.y * 0.8}px))`,
+            }}
+          />
+          <div
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[200px] bg-gradient-to-r from-amber-400/15 via-emerald-400/20 to-sky-400/15 blur-2xl pointer-events-none transition-transform duration-500 ease-out"
+            style={{
+              transform: `translate(calc(-50% + ${offset.x * -0.5}px), ${offset.y * -0.5}px)`,
+            }}
+          />
 
-          {/* デジタルAIツリー SVG アートワーク */}
+          {/* デジタルAIツリー SVG アートワーク（マウス連動微細パララックス） */}
           <svg
-            className="absolute inset-0 w-full h-full object-cover opacity-35 pointer-events-none"
+            className="absolute inset-0 w-full h-full object-cover opacity-35 pointer-events-none transition-transform duration-200 ease-out"
+            style={{
+              transform: `translate(${offset.x * 0.4}px, ${offset.y * 0.4}px) scale(1.02)`,
+            }}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 1200 400"
             preserveAspectRatio="xMidYMid slice"
@@ -94,8 +132,18 @@ export default function HeroBanner({
           {/* 個別ページのダークフューチャリスティック背景 */}
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950" />
           <div className="absolute inset-0 bg-[radial-gradient(#ffffff08_1px,transparent_1px)] [background-size:20px_20px] opacity-60 pointer-events-none" />
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
+          <div
+            className="absolute -top-24 -right-24 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none transition-transform duration-300 ease-out"
+            style={{
+              transform: `translate(${offset.x * 0.5}px, ${offset.y * 0.5}px)`,
+            }}
+          />
+          <div
+            className="absolute -bottom-24 -left-24 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none transition-transform duration-300 ease-out"
+            style={{
+              transform: `translate(${offset.x * -0.5}px, ${offset.y * -0.5}px)`,
+            }}
+          />
         </>
       )}
 
@@ -103,9 +151,10 @@ export default function HeroBanner({
       <div className="absolute top-4 right-5 z-20">
         <button
           onClick={() => {
+            playCyberClick();
             window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
           }}
-          className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 text-slate-200 hover:text-white transition-all shadow-md group cursor-pointer"
+          className="flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/15 text-slate-200 hover:text-white transition-all shadow-md group cursor-pointer active:scale-95"
           title="サイト内横断検索 (⌘K)"
         >
           <Search size={14} className="text-cyan-300 group-hover:scale-110 transition-transform" />

@@ -57,6 +57,12 @@ export default function PreflightUatPage() {
       md += `- **ステータス**: ${r.overallStatus === "passed" ? "✅ 合格 (Passed)" : "⚠️ 要対応"}\n`;
       md += `- **確認環境**: ${r.environment}\n`;
       md += `- **仕様・事実確認**: ${r.checks.factAndSpec.passed ? "✅ OK" : "❌ NG"} - ${r.checks.factAndSpec.evidence}\n`;
+      if (r.checks.factAndSpec.subChecks && r.checks.factAndSpec.subChecks.length > 0) {
+        md += `  - **詳細手動チェックリスト**:\n`;
+        r.checks.factAndSpec.subChecks.forEach((sc) => {
+          md += `    - [x] **[${sc.groupTitle}] ${sc.label}**: ${sc.detail}\n`;
+        });
+      }
       md += `- **デザイン・レイアウト**: ${r.checks.designAndLayout.passed ? "✅ OK" : "❌ NG"} - ${r.checks.designAndLayout.evidence}\n`;
       md += `- **操作性・機能性**: ${r.checks.usability.passed ? "✅ OK" : "❌ NG"} - ${r.checks.usability.evidence}\n`;
       md += `- **視認性・アクセシビリティ**: ${r.checks.readability.passed ? "✅ OK" : "❌ NG"} - ${r.checks.readability.evidence}\n`;
@@ -316,14 +322,49 @@ export default function PreflightUatPage() {
                       合格
                     </span>
                   </div>
-                  <div className="bg-white p-3 rounded-xl border border-slate-200 text-[11px] space-y-1.5">
-                    <span className="font-bold text-slate-700 block">手動確認ポイント:</span>
-                    <ul className="list-disc pl-4 space-y-0.5 text-slate-600">
-                      {selectedRecord.checks.factAndSpec.points.map((p, i) => (
-                        <li key={i}>{p}</li>
+                  {selectedRecord.checks.factAndSpec.subChecks && selectedRecord.checks.factAndSpec.subChecks.length > 0 ? (
+                    <div className="bg-white p-3.5 rounded-xl border border-slate-200 text-[11px] space-y-3 max-h-[380px] overflow-y-auto">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+                        <span className="font-bold text-slate-800">詳細手動チェックリスト ({selectedRecord.checks.factAndSpec.subChecks.length}項目):</span>
+                        <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-bold font-mono">
+                          全項目 手動確認済
+                        </span>
+                      </div>
+                      {/* グループごとにレンダリング */}
+                      {Array.from(new Set(selectedRecord.checks.factAndSpec.subChecks.map(s => s.groupTitle))).map((group) => (
+                        <div key={group} className="space-y-1.5">
+                          <h5 className="font-black text-slate-900 text-[11px] bg-slate-100/80 px-2 py-1 rounded-md text-indigo-950 flex items-center gap-1.5">
+                            <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 inline-block" />
+                            <span>{group}</span>
+                          </h5>
+                          <div className="space-y-1.5 pl-1">
+                            {selectedRecord.checks.factAndSpec.subChecks
+                              ?.filter(s => s.groupTitle === group)
+                              .map(s => (
+                                <div key={s.id} className="p-2 rounded-lg bg-slate-50 border border-slate-200/70 space-y-0.5">
+                                  <div className="flex items-center gap-1.5 font-bold text-slate-800">
+                                    <CheckCircle2 size={13} className="text-emerald-600 shrink-0" />
+                                    <span>{s.label}</span>
+                                  </div>
+                                  <p className="text-[10px] text-slate-600 pl-4 leading-relaxed">
+                                    {s.detail}
+                                  </p>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
                       ))}
-                    </ul>
-                  </div>
+                    </div>
+                  ) : (
+                    <div className="bg-white p-3 rounded-xl border border-slate-200 text-[11px] space-y-1.5">
+                      <span className="font-bold text-slate-700 block">手動確認ポイント:</span>
+                      <ul className="list-disc pl-4 space-y-0.5 text-slate-600">
+                        {selectedRecord.checks.factAndSpec.points.map((p, i) => (
+                          <li key={i}>{p}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   <div className="text-[11px] text-emerald-800 bg-emerald-50/80 p-2.5 rounded-xl border border-emerald-200/60 flex items-start gap-1.5">
                     <CheckCircle2 size={13} className="shrink-0 mt-0.5 text-emerald-600" />
                     <span><strong>確認エビデンス:</strong> {selectedRecord.checks.factAndSpec.evidence}</span>

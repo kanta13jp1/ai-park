@@ -6,11 +6,22 @@
  * （仕様・事実確認、デザイン、操作性、視認性）をクリアする必要があります。
  */
 
+export interface DetailedSubCheck {
+  id: string;
+  category: "no_fiction" | "official_announcement" | "link_integrity" | "other";
+  groupTitle: string; // 例: "嘘や推測のデータがないか（事実性検証）"
+  label: string;      // 短いチェック項目名
+  detail: string;     // 具体的な手動点検ポイント・対象箇所
+  verified: boolean;  // 実機確認結果
+}
+
 export interface UatCheckItem {
   passed: boolean;
   checkedAt?: string;
   inspector?: string;
   evidence: string;
+  points: string[];
+  subChecks?: DetailedSubCheck[];
 }
 
 export interface FeaturePreflightRecord {
@@ -24,21 +35,13 @@ export interface FeaturePreflightRecord {
   // 4大手動評価軸
   checks: {
     // 1. 仕様・事実確認（Fact & Spec）
-    factAndSpec: UatCheckItem & {
-      points: string[];
-    };
+    factAndSpec: UatCheckItem;
     // 2. デザイン・レイアウト（Design & Aesthetics）
-    designAndLayout: UatCheckItem & {
-      points: string[];
-    };
+    designAndLayout: UatCheckItem;
     // 3. 操作性・インタラクション（Usability & Interaction）
-    usability: UatCheckItem & {
-      points: string[];
-    };
+    usability: UatCheckItem;
     // 4. 視認性・アクセシビリティ（Readability & Accessibility）
-    readability: UatCheckItem & {
-      points: string[];
-    };
+    readability: UatCheckItem;
   };
   environment: string; // 例: "Windows 11 / Chrome 129 / 1920x1080 & 375x812 (Mobile)"
   memo: string;
@@ -57,7 +60,100 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
       factAndSpec: {
         passed: true,
         evidence: "全社アナウンス、サイト目的、実在する機能へのリンクであることを確認済み",
-        points: ["嘘や推測のデータがないか", "リンク先が実在するか", "公式アナウンスと一致しているか"],
+        points: [
+          "【事実性】組織名・AI推進担当・Google CloudプロジェクトID等の実在確認",
+          "【事実性】提供モデル（Gemini 3.1 Pro）および会社アカウントの実態一致",
+          "【事実性】ヒーロー数値（12 Academy Lessons, LIVE Issue Sync, CoE Office Hour）の根拠確認",
+          "【事実性】社員フィードバック引用（杉村さん・小林さん）が社内Chat実在データであることの確認",
+          "【事実性】未検証・PoC機能（AIツール一覧等）が「工事中/準備中」で正しく保護されているか確認",
+          "【整合性】ポータル理念（みんなでつくるAI広場）が全社アナウンス通知内容と一致しているか",
+          "【整合性】3ステップ導線（導入→初級→実践）が公式案内通りの推奨利用フローとなっているか",
+          "【整合性】セキュリティ注意・機密情報入力禁止ポリシーへの誘導が公式ルールに準拠しているか",
+          "【整合性】AIPulseTickerや告知バナーの募集スケジュールが社内カレンダーと合致しているか",
+          "【実在性】全リンク先（Academy, 導入ガイド, 事例集, カレンダー, ToDoボード等）の実在・疎通確認済",
+        ],
+        subChecks: [
+          {
+            id: "fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性）",
+            label: "組織・担当者・GCP基盤の実在性",
+            detail: "会社名（株式会社Mighty LINK）、AI推進担当（梅澤）、GCPプロジェクトID（antigravity-pj-509006）が実在情報であり、架空の部署や架空の担当者が書かれていないこと。",
+            verified: true,
+          },
+          {
+            id: "fact-02",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性）",
+            label: "AIモデル・社内利用権限の実態一致",
+            detail: "「Gemini 3.1 Pro & Google Antigravity」の表記が、社内会社アカウント（@ml-mightylink.com）に実際に割り当てられているモデル・認可環境と完全一致していること。",
+            verified: true,
+          },
+          {
+            id: "fact-03",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性）",
+            label: "ヒーローKPIバッジ数値の正確性",
+            detail: "「12 Academy Lessons」が実際のレッスン総数（全3コース・12レッスン）と一致し、「LIVE Issue & Task Sync」「CoE Weekly Office Hour」の実稼働事実が存在すること。",
+            verified: true,
+          },
+          {
+            id: "fact-04",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性）",
+            label: "社員フィードバック引用の事実性",
+            detail: "アナウンスバナーの「杉村さんからのシンプル導線・導入初級実践編」「小林さんからのアカウント疑問」等の引用が、社内Google Chatで実際に投稿された実在のフィードバックであること（捏造された架空の声でないこと）。",
+            verified: true,
+          },
+          {
+            id: "fact-05",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性）",
+            label: "未検証機能の「工事中/準備中」ガード遵守",
+            detail: "トップページに並ぶ全カードにおいて、未連携・検証中の機能（AIツール一覧：PoC中、アンバサダー：準備中、セキュリティ基準：工事中等）が正しくガードされ、虚偽の「公開中」表示になっていないこと。",
+            verified: true,
+          },
+          {
+            id: "ann-01",
+            category: "official_announcement",
+            groupTitle: "② 公式アナウンスと一致しているか（整合性・周知遵守）",
+            label: "ポータル趣旨・スローガンの合致",
+            detail: "「みんなでつくるAI広場 — MightyLINK × Google Antigravity」というポータルの趣旨・目的が、全社メール・社内チャットのアナウンス内容と合致していること。",
+            verified: true,
+          },
+          {
+            id: "ann-02",
+            category: "official_announcement",
+            groupTitle: "② 公式アナウンスと一致しているか（整合性・周知遵守）",
+            label: "3ステップ推奨導線の整合性",
+            detail: "「Step 1: 導入編（所要10分） ➔ Step 2: 初級編 ➔ Step 3: 実践編」の推奨順序が、AI推進担当から全社員に通知された公式利用開始ステップと合致していること。",
+            verified: true,
+          },
+          {
+            id: "ann-03",
+            category: "official_announcement",
+            groupTitle: "② 公式アナウンスと一致しているか（整合性・周知遵守）",
+            label: "セキュリティ原則・機密情報保護の徹底",
+            detail: "個人情報や機密情報の入力禁止、会社アカウント利用徹底という全社セキュリティガイドラインに反する誤った誘導がないこと。",
+            verified: true,
+          },
+          {
+            id: "ann-04",
+            category: "official_announcement",
+            groupTitle: "② 公式アナウンスと一致しているか（整合性・周知遵守）",
+            label: "イベント・募集スケジュールの整合性",
+            detail: "AIPulseTickerやバナーで告知している「社内AI共創プロジェクト募集」「Weekly Office Hour」の内容が、社内カレンダー・公式告知と一致していること。",
+            verified: true,
+          },
+          {
+            id: "link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先が実在するか（リンク検証・確認済み）",
+            label: "全内部・外部リンクの疎通確認",
+            detail: "Antigravity Academy、導入ガイド、社内AIプロジェクト、カレンダー、ToDoボード、アイデア宣言ボード等、トップページ内の全導線が実在ページへ遷移すること（確認済み）。",
+            verified: true,
+          },
+        ],
       },
       designAndLayout: {
         passed: true,

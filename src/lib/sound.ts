@@ -115,3 +115,37 @@ export function playCyberSuccess() {
     // Safe
   }
 }
+
+// カードやナビゲーションホバー時の微小タクタイル・ティック音（スロットル制御付き）
+let lastHoverTime = 0;
+export function playCyberHover() {
+  if (!isSoundEnabled()) return;
+  const nowMs = Date.now();
+  if (nowMs - lastHoverTime < 60) return; // 60msスロットルで耳障りな連打を防止
+  lastHoverTime = nowMs;
+
+  const ctx = getAudioContext();
+  if (!ctx) return;
+
+  try {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const now = ctx.currentTime;
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(1600, now);
+    osc.frequency.exponentialRampToValueAtTime(800, now + 0.015);
+
+    gain.gain.setValueAtTime(0.008, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.015);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.016);
+  } catch {
+    // Safe
+  }
+}
+

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useCallback } from "react";
+import { playCyberHover } from "@/lib/sound";
 
 interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ export default function SpotlightCard({
 
   const handleMouseEnter = useCallback(() => {
     setOpacity(1);
+    playCyberHover();
   }, []);
 
   const handleMouseLeave = useCallback(() => {

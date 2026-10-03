@@ -7,6 +7,7 @@ import ExperienceSelector from "@/components/ExperienceSelector";
 import PurposeJump from "@/components/PurposeJump";
 import SiteOmnisearch from "@/components/SiteOmnisearch";
 import SpotlightCard from "@/components/SpotlightCard";
+import { playCyberClick } from "@/lib/sound";
 import {
   Sparkles,
   ArrowRight,
@@ -198,6 +199,7 @@ export default function Home() {
             >
               <Link
                 href="/guide"
+                onClick={() => playCyberClick()}
                 className="group flex flex-col justify-between h-full p-6 space-y-4"
               >
                 <div className="space-y-3">
@@ -231,6 +233,7 @@ export default function Home() {
             >
               <Link
                 href="/learning"
+                onClick={() => playCyberClick()}
                 className="group flex flex-col justify-between h-full p-6 space-y-4"
               >
                 <div className="space-y-3">
@@ -264,6 +267,7 @@ export default function Home() {
             >
               <Link
                 href="/ai-projects"
+                onClick={() => playCyberClick()}
                 className="group flex flex-col justify-between h-full p-6 space-y-4"
               >
                 <div className="space-y-3">
@@ -294,6 +298,7 @@ export default function Home() {
           {/* Antigravity Academy 特設キーノートバナー（圧倒的クオリティ） */}
           <Link
             href="/academy"
+            onClick={() => playCyberClick()}
             className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-indigo-950 to-blue-950 text-white border border-indigo-600/50 shadow-lg hover:shadow-2xl hover:border-indigo-400 transition-all duration-300 p-6 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-5 group"
           >
             {/* 背景のネオングロー */}
