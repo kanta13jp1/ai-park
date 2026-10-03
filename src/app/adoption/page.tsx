@@ -177,55 +177,57 @@ export default function AdoptionPage() {
 
           <div className="space-y-4">
             {DEPARTMENT_STATS.map((dept) => (
-              <div
-                key={dept.rank}
-                className="p-5 rounded-2xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
-              >
-                <div className="space-y-2 max-w-md">
-                  <div className="flex items-center gap-2.5">
-                    <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black font-mono ${
-                      dept.rank === 1
-                        ? "bg-amber-400 text-slate-950"
-                        : dept.rank === 2
-                        ? "bg-slate-300 text-slate-800"
-                        : "bg-amber-700/30 text-amber-900"
-                    }`}>
-                      #{dept.rank}
-                    </span>
-                    <h4 className="font-extrabold text-slate-900 text-base">
-                      {dept.department}
-                    </h4>
-                  </div>
-
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {dept.primaryUseCases.map((uc, idx) => (
-                      <span
-                        key={idx}
-                        className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600"
-                      >
-                        {uc}
+              <TiltCard key={dept.rank} maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
+                <div
+                  onMouseEnter={() => playCyberHover()}
+                  className="p-5 rounded-2xl border border-slate-200/80 bg-slate-50/50 hover:bg-slate-50 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-default"
+                >
+                  <div className="space-y-2 max-w-md">
+                    <div className="flex items-center gap-2.5">
+                      <span className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black font-mono ${
+                        dept.rank === 1
+                          ? "bg-amber-400 text-slate-950"
+                          : dept.rank === 2
+                          ? "bg-slate-300 text-slate-800"
+                          : "bg-amber-700/30 text-amber-900"
+                      }`}>
+                        #{dept.rank}
                       </span>
-                    ))}
+                      <h4 className="font-extrabold text-slate-900 text-base">
+                        {dept.department}
+                      </h4>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {dept.primaryUseCases.map((uc, idx) => (
+                        <span
+                          key={idx}
+                          className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-600"
+                        >
+                          {uc}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-6 sm:gap-8 shrink-0 font-mono">
+                    <div className="text-right">
+                      <div className="text-[11px] text-slate-400">導入率</div>
+                      <div className="text-lg font-black text-cyan-700">{dept.adoptionRate}%</div>
+                    </div>
+
+                    <div className="text-right">
+                      <div className="text-[11px] text-slate-400">アクティブ</div>
+                      <div className="text-lg font-black text-slate-800">{dept.activeUsers} 名</div>
+                    </div>
+
+                    <div className="text-right">
+                      <div className="text-[11px] text-slate-400">削減工数</div>
+                      <div className="text-lg font-black text-emerald-600">{dept.monthlyHoursSaved} h</div>
+                    </div>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-6 sm:gap-8 shrink-0 font-mono">
-                  <div className="text-right">
-                    <div className="text-[11px] text-slate-400">導入率</div>
-                    <div className="text-lg font-black text-cyan-700">{dept.adoptionRate}%</div>
-                  </div>
-
-                  <div className="text-right">
-                    <div className="text-[11px] text-slate-400">アクティブ</div>
-                    <div className="text-lg font-black text-slate-800">{dept.activeUsers} 名</div>
-                  </div>
-
-                  <div className="text-right">
-                    <div className="text-[11px] text-slate-400">削減工数</div>
-                    <div className="text-lg font-black text-emerald-600">{dept.monthlyHoursSaved} h</div>
-                  </div>
-                </div>
-              </div>
+              </TiltCard>
             ))}
           </div>
         </div>

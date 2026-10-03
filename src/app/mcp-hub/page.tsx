@@ -154,49 +154,54 @@ export default function McpHubPage() {
         />
 
         {/* MCPとは？ アーキテクチャ解説HUD */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
-          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
-            <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-mono font-bold tracking-wider uppercase">
-                <Cpu size={14} />
-                <span>MODEL CONTEXT PROTOCOL (MCP)</span>
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <div
+            onMouseEnter={() => playCyberHover()}
+            className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40 cursor-default"
+          >
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+              <div className="space-y-3 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-mono font-bold tracking-wider uppercase">
+                  <Cpu size={14} />
+                  <span>MODEL CONTEXT PROTOCOL (MCP)</span>
+                </div>
+                <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+                  エージェントに「社内システムへの安全な目と手」を与える
+                </h2>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  MCP（Model Context Protocol）は、AIモデルが外部データベース・GitHub・ブラウザ等のツールと標準化されたAPIで会話するためのオープンプロトコルです。
+                  専用のクライアント設定（<code className="text-cyan-300 font-mono bg-white/10 px-1.5 py-0.5 rounded">mcp_config.json</code>）を追加するだけで、自律エージェントが必要なデータやコマンドを自律的に呼び出せるようになります。
+                </p>
               </div>
-              <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
-                エージェントに「社内システムへの安全な目と手」を与える
-              </h2>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                MCP（Model Context Protocol）は、AIモデルが外部データベース・GitHub・ブラウザ等のツールと標準化されたAPIで会話するためのオープンプロトコルです。
-                専用のクライアント設定（<code className="text-cyan-300 font-mono bg-white/10 px-1.5 py-0.5 rounded">mcp_config.json</code>）を追加するだけで、自律エージェントが必要なデータやコマンドを自律的に呼び出せるようになります。
-              </p>
-            </div>
 
-            {/* アーキテクチャ概要ダイアグラム */}
-            <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-5 shrink-0 w-full lg:w-96 shadow-lg space-y-3">
-              <div className="text-xs font-mono font-bold text-slate-400 flex items-center justify-between border-b border-slate-800 pb-2">
-                <span>SYSTEM ARCHITECTURE</span>
-                <span className="text-emerald-400">SECURE BOUNDARY</span>
-              </div>
-              <div className="flex flex-col gap-2 font-mono text-xs">
-                <div className="p-2.5 rounded-xl bg-indigo-950/80 border border-indigo-500/40 text-center font-bold text-indigo-300">
-                  Antigravity (Parent Agent)
+              {/* アーキテクチャ概要ダイアグラム */}
+              <div className="bg-slate-900/90 border border-slate-700/80 rounded-2xl p-5 shrink-0 w-full lg:w-96 shadow-lg space-y-3">
+                <div className="text-xs font-mono font-bold text-slate-400 flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span>SYSTEM ARCHITECTURE</span>
+                  <span className="text-emerald-400">SECURE BOUNDARY</span>
                 </div>
-                <div className="text-center text-slate-500 text-[10px]">↓ JSON-RPC 2.0 (stdio)</div>
-                <div className="p-2.5 rounded-xl bg-slate-800 border border-slate-600 text-center font-bold text-cyan-300">
-                  MCP Server (Sandbox Layer)
-                </div>
-                <div className="text-center text-slate-500 text-[10px]">↓ Read-Only API Calls</div>
-                <div className="grid grid-cols-2 gap-2 text-[11px]">
-                  <div className="p-2 rounded-lg bg-black/40 border border-slate-800 text-center text-slate-300">
-                    GitHub / GitLab
+                <div className="flex flex-col gap-2 font-mono text-xs">
+                  <div className="p-2.5 rounded-xl bg-indigo-950/80 border border-indigo-500/40 text-center font-bold text-indigo-300">
+                    Antigravity (Parent Agent)
                   </div>
-                  <div className="p-2 rounded-lg bg-black/40 border border-slate-800 text-center text-slate-300">
-                    BigQuery / SQL
+                  <div className="text-center text-slate-500 text-[10px]">↓ JSON-RPC 2.0 (stdio)</div>
+                  <div className="p-2.5 rounded-xl bg-slate-800 border border-slate-600 text-center font-bold text-cyan-300">
+                    MCP Server (Sandbox Layer)
+                  </div>
+                  <div className="text-center text-slate-500 text-[10px]">↓ Read-Only API Calls</div>
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="p-2 rounded-lg bg-black/40 border border-slate-800 text-center text-slate-300">
+                      GitHub / GitLab
+                    </div>
+                    <div className="p-2 rounded-lg bg-black/40 border border-slate-800 text-center text-slate-300">
+                      BigQuery / SQL
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </TiltCard>
 
         {/* 社内検証中 MCPサーバーカタログ */}
         <div className="space-y-4">

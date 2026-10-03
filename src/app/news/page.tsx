@@ -208,7 +208,7 @@ export default function AiNewsPage() {
                 <GlobeIcon className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">Google / 一次情報</p>
+                <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">主要各社 / 一次情報</p>
                 <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 font-mono">
                   <AnimatedCounter value={aiNewsMaster.filter((n) => n.category !== "internal").length} duration={800} />
                   <span className="text-xs font-normal text-slate-500">件</span>

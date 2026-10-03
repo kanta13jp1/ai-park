@@ -79,41 +79,46 @@ export default function AntigravityInfoPage() {
         />
 
         {/* 注目ニュース・ハイライトHUD */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
-          <div className="relative z-10 space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-mono font-bold tracking-wider uppercase">
-              <Zap size={14} className="text-cyan-400" />
-              <span>OFFICIAL HIGHLIGHTS</span>
-            </div>
-            <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
-              Gemini 3.1 Pro & Antigravity 2.0 最新エコシステム
-            </h2>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-3xl">
-              Google DeepMind 製の最先端推論モデル Gemini 3.1 Pro の社内展開が開始されました。
-              超長文コンテキストの把握能力と高精度な自律タスク実行（エージェンティック・コーディング）により、複雑なリファクタリングやアーキテクチャ設計を強力に支援します。
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono">
-              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
-                <div className="text-cyan-400 font-bold text-xs">MODEL GENERATION</div>
-                <div className="text-white font-extrabold text-base mt-0.5">Gemini 3.1 Pro</div>
-                <div className="text-[11px] text-slate-400 mt-1 font-sans">超高速・高精度コード推論</div>
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <div
+            onMouseEnter={() => playCyberHover()}
+            className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40 cursor-default"
+          >
+            <div className="relative z-10 space-y-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-mono font-bold tracking-wider uppercase">
+                <Zap size={14} className="text-cyan-400" />
+                <span>OFFICIAL HIGHLIGHTS</span>
               </div>
+              <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+                Gemini 3.1 Pro & Antigravity 2.0 最新エコシステム
+              </h2>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-3xl">
+                Google DeepMind 製の最先端推論モデル Gemini 3.1 Pro の社内展開が開始されました。
+                超長文コンテキストの把握能力と高精度な自律タスク実行（エージェンティック・コーディング）により、複雑なリファクタリングやアーキテクチャ設計を強力に支援します。
+              </p>
 
-              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
-                <div className="text-emerald-400 font-bold text-xs">CONTEXT WINDOW</div>
-                <div className="text-white font-extrabold text-base mt-0.5">2,000,000+ Tokens</div>
-                <div className="text-[11px] text-slate-400 mt-1 font-sans">大規模リポジトリの一括把握</div>
-              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 font-mono">
+                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+                  <div className="text-cyan-400 font-bold text-xs">MODEL GENERATION</div>
+                  <div className="text-white font-extrabold text-base mt-0.5">Gemini 3.1 Pro</div>
+                  <div className="text-[11px] text-slate-400 mt-1 font-sans">超高速・高精度コード推論</div>
+                </div>
 
-              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
-                <div className="text-indigo-400 font-bold text-xs">AUTONOMOUS FLOW</div>
-                <div className="text-white font-extrabold text-base mt-0.5">Subagent Routing</div>
-                <div className="text-[11px] text-slate-400 mt-1 font-sans">複数エージェント協調実行</div>
+                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+                  <div className="text-emerald-400 font-bold text-xs">CONTEXT WINDOW</div>
+                  <div className="text-white font-extrabold text-base mt-0.5">2,000,000+ Tokens</div>
+                  <div className="text-[11px] text-slate-400 mt-1 font-sans">大規模リポジトリの一括把握</div>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xs">
+                  <div className="text-indigo-400 font-bold text-xs">AUTONOMOUS FLOW</div>
+                  <div className="text-white font-extrabold text-base mt-0.5">Subagent Routing</div>
+                  <div className="text-[11px] text-slate-400 mt-1 font-sans">複数エージェント協調実行</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </TiltCard>
 
         {/* 関連学習・ナビゲーション */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
