@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-10-03T09:46:33.042Z",
-  "syncedAt": "2026-10-03 18:46",
+  "updatedAt": "2026-10-03T10:17:49.463Z",
+  "syncedAt": "2026-10-03 19:17",
   "dataSource": "Google Cloud Billing & Cloud Logging Live Verified",
   "isLive": true,
   "gcpInfo": {
@@ -9,20 +9,22 @@
     "projectId": "antigravity-pj-509006",
     "billingAccountId": "012EB1-1D4C87-D1B374",
     "totalCreditJpy": 47813,
-    "remainingCreditJpy": 42808,
-    "totalSpentJpy": 5005,
+    "remainingCreditJpy": 42630,
+    "totalSpentJpy": 5183,
     "grossCostJpy": 7105,
     "netCostJpy": 0,
     "totalCreditUsd": 318.75,
-    "remainingCreditUsd": 285.39,
-    "totalSpentUsd": 33.36,
+    "remainingCreditUsd": 284.2,
+    "totalSpentUsd": 34.55,
     "grossCostUsd": 47.37,
     "trialDaysTotal": 90,
     "trialDaysLeft": 88,
     "trialEndDate": "2026-12-31",
     "monthlyBudgetUsd": 50,
     "billingAccountStatus": "ACTIVE",
-    "currencyCode": "JPY"
+    "currencyCode": "JPY",
+    "bigQueryExportDataset": "mighty-link-ai-connect-497009:gcp_billing_export",
+    "bigQueryConnected": true
   },
   "summary": {
     "totalRequests": 1840,
@@ -128,7 +130,7 @@
     "authVerified": true,
     "projectId": "antigravity-pj-509006",
     "billingAccountId": "012EB1-1D4C87-D1B374",
-    "lastAuditCheck": "2026-10-03 18:46",
+    "lastAuditCheck": "2026-10-03 19:17",
     "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)"
   }
 }

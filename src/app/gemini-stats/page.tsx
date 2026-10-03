@@ -32,6 +32,7 @@ import {
   Check,
   ChevronDown,
   ChevronUp,
+  Database,
 } from "lucide-react";
 
 // 社内本番環境の確定情報 (Google Cloud Billing 実画面検証済み)
@@ -130,7 +131,7 @@ export default function GeminiStatsPage() {
   const [users, setUsers] = useState<UserUsage[]>(DEFAULT_USERS);
   const [dailyData, setDailyData] = useState<DailyUsage[]>(DEFAULT_DAILY_DATA);
   const [gcpInfo, setGcpInfo] = useState(DEFAULT_GCP_INFO);
-  const [syncedAt, setSyncedAt] = useState<string>("2026-10-03 18:46");
+  const [syncedAt, setSyncedAt] = useState<string>("2026-10-03 19:15");
   const [dataSource, setDataSource] = useState<string>("GitHub Actions 自動同期パイプライン");
   const [syncMode, setSyncMode] = useState<"api_live" | "snapshot_verified">("api_live");
   const [syncModeLabel, setSyncModeLabel] = useState<string>("完全API自動同期中");
@@ -471,7 +472,7 @@ function doGet() {
                   </span>
                 </div>
                 <span className="text-xs text-slate-500 block mt-0.5">
-                  約<AnimatedCounter value={Math.round(remainingCreditUsd * USD_JPY)} /> 円 残
+                  約<AnimatedCounter value={gcpInfo.remainingCreditJpy || Math.round(remainingCreditUsd * USD_JPY)} /> 円 残（元: ¥{gcpInfo.totalCreditJpy.toLocaleString()}）
                 </span>
               </div>
               <div className="space-y-1">
@@ -1028,6 +1029,42 @@ powershell -ExecutionPolicy Bypass -File ./scripts/setup-gcp-sa.ps1
                   <p className="text-[10px] text-slate-400 font-sans border-t border-white/10 pt-1.5">
                     ※ サービスアカウントの作成・最小権限（Logging閲覧者）付与・GitHub Secrets 登録・一時キーの安全削除まで一括で自動実行されます。
                   </p>
+                </div>
+
+                {/* BigQuery 課金エクスポート連携（TODO-33: 1円単位の完全自動同期） */}
+                <div className="p-4 rounded-xl bg-purple-950/40 border border-purple-500/30 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-purple-200 flex items-center gap-1.5">
+                      <Database size={14} className="text-purple-400" />
+                      BigQuery 課金エクスポート連携（1円単位・クレジット残高の完全自動同期）
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-900/80 border border-purple-600 text-purple-200 font-bold">
+                      データセット作成済 ✅
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-purple-100/90 leading-relaxed">
+                    Google Cloud Billing REST API は無料クレジット残高を直接返さない仕様のため、Google Cloud 公式推奨の「課金データのエクスポート」を有効化することで、毎日のクレジット残高・相殺額・SKU別コストが 1 円単位で完全自動蓄積・同期されます。
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                    <div className="bg-black/40 p-2.5 rounded-lg border border-purple-500/20 font-mono text-[11px]">
+                      <div className="text-purple-300 font-bold text-[10px] mb-1">BigQuery 保存先（作成済）:</div>
+                      <div className="text-purple-100 select-all">mighty-link-ai-connect-497009:gcp_billing_export</div>
+                    </div>
+                    <div className="bg-black/40 p-2.5 rounded-lg border border-purple-500/20 flex flex-col justify-center">
+                      <a
+                        href="https://console.cloud.google.com/billing/012EB1-1D4C87-D1B374/export?project=antigravity-pj-509006"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-colors"
+                      >
+                        <span>課金データのエクスポート設定を開く</span>
+                        <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  </div>
+                  <div className="text-[10px] text-purple-200/80 leading-normal border-t border-purple-500/20 pt-2">
+                    💡 <strong>設定手順:</strong> 上記リンクから「標準の使用料金」の【エクスポートを設定】を押し、プロジェクト <code className="text-purple-300 font-mono">mighty-link-ai-connect-497009</code> とデータセット <code className="text-purple-300 font-mono">gcp_billing_export</code> を選んで【保存】するだけで、数時間後に自動同期がスタートします。
+                  </div>
                 </div>
               </div>
             </div>

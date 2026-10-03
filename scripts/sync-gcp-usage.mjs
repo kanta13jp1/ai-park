@@ -187,6 +187,52 @@ async function syncUsageData() {
         console.warn('[WARN] Billing API check skipped:', billingErr.message);
       }
 
+      // BigQuery 課金エクスポート自動クエリ
+      try {
+        const bqProjectId = "mighty-link-ai-connect-497009";
+        const bqQuery = `
+          SELECT
+            SUM(cost) as total_cost,
+            SUM((SELECT COALESCE(SUM(amount), 0) FROM UNNEST(credits))) as total_credits,
+            currency
+          FROM \`mighty-link-ai-connect-497009.gcp_billing_export.gcp_billing_export_v1_*\`
+          WHERE _PARTITIONDATE >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
+          GROUP BY currency
+        `;
+        const bqRes = await fetch(`https://bigquery.googleapis.com/bigquery/v2/projects/${bqProjectId}/queries`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: bqQuery,
+            useLegacySql: false,
+          }),
+        });
+
+        if (bqRes.ok) {
+          const bqData = await bqRes.json();
+          if (bqData.rows && bqData.rows.length > 0) {
+            const row = bqData.rows[0].f;
+            const bqCost = parseFloat(row[0].v || 0);
+            const bqCredits = Math.abs(parseFloat(row[1].v || 0));
+            console.log(`[INFO] BigQuery Billing Export Query Success: Cost=${bqCost}, Credits=${bqCredits}`);
+            currentData.gcpInfo.remainingCreditJpy = Math.max(0, currentData.gcpInfo.totalCreditJpy - bqCredits);
+            currentData.gcpInfo.remainingCreditUsd = +(currentData.gcpInfo.remainingCreditJpy / 150).toFixed(2);
+            currentData.gcpInfo.grossCostJpy = Math.round(bqCost);
+            currentData.gcpInfo.grossCostUsd = +(bqCost / 150).toFixed(2);
+            currentData.gcpInfo.bigQueryConnected = true;
+          } else {
+            console.log('[INFO] BigQuery dataset ready. Awaiting initial export table population from Cloud Billing.');
+          }
+        } else {
+          console.log('[INFO] BigQuery billing export table pending. Using verified console metrics as fallback.');
+        }
+      } catch (bqErr) {
+        console.warn('[WARN] BigQuery check skipped:', bqErr.message);
+      }
+
       const loggingRes = await fetch('https://logging.googleapis.com/v2/entries:list', {
         method: 'POST',
         headers: {
