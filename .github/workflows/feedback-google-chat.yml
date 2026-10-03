@@ -65,12 +65,12 @@ jobs:
           # スレッドIDの決定（デフォルト: ai-park-feedback-notifications に集約）
           THREAD_ID="${THREAD_KEY:-ai-park-feedback-notifications}"
 
-          # Webhook URL にスレッド返信パラメータ（存在しない場合は新スレッド作成）を付加
+          # Webhook URL にスレッド返信パラメータと threadKey（存在しない場合は新スレッド作成）を付加
           TARGET_URL="$WEBHOOK_URL"
           if [[ "$TARGET_URL" == *"?"* ]]; then
-            TARGET_URL="${TARGET_URL}&messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+            TARGET_URL="${TARGET_URL}&threadKey=${THREAD_ID}&messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
           else
-            TARGET_URL="${TARGET_URL}?messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
+            TARGET_URL="${TARGET_URL}?threadKey=${THREAD_ID}&messageReplyOption=REPLY_MESSAGE_FALLBACK_TO_NEW_THREAD"
           fi
 
           TEXT=$(printf '%s\n*#%s %s*\n%s\n(by %s) ページ: %s' "$HEAD" "$NUMBER" "$TITLE" "$ISSUE_URL" "$ACTOR" "$PAGE")
