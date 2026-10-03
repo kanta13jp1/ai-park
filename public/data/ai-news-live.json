@@ -1,0 +1,656 @@
+{
+  "lastSyncedAt": "2026-10-03T14:42:36.405Z",
+  "lastSyncedAtFormatted": "2026/10/3 23:42:36",
+  "syncStatus": "live",
+  "pipelineVersion": "v1.0-auto",
+  "totalCount": 26,
+  "activeSources": [
+    "Google DeepMind Official Feed",
+    "OpenAI Official Newsroom",
+    "Anthropic Official News",
+    "DeepSeek Official Releases",
+    "xAI Announcements",
+    "Manus AI Official",
+    "Cognition Devin Blog"
+  ],
+  "items": [
+    {
+      "id": "news-20261003-gemini4",
+      "title": "Google DeepMind: 次世代フロンティア知能「Gemini 4 Argon」を公式発表",
+      "date": "2026/10/03",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMind公式（deepmind.google/models/gemini/）にて、次世代のフロンティア知能を担う最新フラッグシップモデル「Gemini 4 Argon」が正式公開されました。「Our next era of frontier intelligence」として、超大規模推論とマルチモーダル自律エージェント基盤を刷新しています。",
+      "impactForStaff": "マルチステップ推論・コード生成・自律エージェント協調の能力が飛躍的に向上。全社での社内利用認可に向けたベンチマーク検証およびAPI利用計画の策定を推進窓口にて開始します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進",
+        "経営層"
+      ],
+      "sourceName": "Google DeepMind Official",
+      "sourceUrl": "https://deepmind.google/models/gemini/",
+      "tags": [
+        "Gemini 4 Argon",
+        "Google DeepMind",
+        "Frontier Intelligence",
+        "基盤モデル",
+        "HOT"
+      ]
+    },
+    {
+      "id": "news-20261003-01",
+      "title": "AI Park プリフライト受入テスト管理コンソール（/preflight）が全面稼働",
+      "date": "2026/10/03",
+      "category": "internal",
+      "categoryLabel": "社内AI Park",
+      "importance": "release",
+      "importanceLabel": "社内リリース",
+      "summary": "「自動テストだけでなく人間が実機で手動確認する」社内ガバナンス方針に基づき、4大評価軸（仕様・デザイン・操作性・視認性）の70項目詳細チェックリストおよびデプロイ前品質ゲートを完全統合しました。",
+      "impactForStaff": "ポータル全体の信頼性と安全性が飛躍的に向上。推測や未検証機能の混入をブロックし、全社員が安心して利用できるポータルを維持します。",
+      "recommendedFor": [
+        "全社員",
+        "開発者・推進担当",
+        "管理者"
+      ],
+      "sourceName": "MightyLINK AI推進窓口",
+      "sourceUrl": "https://kanta13jp1.github.io/ai-park/preflight",
+      "tags": [
+        "品質ゲート",
+        "手動UAT",
+        "プリフライト",
+        "ガバナンス"
+      ]
+    },
+    {
+      "id": "news-20261003-02",
+      "title": "ご意見・改善ToDoボードに「⚡ 未対応優先フィルター」が新設",
+      "date": "2026/10/03",
+      "category": "internal",
+      "categoryLabel": "社内AI Park",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "社内Google Chatや全社から寄せられた改善要望・フィードバックのうち、対応中・検討中の未完了タスクを初期表示するフィルターを導入しました。",
+      "impactForStaff": "社員が要望を出した後の進捗状況や、現在AI推進チームが取り組んでいる課題が一目で把握できるようになり、手戻りのない共創を実現します。",
+      "recommendedFor": [
+        "全社員",
+        "フィードバック投稿者"
+      ],
+      "sourceName": "MightyLINK AI推進窓口",
+      "sourceUrl": "https://kanta13jp1.github.io/ai-park/feedback-todo",
+      "tags": [
+        "ToDoボード",
+        "フィルター",
+        "ユーザー改善",
+        "共創"
+      ]
+    },
+    {
+      "id": "live-model-20261002-0",
+      "title": "OpenAI: A model guide for the GPT-6 family",
+      "date": "2026/10/02",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Learn how startups can choose GPT-6 models, tune reasoning effort, improve prompts and skills, coordinate tools, and prepare workflows for production.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「A model guide for the GPT-6 fa」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/practical-guide-building-gpt-6",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261002-1",
+      "title": "OpenAI: Chatham scales its capital markets expertise with OpenAI",
+      "date": "2026/10/02",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Chatham Financial uses Codex and GPT-5.6 to build technology and redesign workflows, cutting trade validation from 30 minutes to under 4.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Chatham scales its capital mar」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/chatham-financial",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "news-20261002-01",
+      "title": "Google DeepMind: Gemini 3.1 Pro がマルチステップ推論・コード生成で新水準を達成",
+      "date": "2026/10/02",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMindが発表した「Gemini 3.1 Pro」は、長大なコードベースの理解と自己修正ループにおいて従来比30%の精度向上を記録。社内環境での先行トライアルを開始します。",
+      "impactForStaff": "複雑なSQLやスクリプト作成、仕様書レビューの自動化精度が大幅に向上。Antigravity内での標準モデルとして利用可能になります。",
+      "recommendedFor": [
+        "エンジニア",
+        "AI推進担当",
+        "データアナリスト"
+      ],
+      "sourceName": "Google DeepMind Official",
+      "sourceUrl": "https://deepmind.google/technologies/gemini/",
+      "tags": [
+        "Gemini 3.1 Pro",
+        "DeepMind",
+        "推論モデル",
+        "長大コンテキスト"
+      ]
+    },
+    {
+      "id": "live-model-20261001-2",
+      "title": "OpenAI: The eternal complement",
+      "date": "2026/10/01",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Advanced AI may matter most for the routine work behind breakthrough ideas. Explore why execution could shape the next economy and the pace of progress.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「The eternal complement」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/the-eternal-complement",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261001-3",
+      "title": "OpenAI: How Albertsons Companies is reimagining retail from the inside out",
+      "date": "2026/10/01",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Albertsons Cos. is using ChatGPT Enterprise and the OpenAI API to help teams work faster and make grocery shopping easier for millions of customers.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Albertsons Companies is re」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/albertsons-reimagining-retail",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261001-4",
+      "title": "OpenAI: The Den frees up 10-15 hours a week to grow with ChatGPT Work",
+      "date": "2026/10/01",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "As it opens a new location, the social club prepares grant applications in 2 hours instead of 3 days and liquor-license materials in 3 hours instead of 4 days.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「The Den frees up 10-15 hours a」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/the-den-family-social",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "news-20261001-01",
+      "title": "Google Antigravity 2.0 & Gemini 3.1 Pro 社内利用環境の正式認可・提供開始",
+      "date": "2026/10/01",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "全社セキュリティ基準に適合したGoogle Antigravity 2.0の社内利用環境を全社員向けに正式オープン。GCP利用枠・クレジット保護機能とセットで安全に活用可能です。",
+      "impactForStaff": "業務PC（Windows/Mac）から即日利用申請可能。社内専用テンプレートや安全ガイドラインが標準整備されています。",
+      "recommendedFor": [
+        "全社員",
+        "マネージャー",
+        "開発者"
+      ],
+      "sourceName": "MightyLINK AI推進窓口",
+      "sourceUrl": "https://kanta13jp1.github.io/ai-park/guide",
+      "tags": [
+        "Antigravity",
+        "社内解禁",
+        "GCP",
+        "セキュリティ認可"
+      ]
+    },
+    {
+      "id": "live-google-20260930-0",
+      "title": "Google DeepMind: Gemini 4 Argon: our next era of frontier intelligence",
+      "date": "2026/09/30",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 4 Argon: our next era o」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20260930-1",
+      "title": "Google DeepMind: Introducing SynthID Bio",
+      "date": "2026/09/30",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Proof of concept for watermarking AI-generated proteins while preserving biological function.",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Introducing SynthID Bio」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/introducing-synthid-bio/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "news-20260930-codex",
+      "title": "OpenAI: 進化した Codex 基盤と「キャンバス（Canvas）」によるコード・文章の共創体験",
+      "date": "2026/09/30",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI公式にて、ChatGPTを使用して文章やコードを書く新インターフェース「キャンバス（Canvas）」が展開。インラインでのドット指示（dots）や差分レビューを行いながら、人間とAIが並行してドキュメントやコードをブラッシュアップ可能です。",
+      "impactForStaff": "チャット全体を再生成することなく、変更したい行・ドット（dots）単位で的確に修正指示を出せるため、ドキュメント校正やコードレビューの作業効率が劇的に向上します。",
+      "recommendedFor": [
+        "全社員",
+        "ライター",
+        "エンジニア"
+      ],
+      "sourceName": "OpenAI Official (introducing-canvas)",
+      "sourceUrl": "https://openai.com/ja-JP/index/introducing-canvas/",
+      "tags": [
+        "Codex",
+        "Canvas",
+        "dots",
+        "OpenAI",
+        "共同編集"
+      ]
+    },
+    {
+      "id": "news-20260929-manus",
+      "title": "汎用自律AIエージェント「Manus」：Web検索から実務実行・タスクバックアップ復元まで対応",
+      "date": "2026/09/29",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "ブラウザ操作・API呼び出し・ファイル作成・情報精査を横断し、人間が与えた高レベルな目的（Goal）を自律的にマルチステップで達成する汎用エージェント「Manus」。アカウント復元やタスクバックアップ機能も拡充され、実務運用の安定性が向上しています。",
+      "impactForStaff": "「競合製品の価格比較表の作成」や「公開データの収集・グラフ化」などの定型リサーチ業務がワンプロンプトで完了可能になり、ナレッジワーカーの業務負担が劇的に軽減されます。",
+      "recommendedFor": [
+        "全社員",
+        "リサーチ担当",
+        "企画・営業推進"
+      ],
+      "sourceName": "Manus AI Official",
+      "sourceUrl": "https://manus.im/",
+      "tags": [
+        "Manus",
+        "自律エージェント",
+        "Web自動化",
+        "業務完結",
+        "HOT"
+      ]
+    },
+    {
+      "id": "news-20260928-01",
+      "title": "Model Context Protocol (MCP) の標準化が進展、対応ツールが急増中",
+      "date": "2026/09/28",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "ClaudeやAntigravityで利用可能なオープンプロトコル「MCP」に対応した社内リソース連携サーバー（GitHub, Figma, BigQuery等）のオープンソース化が世界中で加速しています。",
+      "impactForStaff": "AIエージェントが社内ツールとシームレスに対話可能になり、反復業務やデータ抽出の全自動化が容易になります。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "業務自動化推進"
+      ],
+      "sourceName": "Model Context Protocol Docs",
+      "sourceUrl": "https://modelcontextprotocol.io/",
+      "tags": [
+        "MCP",
+        "オープン標準",
+        "外部連携",
+        "ツール拡張"
+      ]
+    },
+    {
+      "id": "news-20260927-deepseek",
+      "title": "DeepSeek: 最新モデル「DeepSeek-V4.1-Flash」正式リリース（ネイティブ視覚マルチモーダル & Agent性能向上）",
+      "date": "2026/09/27",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "DeepSeek公式（deepseek.com/en/）にて、最新フラッグシップ「DeepSeek-V4.1-Flash」が正式公開。テキストおよびAgent実行性能の包括的な向上に加え、ネイティブマルチモーダル視覚理解（visual understanding）能力を標準搭載しています。",
+      "impactForStaff": "高精度なUI画像解析や図表読み取り、自律エージェントタスクが極めて低レイテンシ・低コストで実行可能となり、社内データ分析や検証の選択肢が広がります。",
+      "recommendedFor": [
+        "AIエンジニア",
+        "インフラ担当",
+        "研究開発"
+      ],
+      "sourceName": "DeepSeek Official",
+      "sourceUrl": "https://www.deepseek.com/en/",
+      "tags": [
+        "DeepSeek-V4.1-Flash",
+        "DeepSeek",
+        "マルチモーダル",
+        "Agent強化"
+      ]
+    },
+    {
+      "id": "news-20260925-01",
+      "title": "Google Cloud: Vertex AI での Spend Cap & コスト保護機能が強化",
+      "date": "2026/09/25",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Vertex AIのAPI呼び出しに対する日次・月次クォータ設定およびハードリミット保護機能が拡充。誤った無限ループ呼び出しによる想定外のクラウドコスト請求を物理的に遮断可能になりました。",
+      "impactForStaff": "開発者や各部署が安心してプロトタイプ開発を実施できるように。月次予算の上限を超過する心配がゼロになります。",
+      "recommendedFor": [
+        "推進担当",
+        "GCP管理者",
+        "エンジニア"
+      ],
+      "sourceName": "Google Cloud Release Notes",
+      "sourceUrl": "https://cloud.google.com/vertex-ai/docs/release-notes",
+      "tags": [
+        "Spend Cap",
+        "コスト管理",
+        "Vertex AI",
+        "クラウドガバナンス"
+      ]
+    },
+    {
+      "id": "live-google-20260924-2",
+      "title": "Google DeepMind: Introducing Gemini 3.8 Live with Live Avatar",
+      "date": "2026/09/24",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Introducing Gemini 3.8 Live wi」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/introducing-gemini-38-live-with-live-avatar/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "news-20260924-grok",
+      "title": "xAI: 最新モデル「Grok 4.7」発表（世界最大スーパークラスタColossusで学習したフロンティアAI）",
+      "date": "2026/09/24",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "xAI公式（x.ai）にて、新モデル「Grok 4.7」が発表されました。世界最大規模のGPUスーパークラスタ「Colossus」によって学習され、高度な論理推論（Reasoning）、コード生成、音声、画像、動画を統合した次世代マルチモーダル基盤を実現しています。",
+      "impactForStaff": "刻一刻と変化するリアルタイム情報検索力と、画像・動画を含むマルチモーダル推論により、高度な市場調査やクリエイティブ分析に強力な効果を発揮します。",
+      "recommendedFor": [
+        "経営企画",
+        "マーケティング",
+        "データサイエンティスト"
+      ],
+      "sourceName": "xAI Official (x.ai)",
+      "sourceUrl": "https://x.ai/",
+      "tags": [
+        "Grok 4.7",
+        "xAI",
+        "Colossus",
+        "マルチモーダル推論"
+      ]
+    },
+    {
+      "id": "live-google-20260923-3",
+      "title": "Google DeepMind: Advancing Private AI Compute with secure, server-side memory",
+      "date": "2026/09/23",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Introducing private, server-side memory to Private AI Compute for personal AI.",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Advancing Private AI Compute w」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20260923-4",
+      "title": "Google DeepMind: Gemini 3.8 text-to-speech says hello",
+      "date": "2026/09/23",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 3.8 text-to-speech says」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/say-hello-to-gemini-38-text-to-speech/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "news-20261002-claude",
+      "title": "Anthropic: 次世代「Claude Opus 5.5」発表（Fable 5.1同等性能で運用コスト40%削減）",
+      "date": "2026/09/22",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Anthropic公式Newsroomにて「Claude Opus 5.5」が正式公開されました。最上位モデルClaude Fable 5.1に匹敵する推論・コーディング性能を達成しながら、Opus 5比で40%の運用コスト削減を実現。先行して発表されたClaude Fable 5.1 / Claude Mythos 5.1と共に業界をリードしています。",
+      "impactForStaff": "大規模なコードリファクタリングや仕様書の整合性レビューにおける精度が一段と向上し、API利用コストも大幅に抑制可能になります。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "データサイエンティスト"
+      ],
+      "sourceName": "Anthropic Newsroom Official",
+      "sourceUrl": "https://www.anthropic.com/news",
+      "tags": [
+        "Claude Opus 5.5",
+        "Claude Fable 5.1",
+        "Claude Mythos 5.1",
+        "Anthropic",
+        "HOT"
+      ]
+    },
+    {
+      "id": "news-20260922-devin",
+      "title": "Cognition: 自律ソフトウェアエンジニア「Devin」のエンタープライズ統合とCI自律修正",
+      "date": "2026/09/22",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Cognitionは、世界初の自律AIソフトウェアエンジニア「Devin」のエンタープライズ向け機能として、GitHub CIのテスト失敗を自律検知してプルリクエスト修正まで自動完結するパイプラインを発表しました。",
+      "impactForStaff": "夜間ビルドの依存関係エラーや型エラーの解消をDevinが自律修正するため、社内開発チームの開発サイクル（CI/CD）の停止時間がほぼゼロになります。",
+      "recommendedFor": [
+        "エンジニア",
+        "CI/CD担当",
+        "テックリード"
+      ],
+      "sourceName": "Cognition Devin Official Blog",
+      "sourceUrl": "https://cognition.ai/blog",
+      "tags": [
+        "Devin",
+        "Cognition",
+        "自律エンジニア",
+        "CI/CD自動化"
+      ]
+    },
+    {
+      "id": "news-20260920-01",
+      "title": "Web Audio API による触感音響（Haptic SFX）がモダンWeb UIの新潮流に",
+      "date": "2026/09/20",
+      "category": "internal",
+      "categoryLabel": "社内AI Park",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Awwwards等の最先端Webデザインで採用されるWeb Audio APIを活用したリアルタイム周波数シンセサイズをAI Parkの主要ボタン・カードへ完全実装。操作感の質的向上が確認されました。",
+      "impactForStaff": "ボタン押下やホバー時のクリック感が心地よく、長時間の業務でも疲れにくいインタラクション体験を提供します。",
+      "recommendedFor": [
+        "全社員",
+        "フロントエンドエンジニア",
+        "デザイナー"
+      ],
+      "sourceName": "MightyLINK UI/UX Labs",
+      "sourceUrl": "https://kanta13jp1.github.io/ai-park/",
+      "tags": [
+        "Web Audio API",
+        "SFX",
+        "UI/UX",
+        "アクセシビリティ"
+      ]
+    },
+    {
+      "id": "news-20260910-01",
+      "title": "Agentic Coding の新潮流：Single prompt から Subagent 自律協調へ",
+      "date": "2026/09/10",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "単一の巨大プロンプトで完結させる手法から、役割分担された軽量サブエージェントが自律的に連携するアーキテクチャへのシフトが加速。トークン効率と問題解決率が飛躍的に向上しています。",
+      "impactForStaff": "大規模なシステム設計や調査タスクにおいて、より安価で高品質なAI支援を受けられるようになります。",
+      "recommendedFor": [
+        "エンジニア",
+        "リサーチャー",
+        "アーキテクト"
+      ],
+      "sourceName": "AI Architecture Research",
+      "sourceUrl": "https://kanta13jp1.github.io/ai-park/agent-cases",
+      "tags": [
+        "Subagents",
+        "Agentic Coding",
+        "自律協調",
+        "アーキテクチャ"
+      ]
+    },
+    {
+      "id": "news-20260905-01",
+      "title": "生成AI 学習コンテンツ（プロンプト集＆セルフチェック）社内受講者が急増",
+      "date": "2026/09/05",
+      "category": "internal",
+      "categoryLabel": "社内AI Park",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "全社員向けの実践プロンプト集およびセキュリティ遵守セルフチェック診断の受講者が累計500名を突破。業務での安全なAI活用が全社規模で定着しています。",
+      "impactForStaff": "穴埋め形式ですぐに使えるプロンプト（議事録要約・メール校正等）により、日常業務の時短効果を即日体感できます。",
+      "recommendedFor": [
+        "全社員",
+        "新入社員",
+        "業務効率化担当"
+      ],
+      "sourceName": "MightyLINK AI推進窓口",
+      "sourceUrl": "https://kanta13jp1.github.io/ai-park/learning",
+      "tags": [
+        "学習コンテンツ",
+        "プロンプト集",
+        "セルフチェック",
+        "実務直結"
+      ]
+    }
+  ]
+}

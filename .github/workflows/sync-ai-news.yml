@@ -1,0 +1,50 @@
+name: Automated AI News Radar Pipeline
+
+on:
+  schedule:
+    # 毎日 日本時間 午前3時, 9時, 15時, 21時 (UTC 18:00, 0:00, 6:00, 12:00) に自動巡回実行
+    - cron: '0 0,6,12,18 * * *'
+  workflow_dispatch: # GitHub画面および外部Webhookから手動即時実行も可能
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  sync-news:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Automated News Sync Pipeline
+        run: node scripts/sync-ai-news.mjs
+
+      - name: Verify Live News Output
+        run: |
+          if [ ! -f "public/data/ai-news-live.json" ]; then
+            echo "Error: public/data/ai-news-live.json was not generated."
+            exit 1
+          fi
+          echo "Live news generated successfully."
+
+      - name: Commit and push changes if updated
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/ai-news-live.json
+          if git diff --staged --quiet; then
+            echo "No new news items detected. Skipping commit."
+          else
+            git commit -m "chore(news): 各社公式フィードからの最新AIニュース自動同期 [skip ci]"
+            git push origin main
+          fi

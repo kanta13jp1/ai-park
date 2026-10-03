@@ -7,6 +7,7 @@ import { navigationSections } from "@/data/navigation";
 import { ExternalLink, Menu, X, Search, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { basePath } from "@/lib/basePath";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -16,8 +17,12 @@ export default function Sidebar() {
     <>
       {/* モバイル用トグルボタン */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-3 left-3 z-50 p-2.5 bg-slate-900/90 text-white rounded-xl shadow-lg border border-slate-700/60 backdrop-blur-md focus:outline-none active:scale-95 transition-transform"
+        onClick={() => {
+          playCyberClick();
+          setIsOpen(!isOpen);
+        }}
+        onMouseEnter={() => playCyberHover()}
+        className="md:hidden fixed top-3 left-3 z-50 p-2.5 bg-slate-900/90 text-white rounded-xl shadow-lg border border-slate-700/60 backdrop-blur-md focus:outline-none active:scale-95 transition-transform cursor-pointer"
         aria-label="Toggle navigation"
       >
         {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -62,8 +67,12 @@ export default function Sidebar() {
 
           <Link
             href="/"
-            onClick={() => setIsOpen(false)}
-            className="group flex items-center space-x-2.5"
+            onClick={() => {
+              playCyberClick();
+              setIsOpen(false);
+            }}
+            onMouseEnter={() => playCyberHover()}
+            className="group flex items-center space-x-2.5 cursor-pointer"
           >
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 via-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
               <Sparkles size={16} />
@@ -81,9 +90,11 @@ export default function Sidebar() {
           {/* クイック検索ボタン（Cmd+K誘導） */}
           <button
             onClick={() => {
+              playCyberClick();
               setIsOpen(false);
               window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
             }}
+            onMouseEnter={() => playCyberHover()}
             className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800/80 border border-slate-700/50 text-slate-400 hover:text-slate-200 transition-all text-xs group cursor-pointer"
           >
             <div className="flex items-center space-x-2">
@@ -104,8 +115,12 @@ export default function Sidebar() {
                 section.href ? (
                   <Link
                     href={section.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`block px-3 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md transition-colors ${
+                    onClick={() => {
+                      playCyberClick();
+                      setIsOpen(false);
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className={`block px-3 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md transition-colors cursor-pointer ${
                       pathname === section.href || pathname.startsWith(section.href + "/")
                         ? "text-cyan-300 bg-cyan-950/40"
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
@@ -132,7 +147,9 @@ export default function Sidebar() {
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-white/5 hover:text-white transition-all text-xs"
+                        onClick={() => playCyberClick()}
+                        onMouseEnter={() => playCyberHover()}
+                        className="group flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-white/5 hover:text-white transition-all text-xs cursor-pointer"
                       >
                         <span className="flex items-center space-x-2.5">
                           {item.icon && <span className="text-sm leading-none opacity-80 group-hover:opacity-100">{item.icon}</span>}
@@ -147,8 +164,12 @@ export default function Sidebar() {
                     <Link
                       key={item.href}
                       href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`group relative flex items-center justify-between px-3 py-2 rounded-xl transition-all text-xs font-medium ${
+                      onClick={() => {
+                        playCyberClick();
+                        setIsOpen(false);
+                      }}
+                      onMouseEnter={() => playCyberHover()}
+                      className={`group relative flex items-center justify-between px-3 py-2 rounded-xl transition-all text-xs font-medium cursor-pointer ${
                         isActive
                           ? "bg-gradient-to-r from-blue-600/30 via-indigo-600/20 to-transparent text-white font-bold border border-blue-500/30 shadow-xs"
                           : "text-slate-300 hover:bg-white/5 hover:text-white"

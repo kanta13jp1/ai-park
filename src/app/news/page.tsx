@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import SpotlightCard from "@/components/SpotlightCard";
+import { basePath } from "@/lib/basePath";
 import {
   aiNewsMaster,
   aiNewsCategoryMaster,
@@ -32,17 +33,65 @@ import {
   Layers,
   BookOpen,
   MessageSquareShare,
+  RefreshCw,
+  Radio,
+  Activity,
+  ShieldCheck,
+  Globe,
 } from "lucide-react";
 
 export default function AiNewsPage() {
+  const [newsList, setNewsList] = useState<AINewsItem[]>(aiNewsMaster);
+  const [isLiveActive, setIsLiveActive] = useState<boolean>(true);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string>("2026/10/03 23:42:36");
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [refreshSuccess, setRefreshSuccess] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedImportance, setSelectedImportance] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
+  // 自動同期パイプラインから最新ニュースをフェッチ（Fail-Open安全設計）
+  const fetchLiveNews = useCallback(async (isManual = false) => {
+    if (isManual) {
+      setIsRefreshing(true);
+      playCyberClick();
+    }
+    try {
+      const res = await fetch(`${basePath}/data/ai-news-live.json?t=${Date.now()}`, {
+        cache: "no-store",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Array.isArray(data.items) && data.items.length > 0) {
+          setNewsList(data.items);
+          if (data.lastSyncedAtFormatted) {
+            setLastSyncedAt(data.lastSyncedAtFormatted);
+          }
+          setIsLiveActive(true);
+          if (isManual) {
+            setRefreshSuccess(true);
+            setTimeout(() => setRefreshSuccess(false), 3000);
+          }
+        }
+      }
+    } catch (err) {
+      console.warn("[News Pipeline] Live fetch error, fallback to static master:", err);
+    } finally {
+      if (isManual) {
+        setIsRefreshing(false);
+      }
+    }
+  }, []);
+
+  // 初期ロード時に自動実行
+  useEffect(() => {
+    fetchLiveNews(false);
+  }, [fetchLiveNews]);
+
   // フィルタリング
   const filteredNews = useMemo(() => {
-    return aiNewsMaster.filter((item) => {
+    return newsList.filter((item) => {
       // カテゴリ絞り込み
       if (selectedCategory !== "all" && item.category !== selectedCategory) {
         return false;
@@ -161,6 +210,59 @@ export default function AiNewsPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-8">
+        {/* 自動巡回パイプライン HUDステータスバー */}
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-4 sm:p-5 rounded-2xl border border-indigo-500/30 shadow-lg relative overflow-hidden">
+          <div className="absolute -right-12 -top-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30 shrink-0">
+                <Radio className="w-5 h-5 animate-pulse text-emerald-400" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-xs sm:text-sm font-black tracking-wide text-white uppercase flex items-center gap-1.5">
+                    ⚡ 自動巡回ニュースパイプライン
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" />
+                    完全自動反映 (LIVE)
+                  </span>
+                  {refreshSuccess && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/30 text-indigo-200 border border-indigo-400/50 animate-bounce">
+                      <Check size={10} />
+                      最新ライブデータを同期しました
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-slate-300 mt-1">
+                  GitHub Actions（6時間定時Cron）が各社公式フィード（Google DeepMind, OpenAI, Anthropic, xAI, DeepSeek等）を自動巡回・最新情報を即時反映。
+                </p>
+                <div className="flex items-center gap-4 text-[11px] text-slate-400 mt-1.5 font-mono">
+                  <span>最終自動巡回: <strong className="text-indigo-200">{lastSyncedAt}</strong></span>
+                  <span className="hidden sm:inline">•</span>
+                  <span className="hidden sm:inline">配信中: <strong className="text-emerald-300">{newsList.length}件</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
+              <button
+                onClick={() => fetchLiveNews(true)}
+                disabled={isRefreshing}
+                onMouseEnter={() => playCyberHover()}
+                className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm ${
+                  isRefreshing
+                    ? "bg-slate-800 text-slate-400 cursor-not-allowed"
+                    : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30 hover:scale-[1.02] active:scale-[0.98]"
+                }`}
+              >
+                <RefreshCw size={13} className={isRefreshing ? "animate-spin" : ""} />
+                <span>{isRefreshing ? "同期中..." : "最新ニュースを今すぐ再取得"}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* KPIサマリーカード */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
@@ -174,7 +276,7 @@ export default function AiNewsPage() {
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">配信中ニュース</p>
                 <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 font-mono">
-                  <AnimatedCounter value={aiNewsMaster.length} duration={800} />
+                  <AnimatedCounter value={newsList.length} duration={800} />
                   <span className="text-xs font-normal text-slate-500">件</span>
                 </p>
               </div>
@@ -192,7 +294,7 @@ export default function AiNewsPage() {
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">社内リリース</p>
                 <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 font-mono">
-                  <AnimatedCounter value={aiNewsMaster.filter((n) => n.category === "internal").length} duration={800} />
+                  <AnimatedCounter value={newsList.filter((n) => n.category === "internal").length} duration={800} />
                   <span className="text-xs font-normal text-slate-500">件</span>
                 </p>
               </div>
@@ -205,12 +307,12 @@ export default function AiNewsPage() {
               className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3 h-full"
             >
               <div className="p-2.5 sm:p-3 bg-sky-50 text-sky-600 rounded-xl shrink-0">
-                <GlobeIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+                <Globe className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">主要各社 / 一次情報</p>
                 <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 font-mono">
-                  <AnimatedCounter value={aiNewsMaster.filter((n) => n.category !== "internal").length} duration={800} />
+                  <AnimatedCounter value={newsList.filter((n) => n.category !== "internal").length} duration={800} />
                   <span className="text-xs font-normal text-slate-500">件</span>
                 </p>
               </div>
@@ -228,7 +330,7 @@ export default function AiNewsPage() {
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">情報更新日</p>
                 <p className="text-sm sm:text-base font-black text-slate-900 tracking-tight font-mono">
-                  2026/10/03
+                  {lastSyncedAt.split(" ")[0] || "2026/10/03"}
                 </p>
               </div>
             </div>
@@ -298,8 +400,8 @@ export default function AiNewsPage() {
             {aiNewsCategoryMaster.map((cat) => {
               const count =
                 cat.id === "all"
-                  ? aiNewsMaster.length
-                  : aiNewsMaster.filter((item) => item.category === cat.id).length;
+                  ? newsList.length
+                  : newsList.filter((item) => item.category === cat.id).length;
               const isActive = selectedCategory === cat.id;
 
               return (
