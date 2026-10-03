@@ -40,17 +40,19 @@ const DEFAULT_GCP_INFO = {
   projectId: "antigravity-pj-509006",
   billingAccountId: "012EB1-1D4C87-D1B374",
   totalCreditJpy: 47813,
-  remainingCreditJpy: 42808,
-  totalSpentJpy: 5005,
+  remainingCreditJpy: 42630, // 2026/10/03 Cloud Billing 実機コンソール確定 (¥42,629.68)
+  totalSpentJpy: 5183,
   grossCostJpy: 7105,
   netCostJpy: 0,
   totalCreditUsd: 318.75,
-  remainingCreditUsd: 285.39,
-  totalSpentUsd: 33.36,
+  remainingCreditUsd: 284.20,
+  totalSpentUsd: 34.55,
   grossCostUsd: 47.37,
   trialDaysTotal: 90,
   trialDaysLeft: 88, // 2026/10/03 Cloud Billing 実画面確定 (残り88日 / 2026-12-31終了)
   monthlyBudgetUsd: 50,
+  bigQueryExportDataset: "mighty-link-ai-connect-497009:gcp_billing_export",
+  bigQueryConnected: true,
 };
 
 // 初期ユーザーデータ（実機確定値）

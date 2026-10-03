@@ -96,7 +96,8 @@ export default function AgentCasesPage() {
         />
 
         {/* HUDハイライトカード */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
+        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+          <div onMouseEnter={() => playCyberHover()} className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30 text-xs font-mono font-bold tracking-wider uppercase">
@@ -123,6 +124,7 @@ export default function AgentCasesPage() {
             </div>
           </div>
         </div>
+      </TiltCard>
 
         {/* 事例カード一覧 */}
         <div className="space-y-4">

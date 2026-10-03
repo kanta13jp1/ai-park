@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
+import AnimatedCounter from "@/components/AnimatedCounter";
 import SpotlightCard from "@/components/SpotlightCard";
 import {
   aiNewsMaster,
@@ -162,55 +163,76 @@ export default function AiNewsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-8">
         {/* KPIサマリーカード */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
-            <div className="p-2.5 sm:p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
-              <Newspaper className="w-5 h-5 sm:w-6 sm:h-6" />
+          <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+            <div
+              onMouseEnter={() => playCyberHover()}
+              className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3 h-full"
+            >
+              <div className="p-2.5 sm:p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0">
+                <Newspaper className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">配信中ニュース</p>
+                <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 font-mono">
+                  <AnimatedCounter value={aiNewsMaster.length} duration={800} />
+                  <span className="text-xs font-normal text-slate-500">件</span>
+                </p>
+              </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">配信中ニュース</p>
-              <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
-                {aiNewsMaster.length} <span className="text-xs font-normal text-slate-500">件</span>
-              </p>
-            </div>
-          </div>
+          </TiltCard>
 
-          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
-            <div className="p-2.5 sm:p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
-              <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
+          <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+            <div
+              onMouseEnter={() => playCyberHover()}
+              className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3 h-full"
+            >
+              <div className="p-2.5 sm:p-3 bg-emerald-50 text-emerald-600 rounded-xl shrink-0">
+                <Building2 className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">社内リリース</p>
+                <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 font-mono">
+                  <AnimatedCounter value={aiNewsMaster.filter((n) => n.category === "internal").length} duration={800} />
+                  <span className="text-xs font-normal text-slate-500">件</span>
+                </p>
+              </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">社内リリース</p>
-              <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
-                {aiNewsMaster.filter((n) => n.category === "internal").length}{" "}
-                <span className="text-xs font-normal text-slate-500">件</span>
-              </p>
-            </div>
-          </div>
+          </TiltCard>
 
-          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
-            <div className="p-2.5 sm:p-3 bg-sky-50 text-sky-600 rounded-xl shrink-0">
-              <GlobeIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+          <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+            <div
+              onMouseEnter={() => playCyberHover()}
+              className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3 h-full"
+            >
+              <div className="p-2.5 sm:p-3 bg-sky-50 text-sky-600 rounded-xl shrink-0">
+                <GlobeIcon className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">Google / 一次情報</p>
+                <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight flex items-baseline gap-1 font-mono">
+                  <AnimatedCounter value={aiNewsMaster.filter((n) => n.category !== "internal").length} duration={800} />
+                  <span className="text-xs font-normal text-slate-500">件</span>
+                </p>
+              </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">Google / 一次情報</p>
-              <p className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight">
-                {aiNewsMaster.filter((n) => n.category !== "internal").length}{" "}
-                <span className="text-xs font-normal text-slate-500">件</span>
-              </p>
-            </div>
-          </div>
+          </TiltCard>
 
-          <div className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3">
-            <div className="p-2.5 sm:p-3 bg-purple-50 text-purple-600 rounded-xl shrink-0">
-              <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
+          <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+            <div
+              onMouseEnter={() => playCyberHover()}
+              className="bg-white p-3.5 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs flex items-center gap-3 h-full"
+            >
+              <div className="p-2.5 sm:p-3 bg-purple-50 text-purple-600 rounded-xl shrink-0">
+                <Calendar className="w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">情報更新日</p>
+                <p className="text-sm sm:text-base font-black text-slate-900 tracking-tight font-mono">
+                  2026/10/03
+                </p>
+              </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">情報更新日</p>
-              <p className="text-sm sm:text-base font-black text-slate-900 tracking-tight font-mono">
-                2026/10/03
-              </p>
-            </div>
-          </div>
+          </TiltCard>
         </div>
 
         {/* フィルター＆検索ツールバー */}

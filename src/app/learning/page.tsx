@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import HeroBanner from "@/components/HeroBanner";
 import BeginnerCheatsheet from "@/components/BeginnerCheatsheet";
@@ -6,6 +8,8 @@ import SafetySelfChecker from "@/components/SafetySelfChecker";
 import InteractivePromptLibrary from "@/components/InteractivePromptLibrary";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
+import { playCyberHover, playCyberClick } from "@/lib/sound";
 import { GraduationCap, ArrowRight, Sparkles, BookOpen } from "lucide-react";
 
 export default function LearningPage() {
@@ -18,14 +22,17 @@ export default function LearningPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-8">
         {/* Academy への誘導ハイライト SpotlightCard */}
-        <SpotlightCard
-          spotlightColor="rgba(99, 102, 241, 0.25)"
-          className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 border-indigo-700/50 shadow-xl overflow-hidden"
-        >
-          <Link
-            href="/academy"
-            className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 sm:p-8 gap-5 group"
+        <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl">
+          <SpotlightCard
+            spotlightColor="rgba(99, 102, 241, 0.25)"
+            className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 border-indigo-700/50 shadow-xl overflow-hidden rounded-2xl"
           >
+            <Link
+              href="/academy"
+              onMouseEnter={() => playCyberHover()}
+              onClick={() => playCyberClick()}
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 sm:p-8 gap-5 group"
+            >
             <div className="flex items-start sm:items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-400/40 flex items-center justify-center shrink-0 text-cyan-300 shadow-inner group-hover:scale-105 transition-transform">
                 <GraduationCap className="w-8 h-8" />
@@ -52,6 +59,7 @@ export default function LearningPage() {
             </div>
           </Link>
         </SpotlightCard>
+      </TiltCard>
 
         {/* 初心者チートシート */}
         <BeginnerCheatsheet />
