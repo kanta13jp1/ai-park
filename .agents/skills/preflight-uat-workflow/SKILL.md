@@ -62,6 +62,11 @@ description: MightyLINK AI Parkにおける新機能・更新画面の公開前�
 - **平易な日本語と明快な解説**:
   - 専門用語や略称（MCP, IDE, API, Spend cap等）に初学者向けの平易な解説・補足があるか。
   - 手順がステップ番号（STEP 1, 2...）で視覚的に整理され、迷わず追えるか。
+- **不自然な単語泣き別れ・孤立文字の排除（タイポグラフィ品質）**:
+  - 助詞・助動詞や単語の一部（例: 「篇）」「ト」「の」等）だけが次の行に孤立改行される不格好なレイアウトを排除する。
+  - 必要に応じて `inline-block`, `break-keep`, `whitespace-nowrap` や適切な改行指定を行い、美しく読みやすい行送りを担保する。
+- **実務に即したデフォルト表示・フィルター優先設定**:
+  - 一覧・ToDo・課題画面などでは、完了済みよりも「⚡ 未対応（対応中＋検討中）」などのアクション待ち項目を初期表示し、実務で最も必要な情報へワンアクションで到達できるようにする。
 - **警告・注意事項のハイライト**:
   - 業務利用時のセキュリティ注意点や禁止事項が、目立つアイコンやカラー（アンバー・レッド枠）で強調されているか。
 - **次のアクションの明確化**:
@@ -79,23 +84,23 @@ flowchart TD
     S2 --> S3["Step 3: /preflight 画面UI & Markdown報告書の整合確認"]
     S3 --> S4["Step 4: 品質ゲート・型チェック・ビルド検証"]
     S4 --> S5["Step 5: Git コミット & GitHub Actions デプロイ監視"]
-    S5 --> S6["Step 6: 本番環境での最終確認 & ユーザーへの報告・サインオフ"]
+    S5 --> S6["Step 6: Puppeteer実機検証 & ユーザーへの報告・サインオフ"]
 ```
 
 ### Step 1: 実機画面の精査 & 小項目チェックリスト策定
 1. ブラウザまたはDevToolsで対象画面（例: `/learning`, `/ai-projects` 等）を開く。
 2. ページ内に記載されているすべての情報（文言、リンク、担当者、コード、手順、診断ロジック）を洗い出す。
-3. 仕様・事実確認（Fact & Spec）を以下の3グループに分類し、具体的な点検小項目（`DetailedSubCheck`）を作成する：
-   - `① 嘘や推測のデータがないか（事実性・正確性検証）`
-   - `② 公式アナウンス・安全基準と一致しているか（整合性・周知遵守）`
-   - `③ リンク先が実在するか（リンク検証・確認済み）`
+3. 仕様・事実確認（Fact & Spec）を以下の3グループに分類し、具体的な点検小項目（`DetailedSubCheck` 計10項目）を作成する：
+   - `① 嘘や推測のデータがないか（事実性・正確性検証）`（4項目）
+   - `② 公式アナウンス・安全基準と一致しているか（整合性・周知遵守）`（3項目）
+   - `③ リンク先が実在するか（リンク検証・確認済み）`（3項目）
 
 ### Step 2: プリフライトマスター（`src/data/preflight-checklist.ts`）への反映
-1. `src/data/preflight-checklist.ts` の対象レコードを開く。
+1. `src/data/preflight-checklist.ts` の対象レコードを開く（新規画面の場合はレコードを追加）。
 2. `checks.factAndSpec` に以下を定義する：
    - `points`: 評価ポイントの一覧配列
    - `evidence`: 検証結果のエビデンス要約文字列
-   - `subChecks`: `DetailedSubCheck` 配列（ID, category, groupTitle, label, detail, verified: true）
+   - `subChecks`: `DetailedSubCheck` 10項目の配列（ID, category, groupTitle, label, detail, verified: true）
 3. `checks.designAndLayout`, `checks.usability`, `checks.readability` の points と evidence も実態に合わせて更新する。
 4. `lastVerifiedAt`（検証日付）および `verifiedBy`（検証担当者）を最新化する。
 
@@ -113,7 +118,7 @@ npm run check:gate
 # 2. TypeScript型チェック
 npx tsc --noEmit
 
-# 3. Next.js本番ビルド
+# 3. Next.js本番ビルド（49ルートSSG生成）
 npm run build
 ```
 
@@ -127,17 +132,35 @@ git commit -m "feat(preflight): granular sub-checklist for fact & spec on <page>
 git push origin main
 
 # GitHub Actions の実行IDを取得して監視
-gh run list -L 1
+gh run list --workflow deploy.yml -L 1
 gh run watch <run_id>
 ```
 
-### Step 6: 本番環境での最終確認 & ユーザーへの報告・サインオフ
-1. 本番サイト（`https://kanta13jp1.github.io/ai-park/preflight`）を開き、最新のチェックリストが反映されていることを確認する。
-2. ユーザーに対して、各小項目の点検根拠と合格判定の要約を報告し、サインオフを得る。
+### Step 6: Puppeteer実機検証 & ユーザーへの報告・サインオフ
+1. Puppeteer MCP ツール等を用いて本番URL（キャッシュバスター付与: `?cachebust=<timestamp>`）へアクセス。
+2. クリック操作、リスト絞り込み、レスポンシブ崩れの有無を実機評価。
+3. スクリーンショットを撮影して保存・確認。
+4. ユーザーに対して、各小項目の点検根拠と合格判定の要約を報告し、サインオフを得る。
 
 ---
 
-## 4. チェックリスト・報告書テンプレート
+## 4. 新規画面追加時のオンボーディング規約（New Page Onboarding）
+
+新しい画面・ページ（例: `/news` など）をポータルに追加する際は、以下のルールを厳守します：
+
+1. **実在データまたは誠実なステータスガード**:
+   - 外部APIや実データと連携して公開する場合は、事実性・実在性を担保する。
+   - 準備中や開発途中の場合は、即座に `🚧 工事中` `📋 準備中` `🧪 PoC中` のバッジを付与し、`scripts/verify-deployment-gate.mjs` にリストアップして品質ゲートを通過させる。
+2. **ナビゲーションと検索への統合**:
+   - `src/components/Sidebar.tsx` の適切なグループ（「使い方・学び」「エージェント・ツール」「コミュニティ」等）にメニュー項目を追加。
+   - `src/lib/searchIndex.ts`（またはサイト内横断検索インデックス）にルートとキーワードを登録。
+3. **Awards水準のUI/UXと触感音響**:
+   - `HeroBanner`, `SpotlightCard`, `TiltCard` による一貫した高品質デザイン。
+   - ホバー音（`playCyberHover`）、クリック音（`playCyberClick`）の適用。
+
+---
+
+## 5. チェックリスト・報告書テンプレート
 
 ユーザーへの確認依頼や報告書作成時は、以下のフォーマットに準拠します。
 
@@ -166,10 +189,11 @@ gh run watch <run_id>
 
 ---
 
-## 5. トラブルシューティング
+## 6. トラブルシューティング
 
 - **ビルドゲート（`npm run check:gate`）でエラーが出る場合**:
   - 未連携機能に `🚧 工事中` `📋 準備中` `🧪 PoC中` 等の注記が漏れていないか確認する。
   - `preflight-checklist.ts` 内の `passed: true` や `evidence` 文字列の記述形式が正規表現と一致しているか確認する。
 - **デプロイ後に画面が更新されない場合**:
-  - GitHub Pages のキャッシュの影響があるため、ブラウザでスーパーリロード（`Ctrl+F5` または `Shift+Reload`）を行う。
+  - GitHub Pages / CDN のキャッシュの影響があるため、URLに `?cachebust=<現在時刻>` を付与するか、ブラウザでスーパーリロード（`Ctrl+F5` または `Shift+Reload`）を行う。
+
