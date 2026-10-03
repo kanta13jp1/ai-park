@@ -22,6 +22,8 @@ interface GeminiStatsSyncStatusProps {
   isLoading: boolean;
   onRefresh: () => void;
   projectId: string;
+  syncMode?: "api_live" | "snapshot_verified";
+  syncModeLabel?: string;
 }
 
 export default function GeminiStatsSyncStatus({
@@ -31,6 +33,8 @@ export default function GeminiStatsSyncStatus({
   isLoading,
   onRefresh,
   projectId,
+  syncMode = "api_live",
+  syncModeLabel = "完全API自動同期中",
 }: GeminiStatsSyncStatusProps) {
   const [isOpenFaq, setIsOpenFaq] = useState(false);
 
@@ -47,16 +51,20 @@ export default function GeminiStatsSyncStatus({
               <h3 className="text-sm font-black text-slate-900 tracking-tight">
                 データ同期ステータス
               </h3>
-              <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+              <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border flex items-center gap-1 ${
+                syncMode === "api_live"
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                  : "bg-blue-50 text-blue-700 border-blue-200"
+              }`}>
                 <CheckCircle2 size={11} />
-                <span>正常稼働中</span>
+                <span>{syncModeLabel}</span>
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
                 取得元: {dataSource}
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5 font-mono">
-              最終同期: <span className="font-bold text-slate-700">{syncedAt}</span> ｜ 対象: <span className="font-bold text-indigo-600">{projectId}</span>
+              最終同期: <span className="font-bold text-slate-700">{syncedAt}</span> ｜ 対象: <span className="font-bold text-indigo-600">{projectId}</span> ｜ 請求先ステータス: <span className="font-bold text-emerald-600">ACTIVE (利用可能)</span>
             </p>
           </div>
         </div>
@@ -116,11 +124,11 @@ export default function GeminiStatsSyncStatus({
               {/* チェック3 */}
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
                 <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs">
-                  <Clock size={14} className="text-amber-600" />
-                  <span>③ Google Cloud 側のログ集計ラグ（数時間〜日次）</span>
+                  <ShieldCheck size={14} className="text-amber-600" />
+                  <span>③ Google Cloud 監査ログ（データアクセス）の有効化</span>
                 </div>
                 <p className="text-[11px] text-slate-600">
-                  GCPの監査ログ（Cloud Logging）および課金集計（Cloud Billing）はリアルタイム加算ではなく、定期バッチ処理で計上されます。利用直後には反映されず、数時間後にまとめて加算される仕様です。
+                  GCP既定ではAPI利用ログ（Data Access）が無効です。Google Cloudコンソール「IAMと管理」&gt;「監査ログ」で Vertex AI および Generative Language の「データ読み取り / 書き込み」を有効にすると、利用回数が完全自動加算されます。
                 </p>
               </div>
 

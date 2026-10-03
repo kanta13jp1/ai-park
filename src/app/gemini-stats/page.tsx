@@ -84,6 +84,8 @@ export default function GeminiStatsPage() {
   const [gcpInfo, setGcpInfo] = useState(DEFAULT_GCP_INFO);
   const [syncedAt, setSyncedAt] = useState<string>("取得中...");
   const [dataSource, setDataSource] = useState<string>("GitHub Actions 自動同期パイプライン");
+  const [syncMode, setSyncMode] = useState<"api_live" | "snapshot_verified">("api_live");
+  const [syncModeLabel, setSyncModeLabel] = useState<string>("完全API自動同期中");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLive, setIsLive] = useState<boolean>(false);
   const [period, setPeriod] = useState<"7d" | "14d" | "30d" | "all">("14d");
@@ -110,6 +112,8 @@ export default function GeminiStatsPage() {
         if (data.users && Array.isArray(data.users)) setUsers(data.users);
         if (data.dailyHistory && Array.isArray(data.dailyHistory)) setDailyData(data.dailyHistory);
         if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
+        if (data.syncMode) setSyncMode(data.syncMode);
+        if (data.syncModeLabel) setSyncModeLabel(data.syncModeLabel);
         setSyncedAt(data.syncedAt || "Cloud Billing 実画面同期");
         setDataSource(data.dataSource || "Google Cloud Billing Live Verified");
         setIsLive(true);
@@ -388,6 +392,8 @@ function doGet() {
             fetchLiveData();
           }}
           projectId={gcpInfo.projectId}
+          syncMode={syncMode}
+          syncModeLabel={syncModeLabel}
         />
 
         {/* 4大KPIメトリクス */}
