@@ -180,7 +180,14 @@ export default function GuidePage() {
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
-        title="Antigravity 導入ガイド（AI導入編）"
+        title={
+          <span className="inline-flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1">
+            <span>Antigravity 導入ガイド</span>
+            <span className="inline-block whitespace-nowrap text-cyan-300">
+              （AI導入編）
+            </span>
+          </span>
+        }
         subtitle="公式ドキュメント準拠のセットアップ・安全設定・IDE日本語化・Git連携完全マニュアル"
       />
       <OfficeHourBanner />

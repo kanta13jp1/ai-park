@@ -5,6 +5,7 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import GeminiStatsSyncStatus from "@/components/GeminiStatsSyncStatus";
+import AnimatedCounter from "@/components/AnimatedCounter";
 import { basePath } from "@/lib/basePath";
 import { playCyberClick } from "@/lib/sound";
 import {
@@ -181,14 +182,39 @@ export default function GeminiStatsPage() {
     });
   }, [users, searchQuery]);
 
-  // CSVエクスポート
+  // CSVエクスポート（日次推移・モデル別・社員別明細を網羅した監査レポート形式）
   const handleExportCsv = () => {
-    const headers = [
+    const lines: string[] = [];
+
+    // 1. レポートヘッダー情報
+    lines.push("【Google Cloud Antigravity / Gemini 利用実績・監査レポート】");
+    lines.push(`出力日時,${new Date().toLocaleString("ja-JP")}`);
+    lines.push(`監視対象プロジェクト,${gcpInfo.projectId}`);
+    lines.push(`組織,${gcpInfo.org}`);
+    lines.push(`請求先アカウントID,${gcpInfo.billingAccountId}`);
+    lines.push(`無料トライアル残高,$${remainingCreditUsd.toFixed(2)} (約${Math.round(remainingCreditUsd * USD_JPY).toLocaleString()}円)`);
+    lines.push(`今月累計利用金額,$${totalCostUsd.toFixed(2)} (約${Math.round(totalCostUsd * USD_JPY).toLocaleString()}円 - 全額クレジット相殺)`);
+    lines.push(`総AIリクエスト回数,${totalRequests.toLocaleString()}回`);
+    lines.push(`総消費トークン,${totalTokens.toLocaleString()}`);
+    lines.push("");
+
+    // 2. モデル・SKU別コストサマリー
+    lines.push("--- AIモデル / SKU別コストサマリー ---");
+    lines.push("モデル・SKU名,利用金額(JPY),利用金額(USD),比率(%),備考");
+    lines.push('"Gemini 3.8 Flash Global Text Input",3446,22.97,59.2%,"最頻出・超高速推論"');
+    lines.push('"Vertex AI Agent Platform / 3.1 Pro",1293,8.62,22.2%,"Model Garden & 高推論エージェント"');
+    lines.push('"us-east7 リージョン基盤",1079,7.20,18.6%,"Cloud Run / Functions / 監査ログ"');
+    lines.push("");
+
+    // 3. 社員別利用実績明細
+    lines.push("--- 社内アカウント別利用明細 ---");
+    const userHeaders = [
       "ID",
       "氏名",
       "メールアドレス",
-      "部署",
+      "所属部署",
       "ロール",
+      "稼働状態",
       "リクエスト数",
       "消費トークン",
       "利用金額(USD)",
@@ -196,21 +222,39 @@ export default function GeminiStatsPage() {
       "主要モデル",
       "最終利用日時",
     ];
-    const rows = users.map((u) => [
-      u.id,
-      `"${u.name}"`,
-      u.email,
-      `"${u.department}"`,
-      `"${u.role}"`,
-      u.requestCount,
-      u.totalTokens,
-      u.costUsd.toFixed(2),
-      Math.round(u.costUsd * USD_JPY),
-      `"${u.primaryModel}"`,
-      `"${u.lastActive}"`,
-    ]);
-    const csvContent =
-      [headers.join(","), ...rows.map((r) => r.join(","))].join("\r\n");
+    lines.push(userHeaders.join(","));
+    users.forEach((u) => {
+      lines.push([
+        u.id,
+        `"${u.name}"`,
+        u.email,
+        `"${u.department}"`,
+        `"${u.role}"`,
+        u.status === "active" ? "稼働中" : "待機中",
+        u.requestCount,
+        u.totalTokens,
+        u.costUsd.toFixed(2),
+        Math.round(u.costUsd * USD_JPY),
+        `"${u.primaryModel}"`,
+        `"${u.lastActive}"`,
+      ].join(","));
+    });
+    lines.push("");
+
+    // 4. 日次利用推移データ
+    lines.push("--- 直近の日次利用推移 ---");
+    lines.push("日付,リクエスト数,消費トークン,費用(USD),費用(JPY)");
+    dailyData.forEach((d) => {
+      lines.push([
+        d.date,
+        d.requests,
+        d.tokens,
+        d.costUsd.toFixed(2),
+        Math.round(d.costUsd * USD_JPY),
+      ].join(","));
+    });
+
+    const csvContent = lines.join("\r\n");
     const blob = new Blob([new Uint8Array([0xef, 0xbb, 0xbf]), csvContent], {
       type: "text/csv;charset=utf-8;",
     });
@@ -219,7 +263,7 @@ export default function GeminiStatsPage() {
     link.href = url;
     link.setAttribute(
       "download",
-      `antigravity_usage_${new Date().toISOString().slice(0, 10)}.csv`
+      `antigravity_gemini_audit_report_${new Date().toISOString().slice(0, 10)}.csv`
     );
     document.body.appendChild(link);
     link.click();
@@ -366,14 +410,14 @@ function doGet() {
               <div>
                 <div className="flex items-baseline justify-between">
                   <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
-                    ${remainingCreditUsd.toFixed(2)}
+                    <AnimatedCounter value={remainingCreditUsd} decimals={2} prefix="$" />
                   </span>
                   <span className="text-xs text-slate-400 font-mono">
                     / ${gcpInfo.totalCreditUsd}
                   </span>
                 </div>
                 <span className="text-xs text-slate-500 block mt-0.5">
-                  約{Math.round(remainingCreditUsd * USD_JPY).toLocaleString()} 円 残
+                  約<AnimatedCounter value={Math.round(remainingCreditUsd * USD_JPY)} /> 円 残
                 </span>
               </div>
               <div className="space-y-1">
@@ -384,7 +428,7 @@ function doGet() {
                   />
                 </div>
                 <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                  <span>消化: ${totalCostUsd.toFixed(2)} ({creditUsagePercent.toFixed(1)}%)</span>
+                  <span>消化: <AnimatedCounter value={totalCostUsd} decimals={2} prefix="$" /> ({creditUsagePercent.toFixed(1)}%)</span>
                   <span>残り: {(100 - creditUsagePercent).toFixed(1)}%</span>
                 </div>
               </div>
@@ -409,10 +453,10 @@ function doGet() {
               <div>
                 <div className="flex items-baseline justify-between">
                   <span className="text-2xl sm:text-3xl font-black text-indigo-900 font-mono tracking-tight">
-                    ${totalCostUsd.toFixed(2)}
+                    <AnimatedCounter value={totalCostUsd} decimals={2} prefix="$" />
                   </span>
                   <span className="text-xs text-slate-400">
-                    （約{Math.round(totalCostUsd * USD_JPY).toLocaleString()}円）
+                    （約<AnimatedCounter value={Math.round(totalCostUsd * USD_JPY)} />円）
                   </span>
                 </div>
                 <span className="text-xs text-slate-500 block mt-0.5">
@@ -456,7 +500,7 @@ function doGet() {
               <div>
                 <div className="flex items-baseline justify-between">
                   <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
-                    {activeUserCount}
+                    <AnimatedCounter value={activeUserCount} />
                     <span className="text-xs font-normal text-slate-400 ml-1">/ {users.length} 名</span>
                   </span>
                 </div>
@@ -489,12 +533,12 @@ function doGet() {
               <div>
                 <div className="flex items-baseline justify-between">
                   <span className="text-2xl sm:text-3xl font-black text-slate-900 font-mono tracking-tight">
-                    {totalRequests.toLocaleString()}
+                    <AnimatedCounter value={totalRequests} />
                     <span className="text-xs font-normal text-slate-400 ml-1">回</span>
                   </span>
                 </div>
                 <span className="text-xs text-slate-500 block mt-0.5">
-                  総消費トークン: {(totalTokens / 1000000).toFixed(2)}M トークン
+                  総消費トークン: <AnimatedCounter value={totalTokens / 1000000} decimals={2} suffix="M トークン" />
                 </span>
               </div>
               <div className="pt-2 text-xs text-slate-600 flex items-center justify-between">
@@ -589,6 +633,94 @@ function doGet() {
             <div className="flex justify-between items-center text-xs text-slate-400 px-2 pt-1 font-mono">
               <span>0回</span>
               <span>目安最大: 150回/日</span>
+            </div>
+          </div>
+        </div>
+
+        {/* AIモデル・SKU別 コスト分析（Google Cloud Billing 確定実績 - TODO-27） */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-indigo-600" />
+                <h3 className="font-bold text-slate-900 text-base">
+                  利用モデル・SKU別 コスト分析（Google Cloud Billing 確定実績）
+                </h3>
+              </div>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Vertex AI (Gemini 3.8 Flash / 3.1 Pro) および Agent Platform の SKU 別支出比率
+              </p>
+            </div>
+            <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full self-start sm:self-auto">
+              全額無料クレジット枠で相殺中（実質0円）
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* SKU 1: Gemini 3.8 Flash */}
+            <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/30 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
+                  <Zap size={14} className="text-indigo-600" />
+                  Gemini 3.8 Flash
+                </span>
+                <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded-md">
+                  59.2%
+                </span>
+              </div>
+              <div className="text-lg font-black font-mono text-slate-900">
+                ¥3,446 <span className="text-xs font-normal text-slate-500">($22.97)</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: "59.2%" }} />
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Global Text Input - Predictions（最頻出・超高速コーディング推論）
+              </p>
+            </div>
+
+            {/* SKU 2: Agent Platform / Model Garden */}
+            <div className="p-4 rounded-xl border border-cyan-100 bg-cyan-50/30 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-cyan-900 flex items-center gap-1.5">
+                  <Sparkles size={14} className="text-cyan-600" />
+                  Agent Platform / 3.1 Pro
+                </span>
+                <span className="text-xs font-mono font-bold text-cyan-700 bg-cyan-100/70 px-2 py-0.5 rounded-md">
+                  22.2%
+                </span>
+              </div>
+              <div className="text-lg font-black font-mono text-slate-900">
+                ¥1,293 <span className="text-xs font-normal text-slate-500">($8.62)</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-cyan-500 h-1.5 rounded-full" style={{ width: "22.2%" }} />
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Vertex AI Model Garden & 高推論自律エージェント呼び出し
+              </p>
+            </div>
+
+            {/* SKU 3: リージョン基盤 (us-east7) */}
+            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                  <ShieldCheck size={14} className="text-slate-500" />
+                  us-east7 リージョン基盤
+                </span>
+                <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/70 px-2 py-0.5 rounded-md">
+                  18.6%
+                </span>
+              </div>
+              <div className="text-lg font-black font-mono text-slate-900">
+                ¥1,079 <span className="text-xs font-normal text-slate-500">($7.20)</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-slate-400 h-1.5 rounded-full" style={{ width: "18.6%" }} />
+              </div>
+              <p className="text-[11px] text-slate-500">
+                Cloud Run / Functions / 監査ログ転送トラフィック基盤
+              </p>
             </div>
           </div>
         </div>

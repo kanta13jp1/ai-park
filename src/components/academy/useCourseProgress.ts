@@ -52,8 +52,10 @@ export function useCourseProgress(course: Course) {
 }
 
 // 進捗表示用：完了数（レッスン＋評価テスト）と全体数
-export function stepCounts(course: Course, progress: CourseProgress) {
+export function stepCounts(course: Course, progress?: CourseProgress) {
   const total = course.lessons.length + 1;
-  const done = progress.lessonsDone.length + ((progress.bestScore ?? 0) >= PASS_RATE ? 1 : 0);
+  const lessonsDoneCount = progress && Array.isArray(progress.lessonsDone) ? progress.lessonsDone.length : 0;
+  const quizDone = progress && typeof progress.bestScore === "number" && progress.bestScore >= PASS_RATE ? 1 : 0;
+  const done = lessonsDoneCount + quizDone;
   return { done, total };
 }

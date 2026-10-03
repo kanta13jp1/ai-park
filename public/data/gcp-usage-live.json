@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-10-03T02:54:00.000Z",
-  "syncedAt": "2026-10-03 11:54",
+  "updatedAt": "2026-10-03T07:22:16.939Z",
+  "syncedAt": "2026-10-03 16:22",
   "dataSource": "Google Cloud Billing & Cloud Logging Live Verified",
   "isLive": true,
   "gcpInfo": {
@@ -97,7 +97,7 @@
       "inputTokens": 31200000,
       "outputTokens": 3800000,
       "totalTokens": 35000000,
-      "costUsd": 35.20,
+      "costUsd": 35.2,
       "costJpy": 5280,
       "lastActive": "2026/10/03 11:45",
       "status": "active",

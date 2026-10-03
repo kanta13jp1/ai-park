@@ -8,6 +8,8 @@ import { loadProgress, type CourseProgress } from "@/lib/academyProgress";
 import { stepCounts } from "@/components/academy/useCourseProgress";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import AcademyProgressHUD from "@/components/academy/AcademyProgressHUD";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 export default function AcademyPage() {
   const [progress, setProgress] = useState<Record<string, CourseProgress>>({});
@@ -20,10 +22,20 @@ export default function AcademyPage() {
 
   const inProgress = courses.filter((c) => {
     const p = progress[c.id];
-    return p && !p.completedAt && (p.lessonsDone.length > 0 || p.bestScore !== undefined);
+    return p && !p.completedAt && ((p.lessonsDone?.length ?? 0) > 0 || p.bestScore !== undefined);
   });
 
   const completedCount = courses.filter((c) => progress[c.id]?.completedAt).length;
+
+  // 全レッスンの達成状況を安全に計算
+  const totalLessons = courses.reduce((acc, c) => acc + (c.lessons.length + 1), 0);
+  const doneLessons = courses.reduce((acc, c) => {
+    const cp = progress[c.id];
+    const done =
+      (cp && Array.isArray(cp.lessonsDone) ? cp.lessonsDone.length : 0) +
+      (cp && typeof cp.bestScore === "number" && cp.bestScore >= 80 ? 1 : 0);
+    return acc + done;
+  }, 0);
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/70 min-h-screen">
@@ -54,21 +66,13 @@ export default function AcademyPage() {
               </p>
             </div>
 
-            {/* スタッツウィジェット */}
-            <div className="shrink-0 flex items-center gap-4 bg-white/5 border border-white/10 backdrop-blur-md rounded-2xl p-4">
-              <div className="text-center px-3 border-r border-white/10">
-                <div className="text-2xl font-black text-cyan-300 font-mono">12</div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Lessons</div>
-              </div>
-              <div className="text-center px-3 border-r border-white/10">
-                <div className="text-2xl font-black text-emerald-300 font-mono">{completedCount}/3</div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Completed</div>
-              </div>
-              <div className="text-center px-3">
-                <div className="text-2xl font-black text-amber-300 font-mono">100%</div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Free & Fast</div>
-              </div>
-            </div>
+            {/* サイバーHUDプログレスゲージ */}
+            <AcademyProgressHUD
+              totalLessons={totalLessons}
+              doneLessons={doneLessons}
+              completedCourses={completedCount}
+              totalCourses={courses.length}
+            />
           </div>
         </div>
 
@@ -89,7 +93,7 @@ export default function AcademyPage() {
                     spotlightColor="rgba(99, 102, 241, 0.15)"
                     className="border-indigo-200/80 bg-white"
                   >
-                    <Link href={`/academy/${c.id}`} className="group p-5 flex flex-col justify-between h-full space-y-4">
+                    <Link href={`/academy/${c.id}`} onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="group p-5 flex flex-col justify-between h-full space-y-4">
                       <div className="flex items-start justify-between">
                         <div className="w-12 h-12 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-2xl shadow-xs group-hover:scale-105 transition-transform">
                           {c.icon}
@@ -149,7 +153,7 @@ export default function AcademyPage() {
                   className="bg-white border-slate-200/90 hover:border-indigo-400/80"
                 >
                   <Link
-                    href={`/academy/${c.id}`}
+                    href={`/academy/${c.id}`} onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()}
                     className="group flex flex-col justify-between h-full p-6 space-y-5"
                   >
                     <div className="space-y-4">

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
 import {
   Building2,
   CircleDot,
@@ -279,12 +281,17 @@ export default function AiProjectsPage() {
           {shown.map((p) => {
             const currentStage = stageStyle[p.stage] ?? stageStyle["検討中"];
             return (
-              <SpotlightCard
+              <TiltCard
                 key={p.id}
-                spotlightColor={currentStage.glow}
-                className="bg-white border-slate-200/90"
+                maxTilt={5}
+                glareOpacity={0.12}
+                className="h-full rounded-2xl"
               >
-                <article className="p-6 flex flex-col justify-between h-full space-y-4">
+                <SpotlightCard
+                  spotlightColor={currentStage.glow}
+                  className="bg-white border-slate-200/90 h-full"
+                >
+                  <article className="p-6 flex flex-col justify-between h-full space-y-4">
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="font-extrabold text-slate-900 text-base leading-snug tracking-tight">
@@ -346,6 +353,7 @@ export default function AiProjectsPage() {
                   </div>
                 </article>
               </SpotlightCard>
+            </TiltCard>
             );
           })}
 
@@ -380,10 +388,13 @@ export default function AiProjectsPage() {
             {DEPT_PRACTICES.map((dp) => {
               const Icon = dp.deptIcon;
               return (
-                <div
+                <TiltCard
                   key={dp.dept}
-                  className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 flex flex-col justify-between space-y-4 hover:border-indigo-300 transition-all shadow-2xs"
+                  maxTilt={6}
+                  glareOpacity={0.1}
+                  className="rounded-2xl"
                 >
+                  <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 flex flex-col justify-between h-full space-y-4 hover:border-indigo-300 transition-all shadow-2xs">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-800 shadow-2xs">
@@ -419,6 +430,7 @@ export default function AiProjectsPage() {
                     <span>効果: {dp.effect}</span>
                   </div>
                 </div>
+              </TiltCard>
               );
             })}
           </div>

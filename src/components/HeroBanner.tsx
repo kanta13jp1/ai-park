@@ -5,7 +5,7 @@ import { useState, useRef, useCallback } from "react";
 import { playCyberClick } from "@/lib/sound";
 
 interface HeroBannerProps {
-  title: string;
+  title: React.ReactNode;
   subtitle?: string;
   isHome?: boolean;
 }
@@ -166,7 +166,7 @@ export default function HeroBanner({
       </div>
 
       {/* 中央タイトル & コンテンツ */}
-      <div className="relative z-10 text-center px-4 max-w-4xl space-y-4">
+      <div className={`relative z-10 text-center px-4 space-y-3 sm:space-y-4 ${isHome ? "max-w-4xl" : "max-w-5xl"}`}>
         {isHome && (
           <div className="flex flex-wrap items-center justify-center gap-2 animate-float-slow">
             <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-emerald-500/15 backdrop-blur-md border border-emerald-400/40 text-emerald-300 text-xs font-semibold tracking-wide shadow-sm">
@@ -180,8 +180,14 @@ export default function HeroBanner({
           </div>
         )}
 
-        <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight drop-shadow-2xl">
-          {isHome ? (
+        <h1
+          className={`font-black text-white tracking-tight drop-shadow-2xl ${
+            isHome
+              ? "text-3xl sm:text-5xl md:text-6xl"
+              : "text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] leading-tight"
+          }`}
+        >
+          {isHome && typeof title === "string" ? (
             <span className="bg-gradient-to-r from-white via-emerald-100 to-cyan-300 bg-clip-text text-transparent">
               {title}
             </span>
