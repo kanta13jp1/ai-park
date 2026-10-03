@@ -222,6 +222,34 @@ export default function GuidePage() {
           </div>
         </div>
 
+        {/* ページ内クイックナビゲーション */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+          <span className="text-slate-400 font-bold shrink-0 text-[11px] mr-1">ページ内目次:</span>
+          {[
+            { label: "初期導入 7ステップ", href: "#setup-steps", icon: "📥" },
+            { label: "会社のGCP連携", href: "#gcp-setup-guide", icon: "☁️" },
+            { label: "Windows エラー解決早見表", href: "#troubleshooting-board", icon: "⚡", highlight: true },
+            { label: "社内MCP安全設定", href: "#windows-powershell-tips", icon: "🤖" },
+            { label: "入力セルフ診断", href: "#safety-checker", icon: "🛡️" },
+            { label: "IDE 日本語化", href: "#ide-japanese", icon: "🌐" },
+          ].map((nav) => (
+            <a
+              key={nav.href}
+              href={nav.href}
+              onClick={() => playCyberClick()}
+              onMouseEnter={() => playCyberHover()}
+              className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition-all shrink-0 cursor-pointer ${
+                nav.highlight
+                  ? "bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200/80 shadow-2xs"
+                  : "bg-white border border-slate-200/90 text-slate-700 hover:bg-slate-100 hover:text-indigo-600 shadow-2xs"
+              }`}
+            >
+              <span>{nav.icon}</span>
+              <span>{nav.label}</span>
+            </a>
+          ))}
+        </div>
+
         {/* アカウント利用に関するセキュリティ注意バナー */}
         <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-300/80 rounded-2xl p-5 flex items-start gap-3.5 text-xs text-amber-950 leading-relaxed shadow-2xs">
           <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
@@ -241,7 +269,7 @@ export default function GuidePage() {
         </div>
 
         {/* 初期導入ステップ一覧 */}
-        <section className="space-y-4">
+        <section className="space-y-4" id="setup-steps">
           <div className="flex items-center space-x-2">
             <Download className="w-5 h-5 text-indigo-600" />
             <h3 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
@@ -259,16 +287,20 @@ export default function GuidePage() {
         </section>
 
         {/* GCP 連携ガイド */}
-        <GcpSetupGuide />
+        <div id="gcp-setup-guide">
+          <GcpSetupGuide />
+        </div>
 
         {/* Windows 実践Tips & MCP活用ガイド */}
         <WindowsAntigravityGuide />
 
         {/* 社内AI入力セルフチェック診断ツール */}
-        <SafetySelfChecker />
+        <div id="safety-checker">
+          <SafetySelfChecker />
+        </div>
 
         {/* IDE 日本語化ガイド */}
-        <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+        <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6" id="ide-japanese">
           <div className="flex items-center space-x-2.5 border-b border-slate-100 pb-4">
             <Languages className="w-5 h-5 text-emerald-600" />
             <div>

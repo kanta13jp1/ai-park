@@ -314,7 +314,20 @@ export default function HowToPage() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 shrink-0">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 shrink-0">
+                <Link
+                  href="/guide#troubleshooting-board"
+                  onClick={() => playCyberClick()}
+                  onMouseEnter={() => playCyberHover()}
+                  className="flex items-center justify-between gap-3 px-4 py-3 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/30 rounded-2xl text-xs font-bold text-amber-200 transition-all group/q active:scale-95 shadow-2xs"
+                >
+                  <span className="flex items-center gap-2">
+                    <Terminal size={16} className="text-amber-300" />
+                    Windows エラー解決早見表
+                  </span>
+                  <ChevronRight size={14} className="text-amber-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
+                </Link>
+
                 <Link
                   href="/guide"
                   onClick={() => playCyberClick()}

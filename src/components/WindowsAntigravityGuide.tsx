@@ -12,6 +12,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
+import TroubleshootingBoard from "@/components/TroubleshootingBoard";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 function CopyableCodeSnippet({ code, label }: { code: string; label?: string }) {
@@ -239,7 +240,7 @@ export default function WindowsAntigravityGuide() {
         )}
       </section>
 
-      {/* 3. 実践トラブルシューティング集 */}
+      {/* 3. 実践トラブルシューティング＆エラー解決早見表（TODO-18） */}
       <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
         <div
           className="flex items-center justify-between border-b border-slate-100 pb-4 cursor-pointer select-none"
@@ -250,11 +251,16 @@ export default function WindowsAntigravityGuide() {
               <HelpCircle className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
-                よくあるトラブルと解決手順（社内実例FAQ）
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+                  Windows環境 エラー解決＆トラブルシューティング早見表
+                </h3>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                  確定コマンド集
+                </span>
+              </div>
               <p className="text-xs text-slate-500 font-normal">
-                実機検証で報告された代表的なエラーの対処法
+                PowerShell実行ポリシー、GCPアカウント・プロジェクト切替、文字化け、ポート競合のワンクリック解決コマンド
               </p>
             </div>
           </div>
@@ -264,8 +270,14 @@ export default function WindowsAntigravityGuide() {
         </div>
 
         {isFaqOpen && (
-          <div className="space-y-4">
-            <div className="space-y-3">
+          <div className="space-y-8">
+            <TroubleshootingBoard />
+
+            <div className="pt-6 border-t border-slate-100 space-y-3">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                社内実例Q&A・運用Tips
+              </h4>
+              <div className="space-y-3">
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
                 <p className="text-xs font-bold text-slate-900 flex items-center space-x-1.5">
                   <span className="text-rose-600">Q.</span>
@@ -300,6 +312,7 @@ export default function WindowsAntigravityGuide() {
               </div>
             </div>
           </div>
+        </div>
         )}
       </section>
     </div>
