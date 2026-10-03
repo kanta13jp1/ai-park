@@ -6,7 +6,7 @@ import OfficeHourBanner from "@/components/OfficeHourBanner";
 import Link from "next/link";
 import GcpSetupGuide from "@/components/GcpSetupGuide";
 import WindowsAntigravityGuide from "@/components/WindowsAntigravityGuide";
-import WindowsTroubleshooter from "@/components/WindowsTroubleshooter";
+import TroubleshootingBoard from "@/components/TroubleshootingBoard";
 import SafetySelfChecker from "@/components/SafetySelfChecker";
 import StepCard, { type GuideStep } from "@/components/GuideStepCard";
 import SpotlightCard from "@/components/SpotlightCard";
@@ -229,7 +229,7 @@ export default function GuidePage() {
           {[
             { label: "初期導入 7ステップ", href: "#setup-steps", icon: "📥" },
             { label: "会社のGCP連携", href: "#gcp-setup-guide", icon: "☁️" },
-            { label: "Windows エラー解決早見表", href: "#troubleshooter", icon: "⚡", highlight: true },
+            { label: "Windows エラー解決早見表", href: "#troubleshooting-board", icon: "⚡", highlight: true },
             { label: "社内MCP安全設定", href: "#windows-powershell-tips", icon: "🤖" },
             { label: "入力セルフ診断", href: "#safety-checker", icon: "🛡️" },
             { label: "IDE 日本語化", href: "#ide-japanese", icon: "🌐" },
@@ -293,7 +293,9 @@ export default function GuidePage() {
         </div>
 
         {/* Windows トラブルシューティング＆エラー解決早見表 */}
-        <WindowsTroubleshooter />
+        <div id="troubleshooting-board">
+          <TroubleshootingBoard />
+        </div>
 
         {/* Windows 実践Tips & MCP活用ガイド */}
         <WindowsAntigravityGuide />
