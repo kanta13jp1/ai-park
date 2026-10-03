@@ -84,8 +84,8 @@ export default function GeminiStatsPage() {
   // 為替レート（概算 1ドル=150円）
   const USD_JPY = 150;
 
-  // GAS Web API エンドポイント（v4）
-  const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzIKekIo1KDQzhxW-7BeGCEY2XDQFV_xm__13O3GFzeGpqHlkbhC4BuUHAA2j4jqAInrw/exec";
+  // GAS Web API エンドポイント（v5: 公開設定=全員）
+  const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzWXZpu6loQFXXATUtrrOfN5XkPzMEFleqzxfqs-izyix5HFtj3TOsCn7ISENekEtqYgg/exec";
 
   // 自動同期データのフェッチ (GAS Live API -> 静的JSONフォールバック)
   const fetchLiveData = useCallback(async () => {
