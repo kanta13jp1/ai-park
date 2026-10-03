@@ -208,7 +208,9 @@ export default function AiProjectsPage() {
             href={buildNewProjectUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            className="relative z-10 shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 text-xs font-black transition-all shadow-md active:scale-95 self-start md:self-center"
+            onClick={() => playCyberClick()}
+            onMouseEnter={() => playCyberHover()}
+            className="relative z-10 shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 text-xs font-black transition-all shadow-md active:scale-95 self-start md:self-center cursor-pointer"
           >
             <Plus size={15} />
             <span>プロジェクトを登録する</span>
@@ -224,7 +226,11 @@ export default function AiProjectsPage() {
               return (
                 <button
                   key={s}
-                  onClick={() => setStageFilter(s)}
+                  onClick={() => {
+                    playCyberClick();
+                    setStageFilter(s);
+                  }}
+                  onMouseEnter={() => playCyberHover()}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     isSelected
                       ? "bg-slate-900 text-white shadow-xs"
@@ -242,7 +248,10 @@ export default function AiProjectsPage() {
                 <span className="text-[11px] font-bold text-slate-500">部署:</span>
                 <select
                   value={deptFilter}
-                  onChange={(e) => setDeptFilter(e.target.value)}
+                  onChange={(e) => {
+                    playCyberClick();
+                    setDeptFilter(e.target.value);
+                  }}
                   className="px-2.5 py-1 rounded-xl text-xs font-bold bg-slate-100/90 border border-slate-200 text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
                 >
                   <option value="all">全社・全部署</option>
@@ -265,9 +274,11 @@ export default function AiProjectsPage() {
             </div>
             <button
               onClick={() => {
+                playCyberClick();
                 setSyncState("loading");
                 load();
               }}
+              onMouseEnter={() => playCyberHover()}
               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-[11px] font-bold text-slate-700 shadow-2xs cursor-pointer transition-colors"
             >
               <RefreshCw size={11} />
@@ -342,7 +353,9 @@ export default function AiProjectsPage() {
                         href={p.issueUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-indigo-600 font-bold hover:text-indigo-700 transition-colors"
+                        onClick={() => playCyberClick()}
+                        onMouseEnter={() => playCyberHover()}
+                        className="inline-flex items-center gap-1 text-indigo-600 font-bold hover:text-indigo-700 transition-colors cursor-pointer"
                       >
                         <span>GitHub Issue を見る</span>
                         <ExternalLink size={12} />

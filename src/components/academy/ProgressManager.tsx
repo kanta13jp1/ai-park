@@ -61,11 +61,37 @@ export default function ProgressManager({
     });
   };
 
+  const safeCopy = async (text: string): Promise<boolean> => {
+    try {
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch {
+      // フォールバックへ
+    }
+    try {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const res = document.execCommand("copy");
+      textArea.remove();
+      return res;
+    } catch {
+      return false;
+    }
+  };
+
   // JSONコピー
   const handleCopyJSON = async () => {
     playCyberClick();
     const jsonStr = exportProgressJSON();
-    await navigator.clipboard.writeText(jsonStr);
+    await safeCopy(jsonStr);
     playCyberSuccess();
     setCopiedType("json");
     setTimeout(() => setCopiedType(null), 2500);
@@ -80,7 +106,7 @@ export default function ProgressManager({
     playCyberClick();
     const all = loadProgress();
     const report = generateChatReportText(all, totalLessons, doneLessons);
-    await navigator.clipboard.writeText(report);
+    await safeCopy(report);
     playCyberSuccess();
     setCopiedType("chat");
     setTimeout(() => setCopiedType(null), 2500);
