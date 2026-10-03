@@ -150,7 +150,8 @@ import SpotlightCard from "@/components/SpotlightCard";
 
 #### 5. 構文防衛ルール
 - **重複インポート厳禁**: 同一モジュール（`@/lib/sound` 等）からのインポート重複を避ける（Webpackパースエラーの未然防止）。
-- **閉じタグの完全整合**: `TiltCard`, `SpotlightCard` などのネスト変更時は、開始タグと閉じタグの数が1対1で対応していることを確認する。
+- **開始タグ・閉じタグの完全整合**: `TiltCard`, `SpotlightCard` などのネスト変更時は、開始タグと閉じタグの両方が確実に同期置換されていることを確認する（一方のみの漏れによるUnterminated JSX / Regexp literal構文エラーを防止）。
+- **ビルド前事前型検査**: 変更後は `npm run build` でWebpackエラーがゼロであることを確認してからコミットする。
 
 ### Phase 4: デプロイ品質ゲート検査（`npm run check:gate`）
 - `npm run check:gate`（`scripts/verify-deployment-gate.mjs`）を実行。
