@@ -1,11 +1,147 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import TiltCard from "@/components/TiltCard";
-import { AlertTriangle, CheckCircle2, Lock, ShieldCheck, XCircle } from "lucide-react";
-import { playCyberHover } from "@/lib/sound";
+import SpotlightCard from "@/components/SpotlightCard";
+import ToolApplicationModal from "@/components/tools/ToolApplicationModal";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Lock,
+  ShieldCheck,
+  XCircle,
+  Sparkles,
+  ExternalLink,
+  Search,
+  Filter,
+  FileText,
+  Clock,
+  Key,
+  BadgeCheck,
+  Layers,
+  Cpu,
+  PlusCircle,
+} from "lucide-react";
+import { playCyberHover, playCyberClick } from "@/lib/sound";
+
+export interface CompanyAiTool {
+  id: string;
+  name: string;
+  vendor: string;
+  category: "approved" | "engineer" | "poc";
+  categoryLabel: string;
+  level: "Level 1" | "Level 2" | "Level 3";
+  levelBadge: string;
+  status: "利用可能" | "申請制" | "PoC検証中";
+  statusColor: string;
+  costModel: string;
+  targetAudience: string;
+  description: string;
+  governanceNote: string;
+  officialDocUrl: string;
+}
+
+const companyAiToolsList: CompanyAiTool[] = [
+  {
+    id: "tool-antigravity",
+    name: "Google Antigravity 2.0 (Gemini 3.1 Pro)",
+    vendor: "Google Cloud",
+    category: "approved",
+    categoryLabel: "会社認可済（全社標準）",
+    level: "Level 1",
+    levelBadge: "Level 1: 社内機密・コード入力可",
+    status: "利用可能",
+    statusColor: "emerald",
+    costModel: "会社契約 GCP従量課金（90日無料トライアル枠適用中）",
+    targetAudience: "全社員（エンジニア・ビジネス職）",
+    description: "Google DeepMindの最高峰推論モデル Gemini 3.1 Pro を搭載した公式次世代IDE・エージェント基盤。長大なコンテキスト・マルチエージェント自律実行に対応。",
+    governanceNote: "会社アカウント（@ml-mightylink.com）および会社GCPプロジェクト経由でのアクセスが学習不使用契約の適用条件です。",
+    officialDocUrl: "https://antigravity.google/",
+  },
+  {
+    id: "tool-vertex-ai",
+    name: "Gemini for Google Cloud (Vertex AI)",
+    vendor: "Google Cloud",
+    category: "approved",
+    categoryLabel: "会社認可済（全社標準）",
+    level: "Level 1",
+    levelBadge: "Level 1: 社内機密・コード入力可",
+    status: "利用可能",
+    statusColor: "emerald",
+    costModel: "GCPプロジェクト課金（Spend Cap設定済）",
+    targetAudience: "開発者・インフラ・データ分析担当",
+    description: "Cloud Console上でのSQL支援、エラー診断、BigQueryコード補完、Vertex AI Model GardenからのAPI呼び出し。",
+    governanceNote: "Spend Cap（利用上限）が適用されたプロジェクト内でのみ利用可能。個人カード登録は厳禁。",
+    officialDocUrl: "https://cloud.google.com/vertex-ai",
+  },
+  {
+    id: "tool-github-copilot",
+    name: "GitHub Copilot Enterprise",
+    vendor: "GitHub / Microsoft",
+    category: "engineer",
+    categoryLabel: "エンジニア向け（申請制）",
+    level: "Level 1",
+    levelBadge: "Level 1: 社内機密・コード入力可",
+    status: "申請制",
+    statusColor: "indigo",
+    costModel: "月額固定シート課金（事業部按分）",
+    targetAudience: "ソフトウェアエンジニア（VS Code / JetBrains利用者）",
+    description: "エディタ統合型のインライン補完・チャット機能。社内リポジトリのインデックス連携により、独自フレームワークに沿ったコード提案が可能。",
+    governanceNote: "会社GitHub Organization参加アカウントへのライセンス割り当てが必要。テレメトリ収集オプトアウト設定必須。",
+    officialDocUrl: "https://github.com/features/copilot",
+  },
+  {
+    id: "tool-claude-console",
+    name: "Claude 3.7 Sonnet (Anthropic Console)",
+    vendor: "Anthropic",
+    category: "poc",
+    categoryLabel: "PoC検証枠",
+    level: "Level 2",
+    levelBadge: "Level 2: マスキング必須",
+    status: "PoC検証中",
+    statusColor: "amber",
+    costModel: "従量課金（APIトークン消費・検証予算）",
+    targetAudience: "アーキテクト・AI推進検証メンバー",
+    description: "高度な論理推論と長大アーキテクチャ設計、Claude Code CLIとの連携検証。ハイブリッド思考モードを搭載。",
+    governanceNote: "個人情報や社外秘データの入力時は固有名詞マスキングが義務付けられます。",
+    officialDocUrl: "https://www.anthropic.com/claude",
+  },
+  {
+    id: "tool-cursor",
+    name: "Cursor AI IDE (Business / Team)",
+    vendor: "Anysphere",
+    category: "poc",
+    categoryLabel: "PoC検証枠",
+    level: "Level 2",
+    levelBadge: "Level 2: マスキング必須",
+    status: "PoC検証中",
+    statusColor: "amber",
+    costModel: "月額固定シート（検証予算）",
+    targetAudience: "フロントエンド・フルスタック開発者",
+    description: "マルチファイル編集・コードベース全体インデックスによる高速プロトタイピング環境。社内開発環境での適合性検証中。",
+    governanceNote: "設定画面にて「Privacy Mode (Do not store/train)」が有効化されていることを必ず確認の上で利用。",
+    officialDocUrl: "https://www.cursor.com/",
+  },
+  {
+    id: "tool-manus",
+    name: "Manus AI (自律エージェント基盤)",
+    vendor: "Manus",
+    category: "poc",
+    categoryLabel: "PoC検証枠",
+    level: "Level 3",
+    levelBadge: "Level 3: 一般公開情報のみ",
+    status: "PoC検証中",
+    statusColor: "amber",
+    costModel: "クレジット従量制（社内検証枠）",
+    targetAudience: "企画・リサーチ・データ自動化担当",
+    description: "Web検索からファイル生成、マルチステップ実務実行まで自律達成するエージェント。市場リサーチや公開情報スクレイピング検証中。",
+    governanceNote: "顧客データ・社内機密コードの投入は厳禁。公開情報の収集・要約に限定して利用すること。",
+    officialDocUrl: "https://manus.im/",
+  },
+];
 
 const aiGuidelines = [
   {
@@ -31,12 +167,248 @@ const aiGuidelines = [
 ];
 
 export default function ToolsHubPage() {
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [targetToolName, setTargetToolName] = useState<string>("Google Antigravity 2.0 (Gemini 3.1 Pro)");
+
+  const filteredTools = useMemo(() => {
+    return companyAiToolsList.filter((tool) => {
+      if (selectedFilter !== "all" && tool.category !== selectedFilter) {
+        return false;
+      }
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchName = tool.name.toLowerCase().includes(q);
+        const matchDesc = tool.description.toLowerCase().includes(q);
+        const matchVendor = tool.vendor.toLowerCase().includes(q);
+        const matchTarget = tool.targetAudience.toLowerCase().includes(q);
+        return matchName || matchDesc || matchVendor || matchTarget;
+      }
+      return true;
+    });
+  }, [selectedFilter, searchQuery]);
+
+  const handleOpenApplicationModal = (initialName?: string) => {
+    playCyberClick();
+    if (initialName) {
+      setTargetToolName(initialName);
+    }
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-slate-50 min-h-screen">
-      <HeroBanner title="AI Tools Hub" subtitle="社内AI利用のセキュリティ基準と注意事項" />
+      <HeroBanner
+        title="AI Tools Hub & 申請フロー"
+        subtitle="社内認定AIツール一覧・ライセンス利用申請・セキュリティ基準"
+      />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-6">
+      <div className="max-w-6xl w-full mx-auto px-4 py-8 space-y-8">
+        {/* 上部アクションバー */}
+        <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 rounded-2xl p-6 text-white shadow-lg border border-indigo-800/40 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="space-y-1.5 text-center md:text-left">
+            <span className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+              <BadgeCheck size={13} />
+              社内認可AIツール即時申請対応
+            </span>
+            <h2 className="text-xl font-bold tracking-tight">
+              業務に必要なAIツールの利用権限をスムーズに申請
+            </h2>
+            <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
+              Google Antigravity 2.0 や Copilot などの利用権限・ライセンス割り当て申請を、所定のセキュリティ誓約とともにGoogle Chat窓口へ即座に提出できます。
+            </p>
+          </div>
+          <button
+            onClick={() => handleOpenApplicationModal()}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-indigo-500 hover:bg-indigo-400 text-white shadow-lg shadow-indigo-500/30 transition-all active:scale-95 shrink-0"
+          >
+            <PlusCircle size={16} />
+            <span>AIツールの利用を申請する</span>
+          </button>
+        </div>
+
+        {/* 検索 & フィルター */}
+        <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3">
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="ツール名、ベンダー、対象部署、説明文で検索..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+            <span className="text-slate-400 font-bold flex items-center gap-1 text-[11px] shrink-0">
+              <Filter size={12} />
+              カテゴリ:
+            </span>
+            <button
+              onClick={() => {
+                playCyberClick();
+                setSelectedFilter("all");
+              }}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 ${
+                selectedFilter === "all"
+                  ? "bg-indigo-600 text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              }`}
+            >
+              すべて ({companyAiToolsList.length})
+            </button>
+            <button
+              onClick={() => {
+                playCyberClick();
+                setSelectedFilter("approved");
+              }}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 ${
+                selectedFilter === "approved"
+                  ? "bg-emerald-600 text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              }`}
+            >
+              会社認可済（全社標準） (2)
+            </button>
+            <button
+              onClick={() => {
+                playCyberClick();
+                setSelectedFilter("engineer");
+              }}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 ${
+                selectedFilter === "engineer"
+                  ? "bg-indigo-600 text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              }`}
+            >
+              エンジニア向け (1)
+            </button>
+            <button
+              onClick={() => {
+                playCyberClick();
+                setSelectedFilter("poc");
+              }}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 ${
+                selectedFilter === "poc"
+                  ? "bg-amber-600 text-white shadow-xs"
+                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+              }`}
+            >
+              PoC検証枠 (3)
+            </button>
+          </div>
+        </div>
+
+        {/* ツールカード一覧 */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
+              <Cpu className="w-5 h-5 text-indigo-600" />
+              <span>社内認定・検証中AIツール一覧</span>
+            </h3>
+            <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+              該当 {filteredTools.length} / 全 {companyAiToolsList.length} 件
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredTools.map((tool) => (
+              <TiltCard key={tool.id} maxTilt={4} glareOpacity={0.06} className="h-full rounded-2xl">
+                <SpotlightCard className="h-full rounded-2xl p-5 border border-slate-200 bg-white shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
+                  <div className="space-y-3">
+                    {/* カード上部 */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-mono font-semibold text-slate-400 uppercase tracking-wider">
+                          {tool.vendor}
+                        </span>
+                        <h4 className="font-bold text-slate-900 text-sm leading-snug">
+                          {tool.name}
+                        </h4>
+                      </div>
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full border shrink-0 ${
+                          tool.status === "利用可能"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                            : tool.status === "申請制"
+                            ? "bg-indigo-50 text-indigo-700 border-indigo-200"
+                            : "bg-amber-50 text-amber-700 border-amber-200"
+                        }`}
+                      >
+                        {tool.status}
+                      </span>
+                    </div>
+
+                    {/* セキュリティLevelバッジ */}
+                    <div>
+                      <span
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold ${
+                          tool.level === "Level 1"
+                            ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                            : tool.level === "Level 2"
+                            ? "bg-amber-50 text-amber-800 border border-amber-200"
+                            : "bg-rose-50 text-rose-800 border border-rose-200"
+                        }`}
+                      >
+                        <ShieldCheck size={13} />
+                        {tool.levelBadge}
+                      </span>
+                    </div>
+
+                    {/* 概要 */}
+                    <p className="text-slate-600 text-xs leading-relaxed">
+                      {tool.description}
+                    </p>
+
+                    {/* メタ情報 */}
+                    <div className="p-3 bg-slate-50 rounded-xl space-y-1.5 text-[11px] text-slate-600 border border-slate-100">
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-400">対象者:</span>
+                        <span className="font-medium text-slate-800">{tool.targetAudience}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-400">課金モデル:</span>
+                        <span className="font-medium text-slate-800">{tool.costModel}</span>
+                      </div>
+                    </div>
+
+                    {/* ガバナンス注記 */}
+                    <p className="text-[11px] text-slate-500 leading-normal border-l-2 border-indigo-300 pl-2">
+                      💡 <strong>社内利用ルール:</strong> {tool.governanceNote}
+                    </p>
+                  </div>
+
+                  {/* カード下部アクション */}
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <a
+                      href={tool.officialDocUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-slate-400 hover:text-slate-700 text-xs flex items-center gap-1 transition-colors"
+                    >
+                      <ExternalLink size={12} />
+                      <span>公式サイト</span>
+                    </a>
+
+                    <button
+                      onClick={() => handleOpenApplicationModal(tool.name)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 transition-colors"
+                    >
+                      <FileText size={13} />
+                      <span>利用申請ドラフト作成</span>
+                    </button>
+                  </div>
+                </SpotlightCard>
+              </TiltCard>
+            ))}
+          </div>
+        </div>
+
         {/* セキュリティマトリクス基準表 */}
         <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
           <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
@@ -74,7 +446,7 @@ export default function ToolsHubPage() {
                   <span>Level 2: マスキング必須</span>
                 </div>
                 <p className="text-slate-600 text-[11px] leading-relaxed">
-                  対象: <strong>確認中（会社として利用を認めたツールが決まり次第掲載）</strong><br />
+                  対象: <strong>PoC検証中ツール（Claude Console / Cursor等）</strong><br />
                   個人情報（氏名、電話番号等）や特定顧客の識別情報は必ず別の文字に置き換えて（マスキングして）から入力してください。
                 </p>
               </div>
@@ -90,7 +462,7 @@ export default function ToolsHubPage() {
                   <span>Level 3: 一般公開情報のみ</span>
                 </div>
                 <p className="text-slate-600 text-[11px] leading-relaxed">
-                  対象: <strong>個人アカウントのAIツール（個人アカウントの Antigravity を含む）</strong><br />
+                  対象: <strong>個人アカウントのAIツールおよびWeb自律エージェント試用枠</strong><br />
                   個人向け規約が適用されるため、顧客情報・社内機密・未公開ソースコードは入力しないでください。公開情報を使った学習・試用にとどめます。
                 </p>
               </div>
@@ -105,8 +477,8 @@ export default function ToolsHubPage() {
               <ShieldCheck className="w-5 h-5 text-indigo-600" />
               <span>社内AI利用の注意事項 5箇条</span>
             </h3>
-            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 self-start sm:self-center">
-              暫定版（2026/09/26〜）：詳細は社長・杉村さんと協議のうえ正式決定します
+            <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 self-start sm:self-center">
+              全社標準運用中（2026/10/01 制定）
             </span>
           </div>
           <ol className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs list-none p-0">
@@ -234,12 +606,20 @@ export default function ToolsHubPage() {
           </div>
         </div>
 
+        {/* 運用ステータス案内 */}
         <UnderConstructionAlert
-          statusType="construction"
-          title="🚧 工事中：会社として使えるAIツールの一覧を準備しています"
-          message="会社として利用を認めるAIツールと、その利用申請の方法はまだ決まっていません。決まり次第、ここに掲載します。それまでは、使う前に AI推進担当へ相談してください。"
+          statusType="poc"
+          title="🧪 社内AIツール利用申請フロー（試作運用中）"
+          message="Google Antigravity 2.0 および主要ツールの利用申請ドラフト作成が稼働中です。申請文面をコピーして Google Chat（AI推進窓口・梅澤）へご提出ください。社内ワークフロー自動連携（SSO・Slack Bot）を順次開発中です。"
         />
       </div>
+
+      {/* 申請モーダル */}
+      <ToolApplicationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        initialToolName={targetToolName}
+      />
     </div>
   );
 }

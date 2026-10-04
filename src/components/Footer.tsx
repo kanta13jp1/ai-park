@@ -46,6 +46,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/skills-hub" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>社内Skillsカタログ</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono font-bold">認定</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/troubleshooting" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
+                  Windowsトラブル解決FAQ
+                </Link>
+              </li>
+              <li>
                 <Link href="/guide" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   Antigravity 導入ガイド
                 </Link>
@@ -70,6 +81,12 @@ export default function Footer() {
               <span>共創・コミュニティ</span>
             </h4>
             <ul className="space-y-2 text-xs">
+              <li>
+                <Link href="/news" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer flex items-center gap-1.5">
+                  <span>最新AIニュース & レーダー</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">LIVE</span>
+                </Link>
+              </li>
               <li>
                 <Link href="/ai-projects" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   社内AIプロジェクト一覧
@@ -108,6 +125,11 @@ export default function Footer() {
               <li>
                 <Link href="/tools-hub" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   AIセキュリティ基準 (Level 1〜3)
+                </Link>
+              </li>
+              <li>
+                <Link href="/gemini-stats" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
+                  Gemini利用統計 & SKUスペック
                 </Link>
               </li>
               <li>

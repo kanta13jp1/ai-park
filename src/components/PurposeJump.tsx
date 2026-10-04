@@ -44,12 +44,13 @@ const jumpSections: JumpSection[] = [
     items: [
       { name: "Antigravity Academy", href: "/academy", desc: "動画と実践で学ぶ全12レッスン・修了テスト", badge: "おすすめ" },
       { name: "使い方・学び 総合ハブ", href: "/how-to", desc: "ツール・教育・インタビュー・クラウドの全体ポータル", badge: "総合" },
+      { name: "社内Skillsカタログ", href: "/skills-hub", desc: "実務効率化の切り札！Antigravity認定Skills一覧（全8種）", badge: "✅ 認定公開" },
+      { name: "Windowsトラブル解決", href: "/troubleshooting", desc: "PowerShell・Git・Node環境の自己解決コマンド集", badge: "FAQ" },
       { name: "AIツール一覧", href: "/tools", desc: "AIツールの一覧（社内マスターシートの内容・確認中）", badge: "🧪 PoC中" },
       { name: "教育用コンテンツ", href: "/learning", desc: "初級編チートシート・Academy への案内" },
       { name: "AI活用インタビュー", href: "/interviews", desc: "社内のAI活用事例の取材記事（取材の立候補を受付中）", badge: "📋 準備中" },
       { name: "AWS・クラウド情報局", href: "/aws-info", desc: "社内での AWS・クラウド活用の情報", badge: "🚧 工事中" },
       { name: "Antigravity導入ガイド", href: "/guide", desc: "IDE / CLI セットアップとスラッシュコマンド" },
-      { name: "社内Skillsカタログ", href: "/skills-hub", desc: "社内で共有する Antigravity の Skills", badge: "🚧 工事中" },
     ],
   },
   {
@@ -62,9 +63,9 @@ const jumpSections: JumpSection[] = [
     bgActive: "bg-purple-50/60 border-purple-500",
     items: [
       { name: "社内AIプロジェクト一覧", href: "/ai-projects", desc: "各部署の実践事例・進捗可視化・自動掲載", badge: "新着" },
+      { name: "Gemini利用統計 & SKU", href: "/gemini-stats", desc: "社内利用トレンド分析とGemini 3.1 Pro/Flashスペック表", badge: "可視化" },
       { name: "アイデア宣言ボード", href: "/idea-board", desc: "AI活用のアイデアを宣言して協力者を募る場所", badge: "β版" },
       { name: "Subagents活用事例", href: "/agent-cases", desc: "社内でのエージェント活用事例", badge: "🚧 工事中" },
-      { name: "Gemini利用率", href: "/gemini-stats", desc: "部署別利用回数の統計（実データ連携の準備中）", badge: "🚧 工事中" },
       { name: "社内AI活用状況", href: "/adoption", desc: "全社・部署ごとの AI 活用状況（実データ連携の準備中）", badge: "🚧 工事中" },
       { name: "AI Tools Hub", href: "/tools-hub", desc: "社内AI利用のセキュリティ基準と注意事項", badge: "🚧 工事中" },
     ],
@@ -78,6 +79,7 @@ const jumpSections: JumpSection[] = [
     borderColor: "border-rose-200 hover:border-rose-400",
     bgActive: "bg-rose-50/60 border-rose-500",
     items: [
+      { name: "最新AIニュース", href: "/news", desc: "社内リリース・各社最新動向のリアルタイムレーダー", badge: "LIVE" },
       { name: "AI Park カレンダー", href: "/calendar", desc: "社内AI勉強会・イベントの予定（社内アカウントで表示）", badge: "β版" },
       { name: "ご意見・改善ToDo", href: "/feedback-todo", desc: "社員からのご意見・改善要望の管理ボード", badge: "β版" },
       { name: "社内AIアンバサダー", href: "/ambassadors", desc: "第1期アンバサダーの応募受付", badge: "📋 準備中" },

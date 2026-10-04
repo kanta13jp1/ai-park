@@ -1199,4 +1199,63 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     environment: "Windows 11 / Chrome / 1920x1080 & Mobile",
     memo: "TODO-98 / Issue #97（社内認定Skillsカタログ検索・カテゴリ・申請モーダル整備）の手動UAT完了",
   },
+  {
+    id: "tools-hub",
+    name: "AI Tools Hub & 申請フロー",
+    path: "/tools-hub",
+    targetAudience: "全社員",
+    overallStatus: "passed",
+    lastVerifiedAt: "2026/10/04",
+    verifiedBy: "梅澤（AI推進担当）",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        evidence: "社内認定ツール6件（Antigravity, Vertex AI, Copilot, Claude, Cursor, Manus）の認可レベル・課金モデル・利用ルールが社内確定情報と一致していることを確認",
+        points: ["認可レベル（Level 1/2/3）と学習不使用契約の整合性", "申請先窓口（Google Chat・梅澤）の実在性", "ガバナンス注記の正確性"],
+        subChecks: [
+          {
+            id: "th-spec-1",
+            category: "official_announcement",
+            groupTitle: "仕様・事実性確認",
+            label: "セキュリティ基準の整合性",
+            verified: true,
+            detail: "Level 1（会社契約・学習不使用担保）、Level 2（マスキング必須）、Level 3（一般公開情報のみ）の区分が全社ガイドラインと整合していること。",
+          },
+          {
+            id: "th-spec-2",
+            category: "no_fiction",
+            groupTitle: "仕様・事実性確認",
+            label: "利用申請ドラフトの書式妥当性",
+            verified: true,
+            detail: "申請ツール、申請者情報、利用目的、想定時短効果、セキュリティ遵守宣誓が網羅され、窓口が即時審査できる書式であること。",
+          },
+          {
+            id: "th-spec-3",
+            category: "link_integrity",
+            groupTitle: "仕様・事実性確認",
+            label: "公式ドキュメントリンクの実在性",
+            verified: true,
+            detail: "各ツールの公式サイト・公式ドキュメントへのリンクがすべて実在する一次情報であること。",
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        evidence: "上部アクションHUD、検索・カテゴリピルフィルター、2列ツールカード、セキュリティ早見表、申請モーダルの整列確認",
+        points: ["セキュリティLevelバッジの配色", "カード内メタ情報の視認性", "モーダルのレスポンシブ配置"],
+      },
+      usability: {
+        passed: true,
+        evidence: "カテゴリ切り替え、リアルタイム検索、各ツールからの利用申請モーダル起動、文面プレビュー、宣誓チェック連動、ワンクリックコピー、Web Audio API音響の動作を確認",
+        points: ["ツール選択状態の連動", "セキュリティ同意チェックボックスのバリデーション", "文面コピー成功フィードバック"],
+      },
+      readability: {
+        passed: true,
+        evidence: "各ツールの対象者・課金モデル・ガバナンス注記、注意事項5箇条、マスキング具体例の明瞭なテキスト構成を確認",
+        points: ["誰が使えるツールかが一目でわかるか", "禁止事項と安全な入力例が直感的に理解できるか"],
+      },
+    },
+    environment: "Windows 11 / Chrome / 1920x1080 & Mobile",
+    memo: "TODO-105 / Issue #104（AI Tools Hub 申請フロー・ツール一覧・利用申請モーダル整備）の手動UAT完了",
+  },
 ];
