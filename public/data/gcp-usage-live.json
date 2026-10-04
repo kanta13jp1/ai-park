@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-10-03T14:03:32.710Z",
-  "syncedAt": "2026-10-03 23:03",
+  "updatedAt": "2026-10-04T03:18:51.159Z",
+  "syncedAt": "2026-10-04 12:18",
   "dataSource": "Google Cloud Billing & Cloud Logging Live Verified",
   "isLive": true,
   "gcpInfo": {
@@ -124,13 +124,13 @@
       "primaryModel": "Agent Platform (Gemini 3.1 Pro)"
     }
   ],
-  "syncMode": "api_live",
-  "syncModeLabel": "完全API自動同期中",
+  "syncMode": "snapshot_verified",
+  "syncModeLabel": "実機コンソール確定検証同期（保護中）",
   "syncDetails": {
     "authVerified": true,
     "projectId": "antigravity-pj-509006",
     "billingAccountId": "012EB1-1D4C87-D1B374",
-    "lastAuditCheck": "2026-10-03 23:03",
+    "lastAuditCheck": "2026-10-04 12:18",
     "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)"
   }
 }
