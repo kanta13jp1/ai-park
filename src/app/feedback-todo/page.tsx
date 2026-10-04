@@ -1918,7 +1918,7 @@ export default function FeedbackTodoPage() {
   const [formQuote, setFormQuote] = useState("");
   const [formActionPlan, setFormActionPlan] = useState("");
 
-  // LocalStorage の読み込み
+  // LocalStorage の読み込み（非同期マイクロタスクでカスケードレンダリング防止）
   useEffect(() => {
     const saved = localStorage.getItem("mightylink_feedback_todos");
     if (saved) {
@@ -1927,7 +1927,11 @@ export default function FeedbackTodoPage() {
         if (Array.isArray(parsed) && parsed.length > 0) {
           // 運営登録のToDo（TODO-xx）は常にコード側の最新内容を使い、ブラウザ保存分は利用者の起票のみ採用
           const userItems = parsed.filter((t: FeedbackTodoItem) => !seedIds.has(t.id));
-          setTodos([...userItems, ...initialFeedbackList]);
+          if (userItems.length > 0) {
+            queueMicrotask(() => {
+              setTodos([...userItems, ...initialFeedbackList]);
+            });
+          }
         }
       } catch (e) {
         console.error("Failed to load feedback todos", e);
@@ -2733,7 +2737,7 @@ export default function FeedbackTodoPage() {
                   </label>
                   <select
                     value={formCategory}
-                    onChange={(e) => setFormCategory(e.target.value as any)}
+                    onChange={(e) => setFormCategory(e.target.value as FeedbackTodoItem["category"])}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                   >
                     <option value="UI/UX">UI/UX・導線改善</option>
@@ -2755,7 +2759,7 @@ export default function FeedbackTodoPage() {
                   </label>
                   <select
                     value={formPriority}
-                    onChange={(e) => setFormPriority(e.target.value as any)}
+                    onChange={(e) => setFormPriority(e.target.value as FeedbackTodoItem["priority"])}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                   >
                     <option value="高">高 (早急に反映)</option>

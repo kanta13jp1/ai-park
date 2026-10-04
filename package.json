@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run check:gate && next build --webpack",
+    "build": "npm run check:gate && node --max-old-space-size=4096 ./node_modules/next/dist/bin/next build --webpack",
     "check:gate": "node scripts/verify-deployment-gate.mjs",
     "setup:gcp": "node scripts/setup-gcp-sa.mjs",
     "start": "next start",

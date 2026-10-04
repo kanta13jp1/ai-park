@@ -768,18 +768,20 @@ export default function ToolsPage() {
                 {/* 推奨ランクピル */}
                 <div className="flex items-center space-x-1.5 flex-wrap gap-y-1 text-xs">
                   <span className="text-[11px] font-bold text-slate-400 mr-1">社内推奨:</span>
-                  {[
-                    { id: "all", label: "全ランク" },
-                    { id: "S", label: "⭐ S (全社公式)" },
-                    { id: "A", label: "💻 A (エンジニア)" },
-                    { id: "B", label: "📊 B (業務特化)" },
-                    { id: "PoC", label: "🧪 PoC検証" },
-                  ].map((r) => (
+                  {(
+                    [
+                      { id: "all", label: "全ランク" },
+                      { id: "S", label: "⭐ S (全社公式)" },
+                      { id: "A", label: "💻 A (エンジニア)" },
+                      { id: "B", label: "📊 B (業務特化)" },
+                      { id: "PoC", label: "🧪 PoC検証" },
+                    ] as const
+                  ).map((r) => (
                     <button
                       key={r.id}
                       onClick={() => {
                         playCyberClick();
-                        setRecommendFilter(r.id as any);
+                        setRecommendFilter(r.id);
                       }}
                       onMouseEnter={() => playCyberHover()}
                       className={`px-2.5 py-1 rounded-md font-semibold text-[11px] transition-all cursor-pointer ${
@@ -863,7 +865,7 @@ export default function ToolsPage() {
                       value={targetFilter}
                       onChange={(e) => {
                         playCyberClick();
-                        setTargetFilter(e.target.value as any);
+                        setTargetFilter(e.target.value as "all" | "全社員" | "エンジニア" | "マーケ・企画" | "デザイン");
                       }}
                       className="px-2 py-1 rounded border border-slate-200 bg-slate-50 text-slate-700 text-[11px] outline-none"
                     >
