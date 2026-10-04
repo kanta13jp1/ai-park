@@ -118,6 +118,28 @@ const tasksData: TaskItem[] = [
     ],
   },
   // Phase 2: 進行中
+  // いまの最優先：会社の Google アカウントで Antigravity を使えるようにする
+  {
+    id: "company-antigravity",
+    title: "【最優先】会社の Google アカウントで Antigravity を使えるようにする",
+    pageName: "Antigravity導入ガイド",
+    href: "/guide#gcp-setup-guide",
+    phase: "Phase 2",
+    targetDate: "未定",
+    status: "in-progress",
+    currentVerificationBadge: "最優先",
+    releaseCondition: "請求先アカウントのリンクと月額上限の設定、利用者への権限付与",
+    category: "system",
+    icon: "🔑",
+    description: "会社の Google アカウントのまま、会社の Google Cloud プロジェクト経由（使った分だけ払う Agent Platform）で Antigravity を使えるようにします。ほかの項目より先に進めます。",
+    items: [
+      { text: "会社の Google Cloud プロジェクトの用意", done: true },
+      { text: "管理者・利用者の手順を導入ガイドに掲載（画面キャプチャ付き）", done: true },
+      { text: "AI推進担当の会社アカウントでサインインできることを確認", done: true },
+      { text: "請求先アカウントのリンクと月額上限（1人あたり3,000円×人数）の設定", done: false },
+      { text: "使う人への権限付与（Agent Platform ユーザー）と社内への案内", done: false },
+    ],
+  },
   {
     id: "academy",
     title: "Antigravity Academy",
@@ -353,6 +375,23 @@ export default function RoadmapPage() {
       <OfficeHourBanner />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* いまの最優先 */}
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-500 text-white text-xs font-bold">いま最優先</span>
+            <h2 className="text-lg font-bold text-slate-900">会社の Google アカウントで Antigravity を使えるようにする</h2>
+            <p className="text-xs text-slate-700 leading-relaxed">
+              まずはこれを先に進めます。AI推進担当の会社アカウントではサインインを確認済みです。残りは、請求先アカウントのリンクと月額上限の設定、使う人への権限付与です。
+            </p>
+          </div>
+          <Link
+            href="/guide#gcp-setup-guide"
+            className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-white text-xs font-bold self-start md:self-center"
+          >
+            手順を見る（導入ガイド）
+          </Link>
+        </div>
+
         {/* 全体進捗サマリーカード */}
         <SpotlightCard
           spotlightColor="rgba(6, 182, 212, 0.15)"

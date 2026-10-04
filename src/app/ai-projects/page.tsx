@@ -112,8 +112,8 @@ const coeProjects: AiProject[] = [
     tools: "Google Antigravity, Google Cloud",
     summary:
       "会社の Google アカウントのまま Antigravity を使えるよう、会社の Google Cloud プロジェクト経由（従量課金）の利用環境を整備中。利用者1人あたり月3,000円を目安に上限を設定します。",
-    effect: "課題：請求先アカウントのリンクと月額上限の設定待ち。手順は導入ガイドに公開済み。",
-    updated: "2026/09/26",
+    effect: "いまの最優先の取り組みです。AI推進担当の会社アカウントではサインインを確認済み。残りは、請求先アカウントのリンクと月額上限の設定、使う人への権限付与です。手順は導入ガイドに公開済み。",
+    updated: "2026/10/04",
   },
 ];
 
