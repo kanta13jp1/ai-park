@@ -1136,19 +1136,19 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     id: "skills-hub",
     name: "社内Skillsカタログ",
     path: "/skills-hub",
-    targetAudience: "全社員・エンジニア・推進担当",
-    lastVerifiedDate: "2026/10/04",
-    verifier: "梅澤（AI推進担当）",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/10/04",
+    verifiedBy: "梅澤（AI推進担当）",
     overallStatus: "passed",
-    axes: {
+    checks: {
       factAndSpec: {
         passed: true,
         evidence: "全8スキルの実務適合性、呼び出し構文、セキュリティ審査基準、Antigravity 2.0 stdio安全設計との完全整合を確認",
         points: ["スキルの実在性と安全基準", "呼び出し構文の正確性", "セキュリティ宣誓項目の実効性"],
-        detailedChecks: [
+        subChecks: [
           {
             id: "skills-fact-01",
-            category: "truthfulness",
+            category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
             label: "Antigravity 2.0 Skills 仕様との整合性",
             detail: "Markdownおよびスクリプトによるパッケージング仕様、stdio準拠の安全設計、呼び出しトリガー構文（@skill ...）が公式仕様と合致していること。",
@@ -1156,7 +1156,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
           },
           {
             id: "skills-fact-02",
-            category: "truthfulness",
+            category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
             label: "社内審査基準・GCP基盤との一致",
             detail: "シークレット非含有、破壊的コマンド（DROP/RM）遮断、プロジェクトID（antigravity-pj-509006）実在情報との整合性を確認。",
@@ -1164,7 +1164,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
           },
           {
             id: "skills-qa-01",
-            category: "design_consistency",
+            category: "other",
             groupTitle: "② デザイン・UIが崩れていないか（Awwwards水準品質確認済み）",
             label: "TiltCard×SpotlightCardの立体感とレスポンシブ",
             detail: "ヘッダーHUDバナー、スキルカードグリッド、カテゴリピルの折り返し、モーダルのスクロール挙動が正常であること。",

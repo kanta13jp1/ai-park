@@ -1671,7 +1671,7 @@ const initialFeedbackList: FeedbackTodoItem[] = [
   {
     id: "TODO-100",
     title: "【高速操作・HUD】キーボードショートカットHUDのジャンプ先拡充（GT/GF/GC/GN）＆行ホバー触覚音響",
-    category: "機能追加",
+    category: "開発環境",
     author: "社内ユーザー提案",
     authorDept: "エンジニアリング部",
     date: "2026/10/04",
