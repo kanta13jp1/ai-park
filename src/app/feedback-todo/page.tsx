@@ -1924,6 +1924,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 114,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/114",
   },
+  {
+    id: "TODO-116",
+    title: "【組織共有エージェント】xAI「Team Bots」発表に伴うチーム共有AIチームメイト（4層設計・Slack常駐）の社内活用リファレンス & ニュース還元",
+    category: "AI実践編",
+    author: "コラボレーション基盤・Slack/AI推進WG",
+    authorDept: "デジタルワークプレイス統括部",
+    date: "2026/10/04",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「個人向けAIチャットからチーム全体の共同作業を支えるAIチームメイトへ進化させるxAIの『Team Bots』が発表された。Context（共通知識）、Plugins（SaaS連携）、Credentials（安全な認証情報管理）、Memory（組織記憶）の4層アーキテクチャやSlack連携の仕組みを社内モデルケースとしてポータルに反映してほしい」",
+    actionPlan: "【反映済み】xAI公式ニュース「Team Bots」の解説をAIニュース（/news）に追加。Subagents活用事例集（/agent-cases）に「チーム共有AIチームメイト（4層協調・Slack常駐）」事例を追加し、専用カスタムエージェント定義（.agents/agents/team-bot-orchestrator.md）とCLIコマンド（agy --agent team-bot-orchestrator）を配備しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 115,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/115",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

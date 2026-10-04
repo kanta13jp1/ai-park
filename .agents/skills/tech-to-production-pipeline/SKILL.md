@@ -159,3 +159,12 @@ flowchart TD
 | **起票ToDo** | `TODO-115`（Issue #114） |
 | **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 1M長文解析モデルケース新設<br>・`.gemini/config/skills/model-router/SKILL.md` 選定マトリクス更新<br>・`src/app/feedback-todo/page.tsx` TODO-115 クローズ |
 | **品質ゲート** | `npm run check:gate` 合格、`npx tsc --noEmit` ノーエラー通過 |
+
+### ケース4: xAI公式ニュース「Team Bots」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [Team Bots: Shared AI Teammates for Organizations](https://x.ai/news/team-bots) (2026/09/28) |
+| **還元アイデア** | ① Context・Plugins・Credentials・Memoryの4層設計解説ニュース配信<br>② チーム共有AIチームメイト（Slack常駐・個別プライバシー保護）モデルケース新設<br>③ 組織共有エージェント統括カスタムエージェント（`team-bot-orchestrator`）の配置 |
+| **起票ToDo** | `TODO-116`（Issue #115） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` チーム共有モデルケース & カタログ新設<br>・`.agents/agents/team-bot-orchestrator.md` エージェント定義配置<br>・`src/app/feedback-todo/page.tsx` TODO-116 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`npx tsc --noEmit` ノーエラー通過 |

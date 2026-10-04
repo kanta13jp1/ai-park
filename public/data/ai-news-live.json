@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-10-04T11:07:54.595Z",
-  "lastSyncedAtFormatted": "2026/10/4 20:07:54",
+  "lastSyncedAt": "2026-10-04T11:25:29.440Z",
+  "lastSyncedAtFormatted": "2026/10/4 20:25:29",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
-  "totalCount": 33,
+  "totalCount": 34,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Blog",
@@ -418,6 +418,36 @@
         "Web自動化",
         "業務完結",
         "HOT"
+      ]
+    },
+    {
+      "id": "news-20260928-xai-team-bots",
+      "title": "xAI: 組織共有AIチームメイト「Team Bots」を公開（Context・Plugins・Credentials・Memory 4層設計）",
+      "date": "2026/09/28",
+      "category": "agent_mcp",
+      "categoryLabel": "Agent & MCP",
+      "importance": "hot",
+      "importanceLabel": "注目 ✨",
+      "summary": "xAI公式ニュースにて、Grok Botを個人向けアシスタントから組織・チーム共有の協調型AIチームメイトへと拡張する「Team Bots」がTeams/Enterpriseプラン向けにパブリックベータ公開されました。Context（共有ドキュメント・規程）、Plugins（Salesforce, Notion, GitHub等SaaS連携）、Credentials（外部API安全管理）、Memory（組織運用の記憶・学習）の4層アーキテクチャを採用。個別メンバーとの対話プライバシーを保護しながら、専用ハンドルでSlackチャンネルに常駐して協調作業を実行可能です。",
+      "impactForStaff": "個人の壁を超えたチーム専用AIアシスタントの運用基盤が具現化。Slackチャンネルで誰もが同一のプロジェクト知識・SaaS権限を持つエージェントと協働可能になり、引き継ぎ工数削減とチーム生産性向上に直結します。",
+      "recommendedFor": [
+        "全社員",
+        "プロジェクトマネージャー",
+        "Slack管理者",
+        "エンジニア",
+        "事業部門リード"
+      ],
+      "sourceName": "xAI Official News",
+      "sourceUrl": "https://x.ai/news/team-bots",
+      "tags": [
+        "xAI",
+        "Team Bots",
+        "Grok",
+        "Slack連携",
+        "チーム共有AI",
+        "Memory",
+        "Credentials",
+        "Plugins"
       ]
     },
     {

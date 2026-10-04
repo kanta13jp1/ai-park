@@ -121,6 +121,24 @@ const AGENT_CASES: AgentCase[] = [
       "8BアクティベートMoEによる超高速Prefillと大幅なAPIコスト圧縮",
       "MITライセンスオープンウェイトモデルによるオンプレミス検証の実現可能性"
     ]
+  },
+  {
+    id: "case-team-bot-collab",
+    title: "チーム共有AIチームメイト（4層協調・Slack常駐・個別プライバシー保護）",
+    department: "デジタルワークプレイス・全社DX推進部",
+    summary: "Context（チーム規程・設計書）、Plugins（GitHub/Notion/Salesforce）、Credentials（安全なAPI鍵管理）、Memory（プロジェクト運用記憶）の4層で協調する共有AIチームメイトをSlackチャンネルに常駐。",
+    subagentRoles: [
+      "Slack Listener & Context Matcher (Flash)",
+      "SaaS Tool Delegator (Plugins / MCP)",
+      "Project Memory Keeper (Long-term DB)"
+    ],
+    estimatedHoursSaved: "月間約 60 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "Slackチャンネル常駐ハンドルによるシームレスなチーム協働",
+      "個別対話のプライバシーを担保した安全な社内情報共有",
+      "退職・異動時もプロジェクト文脈が失われない組織記憶（Memory）の維持"
+    ]
   }
 ];
 
@@ -483,7 +501,7 @@ interface OfficialAgentItem {
   id: string;
   name: string;
   title: string;
-  category: "Google Play" | "Portal Release" | "Flutter & Dart" | "Firebase" | "IoT & 物理サイネージ";
+  category: "Google Play" | "Portal Release" | "Flutter & Dart" | "Firebase" | "IoT & 物理サイネージ" | "Team Bot & 組織共有";
   badgeColor: string;
   description: string;
   targetRole: string;
@@ -630,6 +648,33 @@ tools:
 
 # IoT & Smart Display Controller Agent
 Full-Duplex Voice & Realtime DDP Display Control.`
+  },
+  {
+    id: "team-bot-orchestrator",
+    name: "team-bot-orchestrator",
+    title: "組織共有AIチームメイト統括エージェント",
+    category: "Team Bot & 組織共有",
+    badgeColor: "bg-violet-50 text-violet-700 border-violet-200",
+    description: "xAI Team Botsアーキテクチャ準拠。Context（規程・設計書）、Plugins（GitHub/Notion/Salesforce）、Credentials（API鍵安全管理）、Memory（組織運用記憶）の4層を調停・管理。",
+    targetRole: "全社DX推進 / プロジェクトリーダー / Slackインテグレーター",
+    cliCommand: "agy --agent team-bot-orchestrator",
+    agentFilePath: ".agents/agents/team-bot-orchestrator.md",
+    keyCapabilities: [
+      "チーム共通Context（ドキュメント・スキル）と個別対話の分離設計",
+      "Salesforce / Notion / GitHub 統合プラグイン（MCP）の調停",
+      "暗号化Credentials保管と最小権限トークン委譲の監査",
+      "長期運用記憶（Memory）のスキーマ定義とSlackメンションハンドラ検証"
+    ],
+    configMarkdown: `---
+name: team-bot-orchestrator
+description: 組織共有AIチームメイト（Team Bots 4層アーキテクチャ）統括エージェント。
+tools:
+  - run_command
+  - view_file
+---
+
+# Team Bot Orchestrator Agent
+Coordinate shared Context, Plugins, Credentials, and Memory for team bots.`
   }
 ];
 
