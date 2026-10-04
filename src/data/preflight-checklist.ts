@@ -1306,6 +1306,9 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
         points: ["エラー症状が一目で特定できるか", "補足メモの注意点が明確か"],
       },
     },
+    environment: "Windows 11 / Chrome / 1920x1080 & Mobile",
+    memo: "TODO-109 / Issue #108（Windowsトラブル解決FAQ画面の新設＆自己修復HUD）の手動UAT完了",
+  },
   {
     id: "interviews",
     name: "現場のAI活用インタビュー",
