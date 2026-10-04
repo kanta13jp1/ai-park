@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -17,6 +17,10 @@ import {
   Lightbulb,
   ExternalLink,
   Bot,
+  Wrench,
+  HelpCircle,
+  Compass,
+  FileCheck2,
 } from "lucide-react";
 import { playCyberOpen, playCyberClick, playCyberHover } from "@/lib/sound";
 
@@ -40,12 +44,36 @@ const paletteItems: PaletteItem[] = [
     icon: BookOpen,
   },
   {
+    id: "tools",
+    title: "AIツール検証マトリクス & 利用申請ドラフト",
+    category: "ツール & ガイド",
+    href: "/tools",
+    description: "推奨ランク（S/A/B/PoC）、職種別フィルター、ワンクリック申請文生成",
+    icon: Bot,
+  },
+  {
     id: "guide",
     title: "Antigravity 導入ガイド",
     category: "ツール & ガイド",
     href: "/guide",
     description: "公式ドキュメント準拠のインストール・IDE日本語化・Git連携手順",
     icon: Terminal,
+  },
+  {
+    id: "troubleshooting",
+    title: "Windows環境トラブルシューティング & FAQ",
+    category: "ツール & ガイド",
+    href: "/troubleshooting",
+    description: "PowerShell実行ポリシー、Node.js 22、文字コード、権限エラーの即時解決",
+    icon: Wrench,
+  },
+  {
+    id: "how-to",
+    title: "使い方・学び 総合ハブ",
+    category: "Academy & 学習",
+    href: "/how-to",
+    description: "AIツール一覧、教育用コンテンツ、AI活用インタビュー、クラウド情報局",
+    icon: Compass,
   },
   {
     id: "learning",
@@ -96,27 +124,35 @@ const paletteItems: PaletteItem[] = [
     icon: Layers,
   },
   {
+    id: "contact",
+    title: "AI推進担当窓口 & アカウント・ライセンスFAQ",
+    category: "ガバナンス & サポート",
+    href: "/contact",
+    description: "担当：梅澤への相談窓口、アカウント発行・ライセンスよくある質問検索",
+    icon: HelpCircle,
+  },
+  {
     id: "tools-hub",
     title: "AI利用セキュリティ基準 (Level 1〜3)",
     category: "ガバナンス & サポート",
     href: "/tools-hub",
-    description: "社内AI活用時の機密情報保護基準と注意事項",
+    description: "入力可能なデータの分類と安全な利用ガイドライン",
     icon: ShieldCheck,
   },
   {
-    id: "contact",
-    title: "AI推進担当（担当：梅澤）相談窓口",
-    category: "ガバナンス & サポート",
-    href: "/contact",
-    description: "毎週水曜Office Hourの個別相談予約・お問い合わせ",
+    id: "skills-hub",
+    title: "社内Skillsカタログ",
+    category: "ツール & ガイド",
+    href: "/skills-hub",
+    description: "社内で共有する Antigravity の Skills カタログ（工事中：準備中）",
     icon: Bot,
   },
   {
-    id: "troubleshooting",
-    title: "Windows エラー解決早見表（確定コマンド）",
+    id: "mcp-hub",
+    title: "MCP外部ツール連携ガイド",
     category: "ツール & ガイド",
-    href: "/guide#troubleshooting-board",
-    description: "PowerShell実行ポリシー、会社アカウント切替、文字化け、ポート重複のワンクリック解決",
+    href: "/mcp-hub",
+    description: "Antigravity と外部ツールをつなぐ MCP の設定（工事中：準備中）",
     icon: Terminal,
   },
   {
@@ -148,7 +184,7 @@ const paletteItems: PaletteItem[] = [
     title: "Gemini利用統計ダッシュボード & FAQ",
     category: "ツール & ガイド",
     href: "/gemini-stats",
-    description: "全社・部署別の利用回数集計、社内確定プロジェクト情報、利用仕様FAQ",
+    description: "全社・部署別の利用回数集計、日次推移（7d/14d/30d）、SKU立体カード",
     icon: Layers,
   },
   {
@@ -165,7 +201,7 @@ const paletteItems: PaletteItem[] = [
     category: "ガバナンス & サポート",
     href: "/preflight",
     description: "4大評価軸（仕様・デザイン・操作性・視認性）の社内受入テスト管理コンソール",
-    icon: ShieldCheck,
+    icon: FileCheck2,
   },
   {
     id: "news",
@@ -186,9 +222,18 @@ const paletteItems: PaletteItem[] = [
   },
 ];
 
+const CATEGORIES = [
+  "すべて",
+  "Academy & 学習",
+  "ツール & ガイド",
+  "共創 & コミュニティ",
+  "ガバナンス & サポート",
+] as const;
+
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("すべて");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -214,20 +259,27 @@ export default function CommandPalette() {
       playCyberOpen();
       setTimeout(() => inputRef.current?.focus(), 50);
       setQuery("");
+      setSelectedCategory("すべて");
       setSelectedIndex(0);
     }
   }, [isOpen]);
 
-  const filteredItems = query.trim()
-    ? paletteItems.filter((item) => {
-        const q = query.toLowerCase();
-        return (
+  const filteredItems = useMemo(() => {
+    let list = paletteItems;
+    if (selectedCategory !== "すべて") {
+      list = list.filter((item) => item.category === selectedCategory);
+    }
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      list = list.filter(
+        (item) =>
           item.title.toLowerCase().includes(q) ||
           item.description.toLowerCase().includes(q) ||
           item.category.toLowerCase().includes(q)
-        );
-      })
-    : paletteItems;
+      );
+    }
+    return list;
+  }, [query, selectedCategory]);
 
   const handleSelect = (item: PaletteItem) => {
     playCyberClick();
@@ -242,12 +294,12 @@ export default function CommandPalette() {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      playCyberClick();
-      setSelectedIndex((prev) => (prev + 1) % filteredItems.length);
+      playCyberHover();
+      setSelectedIndex((prev) => (prev + 1) % Math.max(1, filteredItems.length));
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      playCyberClick();
-      setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
+      playCyberHover();
+      setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % Math.max(1, filteredItems.length));
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (filteredItems[selectedIndex]) {
@@ -260,11 +312,11 @@ export default function CommandPalette() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-slate-950/65 backdrop-blur-md animate-in fade-in duration-200"
       onClick={() => setIsOpen(false)}
     >
       <div
-        className="w-full max-w-2xl bg-[#090d16] border border-cyan-500/30 rounded-3xl shadow-2xl overflow-hidden text-white flex flex-col max-h-[80vh] relative animate-in zoom-in-95 duration-150"
+        className="w-full max-w-2xl bg-[#090d16] border border-cyan-500/35 rounded-3xl shadow-2xl overflow-hidden text-white flex flex-col max-h-[82vh] relative animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 背景アンビエント光彩 */}
@@ -288,10 +340,36 @@ export default function CommandPalette() {
           />
           <button
             onClick={() => setIsOpen(false)}
-            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors ml-2"
+            onMouseEnter={() => playCyberHover()}
+            className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors ml-2 cursor-pointer"
           >
             <X size={18} />
           </button>
+        </div>
+
+        {/* カテゴリピルタブ */}
+        <div className="flex items-center gap-1.5 px-6 py-2.5 bg-slate-950/60 border-b border-slate-800/60 overflow-x-auto scrollbar-none z-10">
+          {CATEGORIES.map((cat) => {
+            const isCatActive = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => {
+                  playCyberClick();
+                  setSelectedCategory(cat);
+                  setSelectedIndex(0);
+                }}
+                onMouseEnter={() => playCyberHover()}
+                className={`px-3 py-1 rounded-xl text-[11px] font-bold shrink-0 transition-all cursor-pointer ${
+                  isCatActive
+                    ? "bg-cyan-400 text-slate-950 font-black shadow-xs shadow-cyan-400/20"
+                    : "bg-slate-900/80 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800"
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
         </div>
 
         {/* 検索結果リスト */}
@@ -360,19 +438,19 @@ export default function CommandPalette() {
           )}
         </div>
 
-        {/* フッターナビゲーションヒント */}
+        {/* フッターナビゲーションヒント (3Dキーキャップ風) */}
         <div className="px-6 py-3 border-t border-slate-800/60 bg-slate-950/80 flex items-center justify-between text-[11px] text-slate-400 font-mono z-10">
           <div className="flex items-center space-x-4">
             <span className="flex items-center space-x-1">
-              <kbd className="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">↑↓</kbd>
+              <kbd className="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300 shadow-[0_2px_0_#334155]">↑↓</kbd>
               <span>移動</span>
             </span>
             <span className="flex items-center space-x-1">
-              <kbd className="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">↵</kbd>
+              <kbd className="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300 shadow-[0_2px_0_#334155]">↵</kbd>
               <span>決定</span>
             </span>
             <span className="flex items-center space-x-1">
-              <kbd className="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300">ESC</kbd>
+              <kbd className="px-1.5 py-0.5 bg-slate-800 rounded border border-slate-700 text-slate-300 shadow-[0_2px_0_#334155]">ESC</kbd>
               <span>閉じる</span>
             </span>
           </div>

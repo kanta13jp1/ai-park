@@ -14,13 +14,17 @@ import {
   Sparkles,
   BarChart3,
   Calendar,
-  Layers
+  Layers,
+  Bot,
+  Newspaper,
+  CheckCircle2,
 } from "lucide-react";
 import {
   isSoundEnabled,
   setSoundEnabled,
   playCyberClick,
-  playCyberOpen
+  playCyberOpen,
+  playCyberHover,
 } from "@/lib/sound";
 
 export default function KeyboardShortcutsModal() {
@@ -69,7 +73,7 @@ export default function KeyboardShortcutsModal() {
         return;
       }
 
-      // 2段階ショートカット: 'g' 押下後のジャンプ (g then h/g/a/s/r)
+      // 2段階ショートカット: 'g' 押下後のジャンプ (g then h/g/a/s/r/t/f/c/n)
       if (e.key === "g" && !e.metaKey && !e.ctrlKey && !pendingGKey) {
         pendingGKey = true;
         if (pendingTimeout) clearTimeout(pendingTimeout);
@@ -114,6 +118,21 @@ export default function KeyboardShortcutsModal() {
             router.push("/tools");
             setIsOpen(false);
             break;
+          case "f":
+            playCyberClick();
+            router.push("/feedback-todo");
+            setIsOpen(false);
+            break;
+          case "c":
+            playCyberClick();
+            router.push("/calendar");
+            setIsOpen(false);
+            break;
+          case "n":
+            playCyberClick();
+            router.push("/news");
+            setIsOpen(false);
+            break;
           default:
             break;
         }
@@ -131,7 +150,7 @@ export default function KeyboardShortcutsModal() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in duration-200"
       onClick={() => setIsOpen(false)}
       role="dialog"
       aria-modal="true"
@@ -143,7 +162,7 @@ export default function KeyboardShortcutsModal() {
         {/* ヘッダー */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300">
+            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
               <Keyboard size={18} />
             </div>
             <div>
@@ -158,6 +177,7 @@ export default function KeyboardShortcutsModal() {
               playCyberClick();
               setIsOpen(false);
             }}
+            onMouseEnter={() => playCyberHover()}
             className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
             aria-label="閉じる"
           >
@@ -169,25 +189,35 @@ export default function KeyboardShortcutsModal() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
           {/* グローバル操作 */}
           <div className="space-y-2">
-            <div className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider">
-              GLOBAL COMMANDS
+            <div className="text-[11px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <span>GLOBAL COMMANDS</span>
             </div>
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
                 <span className="text-slate-300">コマンドパレット起動</span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-cyan-300 font-bold border border-slate-600">
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-cyan-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
                   ⌘K / /
                 </span>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
                 <span className="text-slate-300">触感オーディオ ON/OFF</span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-cyan-300 font-bold border border-slate-600">
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-cyan-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
                   M
                 </span>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
                 <span className="text-slate-300">ショートカット一覧</span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-cyan-300 font-bold border border-slate-600">
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-cyan-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
                   ?
                 </span>
               </div>
@@ -196,38 +226,81 @@ export default function KeyboardShortcutsModal() {
 
           {/* クイックナビゲーション (G then ...) */}
           <div className="space-y-2">
-            <div className="text-[11px] font-bold text-indigo-400 uppercase tracking-wider">
-              FAST JUMP (G then key)
+            <div className="text-[11px] font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+              <span>FAST JUMP (G then key)</span>
             </div>
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
                 <span className="text-slate-300">トップ (Home)</span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600">
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
                   G H
                 </span>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
-                <span className="text-slate-300">導入ガイド</span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600">
-                  G G
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
+                <span className="text-slate-300">AIツール検証マトリクス</span>
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
+                  G T
                 </span>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
-                <span className="text-slate-300">Academy</span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600">
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
+                <span className="text-slate-300">改善ToDoボード</span>
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
+                  G F
+                </span>
+              </div>
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
+                <span className="text-slate-300">AI Park カレンダー</span>
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
+                  G C
+                </span>
+              </div>
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
+                <span className="text-slate-300">最新AIニュース</span>
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
+                  G N
+                </span>
+              </div>
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
+                <span className="text-slate-300">Antigravity Academy</span>
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
                   G A
                 </span>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
-                <span className="text-slate-300">利用統計・モニタ</span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600">
-                  G S
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
+                <span className="text-slate-300">導入ガイド</span>
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
+                  G G
                 </span>
               </div>
-              <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60">
-                <span className="text-slate-300">ロードマップ</span>
-                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600">
-                  G R
+              <div
+                onMouseEnter={() => playCyberHover()}
+                className="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 transition-colors"
+              >
+                <span className="text-slate-300">利用統計・モニタ</span>
+                <span className="px-2 py-0.5 rounded-md bg-slate-700 text-indigo-300 font-bold border border-slate-600 shadow-[0_2px_0_#334155]">
+                  G S
                 </span>
               </div>
             </div>
@@ -237,7 +310,10 @@ export default function KeyboardShortcutsModal() {
         {/* フッター */}
         <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
           <span>Esc キーで閉じます</span>
-          <span className="text-cyan-400">Tactile Audio Feedback Ready</span>
+          <span className="text-cyan-400 flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+            <span>Tactile Audio Feedback Active</span>
+          </span>
         </div>
       </div>
     </div>
