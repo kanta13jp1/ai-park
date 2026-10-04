@@ -1258,4 +1258,103 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     environment: "Windows 11 / Chrome / 1920x1080 & Mobile",
     memo: "TODO-105 / Issue #104（AI Tools Hub 申請フロー・ツール一覧・利用申請モーダル整備）の手動UAT完了",
   },
+  {
+    id: "troubleshooting",
+    name: "Windows 環境トラブルシューター",
+    path: "/troubleshooting",
+    targetAudience: "全社員",
+    overallStatus: "passed",
+    lastVerifiedAt: "2026/10/04",
+    verifiedBy: "梅澤（AI推進担当）",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        evidence: "PowerShell実行権限、Git認証、Node競合、Antigravity ADC認証、VS Codeプレビュー設定の全6件のコマンドが実機で動作確認済み",
+        points: ["PowerShell 5.1/7でのSet-ExecutionPolicyの安全性", "gh auth login のブラウザ連動", "gcloud ADC認証の実在性"],
+        subChecks: [
+          {
+            id: "tb-spec-1",
+            category: "official_announcement",
+            groupTitle: "仕様・事実性確認",
+            label: "管理者権限不要の安全なコマンド設計",
+            verified: true,
+            detail: "Set-ExecutionPolicy -Scope CurrentUser 等、全コマンドが管理者権限なしで安全に実行できること。",
+          },
+          {
+            id: "tb-spec-2",
+            category: "no_fiction",
+            groupTitle: "仕様・事実性確認",
+            label: "Gemini 3.1 Pro プレビュー設定の整合性",
+            verified: true,
+            detail: "VS Codeでの general.previewFeatures: true の設定仕様が公式アナウンスと一致していること。",
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        evidence: "HUDサマリーバナー、カテゴリーピル、立体トラブルシューターカード、ダークコードブロックのコントラスト確認",
+        points: ["難易度バッジ・環境バッジの視認性", "コードブロックのシンタックスハイライト風配色"],
+      },
+      usability: {
+        passed: true,
+        evidence: "リアルタイム検索、カテゴリ切り替え、ワンクリックコマンドコピー、Web Audio API触覚音響の動作を確認",
+        points: ["コピー完了トーストの自動復帰", "検索結果0件時のリセット操作"],
+      },
+      readability: {
+        passed: true,
+        evidence: "症状（赤枠）・原因（黄枠）・解決手順（黒枠）の3段構成による直感的なエラー切り分けの確認",
+        points: ["エラー症状が一目で特定できるか", "補足メモの注意点が明確か"],
+      },
+    },
+  {
+    id: "interviews",
+    name: "現場のAI活用インタビュー",
+    path: "/interviews",
+    targetAudience: "全社員",
+    overallStatus: "passed",
+    lastVerifiedAt: "2026/10/04",
+    verifiedBy: "梅澤（AI推進担当）",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        evidence: "先行実践事例3選（開発DX梅澤、営業CS高橋、総務佐藤）の所属・氏名・活用ツール・削減効果が実在の社内実践と整合していることを確認",
+        points: ["実践事例の所属・ツールの実在性", "取材立候補ドラフト（Google Chat提出用）の書式妥当性", "取材キットの所要時間・質問項目の現実性"],
+        subChecks: [
+          {
+            id: "iv-spec-1",
+            category: "official_announcement",
+            groupTitle: "仕様・事実性確認",
+            label: "先行実践事例の事実整合性",
+            verified: true,
+            detail: "Antigravity 2.0、Gemini、マスキング運用（Level 2ルール）など社内確定ルールに則った実践知であること。",
+          },
+          {
+            id: "iv-spec-2",
+            category: "no_fiction",
+            groupTitle: "仕様・事実性確認",
+            label: "取材立候補ドラフトの書式妥当性",
+            verified: true,
+            detail: "氏名、所属、ツール、テーマ、削減工数、希望日程が整理され、AI推進窓口へ即座に申請できること。",
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        evidence: "ヒーローヘッダー、取材募集バナー、部門フィルター、記事カード、成果指標バッジ、詳細スライドモーダルの整列確認",
+        points: ["イニシャルアイコンのグラデーション配色", "成果指標バッジの視認性", "詳細モーダルのレスポンシブ配置"],
+      },
+      usability: {
+        passed: true,
+        evidence: "部門ピル切り替え、インクリメンタル検索、プロンプトコピー、アンケート雛形コピー、取材立候補モーダル起動と文面コピーの動作を確認",
+        points: ["検索フィルターの即応性", "プロンプトコピー完了フィードバック", "Web Audio API触覚音響の連動"],
+      },
+      readability: {
+        passed: true,
+        evidence: "ハイライト3点、Q&A形式の本文、プロンプトテンプレート、現場からのアドバイスの明瞭なテキスト構成を確認",
+        points: ["導入前の課題と導入後の効果の対比", "読者がすぐに真似できるプロンプト構成"],
+      },
+    },
+    environment: "Windows 11 / Chrome / 1920x1080 & Mobile",
+    memo: "TODO-112 / Issue #111（現場のAI活用インタビュー 先行実践事例3選・部門フィルター・取材立候補モーダル整備）の手動UAT完了",
+  },
 ];
