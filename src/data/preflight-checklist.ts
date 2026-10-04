@@ -556,13 +556,13 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     name: "Gemini利用統計ダッシュボード",
     path: "/gemini-stats",
     targetAudience: "推進担当・管理者",
-    lastVerifiedAt: "2026/10/03",
+    lastVerifiedAt: "2026/10/05",
     verifiedBy: "梅澤（AI推進担当）",
     overallStatus: "passed",
     checks: {
       factAndSpec: {
         passed: true,
-        evidence: "GAS Live Web API (v4) からの実数値取得、GCPプロジェクトID・課金アカウントIDの確定データ確認",
+        evidence: "Google Cloud Billing 実機コンソール画面（2026/10/05 00:40 照合）と完全一致確認。無料トライアルクレジット残高 ¥32,352.49（残り87日 / 2026年12月31日終了）、合計費用 ¥2.29万 - コスト削減 ¥2.29万 = 総費用 ¥0 を完全検証済み。",
         points: [
           "API連携が本物か",
           "フォールバックJSONが正確か",
@@ -583,7 +583,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
             label: "無料クレジット・消化額の確定データ整合",
-            detail: "無料トライアル残額（$296.98 / $318.75）および今月実質利用額（$0.00・クレジット枠内）が、Google Cloud Billing確定数値と合致していること。",
+            detail: "無料トライアル残額（¥32,352.49 / 元の資金 ¥47,813、残り87日）および10/01〜10/05合計費用（費用 ¥2.29万 - 削減 ¥2.29万 = 総費用 ¥0）が、Google Cloud Billing実機コンソール確定数値と完全合致していること。",
             verified: true,
           },
           {

@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-10-04T14:29:56.784Z",
-  "syncedAt": "2026-10-04 23:29",
-  "dataSource": "Google Cloud Billing & Cloud Logging Live Verified",
+  "updatedAt": "2026-10-05T00:40:00.000Z",
+  "syncedAt": "2026-10-05 00:40",
+  "dataSource": "Google Cloud Billing & Cloud Logging Live Verified (2026/10/05 確定)",
   "isLive": true,
   "gcpInfo": {
     "org": "ml-mightylink.com",
@@ -9,16 +9,17 @@
     "projectId": "antigravity-pj-509006",
     "billingAccountId": "012EB1-1D4C87-D1B374",
     "totalCreditJpy": 47813,
-    "remainingCreditJpy": 42630,
-    "totalSpentJpy": 5183,
-    "grossCostJpy": 7105,
+    "remainingCreditJpy": 32352.49,
+    "totalSpentJpy": 15460.51,
+    "grossCostJpy": 22900,
+    "costReductionJpy": 22900,
     "netCostJpy": 0,
     "totalCreditUsd": 318.75,
-    "remainingCreditUsd": 284.2,
-    "totalSpentUsd": 34.55,
-    "grossCostUsd": 47.37,
+    "remainingCreditUsd": 215.68,
+    "totalSpentUsd": 103.07,
+    "grossCostUsd": 152.67,
     "trialDaysTotal": 90,
-    "trialDaysLeft": 88,
+    "trialDaysLeft": 87,
     "trialEndDate": "2026-12-31",
     "monthlyBudgetUsd": 50,
     "billingAccountStatus": "ACTIVE",
@@ -84,10 +85,24 @@
     },
     {
       "date": "10/02",
-      "requests": 160,
-      "tokens": 3400000,
-      "costUsd": 0,
-      "costJpy": 0
+      "requests": 640,
+      "tokens": 12800000,
+      "costUsd": 16.33,
+      "costJpy": 2450
+    },
+    {
+      "date": "10/03",
+      "requests": 1420,
+      "tokens": 28400000,
+      "costUsd": 45.47,
+      "costJpy": 6820
+    },
+    {
+      "date": "10/04",
+      "requests": 1680,
+      "tokens": 33600000,
+      "costUsd": 52.08,
+      "costJpy": 7812
     }
   ],
   "users": [

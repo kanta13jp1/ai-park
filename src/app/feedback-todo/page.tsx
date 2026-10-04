@@ -2020,6 +2020,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 120,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/120",
   },
+  {
+    id: "TODO-122",
+    title: "【課金・利用統計実機同期】Google Cloud 無料トライアル残高（¥32,352 / 残り87日）と利用額（¥2.29万 / 請求¥0）の最新実機同期",
+    category: "運用・管理",
+    author: "梅澤 寛太 さん",
+    authorDept: "AI推進担当",
+    date: "2026/10/05",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「Google Cloudコンソールのお支払い概要画面で、無料トライアルクレジットの最新残高（¥32,352.49 / 残り87日）と10月累計利用実績（¥2.29万・全額クレジット相殺で総費用¥0）が確定しました。ポータルのダッシュボードにも実機通りの数値を即時反映してください」",
+    actionPlan: "【反映済み】public/data/gcp-usage-live.jsonおよび利用監視ダッシュボード（/gemini-stats）をGoogle Cloudコンソール実機最新値に完全同期。実機コンソール確定カード（費用 ¥2.29万 - コスト削減 ¥2.29万 = 総費用 ¥0 / 残高 ¥32,352）を新設し、手動UATエビデンス（preflight-checklist.ts）を2026/10/05照合値に更新しました。",
+    relatedLink: "/gemini-stats",
+    relatedLinkText: "Gemini利用統計ダッシュボードを確認",
+    issueNumber: 121,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/121",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

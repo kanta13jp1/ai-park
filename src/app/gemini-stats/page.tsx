@@ -36,22 +36,23 @@ import {
   Database,
 } from "lucide-react";
 
-// 社内本番環境の確定情報 (Google Cloud Billing 実画面検証済み)
+// 社内本番環境の確定情報 (Google Cloud Billing 実画面検証済み 2026/10/05 確定)
 const DEFAULT_GCP_INFO = {
   org: "ml-mightylink.com",
   projectId: "antigravity-pj-509006",
   billingAccountId: "012EB1-1D4C87-D1B374",
   totalCreditJpy: 47813,
-  remainingCreditJpy: 42630, // 2026/10/03 Cloud Billing 実機コンソール確定 (¥42,629.68)
-  totalSpentJpy: 5183,
-  grossCostJpy: 7105,
-  netCostJpy: 0,
+  remainingCreditJpy: 32352.49, // 2026/10/05 Cloud Billing 実機コンソール確定 (¥32,352.49)
+  totalSpentJpy: 15460.51,
+  grossCostJpy: 22900, // 合計費用 (2026/10/01〜2026/10/05): ¥2.29万
+  costReductionJpy: 22900, // コスト削減: -¥2.29万
+  netCostJpy: 0, // 総費用: ¥0
   totalCreditUsd: 318.75,
-  remainingCreditUsd: 284.20,
-  totalSpentUsd: 34.55,
-  grossCostUsd: 47.37,
+  remainingCreditUsd: 215.68,
+  totalSpentUsd: 103.07,
+  grossCostUsd: 152.67,
   trialDaysTotal: 90,
-  trialDaysLeft: 88, // 2026/10/03 Cloud Billing 実画面確定 (残り88日 / 2026-12-31終了)
+  trialDaysLeft: 87, // 2026/10/05 Cloud Billing 実画面確定 (残り87日 / 2026-12-31終了)
   monthlyBudgetUsd: 50,
   bigQueryExportDataset: "mighty-link-ai-connect-497009:gcp_billing_export",
   bigQueryConnected: true,
@@ -132,8 +133,8 @@ export default function GeminiStatsPage() {
   const [users, setUsers] = useState<UserUsage[]>(DEFAULT_USERS);
   const [dailyData, setDailyData] = useState<DailyUsage[]>(DEFAULT_DAILY_DATA);
   const [gcpInfo, setGcpInfo] = useState(DEFAULT_GCP_INFO);
-  const [syncedAt, setSyncedAt] = useState<string>("2026-10-03 19:15");
-  const [dataSource, setDataSource] = useState<string>("GitHub Actions 自動同期パイプライン");
+  const [syncedAt, setSyncedAt] = useState<string>("2026-10-05 00:40");
+  const [dataSource, setDataSource] = useState<string>("Google Cloud Billing Live Verified (2026/10/05 確定)");
   const [syncMode, setSyncMode] = useState<"api_live" | "snapshot_verified">("api_live");
   const [syncModeLabel, setSyncModeLabel] = useState<string>("完全API自動同期中");
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -499,6 +500,121 @@ function doGet() {
           syncMode={syncMode}
           syncModeLabel={syncModeLabel}
         />
+
+        {/* Google Cloud Billing 実機コンソール確定サマリー (2026/10/05 実機キャプチャ完全一致) */}
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-4 sm:p-5 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-blue-400 font-bold">
+                G
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-bold text-sm tracking-tight text-white flex items-center gap-2">
+                    Google Cloud Billing 実機コンソール確定データ
+                  </h3>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
+                    実機一致確認済
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 font-mono">
+                  無料トライアルのステータス: ¥{gcpInfo.remainingCreditJpy.toLocaleString()} クレジット、残り {gcpInfo.trialDaysLeft} 日（2026/12/31 終了）
+                </p>
+              </div>
+            </div>
+            <div className="text-right text-[11px] font-mono text-slate-400">
+              照合日時: <span className="text-cyan-300 font-bold">2026/10/05 00:40</span>
+            </div>
+          </div>
+
+          <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+            {/* 左側: 合計費用 (2026/10/01〜2026/10/05) */}
+            <div className="space-y-4 pr-0 lg:pr-4" onMouseEnter={() => playCyberHover()}>
+              <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                <span className="flex items-center gap-1.5">
+                  <TrendingUp size={15} className="text-indigo-600" />
+                  合計費用（2026/10/01 〜 2026/10/05）
+                </span>
+                <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-mono text-[11px]">
+                  今月
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between py-2 px-3 bg-slate-50/70 rounded-2xl border border-slate-100">
+                <div className="text-center">
+                  <span className="text-[11px] text-slate-500 block">費用 (Gross)</span>
+                  <span className="text-xl sm:text-2xl font-black font-mono text-slate-800">
+                    ¥{(gcpInfo.grossCostJpy / 10000).toFixed(2)}万
+                  </span>
+                </div>
+                <span className="text-xl font-mono text-slate-400">−</span>
+                <div className="text-center">
+                  <span className="text-[11px] text-slate-500 block">コスト削減</span>
+                  <span className="text-xl sm:text-2xl font-black font-mono text-indigo-600">
+                    ¥{((gcpInfo.costReductionJpy || gcpInfo.grossCostJpy) / 10000).toFixed(2)}万
+                  </span>
+                </div>
+                <span className="text-xl font-mono text-slate-400">=</span>
+                <div className="text-center bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200/80">
+                  <span className="text-[11px] text-emerald-700 font-bold block">総費用 (Net)</span>
+                  <span className="text-2xl sm:text-3xl font-black font-mono text-emerald-600">
+                    ¥{gcpInfo.netCostJpy}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs text-slate-600 bg-emerald-50/60 p-3 rounded-xl border border-emerald-100">
+                <CheckCircle2 size={16} className="text-emerald-600 shrink-0" />
+                <span>
+                  <strong>全額トライアルクレジット相殺中:</strong> 社員がAntigravityで開発・推論を実行した全費用は $300 クレジットから自動相殺され、会社の請求費用は <strong>0 円</strong> です。
+                </span>
+              </div>
+            </div>
+
+            {/* 右側: 無料トライアルのクレジット状況 */}
+            <div className="space-y-4 pt-6 lg:pt-0 lg:pl-6" onMouseEnter={() => playCyberHover()}>
+              <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                <span className="flex items-center gap-1.5">
+                  <CreditCard size={15} className="text-emerald-600" />
+                  無料トライアルのクレジット
+                </span>
+                <span className="bg-emerald-50 text-emerald-700 border border-emerald-200/60 px-2 py-0.5 rounded-md font-mono text-[11px] font-bold">
+                  2026年12月31日に終了
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="p-4 rounded-2xl bg-emerald-50/40 border border-emerald-100 flex flex-col justify-between">
+                  <span className="text-xs text-slate-500 font-medium">残りクレジット</span>
+                  <div className="mt-1">
+                    <span className="text-2xl sm:text-3xl font-black font-mono text-slate-900 tracking-tight">
+                      ¥{Math.round(gcpInfo.remainingCreditJpy).toLocaleString()}
+                    </span>
+                    <span className="text-[11px] text-slate-400 block font-mono">
+                      （元の資金: ¥{gcpInfo.totalCreditJpy.toLocaleString()}）
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-indigo-50/40 border border-indigo-100 flex flex-col justify-between">
+                  <span className="text-xs text-slate-500 font-medium">残り有効日数</span>
+                  <div className="mt-1">
+                    <span className="text-2xl sm:text-3xl font-black font-mono text-indigo-900 tracking-tight">
+                      {gcpInfo.trialDaysLeft} <span className="text-sm font-normal text-indigo-700">日</span>
+                    </span>
+                    <span className="text-[11px] text-slate-400 block font-mono">
+                      （総期間: {gcpInfo.trialDaysTotal} 日中）
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-[11px] text-slate-500 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                💡 <strong>Google Cloud Billing 公式注記:</strong> 無料トライアル期間中に料金が発生することはありません。無料トライアルが終了すると、トライアル中に作成したすべてのリソースが停止します。有料アカウントにアップグレードしない限り、自動で請求が発生することはありません。
+              </p>
+            </div>
+          </div>
+        </div>
 
         {/* 4大KPIメトリクス */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
