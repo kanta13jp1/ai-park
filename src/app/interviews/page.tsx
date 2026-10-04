@@ -63,194 +63,8 @@ export interface InterviewArticle {
 }
 
 // 社内先行実践インタビュー記事（実務知見モデルケース）
-const initialInterviewArticles: InterviewArticle[] = [
-  {
-    id: "case-01",
-    issueNumber: "#01",
-    sectionTitle: "🎤 現場AI活用インタビュー #01",
-    initial: "梅",
-    initialBg: "from-blue-600 to-indigo-700",
-    title: "Antigravity 2.0 と Gemini 3.1 Pro で、社内ポータル開発の反復サイクルを5倍に加速",
-    interviewee: "梅澤 幹太",
-    role: "リードエンジニア / AI推進担当",
-    dept: "全社開発基盤・DX推進チーム",
-    category: "dev",
-    categoryLabel: "開発・エンジニアリング",
-    date: "2026/10/01",
-    tag: "Next.js / TypeScript / Subagents",
-    tagColor: "bg-blue-100 text-blue-800 border-blue-200",
-    summary:
-      "Gemini 3.1 Pro を頭脳に備えた Google Antigravity 2.0 をフル活用し、社内ポータルの新機能開発から手動UAT、SSGビルド、本番デプロイまでの自動化パイプラインを構築。開発効率の劇的な向上を達成しました。",
-    metrics: "週あたり 8 時間の定常実装工数を削減 / Issue解決速度 3倍",
-    slideTheme: {
-      bgGradient: "from-slate-900 via-indigo-950 to-blue-950",
-      catchphrase: "思考とコードが直結する、次世代のペアプログラミング体験",
-      subCatchphrase: "Subagentsと自動ビルドゲートを連動させ、手戻りゼロの高品質デプロイを実現",
-    },
-    highlights: [
-      "Subagents機能による自律的なコードベース調査と依存関係解析",
-      "KISS / YAGNI原則の徹底と、TypeScript厳格型付けの自動遵守",
-      "Web Audio APIを用いた触覚音響HUDの迅速なプロトタイピング",
-    ],
-    qna: [
-      {
-        q: "どんな業務で、何に困っていましたか？（導入前の課題）",
-        a: "社内ポータルの改善要望が日々増える中、要件の整理からTypeScriptコード作成、UATエビデンスの記録、デプロイ検証までを少人数で回すための工数が逼迫していました。",
-      },
-      {
-        q: "どのAIツールを、どう活用しましたか？",
-        a: "Google Antigravity 2.0 と Gemini 3.1 Pro を使用しました。特に research サブエージェントを活用してコードベース全体の依存関係を把握させ、安全なFail-Open設計を指示しています。",
-      },
-      {
-        q: "どれくらい効果がありましたか？",
-        a: "1つの新機能を企画してから本番デプロイするまでのリードタイムが平均4時間から45分へ短縮。週あたり約8時間分の工数が創出され、アーキテクチャ設計に集中できるようになりました。",
-      },
-      {
-        q: "つまずいた点や工夫したポイントは？",
-        a: "AIに丸投げするのではなく、デプロイ前品質ゲート（verify-deployment-gate.mjs）で未確認機能に必ず注意書きを強制する仕組みを入れ、嘘や推測のコード混入を構造的に防ぐようにしました。",
-      },
-    ],
-    promptTemplate: {
-      title: "【実践プロンプト】型安全・KISS原則準拠のReactコンポーネントリファクタリング",
-      content: `あなたはTypeScriptとNext.js 16（Static Export）のシニアエンジニアです。
-以下のコンポーネントコードを、KISS原則・YAGNI原則に厳格に従ってリファクタリングしてください。
-
-【要件】
-1. 不必要な外部ライブラリを追加せず、標準のWeb APIとTailwind CSSのみを使用すること。
-2. オプショナルチェイニング（?.）とNull合体演算子（??）を徹底し、SSG初期ビルド時にクラッシュしないこと。
-3. Web Audio API（@/lib/sound）の触覚音響をボタンクリック・ホバー時に連動させること。
-4. 既存のDocstringと型定義を尊重し、変更理由をコメントとして明記すること。`,
-    },
-    advice: "AIツールは『指示待ちの部下』ではなく『超優秀なペアプロ相手』として扱い、制約条件やゴールを具体的に言語化して渡すことが成功の鍵です。",
-    published: true,
-  },
-  {
-    id: "case-02",
-    issueNumber: "#02",
-    sectionTitle: "🎤 現場AI活用インタビュー #02",
-    initial: "高",
-    initialBg: "from-emerald-600 to-teal-700",
-    title: "顧客問い合わせ要約と議事録ドラフト生成を Gemini で標準化",
-    interviewee: "高橋 誠司",
-    role: "CS推進リーダー",
-    dept: "営業・カスタマーサクセス部",
-    category: "sales",
-    categoryLabel: "営業・CS",
-    date: "2026/10/02",
-    tag: "Gemini / 議事録要約 / マスキング",
-    tagColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
-    summary:
-      "毎日の商談・サポート対応メモから、顧客固有の識別情報を事前にマスキングした上で Gemini に要約させ、共有用議事録ドラフトを5分で生成する標準フローをチーム内に展開しました。",
-    metrics: "議事録作成時間を 40分 ➜ 10分 に短縮 / 月間 25時間 削減",
-    slideTheme: {
-      bgGradient: "from-slate-900 via-teal-950 to-emerald-950",
-      catchphrase: "マスキングルール徹底で、安全と時短を両立する実践知",
-      subCatchphrase: "商談直後の記憶が鮮明なうちに、決定事項とネクストアクションを即座に共有",
-    },
-    highlights: [
-      "個人名・顧客企業名を『顧客A社』『担当B様』に置き換えるマスキング早見表の配布",
-      "商談議事録の『決定事項』『ToDo』『検討中』の3大要素を網羅する出力フォーマット統一",
-      "チームメンバー全員が同じプロンプトを使える共有スニペット集の作成",
-    ],
-    qna: [
-      {
-        q: "どんな業務で、何に困っていましたか？",
-        a: "商談後に議事録をまとめる時間が取れず、夕方以降にまとめて作成していたため残業が増え、ネクストアクションの共有が翌日に遅延することが課題でした。",
-      },
-      {
-        q: "どのAIツールを、どう活用しましたか？",
-        a: "会社契約の Gemini を活用しました。メモ書きの箇条書きを投入する前に、顧客名やメールアドレスをマスキングしてからプロンプトに貼り付けています。",
-      },
-      {
-        q: "どれくらい効果がありましたか？",
-        a: "1件あたり40分かかっていた議事録の整形・要約が10分以内で完了。商談直後に共有できるようになり、月間でチーム全体約25時間の工数削減になりました。",
-      },
-      {
-        q: "チーム展開の工夫は？",
-        a: "『社内データ取り扱いセキュリティ基準』のLevel 2ルール（マスキング必須）を遵守するため、入力禁止語句を画面横に付箋で貼って意識づけを行いました。",
-      },
-    ],
-    promptTemplate: {
-      title: "【実践プロンプト】商談メモからの決定事項・ToDo抽出フォーマット",
-      content: `あなたはカスタマーサクセスの優秀なマネージャーです。
-以下の商談メモから、チーム共有用のサマリーを作成してください。
-※顧客名・個人情報はすでにマスキング済みです。
-
-【出力構成】
-1. 商談サマリー（3行以内）
-2. 決定事項（箇条書き）
-3. ネクストアクション・担当者・期日（ToDo形式）
-4. 懸念点・今後のリスク
-
-【商談メモ】
-（ここにマスキング済みのメモを貼り付け）`,
-    },
-    advice: "マスキングを習慣化すれば、セキュリティ不安なくAIの恩恵を最大限に受けることができます。まずは自分の定型業務の1つから試してみてください。",
-    published: true,
-  },
-  {
-    id: "case-03",
-    issueNumber: "#03",
-    sectionTitle: "🎤 現場AI活用インタビュー #03",
-    initial: "佐",
-    initialBg: "from-amber-600 to-orange-700",
-    title: "社内FAQ検索と全社アナウンス文面の推敲を安全な Level 1 環境で実現",
-    interviewee: "佐藤 恵美",
-    role: "社内サポート・総務担当",
-    dept: "人事総務・コーポレート部",
-    category: "corp",
-    categoryLabel: "コーポレート・総務",
-    date: "2026/10/03",
-    tag: "Level 1 AI / アナウンス推敲 / FAQ作成",
-    tagColor: "bg-amber-100 text-amber-800 border-amber-200",
-    summary:
-      "社内就業規則や経費精算ルールの改定アナウンスを作成する際、会社アカウント経由の Antigravity / Gemini を活用して、全社員に誤解を与えない平易で丁寧な文面への推敲を実施しています。",
-    metrics: "全社アナウンス作成時間を半減 / 社内からの質問対応工数を 40% 削減",
-    slideTheme: {
-      bgGradient: "from-slate-900 via-amber-950 to-orange-950",
-      catchphrase: "誰にでも伝わる優しい社内コミュニケーションをAIで支える",
-      subCatchphrase: "制度の複雑な変更点を要約し、社員からの問い合わせ件数を大幅に抑制",
-    },
-    highlights: [
-      "会社契約の学習不使用AI（Level 1）を活用した社内規定ドラフトのレビュー",
-      "専門用語を新入社員でもわかる日常表現に変換する『やさしい言い換え』プロンプト",
-      "アナウンス末尾に『よくある質問3選』を自動付加することで問い合わせを事前防止",
-    ],
-    qna: [
-      {
-        q: "どんな業務で、何に困っていましたか？",
-        a: "全社向けのアナウンスを作成する際、表現が硬すぎたり曖昧だったりして、公開後に社員から同じ質問が何件もチャットで寄せられることがストレスでした。",
-      },
-      {
-        q: "どのAIツールを、どう活用しましたか？",
-        a: "会社契約の Gemini を使っています。規定の改定案を読み込ませ、『新入社員が読んだときに疑問に思う点を3点指摘して』と壁打ち相手として活用しています。",
-      },
-      {
-        q: "どれくらい効果がありましたか？",
-        a: "文面の推敲にかかる時間が半減しただけでなく、アナウンス後の社内チャットでの質問対応件数が40%以上減少し、業務がとてもスムーズになりました。",
-      },
-      {
-        q: "これから始める人へ伝えたいことは？",
-        a: "文章を書くのが苦手な人ほど、AIに『読者目線でのレビュー』を依頼することをお勧めします。客観的なフィードバックがすぐに返ってくるので安心できます。",
-      },
-    ],
-    promptTemplate: {
-      title: "【実践プロンプト】全社通知アナウンスの平易化・FAQ生成",
-      content: `あなたは社内広報・総務のスペシャリストです。
-以下の社内連絡の草案を、全社員に向けてわかりやすく親しみやすい文面に推敲してください。
-
-【推敲基準】
-1. 冒頭に変更点の要約を箇条書きで3点提示すること。
-2. 専門的な規程用語を平易な言葉に言い換えること。
-3. 社員が特に疑問に思うと予想される点について『よくある質問（Q&A 3選）』を末尾に作成すること。
-
-【草案】
-（ここにアナウンス草案を貼り付け）`,
-    },
-    advice: "AIに文章を『直してもらう』のではなく『読者の反応をシミュレーションしてもらう』使い方がとても役立ちます。",
-    published: true,
-  },
-];
+// 実際に取材し、本人と上長の原稿確認が済んだ記事だけを追加する（架空の人物・数値は載せない）
+const initialInterviewArticles: InterviewArticle[] = [];
 
 // 取材キット：取材の流れと質問項目
 const interviewFlow = [
@@ -449,6 +263,12 @@ export default function InterviewsPage() {
             </span>
           </div>
 
+          {initialInterviewArticles.length === 0 && (
+            <div className="rounded-xl border-2 border-dashed border-slate-300 bg-white p-8 text-center text-slate-500 space-y-1">
+              <p className="text-sm font-bold text-slate-700">🚧 工事中：記事はまだありません</p>
+              <p className="text-xs">実際に取材し、本人と上長の確認が済んだ記事から掲載します。</p>
+            </div>
+          )}
           <div className="grid grid-cols-1 gap-5">
             {filteredArticles.map((article) => (
               <TiltCard key={article.id} maxTilt={3} glareOpacity={0.05} className="rounded-2xl">
@@ -600,8 +420,8 @@ export default function InterviewsPage() {
         {/* 運用ステータス案内 */}
         <UnderConstructionAlert
           statusType="draft"
-          title="📋 現場のAI活用インタビュー（先行実践事例 公開中）"
-          message="社内の先行実践チーム（開発DX、営業CS、バックオフィス）のモデル事例を掲載しています。あなたのチームの実践知もぜひお聞かせください！"
+          title="📋 準備中：取材を始める準備をしています"
+          message="インタビュー記事はまだありません。取材の立候補を受け付けています。"
         />
       </div>
 

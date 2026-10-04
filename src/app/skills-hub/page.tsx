@@ -40,80 +40,8 @@ interface SkillItem {
   badgeColor?: string;
 }
 
-const SKILLS_CATALOG: SkillItem[] = [
-  {
-    id: "skill-type-safe-refactor",
-    name: "TypeScript 厳格型付けリファクタリング",
-    category: "コード・品質",
-    status: "社内認定 (Verified)",
-    description: "any型や未定義型を検出し、Zodスキーマまたは厳格な型定義（Generics・Union）へ自動リファクタリングします。",
-    triggerPhrase: "@skill type-safe-refactor 対象ファイル: src/app/...",
-    author: "アーキテクチャ標準化チーム"
-  },
-  {
-    id: "skill-bq-sql-optimize",
-    name: "BigQuery コスト最適化クエリスキャナ",
-    category: "データ・SQL",
-    status: "社内認定 (Verified)",
-    description: "SELECT * の排除、パーティション・クラスタ列の活用、DRY-RUNバイト数計算を行い、クエリ課金を最小化します。",
-    triggerPhrase: "@skill bq-sql-optimize クエリファイル: queries/...",
-    author: "データエンジニアリング部"
-  },
-  {
-    id: "skill-secret-leak-guard",
-    name: "クレデンシャル・機密情報混入ブロッカー",
-    category: "セキュリティ",
-    status: "社内認定 (Verified)",
-    description: "Gitコミット前やPR作成時に、APIキーやAWS/GCPのクレデンシャル、社内顧客データの混入を静的解析で即時遮断します。",
-    triggerPhrase: "@skill secret-leak-guard 差分スキャン",
-    author: "セキュリティ統括室"
-  },
-  {
-    id: "skill-e2e-playwright",
-    name: "Playwright UI自動検証シナリオ合成",
-    category: "コード・品質",
-    status: "社内認定 (Verified)",
-    description: "対象コンポーネントの操作フローから、ヘッドレスブラウザで再現可能なPlaywright E2Eテストコードを生成します。",
-    triggerPhrase: "@skill e2e-playwright 対象ルート: /gemini-stats",
-    author: "QA・品質管理部"
-  },
-  {
-    id: "skill-commit-lint",
-    name: "Git Conventional Commits 自動生成",
-    category: "運用自動化",
-    status: "社内認定 (Verified)",
-    description: "ステージングされたgit diffを解析し、Conventional Commits規約（feat/fix/docs/refactor）に準拠したコミット文を起票します。",
-    triggerPhrase: "@skill commit-lint 差分からコミット作成",
-    author: "開発基盤アーキテクチャ室"
-  },
-  {
-    id: "skill-spec-structuring",
-    name: "要件定義書・受入基準（Gherkin）構造化",
-    category: "ドキュメント・要件",
-    status: "PoC検証中",
-    description: "曖昧な要望メモから、Given-When-Then形式の振る舞い要件定義（BDD）および非機能要件チェックリストを自動生成します。",
-    triggerPhrase: "@skill spec-structuring 議事録メモ: notes.md",
-    author: "AI推進担当・企画室"
-  },
-  {
-    id: "skill-cloud-posture-audit",
-    name: "GCP / Cloud Storage セキュリティ監査",
-    category: "セキュリティ",
-    status: "PoC検証中",
-    description: "GCSバケットの公開アクセス設定（UBLA）、CMEK暗号化、IAM過剰権限、ソフトデリート設定を自動点検・レポート化します。",
-    triggerPhrase: "@skill gcs-security-assessment プロジェクトID: antigravity-pj-509006",
-    author: "クラウドインフラチーム"
-  },
-  {
-    id: "skill-haptic-kinematics-review",
-    name: "Web Audio 触覚音響 & キネマティクス検証",
-    category: "コード・品質",
-    status: "試作カタログ",
-    description: "Awwwards水準のマイクロインタラクション（オシレーター周波数推移・TiltCardパースペクティブ）の挙動健全性を検査します。",
-    triggerPhrase: "@skill awards-driven-quality-cycle 音響・視認性監査",
-    author: "デザインシステムWG"
-  }
-];
+// 社内で実際に作成・確認した Skills だけを追加する（架空のスキル・作成部署・認定は載せない）
+const SKILLS_CATALOG: SkillItem[] = [];
 
 export default function SkillsHubPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -152,17 +80,15 @@ export default function SkillsHubPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="社内 Skills カタログ"
-        subtitle="Antigravity 2.0 で即戦力として呼び出せる社内認定スキル集（PoC検証中）"
+        subtitle="社内で共有する Antigravity の Skills（準備中）"
       />
       <OfficeHourBanner />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
-          statusType="poc"
-          title="🧪 PoC検証中・社内Skillsカタログ（試作版）"
-          message="社内セキュリティ審査を通過した認定Skillsを順次登録・検証中です。審査完了のスキルから順に公式ライブラリへ追加されます。"
-          prepDetails="社内Skillsセキュリティ審査基準（外部API連携・認証情報保護）およびGit自動同期パイプラインを構築中です。"
-          releaseDate="2026年11月上旬予定"
+          statusType="construction"
+          title="🚧 工事中：社内Skillsカタログを準備しています"
+          message="社内で共有している Skills はまだありません。社内で作成・確認が済んだものから掲載します。"
         />
 
         {/* HUDハイライト */}
@@ -296,7 +222,7 @@ export default function SkillsHubPage() {
             <div>
               <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
                 <Layers className="w-5 h-5 text-indigo-600" />
-                <span>社内認定・検証中 Skills 一覧</span>
+                <span>社内 Skills 一覧（準備中）</span>
               </h3>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                 コマンドまたは自然言語でエージェントに呼び出し可能なスキル一覧
@@ -311,10 +237,10 @@ export default function SkillsHubPage() {
             <div className="bg-white rounded-2xl p-12 text-center border border-slate-200 space-y-3">
               <Compass className="w-8 h-8 text-slate-300 mx-auto" />
               <p className="text-sm font-bold text-slate-600">
-                該当するスキルが見つかりませんでした
+                {SKILLS_CATALOG.length === 0 ? "🚧 工事中：社内で共有している Skills はまだありません" : "該当するスキルが見つかりませんでした"}
               </p>
               <p className="text-xs text-slate-400">
-                検索条件を変更するか、右上の「自作Skillの申請」から新しいスキルを提案してください。
+                作成・確認が済んだものから掲載します。右上の「自作Skillの申請」から提案できます。
               </p>
             </div>
           ) : (
