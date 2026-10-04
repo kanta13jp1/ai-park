@@ -1988,6 +1988,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 118,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/118",
   },
+  {
+    id: "TODO-120",
+    title: "【フィジカルAI・エッジビジョン】Meta AI「SAM & DINO」ピッツバーグ大支援ロボティクス（RAMMP）事例に伴うオンデバイス視覚AI活用リファレンス & ニュース還元",
+    category: "AI実践編",
+    author: "スマートモビリティ・IoT研究タスクフォース",
+    authorDept: "システムアーキテクチャ統括部",
+    date: "2026/10/05",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「Metaの基礎ビジョンモデル（SAMとDINO）がピッツバーグ大の自律支援車椅子プロジェクト（RAMMP）で採用され、エッジ上での軽量物体認識（RF-DETR + DINO埋め込み）とSAMによる自動アノテーションで現場の安全性向上に貢献している。クラウド通信に頼らないエッジ視覚AIの知見を社内ポータルに還元してほしい」",
+    actionPlan: "【反映済み】Meta AI公式ブログ「Reimagining Independence: How Meta’s AI Models Are Helping the University of Pittsburgh Transform Assistive Robotics」の解説をAIニュース（/news）に追加し、Subagents活用事例集（/agent-cases）に「エッジビジョンAI × SAM/DINOによるオフィス・現場バリアフリー自律支援」モデルケースを反映。さらにAI Tools Hub（/tools-hub）にMeta SAM & DINOを掲載しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 119,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/119",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

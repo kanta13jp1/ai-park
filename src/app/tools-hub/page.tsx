@@ -157,6 +157,22 @@ const companyAiToolsList: CompanyAiTool[] = [
     governanceNote: "機密認証情報・顧客個人情報がリポジトリに含まれないことを確認の上、サンドボックス検証環境にて利用すること。",
     officialDocUrl: "https://cognition.com/blog/1b-run-rate",
   },
+  {
+    id: "tool-meta-vision",
+    name: "Meta SAM & DINO (Vision Foundation Models)",
+    vendor: "Meta AI",
+    category: "poc",
+    categoryLabel: "PoC検証枠",
+    level: "Level 3",
+    levelBadge: "Level 3: 一般公開情報のみ",
+    status: "PoC検証中",
+    statusColor: "amber",
+    costModel: "オープンウェイト / オープンソース（無償・オンプレミス/エッジ可）",
+    targetAudience: "IoT/組み込みエンジニア・画像処理研究者・スマートオフィス推進・アクセシビリティ担当",
+    description: "Metaが公開する基礎ビジョンモデル群。SAM（高精度ゼロショット画像セグメンテーション・自動アノテーション）およびDINOv2/v3（自己教師あり視覚特徴量抽出）。ピッツバーグ大学HERLのスマート車椅子・支援ロボティクス（RAMMP）などエッジ現場で実用化。",
+    governanceNote: "オープンウェイトライセンス条項に準拠して利用すること。社内カメラ映像や個人を特定可能な顔画像データを取り扱う際は、必ず事前にデータ匿名化・プライバシー事前審査を実施すること。",
+    officialDocUrl: "https://ai.meta.com/blog/assistive-robotics-university-of-pittsburgh-sam-dino/",
+  },
 ];
 
 const aiGuidelines = [

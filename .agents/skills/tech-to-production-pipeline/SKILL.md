@@ -187,3 +187,13 @@ flowchart TD
 | **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` レガシー移行モデルケース新設<br>・`src/app/tools-hub/page.tsx` Devin掲載追加<br>・`src/app/feedback-todo/page.tsx` TODO-118 クローズ |
 | **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
 
+### ケース7: Meta AI公式ブログ「SAM & DINO支援ロボティクス（RAMMP）」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [Reimagining Independence: How Meta’s AI Models Are Helping the University of Pittsburgh Transform Assistive Robotics](https://ai.meta.com/blog/assistive-robotics-university-of-pittsburgh-sam-dino/) (2026/07/27) |
+| **還元アイデア** | ① 基礎ビジョンモデル（SAM & DINO）を用いた次世代自律支援車椅子・ロボティクス技術解説ニュース配信<br>② エッジビジョンAI × SAM/DINOによるオフィス・現場バリアフリー自律支援モデルケース新設<br>③ `tools-hub` へのMeta SAM & DINO（PoC検証枠・オープンウェイト）新規掲載 |
+| **起票ToDo** | `TODO-120`（Issue #119） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` エッジ視覚支援モデルケース新設<br>・`src/app/tools-hub/page.tsx` Meta SAM & DINO掲載<br>・`src/app/feedback-todo/page.tsx` TODO-120 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
+
+

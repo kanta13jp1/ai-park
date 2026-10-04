@@ -175,6 +175,24 @@ const AGENT_CASES: AgentCase[] = [
       "レガシーコード（旧バージョン依存）の機械的一括置換による移行手戻りの撲滅",
       "CI失敗時のエラーログ原因特定からパッチ作成までのリードタイムを70%短縮"
     ]
+  },
+  {
+    id: "case-edge-assistive-robotics",
+    title: "エッジビジョンAI × SAM/DINOによるオフィス・現場バリアフリー自律支援",
+    department: "スマートモビリティ・IoT研究タスクフォース",
+    summary: "Metaのオープンビジョン基盤（DINOv3/DINOv2埋め込み＋SAM自動アノテーション）を活用し、オフィスや作業現場での障害物・段差・自動ドア開閉ボタンをバッテリー駆動のエッジカメラ上で360度リアルタイム検知。通信途絶時でも安全な移動支援と自律ナビゲーションを実現。",
+    subagentRoles: [
+      "Edge Sensor Stream Parser (DINO)",
+      "Object & Barrier Segmenter (SAM)",
+      "Safety & Mobility Action Planner"
+    ],
+    estimatedHoursSaved: "月間約 60 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "クラウド通信に依存しないオンデバイス推論（RF-DETR + DINO埋め込み）によるゼロ遅延の安全回避",
+      "SAMを用いた多様な照明・角度の実環境データ自動アノテーションによる学習コスト90%削減",
+      "車椅子やスマートカート利用時の段差・危険物接触リスクを未然に防止し、現場のアクセシビリティ向上"
+    ]
   }
 ];
 
