@@ -85,6 +85,24 @@ const AGENT_CASES: AgentCase[] = [
       "PR作成時の自動CI連携による不具合即時検知",
       "主要画面40パターンのクロスブラウザ検証"
     ]
+  },
+  {
+    id: "case-iot-led-display",
+    title: "物理LEDサイネージ・HUDリアルタイム音声制御（Voice/Researcher/Pixel協調）",
+    department: "スマートオフィス・IoT開発推進チーム",
+    summary: "全二重音声モデル（GPT-Live-1）が常時リスニングしながらタスクをクライアント委譲し、推論モデル（GPT-5.6 Luna）とRaspberry Pi上のローカルレンダラが128×64 LEDパネルへシーン・RGBフレームをDDPプロトコルでリアルタイム配信。",
+    subagentRoles: [
+      "Voice Listener (GPT-Live-1 / Full-Duplex)",
+      "Task Researcher (GPT-5.6 Luna / Responses API)",
+      "Pixel Renderer (Raspberry Pi / DDP)"
+    ],
+    estimatedHoursSaved: "月間約 45 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "会議室・オフィスの案内サイネージを音声対話でハンズフリー即時更新",
+      "会話中に割り込み（interrupt）可能な全二重クライアント委譲アーキテクチャ",
+      "回路図・ESP32配線トラブルシューティングにおけるCodex画像解析の活用"
+    ]
   }
 ];
 
@@ -447,7 +465,7 @@ interface OfficialAgentItem {
   id: string;
   name: string;
   title: string;
-  category: "Google Play" | "Portal Release" | "Flutter & Dart" | "Firebase";
+  category: "Google Play" | "Portal Release" | "Flutter & Dart" | "Firebase" | "IoT & 物理サイネージ";
   badgeColor: string;
   description: string;
   targetRole: string;
@@ -567,6 +585,33 @@ tools:
 
 # Firebase Security Rules Custom Agent
 Generate and statically verify strict Firestore security rules.`
+  },
+  {
+    id: "iot-display-controller",
+    name: "iot-display-controller",
+    title: "IoT・物理LEDディスプレイ制御エージェント",
+    category: "IoT & 物理サイネージ",
+    badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    description: "OpenAI最新事例（GPT-Live-1×Codex×Raspberry Pi）準拠。全二重音声対話、クライアント委譲、128×64低解像度RGBレンダリング、ESP32 WLED-MM DDPプロトコル配信を支援。",
+    targetRole: "IoTエンジニア / スマートオフィス推進 / 組み込み開発者",
+    cliCommand: "agy --agent iot-display-controller",
+    agentFilePath: ".agents/agents/iot-display-controller.md",
+    keyCapabilities: [
+      "全二重音声対話（GPT-Live-1等）とタスク推論のクライアント委譲設計",
+      "128×64 RGB LEDパネル向け低解像度ピクセルレンダリング検証",
+      "ESP32 WLED-MM DDPプロトコル（UDP 4048）通信・フレームレート調整",
+      "配線写真・ピンアサイン照合とPipeWire音声入出力トラブルシューティング"
+    ],
+    configMarkdown: `---
+name: iot-display-controller
+description: IoT・物理LEDディスプレイ・オフィスサイネージ制御エージェント。
+tools:
+  - run_command
+  - view_file
+---
+
+# IoT & Smart Display Controller Agent
+Full-Duplex Voice & Realtime DDP Display Control.`
   }
 ];
 

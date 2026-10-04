@@ -1892,6 +1892,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 112,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/112",
   },
+  {
+    id: "TODO-114",
+    title: "【IoT・ハードウェア連携】OpenAI最新事例（GPT-Live-1×Codex×Raspberry Pi）に基づく物理LEDサイネージ制御エージェント事例追加 & ニュース還元",
+    category: "AI実践編",
+    author: "IoT・先端技術推進WG",
+    authorDept: "スマートオフィス・全社開発推進",
+    date: "2026/10/04",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「オフィスや現場の物理ディスプレイ（LEDパネルや会議室サイネージ）をAIエージェントからリアルタイム音声で操作・表示更新するOpenAI公式の最新IoT事例を取り入れ、社内実務での連携モデルケースを提示してほしい」",
+    actionPlan: "【反映済み】OpenAI Developers公式ブログ「Bringing my LED display to life」の解説をAIニュース（/news）に追加。さらにSubagents活用事例集（/agent-cases）に「物理LEDサイネージ・HUDリアルタイム音声制御」事例を追加し、エージェント定義（.agents/agents/iot-display-controller.md）とCLIコマンド（agy --agent iot-display-controller）を配備しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 113,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/113",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

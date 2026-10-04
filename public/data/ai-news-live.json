@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-10-04T10:05:24.176Z",
-  "lastSyncedAtFormatted": "2026/10/4 19:05:24",
+  "lastSyncedAt": "2026-10-04T10:50:16.018Z",
+  "lastSyncedAtFormatted": "2026/10/4 19:50:16",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
-  "totalCount": 31,
+  "totalCount": 32,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Blog",
@@ -86,6 +86,36 @@
         "フィルター",
         "ユーザー改善",
         "共創"
+      ]
+    },
+    {
+      "id": "news-20261002-openai-led-display-gpt-live",
+      "title": "OpenAI: GPT-Live-1とCodexによるLEDディスプレイ物理制御アシスタント事例を公開",
+      "date": "2026/10/02",
+      "category": "openai",
+      "categoryLabel": "OpenAI / Codex",
+      "importance": "hot",
+      "importanceLabel": "注目 ✨",
+      "summary": "OpenAI Developers公式ブログにて、全二重音声モデル「GPT-Live-1」と推論・ツール呼び出しモデル「GPT-5.6 Luna」、Raspberry Pi、Codexを連携させ、128×64 HUB75 LEDパネルを音声対話でリアルタイム制御する物理アシスタント（Jack）の構築事例が公開されました。会話の常時リッスンとタスク調査・画像検索のクライアント委譲アーキテクチャが詳解されています。",
+      "impactForStaff": "ブラウザ内チャットを超えて、オフィスの情報サイネージや現場の物理HUD、IoTデバイスとAIエージェントをシームレスに結合する設計指針を獲得。常時音声対話とバックグラウンド推論の分離パターンは社内スマートオフィス企画にも直結します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "IoT/組み込み担当",
+        "スマートオフィス推進",
+        "企画担当"
+      ],
+      "sourceName": "OpenAI Developers Blog Official",
+      "sourceUrl": "https://developers.openai.com/blog/bringing-my-led-display-to-life",
+      "tags": [
+        "OpenAI",
+        "GPT-Live-1",
+        "Codex",
+        "GPT-5.6 Luna",
+        "Raspberry Pi",
+        "IoT",
+        "LED Display",
+        "音声アシスタント"
       ]
     },
     {
