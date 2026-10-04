@@ -168,3 +168,12 @@ flowchart TD
 | **起票ToDo** | `TODO-116`（Issue #115） |
 | **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` チーム共有モデルケース & カタログ新設<br>・`.agents/agents/team-bot-orchestrator.md` エージェント定義配置<br>・`src/app/feedback-todo/page.tsx` TODO-116 クローズ |
 | **品質ゲート** | `npm run check:gate` 合格、`npx tsc --noEmit` ノーエラー通過 |
+
+### ケース5: Manus公式ブログ「Introducing Video Editor」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [Introducing Video Editor](https://manus.im/ja/blog/introducing-video-editor) (2026/10/04) |
+| **還元アイデア** | ① 全レイヤー独立トラック・人間とAIの双方向編集技術解説ニュース配信<br>② 長時間会議・研修動画のAIマルチトラック要約 & ショート動画自動編集モデルケース新設<br>③ `tools-hub` のManus掲載情報をVideo Editor対応へ更新 |
+| **起票ToDo** | `TODO-117`（Issue #116） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 動画要約モデルケース新設<br>・`src/app/tools-hub/page.tsx` ツール情報更新<br>・`src/app/feedback-todo/page.tsx` TODO-117 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |

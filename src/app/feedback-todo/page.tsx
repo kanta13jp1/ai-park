@@ -1940,6 +1940,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 115,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/115",
   },
+  {
+    id: "TODO-117",
+    title: "【動画・マルチメディア】Manus「Video Editor」発表に伴うAIマルチトラック動画編集・社内会議録画ショート化の活用リファレンス & ニュース還元",
+    category: "AI実践編",
+    author: "社内広報・ナレッジメディア推進チーム",
+    authorDept: "コーポレートコミュニケーション部",
+    date: "2026/10/04",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「Manusのデスクトップ版（Manus Studio）に搭載された『Video Editor』が画期的。プロンプトから生成した動画の全素材（映像・キャプション・BGM・効果音）が独立レイヤー化され、マウス操作と自然言語指示を自由に行き来して編集できる。社内の長時間録画（勉強会・タウンホール）のショート化や製品紹介動画の制作事例としてポータルに掲載してほしい」",
+    actionPlan: "【反映済み】Manus公式ブログ「Introducing Video Editor」の解説をAIニュース（/news）に追加。Subagents活用事例集（/agent-cases）に「長時間社内会議・研修動画のAIマルチトラック要約 & ショート動画自動編集」モデルケースを追加し、AI Tools Hub（/tools-hub）のManus掲載情報を最新のVideo Editor対応へ更新しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 116,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/116",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

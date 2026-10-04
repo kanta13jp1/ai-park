@@ -139,6 +139,24 @@ const AGENT_CASES: AgentCase[] = [
       "個別対話のプライバシーを担保した安全な社内情報共有",
       "退職・異動時もプロジェクト文脈が失われない組織記憶（Memory）の維持"
     ]
+  },
+  {
+    id: "case-video-multitrack-editor",
+    title: "長時間会議・研修動画のAIマルチトラック要約 & ショート動画自動編集",
+    department: "社内広報・ナレッジメディア推進チーム",
+    summary: "Manus Studio（Video Editor）アーキテクチャを活用し、タウンホールや勉強会の長時間録画（2時間超）から数十〜数百のクリップを一括解析。文字起こし・冗長部カット・BGMダッキング・独立テロップトラック生成を一気通貫で自動合成。",
+    subagentRoles: [
+      "Transcript & Scene Extractor (Flash)",
+      "Timeline & Storyboard Synthesizer (Pro)",
+      "Multi-track Audio/Visual Compositor"
+    ],
+    estimatedHoursSaved: "月間約 48 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "全素材（映像・テロップ・BGM・効果音）の独立トラック化によるミリ秒単位の手戻り防止",
+      "自然言語での「BGMを下げて」「テンポよく」指示とタイムライン直接操作のシームレス往復",
+      "社内勉強会アーカイブからの要約ショート動画制作時間を80%短縮"
+    ]
   }
 ];
 

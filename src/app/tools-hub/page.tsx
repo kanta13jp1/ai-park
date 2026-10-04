@@ -127,7 +127,7 @@ const companyAiToolsList: CompanyAiTool[] = [
   },
   {
     id: "tool-manus",
-    name: "Manus AI (自律エージェント基盤)",
+    name: "Manus AI / Manus Studio (Video Editor 搭載)",
     vendor: "Manus",
     category: "poc",
     categoryLabel: "PoC検証枠",
@@ -136,10 +136,10 @@ const companyAiToolsList: CompanyAiTool[] = [
     status: "PoC検証中",
     statusColor: "amber",
     costModel: "クレジット従量制（社内検証枠）",
-    targetAudience: "企画・リサーチ・データ自動化担当",
-    description: "Web検索からファイル生成、マルチステップ実務実行まで自律達成するエージェント。市場リサーチや公開情報スクレイピング検証中。",
-    governanceNote: "顧客データ・社内機密コードの投入は厳禁。公開情報の収集・要約に限定して利用すること。",
-    officialDocUrl: "https://manus.im/",
+    targetAudience: "企画・リサーチ・広報動画制作・データ自動化担当",
+    description: "自律型Webリサーチ・ファイル生成に加え、デスクトップ版（Manus Studio）に全レイヤー独立マルチトラックの「Video Editor」を搭載。社内録画の要約ショート動画化や製品紹介動画の制作に対応。",
+    governanceNote: "顧客データ・社内機密コードの投入は厳禁。公開情報のリサーチおよび社内限定公開コンテンツ（公開済セミナー等）の動画編集に限定して利用すること。",
+    officialDocUrl: "https://manus.im/ja/blog/introducing-video-editor",
   },
 ];
 
