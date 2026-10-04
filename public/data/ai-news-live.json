@@ -1,11 +1,12 @@
 {
-  "lastSyncedAt": "2026-10-03T14:46:36.390Z",
-  "lastSyncedAtFormatted": "2026/10/3 23:46:36",
+  "lastSyncedAt": "2026-10-04T09:45:51.212Z",
+  "lastSyncedAtFormatted": "2026/10/4 18:45:51",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
-  "totalCount": 26,
+  "totalCount": 31,
   "activeSources": [
     "Google DeepMind Official Feed",
+    "Google Antigravity Official Blog",
     "OpenAI Official Newsroom",
     "Anthropic Official News",
     "DeepSeek Official Releases",
@@ -88,6 +89,30 @@
       ]
     },
     {
+      "id": "news-20261002-01",
+      "title": "Google DeepMind: Gemini 3.1 Pro がマルチステップ推論・コード生成で新水準を達成",
+      "date": "2026/10/02",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMindが発表した「Gemini 3.1 Pro」は、長大なコードベースの理解と自己修正ループにおいて従来比30%の精度向上を記録。社内環境での先行トライアルを開始します。",
+      "impactForStaff": "複雑なSQLやスクリプト作成、仕様書レビューの自動化精度が大幅に向上。Antigravity内での標準モデルとして利用可能になります。",
+      "recommendedFor": [
+        "エンジニア",
+        "AI推進担当",
+        "データアナリスト"
+      ],
+      "sourceName": "Google DeepMind Official",
+      "sourceUrl": "https://deepmind.google/technologies/gemini/",
+      "tags": [
+        "Gemini 3.1 Pro",
+        "DeepMind",
+        "推論モデル",
+        "長大コンテキスト"
+      ]
+    },
+    {
       "id": "live-model-20261002-0",
       "title": "OpenAI: A model guide for the GPT-6 family",
       "date": "2026/10/02",
@@ -138,27 +163,27 @@
       "isLiveSynced": true
     },
     {
-      "id": "news-20261002-01",
-      "title": "Google DeepMind: Gemini 3.1 Pro がマルチステップ推論・コード生成で新水準を達成",
-      "date": "2026/10/02",
+      "id": "news-20261001-01",
+      "title": "Google Antigravity 2.0 & Gemini 3.1 Pro 社内利用環境の正式認可・提供開始",
+      "date": "2026/10/01",
       "category": "google",
       "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMindが発表した「Gemini 3.1 Pro」は、長大なコードベースの理解と自己修正ループにおいて従来比30%の精度向上を記録。社内環境での先行トライアルを開始します。",
-      "impactForStaff": "複雑なSQLやスクリプト作成、仕様書レビューの自動化精度が大幅に向上。Antigravity内での標準モデルとして利用可能になります。",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "全社セキュリティ基準に適合したGoogle Antigravity 2.0の社内利用環境を全社員向けに正式オープン。GCP利用枠・クレジット保護機能とセットで安全に活用可能です。",
+      "impactForStaff": "業務PC（Windows/Mac）から即日利用申請可能。社内専用テンプレートや安全ガイドラインが標準整備されています。",
       "recommendedFor": [
-        "エンジニア",
-        "AI推進担当",
-        "データアナリスト"
+        "全社員",
+        "マネージャー",
+        "開発者"
       ],
-      "sourceName": "Google DeepMind Official",
-      "sourceUrl": "https://deepmind.google/technologies/gemini/",
+      "sourceName": "MightyLINK AI推進窓口",
+      "sourceUrl": "https://kanta13jp1.github.io/ai-park/guide",
       "tags": [
-        "Gemini 3.1 Pro",
-        "DeepMind",
-        "推論モデル",
-        "長大コンテキスト"
+        "Antigravity",
+        "社内解禁",
+        "GCP",
+        "セキュリティ認可"
       ]
     },
     {
@@ -237,27 +262,28 @@
       "isLiveSynced": true
     },
     {
-      "id": "news-20261001-01",
-      "title": "Google Antigravity 2.0 & Gemini 3.1 Pro 社内利用環境の正式認可・提供開始",
-      "date": "2026/10/01",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
+      "id": "news-20260930-codex",
+      "title": "OpenAI: 進化した Codex 基盤と「キャンバス（Canvas）」によるコード・文章の共創体験",
+      "date": "2026/09/30",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "全社セキュリティ基準に適合したGoogle Antigravity 2.0の社内利用環境を全社員向けに正式オープン。GCP利用枠・クレジット保護機能とセットで安全に活用可能です。",
-      "impactForStaff": "業務PC（Windows/Mac）から即日利用申請可能。社内専用テンプレートや安全ガイドラインが標準整備されています。",
+      "summary": "OpenAI公式にて、ChatGPTを使用して文章やコードを書く新インターフェース「キャンバス（Canvas）」が展開。インラインでのドット指示（dots）や差分レビューを行いながら、人間とAIが並行してドキュメントやコードをブラッシュアップ可能です。",
+      "impactForStaff": "チャット全体を再生成することなく、変更したい行・ドット（dots）単位で的確に修正指示を出せるため、ドキュメント校正やコードレビューの作業効率が劇的に向上します。",
       "recommendedFor": [
         "全社員",
-        "マネージャー",
-        "開発者"
+        "ライター",
+        "エンジニア"
       ],
-      "sourceName": "MightyLINK AI推進窓口",
-      "sourceUrl": "https://kanta13jp1.github.io/ai-park/guide",
+      "sourceName": "OpenAI Official (introducing-canvas)",
+      "sourceUrl": "https://openai.com/ja-JP/index/introducing-canvas/",
       "tags": [
-        "Antigravity",
-        "社内解禁",
-        "GCP",
-        "セキュリティ認可"
+        "Codex",
+        "Canvas",
+        "dots",
+        "OpenAI",
+        "共同編集"
       ]
     },
     {
@@ -311,31 +337,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "news-20260930-codex",
-      "title": "OpenAI: 進化した Codex 基盤と「キャンバス（Canvas）」によるコード・文章の共創体験",
-      "date": "2026/09/30",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI公式にて、ChatGPTを使用して文章やコードを書く新インターフェース「キャンバス（Canvas）」が展開。インラインでのドット指示（dots）や差分レビューを行いながら、人間とAIが並行してドキュメントやコードをブラッシュアップ可能です。",
-      "impactForStaff": "チャット全体を再生成することなく、変更したい行・ドット（dots）単位で的確に修正指示を出せるため、ドキュメント校正やコードレビューの作業効率が劇的に向上します。",
-      "recommendedFor": [
-        "全社員",
-        "ライター",
-        "エンジニア"
-      ],
-      "sourceName": "OpenAI Official (introducing-canvas)",
-      "sourceUrl": "https://openai.com/ja-JP/index/introducing-canvas/",
-      "tags": [
-        "Codex",
-        "Canvas",
-        "dots",
-        "OpenAI",
-        "共同編集"
-      ]
-    },
-    {
       "id": "news-20260929-manus",
       "title": "汎用自律AIエージェント「Manus」：Web検索から実務実行・タスクバックアップ復元まで対応",
       "date": "2026/09/29",
@@ -357,6 +358,35 @@
         "自律エージェント",
         "Web自動化",
         "業務完結",
+        "HOT"
+      ]
+    },
+    {
+      "id": "news-20260928-antigravity-custom-agents",
+      "title": "Google Antigravity: 公式プラグイン対応カスタムエージェント（Flutter・Firebase・Google Play）を提供開始",
+      "date": "2026/09/28",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity公式ブログにて、各プロダクトチームが開発したカスタムエージェントが公式プラグイン（Build with Google）に統合・提供開始されたことが発表されました。Flutterのアクセシビリティ自動修正エージェント、FirebaseのFirestoreセキュリティルール自動検証・堅牢化エージェント、Google Playのストア審査・Manifest・R8事前監査ゲート（play-release-audit）が利用可能です。",
+      "impactForStaff": "Google公式エコシステム（Flutter/Firebase/Android）を用いた開発において、専用の検証・セキュリティ・リリース監査エージェントをIDEやCLI（agy --agent <name>）から即時呼び出し可能に。審査落ちやセキュリティ脆弱性の手戻りを大幅に未然防止できます。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当",
+        "品質管理 (QA)"
+      ],
+      "sourceName": "Google Antigravity Blog Official",
+      "sourceUrl": "https://antigravity.google/blog/custom-agents-in-google-plugins",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "Flutter",
+        "Firebase",
+        "Google Play",
         "HOT"
       ]
     },
@@ -433,6 +463,30 @@
       ]
     },
     {
+      "id": "news-20260924-grok",
+      "title": "xAI: 最新モデル「Grok 4.7」発表（世界最大スーパークラスタColossusで学習したフロンティアAI）",
+      "date": "2026/09/24",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "xAI公式（x.ai）にて、新モデル「Grok 4.7」が発表されました。世界最大規模のGPUスーパークラスタ「Colossus」によって学習され、高度な論理推論（Reasoning）、コード生成、音声、画像、動画を統合した次世代マルチモーダル基盤を実現しています。",
+      "impactForStaff": "刻一刻と変化するリアルタイム情報検索力と、画像・動画を含むマルチモーダル推論により、高度な市場調査やクリエイティブ分析に強力な効果を発揮します。",
+      "recommendedFor": [
+        "経営企画",
+        "マーケティング",
+        "データサイエンティスト"
+      ],
+      "sourceName": "xAI Official (x.ai)",
+      "sourceUrl": "https://x.ai/",
+      "tags": [
+        "Grok 4.7",
+        "xAI",
+        "Colossus",
+        "マルチモーダル推論"
+      ]
+    },
+    {
       "id": "live-google-20260924-2",
       "title": "Google DeepMind: Introducing Gemini 3.8 Live with Live Avatar",
       "date": "2026/09/24",
@@ -456,30 +510,6 @@
         "公式発表"
       ],
       "isLiveSynced": true
-    },
-    {
-      "id": "news-20260924-grok",
-      "title": "xAI: 最新モデル「Grok 4.7」発表（世界最大スーパークラスタColossusで学習したフロンティアAI）",
-      "date": "2026/09/24",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "xAI公式（x.ai）にて、新モデル「Grok 4.7」が発表されました。世界最大規模のGPUスーパークラスタ「Colossus」によって学習され、高度な論理推論（Reasoning）、コード生成、音声、画像、動画を統合した次世代マルチモーダル基盤を実現しています。",
-      "impactForStaff": "刻一刻と変化するリアルタイム情報検索力と、画像・動画を含むマルチモーダル推論により、高度な市場調査やクリエイティブ分析に強力な効果を発揮します。",
-      "recommendedFor": [
-        "経営企画",
-        "マーケティング",
-        "データサイエンティスト"
-      ],
-      "sourceName": "xAI Official (x.ai)",
-      "sourceUrl": "https://x.ai/",
-      "tags": [
-        "Grok 4.7",
-        "xAI",
-        "Colossus",
-        "マルチモーダル推論"
-      ]
     },
     {
       "id": "live-google-20260923-3",
@@ -651,6 +681,110 @@
         "セルフチェック",
         "実務直結"
       ]
+    },
+    {
+      "id": "live-google-20260901-1",
+      "title": "Google Antigravity: Gemini 3.8 Flash in Google Antigravity",
+      "date": "2026/09/01",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Gemini 3.8 Flash in Google Ant」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/gemini-3-8-flash-in-google-antigravity",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20260827-2",
+      "title": "Google Antigravity: Teamwork: when AI becomes a research partner",
+      "date": "2026/08/27",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Teamwork: when AI becomes a re」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/teamwork-when-ai-becomes-a-research-partner",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20260826-3",
+      "title": "Google Antigravity: Visualizing with the help of Antigravity",
+      "date": "2026/08/26",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Visualizing with the help of A」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/visualizing-with-the-help-of-antigravity",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20260824-4",
+      "title": "Google Antigravity: Improving the version control experience",
+      "date": "2026/08/24",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Improving the version control 」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/vcs-and-terminal",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
     }
   ]
 }

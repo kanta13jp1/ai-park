@@ -1,10 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
-import { playCyberHover } from "@/lib/sound";
-import { CalendarDays, Lock, Sparkles, Calendar as CalendarIcon, CheckCircle2 } from "lucide-react";
+import { playCyberClick, playCyberHover } from "@/lib/sound";
+import {
+  CalendarDays,
+  Lock,
+  Sparkles,
+  Calendar as CalendarIcon,
+  ExternalLink,
+  Layers,
+  ListFilter,
+} from "lucide-react";
 
 // 「AI Park イベント」カレンダーのカレンダーID（社内限定で共有。gas/ai-study-agenda/README.md 参照）
 const AI_PARK_CALENDAR_ID = "c_54efbf0cb034ce399450784c14c91910006003253eb98ca8ff161f5ba16ad1a7@group.calendar.google.com";
@@ -20,6 +29,12 @@ const embedUrl = (mode: "MONTH" | "AGENDA") =>
   }).toString()}`;
 
 export default function CalendarPage() {
+  const [viewMode, setViewMode] = useState<"all" | "month" | "agenda">("all");
+
+  const googleCalendarDirectUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(
+    AI_PARK_CALENDAR_ID
+  )}`;
+
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
@@ -71,54 +86,121 @@ export default function CalendarPage() {
 
         {AI_PARK_CALENDAR_ID ? (
           <div className="space-y-6">
-            {/* 月間カレンダービュー */}
-            <TiltCard maxTilt={2} glareOpacity={0.04} className="rounded-3xl">
-              <div className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden">
-                <div
+            {/* ビュー切り替えピルタブ ＆ カレンダー直接追加ボタン */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs">
+              <div className="flex items-center space-x-1 sm:space-x-2">
+                <button
+                  onClick={() => {
+                    playCyberClick();
+                    setViewMode("all");
+                  }}
                   onMouseEnter={() => playCyberHover()}
-                  className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 cursor-default"
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all cursor-pointer ${
+                    viewMode === "all"
+                      ? "bg-slate-900 text-white shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
                 >
-                  <div className="flex items-center space-x-2.5">
-                    <CalendarIcon className="w-4 h-4 text-cyan-400" />
-                    <span className="font-bold text-sm">月間スケジュールビュー</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-xs text-slate-400 font-mono">Live Google Calendar</span>
-                  </div>
-                </div>
-                <div className="p-2 sm:p-4 bg-slate-50/50">
-                  <iframe
-                    title="AI Park カレンダー（月）"
-                    src={embedUrl("MONTH")}
-                    className="w-full h-[640px] border-0 rounded-2xl bg-white shadow-inner"
-                  />
-                </div>
+                  <Layers size={14} />
+                  <span>すべて表示</span>
+                </button>
+                <button
+                  onClick={() => {
+                    playCyberClick();
+                    setViewMode("month");
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all cursor-pointer ${
+                    viewMode === "month"
+                      ? "bg-indigo-600 text-white shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  <CalendarIcon size={14} />
+                  <span>月間カレンダー</span>
+                </button>
+                <button
+                  onClick={() => {
+                    playCyberClick();
+                    setViewMode("agenda");
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all cursor-pointer ${
+                    viewMode === "agenda"
+                      ? "bg-indigo-600 text-white shadow-xs"
+                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  <ListFilter size={14} />
+                  <span>アジェンダ一覧</span>
+                </button>
               </div>
-            </TiltCard>
+
+              <a
+                href={googleCalendarDirectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => playCyberClick()}
+                onMouseEnter={() => playCyberHover()}
+                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition-all shadow-2xs self-start sm:self-auto cursor-pointer"
+              >
+                <span>Google カレンダーで開く</span>
+                <ExternalLink size={12} />
+              </a>
+            </div>
+
+            {/* 月間カレンダービュー */}
+            {(viewMode === "all" || viewMode === "month") && (
+              <TiltCard maxTilt={2} glareOpacity={0.04} className="rounded-3xl">
+                <div className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden">
+                  <div
+                    onMouseEnter={() => playCyberHover()}
+                    className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 cursor-default"
+                  >
+                    <div className="flex items-center space-x-2.5">
+                      <CalendarIcon className="w-4 h-4 text-cyan-400" />
+                      <span className="font-bold text-sm">月間スケジュールビュー</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="text-xs text-slate-400 font-mono">Live Google Calendar</span>
+                    </div>
+                  </div>
+                  <div className="p-2 sm:p-4 bg-slate-50/50">
+                    <iframe
+                      title="AI Park カレンダー（月）"
+                      src={embedUrl("MONTH")}
+                      className="w-full h-[640px] border-0 rounded-2xl bg-white shadow-inner"
+                    />
+                  </div>
+                </div>
+              </TiltCard>
+            )}
 
             {/* リスト（アジェンダ）ビュー */}
-            <TiltCard maxTilt={2} glareOpacity={0.04} className="rounded-3xl">
-              <div className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden">
-                <div
-                  onMouseEnter={() => playCyberHover()}
-                  className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 cursor-default"
-                >
-                  <div className="flex items-center space-x-2.5">
-                    <CalendarDays className="w-4 h-4 text-indigo-400" />
-                    <span className="font-bold text-sm">直近の予定・アジェンダ一覧</span>
+            {(viewMode === "all" || viewMode === "agenda") && (
+              <TiltCard maxTilt={2} glareOpacity={0.04} className="rounded-3xl">
+                <div className="bg-white border border-slate-200/90 rounded-3xl shadow-sm overflow-hidden">
+                  <div
+                    onMouseEnter={() => playCyberHover()}
+                    className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 cursor-default"
+                  >
+                    <div className="flex items-center space-x-2.5">
+                      <CalendarDays className="w-4 h-4 text-indigo-400" />
+                      <span className="font-bold text-sm">直近の予定・アジェンダ一覧</span>
+                    </div>
+                    <span className="text-xs text-slate-400 font-mono">Upcoming Events</span>
                   </div>
-                  <span className="text-xs text-slate-400 font-mono">Upcoming Events</span>
+                  <div className="p-2 sm:p-4 bg-slate-50/50">
+                    <iframe
+                      title="AI Park カレンダー（予定リスト）"
+                      src={embedUrl("AGENDA")}
+                      className="w-full h-[420px] border-0 rounded-2xl bg-white shadow-inner"
+                    />
+                  </div>
                 </div>
-                <div className="p-2 sm:p-4 bg-slate-50/50">
-                  <iframe
-                    title="AI Park カレンダー（予定リスト）"
-                    src={embedUrl("AGENDA")}
-                    className="w-full h-[420px] border-0 rounded-2xl bg-white shadow-inner"
-                  />
-                </div>
-              </div>
-            </TiltCard>
+              </TiltCard>
+            )}
           </div>
         ) : (
           <div className="rounded-3xl border-2 border-dashed border-slate-300 bg-white p-12 text-center text-slate-500 space-y-3">

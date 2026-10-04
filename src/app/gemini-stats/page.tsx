@@ -8,7 +8,7 @@ import TiltCard from "@/components/TiltCard";
 import GeminiStatsSyncStatus from "@/components/GeminiStatsSyncStatus";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { basePath } from "@/lib/basePath";
-import { playCyberClick, playCyberHover } from "@/lib/sound";
+import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
 import {
   BarChart3,
   Users,
@@ -359,6 +359,7 @@ function doGet() {
 
   const handleCopyCode = () => {
     navigator.clipboard?.writeText(gasScriptExample).catch(() => {});
+    playCyberSuccess();
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };
@@ -652,7 +653,11 @@ function doGet() {
 
             <div className="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold">
               <button
-                onClick={() => setPeriod("7d")}
+                onClick={() => {
+                  playCyberClick();
+                  setPeriod("7d");
+                }}
+                onMouseEnter={() => playCyberHover()}
                 className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
                   period === "7d" ? "bg-white text-slate-900 shadow-xs" : "text-slate-500 hover:text-slate-900"
                 }`}
@@ -660,7 +665,11 @@ function doGet() {
                 過去7日
               </button>
               <button
-                onClick={() => setPeriod("14d")}
+                onClick={() => {
+                  playCyberClick();
+                  setPeriod("14d");
+                }}
+                onMouseEnter={() => playCyberHover()}
                 className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
                   period === "14d" ? "bg-white text-slate-900 shadow-xs" : "text-slate-500 hover:text-slate-900"
                 }`}
@@ -668,7 +677,11 @@ function doGet() {
                 過去14日
               </button>
               <button
-                onClick={() => setPeriod("30d")}
+                onClick={() => {
+                  playCyberClick();
+                  setPeriod("30d");
+                }}
+                onMouseEnter={() => playCyberHover()}
                 className={`px-3 py-1 rounded-lg transition-colors cursor-pointer ${
                   period === "30d" ? "bg-white text-slate-900 shadow-xs" : "text-slate-500 hover:text-slate-900"
                 }`}
@@ -704,6 +717,7 @@ function doGet() {
 
                     {/* バー */}
                     <div
+                      onMouseEnter={() => playCyberHover()}
                       className="w-full bg-gradient-to-t from-indigo-600 to-cyan-400 rounded-t-sm group-hover:brightness-110 transition-all cursor-pointer"
                       style={{ height: `${Math.max(8, heightPercent)}%` }}
                     />
@@ -742,70 +756,91 @@ function doGet() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* SKU 1: Gemini 3.8 Flash */}
-            <div className="p-4 rounded-xl border border-indigo-100 bg-indigo-50/30 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
-                  <Zap size={14} className="text-indigo-600" />
-                  Gemini 3.8 Flash
-                </span>
-                <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded-md">
-                  61.2%
-                </span>
-              </div>
-              <div className="text-lg font-black font-mono text-slate-900">
-                ¥4,348 <span className="text-xs font-normal text-slate-500">($28.99)</span>
-              </div>
-              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: "61.2%" }} />
-              </div>
-              <p className="text-[11px] text-slate-500">
-                Global Text Input - Predictions（最頻出・超高速コーディング推論）
-              </p>
-            </div>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(99, 102, 241, 0.15)"
+                className="bg-indigo-50/40 border-indigo-100 h-full rounded-2xl"
+              >
+                <div onMouseEnter={() => playCyberHover()} className="p-4 space-y-2.5 h-full cursor-default">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
+                      <Zap size={14} className="text-indigo-600" />
+                      Gemini 3.8 Flash
+                    </span>
+                    <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded-md">
+                      61.2%
+                    </span>
+                  </div>
+                  <div className="text-lg font-black font-mono text-slate-900">
+                    ¥4,348 <span className="text-xs font-normal text-slate-500">($28.99)</span>
+                  </div>
+                  <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: "61.2%" }} />
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Global Text Input - Predictions（最頻出・超高速コーディング推論）
+                  </p>
+                </div>
+              </SpotlightCard>
+            </TiltCard>
 
             {/* SKU 2: Agent Platform / Model Garden */}
-            <div className="p-4 rounded-xl border border-cyan-100 bg-cyan-50/30 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-cyan-900 flex items-center gap-1.5">
-                  <Sparkles size={14} className="text-cyan-600" />
-                  Agent Platform / 3.1 Pro
-                </span>
-                <span className="text-xs font-mono font-bold text-cyan-700 bg-cyan-100/70 px-2 py-0.5 rounded-md">
-                  22.5%
-                </span>
-              </div>
-              <div className="text-lg font-black font-mono text-slate-900">
-                ¥1,598 <span className="text-xs font-normal text-slate-500">($10.65)</span>
-              </div>
-              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-cyan-500 h-1.5 rounded-full" style={{ width: "22.5%" }} />
-              </div>
-              <p className="text-[11px] text-slate-500">
-                Vertex AI Model Garden & 高推論自律エージェント呼び出し
-              </p>
-            </div>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(6, 182, 212, 0.15)"
+                className="bg-cyan-50/40 border-cyan-100 h-full rounded-2xl"
+              >
+                <div onMouseEnter={() => playCyberHover()} className="p-4 space-y-2.5 h-full cursor-default">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-cyan-900 flex items-center gap-1.5">
+                      <Sparkles size={14} className="text-cyan-600" />
+                      Agent Platform / 3.1 Pro
+                    </span>
+                    <span className="text-xs font-mono font-bold text-cyan-700 bg-cyan-100/70 px-2 py-0.5 rounded-md">
+                      22.5%
+                    </span>
+                  </div>
+                  <div className="text-lg font-black font-mono text-slate-900">
+                    ¥1,598 <span className="text-xs font-normal text-slate-500">($10.65)</span>
+                  </div>
+                  <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-cyan-500 h-1.5 rounded-full" style={{ width: "22.5%" }} />
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Vertex AI Model Garden & 高推論自律エージェント呼び出し
+                  </p>
+                </div>
+              </SpotlightCard>
+            </TiltCard>
 
             {/* SKU 3: リージョン基盤 (us-east7) */}
-            <div className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2.5">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                  <ShieldCheck size={14} className="text-slate-500" />
-                  us-east7 リージョン基盤
-                </span>
-                <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/70 px-2 py-0.5 rounded-md">
-                  16.3%
-                </span>
-              </div>
-              <div className="text-lg font-black font-mono text-slate-900">
-                ¥1,159 <span className="text-xs font-normal text-slate-500">($7.73)</span>
-              </div>
-              <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                <div className="bg-slate-400 h-1.5 rounded-full" style={{ width: "16.3%" }} />
-              </div>
-              <p className="text-[11px] text-slate-500">
-                Cloud Run / Functions / 監査ログ転送トラフィック基盤
-              </p>
-            </div>
+            <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
+              <SpotlightCard
+                spotlightColor="rgba(148, 163, 184, 0.15)"
+                className="bg-slate-50/60 border-slate-200 h-full rounded-2xl"
+              >
+                <div onMouseEnter={() => playCyberHover()} className="p-4 space-y-2.5 h-full cursor-default">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                      <ShieldCheck size={14} className="text-slate-500" />
+                      us-east7 リージョン基盤
+                    </span>
+                    <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/70 px-2 py-0.5 rounded-md">
+                      16.3%
+                    </span>
+                  </div>
+                  <div className="text-lg font-black font-mono text-slate-900">
+                    ¥1,159 <span className="text-xs font-normal text-slate-500">($7.73)</span>
+                  </div>
+                  <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+                    <div className="bg-slate-400 h-1.5 rounded-full" style={{ width: "16.3%" }} />
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Cloud Run / Functions / 監査ログ転送トラフィック基盤
+                  </p>
+                </div>
+              </SpotlightCard>
+            </TiltCard>
           </div>
         </div>
 
@@ -912,7 +947,11 @@ function doGet() {
         {/* GCPから実データを取得する仕組み・技術解説 & 設定手順 */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
           <div
-            onClick={() => setIsGcpDocOpen(!isGcpDocOpen)}
+            onClick={() => {
+              playCyberClick();
+              setIsGcpDocOpen(!isGcpDocOpen);
+            }}
+            onMouseEnter={() => playCyberHover()}
             className="flex items-center justify-between cursor-pointer select-none"
           >
             <div className="flex items-center gap-2.5">

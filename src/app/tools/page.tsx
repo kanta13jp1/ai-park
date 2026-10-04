@@ -26,7 +26,8 @@ import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { TOOLS_SHEET_CSV_URL, fetchSheetTools } from "@/lib/toolsSheet";
-import { playCyberClick, playCyberHover, playCyberOpen } from "@/lib/sound";
+import { playCyberClick, playCyberHover, playCyberOpen, playCyberSuccess } from "@/lib/sound";
+import ToolApplicationDraftModal from "@/components/tools/ToolApplicationDraftModal";
 
 interface MatrixTool {
   id: number;
@@ -273,13 +274,18 @@ const matrixTools: MatrixTool[] = [
 
 export default function ToolsPage() {
   const [activeTab, setActiveTab] = useState<"matrix" | "quadrant" | "coverage" | "diagnosis">("matrix");
-  const [statusFilter, setStatusFilter] = useState<"all" | "available" | "verifying" | "listup">("available");
+  const [statusFilter, setStatusFilter] = useState<"all" | "available" | "verifying" | "listup">("all");
+  const [recommendFilter, setRecommendFilter] = useState<"all" | "S" | "A" | "B" | "PoC">("all");
+  const [targetFilter, setTargetFilter] = useState<"all" | "全社員" | "エンジニア" | "マーケ・企画" | "デザイン">("all");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [tools, setTools] = useState<MatrixTool[]>(matrixTools);
   const [isSyncing, setIsSyncing] = useState(Boolean(TOOLS_SHEET_CSV_URL));
   const [lastSynced, setLastSynced] = useState(
     TOOLS_SHEET_CSV_URL ? "同期中..." : "未接続（ページ組込みデータ）"
   );
   const [selectedTool, setSelectedTool] = useState<MatrixTool | null>(null);
+  const [draftModalTool, setDraftModalTool] = useState<MatrixTool | null>(null);
+  const [isDraftModalOpen, setIsDraftModalOpen] = useState<boolean>(false);
 
   // 診断ウィザード用状態
   const [diagnosisAnswers, setDiagnosisAnswers] = useState({
@@ -287,6 +293,64 @@ export default function ToolsPage() {
     skillLevel: "",
     dataLevel: "",
   });
+
+  // 社内推奨ランク判定ヘルパー
+  const getToolRank = (tool: MatrixTool): "S" | "A" | "B" | "PoC" => {
+    if (tool.id === 2 || tool.id === 7 || tool.id === 3) return "S"; // Gemini, Antigravity, NotebookLM
+    if (
+      tool.name.includes("Claude") ||
+      tool.name.includes("Copilot") ||
+      tool.name.includes("Codex") ||
+      tool.name.includes("Cursor")
+    ) {
+      return "A";
+    }
+    if (
+      tool.name.includes("Midjourney") ||
+      tool.name.includes("Canva") ||
+      tool.name.includes("v0") ||
+      tool.name.includes("Perplexity") ||
+      tool.name.includes("Dify")
+    ) {
+      return "B";
+    }
+    return "PoC";
+  };
+
+  // 職種ターゲット判定ヘルパー
+  const getToolTargetAudience = (tool: MatrixTool): "全社員" | "エンジニア" | "マーケ・企画" | "デザイン" => {
+    if (tool.id === 2 || tool.id === 7 || tool.id === 3) return "全社員";
+    if (
+      tool.name.includes("Claude") ||
+      tool.name.includes("Copilot") ||
+      tool.name.includes("Codex") ||
+      tool.name.includes("Cursor") ||
+      tool.form.includes("開発") ||
+      tool.form.includes("IDE") ||
+      tool.form.includes("CLI")
+    ) {
+      return "エンジニア";
+    }
+    if (
+      tool.name.includes("Midjourney") ||
+      tool.name.includes("Canva") ||
+      tool.name.includes("v0") ||
+      tool.form.includes("デザイン") ||
+      tool.form.includes("UI")
+    ) {
+      return "デザイン";
+    }
+    if (
+      tool.name.includes("Perplexity") ||
+      tool.name.includes("Dify") ||
+      tool.name.includes("Notion") ||
+      tool.form.includes("リサーチ") ||
+      tool.form.includes("検索")
+    ) {
+      return "マーケ・企画";
+    }
+    return "全社員";
+  };
 
   // 社内Google Sheets（AIツールマスター）の公開CSVから取得。失敗時は組込みデータを維持
   const loadSheetTools = (signal?: AbortSignal) =>
@@ -320,22 +384,45 @@ export default function ToolsPage() {
     loadSheetTools();
   };
 
-  // フィルタリング処理
+  // フィルタリング処理（ステータス・推奨ランク・職種・検索語）
   const filteredTools = tools.filter((tool) => {
+    // ステータスフィルター
     if (statusFilter === "available") {
-      return (
-        tool.status === "全社員利用可能" ||
-        tool.status === "利用可能" ||
-        tool.status === "社内セキュア網"
-      );
+      if (
+        !(
+          tool.status === "全社員利用可能" ||
+          tool.status === "利用可能" ||
+          tool.status === "社内セキュア網"
+        )
+      ) {
+        return false;
+      }
+    } else if (statusFilter === "verifying") {
+      if (tool.status !== "検証中") return false;
+    } else if (statusFilter === "listup") {
+      if (tool.status !== "リストアップ") return false;
     }
-    if (statusFilter === "verifying") {
-      return tool.status === "検証中";
+
+    // 推奨ランクフィルター
+    if (recommendFilter !== "all") {
+      if (getToolRank(tool) !== recommendFilter) return false;
     }
-    if (statusFilter === "listup") {
-      return tool.status === "リストアップ";
+
+    // 職種フィルター
+    if (targetFilter !== "all") {
+      if (getToolTargetAudience(tool) !== targetFilter) return false;
     }
-    return true; // all
+
+    // 検索語
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchName = tool.name.toLowerCase().includes(q);
+      const matchDesc = tool.description.toLowerCase().includes(q);
+      const matchForm = tool.form.toLowerCase().includes(q);
+      if (!matchName && !matchDesc && !matchForm) return false;
+    }
+
+    return true;
   });
 
   // 適合度ドットレンダラー
@@ -389,6 +476,37 @@ export default function ToolsPage() {
         </span>
       </div>
     );
+  };
+
+  // 社内推奨ランクバッジレンダラー
+  const renderRankBadge = (tool: MatrixTool) => {
+    const rank = getToolRank(tool);
+    switch (rank) {
+      case "S":
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-50 text-amber-700 border border-amber-300 shadow-2xs">
+            ⭐ S公式
+          </span>
+        );
+      case "A":
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-indigo-50 text-indigo-700 border border-indigo-300 shadow-2xs">
+            💻 A推奨
+          </span>
+        );
+      case "B":
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-300 shadow-2xs">
+            📊 B特化
+          </span>
+        );
+      default:
+        return (
+          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-600 border border-slate-300">
+            🧪 PoC
+          </span>
+        );
+    }
   };
 
   // ステータスバッジレンダラー
@@ -620,66 +738,147 @@ export default function ToolsPage() {
         {/* 1. マトリクスビュー */}
         {activeTab === "matrix" && (
           <div className="space-y-4">
-            {/* フィルター & 凡例バー */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
-              {/* ステータスフィルターピル */}
-              <div className="flex items-center space-x-1.5 flex-wrap gap-y-1.5">
-                <button
-                  onClick={() => {
-                    playCyberClick();
-                    setStatusFilter("all");
-                  }}
-                  onMouseEnter={() => playCyberHover()}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                    statusFilter === "all"
-                      ? "bg-slate-800 text-white shadow-2xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                >
-                  すべて ({tools.length})
-                </button>
-                <button
-                  onClick={() => {
-                    playCyberClick();
-                    setStatusFilter("available");
-                  }}
-                  onMouseEnter={() => playCyberHover()}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                    statusFilter === "available"
-                      ? "bg-indigo-600 text-white shadow-2xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                >
-                  利用可能 ({tools.filter((t) => t.status === "全社員利用可能" || t.status === "利用可能" || t.status === "社内セキュア網").length})
-                </button>
-                <button
-                  onClick={() => {
-                    playCyberClick();
-                    setStatusFilter("verifying");
-                  }}
-                  onMouseEnter={() => playCyberHover()}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                    statusFilter === "verifying"
-                      ? "bg-amber-600 text-white shadow-2xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                >
-                  検証中 ({tools.filter((t) => t.status === "検証中").length})
-                </button>
-                <button
-                  onClick={() => {
-                    playCyberClick();
-                    setStatusFilter("listup");
-                  }}
-                  onMouseEnter={() => playCyberHover()}
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                    statusFilter === "listup"
-                      ? "bg-slate-600 text-white shadow-2xs"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                >
-                  リストアップ ({tools.filter((t) => t.status === "リストアップ").length})
-                </button>
+            {/* フィルター & 検索 & 凡例コントロールパネル */}
+            <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-3.5">
+              {/* 上段：検索バー & 推奨ランクフィルター */}
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                {/* 検索入力 */}
+                <div className="relative flex-1 max-w-md">
+                  <Search
+                    size={15}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="ツール名・特徴・用途で検索..."
+                    className="w-full pl-9 pr-8 py-2 rounded-lg border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-slate-50/50"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                    >
+                      <X size={13} />
+                    </button>
+                  )}
+                </div>
+
+                {/* 推奨ランクピル */}
+                <div className="flex items-center space-x-1.5 flex-wrap gap-y-1 text-xs">
+                  <span className="text-[11px] font-bold text-slate-400 mr-1">社内推奨:</span>
+                  {[
+                    { id: "all", label: "全ランク" },
+                    { id: "S", label: "⭐ S (全社公式)" },
+                    { id: "A", label: "💻 A (エンジニア)" },
+                    { id: "B", label: "📊 B (業務特化)" },
+                    { id: "PoC", label: "🧪 PoC検証" },
+                  ].map((r) => (
+                    <button
+                      key={r.id}
+                      onClick={() => {
+                        playCyberClick();
+                        setRecommendFilter(r.id as any);
+                      }}
+                      onMouseEnter={() => playCyberHover()}
+                      className={`px-2.5 py-1 rounded-md font-semibold text-[11px] transition-all cursor-pointer ${
+                        recommendFilter === r.id
+                          ? "bg-indigo-600 text-white shadow-2xs"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {r.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 下段：ステータス & 職種フィルター & 該当件数 */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-100">
+                <div className="flex items-center space-x-1.5 flex-wrap gap-y-1.5">
+                  <span className="text-[11px] font-bold text-slate-400 mr-1">利用状態:</span>
+                  <button
+                    onClick={() => {
+                      playCyberClick();
+                      setStatusFilter("all");
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
+                      statusFilter === "all"
+                        ? "bg-slate-800 text-white shadow-2xs"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                  >
+                    すべて ({tools.length})
+                  </button>
+                  <button
+                    onClick={() => {
+                      playCyberClick();
+                      setStatusFilter("available");
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
+                      statusFilter === "available"
+                        ? "bg-emerald-600 text-white shadow-2xs"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                  >
+                    利用可能 ({tools.filter((t) => t.status === "全社員利用可能" || t.status === "利用可能" || t.status === "社内セキュア網").length})
+                  </button>
+                  <button
+                    onClick={() => {
+                      playCyberClick();
+                      setStatusFilter("verifying");
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
+                      statusFilter === "verifying"
+                        ? "bg-amber-600 text-white shadow-2xs"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                  >
+                    検証中 ({tools.filter((t) => t.status === "検証中").length})
+                  </button>
+                  <button
+                    onClick={() => {
+                      playCyberClick();
+                      setStatusFilter("listup");
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all cursor-pointer ${
+                      statusFilter === "listup"
+                        ? "bg-slate-600 text-white shadow-2xs"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                  >
+                    リストアップ ({tools.filter((t) => t.status === "リストアップ").length})
+                  </button>
+                </div>
+
+                <div className="flex items-center space-x-3 text-[11px] text-slate-500">
+                  <div className="flex items-center space-x-1.5">
+                    <span className="font-bold text-slate-400">職種:</span>
+                    <select
+                      value={targetFilter}
+                      onChange={(e) => {
+                        playCyberClick();
+                        setTargetFilter(e.target.value as any);
+                      }}
+                      className="px-2 py-1 rounded border border-slate-200 bg-slate-50 text-slate-700 text-[11px] outline-none"
+                    >
+                      <option value="all">全職種・対象</option>
+                      <option value="全社員">全社員共通</option>
+                      <option value="エンジニア">エンジニア・開発</option>
+                      <option value="マーケ・企画">マーケ・企画・リサーチ</option>
+                      <option value="デザイン">デザイン・UI</option>
+                    </select>
+                  </div>
+
+                  <span className="font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                    該当: {filteredTools.length} 件
+                  </span>
+                </div>
               </div>
 
               {/* 適合度レジェンド */}
@@ -737,10 +936,25 @@ export default function ToolsPage() {
                               {tool.initial}
                             </div>
                             <div className="space-y-0.5">
-                              <div className="flex items-center space-x-2">
+                              <div className="flex items-center space-x-2 flex-wrap gap-y-1">
                                 <span className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
                                   {tool.name}
                                 </span>
+                                {getToolRank(tool) === "S" && (
+                                  <span className="text-[10px] px-1.5 py-0.2 bg-amber-50 text-amber-700 border border-amber-200 rounded font-bold">
+                                    ⭐ S 推奨
+                                  </span>
+                                )}
+                                {getToolRank(tool) === "A" && (
+                                  <span className="text-[10px] px-1.5 py-0.2 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded font-bold">
+                                    💻 A 開発
+                                  </span>
+                                )}
+                                {getToolRank(tool) === "B" && (
+                                  <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded font-medium">
+                                    📊 B 業務
+                                  </span>
+                                )}
                                 {tool.id === 7 && (
                                   <Link
                                     href="/academy"
@@ -755,15 +969,25 @@ export default function ToolsPage() {
                                     マニュアル
                                   </span>
                                 )}
-                                {tool.applyRequired && (
-                                  <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded font-medium">
-                                    利用申請
-                                  </span>
-                                )}
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    playCyberClick();
+                                    setDraftModalTool(tool);
+                                    setIsDraftModalOpen(true);
+                                  }}
+                                  className="text-[10px] px-1.5 py-0.2 bg-slate-100 text-slate-700 hover:bg-indigo-50 hover:text-indigo-700 border border-slate-200 rounded font-medium transition-colors"
+                                  title="利用申請ドラフト作成"
+                                >
+                                  📝 申請
+                                </button>
                               </div>
-                              <span className="text-xs text-slate-500 block">
-                                {tool.form}
-                              </span>
+                              <div className="flex items-center space-x-2 text-xs text-slate-500">
+                                <span>{tool.form}</span>
+                                <span>・</span>
+                                <span className="text-[11px] text-slate-400">対象: {getToolTargetAudience(tool)}</span>
+                              </div>
                             </div>
                           </div>
                         </td>
@@ -861,6 +1085,24 @@ export default function ToolsPage() {
                 <div>{renderStatusBadge(selectedTool)}</div>
               </div>
 
+              <div className="grid grid-cols-2 gap-2 py-2 border-b border-slate-100">
+                <div>
+                  <span className="text-slate-500 font-semibold block text-[11px]">社内推奨ランク</span>
+                  <span className="font-bold text-slate-800 text-xs">
+                    {getToolRank(selectedTool) === "S" && "⭐ Sランク（全社公式推奨）"}
+                    {getToolRank(selectedTool) === "A" && "💻 Aランク（エンジニア推奨）"}
+                    {getToolRank(selectedTool) === "B" && "📊 Bランク（業務特化）"}
+                    {getToolRank(selectedTool) === "PoC" && "🧪 PoC（検証中）"}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-slate-500 font-semibold block text-[11px]">推奨職種・対象</span>
+                  <span className="font-bold text-slate-800 text-xs">
+                    {getToolTargetAudience(selectedTool)}
+                  </span>
+                </div>
+              </div>
+
               <div className="flex items-center justify-between py-2 border-b border-slate-100">
                 <span className="text-slate-500 font-semibold">セキュリティ基準</span>
                 <span className="font-bold text-slate-800">
@@ -876,45 +1118,69 @@ export default function ToolsPage() {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-100 flex items-center justify-end space-x-3">
-              {selectedTool.id === 7 && (
-                <Link
-                  href="/academy"
-                  onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
-                  className="px-4 py-2 rounded-lg bg-indigo-600 text-xs font-bold text-white hover:bg-indigo-700 transition-colors shadow-xs"
-                >
-                  🎓 Academyで学ぶ（全12レッスン）
-                </Link>
-              )}
-              {selectedTool.manualUrl && (
-                <Link
-                  href={selectedTool.manualUrl}
-                  onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
-                  className="px-4 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
-                >
-                  導入ガイドを見る
-                </Link>
-              )}
-              {selectedTool.applyRequired ? (
-                <Link
-                  href="/tools-hub"
-                  onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
-                  className="px-4 py-2 rounded-lg bg-indigo-600 text-xs font-bold text-white hover:bg-indigo-700 transition-colors shadow-xs"
-                >
-                  利用ライセンスを申請
-                </Link>
-              ) : (
-                <button
-                  onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
-                  className="px-4 py-2 rounded-lg bg-slate-900 text-xs font-bold text-white hover:bg-slate-800 transition-colors"
-                >
-                  閉じる
-                </button>
-              )}
+            <div className="pt-3 border-t border-slate-100 flex items-center justify-between flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  playCyberClick();
+                  setDraftModalTool(selectedTool);
+                  setIsDraftModalOpen(true);
+                }}
+                className="px-3 py-2 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-bold hover:bg-indigo-100 transition-colors shadow-2xs flex items-center space-x-1.5"
+              >
+                <span>📝 申請ドラフト作成</span>
+              </button>
+
+              <div className="flex items-center space-x-2">
+                {selectedTool.id === 7 && (
+                  <Link
+                    href="/academy"
+                    onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
+                    className="px-3 py-2 rounded-lg bg-indigo-600 text-xs font-bold text-white hover:bg-indigo-700 transition-colors shadow-xs"
+                  >
+                    🎓 Academy
+                  </Link>
+                )}
+                {selectedTool.manualUrl && (
+                  <Link
+                    href={selectedTool.manualUrl}
+                    onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
+                    className="px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
+                  >
+                    導入ガイド
+                  </Link>
+                )}
+                {selectedTool.applyRequired ? (
+                  <Link
+                    href="/tools-hub"
+                    onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
+                    className="px-3 py-2 rounded-lg bg-indigo-600 text-xs font-bold text-white hover:bg-indigo-700 transition-colors shadow-xs"
+                  >
+                    利用申請へ
+                  </Link>
+                ) : (
+                  <button
+                    onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
+                    className="px-3 py-2 rounded-lg bg-slate-900 text-xs font-bold text-white hover:bg-slate-800 transition-colors"
+                  >
+                    閉じる
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* 利用申請ドラフト生成モーダル */}
+      <ToolApplicationDraftModal
+        tool={draftModalTool}
+        isOpen={isDraftModalOpen}
+        onClose={() => {
+          setIsDraftModalOpen(false);
+          setDraftModalTool(null);
+        }}
+      />
     </div>
   );
 }

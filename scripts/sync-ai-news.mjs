@@ -84,6 +84,17 @@ const FEED_CONFIGS = [
     tagGenerator: () => ['Google DeepMind', 'Frontier AI', 'Gemini', '公式発表'],
   },
   {
+    name: 'Google Antigravity',
+    url: 'https://antigravity.google/blog/rss.xml',
+    category: 'google',
+    categoryLabel: 'Google / Antigravity',
+    defaultImportance: 'hot',
+    defaultImportanceLabel: 'HOT 🔥',
+    defaultAudience: ['全社員', 'エンジニア', 'モバイル開発者', 'セキュリティ担当'],
+    impactGenerator: (title) => `Google Antigravityの最新アップデート「${title.slice(0, 30)}」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。`,
+    tagGenerator: () => ['Google Antigravity', 'Custom Agents', 'Plugins', '公式ブログ'],
+  },
+  {
     name: 'OpenAI',
     url: 'https://openai.com/news/rss.xml',
     category: 'model',
@@ -165,6 +176,21 @@ async function main() {
       sourceName: "Google DeepMind Official",
       sourceUrl: "https://deepmind.google/models/gemini/",
       tags: ["Gemini 4 Argon", "Google DeepMind", "Frontier Intelligence", "基盤モデル", "HOT"],
+    },
+    {
+      id: "news-20260928-antigravity-custom-agents",
+      title: "Google Antigravity: 公式プラグイン対応カスタムエージェント（Flutter・Firebase・Google Play）を提供開始",
+      date: "2026/09/28",
+      category: "google",
+      categoryLabel: "Google / Antigravity",
+      importance: "hot",
+      importanceLabel: "HOT 🔥",
+      summary: "Google Antigravity公式ブログにて、各プロダクトチームが開発したカスタムエージェントが公式プラグイン（Build with Google）に統合・提供開始されたことが発表されました。Flutterのアクセシビリティ自動修正エージェント、FirebaseのFirestoreセキュリティルール自動検証・堅牢化エージェント、Google Playのストア審査・Manifest・R8事前監査ゲート（play-release-audit）が利用可能です。",
+      impactForStaff: "Google公式エコシステム（Flutter/Firebase/Android）を用いた開発において、専用の検証・セキュリティ・リリース監査エージェントをIDEやCLI（agy --agent <name>）から即時呼び出し可能に。審査落ちやセキュリティ脆弱性の手戻りを大幅に未然防止できます。",
+      recommendedFor: ["全社員", "エンジニア", "モバイル開発者", "セキュリティ担当", "品質管理 (QA)"],
+      sourceName: "Google Antigravity Blog Official",
+      sourceUrl: "https://antigravity.google/blog/custom-agents-in-google-plugins",
+      tags: ["Google Antigravity", "Custom Agents", "Plugins", "Flutter", "Firebase", "Google Play", "HOT"],
     },
     {
       id: "news-20261002-claude",
@@ -420,8 +446,8 @@ async function main() {
   const seenTitles = new Set();
   const mergedItems = [];
 
-  // フィードから取得した最新のニュースを最優先
-  for (const item of liveItems) {
+  // ベース確定ニュース（詳細な日本語解説・要約付きマスタ）を最優先
+  for (const item of baseNews) {
     const cleanUrl = item.sourceUrl.split('?')[0];
     if (!seenUrls.has(cleanUrl) && !seenTitles.has(item.title)) {
       seenUrls.add(cleanUrl);
@@ -430,8 +456,8 @@ async function main() {
     }
   }
 
-  // ベース確定ニュースをマージ
-  for (const item of baseNews) {
+  // フィードから取得した最新の未登録ニュースを追加
+  for (const item of liveItems) {
     const cleanUrl = item.sourceUrl.split('?')[0];
     if (!seenUrls.has(cleanUrl) && !seenTitles.has(item.title)) {
       seenUrls.add(cleanUrl);
@@ -456,6 +482,7 @@ async function main() {
     totalCount: mergedItems.length,
     activeSources: [
       "Google DeepMind Official Feed",
+      "Google Antigravity Official Blog",
       "OpenAI Official Newsroom",
       "Anthropic Official News",
       "DeepSeek Official Releases",

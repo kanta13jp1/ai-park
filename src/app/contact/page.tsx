@@ -4,11 +4,10 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
-import { playCyberHover } from "@/lib/sound";
-import { Mail, MessageSquare, Send, HelpCircle, ExternalLink, CheckCircle2 } from "lucide-react";
+import { Mail, MessageSquare, Send, HelpCircle, ExternalLink, CheckCircle2, Search } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
-import { playCyberSuccess, playCyberClick } from "@/lib/sound";
+import { playCyberSuccess, playCyberClick, playCyberHover } from "@/lib/sound";
 
 // ご意見TODO-08への対応（Google公式情報 2026/09/25 確認）
 const accountFaqs = [
@@ -71,6 +70,13 @@ const accountFaqs = [
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [faqSearch, setFaqSearch] = useState("");
+
+  const filteredFaqs = accountFaqs.filter(
+    (f) =>
+      f.q.toLowerCase().includes(faqSearch.toLowerCase()) ||
+      f.a.toLowerCase().includes(faqSearch.toLowerCase())
+  );
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
@@ -117,6 +123,7 @@ export default function ContactPage() {
                     playCyberClick();
                     setSent(false);
                   }}
+                  onMouseEnter={() => playCyberHover()}
                   className="px-4 py-2 rounded-xl bg-white text-emerald-700 font-bold text-xs border border-emerald-200 hover:bg-emerald-50 transition-colors cursor-pointer"
                 >
                   入力画面に戻る
@@ -198,6 +205,7 @@ export default function ContactPage() {
 
                 <button
                   type="submit"
+                  onMouseEnter={() => playCyberHover()}
                   className="w-full py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white font-extrabold text-xs sm:text-sm rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-all cursor-pointer active:scale-98"
                 >
                   <Send size={15} />
@@ -216,39 +224,72 @@ export default function ContactPage() {
             className="bg-white border-slate-200/90 shadow-sm rounded-3xl"
           >
           <div className="p-6 sm:p-8 space-y-5">
-            <div className="flex items-center gap-2.5 border-b border-slate-100 pb-3.5">
-              <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200/60 flex items-center justify-center text-indigo-600">
-                <HelpCircle size={18} />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200/60 flex items-center justify-center text-indigo-600">
+                  <HelpCircle size={18} />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-slate-900 text-lg">よくある質問：アカウント・ライセンス</h3>
+                  <span className="text-[11px] text-slate-400">社内導入・課金・仕様に関するFAQ</span>
+                </div>
               </div>
-              <h3 className="font-extrabold text-slate-900 text-lg">よくある質問：アカウント・ライセンス</h3>
+
+              {/* FAQインクリメンタル検索バー */}
+              <div className="relative w-full sm:w-60">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  value={faqSearch}
+                  onChange={(e) => setFaqSearch(e.target.value)}
+                  placeholder="FAQをキーワード検索..."
+                  className="w-full pl-8 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 font-medium"
+                />
+              </div>
             </div>
+
             <div className="space-y-3">
-              {accountFaqs.map((f) => (
-                <details key={f.q} onMouseEnter={() => playCyberHover()} className="group rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 transition-colors p-4">
-                  <summary className="cursor-pointer font-bold text-xs sm:text-sm text-slate-900 list-none flex items-start gap-2.5">
-                    <span className="text-indigo-600 font-mono font-black">Q.</span>
-                    <span className="flex-1">{f.q}</span>
-                  </summary>
-                  <div className="mt-2.5 pl-6 space-y-2 border-t border-slate-200/40 pt-2.5">
-                    <p className="text-xs text-slate-700 leading-relaxed">{f.a}</p>
-                    {f.source.internal ? (
-                      <Link href={f.source.href} className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:underline">
-                        {f.source.label}
-                      </Link>
-                    ) : (
-                      <a
-                        href={f.source.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:underline"
-                      >
-                        出典: {f.source.label}
-                        <ExternalLink size={11} />
-                      </a>
-                    )}
-                  </div>
-                </details>
-              ))}
+              {filteredFaqs.length > 0 ? (
+                filteredFaqs.map((f) => (
+                  <details
+                    key={f.q}
+                    onMouseEnter={() => playCyberHover()}
+                    className="group rounded-2xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 transition-colors p-4"
+                  >
+                    <summary
+                      onClick={() => playCyberClick()}
+                      className="cursor-pointer font-bold text-xs sm:text-sm text-slate-900 list-none flex items-start gap-2.5 select-none"
+                    >
+                      <span className="text-indigo-600 font-mono font-black">Q.</span>
+                      <span className="flex-1">{f.q}</span>
+                    </summary>
+                    <div className="mt-2.5 pl-6 space-y-2 border-t border-slate-200/40 pt-2.5">
+                      <p className="text-xs text-slate-700 leading-relaxed">{f.a}</p>
+                      {f.source.internal ? (
+                        <Link href={f.source.href} onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:underline">
+                          {f.source.label}
+                        </Link>
+                      ) : (
+                        <a
+                          href={f.source.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => playCyberClick()}
+                          onMouseEnter={() => playCyberHover()}
+                          className="inline-flex items-center gap-1 text-xs font-bold text-indigo-700 hover:underline"
+                        >
+                          出典: {f.source.label}
+                          <ExternalLink size={11} />
+                        </a>
+                      )}
+                    </div>
+                  </details>
+                ))
+              ) : (
+                <div className="p-8 text-center bg-slate-50/50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
+                  「{faqSearch}」に一致するFAQが見つかりませんでした。上のフォームからお気軽にご質問ください。
+                </div>
+              )}
             </div>
           </div>
         </SpotlightCard>
