@@ -196,4 +196,14 @@ flowchart TD
 | **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` エッジ視覚支援モデルケース新設<br>・`src/app/tools-hub/page.tsx` Meta SAM & DINO掲載<br>・`src/app/feedback-todo/page.tsx` TODO-120 クローズ |
 | **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
 
+### ケース8: Mistral AI公式ニュース「Making sovereign, open-weight AI the technology frontier」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [Making sovereign, open-weight AI the technology frontier](https://mistral.ai/news/mistral-makes-sovereign-open-weight-ai-to-frontier/) (2026/10/05) |
+| **還元アイデア** | ① シリーズD 30億ユーロ（評価額210億ユーロ）調達・ソブリンAI（データ境界・モデル制御・専用推論・監査性）技術解説ニュース配信<br>② ソブリンAI・完全オンプレミス環境での自律コーディング & 規程監査モデルケース新設<br>③ `tools-hub` へのMistral AI（PoC検証枠・セルフホスト時Level 1可）新規掲載 |
+| **起票ToDo** | `TODO-121`（Issue #120） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` オンプレ自律開発モデルケース新設<br>・`src/app/tools-hub/page.tsx` Mistral AI掲載<br>・`src/app/feedback-todo/page.tsx` TODO-121 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
+
+
 

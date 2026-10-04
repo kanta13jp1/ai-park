@@ -163,6 +163,21 @@ async function main() {
   // 確定版マスターニュース（前回収集分および基礎データ）
   const baseNews = [
     {
+      id: "news-20261005-mistral-series-d-sovereign-ai",
+      title: "Mistral AI: シリーズDで30億ユーロ（評価額210億ユーロ）調達、企業主権（Sovereign AI）× オープンウェイト基盤をフロンティアへ拡大",
+      date: "2026/10/05",
+      category: "model",
+      categoryLabel: "基盤モデル・LLM",
+      importance: "hot",
+      importanceLabel: "HOT 🔥",
+      summary: "フランス発AI企業Mistral AIが、Samsung Electronics主導のシリーズDにて欧州テクノロジー企業史上最大規模となる30億ユーロ（約32億ドル）の資金調達を完了し、事後評価額210億ユーロ（約230億ドル）に達したと公式発表しました。特定クラウドへの囲い込みを打破する「ソブリンAI（Sovereign AI）」を掲げ、データ境界・モデル制御・専用推論コンピュート・本番監査性の4層完全制御を提唱。新エージェント「Vibe / Vibe for Code」や「Mistral OCR 4 / Voxtral TTS」などオープンウェイト基盤を加速し、AirbusやASML、HSBCなど125社以上のグローバル大企業の基幹AI移行を支えています。",
+      impactForStaff: "顧客データや未公開ソースコードをパブリッククラウドに預けられない製造・金融・防衛等の機密領域において、オープンウェイトモデルを用いた社内閉域網（オンプレミス・プライベートクラウド）での自律エージェント運用指針が確立。特定ベンダーへの価格・規約ロックインを防ぐ重要戦略となります。",
+      recommendedFor: ["全社員", "エンジニア", "セキュリティ担当", "アーキテクト", "DX推進・経営企画", "コンプライアンス担当"],
+      sourceName: "Mistral AI Official Blog",
+      sourceUrl: "https://mistral.ai/news/mistral-makes-sovereign-open-weight-ai-to-frontier/",
+      tags: ["Mistral AI", "Sovereign AI", "ソブリンAI", "オープンウェイト", "Series D", "Vibe Code", "閉域網", "HOT"],
+    },
+    {
       id: "news-20261003-gemini4",
       title: "Google DeepMind: 次世代フロンティア知能「Gemini 4 Argon」を公式発表",
       date: "2026/10/03",

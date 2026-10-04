@@ -193,6 +193,24 @@ const AGENT_CASES: AgentCase[] = [
       "SAMを用いた多様な照明・角度の実環境データ自動アノテーションによる学習コスト90%削減",
       "車椅子やスマートカート利用時の段差・危険物接触リスクを未然に防止し、現場のアクセシビリティ向上"
     ]
+  },
+  {
+    id: "case-sovereign-airgapped-agent",
+    title: "ソブリンAI・完全オンプレミス環境での自律コーディング & 規程監査",
+    department: "基盤セキュリティ統括・金融システム開発室",
+    summary: "Mistralのオープンウェイトモデル（Mistral Small 4 / Vibe Code / Mistral Medium）を社内プライベートGPU基盤（オンプレミス）に配備。顧客個人情報や未公開知的財産を外部クラウドへ一切送信せず、閉域網内でリポジトリ解析・脆弱性スキャン・規程準拠テストを自律協調実行。",
+    subagentRoles: [
+      "Air-Gapped Repository Scanner (Mistral Small)",
+      "Sovereign Compliance Auditor (Mistral Medium)",
+      "Local Patch Synthesizer (Vibe Code)"
+    ],
+    estimatedHoursSaved: "月間約 52 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "外部通信を一切行わない完全閉域網での自律コーディングとセキュリティパッチ生成",
+      "特定クラウドへの依存・API課金変動・利用規約改定リスクの完全排除（ベンダーロックイン防止）",
+      "金融・防衛基準の監査ログ保持とオンプレミス完結によるコンプライアンス適合性100%"
+    ]
   }
 ];
 

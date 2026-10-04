@@ -173,6 +173,22 @@ const companyAiToolsList: CompanyAiTool[] = [
     governanceNote: "オープンウェイトライセンス条項に準拠して利用すること。社内カメラ映像や個人を特定可能な顔画像データを取り扱う際は、必ず事前にデータ匿名化・プライバシー事前審査を実施すること。",
     officialDocUrl: "https://ai.meta.com/blog/assistive-robotics-university-of-pittsburgh-sam-dino/",
   },
+  {
+    id: "tool-mistral",
+    name: "Mistral AI (Le Chat / Vibe / Open Weights)",
+    vendor: "Mistral AI",
+    category: "poc",
+    categoryLabel: "PoC検証枠",
+    level: "Level 2",
+    levelBadge: "Level 2: マスキング必須 (※セルフホスト時はLevel 1可)",
+    status: "PoC検証中",
+    statusColor: "amber",
+    costModel: "オープンウェイト無償 / API従量制 / エンタープライズ専用基盤",
+    targetAudience: "セキュリティ担当・インフラ/MLOps・金融/製造系エンジニア・全社DX推進",
+    description: "欧州発のフロンティアAI。完全閉域網・オンプレミスで稼働するオープンウェイトモデル（Mistral Small 4 / Medium 3.5 / OCR 4）と、自律コーディングエージェント「Vibe for Code」を提供。Samsung主導で30億ユーロ調達しソブリンAIを主導。",
+    governanceNote: "クラウドAPI（Le Chat / Mistral API）利用時はLevel 2運用（個人情報・未公開ソースコードはマスキング）。社内閉域網（プライベートクラウド/オンプレミスGPU）でのオープンウェイトセルフホスト検証時は社内セキュリティ審査を経てLevel 1適用可。",
+    officialDocUrl: "https://mistral.ai/news/mistral-makes-sovereign-open-weight-ai-to-frontier/",
+  },
 ];
 
 const aiGuidelines = [

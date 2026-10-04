@@ -2004,6 +2004,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 119,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/119",
   },
+  {
+    id: "TODO-121",
+    title: "【ソブリンAI・オープンウェイト】Mistral AI シリーズD 30億ユーロ調達に伴う完全閉域・自律開発エージェント活用リファレンス & ニュース還元",
+    category: "AI実践編",
+    author: "セキュリティ統括・基盤アーキテクチャ推進チーム",
+    authorDept: "情報セキュリティ本部・DX推進室",
+    date: "2026/10/05",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「MistralがSamsung主導のシリーズDで30億ユーロ（評価額210億ユーロ）を調達し、データ境界・モデル制御・専用推論・監査性の4層完全制御を掲げる『ソブリンAI（Sovereign AI）』と自律エージェント（Vibe Code）を強化している。機密コードや規制データを扱う金融・製造部門でも導入可能な閉域網AI活用のリファレンスを整理してほしい」",
+    actionPlan: "【反映済み】Mistral公式ニュース「Making sovereign, open-weight AI the technology frontier」の解説をAIニュース（/news）に追加し、Subagents活用事例集（/agent-cases）に「ソブリンAI・完全オンプレミス環境での自律コーディング & 規程監査」モデルケースを反映。さらにAI Tools Hub（/tools-hub）にMistral AI（Vibe / Open Weights）を掲載しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 120,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/120",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));
