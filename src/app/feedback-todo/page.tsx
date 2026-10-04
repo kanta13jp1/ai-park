@@ -1972,6 +1972,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 117,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/117",
   },
+  {
+    id: "TODO-119",
+    title: "【ニュース自動巡回・情報網拡充】主要フロンティアAI・エコシステム13媒体の自動フォロー＆最新AIニュース毎日反映パイプラインの構築",
+    category: "運用・管理",
+    author: "AI Park 全社情報配信デスク",
+    authorDept: "デジタル推進本部・AI活用推進室",
+    date: "2026/10/04",
+    priority: "高",
+    status: "todo",
+    feedbackQuote: "「Google/OpenAI/Anthropic/DeepSeek/xAI/Devinに加え、Meta AI (Llama)、Mistral AI、Hugging Face、LangChain、LlamaIndex、Cursor、GitHub Next、Runway、Black Forest Labs、Figma、Latent Space、The Gradient、Import AIなどの重要13媒体もすべて自動巡回し、最新AIニュース（/news）へ毎日反映してほしい」",
+    actionPlan: "【起票済み】主要フロンティアAI・開発フレームワーク・クリエイティブ・AIエンジニアリングの厳選13媒体を特定。scripts/sync-ai-news.mjs の巡回フィード対象への追加およびGitHub Actions日次自動同期ワークフローを構築し、最新動向が漏れなく毎日ポータルへ集約される仕組みを実装します。",
+    relatedLink: "/news",
+    relatedLinkText: "最新AIニュースを確認",
+    issueNumber: 118,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/118",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));
