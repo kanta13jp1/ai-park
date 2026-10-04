@@ -150,8 +150,10 @@ export default function GeminiStatsPage() {
   const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbw9ZDjn5OdbGFwSYglwZlk5ASMVYPLDQ7zvty_rcB76LLqgl-XUz1wO_-w5QL_0YDfuEg/exec";
 
   // 自動同期データのフェッチ (GAS Live API -> 静的JSONフォールバック)
-  const fetchLiveData = useCallback(async () => {
-    setIsLoading(true);
+  const fetchLiveData = useCallback(async (isManual = false) => {
+    if (isManual) {
+      setIsLoading(true);
+    }
     let loaded = false;
 
     // 1. まず Cloud Billing 実画面確定の検証済みJSONを確実にロード
@@ -196,8 +198,51 @@ export default function GeminiStatsPage() {
   }, []);
 
   useEffect(() => {
-    fetchLiveData();
-  }, [fetchLiveData]);
+    let ignore = false;
+    const initFetch = async () => {
+      try {
+        const res = await fetch(`${basePath}/data/gcp-usage-live.json?t=${Date.now()}`);
+        if (res.ok && !ignore) {
+          const data = await res.json();
+          if (data.users && Array.isArray(data.users)) setUsers(data.users);
+          if (data.dailyHistory && Array.isArray(data.dailyHistory)) setDailyData(data.dailyHistory);
+          if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
+          if (data.syncMode) setSyncMode(data.syncMode);
+          if (data.syncModeLabel) setSyncModeLabel(data.syncModeLabel);
+          setSyncedAt(data.syncedAt || "Cloud Billing 実画面同期");
+          setDataSource(data.dataSource || "Google Cloud Billing Live Verified");
+          setIsLive(true);
+        }
+      } catch (err) {
+        console.warn("Failed to load verified sync data", err);
+      }
+
+      try {
+        const gasRes = await fetch(GAS_ENDPOINT_URL, { redirect: "follow" });
+        if (gasRes.ok && !ignore) {
+          const data = await gasRes.json();
+          const isGasValid = data.users && Array.isArray(data.users) && (!data.debug || data.debug.apiSuccess === true || (data.summary && data.summary.totalRequests > 100));
+          if (isGasValid) {
+            setUsers(data.users);
+            if (data.dailyHistory) setDailyData(data.dailyHistory);
+            if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
+            setSyncedAt(data.syncedAt || "リアルタイム同期");
+            setDataSource(data.dataSource || "GAS Live API");
+            setIsLive(true);
+          }
+        }
+      } catch {
+        // ignore
+      } finally {
+        if (!ignore) setIsLoading(false);
+      }
+    };
+
+    initFetch();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   // 集計計算
   const totalCostUsd = useMemo(

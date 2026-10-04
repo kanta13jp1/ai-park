@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Activity, Sparkles, Terminal, CheckCircle2, Flame, Bot, Cpu, Pause, Trophy, Wrench, AlertTriangle } from "lucide-react";
+import { Activity, Sparkles, Terminal, CheckCircle2, Flame, Bot, Cpu, Pause, Trophy, Wrench, AlertTriangle, LucideIcon } from "lucide-react";
 import Link from "next/link";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
@@ -9,7 +9,7 @@ interface PulseItem {
   id: string;
   badge: string;
   badgeColor: string;
-  icon: any;
+  icon: LucideIcon;
   text: string;
   linkText?: string;
   href?: string;

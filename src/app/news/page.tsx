@@ -84,10 +84,34 @@ export default function AiNewsPage() {
     }
   }, []);
 
-  // 初期ロード時に自動実行
+  // 初期ロード時に自動実行（マウントクリーンアップ付き）
   useEffect(() => {
-    fetchLiveNews(false);
-  }, [fetchLiveNews]);
+    let ignore = false;
+    const loadLiveNews = async () => {
+      try {
+        const res = await fetch(`${basePath}/data/ai-news-live.json?t=${Date.now()}`, {
+          cache: "no-store",
+        });
+        if (res.ok && !ignore) {
+          const data = await res.json();
+          if (data && Array.isArray(data.items) && data.items.length > 0) {
+            setNewsList(data.items);
+            if (data.lastSyncedAtFormatted) {
+              setLastSyncedAt(data.lastSyncedAtFormatted);
+            }
+            setIsLiveActive(true);
+          }
+        }
+      } catch (err) {
+        console.warn("[News Pipeline] Live fetch error, fallback to static master:", err);
+      }
+    };
+
+    loadLiveNews();
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   // フィルタリング
   const filteredNews = useMemo(() => {

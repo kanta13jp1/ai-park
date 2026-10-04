@@ -96,8 +96,9 @@ export function importProgressJSON(jsonString: string): { success: boolean; coun
 
     localStorage.setItem(KEY, JSON.stringify(current));
     return { success: true, count: importedCount };
-  } catch (err: any) {
-    return { success: false, count: 0, error: err?.message || "インポートの解析に失敗しました。" };
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : "インポートの解析に失敗しました。";
+    return { success: false, count: 0, error: errorMsg };
   }
 }
 

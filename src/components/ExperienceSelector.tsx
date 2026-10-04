@@ -17,20 +17,21 @@ import {
   Cpu,
   Layers,
   Lightbulb,
+  LucideIcon,
 } from "lucide-react";
 
 interface PersonaMode {
   id: "beginner" | "business" | "engineer" | "leader";
   label: string;
   sublabel: string;
-  icon: any;
+  icon: LucideIcon;
   accent: string;
   badgeColor: string;
   recommendations: {
     title: string;
     description: string;
     href: string;
-    icon: any;
+    icon: LucideIcon;
     tag: string;
   }[];
 }

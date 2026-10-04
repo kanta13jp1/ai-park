@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
 function RouteProgressBar() {
@@ -8,10 +8,18 @@ function RouteProgressBar() {
   const searchParams = useSearchParams();
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(false);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
-    setVisible(true);
-    setProgress(30);
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
+
+    const frameId = requestAnimationFrame(() => {
+      setVisible(true);
+      setProgress(30);
+    });
 
     const timer1 = setTimeout(() => {
       setProgress(75);
@@ -27,6 +35,7 @@ function RouteProgressBar() {
     }, 450);
 
     return () => {
+      cancelAnimationFrame(frameId);
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);

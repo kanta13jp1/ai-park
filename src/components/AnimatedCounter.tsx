@@ -29,16 +29,17 @@ export default function AnimatedCounter({
   const [displayValue, setDisplayValue] = useState(targetValue);
   const elementRef = useRef<HTMLSpanElement>(null);
   const isIntersectingRef = useRef(false);
-  const currentValRef = useRef(displayValue);
-  currentValRef.current = displayValue;
+  const currentValRef = useRef(targetValue);
 
   useEffect(() => {
-    // ユーザーがアニメーション低減を設定している場合は即座に目標値を表示
+    // ユーザーがアニメーション低減を設定している場合はアニメーションを行わない
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
-      setDisplayValue(targetValue);
+      currentValRef.current = targetValue;
       return;
     }
+
+    let animationFrameId: number;
 
     const startCountAnimation = (startVal: number, endVal: number) => {
       const startTime = performance.now();
@@ -51,16 +52,18 @@ export default function AnimatedCounter({
         const easeProgress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
         const current = startVal + (endVal - startVal) * easeProgress;
 
+        currentValRef.current = current;
         setDisplayValue(current);
 
         if (progress < 1) {
-          requestAnimationFrame(tick);
+          animationFrameId = requestAnimationFrame(tick);
         } else {
+          currentValRef.current = endVal;
           setDisplayValue(endVal);
         }
       };
 
-      requestAnimationFrame(tick);
+      animationFrameId = requestAnimationFrame(tick);
     };
 
     const observer = new IntersectionObserver(
@@ -79,11 +82,16 @@ export default function AnimatedCounter({
     }
 
     // すでに画面内に表示されている状態で value が更新された場合もアニメーションを実行
-    if (isIntersectingRef.current && currentValRef.current !== value) {
+    if (isIntersectingRef.current && currentValRef.current !== targetValue) {
       startCountAnimation(currentValRef.current, targetValue);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, [targetValue, duration]);
 
   const formattedValue = displayValue.toLocaleString("ja-JP", {

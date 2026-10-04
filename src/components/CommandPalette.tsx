@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   Search,
@@ -21,6 +21,7 @@ import {
   HelpCircle,
   Compass,
   FileCheck2,
+  LucideIcon,
 } from "lucide-react";
 import { playCyberOpen, playCyberClick, playCyberHover } from "@/lib/sound";
 
@@ -30,7 +31,7 @@ interface PaletteItem {
   category: "Academy & 学習" | "ツール & ガイド" | "共創 & コミュニティ" | "ガバナンス & サポート";
   href: string;
   description: string;
-  icon: any;
+  icon: LucideIcon;
   isExternal?: boolean;
 }
 
@@ -238,29 +239,53 @@ export default function CommandPalette() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const openPalette = useCallback(() => {
+    setQuery("");
+    setSelectedCategory("すべて");
+    setSelectedIndex(0);
+    setIsOpen(true);
+    playCyberOpen();
+  }, []);
+
+  const closePalette = useCallback(() => {
+    setIsOpen(false);
+  }, []);
+
   // ⌘K / Ctrl+K による開閉
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setIsOpen((prev) => !prev);
+        setIsOpen((prev) => {
+          if (!prev) {
+            playCyberOpen();
+            setQuery("");
+            setSelectedCategory("すべて");
+            setSelectedIndex(0);
+            return true;
+          }
+          return false;
+        });
       } else if (e.key === "Escape") {
-        setIsOpen(false);
+        closePalette();
       }
     };
 
+    const handleOpenCustom = () => openPalette();
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+    window.addEventListener("ai-park-open-command-palette", handleOpenCustom);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("ai-park-open-command-palette", handleOpenCustom);
+    };
+  }, [closePalette, openPalette]);
 
   // 開いた際に入力欄にフォーカス
   useEffect(() => {
     if (isOpen) {
-      playCyberOpen();
-      setTimeout(() => inputRef.current?.focus(), 50);
-      setQuery("");
-      setSelectedCategory("すべて");
-      setSelectedIndex(0);
+      const timer = setTimeout(() => inputRef.current?.focus(), 50);
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 

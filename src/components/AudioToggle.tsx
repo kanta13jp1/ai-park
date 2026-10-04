@@ -1,32 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { isSoundEnabled, setSoundEnabled, playCyberClick, playCyberHover } from "@/lib/sound";
 
+const emptySubscribe = () => () => {};
+
+function subscribeSound(callback: () => void) {
+  window.addEventListener("ai-park-sound-changed", callback);
+  return () => window.removeEventListener("ai-park-sound-changed", callback);
+}
+
 export default function AudioToggle() {
-  const [enabled, setEnabled] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const enabled = useSyncExternalStore(subscribeSound, () => isSoundEnabled(), () => false);
 
-  useEffect(() => {
-    setMounted(true);
-    setEnabled(isSoundEnabled());
-
-    const handleSoundChange = (e: Event) => {
-      const customEvent = e as CustomEvent<{ enabled: boolean }>;
-      setEnabled(customEvent.detail.enabled);
-    };
-
-    window.addEventListener("ai-park-sound-changed", handleSoundChange);
-    return () => window.removeEventListener("ai-park-sound-changed", handleSoundChange);
-  }, []);
-
-  if (!mounted) return null;
+  if (!isMounted) return null;
 
   const toggle = () => {
     const next = !enabled;
     setSoundEnabled(next);
-    setEnabled(next);
     if (next) {
       setTimeout(() => playCyberClick(), 50);
     }
@@ -58,19 +51,13 @@ export default function AudioToggle() {
       >
         {enabled ? (
           <>
-            {/* サイバーイコライザー波形（3本の周波数バー） */}
-            <div className="flex items-end gap-0.5 h-3 px-0.5">
-              <span className="w-0.5 bg-cyan-400 rounded-full animate-equalizer-1 shadow-[0_0_4px_#22d3ee]" />
-              <span className="w-0.5 bg-cyan-300 rounded-full animate-equalizer-2 shadow-[0_0_4px_#22d3ee]" />
-              <span className="w-0.5 bg-cyan-400 rounded-full animate-equalizer-3 shadow-[0_0_4px_#22d3ee]" />
-            </div>
-            <Volume2 size={14} className="text-cyan-300" />
-            <span className="tracking-widest text-[10px]">SFX ON</span>
+            <Volume2 size={14} className="text-cyan-400 animate-pulse" />
+            <span className="tracking-wide">SOUND ON</span>
           </>
         ) : (
           <>
             <VolumeX size={14} />
-            <span className="tracking-widest text-[10px]">SFX OFF</span>
+            <span className="tracking-wide">MUTED</span>
           </>
         )}
       </button>

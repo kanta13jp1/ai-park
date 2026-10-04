@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
@@ -17,7 +18,17 @@ import {
   ShieldCheck,
   CheckCircle2,
   FileCode2,
-  Users
+  Users,
+  Copy,
+  Check,
+  Terminal,
+  ExternalLink,
+  Shield,
+  Layers,
+  Smartphone,
+  Flame,
+  BookOpen,
+  X
 } from "lucide-react";
 import Link from "next/link";
 
@@ -78,6 +89,19 @@ const AGENT_CASES: AgentCase[] = [
 ];
 
 export default function AgentCasesPage() {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [selectedAgentForModal, setSelectedAgentForModal] = useState<OfficialAgentItem | null>(null);
+
+  const handleCopy = (text: string, id: string) => {
+    playCyberClick();
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => {
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2500);
+      });
+    }
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
@@ -86,7 +110,7 @@ export default function AgentCasesPage() {
       />
       <OfficeHourBanner />
 
-      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
         <UnderConstructionAlert
           statusType="poc"
           title="🧪 PoC検証中・試作モデルケース表示"
@@ -95,38 +119,144 @@ export default function AgentCasesPage() {
           releaseDate="2026年11月上旬予定"
         />
 
+        {/* Google公式プラグイン対応カスタムエージェント実践導入カタログ */}
+        <section className="space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-indigo-100 pb-4">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-mono font-bold tracking-wider uppercase mb-2">
+                <Sparkles size={13} className="text-indigo-600" />
+                <span>BUILD WITH GOOGLE PLUGINS</span>
+              </div>
+              <h3 className="font-black text-slate-900 text-xl sm:text-2xl flex items-center gap-2.5">
+                <Bot className="w-6 h-6 text-indigo-600" />
+                <span>Google公式プラグイン対応 カスタムエージェント実践カタログ</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-3xl leading-relaxed">
+                Google公式ブログ（2026/09/28発表）準拠。Flutter・Firebase・Google Play・AI Park専用の各カスタムエージェント定義（<code className="text-indigo-700 font-mono bg-indigo-50 px-1 py-0.5 rounded">.agents/agents/&lt;name&gt;.md</code>）と、Terminalから即座に呼び出せるCLIコマンドを整備しました。
+              </p>
+            </div>
+            <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200 self-start sm:self-auto shrink-0">
+              全 {OFFICIAL_CUSTOM_AGENTS.length} エージェント
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {OFFICIAL_CUSTOM_AGENTS.map((agent) => (
+              <TiltCard key={agent.id} maxTilt={4} glareOpacity={0.08} className="h-full rounded-2xl">
+                <SpotlightCard
+                  spotlightColor="rgba(99, 102, 241, 0.12)"
+                  className="bg-white border-slate-200/90 shadow-sm h-full rounded-2xl flex flex-col justify-between p-6 space-y-5"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border ${agent.badgeColor}`}>
+                        {agent.category}
+                      </span>
+                      <span className="text-[11px] font-mono font-semibold text-slate-500">
+                        {agent.targetRole}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h4 className="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
+                        {agent.id.includes("play") && <Smartphone className="w-5 h-5 text-emerald-600 shrink-0" />}
+                        {agent.id.includes("ai-park") && <ShieldCheck className="w-5 h-5 text-indigo-600 shrink-0" />}
+                        {agent.id.includes("flutter") && <Layers className="w-5 h-5 text-cyan-600 shrink-0" />}
+                        {agent.id.includes("firebase") && <Flame className="w-5 h-5 text-amber-600 shrink-0" />}
+                        <span>{agent.title}</span>
+                      </h4>
+                      <p className="text-xs text-slate-600 mt-2 leading-relaxed">
+                        {agent.description}
+                      </p>
+                    </div>
+
+                    {/* CLI呼び出しコマンド */}
+                    <div className="bg-slate-950 text-slate-200 rounded-xl p-3 border border-slate-800 font-mono text-xs flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 overflow-x-auto py-0.5">
+                        <Terminal size={14} className="text-indigo-400 shrink-0" />
+                        <span className="text-indigo-300 select-all">{agent.cliCommand}</span>
+                      </div>
+                      <button
+                        onClick={() => handleCopy(agent.cliCommand, `cli-${agent.id}`)}
+                        onMouseEnter={() => playCyberHover()}
+                        title="CLIコマンドをコピー"
+                        className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors shrink-0"
+                      >
+                        {copiedId === `cli-${agent.id}` ? (
+                          <Check size={13} className="text-emerald-400" />
+                        ) : (
+                          <Copy size={13} />
+                        )}
+                      </button>
+                    </div>
+
+                    {/* 主な能力 */}
+                    <div className="space-y-1.5 pt-1">
+                      <div className="text-[11px] font-mono font-bold text-slate-700">コア検証機能:</div>
+                      {agent.keyCapabilities.map((cap, idx) => (
+                        <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-600">
+                          <CheckCircle2 size={13} className="text-indigo-600 shrink-0 mt-0.5" />
+                          <span>{cap}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* フッターアクション */}
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <span className="text-[11px] font-mono text-slate-400 truncate">
+                      {agent.agentFilePath}
+                    </span>
+                    <button
+                      onClick={() => {
+                        playCyberClick();
+                        setSelectedAgentForModal(agent);
+                      }}
+                      onMouseEnter={() => playCyberHover()}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors border border-indigo-200/60 shrink-0"
+                    >
+                      <BookOpen size={13} />
+                      <span>定義を表示</span>
+                    </button>
+                  </div>
+                </SpotlightCard>
+              </TiltCard>
+            ))}
+          </div>
+        </section>
+
         {/* HUDハイライトカード */}
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
           <div onMouseEnter={() => playCyberHover()} className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40">
-          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30 text-xs font-mono font-bold tracking-wider uppercase">
-                <Bot size={14} className="text-purple-400" />
-                <span>MULTI-AGENT ARCHITECTURE</span>
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              <div className="space-y-3 max-w-2xl">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/30 text-xs font-mono font-bold tracking-wider uppercase">
+                  <Bot size={14} className="text-purple-400" />
+                  <span>MULTI-AGENT ARCHITECTURE</span>
+                </div>
+                <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
+                  単一プロンプトから「自律協調チーム」への進化
+                </h2>
+                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                  Antigravity 2.0 の Subagents 機能により、親エージェントがタスクを分割し、調査役（Flash）・実装役（Pro）・テスト実行役（CLI）をバックグラウンドで並列起動。
+                  開発者は複雑な指示を待つことなく、完成された差分とテストログを受け取ることが可能になります。
+                </p>
               </div>
-              <h2 className="text-xl sm:text-3xl font-black tracking-tight text-white">
-                単一プロンプトから「自律協調チーム」への進化
-              </h2>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Antigravity 2.0 の Subagents 機能により、親エージェントがタスクを分割し、調査役（Flash）・実装役（Pro）・テスト実行役（CLI）をバックグラウンドで並列起動。
-                開発者は複雑な指示を待つことなく、完成された差分とテストログを受け取ることが可能になります。
-              </p>
-            </div>
 
-            <div className="p-4.5 rounded-2xl bg-white/5 border border-white/10 shrink-0 font-mono text-xs space-y-2">
-              <div className="text-purple-400 font-bold flex items-center gap-1.5">
-                <Sparkles size={14} />
-                <span>POC HIGHLIGHTS</span>
+              <div className="p-4.5 rounded-2xl bg-white/5 border border-white/10 shrink-0 font-mono text-xs space-y-2">
+                <div className="text-purple-400 font-bold flex items-center gap-1.5">
+                  <Sparkles size={14} />
+                  <span>POC HIGHLIGHTS</span>
+                </div>
+                <div className="text-slate-200">・並列実行による待ち時間 70% 削減</div>
+                <div className="text-slate-200">・独立ブランチでの安全なサンドボックス実行</div>
+                <div className="text-slate-200">・Flashモデル併用によるトークンコスト半減</div>
               </div>
-              <div className="text-slate-200">・並列実行による待ち時間 70% 削減</div>
-              <div className="text-slate-200">・独立ブランチでの安全なサンドボックス実行</div>
-              <div className="text-slate-200">・Flashモデル併用によるトークンコスト半減</div>
             </div>
           </div>
-        </div>
-      </TiltCard>
+        </TiltCard>
 
-        {/* 事例カード一覧 */}
+        {/* 社内パイロット事例カード一覧 */}
         <div className="space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
             <div>
@@ -220,7 +350,223 @@ export default function AgentCasesPage() {
             ))}
           </div>
         </div>
+
+        {/* エージェント詳細定義モーダル */}
+        {selectedAgentForModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+            <div className="bg-white rounded-3xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+              <div className="px-6 py-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-mono text-indigo-300 font-bold uppercase tracking-wider">
+                    {selectedAgentForModal.agentFilePath}
+                  </div>
+                  <h3 className="text-lg font-black mt-0.5 flex items-center gap-2">
+                    <span>{selectedAgentForModal.title}</span>
+                  </h3>
+                </div>
+                <button
+                  onClick={() => {
+                    playCyberClick();
+                    setSelectedAgentForModal(null);
+                  }}
+                  className="p-1.5 rounded-full hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              <div className="p-6 overflow-y-auto space-y-4">
+                <div>
+                  <div className="text-xs font-mono font-bold text-slate-500 uppercase mb-1">
+                    Terminal 呼び出しコマンド
+                  </div>
+                  <div className="bg-slate-950 text-indigo-300 p-3 rounded-xl font-mono text-xs flex items-center justify-between">
+                    <code>{selectedAgentForModal.cliCommand}</code>
+                    <button
+                      onClick={() => handleCopy(selectedAgentForModal.cliCommand, "modal-cli")}
+                      className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors"
+                    >
+                      {copiedId === "modal-cli" ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-xs font-mono font-bold text-slate-500 uppercase">
+                      エージェント設定ファイル定義 (Markdown)
+                    </span>
+                    <button
+                      onClick={() => handleCopy(selectedAgentForModal.configMarkdown, "modal-md")}
+                      className="inline-flex items-center gap-1 text-xs font-mono text-indigo-600 hover:text-indigo-800 font-bold"
+                    >
+                      {copiedId === "modal-md" ? (
+                        <>
+                          <Check size={13} className="text-emerald-600" />
+                          <span>コピーしました</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={13} />
+                          <span>定義をコピー</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <pre className="bg-slate-50 border border-slate-200 rounded-xl p-4 font-mono text-xs text-slate-800 overflow-x-auto whitespace-pre-wrap">
+                    {selectedAgentForModal.configMarkdown}
+                  </pre>
+                </div>
+
+                <div className="bg-indigo-50/60 border border-indigo-100 rounded-xl p-3.5 text-xs text-indigo-900 leading-relaxed">
+                  💡 <strong>導入手順:</strong> ご利用のプロジェクトルートに <code className="font-mono bg-white px-1 py-0.5 rounded border border-indigo-200">{selectedAgentForModal.agentFilePath}</code> を作成し、上記内容を保存してください。Terminalから <code className="font-mono bg-white px-1 py-0.5 rounded border border-indigo-200">{selectedAgentForModal.cliCommand}</code> を実行すると専用エージェントが起動します。
+                </div>
+              </div>
+
+              <div className="px-6 py-3 bg-slate-50 border-t border-slate-100 flex justify-end">
+                <button
+                  onClick={() => {
+                    playCyberClick();
+                    setSelectedAgentForModal(null);
+                  }}
+                  className="px-5 py-2 rounded-xl bg-slate-900 text-white font-bold text-xs hover:bg-slate-800 transition-colors"
+                >
+                  閉じる
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
+// Google公式プラグイン対応カスタムエージェントの定義
+interface OfficialAgentItem {
+  id: string;
+  name: string;
+  title: string;
+  category: "Google Play" | "Portal Release" | "Flutter & Dart" | "Firebase";
+  badgeColor: string;
+  description: string;
+  targetRole: string;
+  cliCommand: string;
+  agentFilePath: string;
+  keyCapabilities: string[];
+  configMarkdown: string;
+}
+
+const OFFICIAL_CUSTOM_AGENTS: OfficialAgentItem[] = [
+  {
+    id: "play-release-audit",
+    name: "play-release-audit",
+    title: "Google Play 事前リリース監査ゲートエージェント",
+    category: "Google Play",
+    badgeColor: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    description: "Google Play Developer Programポリシー、パーミッション、Intent安全宣言、R8/DEX最適化を事前監査する読み取り専用ゲート。",
+    targetRole: "Android開発者 / モバイルリード / QA",
+    cliCommand: "agy --agent play-release-audit",
+    agentFilePath: ".agents/agents/play-release-audit.md",
+    keyCapabilities: [
+      "AndroidManifest.xml の制限付き権限監査",
+      "コンポーネントの android:exported 宣言検証",
+      "R8難読化での過剰削除・Keepルール検証",
+      "[ APPROVED | CONDITIONAL | BLOCKED ] 判定出力"
+    ],
+    configMarkdown: `---
+name: play-release-audit
+description: Google Play Pre-submission Release Gate Auditor.
+tools:
+  - run_command
+  - view_file
+---
+
+# Google Play Pre-submission Release Gate Auditor
+Strict Read-Only Mode. Run deterministically before Play Console submission.`
+  },
+  {
+    id: "ai-park-release-audit",
+    name: "ai-park-release-audit",
+    title: "AI Park 本番デプロイ前総合リリース監査エージェント",
+    category: "Portal Release",
+    badgeColor: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    description: "MightyLINK AI Parkの公開前総合監査ゲート。未完了注記、手動UAT合格ステータス、静的エクスポート整合性、404ハンドラを検証。",
+    targetRole: "フロントエンド開発者 / レビュー担当 / PM",
+    cliCommand: "agy --agent ai-park-release-audit",
+    agentFilePath: ".agents/agents/ai-park-release-audit.md",
+    keyCapabilities: [
+      "11画面の未確認・工事中注記（npm run check:gate）検証",
+      "開発者手動プリフライト（UAT 4大評価軸）全件合格確認",
+      "Next.js 16 静的エクスポート（404.html含む）ビルド検証",
+      "Fail-Closed 設計による厳格な合否レポート出力"
+    ],
+    configMarkdown: `---
+name: ai-park-release-audit
+description: MightyLINK AI Park デプロイ前総合リリース監査ゲートエージェント。
+tools:
+  - run_command
+  - view_file
+---
+
+# AI Park Pre-submission Release Gate Auditor
+Strict Read-Only Mode. Verify gate before merging to main.`
+  },
+  {
+    id: "flutter-a11y",
+    name: "flutter-a11y",
+    title: "Flutter アクセシビリティ自動修正エージェント",
+    category: "Flutter & Dart",
+    badgeColor: "bg-cyan-50 text-cyan-700 border-cyan-200",
+    description: "宣言的UIツリーからセマンティックラベル欠落や48x48dp未満のタッチターゲットを自動検知し、安全なFlutterコード修正を提案。",
+    targetRole: "Flutter開発者 / UI・アクセシビリティ担当",
+    cliCommand: "agy --agent flutter-a11y",
+    agentFilePath: ".agents/agents/flutter-a11y.md",
+    keyCapabilities: [
+      "タッチターゲットサイズ（48x48 dp基準）の自動検出",
+      "Semantics / Tooltip ウィジェットの自動ラッピング",
+      "W3C WCAG 2.2 準拠のコントラスト比検証",
+      "宣言的Widgetツリーへの安全な最小限差分適用"
+    ],
+    configMarkdown: `---
+name: flutter-a11y
+description: Flutter Accessibility Custom Agent.
+tools:
+  - run_command
+  - view_file
+  - replace_file_content
+---
+
+# Flutter Accessibility Custom Agent
+Audit and repair semantic labels and touch target sizes.`
+  },
+  {
+    id: "firebase-rules",
+    name: "firebase-rules",
+    title: "Firebase セキュリティルール堅牢化エージェント",
+    category: "Firebase",
+    badgeColor: "bg-amber-50 text-amber-700 border-amber-200",
+    description: "データモデルと認証要件を解析し、過剰なアクセス権限（allow read, write: if true）を未然に防止するFirestoreルールを自動合成。",
+    targetRole: "バックエンドエンジニア / クラウドアーキテクト",
+    cliCommand: "agy --agent firebase-rules",
+    agentFilePath: ".agents/agents/firebase-rules.md",
+    keyCapabilities: [
+      "過剰権限ルール（ワイルドカード許可）の自動検知",
+      "request.auth.uid 準拠のきめ細かなRBACルール生成",
+      "Firestore Rules Emulator 向けユニットテストの自動合成",
+      "本番デプロイ前のセキュリティ回帰チェック"
+    ],
+    configMarkdown: `---
+name: firebase-rules
+description: Firebase Security Rules Custom Agent.
+tools:
+  - run_command
+  - view_file
+  - write_to_file
+---
+
+# Firebase Security Rules Custom Agent
+Generate and statically verify strict Firestore security rules.`
+  }
+];
+

@@ -1,29 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Volume2, VolumeX, Sparkles } from "lucide-react";
+import { useSyncExternalStore } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 import { isSoundEnabled, setSoundEnabled, playCyberClick, playCyberHover } from "@/lib/sound";
 
+const emptySubscribe = () => () => {};
+
+function subscribeSound(callback: () => void) {
+  window.addEventListener("ai-park-sound-changed", callback);
+  return () => window.removeEventListener("ai-park-sound-changed", callback);
+}
+
 export default function SoundToggle() {
-  const [enabled, setEnabled] = useState(true);
-  const [mounted, setMounted] = useState(false);
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const enabled = useSyncExternalStore(subscribeSound, () => isSoundEnabled(), () => true);
 
-  useEffect(() => {
-    setMounted(true);
-    setEnabled(isSoundEnabled());
-
-    const handleSoundChange = (e: Event) => {
-      const customEvent = e as CustomEvent<{ enabled: boolean }>;
-      if (customEvent.detail) {
-        setEnabled(customEvent.detail.enabled);
-      }
-    };
-
-    window.addEventListener("ai-park-sound-changed", handleSoundChange);
-    return () => window.removeEventListener("ai-park-sound-changed", handleSoundChange);
-  }, []);
-
-  if (!mounted) {
+  if (!isMounted) {
     return null;
   }
 
@@ -31,12 +23,10 @@ export default function SoundToggle() {
     const next = !enabled;
     if (next) {
       setSoundEnabled(true);
-      setEnabled(true);
       setTimeout(() => playCyberClick(), 50);
     } else {
       playCyberClick();
       setSoundEnabled(false);
-      setEnabled(false);
     }
   };
 
@@ -49,18 +39,17 @@ export default function SoundToggle() {
           ? "bg-cyan-950/60 text-cyan-300 border-cyan-500/40 hover:bg-cyan-900/60 hover:border-cyan-400"
           : "bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700 hover:text-slate-200"
       }`}
-      title={enabled ? "触覚音響をミュートする" : "触覚音響を有効化する"}
-      aria-label={enabled ? "触覚音響をミュートする" : "触覚音響を有効化する"}
+      title={enabled ? "効果音をミュート" : "効果音を有効化"}
     >
       {enabled ? (
         <>
-          <Volume2 size={13} className="text-cyan-400 animate-pulse" />
-          <span>CYBER AUDIO: ON</span>
+          <Volume2 size={14} className="text-cyan-400 animate-pulse" />
+          <span>SOUND ON</span>
         </>
       ) : (
         <>
-          <VolumeX size={13} className="text-slate-400" />
-          <span>CYBER AUDIO: OFF</span>
+          <VolumeX size={14} className="text-slate-500" />
+          <span>MUTED</span>
         </>
       )}
     </button>

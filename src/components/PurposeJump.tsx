@@ -9,18 +9,17 @@ import {
   BookOpen,
   Bot,
   MessageCircle,
-  ChevronDown,
   ArrowRight,
   ExternalLink,
   Sparkles,
-  Zap,
+  LucideIcon,
 } from "lucide-react";
 
 interface JumpSection {
   id: "learning" | "agents" | "community";
   title: string;
   subtitle: string;
-  icon: any;
+  icon: LucideIcon;
   color: string;
   borderColor: string;
   bgActive: string;
