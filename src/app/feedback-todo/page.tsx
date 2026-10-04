@@ -1876,6 +1876,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 111,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/111",
   },
+  {
+    id: "TODO-113",
+    title: "【Google公式エージェント活用】公式プラグイン対応カスタムエージェント（Flutter・Firebase・Google Play）の実践導入カタログ新設 & AI Parkリリース監査エージェント（ai-park-release-audit）の実装",
+    category: "開発環境",
+    author: "全社開発・AI推進チーム",
+    authorDept: "技術基盤・QA推進部",
+    date: "2026/10/04",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「Google Antigravity公式ブログで発表された公式カスタムエージェント群（Flutter / Firebase / Play Audit）を社内エンジニアが自分のプロジェクトへ即座に導入できるカタログと設定テンプレートを提供し、同時にAI Park自身のデプロイ前総合監査エージェントも整備してほしい」",
+    actionPlan: "【反映済み】Subagents活用事例集（/agent-cases）にGoogle公式プラグイン対応カスタムエージェント実践導入カタログ（4種）を新設し、ワンクリックMarkdown定義コピー・CLIコマンド（agy --agent <name>）連携を実装。また、AI Park本番前総合監査エージェント（.agents/agents/ai-park-release-audit.md）を正式配置しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "カスタムエージェント実践カタログを確認",
+    issueNumber: 112,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/112",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));
