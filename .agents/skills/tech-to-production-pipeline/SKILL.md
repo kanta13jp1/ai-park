@@ -150,3 +150,12 @@ flowchart TD
 | **起票ToDo** | `TODO-114`（Issue #113） |
 | **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 物理サイネージモデルケース & カタログ追加<br>・`.agents/agents/iot-display-controller.md` エージェント定義配置<br>・`src/app/feedback-todo/page.tsx` TODO-114 クローズ |
 | **品質ゲート** | `npm run check:gate` 合格、`npx tsc --noEmit` ノーエラー通過 |
+
+### ケース3: DeepSeek公式ブログ「DeepSeek-V4.1-Flash Generally Available」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [DeepSeek-V4.1-Flash: Generally Available](https://deepseek.ai/blog/deepseek-v41-flash-generally-available) (2026/10/04) |
+| **還元アイデア** | ① 1Mトークン超長文コンテキスト・8B Prefill MoE・MITライセンス技術速報ニュース配信<br>② モノレポ全件依存解析 & 規程一括監査モデルケースの新設<br>③ `model-router` スキルへの超長文・オープンウェイト推論モデル特性の反映 |
+| **起票ToDo** | `TODO-115`（Issue #114） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 1M長文解析モデルケース新設<br>・`.gemini/config/skills/model-router/SKILL.md` 選定マトリクス更新<br>・`src/app/feedback-todo/page.tsx` TODO-115 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`npx tsc --noEmit` ノーエラー通過 |

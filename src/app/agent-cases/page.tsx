@@ -103,6 +103,24 @@ const AGENT_CASES: AgentCase[] = [
       "会話中に割り込み（interrupt）可能な全二重クライアント委譲アーキテクチャ",
       "回路図・ESP32配線トラブルシューティングにおけるCodex画像解析の活用"
     ]
+  },
+  {
+    id: "case-repo-inspection-moe",
+    title: "超長文1Mコンテキストによるモノレポ全件依存解析 & 規程一括監査",
+    department: "基盤技術・全社アーキテクチャ統括",
+    summary: "100万トークン（1M）の長大コンテキストウィンドウとMoE（8B Prefill/16B Decode）高効率推論を活かし、モノレポ全体の数千ファイルや全社セキュリティ規程を一括読込。循環参照や脆弱性パターンを高速に網羅検出。",
+    subagentRoles: [
+      "Repo Crawler (DeepSeek-V4.1-Flash / 1M Context)",
+      "Dependency Auditor (Flash MoE)",
+      "Report Generator (Pro / Inherit)"
+    ],
+    estimatedHoursSaved: "月間約 52 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "1Mトークンによるチャンク分割不要のモノレポ全域一括インスペクション",
+      "8BアクティベートMoEによる超高速Prefillと大幅なAPIコスト圧縮",
+      "MITライセンスオープンウェイトモデルによるオンプレミス検証の実現可能性"
+    ]
   }
 ];
 

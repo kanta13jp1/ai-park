@@ -1908,6 +1908,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 113,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/113",
   },
+  {
+    id: "TODO-115",
+    title: "【基盤モデル】DeepSeek-V4.1-Flash GA提供開始に伴う1M長文コンテキスト・高効率MoEモデルの社内活用リファレンス & ニュース還元",
+    category: "AI実践編",
+    author: "基盤モデル研究・LLM活用推進WG",
+    authorDept: "AIテクノロジーセンター・技術基盤統括",
+    date: "2026/10/04",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「DeepSeekの最新モデル『DeepSeek-V4.1-Flash』がGAとなり、1Mトークンの超長文コンテキスト、8B/16Bアクティベートの高効率MoE、MITライセンスによるオープンウェイトが提供開始された。社内での長大コード/ドキュメント解析やオンプレミス検証の選択肢としてモデル特性をポータルに反映してほしい」",
+    actionPlan: "【反映済み】DeepSeek公式ブログ『DeepSeek-V4.1-Flash Generally Available』の解説をAIニュース（/news）に追加。Subagents活用事例集（/agent-cases）に1M長文コンテキスト高速インスペクション事例を新設し、基盤モデル自動選定スキル（model-router）の選定マトリクスへ8B Prefill MoEと1M Contextモデル特性を反映しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 114,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/114",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));
