@@ -177,3 +177,13 @@ flowchart TD
 | **起票ToDo** | `TODO-117`（Issue #116） |
 | **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 動画要約モデルケース新設<br>・`src/app/tools-hub/page.tsx` ツール情報更新<br>・`src/app/feedback-todo/page.tsx` TODO-117 クローズ |
 | **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
+
+### ケース6: Cognition公式ブログ「Cognition Crosses $1B in Annualized Revenue Run Rate」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [Cognition Crosses $1B in Annualized Revenue Run Rate](https://cognition.com/blog/1b-run-rate) (2026/09/25) |
+| **還元アイデア** | ① 自律型AIエンジニア「Devin」ARR 10億ドル突破・大企業（GE Aerospace・Rivian・NVIDIA等）浸透動向ニュース配信<br>② 大規模自律エージェントによるレガシー移行 & CI自動修復モデルケース新設<br>③ `tools-hub` へのDevin（PoC検証枠・Level 2）新規掲載 |
+| **起票ToDo** | `TODO-118`（Issue #117） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` レガシー移行モデルケース新設<br>・`src/app/tools-hub/page.tsx` Devin掲載追加<br>・`src/app/feedback-todo/page.tsx` TODO-118 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
+
