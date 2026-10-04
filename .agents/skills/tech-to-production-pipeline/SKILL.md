@@ -131,12 +131,22 @@ flowchart TD
 
 ---
 
-## 3. 実践ケーススタディ（Google公式ブログ「Custom agents in Google plugins」適用例）
+## 3. 実践ケーススタディ
 
-| 項目 | 今回の実績 |
+### ケース1: Google公式ブログ「Custom agents in Google plugins」適用例
+| 項目 | 実績内容 |
 | :--- | :--- |
 | **元記事** | [Custom agents in Google plugins](https://antigravity.google/blog/custom-agents-in-google-plugins) (2026/09/28) |
 | **還元アイデア** | ① 社内開発者向け公式カスタムエージェント（Flutter / Firebase / Play Audit）実践カタログの提供<br>② AI Park専用デプロイ前総合リリース監査エージェント（`ai-park-release-audit`）の実装 |
 | **起票ToDo** | `TODO-113`（Issue #112） |
 | **成果物** | ・`.agents/agents/ai-park-release-audit.md`<br>・`.agents/agents/play-release-audit.md`<br>・`.agents/agents/flutter-a11y.md`<br>・`.agents/agents/firebase-rules.md`<br>・`src/app/agent-cases/page.tsx` カタログUI & モーダル<br>・`src/app/feedback-todo/page.tsx` TODO-113 クローズ |
 | **品質ゲート** | `npm run check:gate` 全13件手動UAT合格確認、`npx tsc --noEmit` ノーエラー通過 |
+
+### ケース2: OpenAI公式ブログ「Bringing my LED display to life」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [Bringing my LED display to life with GPT-Live-1 and Codex](https://developers.openai.com/blog/bringing-my-led-display-to-life) (2026/10/02) |
+| **還元アイデア** | ① 全二重音声対話×推論委譲×ローカルピクセルレンダリングの最新IoT技術解説ニュース配信<br>② 物理LEDサイネージ・HUDリアルタイム音声制御モデルケースの新設<br>③ IoT・物理ディスプレイ制御用カスタムエージェント（`iot-display-controller`）の配置 |
+| **起票ToDo** | `TODO-114`（Issue #113） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 物理サイネージモデルケース & カタログ追加<br>・`.agents/agents/iot-display-controller.md` エージェント定義配置<br>・`src/app/feedback-todo/page.tsx` TODO-114 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`npx tsc --noEmit` ノーエラー通過 |
