@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
-import { playCyberClick, playCyberHover } from "@/lib/sound";
+import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
 import {
   Building2,
   CircleDot,
@@ -22,6 +22,10 @@ import {
   Users,
   CheckCircle2,
   Zap,
+  Search,
+  Copy,
+  Check,
+  X,
 } from "lucide-react";
 import {
   buildNewProjectUrl,
@@ -145,6 +149,15 @@ export default function AiProjectsPage() {
   const [syncState, setSyncState] = useState<"loading" | "ok" | "error">("loading");
   const [stageFilter, setStageFilter] = useState<ProjectStage | "all">("all");
   const [deptFilter, setDeptFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [copiedDept, setCopiedDept] = useState<string | null>(null);
+
+  const handleCopyWorkflow = (dept: string, text: string) => {
+    navigator.clipboard.writeText(text);
+    playCyberSuccess();
+    setCopiedDept(dept);
+    setTimeout(() => setCopiedDept(null), 2000);
+  };
 
   const load = (signal?: AbortSignal) =>
     fetchProjectIssues(signal).then(
@@ -171,7 +184,15 @@ export default function AiProjectsPage() {
   const shown = all.filter((p) => {
     const matchesStage = stageFilter === "all" || p.stage === stageFilter;
     const matchesDept = deptFilter === "all" || p.dept === deptFilter;
-    return matchesStage && matchesDept;
+    const matchesSearch =
+      searchQuery.trim() === "" ||
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.dept.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (p.owner && p.owner.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (p.tools && p.tools.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (p.summary && p.summary.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (p.effect && p.effect.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesStage && matchesDept && matchesSearch;
   });
 
   return (
@@ -263,6 +284,26 @@ export default function AiProjectsPage() {
                 </select>
               </div>
             )}
+
+            {/* リアルタイムキーワード検索 */}
+            <div className="relative flex items-center ml-1">
+              <Search size={13} className="absolute left-2.5 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="プロジェクト・ツール・概要検索..."
+                className="pl-7 pr-7 py-1 text-xs font-medium rounded-xl border border-slate-200 bg-slate-100/80 text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400 transition-all w-48 sm:w-56"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex items-center gap-3 text-xs text-slate-500 font-medium self-end md:self-center">
@@ -373,7 +414,15 @@ export default function AiProjectsPage() {
           {shown.length === 0 && (
             <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center text-slate-500 md:col-span-2 space-y-2">
               <FolderGit2 size={36} className="mx-auto text-slate-300" />
-              <p className="text-xs font-semibold">該当するステータスのプロジェクトはありません。</p>
+              <p className="text-xs font-semibold">該当する条件（ステータス・部署・検索ワード）のプロジェクトはありません。</p>
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="text-xs text-indigo-600 font-bold hover:underline cursor-pointer"
+                >
+                  検索フィルターをリセット
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -428,8 +477,27 @@ export default function AiProjectsPage() {
                       </p>
                     </div>
 
-                    <div className="bg-white p-3 rounded-xl border border-slate-200/70 space-y-1.5">
-                      <span className="text-[11px] font-bold text-slate-700 block">実践フロー:</span>
+                    <div className="bg-white p-3 rounded-xl border border-slate-200/70 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-bold text-slate-700 block">実践フロー:</span>
+                        <button
+                          onClick={() => handleCopyWorkflow(dp.dept, dp.workflow.join("\n"))}
+                          onMouseEnter={() => playCyberHover()}
+                          className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 transition-colors cursor-pointer border border-slate-200/70"
+                        >
+                          {copiedDept === dp.dept ? (
+                            <>
+                              <Check size={11} className="text-emerald-500" />
+                              <span className="text-emerald-600">コピー完了</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy size={11} />
+                              <span>フローをコピー</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
                       <ul className="space-y-1 text-[11px] text-slate-600 leading-relaxed font-mono">
                         {dp.workflow.map((w, i) => (
                           <li key={i}>{w}</li>
@@ -438,9 +506,11 @@ export default function AiProjectsPage() {
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-200/60 flex items-center gap-1.5 text-xs text-emerald-700 font-bold">
-                    <CheckCircle2 size={13} className="shrink-0" />
-                    <span>効果: {dp.effect}</span>
+                  <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between gap-1.5 text-xs text-emerald-700 font-bold">
+                    <div className="flex items-center gap-1.5">
+                      <CheckCircle2 size={13} className="shrink-0" />
+                      <span>効果: {dp.effect}</span>
+                    </div>
                   </div>
                 </div>
               </TiltCard>

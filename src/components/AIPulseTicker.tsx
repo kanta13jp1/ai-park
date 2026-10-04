@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Activity, Sparkles, Terminal, CheckCircle2, Flame, Bot, Cpu, Pause } from "lucide-react";
+import { Activity, Sparkles, Terminal, CheckCircle2, Flame, Bot, Cpu, Pause, Trophy, Wrench, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
@@ -19,6 +19,36 @@ interface PulseItem {
 const pulseEvents: PulseItem[] = [
   {
     id: "1",
+    badge: "MILESTONE",
+    badgeColor: "bg-amber-500/25 text-amber-300 border-amber-400/50",
+    icon: Trophy,
+    text: "祝・改善ToDo通算100件突破！社員の声を反映する自律品質向上サイクルが稼働中",
+    linkText: "100件ToDoを見る",
+    href: "/feedback-todo",
+    time: "100+ DONE",
+  },
+  {
+    id: "2",
+    badge: "SKILLS",
+    badgeColor: "bg-purple-500/25 text-purple-300 border-purple-400/50",
+    icon: Wrench,
+    text: "社内認定Skillsカタログ：全8スキルのプロンプト即時コピー＆申請ドラフト生成",
+    linkText: "Skillsを見る",
+    href: "/skills-hub",
+    time: "NEW",
+  },
+  {
+    id: "3",
+    badge: "SUPPORT",
+    badgeColor: "bg-rose-500/25 text-rose-300 border-rose-400/50",
+    icon: AlertTriangle,
+    text: "Windowsトラブルシューター：PowerShell・Git・Node環境の自己解決コマンド集公開",
+    linkText: "解決する",
+    href: "/troubleshooting",
+    time: "FAQ",
+  },
+  {
+    id: "4",
     badge: "ACADEMY",
     badgeColor: "bg-indigo-500/20 text-indigo-300 border-indigo-400/40",
     icon: Sparkles,
@@ -28,7 +58,7 @@ const pulseEvents: PulseItem[] = [
     time: "NOW",
   },
   {
-    id: "2",
+    id: "5",
     badge: "FEEDBACK",
     badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-400/40",
     icon: CheckCircle2,
@@ -38,7 +68,7 @@ const pulseEvents: PulseItem[] = [
     time: "SYNCED",
   },
   {
-    id: "3",
+    id: "6",
     badge: "AGENTIC",
     badgeColor: "bg-cyan-500/20 text-cyan-300 border-cyan-400/40",
     icon: Bot,
@@ -48,7 +78,7 @@ const pulseEvents: PulseItem[] = [
     time: "v1.2",
   },
   {
-    id: "4",
+    id: "7",
     badge: "COMMUNITY",
     badgeColor: "bg-amber-500/20 text-amber-300 border-amber-400/40",
     icon: Flame,

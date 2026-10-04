@@ -16,6 +16,8 @@ import {
   Terminal,
   GraduationCap,
   Wrench,
+  AlertTriangle,
+  BarChart3,
 } from "lucide-react";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
@@ -85,14 +87,38 @@ export default function HowToPage() {
     {
       id: "skills-hub",
       title: "社内Skillsカタログ",
-      desc: "社内で共有する Antigravity の Skills はこちら！",
+      desc: "実務効率化の切り札！Antigravity認定Skillsの検索と新規申請はこちら！",
       icon: <Wrench className="text-purple-600" size={32} />,
       iconBg: "bg-purple-50 border-purple-100",
       href: "/skills-hub",
-      badge: "🚧 工事中",
-      badgeColor: "bg-purple-100 text-purple-700",
-      tags: ["準備中", "Skills"],
-      highlights: "社内で共有する Antigravity の Skills カタログ（準備中）",
+      badge: "✅ 認定公開中",
+      badgeColor: "bg-purple-100 text-purple-700 font-bold",
+      tags: ["認定Skills", "申請モーダル", "業務自動化"],
+      highlights: "社内で共有する認定 Skills カタログ（全8スキル・プロンプト即時コピー・申請フォーム完備）",
+    },
+    {
+      id: "troubleshooting",
+      title: "Windowsトラブル解決",
+      desc: "PowerShell実行ポリシーやGit認証・Node環境のエラーを即時自己解決！",
+      icon: <AlertTriangle className="text-rose-600" size={32} />,
+      iconBg: "bg-rose-50 border-rose-100",
+      href: "/troubleshooting",
+      badge: "自己解決FAQ",
+      badgeColor: "bg-rose-100 text-rose-700 font-bold",
+      tags: ["PowerShell", "Git認証", "Node.js", "ワンクリックコピー"],
+      highlights: "Windows開発環境で発生しやすいエラーの対処コマンド集と事前チェック",
+    },
+    {
+      id: "gemini-stats",
+      title: "Gemini利用統計 & SKU",
+      desc: "社内でのGemini活用状況、SKU別料金・モデル仕様の可視化ダッシュボード！",
+      icon: <BarChart3 className="text-emerald-600" size={32} />,
+      iconBg: "bg-emerald-50 border-emerald-100",
+      href: "/gemini-stats",
+      badge: "利用統計・可視化",
+      badgeColor: "bg-emerald-100 text-emerald-700 font-bold",
+      tags: ["利用統計", "SKU・料金", "モデル比較"],
+      highlights: "社内利用トレンドのグラフ分析とGemini 3.1 Pro/Flashのスペック早見表",
     },
   ];
 
