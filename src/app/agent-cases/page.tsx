@@ -157,6 +157,24 @@ const AGENT_CASES: AgentCase[] = [
       "自然言語での「BGMを下げて」「テンポよく」指示とタイムライン直接操作のシームレス往復",
       "社内勉強会アーカイブからの要約ショート動画制作時間を80%短縮"
     ]
+  },
+  {
+    id: "case-autonomous-legacy-migration",
+    title: "大規模自律エージェントによるレガシー移行 & CI自動修復",
+    department: "システム基盤・モダナイゼーション推進チーム",
+    summary: "Cognition Devinのエンタープライズ協働アーキテクチャに倣い、リポジトリ全体を走査してフレームワークのバージョン移行・非推奨API置換・壊れたCIテストの自動修復・プルリクエスト作成までを自律型エージェント群が反復実行。",
+    subagentRoles: [
+      "Issue & Dependency Scanner (Flash)",
+      "Autonomous Refactoring Engine (Pro)",
+      "CI Test & Regression Verifier"
+    ],
+    estimatedHoursSaved: "月間約 85 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "単なるコード提案を超えた、ブランチ作成・ビルド検証・テスト修正までの自律反復完遂",
+      "レガシーコード（旧バージョン依存）の機械的一括置換による移行手戻りの撲滅",
+      "CI失敗時のエラーログ原因特定からパッチ作成までのリードタイムを70%短縮"
+    ]
   }
 ];
 

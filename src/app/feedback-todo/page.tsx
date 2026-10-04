@@ -1956,6 +1956,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 116,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/116",
   },
+  {
+    id: "TODO-118",
+    title: "【自律型エージェント】Cognition「Devin」ARR 10億ドル突破に伴う自律型開発エージェント活用リファレンス & ニュース還元",
+    category: "AI実践編",
+    author: "エンジニアリング生産性向上タスクフォース",
+    authorDept: "システムアーキテクチャ統括部",
+    date: "2026/10/04",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「自律型AIエンジニアのDevin（Cognition）が創業から2年足らずでARR 10億ドルを突破し、GE AerospaceやRivian、Citi、NVIDIAといった大企業の基幹開発に定着している。単なるインライン補完を超えて自律的にIssue解決やレガシーコード移行を行うエージェント活用の潮流を社内ポータルに還元してほしい」",
+    actionPlan: "【反映済み】Cognition公式発表「Cognition Crosses $1B in Annualized Revenue Run Rate」の解説をAIニュース（/news）に追加。Subagents活用事例集（/agent-cases）に「大規模自律エージェントによるレガシー移行 & CI自動修復」モデルケースを追加し、AI Tools Hub（/tools-hub）にDevinを新規掲載しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 117,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/117",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

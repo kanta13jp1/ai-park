@@ -141,6 +141,22 @@ const companyAiToolsList: CompanyAiTool[] = [
     governanceNote: "顧客データ・社内機密コードの投入は厳禁。公開情報のリサーチおよび社内限定公開コンテンツ（公開済セミナー等）の動画編集に限定して利用すること。",
     officialDocUrl: "https://manus.im/ja/blog/introducing-video-editor",
   },
+  {
+    id: "tool-devin",
+    name: "Devin (Cognition 自律型AIエンジニア)",
+    vendor: "Cognition",
+    category: "poc",
+    categoryLabel: "PoC検証枠",
+    level: "Level 2",
+    levelBadge: "Level 2: マスキング必須",
+    status: "PoC検証中",
+    statusColor: "amber",
+    costModel: "月額シート + コンピュート従量制（検証予算）",
+    targetAudience: "ソフトウェアエンジニア・アーキテクト・SRE/QA担当",
+    description: "Issue自律解決、レガシーライブラリ移行、CIテストの自動修復・プルリクエスト作成までを完遂する自律型AIエンジニア。GE AerospaceやRivian、NVIDIA等で導入実績多数。",
+    governanceNote: "機密認証情報・顧客個人情報がリポジトリに含まれないことを確認の上、サンドボックス検証環境にて利用すること。",
+    officialDocUrl: "https://cognition.com/blog/1b-run-rate",
+  },
 ];
 
 const aiGuidelines = [
