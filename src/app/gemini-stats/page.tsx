@@ -62,10 +62,10 @@ const DEFAULT_GCP_INFO = {
 const DEFAULT_USERS: UserUsage[] = [
   {
     id: "usr-01",
-    name: "寛太 梅澤",
+    name: "利用者A",
     email: "k***@ml-mightylink.com",
-    department: "AI推進担当",
-    role: "Agent Platform ユーザー / 開発者",
+    department: "社内",
+    role: "Agent Platform ユーザー",
     requestCount: 1620,
     inputTokens: 29800000,
     outputTokens: 5200000,
@@ -77,10 +77,10 @@ const DEFAULT_USERS: UserUsage[] = [
   },
   {
     id: "usr-02",
-    name: "小林 雅水",
+    name: "利用者B",
     email: "k***@ml-mightylink.com",
-    department: "社内エンジニア / インフラ",
-    role: "プロジェクトオーナー",
+    department: "社内",
+    role: "Agent Platform ユーザー",
     requestCount: 220,
     inputTokens: 2800000,
     outputTokens: 600000,
@@ -750,7 +750,7 @@ function doGet() {
                 </div>
                 <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-600">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>本日利用: 2名（梅澤, 小林）</span>
+                  <span>本日利用: 2名</span>
                 </div>
               </div>
             </SpotlightCard>
@@ -1204,7 +1204,7 @@ function doGet() {
                       <span>⚡ GitHub Secrets 連携による完全自動同期パイプライン（稼働中）</span>
                     </h4>
                     <p className="text-xs text-indigo-200/80 mt-1">
-                      梅澤様のアカウント連携（authorized_user / ADC）により GitHub Secrets（GCP_SA_KEY）が登録され、定期ワークフローによる完全自動同期が本番稼働中です。
+                      管理者アカウント連携（authorized_user / ADC）により GitHub Secrets（GCP_SA_KEY）が登録され、定期ワークフローによる完全自動同期が本番稼働中です。
                     </p>
                   </div>
                 </div>
@@ -1216,7 +1216,7 @@ function doGet() {
                       <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-950/80 border border-emerald-700 text-emerald-300">完了済</span>
                     </div>
                     <p className="text-[11px] text-slate-300 leading-snug">
-                      梅澤様の Google アカウント（ADC）から安全にOAuth2リフレッシュトークンを取得・接続を確立しました。
+                      管理者の Google アカウント（ADC）から安全にOAuth2リフレッシュトークンを取得・接続を確立しました。
                     </p>
                   </div>
 

@@ -28,7 +28,7 @@ function sanitizeForPublish(d) {
     d.syncDetails.projectId = g.projectId;
     d.syncDetails.billingAccountId = g.billingAccountId;
   }
-  (d.users || []).forEach((u) => { u.email = maskEmail(u.email); });
+  (d.users || []).forEach((u, i) => { u.email = maskEmail(u.email); u.name = `利用者${String.fromCharCode(65 + i)}`; u.department = '社内'; u.role = 'Agent Platform ユーザー'; });
   return d;
 }
 const TARGET_FILE = path.join(__dirname, '..', 'public', 'data', 'gcp-usage-live.json');

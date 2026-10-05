@@ -108,10 +108,10 @@
   "users": [
     {
       "id": "U-01",
-      "name": "寛太 梅澤",
+      "name": "利用者A",
       "email": "k***@ml-mightylink.com",
-      "department": "AI推進担当",
-      "role": "Agent Platform ユーザー / 開発者",
+      "department": "社内",
+      "role": "Agent Platform ユーザー",
       "requestCount": 1620,
       "inputTokens": 31200000,
       "outputTokens": 3800000,
@@ -124,10 +124,10 @@
     },
     {
       "id": "U-02",
-      "name": "小林 雅水",
+      "name": "利用者B",
       "email": "k***@ml-mightylink.com",
-      "department": "社内エンジニア / インフラ",
-      "role": "プロジェクトオーナー",
+      "department": "社内",
+      "role": "Agent Platform ユーザー",
       "requestCount": 220,
       "inputTokens": 2800000,
       "outputTokens": 600000,
