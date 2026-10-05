@@ -18,26 +18,6 @@ interface PulseItem {
 
 const pulseEvents: PulseItem[] = [
   {
-    id: "1",
-    badge: "MILESTONE",
-    badgeColor: "bg-amber-500/25 text-amber-300 border-amber-400/50",
-    icon: Trophy,
-    text: "祝・改善ToDo通算100件突破！社員の声を反映する自律品質向上サイクルが稼働中",
-    linkText: "100件ToDoを見る",
-    href: "/feedback-todo",
-    time: "100+ DONE",
-  },
-  {
-    id: "2",
-    badge: "SKILLS",
-    badgeColor: "bg-purple-500/25 text-purple-300 border-purple-400/50",
-    icon: Wrench,
-    text: "社内認定Skillsカタログ：全8スキルのプロンプト即時コピー＆申請ドラフト生成",
-    linkText: "Skillsを見る",
-    href: "/skills-hub",
-    time: "NEW",
-  },
-  {
     id: "3",
     badge: "SUPPORT",
     badgeColor: "bg-rose-500/25 text-rose-300 border-rose-400/50",
@@ -82,7 +62,7 @@ const pulseEvents: PulseItem[] = [
     badge: "COMMUNITY",
     badgeColor: "bg-amber-500/20 text-amber-300 border-amber-400/40",
     icon: Flame,
-    text: "アイデア宣言ボード：社内AI共創プロジェクト募集中（いいね＆参加表明）",
+    text: "アイデア宣言ボード：AIで任せたい作業の宣言を受付中（GitHub で宣言・Google Chat に通知）",
     linkText: "宣言する",
     href: "/idea-board",
     time: "ACTIVE",

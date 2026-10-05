@@ -47,8 +47,8 @@ export const troubleshootingCommands: TroubleshootingCommand[] = [
     errorTitle: "GCPプロジェクト未指定・クォータプロジェクト未設定エラー",
     errorPattern: "The project property has not been set in your active configuration",
     cause: "gcloudやSDKがどのプロジェクトに対して課金・API呼び出しを行うべきか認識できていない。",
-    solutionCommand: "gcloud config set project antigravity-pj-509006",
-    explanation: "監視・稼働対象の社内プロジェクト「antigravity-pj-509006」をアクティブプロジェクトに固定します。",
+    solutionCommand: "gcloud config set project antigravity-pj-xxxxxx",
+    explanation: "監視・稼働対象の社内プロジェクト「antigravity-pj-xxxxxx」をアクティブプロジェクトに固定します。",
     frequency: "高",
   },
   {

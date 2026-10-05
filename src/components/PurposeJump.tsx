@@ -43,7 +43,7 @@ const jumpSections: JumpSection[] = [
     items: [
       { name: "Antigravity Academy", href: "/academy", desc: "動画と実践で学ぶ全12レッスン・修了テスト", badge: "おすすめ" },
       { name: "使い方・学び 総合ハブ", href: "/how-to", desc: "ツール・教育・インタビュー・クラウドの全体ポータル", badge: "総合" },
-      { name: "社内Skillsカタログ", href: "/skills-hub", desc: "実務効率化の切り札！Antigravity認定Skills一覧（全8種）", badge: "✅ 認定公開" },
+      { name: "社内Skillsカタログ", href: "/skills-hub", desc: "社内で共有する Antigravity の Skills（準備中）", badge: "🚧 工事中" },
       { name: "Windowsトラブル解決", href: "/troubleshooting", desc: "PowerShell・Git・Node環境の自己解決コマンド集", badge: "FAQ" },
       { name: "AIツール一覧", href: "/tools", desc: "AIツールの一覧（社内マスターシートの内容・確認中）", badge: "🧪 PoC中" },
       { name: "教育用コンテンツ", href: "/learning", desc: "初級編チートシート・Academy への案内" },

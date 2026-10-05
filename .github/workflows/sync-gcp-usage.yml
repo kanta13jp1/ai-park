@@ -26,8 +26,10 @@ jobs:
 
       - name: Run GCP Usage Sync Script
         env:
-          GCP_PROJECT_ID: "antigravity-pj-509006"
-          GCP_BILLING_ACCOUNT_ID: "012EB1-1D4C87-D1B374"
+          # 公開リポジトリのため ID は書かず、リポジトリの Variables（Settings → Secrets and variables → Actions）から読む
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_BILLING_ACCOUNT_ID: ${{ vars.GCP_BILLING_ACCOUNT_ID }}
+          GCP_BQ_PROJECT_ID: ${{ vars.GCP_BQ_PROJECT_ID }}
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
         run: node scripts/sync-gcp-usage.mjs
 

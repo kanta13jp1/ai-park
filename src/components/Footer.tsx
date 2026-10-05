@@ -48,7 +48,7 @@ export default function Footer() {
               <li>
                 <Link href="/skills-hub" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer flex items-center gap-1.5">
                   <span>社内Skillsカタログ</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono font-bold">認定</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono font-bold">準備中</span>
                 </Link>
               </li>
               <li>

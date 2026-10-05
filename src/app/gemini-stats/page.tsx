@@ -39,8 +39,8 @@ import {
 // 社内本番環境の確定情報 (Google Cloud Billing 実画面検証済み 2026/10/05 確定)
 const DEFAULT_GCP_INFO = {
   org: "ml-mightylink.com",
-  projectId: "antigravity-pj-509006",
-  billingAccountId: "012EB1-1D4C87-D1B374",
+  projectId: "antigravity-pj-xxxxxx",
+  billingAccountId: "012EB1-xxxxxx-xxxxxx",
   totalCreditJpy: 47813,
   remainingCreditJpy: 32352.49, // 2026/10/05 Cloud Billing 実機コンソール確定 (¥32,352.49)
   totalSpentJpy: 15460.51,
@@ -54,7 +54,7 @@ const DEFAULT_GCP_INFO = {
   trialDaysTotal: 90,
   trialDaysLeft: 87, // 2026/10/05 Cloud Billing 実画面確定 (残り87日 / 2026-12-31終了)
   monthlyBudgetUsd: 50,
-  bigQueryExportDataset: "mighty-link-ai-connect-497009:gcp_billing_export",
+  bigQueryExportDataset: "mighty-link-ai-connect-xxxxxx:gcp_billing_export",
   bigQueryConnected: true,
 };
 
@@ -63,7 +63,7 @@ const DEFAULT_USERS: UserUsage[] = [
   {
     id: "usr-01",
     name: "寛太 梅澤",
-    email: "k-umezawa@ml-mightylink.com",
+    email: "k***@ml-mightylink.com",
     department: "AI推進担当",
     role: "Agent Platform ユーザー / 開発者",
     requestCount: 1620,
@@ -78,7 +78,7 @@ const DEFAULT_USERS: UserUsage[] = [
   {
     id: "usr-02",
     name: "小林 雅水",
-    email: "kobayashi.masami@ml-mightylink.com",
+    email: "k***@ml-mightylink.com",
     department: "社内エンジニア / インフラ",
     role: "プロジェクトオーナー",
     requestCount: 220,
@@ -472,7 +472,7 @@ function doGet() {
                 <span>CSV出力</span>
               </button>
               <a
-                href={`https://console.cloud.google.com/billing/${gcpInfo.billingAccountId}/reports?project=${gcpInfo.projectId}`}
+                href="https://console.cloud.google.com/billing"
                 target="_blank"
                 rel="noopener noreferrer"
                 onMouseEnter={() => playCyberHover()}
@@ -1277,11 +1277,11 @@ powershell -ExecutionPolicy Bypass -File ./scripts/setup-gcp-sa.ps1
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                     <div className="bg-black/40 p-2.5 rounded-lg border border-purple-500/20 font-mono text-[11px]">
                       <div className="text-purple-300 font-bold text-[10px] mb-1">BigQuery 保存先（作成済）:</div>
-                      <div className="text-purple-100 select-all">mighty-link-ai-connect-497009:gcp_billing_export</div>
+                      <div className="text-purple-100 select-all">mighty-link-ai-connect-xxxxxx:gcp_billing_export</div>
                     </div>
                     <div className="bg-black/40 p-2.5 rounded-lg border border-purple-500/20 flex flex-col justify-center">
                       <a
-                        href="https://console.cloud.google.com/billing/012EB1-1D4C87-D1B374/export?project=antigravity-pj-509006"
+                        href="https://console.cloud.google.com/billing"
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-colors"
@@ -1292,7 +1292,7 @@ powershell -ExecutionPolicy Bypass -File ./scripts/setup-gcp-sa.ps1
                     </div>
                   </div>
                   <div className="text-[10px] text-purple-200/80 leading-normal border-t border-purple-500/20 pt-2">
-                    💡 <strong>設定手順:</strong> 上記リンクから「標準の使用料金」の【エクスポートを設定】を押し、プロジェクト <code className="text-purple-300 font-mono">mighty-link-ai-connect-497009</code> とデータセット <code className="text-purple-300 font-mono">gcp_billing_export</code> を選んで【保存】するだけで、数時間後に自動同期がスタートします。
+                    💡 <strong>設定手順:</strong> 上記リンクから「標準の使用料金」の【エクスポートを設定】を押し、プロジェクト <code className="text-purple-300 font-mono">mighty-link-ai-connect-xxxxxx</code> とデータセット <code className="text-purple-300 font-mono">gcp_billing_export</code> を選んで【保存】するだけで、数時間後に自動同期がスタートします。
                   </div>
                 </div>
               </div>

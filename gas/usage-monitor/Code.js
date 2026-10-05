@@ -2,14 +2,14 @@
  * ==============================================================================
  * Antigravity / Gemini 社内利用監視 自動集計 API (Google Apps Script)
  * ==============================================================================
- * 監視対象: antigravity-pj-509006
- * 組織: ml-mightylink.com (943535207512)
- * 請求先ID: 012EB1-1D4C87-D1B374
+ * 監視対象: antigravity-pj-xxxxxx
+ * 組織: ml-mightylink.com
+ * 請求先ID: 012EB1-xxxxxx-xxxxxx
  */
 
 const CONFIG = {
-  PROJECT_ID: "antigravity-pj-509006",
-  BILLING_ACCOUNT_ID: "012EB1-1D4C87-D1B374",
+  PROJECT_ID: "antigravity-pj-xxxxxx",
+  BILLING_ACCOUNT_ID: "012EB1-xxxxxx-xxxxxx",
   TOTAL_CREDIT_JPY: 47813,
   REMAINING_CREDIT_JPY: 47749,
   TOTAL_SPENT_JPY: 64,
@@ -43,7 +43,7 @@ function getAggregatedUsageData() {
     {
       id: "U-01",
       name: "寛太 梅澤",
-      email: "k-umezawa@ml-mightylink.com",
+      email: "k***@ml-mightylink.com",
       department: "AI推進担当",
       role: "Agent Platform ユーザー / 閲覧者",
       requestCount: 12,
@@ -58,7 +58,7 @@ function getAggregatedUsageData() {
     {
       id: "U-02",
       name: "小林 雅水",
-      email: "kobayashi masami@ml mightylink.com",
+      email: "k***@ml-mightylink.com",
       department: "社内エンジニア / インフラ",
       role: "プロジェクトオーナー",
       requestCount: 6,
@@ -79,7 +79,7 @@ function getAggregatedUsageData() {
     isLive: true,
     gcpInfo: {
       org: "ml-mightylink.com",
-      orgId: "943535207512",
+      orgId: "xxxxxxxxxxxx",
       projectId: CONFIG.PROJECT_ID,
       billingAccountId: CONFIG.BILLING_ACCOUNT_ID,
       totalCreditJpy: CONFIG.TOTAL_CREDIT_JPY,

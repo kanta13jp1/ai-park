@@ -332,7 +332,7 @@ export const aiNewsMaster: AINewsItem[] = [
     categoryLabel: "社内AI Park",
     importance: "release",
     importanceLabel: "社内リリース",
-    summary: "株式会社Mighty LINK全社員向けに、Google AntigravityおよびGemini 3.1 Proの利用環境が社内GCP基盤（antigravity-pj-509006）にて正式提供開始されました。",
+    summary: "株式会社Mighty LINK全社員向けに、Google AntigravityおよびGemini 3.1 Proの利用環境が社内GCP基盤（antigravity-pj-xxxxxx）にて正式提供開始されました。",
     impactForStaff: "会社貸与PC環境（Windows 11 / PowerShell）からセキュアにAIコーディング・業務自動化・ドキュメント作成を行うことが可能になりました。",
     recommendedFor: ["全社員", "エンジニア"],
     sourceName: "MightyLINK AI推進窓口",

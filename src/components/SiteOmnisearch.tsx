@@ -189,7 +189,7 @@ const siteSearchIndex: SearchIndexItem[] = [
     category: "統計分析",
     href: "/gemini-stats#faq",
     description: "全社・部署別Gemini利用回数、確定プロジェクト情報、集計期間・仕様FAQ",
-    keywords: ["gemini統計", "faq", "プライバシー", "集計期間", "更新頻度", "ログ仕様", "antigravity-pj-509006"],
+    keywords: ["gemini統計", "faq", "プライバシー", "集計期間", "更新頻度", "ログ仕様", "antigravity-pj-xxxxxx"],
   },
   {
     title: "部署別実践テンプレ＆実務フロー",

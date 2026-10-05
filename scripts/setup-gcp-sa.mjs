@@ -12,8 +12,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PROJECT_ID = process.env.GCP_PROJECT_ID || 'antigravity-pj-509006';
-const TARGET_ACCOUNT = process.env.GCP_ACCOUNT || 'k-umezawa@ml-mightylink.com';
+const PROJECT_ID = process.env.GCP_PROJECT_ID || 'antigravity-pj-xxxxxx';
+const TARGET_ACCOUNT = process.env.GCP_ACCOUNT || '<会社のメールアドレス>';
 const SA_NAME = 'ai-park-usage-sync';
 const DISPLAY_NAME = 'AI Park Usage Sync Service Account';
 const ROLE = 'roles/logging.viewer';

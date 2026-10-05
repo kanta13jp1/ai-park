@@ -107,10 +107,10 @@ export default function Home() {
     },
     {
       title: "社内Skillsカタログ",
-      description: "実務効率化の切り札！Antigravity認定Skills一覧（全8種）・申請モーダル完備",
+      description: "社内で共有する Antigravity の Skills（準備中）",
       icon: "⚡",
       href: "/skills-hub",
-      badge: "✅ 認定公開",
+      badge: "🚧 工事中",
       badgeColor: "bg-purple-500/15 text-purple-700 border border-purple-300/60",
       accentGradient: "from-purple-600 to-indigo-600",
       spotlightColor: "rgba(168, 85, 247, 0.18)",
@@ -598,7 +598,7 @@ export default function Home() {
               AI導入の疑問や自チームへの適用相談をお待ちしています
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-              「自チームの業務にエージェントを組み込みたい」「カスタムSkillsの作り方を教えてほしい」など、AI推進担当（担当：梅澤）が毎週水曜のOffice Hourで個別に対応します。
+              「自チームの業務にエージェントを組み込みたい」「カスタムSkillsの作り方を教えてほしい」など、AI推進担当（担当：梅澤）がOffice Hourで個別に対応します。
             </p>
             <div className="pt-2">
               <Link

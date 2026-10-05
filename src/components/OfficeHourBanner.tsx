@@ -18,7 +18,7 @@ export default function OfficeHourBanner() {
               <span>OFFICE HOUR</span>
             </span>
             <span className="text-slate-300 hidden md:inline">
-              毎週水曜 13:00〜17:00 開催中 • 担当：梅澤
+              担当：梅澤（AI推進担当）
             </span>
             <span className="text-slate-400 text-[11px]">
               自チームのAI活用・エージェント実装の個別相談を受付中

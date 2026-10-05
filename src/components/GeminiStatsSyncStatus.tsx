@@ -106,7 +106,7 @@ export default function GeminiStatsSyncStatus({
                   <span>① 会社アカウント（ml-mightylink.com）でのログイン確認</span>
                 </div>
                 <p className="text-[11px] text-slate-600">
-                  Antigravity右上のユーザー設定で、私用Gmailではなく会社ドメインのアカウント（例: <code>k-umezawa@ml-mightylink.com</code>）でサインインしているか確認してください。
+                  Antigravity右上のユーザー設定で、私用Gmailではなく会社ドメインのアカウント（例: <code>k***@ml-mightylink.com</code>）でサインインしているか確認してください。
                 </p>
               </div>
 
@@ -114,10 +114,10 @@ export default function GeminiStatsSyncStatus({
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
                 <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs">
                   <KeyRound size={14} className="text-cyan-600" />
-                  <span>② プロジェクトID（antigravity-pj-509006）の指定</span>
+                  <span>② プロジェクトID（antigravity-pj-xxxxxx）の指定</span>
                 </div>
                 <p className="text-[11px] text-slate-600">
-                  Google Cloud の課金・監査ログはプロジェクトごとに集計されます。Antigravityの接続先プロジェクトが <code>antigravity-pj-509006</code> に指定されていることを確認してください。
+                  Google Cloud の課金・監査ログはプロジェクトごとに集計されます。Antigravityの接続先プロジェクトが <code>antigravity-pj-xxxxxx</code> に指定されていることを確認してください。
                 </p>
               </div>
 

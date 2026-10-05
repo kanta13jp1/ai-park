@@ -12,8 +12,25 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PROJECT_ID = process.env.GCP_PROJECT_ID || 'antigravity-pj-509006';
-const BILLING_ACCOUNT_ID = process.env.GCP_BILLING_ACCOUNT_ID || '012EB1-1D4C87-D1B374';
+const PROJECT_ID = process.env.GCP_PROJECT_ID || 'antigravity-pj-xxxxxx';
+const BILLING_ACCOUNT_ID = process.env.GCP_BILLING_ACCOUNT_ID || '012EB1-xxxxxx-xxxxxx';
+const BQ_PROJECT_ID = process.env.GCP_BQ_PROJECT_ID || 'mighty-link-ai-connect-xxxxxx';
+
+// 公開ファイルに載せる値は伏せる（実際の ID は API 呼び出しにだけ使う）
+const maskEmail = (e) => (e && e.includes('@') && !e.includes('***') ? `${e[0]}***@${e.split('@')[1]}` : e);
+function sanitizeForPublish(d) {
+  const g = d.gcpInfo || {};
+  g.projectId = 'antigravity-pj-xxxxxx';
+  g.billingAccountId = '012EB1-xxxxxx-xxxxxx';
+  if (g.orgId) g.orgId = 'xxxxxxxxxxxx';
+  if (g.bigQueryExportDataset) g.bigQueryExportDataset = 'mighty-link-ai-connect-xxxxxx:gcp_billing_export';
+  if (d.syncDetails) {
+    d.syncDetails.projectId = g.projectId;
+    d.syncDetails.billingAccountId = g.billingAccountId;
+  }
+  (d.users || []).forEach((u) => { u.email = maskEmail(u.email); });
+  return d;
+}
 const TARGET_FILE = path.join(__dirname, '..', 'public', 'data', 'gcp-usage-live.json');
 
 // サービスアカウント (JWT) または ユーザー認証情報 (ADC / refresh_token) から Google OAuth2 アクセストークンを生成
@@ -189,13 +206,13 @@ async function syncUsageData() {
 
       // BigQuery 課金エクスポート自動クエリ
       try {
-        const bqProjectId = "mighty-link-ai-connect-497009";
+        const bqProjectId = BQ_PROJECT_ID;
         const bqQuery = `
           SELECT
             SUM(cost) as total_cost,
             SUM((SELECT COALESCE(SUM(amount), 0) FROM UNNEST(credits))) as total_credits,
             currency
-          FROM \`mighty-link-ai-connect-497009.gcp_billing_export.gcp_billing_export_v1_*\`
+          FROM \`${BQ_PROJECT_ID}.gcp_billing_export.gcp_billing_export_v1_*\`
           WHERE _PARTITIONDATE >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY)
           GROUP BY currency
         `;
@@ -260,10 +277,11 @@ async function syncUsageData() {
             const email = entry?.protoPayload?.authenticationInfo?.principalEmail;
             if (!email) return;
 
-            if (!userStats[email]) {
-              userStats[email] = { count: 0, lastActive: entry.timestamp };
+            const key = maskEmail(email);
+            if (!userStats[key]) {
+              userStats[key] = { count: 0, lastActive: entry.timestamp };
             }
-            userStats[email].count += 1;
+            userStats[key].count += 1;
           });
 
           // ユーザーデータ反映
@@ -319,7 +337,7 @@ async function syncUsageData() {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  fs.writeFileSync(TARGET_FILE, JSON.stringify(currentData, null, 2), 'utf-8');
+  fs.writeFileSync(TARGET_FILE, JSON.stringify(sanitizeForPublish(currentData), null, 2), 'utf-8');
   console.log(`[SUCCESS] Live usage data synchronized to ${TARGET_FILE} (Mode: ${currentData.syncMode})`);
 }
 

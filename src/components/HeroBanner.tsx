@@ -209,16 +209,16 @@ export default function HeroBanner({
         {isHome && (
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-slate-300 text-xs font-mono">
             <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-700/60 backdrop-blur-md">
-              <span className="text-cyan-400 font-bold">12</span>
-              <span className="text-slate-400 text-[11px]">Academy Lessons</span>
+              <span className="text-cyan-400 font-bold">3</span>
+              <span className="text-slate-400 text-[11px]">Academy Courses</span>
             </div>
             <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-700/60 backdrop-blur-md">
               <span className="text-emerald-400 font-bold">LIVE</span>
               <span className="text-slate-400 text-[11px]">Issue & Task Sync</span>
             </div>
             <div className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-slate-700/60 backdrop-blur-md">
-              <span className="text-amber-400 font-bold">CoE</span>
-              <span className="text-slate-400 text-[11px]">Weekly Office Hour</span>
+              <span className="text-amber-400 font-bold">相談</span>
+              <span className="text-slate-400 text-[11px]">Office Hour 相談</span>
             </div>
           </div>
         )}

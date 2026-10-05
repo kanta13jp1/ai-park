@@ -78,7 +78,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・実在性）",
             label: "組織・担当者・GCP基盤の実在性",
-            detail: "会社名（株式会社Mighty LINK）、AI推進担当（梅澤）、GCPプロジェクトID（antigravity-pj-509006）が実在情報であり、架空の部署や架空の担当者が書かれていないこと。",
+            detail: "会社名（株式会社Mighty LINK）、AI推進担当（梅澤）、GCPプロジェクトID（antigravity-pj-xxxxxx）が実在情報であり、架空の部署や架空の担当者が書かれていないこと。",
             verified: true,
           },
           {
@@ -231,7 +231,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "official_announcement",
             groupTitle: "② 公式アナウンス・安全基準と一致しているか（整合性・周知遵守）",
             label: "社内Antigravity・Gemini 3.1 Pro 認可状況との合致",
-            detail: "全社アナウンスされたGCPプロジェクト（antigravity-pj-509006）および認可アカウント規程に準拠した内容であること。",
+            detail: "全社アナウンスされたGCPプロジェクト（antigravity-pj-xxxxxx）および認可アカウント規程に準拠した内容であること。",
             verified: true,
           },
           {
@@ -325,9 +325,9 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     checks: {
       factAndSpec: {
         passed: true,
-        evidence: "Google公式ドキュメントおよび社内GCPプロジェクトID（antigravity-pj-509006）との整合を確認",
+        evidence: "Google公式ドキュメントおよび社内GCPプロジェクトID（antigravity-pj-xxxxxx）との整合を確認",
         points: [
-          "【事実性】社内組織名（ml-mightylink.com）およびプロジェクトID（antigravity-pj-509006）の正確性",
+          "【事実性】社内組織名（ml-mightylink.com）およびプロジェクトID（antigravity-pj-xxxxxx）の正確性",
           "【事実性】Google公式ダウンロードURLおよびCLIインストールコマンド（PowerShell / Bash）の一致",
           "【事実性】利用料金（3,000円/人 目安）およびSpend cap（課金上限）設定手順の事実性",
           "【事実性】付与必須ロール（Cloud AI Companion ユーザー）および過大権限禁止の正確性",
@@ -343,7 +343,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
             label: "社内GCP接続情報の正確性",
-            detail: "Google Cloud 組織（ml-mightylink.com）、社内プロジェクトID（antigravity-pj-509006）、プラン（Agent Platform）が実在情報であり、誤記がないこと。",
+            detail: "Google Cloud 組織（ml-mightylink.com）、社内プロジェクトID（antigravity-pj-xxxxxx）、プラン（Agent Platform）が実在情報であり、誤記がないこと。",
             verified: true,
           },
           {
@@ -575,7 +575,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
             label: "GCP基盤実在ID・組織情報の完全一致",
-            detail: "プロジェクトID「antigravity-pj-509006」、組織「ml-mightylink.com」、請求先ID「012EB1-1D4C87-D1B374」が実在する社内本番リソースと完全一致していること。",
+            detail: "プロジェクトID「antigravity-pj-xxxxxx」、組織「ml-mightylink.com」、請求先ID「012EB1-xxxxxx-xxxxxx」が実在する社内本番リソースと完全一致していること。",
             verified: true,
           },
           {
@@ -591,7 +591,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
             label: "実在社員アカウント・利用モデルの事実性",
-            detail: "寛太 梅澤（k-umezawa@ml-mightylink.com）、小林 雅水（kobayashi.masami@ml-mightylink.com）の2名が実在する社員アカウントであり、利用モデル（Gemini 3.8 Flash / 3.1 Pro）の実績と一致していること。",
+            detail: "寛太 梅澤（k***@ml-mightylink.com）、小林 雅水（k***@ml-mightylink.com）の2名が実在する社員アカウントであり、利用モデル（Gemini 3.8 Flash / 3.1 Pro）の実績と一致していること。",
             verified: true,
           },
           {
@@ -1159,7 +1159,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
             label: "社内審査基準・GCP基盤との一致",
-            detail: "シークレット非含有、破壊的コマンド（DROP/RM）遮断、プロジェクトID（antigravity-pj-509006）実在情報との整合性を確認。",
+            detail: "シークレット非含有、破壊的コマンド（DROP/RM）遮断、プロジェクトID（antigravity-pj-xxxxxx）実在情報との整合性を確認。",
             verified: true,
           },
           {

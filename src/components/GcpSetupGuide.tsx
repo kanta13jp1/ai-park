@@ -3,15 +3,15 @@ import StepCard, { type GuideStep } from "@/components/GuideStepCard";
 import { useState } from "react";
 
 // 会社のGoogle Cloudプロジェクト経由で Antigravity を使うための運用手順書
-// 社内本番環境：ml-mightylink.com / antigravity-pj (antigravity-pj-509006)
+// 社内本番環境：ml-mightylink.com / antigravity-pj (antigravity-pj-xxxxxx)
 
 export const COMPANY_GCP_INFO = {
   org: "ml-mightylink.com",
   projectName: "antigravity-pj",
-  projectId: "antigravity-pj-509006",
+  projectId: "antigravity-pj-xxxxxx",
   projectNumber: "470325701687",
   plan: "Agent Platform (Managed by your organization)",
-  billingAccountId: "012EB1-1D4C87-D1B374",
+  billingAccountId: "012EB1-xxxxxx-xxxxxx",
 };
 
 const adminSteps: GuideStep[] = [
@@ -37,7 +37,7 @@ const adminSteps: GuideStep[] = [
     who: "プロジェクトのオーナー",
     link: {
       label: "Vertex AI API を開く",
-      href: "https://console.cloud.google.com/apis/library/aiplatform.googleapis.com?project=antigravity-pj-509006",
+      href: "https://console.cloud.google.com/apis/library/aiplatform.googleapis.com?project=antigravity-pj-xxxxxx",
     },
     actions: [
       "左のリンクを開き、画面上部のプロジェクトが「antigravity-pj」になっていることを確認して「有効にする」をクリック",
@@ -224,7 +224,7 @@ export default function GcpSetupGuide() {
             </p>
             <p className="text-slate-700 leading-relaxed">
               <strong className="text-slate-900">対処法：</strong>
-              <br />1. 管理者にプロジェクト「<code>antigravity-pj-509006</code>」で <code>cloudaicompanion.googleapis.com</code> の有効化と、自身のアカウントへ「<code>Cloud AI Companion ユーザー</code>（または Vertex AI ユーザー）」のロール付与を依頼する。
+              <br />1. 管理者にプロジェクト「<code>antigravity-pj-xxxxxx</code>」で <code>cloudaicompanion.googleapis.com</code> の有効化と、自身のアカウントへ「<code>Cloud AI Companion ユーザー</code>（または Vertex AI ユーザー）」のロール付与を依頼する。
               <br />2. IDE側で「New Conversation（＋）」を開いて新規スレッドにするか、Settings &gt; Account から一度 Sign Out して再ログインする。
             </p>
           </div>

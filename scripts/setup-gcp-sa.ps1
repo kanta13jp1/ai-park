@@ -3,11 +3,11 @@
 # ==============================================================================
 
 param(
-    [string]$ProjectId = "antigravity-pj-509006",
+    [string]$ProjectId = "antigravity-pj-xxxxxx",
     [string]$ServiceAccountName = "ai-park-usage-sync",
     [string]$DisplayName = "AI Park Usage Sync Service Account",
     [string]$Role = "roles/logging.viewer",
-    [string]$TargetAccount = "k-umezawa@ml-mightylink.com"
+    [string]$TargetAccount = "<会社のメールアドレス>"
 )
 
 $ErrorActionPreference = "Stop"

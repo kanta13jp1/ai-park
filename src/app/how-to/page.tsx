@@ -87,13 +87,13 @@ export default function HowToPage() {
     {
       id: "skills-hub",
       title: "社内Skillsカタログ",
-      desc: "実務効率化の切り札！Antigravity認定Skillsの検索と新規申請はこちら！",
+      desc: "社内で共有する Antigravity の Skills（準備中）",
       icon: <Wrench className="text-purple-600" size={32} />,
       iconBg: "bg-purple-50 border-purple-100",
       href: "/skills-hub",
       badge: "✅ 認定公開中",
       badgeColor: "bg-purple-100 text-purple-700 font-bold",
-      tags: ["認定Skills", "申請モーダル", "業務自動化"],
+      tags: ["準備中"],
       highlights: "社内で共有する認定 Skills カタログ（全8スキル・プロンプト即時コピー・申請フォーム完備）",
     },
     {

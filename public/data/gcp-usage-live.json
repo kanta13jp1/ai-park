@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-10-05T17:33:55.649Z",
-  "syncedAt": "2026-10-06 02:33",
+  "updatedAt": "2026-10-05T17:55:41.168Z",
+  "syncedAt": "2026-10-06 02:55",
   "dataSource": "Google Cloud Billing & Cloud Logging Live Verified (2026/10/05 確定)",
   "isLive": true,
   "gcpInfo": {
     "org": "ml-mightylink.com",
-    "orgId": "943535207512",
-    "projectId": "antigravity-pj-509006",
-    "billingAccountId": "012EB1-1D4C87-D1B374",
+    "orgId": "xxxxxxxxxxxx",
+    "projectId": "antigravity-pj-xxxxxx",
+    "billingAccountId": "012EB1-xxxxxx-xxxxxx",
     "totalCreditJpy": 47813,
     "remainingCreditJpy": 32352.49,
     "totalSpentJpy": 15460.51,
@@ -24,7 +24,7 @@
     "monthlyBudgetUsd": 50,
     "billingAccountStatus": "ACTIVE",
     "currencyCode": "JPY",
-    "bigQueryExportDataset": "mighty-link-ai-connect-497009:gcp_billing_export",
+    "bigQueryExportDataset": "mighty-link-ai-connect-xxxxxx:gcp_billing_export",
     "bigQueryConnected": true
   },
   "summary": {
@@ -109,7 +109,7 @@
     {
       "id": "U-01",
       "name": "寛太 梅澤",
-      "email": "k-umezawa@ml-mightylink.com",
+      "email": "k***@ml-mightylink.com",
       "department": "AI推進担当",
       "role": "Agent Platform ユーザー / 開発者",
       "requestCount": 1620,
@@ -125,7 +125,7 @@
     {
       "id": "U-02",
       "name": "小林 雅水",
-      "email": "kobayashi.masami@ml-mightylink.com",
+      "email": "k***@ml-mightylink.com",
       "department": "社内エンジニア / インフラ",
       "role": "プロジェクトオーナー",
       "requestCount": 220,
@@ -143,9 +143,9 @@
   "syncModeLabel": "実機コンソール確定検証同期（保護中）",
   "syncDetails": {
     "authVerified": true,
-    "projectId": "antigravity-pj-509006",
-    "billingAccountId": "012EB1-1D4C87-D1B374",
-    "lastAuditCheck": "2026-10-06 02:33",
+    "projectId": "antigravity-pj-xxxxxx",
+    "billingAccountId": "012EB1-xxxxxx-xxxxxx",
+    "lastAuditCheck": "2026-10-06 02:55",
     "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)"
   }
 }
