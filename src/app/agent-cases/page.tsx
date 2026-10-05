@@ -229,6 +229,24 @@ const AGENT_CASES: AgentCase[] = [
       "ツール実行失敗（エラーの約80%を占める回復可能障害）を自動検出し、安全な再試行とフォールバックを実行",
       "不可逆な重要データ更新時に人間承認（Human-in-the-loop）へ委任し、本番インフラと顧客データの安全性を担保"
     ]
+  },
+  {
+    id: "case-own-your-intelligence-evals",
+    title: "自律エージェントの知的資産複利蓄積 & リグレッション自動評価（Evals）",
+    department: "DX推進統括・AIアーキテクチャ推進室",
+    summary: "LangChain『Own Your Intelligence』の指針に基づき、エージェントの実行トレース（Traces）とユーザーのフィードバック（Good/Bad）から、社内固有の評価データセット（Evals）と長期記憶（Memory）を自動合成。モデル切り替え（Claude / Gemini / GPT / Mistral）時の品質劣化を自動検知し、業務利用回数に比例してエージェントが自律改善する知的複利基盤を構築。",
+    subagentRoles: [
+      "Trace & Feedback Harvester",
+      "Regression Evals Evaluator (LangSmith Check)",
+      "Long-Term Memory & Prompt Optimizer"
+    ],
+    estimatedHoursSaved: "月間約 85 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "特定LLMベンダーのモデル廃止や仕様変更時でも、自社Evalsスイートにより品質劣化なく即座に切り替え可能",
+      "日々のエージェント利用ログと業務結果フィードバックから社内プロンプト・ルーティングルールを自動最適化",
+      "API利用トークンコスト・レイテンシ・回答精度をユーザー/タスク単位で可視化・上限統制"
+    ]
   }
 ];
 

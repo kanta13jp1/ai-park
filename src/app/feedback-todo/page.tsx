@@ -2052,6 +2052,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 122,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/122",
   },
+  {
+    id: "TODO-124",
+    title: "【AI資産化・Evals運用】LangChain「Own Your Intelligence」発表に伴う自社AI主権・評価ループ構築リファレンス & ニュース還元",
+    category: "AI実践編",
+    author: "AIアーキテクチャ研究会・社内基盤開発チーム",
+    authorDept: "DX統括本部・情報システム部",
+    date: "2026/10/05",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「LangChainが提唱する『Own Your Intelligence（知能の主権を握れ）』によると、汎用モデルをただAPI呼び出しするだけでは競合優位にならず、ハーネス（制御）・コンテキスト（長期記憶）・Evals（評価）・自己改善ループを自前で所有することが不可欠とのこと。社内でもモデル変更に耐えうる評価基盤やナレッジ蓄積の仕組みを整理してほしい」",
+    actionPlan: "【反映済み】LangChain公式ブログ「Own Your Intelligence」の解説をAIニュース（/news）に追加し、Subagents活用事例集（/agent-cases）に「自律エージェントの知的資産複利蓄積 & リグレッション自動評価（Evals）」モデルケースを反映。さらにAI Tools Hub（/tools-hub）にLangGraph & LangSmithを掲載しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 123,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/123",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

@@ -205,6 +205,22 @@ const companyAiToolsList: CompanyAiTool[] = [
     governanceNote: "オープンソースコード（GitHub/Hugging Face）であり、社内の完全閉域ローカルテスト環境（Docker/uv）にて検証可能。実機DBと連動させる場合は、テスト専用サンドボックス環境にて副作用検証を行うこと。",
     officialDocUrl: "https://huggingface.co/blog/microsoft/thinkingbox",
   },
+  {
+    id: "tool-langchain-langgraph",
+    name: "LangGraph & LangSmith (LangChain Ecosystem)",
+    vendor: "LangChain, Inc.",
+    category: "engineer",
+    categoryLabel: "開発者向け",
+    level: "Level 1",
+    levelBadge: "Level 1: 社内機密・コード利用可 (OSSセルフホスト時)",
+    status: "利用可能",
+    statusColor: "emerald",
+    costModel: "LangGraph: オープンソース（MIT無償） / LangSmith: クラウド従量制またはセルフホスト",
+    targetAudience: "AIエージェント開発者・MLOpsエンジニア・エンタープライズアーキテクト",
+    description: "ステートフルなマルチエージェントオーケストレーション基盤（LangGraph）と、実行トレース・リグレッション評価（LangSmith）。「Own Your Intelligence」戦略に基づき、モデルに依存しない自社独自のハーネス・長期記憶・評価ループを構築可能。",
+    governanceNote: "LangGraphライブラリ自体は社内リポジトリで安全にOSS利用可能。LangSmithクラウド版を使用する場合はAPIキー管理を徹底し、未公開社外秘データ送信時はマスキングまたはプライベートインスタンス（セルフホスト）を検討すること。",
+    officialDocUrl: "https://www.langchain.com/blog/own-your-intelligence",
+  },
 ];
 
 const aiGuidelines = [

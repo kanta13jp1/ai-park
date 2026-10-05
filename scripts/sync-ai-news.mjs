@@ -163,6 +163,21 @@ async function main() {
   // 確定版マスターニュース（前回収集分および基礎データ）
   const baseNews = [
     {
+      id: "news-20261005-langchain-own-your-intelligence",
+      title: "LangChain: 企業AI戦略の新指針『Own Your Intelligence（知能の主権を握れ）』を発表──モデルは借りても、システム・評価・改善ループは所有せよ",
+      date: "2026/10/05",
+      category: "agent_mcp",
+      categoryLabel: "開発エージェント・MCP",
+      importance: "hot",
+      importanceLabel: "HOT 🔥",
+      summary: "LangChain CEOのHarrison Chase氏が、企業がAIで持続的な競争優位性を築くための重要指針『Own Your Intelligence』を発表しました。基盤モデルAPIは誰もが呼び出せるコモディティであり、真の差別化は『モデルを取り巻くシステム（オーケストレーションハーネス、文脈・長期記憶、Evals、フィードバックループ）』の所有にあると提唱。特定ベンダーへの依存を防ぐモデル選択性（Optionality）、実行トレースとフィードバックによる品質リグレッション検知、そして『1回目の利用より100回目の利用が圧倒的に賢くなる』自己改善ループの自社保有チェックリスト（10項目）を提示しました。",
+      impactForStaff: "社内AI活用において、単にAPIを叩く単発チャットから脱却し、社内固有の業務ルールやフィードバックを反映したエージェントハーネス（LangGraph等）や評価基盤（Evals）を自社資産として蓄積する重要性が明確化。モデル乗り換え時にも品質を保証し、組織全体の知的生産性を複利で高める設計指針となります。",
+      recommendedFor: ["全社員", "エンジニア", "アーキテクト", "DX推進・経営企画", "プロダクトマネージャー"],
+      sourceName: "LangChain Official Blog",
+      sourceUrl: "https://www.langchain.com/blog/own-your-intelligence",
+      tags: ["LangChain", "Own Your Intelligence", "LangGraph", "LangSmith", "Evals", "Agent Harness", "HOT"],
+    },
+    {
       id: "news-20261005-thinkingbox-agent-reliability",
       title: "Microsoft × Hugging Face: エージェント評価基盤「ThinkingBox」公開──『エージェントは完了と言った。DBは同意しなかった』",
       date: "2026/10/05",

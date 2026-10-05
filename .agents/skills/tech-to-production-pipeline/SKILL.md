@@ -214,6 +214,16 @@ flowchart TD
 | **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 決定論的DB状態検証モデルケース新設<br>・`src/app/tools-hub/page.tsx` ThinkingBox掲載<br>・`src/app/feedback-todo/page.tsx` TODO-123 クローズ |
 | **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
 
+### ケース10: LangChain公式ブログ「Own Your Intelligence」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [Own Your Intelligence](https://www.langchain.com/blog/own-your-intelligence) (2026/10) |
+| **還元アイデア** | ① 「モデルは借りてもシステム・評価・改善ループは所有せよ」企業AI主権戦略（10問チェックリスト）解説ニュース配信<br>② 自律エージェントの知的資産複利蓄積 & リグレッション自動評価（Evals）モデルケース新設<br>③ `tools-hub` へのLangGraph & LangSmith（OSS/クラウド開発者枠）新規掲載 |
+| **起票ToDo** | `TODO-124`（Issue #123） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 知的資産複利蓄積モデルケース新設<br>・`src/app/tools-hub/page.tsx` LangGraph & LangSmith掲載<br>・`src/app/feedback-todo/page.tsx` TODO-124 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
+
+
 
 
 
