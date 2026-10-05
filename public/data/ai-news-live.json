@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-05T04:37:49.356Z",
-  "lastSyncedAtFormatted": "2026/10/5 13:37:49",
+  "lastSyncedAt": "2026-10-05T13:54:45.810Z",
+  "lastSyncedAtFormatted": "2026/10/5 22:54:45",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -103,6 +103,31 @@
         "閉域網",
         "HOT"
       ]
+    },
+    {
+      "id": "live-model-20261005-0",
+      "title": "OpenAI: Building advertising for the way people use AI",
+      "date": "2026/10/05",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI introduces a new visual ad format in ChatGPT and expands measurement tools, attribution partnerships, and brand suitability for advertisers.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Building advertising for the w」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
     },
     {
       "id": "news-20261004-deepseek-v41-flash",
@@ -290,7 +315,7 @@
       ]
     },
     {
-      "id": "live-model-20261002-0",
+      "id": "live-model-20261002-1",
       "title": "OpenAI: A model guide for the GPT-6 family",
       "date": "2026/10/02",
       "category": "model",
@@ -315,7 +340,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261002-1",
+      "id": "live-model-20261002-2",
       "title": "OpenAI: Chatham scales its capital markets expertise with OpenAI",
       "date": "2026/10/02",
       "category": "model",
@@ -364,7 +389,7 @@
       ]
     },
     {
-      "id": "live-model-20261001-2",
+      "id": "live-model-20261001-3",
       "title": "OpenAI: The eternal complement",
       "date": "2026/10/01",
       "category": "model",
@@ -389,7 +414,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261001-3",
+      "id": "live-model-20261001-4",
       "title": "OpenAI: How Albertsons Companies is reimagining retail from the inside out",
       "date": "2026/10/01",
       "category": "model",
@@ -405,31 +430,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/albertsons-reimagining-retail",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261001-4",
-      "title": "OpenAI: The Den frees up 10-15 hours a week to grow with ChatGPT Work",
-      "date": "2026/10/01",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "As it opens a new location, the social club prepares grant applications in 2 hours instead of 3 days and liquor-license materials in 3 hours instead of 4 days.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「The Den frees up 10-15 hours a」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/the-den-family-social",
       "tags": [
         "OpenAI",
         "ChatGPT",
