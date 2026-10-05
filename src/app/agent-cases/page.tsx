@@ -211,6 +211,24 @@ const AGENT_CASES: AgentCase[] = [
       "特定クラウドへの依存・API課金変動・利用規約改定リスクの完全排除（ベンダーロックイン防止）",
       "金融・防衛基準の監査ログ保持とオンプレミス完結によるコンプライアンス適合性100%"
     ]
+  },
+  {
+    id: "case-thinkingbox-deterministic-eval",
+    title: "ステートフル業務エージェントの決定論的DB状態検証 & 副作用ロールバック",
+    department: "品質管理統括・エンタープライズアーキテクチャ推進室",
+    summary: "Microsoft × Hugging Face『ThinkingBox』の設計思想に基づき、AIエージェントの「処理完了」という会話要約を信じず、バックエンドDBの最終状態・副作用・未完了フラグを確定的に判定。ツールエラーや前提条件の不一致を検知した場合は自動ロールバックを行い、意図しない破壊的変更を100%防止。",
+    subagentRoles: [
+      "Transactional Agent Runner",
+      "Terminal State & Side-Effect Verifier (ThinkingBox Checker)",
+      "Rollback & Retry Orchestrator"
+    ],
+    estimatedHoursSaved: "月間約 75 時間削減（試作モデルケース）",
+    status: "試作モデルケース",
+    keyBenefits: [
+      "AIの完了発話ではなくバックエンドDBの確定値（Terminal State）を検査し、誤解決・フィールド欠落を完全遮断",
+      "ツール実行失敗（エラーの約80%を占める回復可能障害）を自動検出し、安全な再試行とフォールバックを実行",
+      "不可逆な重要データ更新時に人間承認（Human-in-the-loop）へ委任し、本番インフラと顧客データの安全性を担保"
+    ]
   }
 ];
 

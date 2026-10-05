@@ -163,6 +163,21 @@ async function main() {
   // 確定版マスターニュース（前回収集分および基礎データ）
   const baseNews = [
     {
+      id: "news-20261005-thinkingbox-agent-reliability",
+      title: "Microsoft × Hugging Face: エージェント評価基盤「ThinkingBox」公開──『エージェントは完了と言った。DBは同意しなかった』",
+      date: "2026/10/05",
+      category: "agent_mcp",
+      categoryLabel: "開発エージェント・MCP",
+      importance: "hot",
+      importanceLabel: "HOT 🔥",
+      summary: "MicrosoftとHugging Faceが共同で、実務業務におけるAIエージェントの真の信頼性を評価する新オープンソースフレームワーク「ThinkingBox」を発表しました。従来の会話ログやTool Call成功有無といった表面的な指標を排し、バックエンドDBの最終状態（Terminal State）と副作用を確定的に検証。同一タスクを20回連続実行した「Observed 20/20」の再現性を測定したところ、失敗した試行の約80%はモデルの推論ではなくツール実行エラーや前提条件のリカバリ失敗によるものであり、単発成功率（pass@1）の高いモデルでも連続実行での信頼性に巨大な断絶があることが実証されました。",
+      impactForStaff: "業務でAIエージェントを本番運用する際、「AIの完了メッセージを鵜呑みにせず、確定コミット前にDB状態をプログラム検証する」「不可逆操作には人間の承認を挟む」「ツールエラーの自動リカバリ設計を行う」という本質的な信頼性設計の指針が示されました。社内開発においてもMCP環境での副作用検証テストの導入が推奨されます。",
+      recommendedFor: ["全社員", "エンジニア", "QA/テスト担当", "アーキテクト", "DX推進・プロジェクトリーダー"],
+      sourceName: "Hugging Face Official Blog",
+      sourceUrl: "https://huggingface.co/blog/microsoft/thinkingbox",
+      tags: ["ThinkingBox", "Microsoft", "Hugging Face", "Agent Reliability", "MCP", "OpenEnv", "HOT"],
+    },
+    {
       id: "news-20261005-mistral-series-d-sovereign-ai",
       title: "Mistral AI: シリーズDで30億ユーロ（評価額210億ユーロ）調達、企業主権（Sovereign AI）× オープンウェイト基盤をフロンティアへ拡大",
       date: "2026/10/05",

@@ -189,6 +189,22 @@ const companyAiToolsList: CompanyAiTool[] = [
     governanceNote: "クラウドAPI（Le Chat / Mistral API）利用時はLevel 2運用（個人情報・未公開ソースコードはマスキング）。社内閉域網（プライベートクラウド/オンプレミスGPU）でのオープンウェイトセルフホスト検証時は社内セキュリティ審査を経てLevel 1適用可。",
     officialDocUrl: "https://mistral.ai/news/mistral-makes-sovereign-open-weight-ai-to-frontier/",
   },
+  {
+    id: "tool-thinkingbox",
+    name: "ThinkingBox (Agent State Evaluator & Benchmark)",
+    vendor: "Microsoft & Hugging Face",
+    category: "poc",
+    categoryLabel: "PoC検証枠",
+    level: "Level 1",
+    levelBadge: "Level 1: 社内データ利用可 (OSSセルフホスト時)",
+    status: "PoC検証中",
+    statusColor: "amber",
+    costModel: "オープンソース（MITライセンス・無償・セルフホスト）",
+    targetAudience: "AIエージェント開発者・QAエンジニア・SRE・エンタープライズアーキテクト",
+    description: "MicrosoftとHugging Faceが共同開発した、ステートフル業務エージェントの決定論的評価フレームワーク。単なる会話ログやTool Call成否ではなく、MCP（Model Context Protocol）経由のバックエンドDB状態と副作用、および20回連続実行（Observed 20/20）による再現性を検証。",
+    governanceNote: "オープンソースコード（GitHub/Hugging Face）であり、社内の完全閉域ローカルテスト環境（Docker/uv）にて検証可能。実機DBと連動させる場合は、テスト専用サンドボックス環境にて副作用検証を行うこと。",
+    officialDocUrl: "https://huggingface.co/blog/microsoft/thinkingbox",
+  },
 ];
 
 const aiGuidelines = [

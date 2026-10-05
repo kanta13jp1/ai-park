@@ -2036,6 +2036,22 @@ const initialFeedbackList: FeedbackTodoItem[] = [
     issueNumber: 121,
     issueUrl: "https://github.com/kanta13jp1/ai-park/issues/121",
   },
+  {
+    id: "TODO-123",
+    title: "【エージェント信頼性・DB状態検証】MS & Hugging Face「ThinkingBox」公開に伴うバックエンド副作用検証リファレンス & ニュース還元",
+    category: "AI実践編",
+    author: "基盤品質管理・エージェント基盤タスクフォース",
+    authorDept: "情報システム本部・アーキテクチャ推進室",
+    date: "2026/10/05",
+    priority: "高",
+    status: "done",
+    feedbackQuote: "「MicrosoftとHugging Faceが共同発表したThinkingBoxによると、AIエージェントが完了と報告してもDB状態が誤っているケースが多発している。単発のツール成功だけでなく、バックエンド状態の決定論的検証や20回反復実行（Observed 20/20）による再現性担保の知見を社内ポータルに還元してほしい」",
+    actionPlan: "【反映済み】Hugging Face公式ブログ「The Agent Said It Was Done. The Database Disagreed.」の解説をAIニュース（/news）に追加し、Subagents活用事例集（/agent-cases）に「ステートフル業務エージェントの決定論的DB状態検証 & 副作用ロールバック」モデルケースを反映。さらにAI Tools Hub（/tools-hub）にThinkingBox（エージェント信頼性ベンチマーク）を掲載しました。",
+    relatedLink: "/agent-cases",
+    relatedLinkText: "Subagents活用事例集を確認",
+    issueNumber: 122,
+    issueUrl: "https://github.com/kanta13jp1/ai-park/issues/122",
+  },
 ];
 
 const seedIds = new Set(initialFeedbackList.map((t) => t.id));

@@ -205,5 +205,15 @@ flowchart TD
 | **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` オンプレ自律開発モデルケース新設<br>・`src/app/tools-hub/page.tsx` Mistral AI掲載<br>・`src/app/feedback-todo/page.tsx` TODO-121 クローズ |
 | **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
 
+### ケース9: Microsoft × Hugging Face公式ブログ「The Agent Said It Was Done. The Database Disagreed. (ThinkingBox)」適用例
+| 項目 | 実績内容 |
+| :--- | :--- |
+| **元記事** | [The Agent Said It Was Done. The Database Disagreed.](https://huggingface.co/blog/microsoft/thinkingbox) (2026/10/03) |
+| **還元アイデア** | ① 会話ログではなくターミナルDB状態・副作用でエージェントを判定する評価フレームワーク「ThinkingBox」解説ニュース配信<br>② ステートフル業務エージェントの決定論的DB状態検証 & 副作用ロールバックモデルケース新設<br>③ `tools-hub` へのThinkingBox（OSS・MCP/OpenEnv検証枠）新規掲載 |
+| **起票ToDo** | `TODO-123`（Issue #122） |
+| **成果物** | ・`src/data/ai-news.ts` & `public/data/ai-news-live.json` ニュース解説追加<br>・`src/app/agent-cases/page.tsx` 決定論的DB状態検証モデルケース新設<br>・`src/app/tools-hub/page.tsx` ThinkingBox掲載<br>・`src/app/feedback-todo/page.tsx` TODO-123 クローズ |
+| **品質ゲート** | `npm run check:gate` 合格、`tsc` ノーエラー通過 |
+
+
 
 
