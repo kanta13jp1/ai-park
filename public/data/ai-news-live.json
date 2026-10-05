@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-05T13:54:45.810Z",
-  "lastSyncedAtFormatted": "2026/10/5 22:54:45",
+  "lastSyncedAt": "2026-10-05T23:51:03.943Z",
+  "lastSyncedAtFormatted": "2026/10/6 8:51:03",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -106,6 +106,31 @@
     },
     {
       "id": "live-model-20261005-0",
+      "title": "OpenAI: Our approach to EU text provenance rules",
+      "date": "2026/10/05",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "How OpenAI is approaching text watermarking under EU rules. Learn where watermarks apply, how detection works, and why access starts with researchers.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Our approach to EU text proven」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/eu-text-provenance",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261005-1",
       "title": "OpenAI: Building advertising for the way people use AI",
       "date": "2026/10/05",
       "category": "model",
@@ -315,7 +340,7 @@
       ]
     },
     {
-      "id": "live-model-20261002-1",
+      "id": "live-model-20261002-2",
       "title": "OpenAI: A model guide for the GPT-6 family",
       "date": "2026/10/02",
       "category": "model",
@@ -340,7 +365,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261002-2",
+      "id": "live-model-20261002-3",
       "title": "OpenAI: Chatham scales its capital markets expertise with OpenAI",
       "date": "2026/10/02",
       "category": "model",
@@ -389,7 +414,7 @@
       ]
     },
     {
-      "id": "live-model-20261001-3",
+      "id": "live-model-20261001-4",
       "title": "OpenAI: The eternal complement",
       "date": "2026/10/01",
       "category": "model",
@@ -405,31 +430,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/the-eternal-complement",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261001-4",
-      "title": "OpenAI: How Albertsons Companies is reimagining retail from the inside out",
-      "date": "2026/10/01",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Albertsons Cos. is using ChatGPT Enterprise and the OpenAI API to help teams work faster and make grocery shopping easier for millions of customers.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Albertsons Companies is re」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/albertsons-reimagining-retail",
       "tags": [
         "OpenAI",
         "ChatGPT",
