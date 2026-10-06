@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-06T12:57:25.762Z",
-  "lastSyncedAtFormatted": "2026/10/6 21:57:25",
+  "lastSyncedAt": "2026-10-06T22:27:34.613Z",
+  "lastSyncedAtFormatted": "2026/10/7 7:27:34",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -15,6 +15,81 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-google-20261006-0",
+      "title": "Google DeepMind: EmbeddingGemma 2: an open, lightweight multimodal embedding model",
+      "date": "2026/10/06",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「EmbeddingGemma 2: an open, lig」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/embeddinggemma-2-an-open-lightweight-multimodal-embedding-model/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261006-0",
+      "title": "OpenAI: Advancing computer use with Ironclad",
+      "date": "2026/10/06",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Learn how OpenAI and Ironclad are training and evaluating AI agents on complex contracting workflows to advance computer use for professional work.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Advancing computer use with Ir」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/advancing-computer-use-with-ironclad",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261006-1",
+      "title": "OpenAI: Atlassian and OpenAI expand partnership to turn enterprise knowledge into action",
+      "date": "2026/10/06",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Atlassian and OpenAI are expanding their partnership to connect frontier models with enterprise knowledge and help teams plan, build, and deliver work.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Atlassian and OpenAI expand pa」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/atlassian-partnership",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "news-20261005-langchain-own-your-intelligence",
       "title": "LangChain: 企業AI戦略の新指針『Own Your Intelligence（知能の主権を握れ）』を発表──モデルは借りても、システム・評価・改善ループは所有せよ",
@@ -105,7 +180,7 @@
       ]
     },
     {
-      "id": "live-model-20261005-0",
+      "id": "live-model-20261005-2",
       "title": "OpenAI: Our approach to EU text provenance rules",
       "date": "2026/10/05",
       "category": "model",
@@ -130,7 +205,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261005-1",
+      "id": "live-model-20261005-3",
       "title": "OpenAI: Building advertising for the way people use AI",
       "date": "2026/10/05",
       "category": "model",
@@ -340,7 +415,7 @@
       ]
     },
     {
-      "id": "live-model-20261002-2",
+      "id": "live-model-20261002-4",
       "title": "OpenAI: A model guide for the GPT-6 family",
       "date": "2026/10/02",
       "category": "model",
@@ -356,31 +431,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/practical-guide-building-gpt-6",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261002-3",
-      "title": "OpenAI: Chatham scales its capital markets expertise with OpenAI",
-      "date": "2026/10/02",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Chatham Financial uses Codex and GPT-5.6 to build technology and redesign workflows, cutting trade validation from 30 minutes to under 4.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Chatham scales its capital mar」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/chatham-financial",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -414,31 +464,6 @@
       ]
     },
     {
-      "id": "live-model-20261001-4",
-      "title": "OpenAI: The eternal complement",
-      "date": "2026/10/01",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Advanced AI may matter most for the routine work behind breakthrough ideas. Explore why execution could shape the next economy and the pace of progress.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「The eternal complement」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/the-eternal-complement",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "news-20260930-codex",
       "title": "OpenAI: 進化した Codex 基盤と「キャンバス（Canvas）」によるコード・文章の共創体験",
       "date": "2026/09/30",
@@ -464,7 +489,7 @@
       ]
     },
     {
-      "id": "live-google-20260930-0",
+      "id": "live-google-20260930-1",
       "title": "Google DeepMind: Gemini 4 Argon: our next era of frontier intelligence",
       "date": "2026/09/30",
       "category": "google",
@@ -489,7 +514,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20260930-1",
+      "id": "live-google-20260930-2",
       "title": "Google DeepMind: Introducing SynthID Bio",
       "date": "2026/09/30",
       "category": "google",
@@ -724,7 +749,7 @@
       ]
     },
     {
-      "id": "live-google-20260924-2",
+      "id": "live-google-20260924-3",
       "title": "Google DeepMind: Introducing Gemini 3.8 Live with Live Avatar",
       "date": "2026/09/24",
       "category": "google",
@@ -749,7 +774,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20260923-3",
+      "id": "live-google-20260923-4",
       "title": "Google DeepMind: Advancing Private AI Compute with secure, server-side memory",
       "date": "2026/09/23",
       "category": "google",
@@ -765,31 +790,6 @@
       ],
       "sourceName": "Google DeepMind Official Feed",
       "sourceUrl": "https://deepmind.google/blog/advancing-private-ai-compute-with-secure-server-side-memory/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20260923-4",
-      "title": "Google DeepMind: Gemini 3.8 text-to-speech says hello",
-      "date": "2026/09/23",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 3.8 text-to-speech says」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/say-hello-to-gemini-38-text-to-speech/",
       "tags": [
         "Google DeepMind",
         "Frontier AI",
