@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-06T22:27:34.613Z",
-  "lastSyncedAtFormatted": "2026/10/7 7:27:34",
+  "lastSyncedAt": "2026-10-07T04:52:52.594Z",
+  "lastSyncedAtFormatted": "2026/10/7 13:52:52",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -42,6 +42,56 @@
     },
     {
       "id": "live-model-20261006-0",
+      "title": "OpenAI: How Jump Trading is scaling quant research with ChatGPT",
+      "date": "2026/10/06",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Jump Trading uses OpenAI to expand quantitative research. See how longer-running AI workflows combine multiple data sources with human review.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Jump Trading is scaling qu」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/jump-trading",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261006-1",
+      "title": "OpenAI: Sharing AI progress in mathematics",
+      "date": "2026/10/06",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI publishes new results on open problems in mathematics from an internal frontier model and shares Lean proof formalizations and research details on GitHub.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Sharing AI progress in mathema」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/sharing-ai-progress-in-mathematics",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261006-2",
       "title": "OpenAI: Advancing computer use with Ironclad",
       "date": "2026/10/06",
       "category": "model",
@@ -66,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261006-1",
+      "id": "live-model-20261006-3",
       "title": "OpenAI: Atlassian and OpenAI expand partnership to turn enterprise knowledge into action",
       "date": "2026/10/06",
       "category": "model",
@@ -180,7 +230,7 @@
       ]
     },
     {
-      "id": "live-model-20261005-2",
+      "id": "live-model-20261005-4",
       "title": "OpenAI: Our approach to EU text provenance rules",
       "date": "2026/10/05",
       "category": "model",
@@ -196,31 +246,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/eu-text-provenance",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261005-3",
-      "title": "OpenAI: Building advertising for the way people use AI",
-      "date": "2026/10/05",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI introduces a new visual ad format in ChatGPT and expands measurement tools, attribution partnerships, and brand suitability for advertisers.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Building advertising for the w」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/new-chatgpt-ads-format-and-measurement",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -413,31 +438,6 @@
         "推論モデル",
         "長大コンテキスト"
       ]
-    },
-    {
-      "id": "live-model-20261002-4",
-      "title": "OpenAI: A model guide for the GPT-6 family",
-      "date": "2026/10/02",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Learn how startups can choose GPT-6 models, tune reasoning effort, improve prompts and skills, coordinate tools, and prepare workflows for production.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「A model guide for the GPT-6 fa」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/practical-guide-building-gpt-6",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
     },
     {
       "id": "news-20261001-01",
