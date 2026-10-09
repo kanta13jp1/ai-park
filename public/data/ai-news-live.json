@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-09T05:06:15.781Z",
-  "lastSyncedAtFormatted": "2026/10/9 14:06:15",
+  "lastSyncedAt": "2026-10-09T12:46:26.200Z",
+  "lastSyncedAtFormatted": "2026/10/9 21:46:26",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -16,7 +16,32 @@
   ],
   "items": [
     {
-      "id": "live-model-20261008-0",
+      "id": "live-model-20261009-0",
+      "title": "OpenAI: Sophos cuts threat investigation time by 96% with OpenAI Daybreak",
+      "date": "2026/10/09",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Discover how Sophos uses OpenAI’s Daybreak to cut cyber-threat investigation time by 96% and automate 52% of MDR cases while preserving human oversight.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Sophos cuts threat investigati」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/sophos",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261008-1",
       "title": "OpenAI: How Oracle turns days of work into minutes with ChatGPT and Codex",
       "date": "2026/10/08",
       "category": "model",
@@ -41,7 +66,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261008-1",
+      "id": "live-model-20261008-2",
       "title": "OpenAI: Pollo AI turns creative ideas into campaigns with OpenAI",
       "date": "2026/10/08",
       "category": "model",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261008-2",
+      "id": "live-model-20261008-3",
       "title": "OpenAI: LegalOn halves Codex costs while maintaining development speed",
       "date": "2026/10/08",
       "category": "model",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261008-3",
+      "id": "live-model-20261008-4",
       "title": "OpenAI: Disrupting AI-enabled “false front” operations",
       "date": "2026/10/08",
       "category": "model",
@@ -107,31 +132,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/disrupting-ai-enabled-false-front-operations",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261007-4",
-      "title": "OpenAI: Helping teens learn, plan, and shape the future of AI",
-      "date": "2026/10/07",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "College Planner is coming to ChatGPT for Teens to help students manage college applications, alongside new flashcards, quizzes, and a teen AI council.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Helping teens learn, plan, and」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/teens-learn-and-plan",
       "tags": [
         "OpenAI",
         "ChatGPT",
