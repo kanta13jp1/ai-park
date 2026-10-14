@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-14T16:45:12.470Z",
-  "lastSyncedAtFormatted": "2026/10/15 1:45:12",
+  "lastSyncedAt": "2026-10-14T21:21:51.004Z",
+  "lastSyncedAtFormatted": "2026/10/15 6:21:51",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -42,6 +42,56 @@
     },
     {
       "id": "live-model-20261014-0",
+      "title": "OpenAI: Amp puts AI agents to work beyond code with OpenAI models",
+      "date": "2026/10/14",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "See how Amp pushes the frontier of what agents can do with GPT-6 Astra, Ultrafast, GPT-Live-1, and Sign in with ChatGPT.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Amp puts AI agents to work bey」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/amp-beyond-coding",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261014-1",
+      "title": "OpenAI: SentinelOne cuts malware analysis from weeks to hours",
+      "date": "2026/10/14",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "With OpenAI Daybreak, SentinelOne cuts weeks of malware analysis to hours, creating capacity to investigate more threats.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「SentinelOne cuts malware analy」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/sentinelone",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261014-2",
       "title": "OpenAI: How Third Moment Research runs 10,000 agents for 36+ hours",
       "date": "2026/10/14",
       "category": "model",
@@ -66,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261014-1",
+      "id": "live-model-20261014-3",
       "title": "OpenAI: The EU’s next chapter in AI is agentic",
       "date": "2026/10/14",
       "category": "model",
@@ -192,7 +242,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261013-2",
+      "id": "live-model-20261013-4",
       "title": "OpenAI: Higgsfield takes AI video from 1 minute to over 10",
       "date": "2026/10/13",
       "category": "model",
@@ -208,56 +258,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/higgsfield-longer-videos-voice",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261009-3",
-      "title": "OpenAI: Asana cuts model costs 76x in browser tests with GPT-6.1 Sol",
-      "date": "2026/10/09",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Using GPT-6 Astra in Codex, Asana made its browser agent 76x cheaper and 5x faster in tests to offer customers more capable models.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Asana cuts model costs 76x in 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/asana-browser-agent",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261009-4",
-      "title": "OpenAI: Sophos cuts threat investigation time by 96% with OpenAI Daybreak",
-      "date": "2026/10/09",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Discover how Sophos uses OpenAI’s Daybreak to cut cyber-threat investigation time by 96% and automate 52% of MDR cases while preserving human oversight.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Sophos cuts threat investigati」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/sophos",
       "tags": [
         "OpenAI",
         "ChatGPT",
