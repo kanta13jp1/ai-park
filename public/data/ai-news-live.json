@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-14T03:58:43.895Z",
-  "lastSyncedAtFormatted": "2026/10/14 12:58:43",
+  "lastSyncedAt": "2026-10-14T11:24:21.165Z",
+  "lastSyncedAtFormatted": "2026/10/14 20:24:21",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -17,7 +17,7 @@
   "items": [
     {
       "id": "live-google-20261014-0",
-      "title": "Google DeepMind: Google DeepMind and Singapore Government announce new AI tool to protect citizens against scams",
+      "title": "Google DeepMind: Google DeepMind and Singapore Government collaborate to build fine-tuned AI model for scam detection",
       "date": "2026/10/14",
       "category": "google",
       "categoryLabel": "Google / Antigravity",
@@ -36,6 +36,31 @@
         "Google DeepMind",
         "Frontier AI",
         "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261014-0",
+      "title": "OpenAI: The EU’s next chapter in AI is agentic",
+      "date": "2026/10/14",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "New analysis shows how agentic AI adoption is growing across EU enterprises and small businesses—and where deeper use could unlock more value.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「The EU’s next chapter in AI is」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/the-eus-next-chapter-in-ai-is-agentic",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
         "公式発表"
       ],
       "isLiveSynced": true
@@ -116,7 +141,33 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261013-0",
+      "id": "live-google-20261013-0",
+      "title": "Google Antigravity: Gemini 4 Argon in Google Antigravity",
+      "date": "2026/10/13",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Gemini 4 Argon in Google Antig」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/gemini-4-argon-in-google-antigravity",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261013-1",
       "title": "OpenAI: Higgsfield takes AI video from 1 minute to over 10",
       "date": "2026/10/13",
       "category": "model",
@@ -141,7 +192,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261009-1",
+      "id": "live-model-20261009-2",
       "title": "OpenAI: Sophos cuts threat investigation time by 96% with OpenAI Daybreak",
       "date": "2026/10/09",
       "category": "model",
@@ -166,7 +217,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261009-2",
+      "id": "live-model-20261009-3",
       "title": "OpenAI: Asana cuts model costs 76x in browser tests with GPT-6.1 Sol",
       "date": "2026/10/09",
       "category": "model",
@@ -191,7 +242,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261008-3",
+      "id": "live-model-20261008-4",
       "title": "OpenAI: How Oracle turns days of work into minutes with ChatGPT and Codex",
       "date": "2026/10/08",
       "category": "model",
@@ -207,31 +258,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/oracle",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261008-4",
-      "title": "OpenAI: Pollo AI turns creative ideas into campaigns with OpenAI",
-      "date": "2026/10/08",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "With GPT-5.6, GPT-6 Astra, and GPT‑Image‑2.5, Pollo AI helps creators turn bold ideas into detailed images and cinematic video ads.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Pollo AI turns creative ideas 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/pollo-ai",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -920,7 +946,7 @@
       ]
     },
     {
-      "id": "live-google-20260901-1",
+      "id": "live-google-20260901-2",
       "title": "Google Antigravity: Gemini 3.8 Flash in Google Antigravity",
       "date": "2026/09/01",
       "category": "google",
@@ -946,7 +972,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20260827-2",
+      "id": "live-google-20260827-3",
       "title": "Google Antigravity: Teamwork: when AI becomes a research partner",
       "date": "2026/08/27",
       "category": "google",
@@ -972,7 +998,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20260826-3",
+      "id": "live-google-20260826-4",
       "title": "Google Antigravity: Visualizing with the help of Antigravity",
       "date": "2026/08/26",
       "category": "google",
@@ -989,32 +1015,6 @@
       ],
       "sourceName": "Google Antigravity Official Feed",
       "sourceUrl": "https://antigravity.google/blog/visualizing-with-the-help-of-antigravity",
-      "tags": [
-        "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
-        "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20260824-4",
-      "title": "Google Antigravity: Improving the version control experience",
-      "date": "2026/08/24",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Improving the version control 」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
-      ],
-      "sourceName": "Google Antigravity Official Feed",
-      "sourceUrl": "https://antigravity.google/blog/vcs-and-terminal",
       "tags": [
         "Google Antigravity",
         "Custom Agents",
