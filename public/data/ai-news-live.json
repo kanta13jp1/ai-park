@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-13T22:24:03.161Z",
-  "lastSyncedAtFormatted": "2026/10/14 7:24:03",
+  "lastSyncedAt": "2026-10-14T03:58:43.895Z",
+  "lastSyncedAtFormatted": "2026/10/14 12:58:43",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -16,7 +16,32 @@
   ],
   "items": [
     {
-      "id": "live-google-20261013-0",
+      "id": "live-google-20261014-0",
+      "title": "Google DeepMind: Google DeepMind and Singapore Government announce new AI tool to protect citizens against scams",
+      "date": "2026/10/14",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Learn how Google DeepMind and GovTech Singapore uses lightweight on-device Gemma models to intercept conversational scams in private chats with zero cloud data egress.",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Google DeepMind and Singapore 」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/on-device-ai-scam-detection-mddi/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20261013-1",
       "title": "Google DeepMind: Developing Gemini 4 Argon responsibly and safely",
       "date": "2026/10/13",
       "category": "google",
@@ -41,7 +66,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261013-1",
+      "id": "live-google-20261013-2",
       "title": "Google DeepMind: Gemini 4 Argon for Robotics",
       "date": "2026/10/13",
       "category": "google",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261013-2",
+      "id": "live-google-20261013-3",
       "title": "Google DeepMind: Gemini 4 Argon: Built to solve your hardest problems",
       "date": "2026/10/13",
       "category": "google",
@@ -87,32 +112,6 @@
         "Frontier AI",
         "Gemini",
         "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261013-0",
-      "title": "Google Antigravity: Gemini 4 Argon in Google Antigravity",
-      "date": "2026/10/13",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Gemini 4 Argon in Google Antig」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
-      ],
-      "sourceName": "Google Antigravity Official Feed",
-      "sourceUrl": "https://antigravity.google/blog/gemini-4-argon-in-google-antigravity",
-      "tags": [
-        "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
-        "公式ブログ"
       ],
       "isLiveSynced": true
     },
@@ -242,7 +241,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261006-3",
+      "id": "live-google-20261006-4",
       "title": "Google DeepMind: EmbeddingGemma 2: an open, lightweight multimodal embedding model",
       "date": "2026/10/06",
       "category": "google",
@@ -590,31 +589,6 @@
       ]
     },
     {
-      "id": "live-google-20260930-4",
-      "title": "Google DeepMind: Gemini 4 Argon: our next era of frontier intelligence",
-      "date": "2026/09/30",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 4 Argon: our next era o」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/gemini-4-argon-our-next-era-of-frontier-intelligence/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "news-20260929-manus",
       "title": "汎用自律AIエージェント「Manus」：Web検索から実務実行・タスクバックアップ復元まで対応",
       "date": "2026/09/29",
@@ -946,7 +920,7 @@
       ]
     },
     {
-      "id": "live-google-20260901-2",
+      "id": "live-google-20260901-1",
       "title": "Google Antigravity: Gemini 3.8 Flash in Google Antigravity",
       "date": "2026/09/01",
       "category": "google",
@@ -972,7 +946,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20260827-3",
+      "id": "live-google-20260827-2",
       "title": "Google Antigravity: Teamwork: when AI becomes a research partner",
       "date": "2026/08/27",
       "category": "google",
@@ -998,7 +972,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20260826-4",
+      "id": "live-google-20260826-3",
       "title": "Google Antigravity: Visualizing with the help of Antigravity",
       "date": "2026/08/26",
       "category": "google",
@@ -1015,6 +989,32 @@
       ],
       "sourceName": "Google Antigravity Official Feed",
       "sourceUrl": "https://antigravity.google/blog/visualizing-with-the-help-of-antigravity",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20260824-4",
+      "title": "Google Antigravity: Improving the version control experience",
+      "date": "2026/08/24",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Improving the version control 」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/vcs-and-terminal",
       "tags": [
         "Google Antigravity",
         "Custom Agents",
