@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-14T11:24:21.165Z",
-  "lastSyncedAtFormatted": "2026/10/14 20:24:21",
+  "lastSyncedAt": "2026-10-14T16:45:12.470Z",
+  "lastSyncedAtFormatted": "2026/10/15 1:45:12",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -42,6 +42,31 @@
     },
     {
       "id": "live-model-20261014-0",
+      "title": "OpenAI: How Third Moment Research runs 10,000 agents for 36+ hours",
+      "date": "2026/10/14",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "With GPT-6 Astra and GPT-6.1 Sol, Codex, and Daybreak for cybersecurity, this AI lab builds agents that focus for days and improve with use.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Third Moment Research runs」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/third-moment-research",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261014-1",
       "title": "OpenAI: The EU’s next chapter in AI is agentic",
       "date": "2026/10/14",
       "category": "model",
@@ -167,7 +192,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261013-1",
+      "id": "live-model-20261013-2",
       "title": "OpenAI: Higgsfield takes AI video from 1 minute to over 10",
       "date": "2026/10/13",
       "category": "model",
@@ -183,31 +208,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/higgsfield-longer-videos-voice",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261009-2",
-      "title": "OpenAI: Sophos cuts threat investigation time by 96% with OpenAI Daybreak",
-      "date": "2026/10/09",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Discover how Sophos uses OpenAI’s Daybreak to cut cyber-threat investigation time by 96% and automate 52% of MDR cases while preserving human oversight.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Sophos cuts threat investigati」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/sophos",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -242,22 +242,22 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261008-4",
-      "title": "OpenAI: How Oracle turns days of work into minutes with ChatGPT and Codex",
-      "date": "2026/10/08",
+      "id": "live-model-20261009-4",
+      "title": "OpenAI: Sophos cuts threat investigation time by 96% with OpenAI Daybreak",
+      "date": "2026/10/09",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "Across recruiting, engineering, and operations, Oracle turns specialist knowledge into fast, repeatable workflows with ChatGPT Work and Codex.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Oracle turns days of work 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "Discover how Sophos uses OpenAI’s Daybreak to cut cyber-threat investigation time by 96% and automate 52% of MDR cases while preserving human oversight.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Sophos cuts threat investigati」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/oracle",
+      "sourceUrl": "https://openai.com/index/sophos",
       "tags": [
         "OpenAI",
         "ChatGPT",
