@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-14T21:21:51.004Z",
-  "lastSyncedAtFormatted": "2026/10/15 6:21:51",
+  "lastSyncedAt": "2026-10-15T03:40:51.804Z",
+  "lastSyncedAtFormatted": "2026/10/15 12:40:51",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -117,6 +117,31 @@
     },
     {
       "id": "live-model-20261014-3",
+      "title": "OpenAI: How Block is building AI-powered security with OpenAI technology",
+      "date": "2026/10/14",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Block is building AI-powered security with OpenAI. Its security team investigates threats faster and proposes patches in minutes.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Block is building AI-power」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/block-ai-powered-security",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261014-4",
       "title": "OpenAI: The EU’s next chapter in AI is agentic",
       "date": "2026/10/14",
       "category": "model",
@@ -238,31 +263,6 @@
         "Custom Agents",
         "Plugins",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261013-4",
-      "title": "OpenAI: Higgsfield takes AI video from 1 minute to over 10",
-      "date": "2026/10/13",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Higgsfield brings creators longer videos with GPT-6 Astra, precise visuals with GPT-Image-2.5, and a path to voice filmmaking with GPT-Live.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Higgsfield takes AI video from」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/higgsfield-longer-videos-voice",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
       ],
       "isLiveSynced": true
     },
