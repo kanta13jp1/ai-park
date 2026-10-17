@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-17T10:18:31.690Z",
-  "lastSyncedAtFormatted": "2026/10/17 19:18:31",
+  "lastSyncedAt": "2026-10-17T15:10:17.928Z",
+  "lastSyncedAtFormatted": "2026/10/18 0:10:17",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -42,31 +42,6 @@
     },
     {
       "id": "live-model-20261016-1",
-      "title": "OpenAI: Stack Overflow for Agents triples signups with ChatGPT plugin",
-      "date": "2026/10/16",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Two engineers shipped Stack Overflow for Agents in a few weeks with Codex, and its ChatGPT plugin helped drive up to 10× growth in agent creation.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Stack Overflow for Agents trip」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/stack-overflow-chatgpt-plugin",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261016-2",
       "title": "OpenAI: Benefit Street Partners answers questions faster with Codex",
       "date": "2026/10/16",
       "category": "model",
@@ -82,6 +57,31 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/benefit-street-partners",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261016-2",
+      "title": "OpenAI: Stack Overflow for Agents triples signups with ChatGPT plugin",
+      "date": "2026/10/16",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Two engineers shipped Stack Overflow for Agents in a few weeks with Codex, and its ChatGPT plugin helped drive up to 10× growth in agent creation.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Stack Overflow for Agents trip」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/stack-overflow-chatgpt-plugin",
       "tags": [
         "OpenAI",
         "ChatGPT",
