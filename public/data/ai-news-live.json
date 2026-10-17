@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-17T03:26:53.575Z",
-  "lastSyncedAtFormatted": "2026/10/17 12:26:53",
+  "lastSyncedAt": "2026-10-17T10:18:31.690Z",
+  "lastSyncedAtFormatted": "2026/10/17 19:18:31",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -66,6 +66,31 @@
       "isLiveSynced": true
     },
     {
+      "id": "live-model-20261016-2",
+      "title": "OpenAI: Benefit Street Partners answers questions faster with Codex",
+      "date": "2026/10/16",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Anant Kumar builds tools to compare loan valuations and analyze credit agreements, using Codex for code review and faster follow-ups.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Benefit Street Partners answer」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/benefit-street-partners",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
       "id": "live-google-20261015-0",
       "title": "Google DeepMind: Accelerating the search for antimicrobial peptides with Google Antigravity",
       "date": "2026/10/15",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261015-2",
+      "id": "live-model-20261015-3",
       "title": "OpenAI: Bringing GPT-Rosalind to academic research labs",
       "date": "2026/10/15",
       "category": "model",
@@ -116,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261015-3",
+      "id": "live-model-20261015-4",
       "title": "OpenAI: Teaching students to think and learn through questions",
       "date": "2026/10/15",
       "category": "model",
@@ -132,31 +157,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/teaching-students-to-think-and-learn-through-questions",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261015-4",
-      "title": "OpenAI: Sullivan & Cromwell brings legal expertise into agreement review",
-      "date": "2026/10/15",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "In collaboration with OpenAI, Sullivan & Cromwell developed Agreement Analyzer, an AI tool for identifying issues in a draft agreement.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Sullivan & Cromwell brings leg」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/sullivan-cromwell",
       "tags": [
         "OpenAI",
         "ChatGPT",
