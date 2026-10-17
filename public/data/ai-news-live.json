@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-16T20:37:54.814Z",
-  "lastSyncedAtFormatted": "2026/10/17 5:37:54",
+  "lastSyncedAt": "2026-10-17T03:26:53.575Z",
+  "lastSyncedAtFormatted": "2026/10/17 12:26:53",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -17,6 +17,31 @@
   "items": [
     {
       "id": "live-model-20261016-0",
+      "title": "OpenAI: How Itaú is building generative AI for its entire customer base",
+      "date": "2026/10/16",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Itaú is building generativ」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/itau-generative-ai",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261016-1",
       "title": "OpenAI: Stack Overflow for Agents triples signups with ChatGPT plugin",
       "date": "2026/10/16",
       "category": "model",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261015-1",
+      "id": "live-model-20261015-2",
       "title": "OpenAI: Bringing GPT-Rosalind to academic research labs",
       "date": "2026/10/15",
       "category": "model",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261015-2",
+      "id": "live-model-20261015-3",
       "title": "OpenAI: Teaching students to think and learn through questions",
       "date": "2026/10/15",
       "category": "model",
@@ -116,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261015-3",
+      "id": "live-model-20261015-4",
       "title": "OpenAI: Sullivan & Cromwell brings legal expertise into agreement review",
       "date": "2026/10/15",
       "category": "model",
@@ -161,31 +186,6 @@
         "Google DeepMind",
         "Frontier AI",
         "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261014-4",
-      "title": "OpenAI: Amp puts AI agents to work beyond code with OpenAI models",
-      "date": "2026/10/14",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "See how Amp pushes the frontier of what agents can do with GPT-6 Astra, Ultrafast, GPT-Live-1, and Sign in with ChatGPT.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Amp puts AI agents to work bey」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/amp-beyond-coding",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
         "公式発表"
       ],
       "isLiveSynced": true
