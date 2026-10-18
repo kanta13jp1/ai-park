@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-10-17T12:34:15.028Z",
-  "syncedAt": "2026-10-17 21:34",
+  "updatedAt": "2026-10-18T02:01:13.545Z",
+  "syncedAt": "2026-10-18 11:01",
   "dataSource": "Google Cloud Billing & Cloud Logging Live Verified (2026/10/05 確定)",
   "isLive": true,
   "gcpInfo": {
@@ -145,7 +145,7 @@
     "authVerified": true,
     "projectId": "antigravity-pj-xxxxxx",
     "billingAccountId": "012EB1-xxxxxx-xxxxxx",
-    "lastAuditCheck": "2026-10-17 21:34",
+    "lastAuditCheck": "2026-10-18 11:01",
     "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)"
   }
 }
