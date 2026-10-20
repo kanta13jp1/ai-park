@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-20T16:30:58.856Z",
-  "lastSyncedAtFormatted": "2026/10/21 1:30:58",
+  "lastSyncedAt": "2026-10-20T21:22:10.834Z",
+  "lastSyncedAtFormatted": "2026/10/21 6:22:10",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -16,7 +16,57 @@
   ],
   "items": [
     {
-      "id": "live-model-20261019-0",
+      "id": "live-model-20261020-0",
+      "title": "OpenAI: Franchisee reconciles cash in 94% less time with ChatGPT Work",
+      "date": "2026/10/20",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "An independent Schlotzsky’s and Cinnabon franchisee cut menu repricing time by 95% and built a workflow that could free up $100K in cash flow.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Franchisee reconciles cash in 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/ted-taylor-restaurant",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261020-1",
+      "title": "OpenAI: OpenAI acquires Orchestra Bio",
+      "date": "2026/10/20",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI is acquiring Orchestra Bio to bring AI-powered operations to life sciences R&D, helping biopharma teams accelerate drug development and advance new treatments.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI acquires Orchestra Bio」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/openai-to-acquire-orchestra-bio",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261019-2",
       "title": "OpenAI: Advancing coding in low‑resource programming languages",
       "date": "2026/10/19",
       "category": "model",
@@ -41,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261016-1",
+      "id": "live-model-20261016-3",
       "title": "OpenAI: How Itaú is building generative AI for its entire customer base",
       "date": "2026/10/16",
       "category": "model",
@@ -66,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261016-2",
+      "id": "live-model-20261016-4",
       "title": "OpenAI: Benefit Street Partners answers questions faster with Codex",
       "date": "2026/10/16",
       "category": "model",
@@ -82,31 +132,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/benefit-street-partners",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261016-3",
-      "title": "OpenAI: Stack Overflow for Agents triples signups with ChatGPT plugin",
-      "date": "2026/10/16",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Two engineers shipped Stack Overflow for Agents in a few weeks with Codex, and its ChatGPT plugin helped drive up to 10× growth in agent creation.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Stack Overflow for Agents trip」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/stack-overflow-chatgpt-plugin",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -136,31 +161,6 @@
         "Google DeepMind",
         "Frontier AI",
         "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261015-4",
-      "title": "OpenAI: Bringing GPT-Rosalind to academic research labs",
-      "date": "2026/10/15",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Introducing the Rosalind Academic Plan, offering eligible academic labs sponsored access to GPT-Rosalind and tools to advance life sciences research.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Bringing GPT-Rosalind to acade」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/introducing-the-rosalind-academic-plan",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
         "公式発表"
       ],
       "isLiveSynced": true
