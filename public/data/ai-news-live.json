@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-19T22:05:49.711Z",
-  "lastSyncedAtFormatted": "2026/10/20 7:05:49",
+  "lastSyncedAt": "2026-10-20T03:55:05.233Z",
+  "lastSyncedAtFormatted": "2026/10/20 12:55:05",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -16,7 +16,32 @@
   ],
   "items": [
     {
-      "id": "live-model-20261016-0",
+      "id": "live-model-20261019-0",
+      "title": "OpenAI: Advancing coding in low‑resource programming languages",
+      "date": "2026/10/19",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Learn how OpenAI is improving ChatGPT across low-resource programming languages, with new evaluations for software engineering, SQLite, and COBOL migration.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Advancing coding in low‑resour」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/low-resource-programming-languages",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261016-1",
       "title": "OpenAI: How Itaú is building generative AI for its entire customer base",
       "date": "2026/10/16",
       "category": "model",
@@ -41,7 +66,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261016-1",
+      "id": "live-model-20261016-2",
       "title": "OpenAI: Benefit Street Partners answers questions faster with Codex",
       "date": "2026/10/16",
       "category": "model",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261016-2",
+      "id": "live-model-20261016-3",
       "title": "OpenAI: Stack Overflow for Agents triples signups with ChatGPT plugin",
       "date": "2026/10/16",
       "category": "model",
@@ -116,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261015-3",
+      "id": "live-model-20261015-4",
       "title": "OpenAI: Bringing GPT-Rosalind to academic research labs",
       "date": "2026/10/15",
       "category": "model",
@@ -132,31 +157,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/introducing-the-rosalind-academic-plan",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261015-4",
-      "title": "OpenAI: Teaching students to think and learn through questions",
-      "date": "2026/10/15",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Celebrate Teachers’ Day with AI for Educators in Brazilian Portuguese and see how Study Mode can help teachers support active, step-by-step learning.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Teaching students to think and」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/teaching-students-to-think-and-learn-through-questions",
       "tags": [
         "OpenAI",
         "ChatGPT",
