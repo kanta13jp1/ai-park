@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-20T21:22:10.834Z",
-  "lastSyncedAtFormatted": "2026/10/21 6:22:10",
+  "lastSyncedAt": "2026-10-21T03:45:22.419Z",
+  "lastSyncedAtFormatted": "2026/10/21 12:45:22",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -42,6 +42,31 @@
     },
     {
       "id": "live-model-20261020-1",
+      "title": "OpenAI: Terminal X matches senior investor judgment 88.6% with GPT-6.1",
+      "date": "2026/10/20",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Terminal X’s Eval Agent grades outputs against a 54-criterion rubric, catching 25% more deviances from a fund’s mandate with GPT-6.1 Sol.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Terminal X matches senior inve」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/terminal-x",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261020-2",
       "title": "OpenAI: OpenAI acquires Orchestra Bio",
       "date": "2026/10/20",
       "category": "model",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261019-2",
+      "id": "live-model-20261019-3",
       "title": "OpenAI: Advancing coding in low‑resource programming languages",
       "date": "2026/10/19",
       "category": "model",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261016-3",
+      "id": "live-model-20261016-4",
       "title": "OpenAI: How Itaú is building generative AI for its entire customer base",
       "date": "2026/10/16",
       "category": "model",
@@ -107,31 +132,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/itau-generative-ai",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261016-4",
-      "title": "OpenAI: Benefit Street Partners answers questions faster with Codex",
-      "date": "2026/10/16",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Anant Kumar builds tools to compare loan valuations and analyze credit agreements, using Codex for code review and faster follow-ups.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Benefit Street Partners answer」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/benefit-street-partners",
       "tags": [
         "OpenAI",
         "ChatGPT",
