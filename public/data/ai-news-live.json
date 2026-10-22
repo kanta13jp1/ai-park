@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-22T11:21:02.874Z",
-  "lastSyncedAtFormatted": "2026/10/22 20:21:02",
+  "lastSyncedAt": "2026-10-22T16:48:25.140Z",
+  "lastSyncedAtFormatted": "2026/10/23 1:48:25",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -16,7 +16,82 @@
   ],
   "items": [
     {
-      "id": "live-model-20261021-0",
+      "id": "live-google-20261022-0",
+      "title": "Google DeepMind: Beyond tree cover: mapping the world’s forest types",
+      "date": "2026/10/22",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "A global map categorizing every 10-meter patch of land on Earth into distinct forest types.",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Beyond tree cover: mapping the」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/beyond-tree-cover-mapping-the-worlds-forest-types/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261022-0",
+      "title": "OpenAI: What FDE means at OpenAI",
+      "date": "2026/10/22",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "What forward deployed engineering means at OpenAI",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「What FDE means at OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/forward-deployed-engineering-means",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261022-1",
+      "title": "OpenAI: Uber brings ChatGPT Work to all employees with OpenAI",
+      "date": "2026/10/22",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Uber is rolling out ChatGPT Work to more than 30,000 employees, helping teams research, analyze data, create presentations, and complete complex workflows.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Uber brings ChatGPT Work to al」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/uber-chatgpt-work-rollout",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261021-2",
       "title": "OpenAI: How AT&T is rethinking in-house legal work with OpenAI",
       "date": "2026/10/21",
       "category": "model",
@@ -41,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261021-1",
+      "id": "live-model-20261021-3",
       "title": "OpenAI: Broad access through consistent standards",
       "date": "2026/10/21",
       "category": "model",
@@ -66,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261021-2",
+      "id": "live-model-20261021-4",
       "title": "OpenAI: OpenAI models are coming to Google Cloud",
       "date": "2026/10/21",
       "category": "model",
@@ -91,57 +166,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261021-3",
-      "title": "OpenAI: Patch the Planet: global response coordination as agents uncover critical vulnerabilities",
-      "date": "2026/10/21",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Patch the Planet connects security researchers, maintainers, and incident responders to help address critical vulnerabilities across open source.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Patch the Planet: global respo」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/coordinated-disclosure-of-critical-vulnerabilities",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261021-4",
-      "title": "OpenAI: ChatGPT Ads expands to 26 new countries as over 100,000 advertisers have used the platform",
-      "date": "2026/10/21",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "From local businesses to global brands, more advertisers can now reach people as they explore, compare and decide what to buy in ChatGPT.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「ChatGPT Ads expands to 26 new 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/chatgpt-ads-expands-26-new-countries",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261015-0",
+      "id": "live-google-20261015-1",
       "title": "Google DeepMind: Accelerating the search for antimicrobial peptides with Google Antigravity",
       "date": "2026/10/15",
       "category": "google",
@@ -166,7 +191,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261014-1",
+      "id": "live-google-20261014-2",
       "title": "Google DeepMind: Google DeepMind and Singapore Government collaborate to build fine-tuned AI model for scam detection",
       "date": "2026/10/14",
       "category": "google",
@@ -191,7 +216,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261013-2",
+      "id": "live-google-20261013-3",
       "title": "Google DeepMind: Developing Gemini 4 Argon responsibly and safely",
       "date": "2026/10/13",
       "category": "google",
@@ -216,7 +241,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261013-3",
+      "id": "live-google-20261013-4",
       "title": "Google DeepMind: Gemini 4 Argon for Robotics",
       "date": "2026/10/13",
       "category": "google",
@@ -232,31 +257,6 @@
       ],
       "sourceName": "Google DeepMind Official Feed",
       "sourceUrl": "https://deepmind.google/blog/gemini-4-argon-for-robotics/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261013-4",
-      "title": "Google DeepMind: Gemini 4 Argon: Built to solve your hardest problems",
-      "date": "2026/10/13",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 4 Argon: Built to solve」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/introducing-gemini-4-argon/",
       "tags": [
         "Google DeepMind",
         "Frontier AI",
