@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-22T16:48:25.140Z",
-  "lastSyncedAtFormatted": "2026/10/23 1:48:25",
+  "lastSyncedAt": "2026-10-22T21:18:12.631Z",
+  "lastSyncedAtFormatted": "2026/10/23 6:18:12",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -42,6 +42,31 @@
     },
     {
       "id": "live-model-20261022-0",
+      "title": "OpenAI: Build more responsive apps with the Decisions API",
+      "date": "2026/10/22",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Fast, focused, low-cost decisions for any application.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Build more responsive apps wit」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/decisions-api",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261022-1",
       "title": "OpenAI: What FDE means at OpenAI",
       "date": "2026/10/22",
       "category": "model",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-1",
+      "id": "live-model-20261022-2",
       "title": "OpenAI: Uber brings ChatGPT Work to all employees with OpenAI",
       "date": "2026/10/22",
       "category": "model",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261021-2",
+      "id": "live-model-20261021-3",
       "title": "OpenAI: How AT&T is rethinking in-house legal work with OpenAI",
       "date": "2026/10/21",
       "category": "model",
@@ -116,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261021-3",
+      "id": "live-model-20261021-4",
       "title": "OpenAI: Broad access through consistent standards",
       "date": "2026/10/21",
       "category": "model",
@@ -132,31 +157,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/broad-access-through-consistent-standards",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261021-4",
-      "title": "OpenAI: OpenAI models are coming to Google Cloud",
-      "date": "2026/10/21",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI and Google Cloud are bringing frontier models and Codex workflows to Gemini’s Model Garden, available through Google Cloud Marketplace.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI models are coming to Go」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/openai-models-google-cloud",
       "tags": [
         "OpenAI",
         "ChatGPT",
