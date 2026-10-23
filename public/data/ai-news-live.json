@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-23T03:49:04.673Z",
-  "lastSyncedAtFormatted": "2026/10/23 12:49:04",
+  "lastSyncedAt": "2026-10-23T11:11:24.601Z",
+  "lastSyncedAtFormatted": "2026/10/23 20:11:24",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -15,6 +15,31 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-model-20261023-0",
+      "title": "OpenAI: OpenAI and Poland’s NASK partner to advance AI safety and security",
+      "date": "2026/10/23",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI and Poland’s NASK are partnering on AI safety, security, and technical research to strengthen safeguards and support a more resilient digital ecosystem.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI and Poland’s NASK partn」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/openai-nask-ai-safety-security-partnership",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-google-20261022-0",
       "title": "Google DeepMind: Beyond tree cover: mapping the world’s forest types",
@@ -41,7 +66,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-0",
+      "id": "live-model-20261022-1",
       "title": "OpenAI: Build more responsive apps with the Decisions API",
       "date": "2026/10/22",
       "category": "model",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-1",
+      "id": "live-model-20261022-2",
       "title": "OpenAI: What FDE means at OpenAI",
       "date": "2026/10/22",
       "category": "model",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-2",
+      "id": "live-model-20261022-3",
       "title": "OpenAI: Uber brings ChatGPT Work to all employees with OpenAI",
       "date": "2026/10/22",
       "category": "model",
@@ -116,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261021-3",
+      "id": "live-model-20261021-4",
       "title": "OpenAI: How AT&T is rethinking in-house legal work with OpenAI",
       "date": "2026/10/21",
       "category": "model",
@@ -132,31 +157,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/att-legal",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261021-4",
-      "title": "OpenAI: Broad access through consistent standards",
-      "date": "2026/10/21",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "How OpenAI works with distribution partners to uphold consistent safeguards, support responsible access, and clarify expectations in our Usage Policies.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Broad access through consisten」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/broad-access-through-consistent-standards",
       "tags": [
         "OpenAI",
         "ChatGPT",
