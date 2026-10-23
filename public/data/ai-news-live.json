@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-23T16:39:23.971Z",
-  "lastSyncedAtFormatted": "2026/10/24 1:39:23",
+  "lastSyncedAt": "2026-10-23T21:07:42.502Z",
+  "lastSyncedAtFormatted": "2026/10/24 6:07:42",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -42,6 +42,31 @@
     },
     {
       "id": "live-model-20261023-1",
+      "title": "OpenAI: Securing our frontier model training environment",
+      "date": "2026/10/23",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI explains how we strengthened containment for frontier model training and evaluation, including offline environments and high-compute red-teaming.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Securing our frontier model tr」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/securing-our-frontier-model-training-environment",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261023-2",
       "title": "OpenAI: OpenAI and Poland’s NASK partner to advance AI safety and security",
       "date": "2026/10/23",
       "category": "model",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-2",
+      "id": "live-model-20261022-3",
       "title": "OpenAI: Build more responsive apps with the Decisions API",
       "date": "2026/10/22",
       "category": "model",
@@ -116,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-3",
+      "id": "live-model-20261022-4",
       "title": "OpenAI: What FDE means at OpenAI",
       "date": "2026/10/22",
       "category": "model",
@@ -132,31 +157,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/forward-deployed-engineering-means",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261022-4",
-      "title": "OpenAI: Uber brings ChatGPT Work to all employees with OpenAI",
-      "date": "2026/10/22",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Uber is rolling out ChatGPT Work to more than 30,000 employees, helping teams research, analyze data, create presentations, and complete complex workflows.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Uber brings ChatGPT Work to al」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/uber-chatgpt-work-rollout",
       "tags": [
         "OpenAI",
         "ChatGPT",
