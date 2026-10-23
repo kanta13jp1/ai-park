@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-23T11:11:24.601Z",
-  "lastSyncedAtFormatted": "2026/10/23 20:11:24",
+  "lastSyncedAt": "2026-10-23T16:39:23.971Z",
+  "lastSyncedAtFormatted": "2026/10/24 1:39:23",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -17,6 +17,31 @@
   "items": [
     {
       "id": "live-model-20261023-0",
+      "title": "OpenAI: Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II)",
+      "date": "2026/10/23",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Learn how OpenAI scaled Habitat with reliable multi-tenancy, global caching, and Azure Cosmos DB to deliver 12× faster reads for ChatGPT.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Rapidly scaling online storage」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/scaling-storage-one-billion-users-part-two",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261023-1",
       "title": "OpenAI: OpenAI and Poland’s NASK partner to advance AI safety and security",
       "date": "2026/10/23",
       "category": "model",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-1",
+      "id": "live-model-20261022-2",
       "title": "OpenAI: Build more responsive apps with the Decisions API",
       "date": "2026/10/22",
       "category": "model",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-2",
+      "id": "live-model-20261022-3",
       "title": "OpenAI: What FDE means at OpenAI",
       "date": "2026/10/22",
       "category": "model",
@@ -116,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261022-3",
+      "id": "live-model-20261022-4",
       "title": "OpenAI: Uber brings ChatGPT Work to all employees with OpenAI",
       "date": "2026/10/22",
       "category": "model",
@@ -132,31 +157,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/uber-chatgpt-work-rollout",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261021-4",
-      "title": "OpenAI: How AT&T is rethinking in-house legal work with OpenAI",
-      "date": "2026/10/21",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "AT&T is working with OpenAI to make legal knowledge easier to access. Learn how its LegalEdge team is rethinking intake and scaling legal judgment.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How AT&T is rethinking in-hous」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/att-legal",
       "tags": [
         "OpenAI",
         "ChatGPT",
