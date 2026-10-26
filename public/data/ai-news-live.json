@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-26T12:27:07.023Z",
-  "lastSyncedAtFormatted": "2026/10/26 21:27:07",
+  "lastSyncedAt": "2026-10-26T22:23:56.088Z",
+  "lastSyncedAtFormatted": "2026/10/27 7:23:56",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -16,22 +16,48 @@
   ],
   "items": [
     {
-      "id": "live-model-20261023-0",
-      "title": "OpenAI: Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II)",
-      "date": "2026/10/23",
+      "id": "live-google-20261026-0",
+      "title": "Google Antigravity: How Gemini 4 Argon Upleveled Agents on Antigravity: Trillion-Edge Graphs and Custom TPU Kernels",
+      "date": "2026/10/26",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「How Gemini 4 Argon Upleveled A」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/gemini-4-argon-trillion-edge-graphs-and-tpu-kernels",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261026-0",
+      "title": "OpenAI: GPT-6.1 Sol helps CodeRabbit strengthen security across complex codebases",
+      "date": "2026/10/26",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "Learn how OpenAI scaled Habitat with reliable multi-tenancy, global caching, and Azure Cosmos DB to deliver 12× faster reads for ChatGPT.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Rapidly scaling online storage」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "CodeRabbit uses GPT-6.1 Sol to investigate security risks across complex codebases. Its security agent helps developers review findings and proposed fixes.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「GPT-6.1 Sol helps CodeRabbit s」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/scaling-storage-one-billion-users-part-two",
+      "sourceUrl": "https://openai.com/index/gpt-6-1-sol-coderabbit-code-security",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -41,22 +67,22 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261023-1",
-      "title": "OpenAI: Securing our frontier model training environment",
-      "date": "2026/10/23",
+      "id": "live-model-20261026-1",
+      "title": "OpenAI: ChatGPT’s expanding world of work",
+      "date": "2026/10/26",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "OpenAI explains how we strengthened containment for frontier model training and evaluation, including offline environments and high-compute red-teaming.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Securing our frontier model tr」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "Explore OpenAI Signals data on 165 work activities across nearly 100 countries, revealing how people use ChatGPT for work and how usage changes over time.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「ChatGPT’s expanding world of w」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/securing-our-frontier-model-training-environment",
+      "sourceUrl": "https://openai.com/index/chatgpt-expanding-world-of-work",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -66,22 +92,72 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261023-2",
-      "title": "OpenAI: OpenAI and Poland’s NASK partner to advance AI safety and security",
-      "date": "2026/10/23",
+      "id": "live-model-20261026-2",
+      "title": "OpenAI: How Fanatics and OpenAI streamline the fan experience",
+      "date": "2026/10/26",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "OpenAI and Poland’s NASK are partnering on AI safety, security, and technical research to strengthen safeguards and support a more resilient digital ecosystem.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI and Poland’s NASK partn」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "Fanatics uses OpenAI to help fans complete their game-day outfits with Shop the Look. Testing across roughly 30,000 MLB products showed 10% higher engagement.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Fanatics and OpenAI stream」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/openai-nask-ai-safety-security-partnership",
+      "sourceUrl": "https://openai.com/index/fanatics-streamline-fan-experience",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261026-3",
+      "title": "OpenAI: How Ultrafast cut incident investigation from hours to minutes at OpenAI",
+      "date": "2026/10/26",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "See how OpenAI engineers use Codex Ultrafast to investigate incidents in minutes. Explore faster security analysis, code refactoring, and daily workflows.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Ultrafast cut incident inv」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/openai-cut-incident-investigation",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261026-4",
+      "title": "OpenAI: Working with academic communities to build scientific understanding",
+      "date": "2026/10/26",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI shares model results on the Kakeya conjecture, Exponential Time Hypothesis, and quantum chromodynamics—and how researchers can verify and build on them.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Working with academic communit」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/building-scientific-understanding-with-academic-communities",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -111,56 +187,6 @@
         "Google DeepMind",
         "Frontier AI",
         "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261022-3",
-      "title": "OpenAI: Build more responsive apps with the Decisions API",
-      "date": "2026/10/22",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Fast, focused, low-cost decisions for any application.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Build more responsive apps wit」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/decisions-api",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261022-4",
-      "title": "OpenAI: What FDE means at OpenAI",
-      "date": "2026/10/22",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "What forward deployed engineering means at OpenAI",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「What FDE means at OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/forward-deployed-engineering-means",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
         "公式発表"
       ],
       "isLiveSynced": true
@@ -266,7 +292,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261013-0",
+      "id": "live-google-20261013-1",
       "title": "Google Antigravity: Gemini 4 Argon in Google Antigravity",
       "date": "2026/10/13",
       "category": "google",
@@ -946,7 +972,7 @@
       ]
     },
     {
-      "id": "live-google-20260901-2",
+      "id": "live-google-20260901-3",
       "title": "Google Antigravity: Gemini 3.8 Flash in Google Antigravity",
       "date": "2026/09/01",
       "category": "google",
@@ -972,7 +998,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20260827-3",
+      "id": "live-google-20260827-4",
       "title": "Google Antigravity: Teamwork: when AI becomes a research partner",
       "date": "2026/08/27",
       "category": "google",
@@ -989,32 +1015,6 @@
       ],
       "sourceName": "Google Antigravity Official Feed",
       "sourceUrl": "https://antigravity.google/blog/teamwork-when-ai-becomes-a-research-partner",
-      "tags": [
-        "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
-        "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20260826-4",
-      "title": "Google Antigravity: Visualizing with the help of Antigravity",
-      "date": "2026/08/26",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Visualizing with the help of A」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
-      ],
-      "sourceName": "Google Antigravity Official Feed",
-      "sourceUrl": "https://antigravity.google/blog/visualizing-with-the-help-of-antigravity",
       "tags": [
         "Google Antigravity",
         "Custom Agents",
