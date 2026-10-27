@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-27T11:46:00.206Z",
-  "lastSyncedAtFormatted": "2026/10/27 20:46:00",
+  "lastSyncedAt": "2026-10-27T17:39:40.336Z",
+  "lastSyncedAtFormatted": "2026/10/28 2:39:40",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -15,6 +15,56 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-google-20261027-0",
+      "title": "Google DeepMind: Genie 4: A new generation of world simulation",
+      "date": "2026/10/27",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Genie 4: our new world model unlocking unprecedented realism in real-time simulation.",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Genie 4: A new generation of w」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/genie-4-a-new-generation-of-world-simulation/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261027-0",
+      "title": "OpenAI: OpenAI expands partnership with Oracle to bring its apps to ChatGPT",
+      "date": "2026/10/27",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI and Oracle are expanding their partnership to bring business applications and AI agents into ChatGPT and power new Oracle offerings.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI expands partnership wit」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/oracle-apps-in-chatgpt",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-google-20261026-0",
       "title": "Google Antigravity: How Gemini 4 Argon Upleveled Agents on Antigravity: Trillion-Edge Graphs and Custom TPU Kernels",
@@ -42,7 +92,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261026-0",
+      "id": "live-model-20261026-1",
       "title": "OpenAI: Greptile takes bug detection beyond code review with GPT-6 Astra",
       "date": "2026/10/26",
       "category": "model",
@@ -67,7 +117,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261026-1",
+      "id": "live-model-20261026-2",
       "title": "OpenAI: Working with academic communities to build scientific understanding",
       "date": "2026/10/26",
       "category": "model",
@@ -92,7 +142,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261026-2",
+      "id": "live-model-20261026-3",
       "title": "OpenAI: GPT-6.1 Sol helps CodeRabbit strengthen security across complex codebases",
       "date": "2026/10/26",
       "category": "model",
@@ -117,7 +167,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261026-3",
+      "id": "live-model-20261026-4",
       "title": "OpenAI: ChatGPT’s expanding world of work",
       "date": "2026/10/26",
       "category": "model",
@@ -142,32 +192,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261026-4",
-      "title": "OpenAI: How Fanatics and OpenAI streamline the fan experience",
-      "date": "2026/10/26",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Fanatics uses OpenAI to help fans complete their game-day outfits with Shop the Look. Testing across roughly 30,000 MLB products showed 10% higher engagement.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Fanatics and OpenAI stream」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/fanatics-streamline-fan-experience",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261022-0",
+      "id": "live-google-20261022-1",
       "title": "Google DeepMind: Beyond tree cover: mapping the world’s forest types",
       "date": "2026/10/22",
       "category": "google",
@@ -192,7 +217,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261015-1",
+      "id": "live-google-20261015-2",
       "title": "Google DeepMind: Accelerating the search for antimicrobial peptides with Google Antigravity",
       "date": "2026/10/15",
       "category": "google",
@@ -217,7 +242,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261014-2",
+      "id": "live-google-20261014-3",
       "title": "Google DeepMind: Google DeepMind and Singapore Government collaborate to build fine-tuned AI model for scam detection",
       "date": "2026/10/14",
       "category": "google",
@@ -242,7 +267,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261013-3",
+      "id": "live-google-20261013-4",
       "title": "Google DeepMind: Developing Gemini 4 Argon responsibly and safely",
       "date": "2026/10/13",
       "category": "google",
@@ -258,31 +283,6 @@
       ],
       "sourceName": "Google DeepMind Official Feed",
       "sourceUrl": "https://deepmind.google/blog/developing-gemini-4-argon-responsibly-and-safely/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261013-4",
-      "title": "Google DeepMind: Gemini 4 Argon for Robotics",
-      "date": "2026/10/13",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 4 Argon for Robotics」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/gemini-4-argon-for-robotics/",
       "tags": [
         "Google DeepMind",
         "Frontier AI",
