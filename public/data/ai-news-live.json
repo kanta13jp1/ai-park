@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-26T22:23:56.088Z",
-  "lastSyncedAtFormatted": "2026/10/27 7:23:56",
+  "lastSyncedAt": "2026-10-27T04:08:04.619Z",
+  "lastSyncedAtFormatted": "2026/10/27 13:08:04",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -43,6 +43,56 @@
     },
     {
       "id": "live-model-20261026-0",
+      "title": "OpenAI: Greptile takes bug detection beyond code review with GPT-6 Astra",
+      "date": "2026/10/26",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "How Greptile uses GPT-6 Astra to test user workflows, Daybreak to strengthen security, and Codex to reduce rework.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Greptile takes bug detection b」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/greptile-code-review-codex-astra",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261026-1",
+      "title": "OpenAI: Working with academic communities to build scientific understanding",
+      "date": "2026/10/26",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI shares model results on the Kakeya conjecture, Exponential Time Hypothesis, and quantum chromodynamics—and how researchers can verify and build on them.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Working with academic communit」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/building-scientific-understanding-with-academic-communities",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261026-2",
       "title": "OpenAI: GPT-6.1 Sol helps CodeRabbit strengthen security across complex codebases",
       "date": "2026/10/26",
       "category": "model",
@@ -67,7 +117,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261026-1",
+      "id": "live-model-20261026-3",
       "title": "OpenAI: ChatGPT’s expanding world of work",
       "date": "2026/10/26",
       "category": "model",
@@ -92,7 +142,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261026-2",
+      "id": "live-model-20261026-4",
       "title": "OpenAI: How Fanatics and OpenAI streamline the fan experience",
       "date": "2026/10/26",
       "category": "model",
@@ -108,56 +158,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/fanatics-streamline-fan-experience",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261026-3",
-      "title": "OpenAI: How Ultrafast cut incident investigation from hours to minutes at OpenAI",
-      "date": "2026/10/26",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "See how OpenAI engineers use Codex Ultrafast to investigate incidents in minutes. Explore faster security analysis, code refactoring, and daily workflows.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Ultrafast cut incident inv」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/openai-cut-incident-investigation",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261026-4",
-      "title": "OpenAI: Working with academic communities to build scientific understanding",
-      "date": "2026/10/26",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI shares model results on the Kakeya conjecture, Exponential Time Hypothesis, and quantum chromodynamics—and how researchers can verify and build on them.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Working with academic communit」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/building-scientific-understanding-with-academic-communities",
       "tags": [
         "OpenAI",
         "ChatGPT",
