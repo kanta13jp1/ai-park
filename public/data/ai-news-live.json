@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-28T04:35:56.093Z",
-  "lastSyncedAtFormatted": "2026/10/28 13:35:56",
+  "lastSyncedAt": "2026-10-28T12:19:03.957Z",
+  "lastSyncedAtFormatted": "2026/10/28 21:19:03",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -15,6 +15,31 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-model-20261028-0",
+      "title": "OpenAI: Legora is building the agentic operating system for legal work",
+      "date": "2026/10/28",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "See how Legora uses OpenAI models, ChatGPT, and Codex to accelerate legal workflows, expand contract analysis, and free lawyers to focus on higher-value work.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Legora is building the agentic」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/legora-agentic-operating-system-for-legal-work",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-google-20261027-0",
       "title": "Google DeepMind: Genie 4: A new generation of world simulation",
@@ -41,7 +66,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261027-0",
+      "id": "live-model-20261027-1",
       "title": "OpenAI: Retell uses OpenAI models to help power 100M monthly calls",
       "date": "2026/10/27",
       "category": "model",
@@ -66,7 +91,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261027-1",
+      "id": "live-model-20261027-2",
       "title": "OpenAI: OpenAI expands partnership with Oracle to bring its apps to ChatGPT",
       "date": "2026/10/27",
       "category": "model",
@@ -91,7 +116,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261027-2",
+      "id": "live-model-20261027-3",
       "title": "OpenAI: How Check Point accelerates vulnerability research with Daybreak",
       "date": "2026/10/27",
       "category": "model",
@@ -142,7 +167,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261026-3",
+      "id": "live-model-20261026-4",
       "title": "OpenAI: Greptile takes bug detection beyond code review with GPT-6 Astra",
       "date": "2026/10/26",
       "category": "model",
@@ -158,31 +183,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/greptile-code-review-codex-astra",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261026-4",
-      "title": "OpenAI: Working with academic communities to build scientific understanding",
-      "date": "2026/10/26",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI shares model results on the Kakeya conjecture, Exponential Time Hypothesis, and quantum chromodynamics—and how researchers can verify and build on them.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Working with academic communit」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/building-scientific-understanding-with-academic-communities",
       "tags": [
         "OpenAI",
         "ChatGPT",
