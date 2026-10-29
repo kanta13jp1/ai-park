@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-29T12:28:43.842Z",
-  "lastSyncedAtFormatted": "2026/10/29 21:28:43",
+  "lastSyncedAt": "2026-10-29T22:32:09.376Z",
+  "lastSyncedAtFormatted": "2026/10/30 7:32:09",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -15,6 +15,107 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-google-20261029-0",
+      "title": "Google Antigravity: Plugin Marketplace in Antigravity",
+      "date": "2026/10/29",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Plugin Marketplace in Antigrav」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/plugin-marketplace-in-antigravity",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261029-0",
+      "title": "OpenAI: An updated Model Spec for more capable and beneficial AI",
+      "date": "2026/10/29",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI’s updated Model Spec outlines five core values to guide more capable AI toward sound judgment, human agency, and faithfulness to human intent.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「An updated Model Spec for more」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/updated-model-spec",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261029-1",
+      "title": "OpenAI: How we detect frontier model misalignment",
+      "date": "2026/10/29",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI uses layered monitoring to detect frontier model misalignment and unauthorized agent behavior so responders can intervene before incidents escalate.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How we detect frontier model m」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/how-we-detect-frontier-model-misalignment",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261029-2",
+      "title": "OpenAI: How Ropes & Gray is developing AI for transactional diligence",
+      "date": "2026/10/29",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Ropes & Gray is developing AI for transactional diligence with OpenAI. Lawyers review grouped documents, summaries, and reports before advising clients.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Ropes & Gray is developing」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/ropes-gray-ai-diligence",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-google-20261028-0",
       "title": "Google DeepMind: Gemini 4 Carbon: Our next frontier model",
@@ -41,7 +142,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261028-0",
+      "id": "live-model-20261028-3",
       "title": "OpenAI: OpenAI and ServiceNow expand partnership across enterprise workflows",
       "date": "2026/10/28",
       "category": "model",
@@ -66,7 +167,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261028-1",
+      "id": "live-model-20261028-4",
       "title": "OpenAI: The future of the firm",
       "date": "2026/10/28",
       "category": "model",
@@ -82,31 +183,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/the-future-of-the-firm",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261028-2",
-      "title": "OpenAI: Legora is building the agentic operating system for legal work",
-      "date": "2026/10/28",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "See how Legora uses OpenAI models, ChatGPT, and Codex to accelerate legal workflows, expand contract analysis, and free lawyers to focus on higher-value work.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Legora is building the agentic」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/legora",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -141,57 +217,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261027-3",
-      "title": "OpenAI: Retell uses OpenAI models to help power 100M monthly calls",
-      "date": "2026/10/27",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "GPT-6 Astra tops Retell’s voice agent benchmark, while Codex helps it reach a $1.6M annual revenue run rate per employee.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Retell uses OpenAI models to h」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/retell-ai",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261027-4",
-      "title": "OpenAI: OpenAI expands partnership with Oracle to bring its apps to ChatGPT",
-      "date": "2026/10/27",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI and Oracle are expanding their partnership to bring business applications and AI agents into ChatGPT and power new Oracle offerings.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI expands partnership wit」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/oracle-apps-in-chatgpt",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261026-0",
+      "id": "live-google-20261026-1",
       "title": "Google Antigravity: How Gemini 4 Argon Upleveled Agents on Antigravity: Trillion-Edge Graphs and Custom TPU Kernels",
       "date": "2026/10/26",
       "category": "google",
@@ -292,7 +318,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261013-1",
+      "id": "live-google-20261013-2",
       "title": "Google Antigravity: Gemini 4 Argon in Google Antigravity",
       "date": "2026/10/13",
       "category": "google",
@@ -972,7 +998,7 @@
       ]
     },
     {
-      "id": "live-google-20260901-3",
+      "id": "live-google-20260901-4",
       "title": "Google Antigravity: Gemini 3.8 Flash in Google Antigravity",
       "date": "2026/09/01",
       "category": "google",
@@ -989,32 +1015,6 @@
       ],
       "sourceName": "Google Antigravity Official Feed",
       "sourceUrl": "https://antigravity.google/blog/gemini-3-8-flash-in-google-antigravity",
-      "tags": [
-        "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
-        "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20260827-4",
-      "title": "Google Antigravity: Teamwork: when AI becomes a research partner",
-      "date": "2026/08/27",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Teamwork: when AI becomes a re」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
-      ],
-      "sourceName": "Google Antigravity Official Feed",
-      "sourceUrl": "https://antigravity.google/blog/teamwork-when-ai-becomes-a-research-partner",
       "tags": [
         "Google Antigravity",
         "Custom Agents",
