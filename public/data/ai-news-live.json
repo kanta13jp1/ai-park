@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-10-30T12:20:23.454Z",
-  "lastSyncedAtFormatted": "2026/10/30 21:20:23",
+  "lastSyncedAt": "2026-10-30T22:00:33.407Z",
+  "lastSyncedAtFormatted": "2026/10/31 7:00:33",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -15,6 +15,81 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-model-20261030-0",
+      "title": "OpenAI: Making it easier for websites to express AI training preferences",
+      "date": "2026/10/30",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI will honor a shared robots.txt signal to help website operators communicate their AI training preferences to participating providers.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Making it easier for websites 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/helping-websites-express-ai-training-preferences",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261030-1",
+      "title": "OpenAI: Community safety report and new protections for teens",
+      "date": "2026/10/30",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI is strengthening violence prevention in ChatGPT with expanded safeguards, earlier interventions, and a new commitment to public safety reporting.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Community safety report and ne」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/community-safety-report-and-new-protections-for-teens",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261030-2",
+      "title": "OpenAI: Fair use benefits everyone",
+      "date": "2026/10/30",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI shares excerpts from court briefs by creators, academics, accessibility advocates, and legal experts, among others, on how fair use supports AI training and innovation.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Fair use benefits everyone」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/fair-use-benefits-everyone",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-google-20261029-0",
       "title": "Google Antigravity: Plugin Marketplace in Antigravity",
@@ -42,7 +117,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261029-0",
+      "id": "live-model-20261029-3",
       "title": "OpenAI: An updated Model Spec for more capable and beneficial AI",
       "date": "2026/10/29",
       "category": "model",
@@ -67,7 +142,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261029-1",
+      "id": "live-model-20261029-4",
       "title": "OpenAI: How we detect frontier model misalignment",
       "date": "2026/10/29",
       "category": "model",
@@ -83,31 +158,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/how-we-detect-frontier-model-misalignment",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261029-2",
-      "title": "OpenAI: How Ropes & Gray is developing AI for transactional diligence",
-      "date": "2026/10/29",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Ropes & Gray is developing AI for transactional diligence with OpenAI. Lawyers review grouped documents, summaries, and reports before advising clients.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Ropes & Gray is developing」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/ropes-gray-ai-diligence",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -137,56 +187,6 @@
         "Google DeepMind",
         "Frontier AI",
         "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261028-3",
-      "title": "OpenAI: OpenAI and ServiceNow expand partnership across enterprise workflows",
-      "date": "2026/10/28",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI and ServiceNow expand their partnership to bring OpenAI models and agents into ServiceNow and ServiceNow workflows into ChatGPT and Codex.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI and ServiceNow expand p」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/openai-servicenow-partnership-expansion",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261028-4",
-      "title": "OpenAI: The future of the firm",
-      "date": "2026/10/28",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "How AI might enter the org chart—beneath, beside, and between us.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「The future of the firm」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/the-future-of-the-firm",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
         "公式発表"
       ],
       "isLiveSynced": true
