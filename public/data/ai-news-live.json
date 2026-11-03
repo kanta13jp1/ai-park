@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-02T15:00:56.696Z",
-  "lastSyncedAtFormatted": "2026/11/3 0:00:56",
+  "lastSyncedAt": "2026-11-03T00:42:24.654Z",
+  "lastSyncedAtFormatted": "2026/11/3 9:42:24",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -15,6 +15,106 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-model-20261102-0",
+      "title": "OpenAI: Scaling Git at OpenAI",
+      "date": "2026/11/02",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "How OpenAI built Pando, a Git-compatible backend designed for the scale of development that Codex makes possible.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Scaling Git at OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/scaling-git-at-openai",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261102-1",
+      "title": "OpenAI: Introducing the Grid Protectors Program",
+      "date": "2026/11/02",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI’s Grid Protectors Program will work with utilities to help future compute campuses support grid reliability and protect consumer electricity costs.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing the Grid Protector」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/grid-protectors-program",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261102-2",
+      "title": "OpenAI: LifeVal",
+      "date": "2026/11/02",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Introducing LifeVal, a benchmark measuring how well AI helps people complete everyday tasks, from finding childcare to managing finances and government paperwork.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「LifeVal」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/lifeval",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261102-3",
+      "title": "OpenAI: Qodo builds context into AI code review with Codex",
+      "date": "2026/11/02",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Qodo brings company knowledge and coding standards into Codex, helping developers catch P0 issues across repositories before opening a pull request.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Qodo builds context into AI co」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/qodo-codex-plugin",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-google-20261030-0",
       "title": "Google DeepMind: Speeding up planning decisions with AI",
@@ -41,7 +141,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261030-0",
+      "id": "live-model-20261030-4",
       "title": "OpenAI: Making it easier for websites to express AI training preferences",
       "date": "2026/10/30",
       "category": "model",
@@ -57,56 +157,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/helping-websites-express-ai-training-preferences",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261030-1",
-      "title": "OpenAI: Community safety report and new protections for teens",
-      "date": "2026/10/30",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI is strengthening violence prevention in ChatGPT with expanded safeguards, earlier interventions, and a new commitment to public safety reporting.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Community safety report and ne」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/community-safety-report-and-new-protections-for-teens",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261030-2",
-      "title": "OpenAI: Fair use benefits everyone",
-      "date": "2026/10/30",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI shares excerpts from court briefs by creators, academics, accessibility advocates, and legal experts, among others, on how fair use supports AI training and innovation.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Fair use benefits everyone」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/fair-use-benefits-everyone",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -138,56 +188,6 @@
         "Custom Agents",
         "Plugins",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261029-3",
-      "title": "OpenAI: An updated Model Spec for more capable and beneficial AI",
-      "date": "2026/10/29",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI’s updated Model Spec outlines five core values to guide more capable AI toward sound judgment, human agency, and faithfulness to human intent.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「An updated Model Spec for more」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/updated-model-spec",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261029-4",
-      "title": "OpenAI: How we detect frontier model misalignment",
-      "date": "2026/10/29",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI uses layered monitoring to detect frontier model misalignment and unauthorized agent behavior so responders can intervene before incidents escalate.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How we detect frontier model m」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/how-we-detect-frontier-model-misalignment",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
       ],
       "isLiveSynced": true
     },
