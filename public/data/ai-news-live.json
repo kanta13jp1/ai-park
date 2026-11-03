@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-03T00:42:24.654Z",
-  "lastSyncedAtFormatted": "2026/11/3 9:42:24",
+  "lastSyncedAt": "2026-11-03T13:48:06.783Z",
+  "lastSyncedAtFormatted": "2026/11/3 22:48:06",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -16,7 +16,32 @@
   ],
   "items": [
     {
-      "id": "live-model-20261102-0",
+      "id": "live-model-20261103-0",
+      "title": "OpenAI: Heimstaden is changing residential real estate management with AI",
+      "date": "2026/11/03",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Discover how Heimstaden uses OpenAI’s ChatGPT Enterprise and Codex to transform property management, cut costs, and empower employees across Europe.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Heimstaden is changing residen」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/heimstaden",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261102-1",
       "title": "OpenAI: Scaling Git at OpenAI",
       "date": "2026/11/02",
       "category": "model",
@@ -41,7 +66,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261102-1",
+      "id": "live-model-20261102-2",
       "title": "OpenAI: Introducing the Grid Protectors Program",
       "date": "2026/11/02",
       "category": "model",
@@ -66,22 +91,22 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261102-2",
-      "title": "OpenAI: LifeVal",
+      "id": "live-model-20261102-3",
+      "title": "OpenAI: Rewarding defenders with bigger bug bounties",
       "date": "2026/11/02",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "Introducing LifeVal, a benchmark measuring how well AI helps people complete everyday tasks, from finding childcare to managing finances and government paperwork.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「LifeVal」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "OpenAI is raising Security Bug Bounty rewards and introducing report quality, loyalty, and priority campaign bonuses for independent security researchers.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Rewarding defenders with bigge」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/lifeval",
+      "sourceUrl": "https://openai.com/index/rewarding-defenders-with-bigger-bug-bounties",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -91,22 +116,22 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261102-3",
-      "title": "OpenAI: Qodo builds context into AI code review with Codex",
+      "id": "live-model-20261102-4",
+      "title": "OpenAI: Preparing our next security sprint to harden OpenAI",
       "date": "2026/11/02",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "Qodo brings company knowledge and coding standards into Codex, helping developers catch P0 issues across repositories before opening a pull request.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Qodo builds context into AI co」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "OpenAI is preparing its next internal security sprint with Cathedral Systems to test and strengthen its defenses using AI.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Preparing our next security sp」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/qodo-codex-plugin",
+      "sourceUrl": "https://openai.com/index/preparing-our-next-security-sprint-to-harden-openai",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -136,31 +161,6 @@
         "Google DeepMind",
         "Frontier AI",
         "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261030-4",
-      "title": "OpenAI: Making it easier for websites to express AI training preferences",
-      "date": "2026/10/30",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI will honor a shared robots.txt signal to help website operators communicate their AI training preferences to participating providers.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Making it easier for websites 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/helping-websites-express-ai-training-preferences",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
         "公式発表"
       ],
       "isLiveSynced": true
