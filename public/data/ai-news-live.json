@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-04T13:56:29.748Z",
-  "lastSyncedAtFormatted": "2026/11/4 22:56:29",
+  "lastSyncedAt": "2026-11-04T23:20:50.644Z",
+  "lastSyncedAtFormatted": "2026/11/5 8:20:50",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -15,6 +15,106 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-model-20261104-0",
+      "title": "OpenAI: OpenAI to acquire Pierre Computer Company, Inc.",
+      "date": "2026/11/04",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI will acquire Pierre Computer Company, expanding Codex’s tools for building, understanding, and reviewing code.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI to acquire Pierre Compu」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/openai-to-acquire-pierre",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261104-1",
+      "title": "OpenAI: Daybreak Red is now available in AWS GovCloud (US-East)",
+      "date": "2026/11/04",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Daybreak Red brings GPT-5.6 Cyber to approved customers in AWS GovCloud (US-East) through Amazon Bedrock for authorized cybersecurity work.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Daybreak Red is now available 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/daybreak-red-aws-govcloud",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261104-2",
+      "title": "OpenAI: A thousand fewer paths to root",
+      "date": "2026/11/04",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI built an autonomous pipeline that found, validated, and generated patches for 948 local privilege-escalation vulnerabilities in the Linux kernel.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「A thousand fewer paths to root」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/a-thousand-fewer-paths-to-root",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261104-3",
+      "title": "OpenAI: DevRev delivers autonomous self-service with GPT-6.1 Sol",
+      "date": "2026/11/04",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "DevRev uses GPT-6.1 Sol to power Computer and Operator, balancing reasoning, speed, and cost for enterprise service.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「DevRev delivers autonomous sel」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/devrev-enterprise-self-service",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-google-20261103-0",
       "title": "Google DeepMind: Agentic cheminformatics with Google Antigravity",
@@ -67,7 +167,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261103-0",
+      "id": "live-model-20261103-4",
       "title": "OpenAI: Accelerating engineering for the physical world",
       "date": "2026/11/03",
       "category": "model",
@@ -83,106 +183,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/accelerating-engineering-for-the-physical-world",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261103-1",
-      "title": "OpenAI: How Cisco defends at machine speed with OpenAI",
-      "date": "2026/11/03",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Cisco combines network intelligence with OpenAI models to strengthen enterprise security. Learn how it is building more adaptive defenses.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Cisco defends at machine s」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/cisco-cyber",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261103-2",
-      "title": "OpenAI: Heimstaden is changing residential real estate management with AI",
-      "date": "2026/11/03",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Discover how Heimstaden uses OpenAI’s ChatGPT Enterprise and Codex to transform property management, cut costs, and empower employees across Europe.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Heimstaden is changing residen」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/heimstaden",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261103-3",
-      "title": "OpenAI: OpenAI appoints Jill Hazelbaker as Chief Corporate Affairs Officer",
-      "date": "2026/11/03",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Jill Hazelbaker will join OpenAI as Chief Corporate Affairs Officer, leading the company’s global communications and corporate positioning.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI appoints Jill Hazelbake」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/jill-hazelbaker-chief-corporate-affairs-officer",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261102-4",
-      "title": "OpenAI: Scaling Git at OpenAI",
-      "date": "2026/11/02",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "How OpenAI built Pando, a Git-compatible backend designed for the scale of development that Codex makes possible.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Scaling Git at OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/scaling-git-at-openai",
       "tags": [
         "OpenAI",
         "ChatGPT",
