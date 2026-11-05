@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-04T23:20:50.644Z",
-  "lastSyncedAtFormatted": "2026/11/5 8:20:50",
+  "lastSyncedAt": "2026-11-05T05:39:40.928Z",
+  "lastSyncedAtFormatted": "2026/11/5 14:39:40",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 40,
@@ -92,6 +92,31 @@
     },
     {
       "id": "live-model-20261104-3",
+      "title": "OpenAI: Introducing Images 2.6",
+      "date": "2026/11/04",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Images 2.6 brings faster image generation, GIF creation, more precise editing, and new API controls across ChatGPT, Codex, and the API.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing Images 2.6」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/introducing-images-2-6",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261104-4",
       "title": "OpenAI: DevRev delivers autonomous self-service with GPT-6.1 Sol",
       "date": "2026/11/04",
       "category": "model",
@@ -163,31 +188,6 @@
         "Custom Agents",
         "Plugins",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261103-4",
-      "title": "OpenAI: Accelerating engineering for the physical world",
-      "date": "2026/11/03",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Discover how ChatGPT and Codex are helping engineers accelerate CAD, PCB design, simulation, and other workflows across the physical world.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Accelerating engineering for t」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/accelerating-engineering-for-the-physical-world",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
       ],
       "isLiveSynced": true
     },
