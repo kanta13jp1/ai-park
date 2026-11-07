@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-06T22:49:28.277Z",
-  "lastSyncedAtFormatted": "2026/11/7 7:49:28",
+  "lastSyncedAt": "2026-11-07T05:04:55.304Z",
+  "lastSyncedAtFormatted": "2026/11/7 14:04:55",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
-  "totalCount": 40,
+  "totalCount": 41,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Blog",
@@ -15,6 +15,32 @@
     "Cognition Devin Blog"
   ],
   "items": [
+    {
+      "id": "live-google-20261106-0",
+      "title": "Google Antigravity: Voice mode in Antigravity",
+      "date": "2026/11/06",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Voice mode in Antigravity」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/antigravity-voice-mode",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-model-20261106-0",
       "title": "OpenAI: Partnering with Hacktron to find vulnerabilities in OpenAI’s systems",
@@ -191,7 +217,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261103-0",
+      "id": "live-google-20261103-1",
       "title": "Google Antigravity: Modernizing 40-year-old scientific code with Gemini 4 Argon",
       "date": "2026/11/03",
       "category": "google",
@@ -242,7 +268,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261029-1",
+      "id": "live-google-20261029-2",
       "title": "Google Antigravity: Plugin Marketplace in Antigravity",
       "date": "2026/10/29",
       "category": "google",
@@ -318,7 +344,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261026-2",
+      "id": "live-google-20261026-3",
       "title": "Google Antigravity: How Gemini 4 Argon Upleveled Agents on Antigravity: Trillion-Edge Graphs and Custom TPU Kernels",
       "date": "2026/10/26",
       "category": "google",
@@ -344,7 +370,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261013-3",
+      "id": "live-google-20261013-4",
       "title": "Google Antigravity: Gemini 4 Argon in Google Antigravity",
       "date": "2026/10/13",
       "category": "google",
