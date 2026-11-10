@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-10T14:30:34.964Z",
-  "lastSyncedAtFormatted": "2026/11/10 23:30:34",
+  "lastSyncedAt": "2026-11-10T22:58:05.807Z",
+  "lastSyncedAtFormatted": "2026/11/11 7:58:05",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 41,
@@ -17,6 +17,31 @@
   "items": [
     {
       "id": "live-google-20261110-0",
+      "title": "Google DeepMind: Gemini 4 Carbon is now available",
+      "date": "2026/11/10",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 4 Carbon is now availab」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/gemini-4-carbon-is-now-available/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20261110-1",
       "title": "Google DeepMind: Introducing AlphaProof Code: a breakthrough in verifying complex software at depth",
       "date": "2026/11/10",
       "category": "google",
@@ -37,6 +62,32 @@
         "Frontier AI",
         "Gemini",
         "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20261110-0",
+      "title": "Google Antigravity: Gemini 4 Carbon and /swarm",
+      "date": "2026/11/10",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Gemini 4 Carbon and /swarm」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/gemini-4-carbon-in-google-antigravity",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
       ],
       "isLiveSynced": true
     },
@@ -67,6 +118,31 @@
     },
     {
       "id": "live-model-20261110-1",
+      "title": "OpenAI: Introducing Businesses in ChatGPT",
+      "date": "2026/11/10",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Manage your business information, get insights about how your business shows up, and turn interest into action in ChatGPT.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing Businesses in Chat」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/introducing-businesses-chatgpt",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261110-2",
       "title": "OpenAI: Closing the AI guidance gap in education",
       "date": "2026/11/10",
       "category": "model",
@@ -91,7 +167,57 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261109-0",
+      "id": "live-model-20261110-3",
+      "title": "OpenAI: Work at the Frontier: AI’s effect on freelance work",
+      "date": "2026/11/10",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "New research from OpenAI and Upwork finds shifting demand for freelance work, new skill combinations, and larger budgets and more hours for AI-related projects.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Work at the Frontier: AI’s eff」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/ai-effect-on-freelance-work",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20261109-2",
+      "title": "Google DeepMind: Gemini Robotics 2.5 accelerates real-world general dexterity",
+      "date": "2026/11/09",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Our most capable vision-language-action model enhances robot dexterity, reliability, and safety",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini Robotics 2.5 accelerate」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-google-20261109-1",
       "title": "Google Antigravity: Google Antigravity for Knowledge Work",
       "date": "2026/11/09",
       "category": "google",
@@ -117,7 +243,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261109-2",
+      "id": "live-model-20261109-4",
       "title": "OpenAI: ChatGPT Enterprise now available in AWS Marketplace",
       "date": "2026/11/09",
       "category": "model",
@@ -142,57 +268,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261109-3",
-      "title": "OpenAI: Control Room: A central system to track and stop model workloads across our research infrastructure",
-      "date": "2026/11/09",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Learn how OpenAI’s Control Room tracks model workloads across our research infrastructure and can rapidly stop them when safety or security concerns arise.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Control Room: A central system」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/control-room",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261109-4",
-      "title": "OpenAI: CodeRabbit scales agentic software development and ships 20x more",
-      "date": "2026/11/09",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "CodeRabbit uses OpenAI models to govern and trust AI-generated code and Codex to ship 20 times more software with the same engineering team.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「CodeRabbit scales agentic soft」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/coderabbit-codex-daybreak",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261106-1",
+      "id": "live-google-20261106-2",
       "title": "Google Antigravity: Voice mode in Antigravity",
       "date": "2026/11/06",
       "category": "google",
@@ -218,7 +294,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261105-1",
+      "id": "live-google-20261105-3",
       "title": "Google DeepMind: Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips",
       "date": "2026/11/05",
       "category": "google",
@@ -243,7 +319,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261103-2",
+      "id": "live-google-20261103-4",
       "title": "Google DeepMind: Agentic cheminformatics with Google Antigravity",
       "date": "2026/11/03",
       "category": "google",
@@ -268,7 +344,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261103-2",
+      "id": "live-google-20261103-3",
       "title": "Google Antigravity: Modernizing 40-year-old scientific code with Gemini 4 Argon",
       "date": "2026/11/03",
       "category": "google",
@@ -294,32 +370,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261030-3",
-      "title": "Google DeepMind: Speeding up planning decisions with AI",
-      "date": "2026/10/30",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind and UK government work together to reduce planning assessment times",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Speeding up planning decisions」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/speeding-up-planning-decisions-with-ai/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261029-3",
+      "id": "live-google-20261029-4",
       "title": "Google Antigravity: Plugin Marketplace in Antigravity",
       "date": "2026/10/29",
       "category": "google",
@@ -336,57 +387,6 @@
       ],
       "sourceName": "Google Antigravity Official Feed",
       "sourceUrl": "https://antigravity.google/blog/plugin-marketplace-in-antigravity",
-      "tags": [
-        "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
-        "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261028-4",
-      "title": "Google DeepMind: Gemini 4 Carbon: Our next frontier model",
-      "date": "2026/10/28",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 4 Carbon: Our next fron」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/gemini-4-carbon-our-next-frontier-model/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261026-4",
-      "title": "Google Antigravity: How Gemini 4 Argon Upleveled Agents on Antigravity: Trillion-Edge Graphs and Custom TPU Kernels",
-      "date": "2026/10/26",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「How Gemini 4 Argon Upleveled A」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
-      ],
-      "sourceName": "Google Antigravity Official Feed",
-      "sourceUrl": "https://antigravity.google/blog/gemini-4-argon-trillion-edge-graphs-and-tpu-kernels",
       "tags": [
         "Google Antigravity",
         "Custom Agents",
