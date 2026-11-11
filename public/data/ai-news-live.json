@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-11T13:45:20.523Z",
-  "lastSyncedAtFormatted": "2026/11/11 22:45:20",
+  "lastSyncedAt": "2026-11-11T21:27:30.669Z",
+  "lastSyncedAtFormatted": "2026/11/12 6:27:30",
   "syncStatus": "live",
-  "pipelineVersion": "v1.0-auto",
-  "totalCount": 41,
+  "pipelineVersion": "v1.1-auto",
+  "totalCount": 42,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Blog",
@@ -16,7 +16,7 @@
   ],
   "items": [
     {
-      "id": "live-model-20261112-0",
+      "id": "live-openai-gilbert-tobin-sam-nickless",
       "title": "OpenAI: Gilbert + Tobin rethinks the business of law with AI",
       "date": "2026/11/12",
       "category": "model",
@@ -24,7 +24,7 @@
       "importance": "official",
       "importanceLabel": "公式発表",
       "summary": "A conversation with Sam Nickless, Partner and Chief Executive Officer at Gilbert + Tobin.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Gilbert + Tobin rethinks the b」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Gilbert + Tobin rethinks the business of law with AI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -41,7 +41,32 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261111-1",
+      "id": "live-deepmind-alphagenome-2-deciphering-how-cells-read-dna-to-",
+      "title": "Google DeepMind: AlphaGenome 2: Deciphering how cells read DNA to better understand disease",
+      "date": "2026/11/11",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Predicting how DNA sequences and their variations impact specific human cell types and disease.",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「AlphaGenome 2: Deciphering how cells read DNA to better understand disease」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/alphagenome-2-deciphering-how-cells-read-dna-to-better-understand-disease/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-chatgpt-plus-for-veterans",
       "title": "OpenAI: ChatGPT Plus for veterans and servicemembers",
       "date": "2026/11/11",
       "category": "model",
@@ -49,7 +74,7 @@
       "importance": "official",
       "importanceLabel": "公式発表",
       "summary": "More than 20,000 veterans and transitioning service members have claimed a free year of ChatGPT Plus. See how they use it to prepare for civilian careers.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「ChatGPT Plus for veterans and 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「ChatGPT Plus for veterans and servicemembers」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -66,15 +91,40 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261110-0",
+      "id": "live-openai-jiostar-vijay-seshadri",
+      "title": "OpenAI: JioStar’s chief architect on AI discovery at 500M-user scale",
+      "date": "2026/11/11",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "JioStar’s Vijay Seshadri explains AI discovery at 500M-user scale. Read his lessons on evals, guardrails, and taking AI into production.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「JioStar’s chief architect on AI discovery at 500M-user scale」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/jiostar-vijay-seshadri",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-deepmind-20261110-0",
       "title": "Google DeepMind: Gemini 4 Carbon is now available",
       "date": "2026/11/10",
       "category": "google",
       "categoryLabel": "Google / Antigravity",
       "importance": "hot",
       "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini 4 Carbon is now availab」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "summary": "Google DeepMind公式ブログにて、最新モデル「Gemini 4 Carbon」の提供開始が発表されました。高度な推論・コーディング・自律エージェント実行を高速かつ高効率に処理するフロンティアモデルとして展開されています。",
+      "impactForStaff": "Google DeepMindの最新モデル「Gemini 4 Carbon is now available」に関する公式発表。Antigravity環境等での活用検証および業務効率化への適用を確認します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -84,47 +134,22 @@
       "sourceUrl": "https://deepmind.google/blog/gemini-4-carbon-is-now-available/",
       "tags": [
         "Google DeepMind",
-        "Frontier AI",
+        "Gemini 4 Carbon",
         "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
+        "公式発表",
+        "HOT"
+      ]
     },
     {
-      "id": "live-google-20261110-1",
-      "title": "Google DeepMind: Introducing AlphaProof Code: a breakthrough in verifying complex software at depth",
-      "date": "2026/11/10",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "AlphaProof Code agents wrote three  million lines of proofs in Lean to verify Signal’s core encryption.",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Introducing AlphaProof Code: a」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/introducing-alphaproof-code/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261110-0",
+      "id": "live-antigravity-20261110-0",
       "title": "Google Antigravity: Gemini 4 Carbon and /swarm",
       "date": "2026/11/10",
       "category": "google",
       "categoryLabel": "Google / Antigravity",
       "importance": "hot",
       "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Gemini 4 Carbon and /swarm」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "summary": "Google Antigravity公式ブログにて、新モデル「Gemini 4 Carbon」への対応と、複数サブエージェントを並列協調動作させる新スラッシュコマンド「/swarm」の提供が発表されました。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Gemini 4 Carbon and /swarm」。複数エージェント協調や新モデルを活用した開発効率化を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -135,14 +160,40 @@
       "sourceUrl": "https://antigravity.google/blog/gemini-4-carbon-in-google-antigravity",
       "tags": [
         "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
+        "Gemini 4 Carbon",
+        "/swarm",
+        "Subagents",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
+      ]
     },
     {
-      "id": "live-model-20261110-2",
+      "id": "live-deepmind-20261110-1",
+      "title": "Google DeepMind: Introducing AlphaProof Code: a breakthrough in verifying complex software at depth",
+      "date": "2026/11/10",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "AlphaProof Code agents wrote three million lines of proofs in Lean to verify Signal's core encryption.",
+      "impactForStaff": "Google DeepMindの最新技術「Introducing AlphaProof Code: a breakthrough in verifying complex software at depth」に関する公式発表。形式検証やソフトウェア品質保証における最新動向として共有します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "セキュリティ担当",
+        "品質管理 (QA)"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/introducing-alphaproof-code/",
+      "tags": [
+        "Google DeepMind",
+        "AlphaProof Code",
+        "形式検証",
+        "Lean",
+        "公式発表"
+      ]
+    },
+    {
+      "id": "live-openai-helping-caregivers-use-ai-in-everyday-life",
       "title": "OpenAI: Helping caregivers use AI in everyday life",
       "date": "2026/11/10",
       "category": "model",
@@ -150,7 +201,7 @@
       "importance": "official",
       "importanceLabel": "公式発表",
       "summary": "OpenAI Academy is bringing free, hands-on ChatGPT workshops to caregivers in five U.S. cities, helping them build practical AI skills for everyday life.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Helping caregivers use AI in e」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Helping caregivers use AI in everyday life」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -167,7 +218,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261110-3",
+      "id": "live-openai-introducing-businesses-chatgpt",
       "title": "OpenAI: Introducing Businesses in ChatGPT",
       "date": "2026/11/10",
       "category": "model",
@@ -175,7 +226,7 @@
       "importance": "official",
       "importanceLabel": "公式発表",
       "summary": "Manage your business information, get insights about how your business shows up, and turn interest into action in ChatGPT.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing Businesses in Chat」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing Businesses in ChatGPT」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -192,32 +243,32 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261110-4",
-      "title": "OpenAI: Closing the AI guidance gap in education",
-      "date": "2026/11/10",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
+      "id": "live-antigravity-20261109-1",
+      "title": "Google Antigravity: Google Antigravity for Knowledge Work",
+      "date": "2026/11/09",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "New ThinkYoung research and lessons from OpenAI’s EMEA education partnerships on supporting teachers, AI literacy, and independent learning.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Closing the AI guidance gap in」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "Google Antigravityをソフトウェア開発だけでなく、リサーチ・資料作成・データ整理などのナレッジワーク全般に活用するワークフローが公式ブログで紹介されました。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Google Antigravity for Knowledge Work」。エンジニア以外の企画・管理業務における活用方法の参考になります。",
       "recommendedFor": [
         "全社員",
-        "エンジニア",
-        "ライター"
+        "企画・データ推進",
+        "バックオフィス",
+        "エンジニア"
       ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/closing-ai-guidance-gap-education",
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/antigravity-for-knowledge-work",
       "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
+        "Google Antigravity",
+        "Knowledge Work",
+        "業務効率化",
+        "公式ブログ"
+      ]
     },
     {
-      "id": "live-google-20261109-2",
+      "id": "live-deepmind-gemini-robotics-2-5-accelerates-real-world-physi",
       "title": "Google DeepMind: Gemini Robotics 2.5 accelerates real-world general dexterity",
       "date": "2026/11/09",
       "category": "google",
@@ -225,7 +276,7 @@
       "importance": "hot",
       "importanceLabel": "HOT 🔥",
       "summary": "Our most capable vision-language-action model enhances robot dexterity, reliability, and safety",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini Robotics 2.5 accelerate」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini Robotics 2.5 accelerates real-world general dexterity」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -242,59 +293,30 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261109-1",
-      "title": "Google Antigravity: Google Antigravity for Knowledge Work",
-      "date": "2026/11/09",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Google Antigravity for Knowled」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
-      ],
-      "sourceName": "Google Antigravity Official Feed",
-      "sourceUrl": "https://antigravity.google/blog/antigravity-for-knowledge-work",
-      "tags": [
-        "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
-        "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261106-2",
+      "id": "live-antigravity-20261106-2",
       "title": "Google Antigravity: Voice mode in Antigravity",
       "date": "2026/11/06",
       "category": "google",
       "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Voice mode in Antigravity」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Google Antigravity公式ブログにて、音声でエージェントと対話・指示できる「Voice mode」の搭載が発表されました。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Voice mode in Antigravity」。ハンズフリーでの要件整理やペアプログラミングへの活用を検証します。",
       "recommendedFor": [
         "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
+        "エンジニア"
       ],
       "sourceName": "Google Antigravity Official Feed",
       "sourceUrl": "https://antigravity.google/blog/antigravity-voice-mode",
       "tags": [
         "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
+        "Voice mode",
+        "音声対話",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
+      ]
     },
     {
-      "id": "live-google-20261105-3",
+      "id": "live-deepmind-gemini-omni-12-flash-fast-and-cost-effective-wit",
       "title": "Google DeepMind: Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips",
       "date": "2026/11/05",
       "category": "google",
@@ -302,7 +324,7 @@
       "importance": "hot",
       "importanceLabel": "HOT 🔥",
       "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini Omni 1.2 Flash: Fast an」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -319,32 +341,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261103-4",
-      "title": "Google DeepMind: Agentic cheminformatics with Google Antigravity",
-      "date": "2026/11/03",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Learn how Google Antigravity and our Cheminformatics Skills accelerate drug discovery workflows, search compounds, and propose novel rigidified macrocycles.",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Agentic cheminformatics with G」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-google-20261103-3",
+      "id": "live-antigravity-modernizing-40-year-old-scientific-code-with-gem",
       "title": "Google Antigravity: Modernizing 40-year-old scientific code with Gemini 4 Argon",
       "date": "2026/11/03",
       "category": "google",
@@ -352,7 +349,7 @@
       "importance": "hot",
       "importanceLabel": "HOT 🔥",
       "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Modernizing 40-year-old scient」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Modernizing 40-year-old scientific code with Gemini 4 Argon」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
@@ -370,30 +367,28 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-google-20261029-4",
+      "id": "live-antigravity-20261029-4",
       "title": "Google Antigravity: Plugin Marketplace in Antigravity",
       "date": "2026/10/29",
       "category": "google",
       "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Plugin Marketplace in Antigrav」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Google Antigravity公式ブログにて、外部サービス連携やSkills・MCPサーバーをワンクリックで追加・管理できる「Plugin Marketplace」が公開されました。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Plugin Marketplace in Antigravity」。公式プラグインを活用した安全なツール連携手順を確認します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
-        "モバイル開発者",
         "セキュリティ担当"
       ],
       "sourceName": "Google Antigravity Official Feed",
       "sourceUrl": "https://antigravity.google/blog/plugin-marketplace-in-antigravity",
       "tags": [
         "Google Antigravity",
-        "Custom Agents",
+        "Plugin Marketplace",
         "Plugins",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
+      ]
     },
     {
       "id": "news-20261005-langchain-own-your-intelligence",
@@ -652,13 +647,13 @@
       "category": "google",
       "categoryLabel": "Google / Antigravity",
       "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMindが発表した「Gemini 3.1 Pro」は、長大なコードベースの理解と自己修正ループにおいて従来比30%の精度向上を記録。社内環境での先行トライアルを開始します。",
-      "impactForStaff": "複雑なSQLやスクリプト作成、仕様書レビューの自動化精度が大幅に向上。Antigravity内での標準モデルとして利用可能になります。",
+      "importanceLabel": "HOT",
+      "summary": "Google DeepMindは、Gemini 3.1 Proの推論能力・エージェント連携性能の向上を発表。長大コンテキスト（100万トークン超）における高精度な文脈維持と、自律サブエージェント協調の安定性が強化されました。",
+      "impactForStaff": "社内システムの大規模な設計書やソースコード全体を一括で解析させることが可能になり、仕様調査や不具合原因の特定時間が劇的に短縮されます。",
       "recommendedFor": [
         "エンジニア",
-        "AI推進担当",
-        "データアナリスト"
+        "データアナリスト",
+        "企画担当"
       ],
       "sourceName": "Google DeepMind Official",
       "sourceUrl": "https://deepmind.google/technologies/gemini/",
@@ -671,26 +666,25 @@
     },
     {
       "id": "news-20261001-01",
-      "title": "Google Antigravity 2.0 & Gemini 3.1 Pro 社内利用環境の正式認可・提供開始",
+      "title": "会社の Google Cloud プロジェクト経由での Antigravity 利用手順を導入ガイドに公開",
       "date": "2026/10/01",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "全社セキュリティ基準に適合したGoogle Antigravity 2.0の社内利用環境を全社員向けに正式オープン。GCP利用枠・クレジット保護機能とセットで安全に活用可能です。",
-      "impactForStaff": "業務PC（Windows/Mac）から即日利用申請可能。社内専用テンプレートや安全ガイドラインが標準整備されています。",
+      "category": "internal",
+      "categoryLabel": "社内AI Park",
+      "importance": "release",
+      "importanceLabel": "社内リリース",
+      "summary": "会社の Google アカウントで社内 Google Cloud プロジェクト（antigravity-pj-xxxxxx）経由で Google Antigravity を使うための管理者・利用者向け手順書（画面キャプチャ・トラブル対処付き）を導入ガイド（/guide）に公開しました。",
+      "impactForStaff": "個人向けの有料プラン（Pro）に加入しなくても、会社の Google Cloud プロジェクトの従量課金（無料トライアルクレジット適用中）で Antigravity を利用するための設定手順を確認できます。",
       "recommendedFor": [
         "全社員",
-        "マネージャー",
-        "開発者"
+        "エンジニア"
       ],
       "sourceName": "MightyLINK AI推進窓口",
       "sourceUrl": "https://kanta13jp1.github.io/ai-park/guide",
       "tags": [
         "Antigravity",
-        "社内解禁",
+        "導入ガイド",
         "GCP",
-        "セキュリティ認可"
+        "設定手順"
       ]
     },
     {
@@ -808,16 +802,16 @@
       "date": "2026/09/28",
       "category": "agent_mcp",
       "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "ClaudeやAntigravityで利用可能なオープンプロトコル「MCP」に対応した社内リソース連携サーバー（GitHub, Figma, BigQuery等）のオープンソース化が世界中で加速しています。",
-      "impactForStaff": "AIエージェントが社内ツールとシームレスに対話可能になり、反復業務やデータ抽出の全自動化が容易になります。",
+      "importance": "hot",
+      "importanceLabel": "HOT",
+      "summary": "AIモデルと外部システム（データベース、GitHub、Slack、デザインツールなど）を接続する標準プロトコル「MCP」の採用が業界全体で急速に拡大しています。",
+      "impactForStaff": "社内のデータベースやAPIとも安全かつ標準化された方法でAIを連携できるようになり、独自の開発工数を大幅に削減できます。",
       "recommendedFor": [
         "エンジニア",
-        "アーキテクト",
-        "業務自動化推進"
+        "インフラ担当",
+        "SRE"
       ],
-      "sourceName": "Model Context Protocol Docs",
+      "sourceName": "Model Context Protocol Official",
       "sourceUrl": "https://modelcontextprotocol.io/",
       "tags": [
         "MCP",
@@ -886,17 +880,17 @@
       "date": "2026/09/25",
       "category": "google",
       "categoryLabel": "Google / Antigravity",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Vertex AIのAPI呼び出しに対する日次・月次クォータ設定およびハードリミット保護機能が拡充。誤った無限ループ呼び出しによる想定外のクラウドコスト請求を物理的に遮断可能になりました。",
-      "impactForStaff": "開発者や各部署が安心してプロトタイプ開発を実施できるように。月次予算の上限を超過する心配がゼロになります。",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Google CloudはVertex AIにおいて日次・月次コスト上限アラートおよび自動スロットリング機能を拡充。想定外のトークン消費による過剰課金を事前にブロック可能になりました。",
+      "impactForStaff": "社内でのAI PoC検証時における予算超過リスクを最小化。エンジニアが安心して実験・開発に取り組めるセーフティネットが整いました。",
       "recommendedFor": [
-        "推進担当",
-        "GCP管理者",
-        "エンジニア"
+        "プロジェクト管理者",
+        "開発責任者",
+        "経理・情シス"
       ],
-      "sourceName": "Google Cloud Release Notes",
-      "sourceUrl": "https://cloud.google.com/vertex-ai/docs/release-notes",
+      "sourceName": "Google Cloud Documentation",
+      "sourceUrl": "https://cloud.google.com/vertex-ai/docs",
       "tags": [
         "Spend Cap",
         "コスト管理",
@@ -981,24 +975,47 @@
       "id": "news-20260920-01",
       "title": "Web Audio API による触感音響（Haptic SFX）がモダンWeb UIの新潮流に",
       "date": "2026/09/20",
-      "category": "internal",
-      "categoryLabel": "社内AI Park",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
       "importance": "tech",
       "importanceLabel": "技術解説",
-      "summary": "Awwwards等の最先端Webデザインで採用されるWeb Audio APIを活用したリアルタイム周波数シンセサイズをAI Parkの主要ボタン・カードへ完全実装。操作感の質的向上が確認されました。",
-      "impactForStaff": "ボタン押下やホバー時のクリック感が心地よく、長時間の業務でも疲れにくいインタラクション体験を提供します。",
+      "summary": "Web Audio APIのオシレーターを用いて、ボタンクリックやホバー時に微細な触感音をリアルタイム合成するデザインパターンが、世界的なデザインアワード（Awwwards等）で評価を高めています。",
+      "impactForStaff": "AI Parkポータルでも本技術を採用。誤クリックの防止や操作の確信感が得られ、心地よい操作体験を提供しています。",
       "recommendedFor": [
-        "全社員",
-        "フロントエンドエンジニア",
-        "デザイナー"
+        "デザイナー",
+        "フロントエンド開発者"
       ],
-      "sourceName": "MightyLINK UI/UX Labs",
-      "sourceUrl": "https://kanta13jp1.github.io/ai-park/",
+      "sourceName": "MDN Web Docs - Web Audio API",
+      "sourceUrl": "https://developer.mozilla.org/ja/docs/Web/API/Web_Audio_API",
       "tags": [
         "Web Audio API",
         "SFX",
         "UI/UX",
         "アクセシビリティ"
+      ]
+    },
+    {
+      "id": "news-20260915-01",
+      "title": "AIエージェントによるE2E実機テスト自動化とビジュアルリグレッション検知",
+      "date": "2026/09/15",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "PuppeteerやChrome DevTools MCPを活用し、AIエージェント自身がビルド後の画面を実機ブラウザで操作・撮影してレイアウト崩れや文字泣き別れを検出する手法が実用化されています。",
+      "impactForStaff": "AI Parkの開発プロセスにも導入され、人間の受入テストを補助しながらデプロイ後の不具合ゼロを支えています。",
+      "recommendedFor": [
+        "QAエンジニア",
+        "テスト自動化担当",
+        "開発者"
+      ],
+      "sourceName": "Playwright / Puppeteer Ecosystem",
+      "sourceUrl": "https://playwright.dev/",
+      "tags": [
+        "E2Eテスト",
+        "Puppeteer",
+        "ビジュアルリグレッション",
+        "品質保証"
       ]
     },
     {
@@ -1009,15 +1026,14 @@
       "categoryLabel": "基盤モデル・LLM",
       "importance": "tech",
       "importanceLabel": "技術解説",
-      "summary": "単一の巨大プロンプトで完結させる手法から、役割分担された軽量サブエージェントが自律的に連携するアーキテクチャへのシフトが加速。トークン効率と問題解決率が飛躍的に向上しています。",
-      "impactForStaff": "大規模なシステム設計や調査タスクにおいて、より安価で高品質なAI支援を受けられるようになります。",
+      "summary": "1回の巨大なプロンプトですべてを完結させる手法から、調査・設計・実装・テストを専門サブエージェントが自律的に分担・引継ぎする協調アーキテクチャが主流化しています。",
+      "impactForStaff": "複雑な業務システム構築や複数ファイルにまたがるリファクタリングにおいて、ハルシネーション（嘘）の発生率が劇的に減少します。",
       "recommendedFor": [
-        "エンジニア",
-        "リサーチャー",
+        "全エンジニア",
         "アーキテクト"
       ],
-      "sourceName": "AI Architecture Research",
-      "sourceUrl": "https://kanta13jp1.github.io/ai-park/agent-cases",
+      "sourceName": "Google Antigravity Engineering",
+      "sourceUrl": "https://antigravity.google",
       "tags": [
         "Subagents",
         "Agentic Coding",
@@ -1027,25 +1043,25 @@
     },
     {
       "id": "news-20260905-01",
-      "title": "生成AI 学習コンテンツ（プロンプト集＆セルフチェック）社内受講者が急増",
+      "title": "AI初級編チートシート（/learning）と Antigravity Academy（/academy）を公開",
       "date": "2026/09/05",
       "category": "internal",
       "categoryLabel": "社内AI Park",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "全社員向けの実践プロンプト集およびセキュリティ遵守セルフチェック診断の受講者が累計500名を突破。業務での安全なAI活用が全社規模で定着しています。",
-      "impactForStaff": "穴埋め形式ですぐに使えるプロンプト（議事録要約・メール校正等）により、日常業務の時短効果を即日体感できます。",
+      "importance": "release",
+      "importanceLabel": "社内リリース",
+      "summary": "「頼み方の4点セット」「ファイル編集を任せるときの流れ」「エラー時の対処」を1枚にまとめた初級編チートシート（/learning）と、3コース・12レッスンの動画付き学習コース Antigravity Academy（/academy）を公開しました。",
+      "impactForStaff": "これから Antigravity を使い始める社員が、基本の頼み方や安全な操作手順を画面キャプチャと動画で順番に学べます。",
       "recommendedFor": [
         "全社員",
         "新入社員",
-        "業務効率化担当"
+        "バックオフィス"
       ],
       "sourceName": "MightyLINK AI推進窓口",
       "sourceUrl": "https://kanta13jp1.github.io/ai-park/learning",
       "tags": [
         "学習コンテンツ",
-        "プロンプト集",
-        "セルフチェック",
+        "初級編チートシート",
+        "Academy",
         "実務直結"
       ]
     },

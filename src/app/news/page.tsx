@@ -40,10 +40,35 @@ import {
   Globe,
 } from "lucide-react";
 
+// GitHub Actions（6時間定時Cron）が main ブランチへ [skip ci] で自動コミットするため、
+// GitHub raw を優先参照し、到達不能時はビルド同梱の静的 JSON にフォールバックする
+const LIVE_NEWS_URLS = [
+  "https://raw.githubusercontent.com/kanta13jp1/ai-park/main/public/data/ai-news-live.json",
+  `${basePath}/data/ai-news-live.json`,
+];
+
+async function fetchLatestNewsPayload() {
+  const cacheBuster = Date.now();
+  for (const baseUrl of LIVE_NEWS_URLS) {
+    try {
+      const res = await fetch(`${baseUrl}?t=${cacheBuster}`, { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && Array.isArray(data.items) && data.items.length > 0) {
+          return data;
+        }
+      }
+    } catch {
+      // 次のエンドポイントへフォールバック
+    }
+  }
+  return null;
+}
+
 export default function AiNewsPage() {
   const [newsList, setNewsList] = useState<AINewsItem[]>(aiNewsMaster);
-  const [isLiveActive, setIsLiveActive] = useState<boolean>(true);
-  const [lastSyncedAt, setLastSyncedAt] = useState<string>("2026/10/03 23:42:36");
+  const [, setIsLiveActive] = useState<boolean>(true);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string>("2026/11/12 06:25:24");
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [refreshSuccess, setRefreshSuccess] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -58,21 +83,16 @@ export default function AiNewsPage() {
       playCyberClick();
     }
     try {
-      const res = await fetch(`${basePath}/data/ai-news-live.json?t=${Date.now()}`, {
-        cache: "no-store",
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data && Array.isArray(data.items) && data.items.length > 0) {
-          setNewsList(data.items);
-          if (data.lastSyncedAtFormatted) {
-            setLastSyncedAt(data.lastSyncedAtFormatted);
-          }
-          setIsLiveActive(true);
-          if (isManual) {
-            setRefreshSuccess(true);
-            setTimeout(() => setRefreshSuccess(false), 3000);
-          }
+      const data = await fetchLatestNewsPayload();
+      if (data) {
+        setNewsList(data.items);
+        if (data.lastSyncedAtFormatted) {
+          setLastSyncedAt(data.lastSyncedAtFormatted);
+        }
+        setIsLiveActive(true);
+        if (isManual) {
+          setRefreshSuccess(true);
+          setTimeout(() => setRefreshSuccess(false), 3000);
         }
       }
     } catch (err) {
@@ -89,18 +109,13 @@ export default function AiNewsPage() {
     let ignore = false;
     const loadLiveNews = async () => {
       try {
-        const res = await fetch(`${basePath}/data/ai-news-live.json?t=${Date.now()}`, {
-          cache: "no-store",
-        });
-        if (res.ok && !ignore) {
-          const data = await res.json();
-          if (data && Array.isArray(data.items) && data.items.length > 0) {
-            setNewsList(data.items);
-            if (data.lastSyncedAtFormatted) {
-              setLastSyncedAt(data.lastSyncedAtFormatted);
-            }
-            setIsLiveActive(true);
+        const data = await fetchLatestNewsPayload();
+        if (data && !ignore) {
+          setNewsList(data.items);
+          if (data.lastSyncedAtFormatted) {
+            setLastSyncedAt(data.lastSyncedAtFormatted);
           }
+          setIsLiveActive(true);
         }
       } catch (err) {
         console.warn("[News Pipeline] Live fetch error, fallback to static master:", err);
@@ -136,7 +151,7 @@ export default function AiNewsPage() {
       }
       return true;
     });
-  }, [selectedCategory, selectedImportance, searchQuery]);
+  }, [newsList, selectedCategory, selectedImportance, searchQuery]);
 
   // URL共有コピー
   const handleCopyShareUrl = (item: AINewsItem) => {
@@ -354,7 +369,7 @@ export default function AiNewsPage() {
               <div className="min-w-0 flex-1">
                 <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate">情報更新日</p>
                 <p className="text-sm sm:text-base font-black text-slate-900 tracking-tight font-mono">
-                  {lastSyncedAt.split(" ")[0] || "2026/10/03"}
+                  {lastSyncedAt.split(" ")[0] || "2026/11/12"}
                 </p>
               </div>
             </div>
@@ -613,20 +628,20 @@ export default function AiNewsPage() {
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
                   <p className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse inline-block" />
-                    <span>Gemini 4 Argon 発表 (DeepMind)</span>
+                    <span>Gemini 4 Carbon & Antigravity /swarm (Google)</span>
                   </p>
                   <p className="text-[11px] text-slate-300 pl-3">
-                    次世代フロンティア知能として公式公開。超大規模推論とマルチモーダル自律基盤を刷新。
+                    DeepMindの「Gemini 4 Carbon」提供開始に合わせ、Antigravityでも並列協調「/swarm」やVoice mode、Plugin Marketplaceが公開。
                   </p>
                 </div>
 
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
                   <p className="font-bold text-sky-300 text-xs flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-sky-400 inline-block" />
-                    <span>主要各社フロンティア加速（Claude / Manus / Codex）</span>
+                    <span>形式検証・実世界AIの進展（AlphaProof Code 等）</span>
                   </p>
                   <p className="text-[11px] text-slate-300 pl-3">
-                    Claude Opus 5.5の推論、Manus自律実行、Codex/Canvas dots、DeepSeek-R1など各社が激突。
+                    300万行のLean証明で暗号実装を検証する「AlphaProof Code」や「AlphaGenome 2」「Gemini Robotics 2.5」が公式発表。
                   </p>
                 </div>
 
@@ -675,8 +690,8 @@ export default function AiNewsPage() {
                   <div className="flex items-center gap-2.5">
                     <Layers size={15} className="text-indigo-600" />
                     <div>
-                      <p className="font-bold">穴埋めプロンプト集</p>
-                      <p className="text-[10px] text-slate-500">議事録・要約・コード生成</p>
+                      <p className="font-bold">AI初級編チートシート</p>
+                      <p className="text-[10px] text-slate-500">頼み方4点セット・基本の流れ・対処法</p>
                     </div>
                   </div>
                   <ArrowUpRight size={14} className="text-slate-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

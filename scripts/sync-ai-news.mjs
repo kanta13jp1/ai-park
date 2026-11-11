@@ -1,7 +1,8 @@
 /**
  * sync-ai-news.mjs
- * 各社公式フィード（Google DeepMind, OpenAI, Anthropic, DeepSeek, xAI, Manus等）を自動巡回し、
- * 最新AIニュースを public/data/ai-news-live.json に完全自動反映するデータパイプラインスクリプト
+ * 各社公式フィード（Google DeepMind, Google Antigravity, OpenAI 等）を自動巡回し、
+ * 最新AIニュースを public/data/ai-news-live.json に自動反映するデータパイプラインスクリプト
+ * ベースニュースは src/data/ai-news.ts (aiNewsMaster) を唯一の情報源（SSOT）として参照する。
  */
 
 import fs from 'fs';
@@ -13,6 +14,32 @@ const __dirname = path.dirname(__filename);
 
 const TARGET_FILE = path.join(__dirname, '..', 'public', 'data', 'ai-news-live.json');
 const MASTER_TS_FILE = path.join(__dirname, '..', 'src', 'data', 'ai-news.ts');
+
+// HTMLエンティティのデコード
+function decodeHtmlEntities(str) {
+  return (str || '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&rsquo;|&lsquo;/gi, "'")
+    .replace(/&rdquo;|&ldquo;/gi, '"')
+    .replace(/&ndash;/gi, '-')
+    .replace(/&mdash;/gi, '—')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// タイトルを単語途中で切らずに引用フォーマットするヘルパー
+function formatTitleForQuote(title, maxLen = 85) {
+  const clean = decodeHtmlEntities(title);
+  if (clean.length <= maxLen) return clean;
+  const sliced = clean.slice(0, maxLen);
+  const lastSpace = sliced.lastIndexOf(' ');
+  return (lastSpace > 40 ? sliced.slice(0, lastSpace) : sliced) + '...';
+}
 
 // XML簡易パーサー（Node標準fetchと正規表現で高速・安全にパース）
 function parseRssXml(xmlText) {
@@ -26,11 +53,13 @@ function parseRssXml(xmlText) {
     const pubDateMatch = itemXml.match(/<pubDate>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/pubDate>/i);
 
     if (titleMatch && linkMatch) {
-      const title = titleMatch[1].replace(/<[^>]+>/g, '').trim();
+      const title = decodeHtmlEntities(titleMatch[1].replace(/<[^>]+>/g, ''));
       const link = linkMatch[1].trim();
-      let summary = descMatch ? descMatch[1].replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim() : '';
-      if (summary.length > 250) {
-        summary = summary.slice(0, 247) + '...';
+      let summary = descMatch ? decodeHtmlEntities(descMatch[1].replace(/<[^>]+>/g, '')) : '';
+      if (summary.length > 260) {
+        const sliced = summary.slice(0, 257);
+        const lastSpace = sliced.lastIndexOf(' ');
+        summary = (lastSpace > 180 ? sliced.slice(0, lastSpace) : sliced) + '...';
       }
 
       let dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
@@ -52,20 +81,25 @@ function parseRssXml(xmlText) {
   return items;
 }
 
-// 既存の静的マスター（ai-news.ts）から基本ニュースを安全に抽出
+// 静的マスター（src/data/ai-news.ts）から aiNewsMaster を単一情報源（SSOT）として読み込む
 function loadStaticMasterNews() {
   try {
     if (!fs.existsSync(MASTER_TS_FILE)) return [];
     const content = fs.readFileSync(MASTER_TS_FILE, 'utf-8');
-    // 簡単な構文解析でaiNewsMasterを読み込むか、既存のJSONがあればそれを優先
-    if (fs.existsSync(TARGET_FILE)) {
-      const existing = JSON.parse(fs.readFileSync(TARGET_FILE, 'utf-8'));
-      if (Array.isArray(existing.items)) {
-        return existing.items;
+    const marker = 'export const aiNewsMaster: AINewsItem[] =';
+    const idx = content.indexOf(marker);
+    if (idx !== -1) {
+      const arrayPart = content
+        .slice(idx + marker.length)
+        .trim()
+        .replace(/;\s*$/, '');
+      const parsed = new Function(`return (${arrayPart});`)();
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
       }
     }
   } catch (err) {
-    console.warn('[WARN] Could not load previous live news, using fallback defaults:', err.message);
+    console.warn('[WARN] Could not parse src/data/ai-news.ts:', err.message);
   }
   return [];
 }
@@ -73,6 +107,7 @@ function loadStaticMasterNews() {
 // 各社フィードの巡回設定
 const FEED_CONFIGS = [
   {
+    feedId: 'deepmind',
     name: 'Google DeepMind',
     url: 'https://deepmind.google/blog/rss.xml',
     category: 'google',
@@ -80,10 +115,12 @@ const FEED_CONFIGS = [
     defaultImportance: 'hot',
     defaultImportanceLabel: 'HOT 🔥',
     defaultAudience: ['全社員', 'エンジニア', '企画・データ推進'],
-    impactGenerator: (title) => `Google DeepMindの最新知能・推論モデル「${title.slice(0, 30)}」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。`,
+    impactGenerator: (title) =>
+      `Google DeepMindの最新知能・推論モデル「${formatTitleForQuote(title)}」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。`,
     tagGenerator: () => ['Google DeepMind', 'Frontier AI', 'Gemini', '公式発表'],
   },
   {
+    feedId: 'antigravity',
     name: 'Google Antigravity',
     url: 'https://antigravity.google/blog/rss.xml',
     category: 'google',
@@ -91,10 +128,12 @@ const FEED_CONFIGS = [
     defaultImportance: 'hot',
     defaultImportanceLabel: 'HOT 🔥',
     defaultAudience: ['全社員', 'エンジニア', 'モバイル開発者', 'セキュリティ担当'],
-    impactGenerator: (title) => `Google Antigravityの最新アップデート「${title.slice(0, 30)}」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。`,
+    impactGenerator: (title) =>
+      `Google Antigravityの最新アップデート「${formatTitleForQuote(title)}」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。`,
     tagGenerator: () => ['Google Antigravity', 'Custom Agents', 'Plugins', '公式ブログ'],
   },
   {
+    feedId: 'openai',
     name: 'OpenAI',
     url: 'https://openai.com/news/rss.xml',
     category: 'model',
@@ -102,7 +141,8 @@ const FEED_CONFIGS = [
     defaultImportance: 'official',
     defaultImportanceLabel: '公式発表',
     defaultAudience: ['全社員', 'エンジニア', 'ライター'],
-    impactGenerator: (title) => `OpenAIの最新機能・モデルアップデート「${title.slice(0, 30)}」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。`,
+    impactGenerator: (title) =>
+      `OpenAIの最新機能・モデルアップデート「${formatTitleForQuote(title)}」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。`,
     tagGenerator: () => ['OpenAI', 'ChatGPT', 'Codex', '公式発表'],
   },
 ];
@@ -131,22 +171,34 @@ async function fetchFeedSafe(config) {
     const parsed = parseRssXml(xmlText);
     console.log(`[SUCCESS] Extracted ${parsed.length} items from ${config.name}`);
 
-    return parsed.slice(0, 5).map((item, idx) => ({
-      id: `live-${config.category}-${item.date.replace(/\//g, '')}-${idx}`,
-      title: `${config.name}: ${item.title}`,
-      date: item.date,
-      category: config.category,
-      categoryLabel: config.categoryLabel,
-      importance: config.defaultImportance,
-      importanceLabel: config.defaultImportanceLabel,
-      summary: item.summary || `${config.name} 公式アナウンスメント。最新の技術アップデートと提供開始情報です。`,
-      impactForStaff: config.impactGenerator(item.title),
-      recommendedFor: config.defaultAudience,
-      sourceName: `${config.name} Official Feed`,
-      sourceUrl: item.link,
-      tags: config.tagGenerator(),
-      isLiveSynced: true,
-    }));
+    return parsed.slice(0, 5).map((item, idx) => {
+      const urlSlug = (item.link || '')
+        .split('?')[0]
+        .replace(/\/$/, '')
+        .split('/')
+        .pop()
+        ?.replace(/[^a-zA-Z0-9-_]/g, '')
+        .slice(0, 48);
+      const itemId = urlSlug
+        ? `live-${config.feedId}-${urlSlug}`
+        : `live-${config.feedId}-${item.date.replace(/\//g, '')}-${idx}`;
+      return {
+        id: itemId,
+        title: `${config.name}: ${item.title}`,
+        date: item.date,
+        category: config.category,
+        categoryLabel: config.categoryLabel,
+        importance: config.defaultImportance,
+        importanceLabel: config.defaultImportanceLabel,
+        summary: item.summary || `${config.name} 公式アナウンスメント。最新の技術アップデートと提供開始情報です。`,
+        impactForStaff: config.impactGenerator(item.title),
+        recommendedFor: config.defaultAudience,
+        sourceName: `${config.name} Official Feed`,
+        sourceUrl: item.link,
+        tags: config.tagGenerator(),
+        isLiveSynced: true,
+      };
+    });
   } catch (err) {
     console.warn(`[WARN] Failed to fetch feed ${config.name}: ${err.message}. Failing open.`);
     return [];
@@ -159,415 +211,9 @@ async function main() {
   console.log('🚀 AI Park: Tech-to-Production Automated News Pipeline');
   console.log('==================================================');
 
-  // 1. 既存のベースニュース（マスタ）の読み込み
-  // 確定版マスターニュース（前回収集分および基礎データ）
-  const baseNews = [
-    {
-      id: "news-20261005-langchain-own-your-intelligence",
-      title: "LangChain: 企業AI戦略の新指針『Own Your Intelligence（知能の主権を握れ）』を発表──モデルは借りても、システム・評価・改善ループは所有せよ",
-      date: "2026/10/05",
-      category: "agent_mcp",
-      categoryLabel: "開発エージェント・MCP",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "LangChain CEOのHarrison Chase氏が、企業がAIで持続的な競争優位性を築くための重要指針『Own Your Intelligence』を発表しました。基盤モデルAPIは誰もが呼び出せるコモディティであり、真の差別化は『モデルを取り巻くシステム（オーケストレーションハーネス、文脈・長期記憶、Evals、フィードバックループ）』の所有にあると提唱。特定ベンダーへの依存を防ぐモデル選択性（Optionality）、実行トレースとフィードバックによる品質リグレッション検知、そして『1回目の利用より100回目の利用が圧倒的に賢くなる』自己改善ループの自社保有チェックリスト（10項目）を提示しました。",
-      impactForStaff: "社内AI活用において、単にAPIを叩く単発チャットから脱却し、社内固有の業務ルールやフィードバックを反映したエージェントハーネス（LangGraph等）や評価基盤（Evals）を自社資産として蓄積する重要性が明確化。モデル乗り換え時にも品質を保証し、組織全体の知的生産性を複利で高める設計指針となります。",
-      recommendedFor: ["全社員", "エンジニア", "アーキテクト", "DX推進・経営企画", "プロダクトマネージャー"],
-      sourceName: "LangChain Official Blog",
-      sourceUrl: "https://www.langchain.com/blog/own-your-intelligence",
-      tags: ["LangChain", "Own Your Intelligence", "LangGraph", "LangSmith", "Evals", "Agent Harness", "HOT"],
-    },
-    {
-      id: "news-20261005-thinkingbox-agent-reliability",
-      title: "Microsoft × Hugging Face: エージェント評価基盤「ThinkingBox」公開──『エージェントは完了と言った。DBは同意しなかった』",
-      date: "2026/10/05",
-      category: "agent_mcp",
-      categoryLabel: "開発エージェント・MCP",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "MicrosoftとHugging Faceが共同で、実務業務におけるAIエージェントの真の信頼性を評価する新オープンソースフレームワーク「ThinkingBox」を発表しました。従来の会話ログやTool Call成功有無といった表面的な指標を排し、バックエンドDBの最終状態（Terminal State）と副作用を確定的に検証。同一タスクを20回連続実行した「Observed 20/20」の再現性を測定したところ、失敗した試行の約80%はモデルの推論ではなくツール実行エラーや前提条件のリカバリ失敗によるものであり、単発成功率（pass@1）の高いモデルでも連続実行での信頼性に巨大な断絶があることが実証されました。",
-      impactForStaff: "業務でAIエージェントを本番運用する際、「AIの完了メッセージを鵜呑みにせず、確定コミット前にDB状態をプログラム検証する」「不可逆操作には人間の承認を挟む」「ツールエラーの自動リカバリ設計を行う」という本質的な信頼性設計の指針が示されました。社内開発においてもMCP環境での副作用検証テストの導入が推奨されます。",
-      recommendedFor: ["全社員", "エンジニア", "QA/テスト担当", "アーキテクト", "DX推進・プロジェクトリーダー"],
-      sourceName: "Hugging Face Official Blog",
-      sourceUrl: "https://huggingface.co/blog/microsoft/thinkingbox",
-      tags: ["ThinkingBox", "Microsoft", "Hugging Face", "Agent Reliability", "MCP", "OpenEnv", "HOT"],
-    },
-    {
-      id: "news-20261005-mistral-series-d-sovereign-ai",
-      title: "Mistral AI: シリーズDで30億ユーロ（評価額210億ユーロ）調達、企業主権（Sovereign AI）× オープンウェイト基盤をフロンティアへ拡大",
-      date: "2026/10/05",
-      category: "model",
-      categoryLabel: "基盤モデル・LLM",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "フランス発AI企業Mistral AIが、Samsung Electronics主導のシリーズDにて欧州テクノロジー企業史上最大規模となる30億ユーロ（約32億ドル）の資金調達を完了し、事後評価額210億ユーロ（約230億ドル）に達したと公式発表しました。特定クラウドへの囲い込みを打破する「ソブリンAI（Sovereign AI）」を掲げ、データ境界・モデル制御・専用推論コンピュート・本番監査性の4層完全制御を提唱。新エージェント「Vibe / Vibe for Code」や「Mistral OCR 4 / Voxtral TTS」などオープンウェイト基盤を加速し、AirbusやASML、HSBCなど125社以上のグローバル大企業の基幹AI移行を支えています。",
-      impactForStaff: "顧客データや未公開ソースコードをパブリッククラウドに預けられない製造・金融・防衛等の機密領域において、オープンウェイトモデルを用いた社内閉域網（オンプレミス・プライベートクラウド）での自律エージェント運用指針が確立。特定ベンダーへの価格・規約ロックインを防ぐ重要戦略となります。",
-      recommendedFor: ["全社員", "エンジニア", "セキュリティ担当", "アーキテクト", "DX推進・経営企画", "コンプライアンス担当"],
-      sourceName: "Mistral AI Official Blog",
-      sourceUrl: "https://mistral.ai/news/mistral-makes-sovereign-open-weight-ai-to-frontier/",
-      tags: ["Mistral AI", "Sovereign AI", "ソブリンAI", "オープンウェイト", "Series D", "Vibe Code", "閉域網", "HOT"],
-    },
-    {
-      id: "news-20261003-gemini4",
-      title: "Google DeepMind: 次世代フロンティア知能「Gemini 4 Argon」を公式発表",
-      date: "2026/10/03",
-      category: "google",
-      categoryLabel: "Google / Antigravity",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "Google DeepMind公式（deepmind.google/models/gemini/）にて、次世代のフロンティア知能を担う最新フラッグシップモデル「Gemini 4 Argon」が正式公開されました。「Our next era of frontier intelligence」として、超大規模推論とマルチモーダル自律エージェント基盤を刷新しています。",
-      impactForStaff: "マルチステップ推論・コード生成・自律エージェント協調の能力が飛躍的に向上。全社での社内利用認可に向けたベンチマーク検証およびAPI利用計画の策定を推進窓口にて開始します。",
-      recommendedFor: ["全社員", "エンジニア", "企画・データ推進", "経営層"],
-      sourceName: "Google DeepMind Official",
-      sourceUrl: "https://deepmind.google/models/gemini/",
-      tags: ["Gemini 4 Argon", "Google DeepMind", "Frontier Intelligence", "基盤モデル", "HOT"],
-    },
-    {
-      id: "news-20261004-deepseek-v41-flash",
-      title: "DeepSeek: 次世代MoEモデル「DeepSeek-V4.1-Flash」がGA提供開始（1Mコンテキスト・8B Prefill・MITライセンス）",
-      date: "2026/10/04",
-      category: "model",
-      categoryLabel: "基盤モデル・LLM",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "DeepSeek公式ブログにて、次世代Causal Encoder-Decoder MoEモデル「DeepSeek-V4.1-Flash」（APIモデルID: deepseek-flash）が正式提供（GA）開始。総パラメータ552B（Vision統合763B）に対し、入力処理（Prefill）時はわずか8B、生成（Decode）時は16Bのみをアクティベートする驚異的な高効率と、100万トークン（1M）コンテキスト、事前学習ネイティブマルチモーダルを達成。Hugging FaceおよびModelScopeにてMITライセンスのオープンウェイトとして公開されました。",
-      impactForStaff: "巨大リポジトリ全件や大量の法務・規程ドキュメントの一括投入・高速推論が超低コストで実現可能に。MITライセンスによるオープンウェイト提供のため、社内オンプレミス・プライベートクラウド環境へのセルフホスト検証の選択肢としても極めて有望です。",
-      recommendedFor: ["全社員", "エンジニア", "データサイエンティスト", "インフラ/MLOps担当", "アーキテクト"],
-      sourceName: "DeepSeek Blog Official",
-      sourceUrl: "https://deepseek.ai/blog/deepseek-v41-flash-generally-available",
-      tags: ["DeepSeek", "DeepSeek-V4.1-Flash", "MoE", "1M Context", "MIT License", "Open Weights", "HOT"],
-    },
-    {
-      id: "news-20261004-manus-video-editor",
-      title: "Manus: デスクトップ版「Manus Studio」にタイムライン連動型「Video Editor」を搭載（全レイヤー独立トラック・人間とAIの双方向編集）",
-      date: "2026/10/04",
-      category: "agent_mcp",
-      categoryLabel: "Agent & Multi-Modal",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "自律型AIエージェントプラットフォーム「Manus」公式ブログにて、デスクトップアプリ「Manus Studio」（macOS / Windows対応）にタイムライン連動型「Video Editor」が搭載されたことが発表されました。1〜2文のプロンプトから生成された映像、キャプション、ナレーション、BGM、効果音がすべて独立レイヤーのトラックとしてタイムライン上に配置され、平坦化されたMP4ではなく分解・再編集可能なプロジェクトとして保持。マウスドラッグによる直接編集と「音楽を下げて」「ここをタイトに」といった自然言語指示をシームレスに行き来でき、ローカルの数十〜数百本の動画クリップ一括解析によるハイライト抽出やBGMダッキングにも対応しています。",
-      impactForStaff: "AI動画生成における最大の難関だった「最後の10〜20%の微調整」が解決。社内勉強会やタウンホールの長時間録画からの要約ショート動画化、プロダクトローンチ動画や社内UGC動画の制作工数を劇的に短縮可能になります。",
-      recommendedFor: ["全社員", "広報・マーケティング", "デザイン・動画制作担当", "社内ナレッジ推進", "エンジニア"],
-      sourceName: "Manus Official Blog",
-      sourceUrl: "https://manus.im/ja/blog/introducing-video-editor",
-      tags: ["Manus", "Manus Studio", "Video Editor", "AI動画編集", "タイムライン", "マルチトラック", "HOT"],
-    },
-    {
-      id: "news-20261002-openai-led-display-gpt-live",
-      title: "OpenAI: GPT-Live-1とCodexによるLEDディスプレイ物理制御アシスタント事例を公開",
-      date: "2026/10/02",
-      category: "model",
-      categoryLabel: "OpenAI / Codex",
-      importance: "hot",
-      importanceLabel: "注目 ✨",
-      summary: "OpenAI Developers公式ブログにて、全二重音声モデル「GPT-Live-1」と推論・ツール呼び出しモデル「GPT-5.6 Luna」、Raspberry Pi、Codexを連携させ、128×64 HUB75 LEDパネルを音声対話でリアルタイム制御する物理アシスタント（Jack）の構築事例が公開されました。会話の常時リッスンとタスク調査・画像検索のクライアント委譲アーキテクチャが詳解されています。",
-      impactForStaff: "ブラウザ内チャットを超えて、オフィスの情報サイネージや現場の物理HUD、IoTデバイスとAIエージェントをシームレスに結合する設計指針を獲得。常時音声対話とバックグラウンド推論の分離パターンは社内スマートオフィス企画にも直結します。",
-      recommendedFor: ["全社員", "エンジニア", "IoT/組み込み担当", "スマートオフィス推進", "企画担当"],
-      sourceName: "OpenAI Developers Blog Official",
-      sourceUrl: "https://developers.openai.com/blog/bringing-my-led-display-to-life",
-      tags: ["OpenAI", "GPT-Live-1", "Codex", "GPT-5.6 Luna", "Raspberry Pi", "IoT", "LED Display", "音声アシスタント"],
-    },
-    {
-      id: "news-20260928-xai-team-bots",
-      title: "xAI: 組織共有AIチームメイト「Team Bots」を公開（Context・Plugins・Credentials・Memory 4層設計）",
-      date: "2026/09/28",
-      category: "agent_mcp",
-      categoryLabel: "Agent & MCP",
-      importance: "hot",
-      importanceLabel: "注目 ✨",
-      summary: "xAI公式ニュースにて、Grok Botを個人向けアシスタントから組織・チーム共有の協調型AIチームメイトへと拡張する「Team Bots」がTeams/Enterpriseプラン向けにパブリックベータ公開されました。Context（共有ドキュメント・規程）、Plugins（Salesforce, Notion, GitHub等SaaS連携）、Credentials（外部API安全管理）、Memory（組織運用の記憶・学習）の4層アーキテクチャを採用。個別メンバーとの対話プライバシーを保護しながら、専用ハンドルでSlackチャンネルに常駐して協調作業を実行可能です。",
-      impactForStaff: "個人の壁を超えたチーム専用AIアシスタントの運用基盤が具現化。Slackチャンネルで誰もが同一のプロジェクト知識・SaaS権限を持つエージェントと協働可能になり、引き継ぎ工数削減とチーム生産性向上に直結します。",
-      recommendedFor: ["全社員", "プロジェクトマネージャー", "Slack管理者", "エンジニア", "事業部門リード"],
-      sourceName: "xAI Official News",
-      sourceUrl: "https://x.ai/news/team-bots",
-      tags: ["xAI", "Team Bots", "Grok", "Slack連携", "チーム共有AI", "Memory", "Credentials", "Plugins"],
-    },
-    {
-      id: "news-20260928-antigravity-custom-agents",
-      title: "Google Antigravity: 公式プラグイン対応カスタムエージェント（Flutter・Firebase・Google Play）を提供開始",
-      date: "2026/09/28",
-      category: "google",
-      categoryLabel: "Google / Antigravity",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "Google Antigravity公式ブログにて、各プロダクトチームが開発したカスタムエージェントが公式プラグイン（Build with Google）に統合・提供開始されたことが発表されました。Flutterのアクセシビリティ自動修正エージェント、FirebaseのFirestoreセキュリティルール自動検証・堅牢化エージェント、Google Playのストア審査・Manifest・R8事前監査ゲート（play-release-audit）が利用可能です。",
-      impactForStaff: "Google公式エコシステム（Flutter/Firebase/Android）を用いた開発において、専用の検証・セキュリティ・リリース監査エージェントをIDEやCLI（agy --agent <name>）から即時呼び出し可能に。審査落ちやセキュリティ脆弱性の手戻りを大幅に未然防止できます。",
-      recommendedFor: ["全社員", "エンジニア", "モバイル開発者", "セキュリティ担当", "品質管理 (QA)"],
-      sourceName: "Google Antigravity Blog Official",
-      sourceUrl: "https://antigravity.google/blog/custom-agents-in-google-plugins",
-      tags: ["Google Antigravity", "Custom Agents", "Plugins", "Flutter", "Firebase", "Google Play", "HOT"],
-    },
-    {
-      id: "news-20260925-cognition-devin-1b-run-rate",
-      title: "Cognition: 自律型AIエンジニア「Devin」のARRが10億ドルを突破（GE Aerospace・Rivian・NVIDIAなど大企業へ浸透）",
-      date: "2026/09/25",
-      category: "agent_mcp",
-      categoryLabel: "Autonomous Agent",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "自律型AIソフトウェアエンジニア「Devin」を開発するCognition公式ブログにて、年間経常収益ランレート（ARR）が10億ドル（$1B）を突破したことが正式発表されました。2024年1月の創業およびDevinの一般提供（GA）開始から2年足らずでの達成であり、2026年5月の4億9,200万ドルから急速に倍増。GE Aerospace、Rivian、Citi、NVIDIA、Mercedes-Benzなどグローバル大企業の開発現場において、エンジニアと協調してIssue解決やレガシー移行を担うAIチームメイトとして定着が進んでいます。",
-      impactForStaff: "生成AI活用が「エディタ上のインライン補完」から「自律型AIチームメイトによるリポジトリ単位の課題解決・CI保守・移行自動化」へと本格移行したことを示す象徴的事例。社内でもタスク単位での自律エージェント適用を加速します。",
-      recommendedFor: ["全社員", "エンジニア", "アーキテクト", "開発リーダー", "プロダクトマネージャー", "経営企画"],
-      sourceName: "Cognition Official Blog",
-      sourceUrl: "https://cognition.com/blog/1b-run-rate",
-      tags: ["Cognition", "Devin", "自律型AIエンジニア", "ARR 10億ドル", "Enterprise AI", "ソフトウェア開発", "HOT"],
-    },
-    {
-      id: "news-20260727-meta-sam-dino-assistive-robotics",
-      title: "Meta AI: ピッツバーグ大HERLと提携、SAMとDINOによる次世代スマート車椅子・支援ロボティクス（RAMMP）事例を公開",
-      date: "2026/07/27",
-      category: "industry",
-      categoryLabel: "業界・最新技術",
-      importance: "hot",
-      importanceLabel: "注目 ✨",
-      summary: "Meta AI公式ブログにて、ピッツバーグ大学人間工学研究所（HERL）およびATDevが推進する次世代自律支援ロボティクス基盤「RAMMP」（米ARPA-Hが最大4,150万ドル助成）に、Metaの基礎ビジョンモデル「SAM（Segment Anything Model）」と「DINOv2 / DINOv3」が採用された事例が公開されました。米国で年間10万件以上発生する車椅子関連事故の防止に向け、RF-DETR（軽量物体検出モデル）にDINO埋め込みを統合してバッテリー駆動のエッジデバイス上で360度環境認識を実現。さらにSAMによる自動アノテーションで多様な照明・角度の学習データを効率生成し、段差や自動ドアボタンのリアルタイム検知を達成しています。",
-      impactForStaff: "基礎ビジョンモデルの価値がWeb/アプリから「実世界の現場・ロボティクス・フィジカルAI」へ本格展開。通信が不安定な現場（工場・倉庫・オフィスフロア）でも低遅延で動く「オンデバイス軽量モデル（DINO埋め込み＋RF-DETR）」と「SAM自動アノテーション」の設計パターンは、社内スマートオフィスや現場安全支援AIのアーキテクチャとしても直結します。",
-      recommendedFor: ["全社員", "エンジニア", "IoT/組み込み担当", "スマートオフィス推進", "UI/UXアクセシビリティ担当", "新規事業開発"],
-      sourceName: "Meta AI Official Blog",
-      sourceUrl: "https://ai.meta.com/blog/assistive-robotics-university-of-pittsburgh-sam-dino/",
-      tags: ["Meta AI", "SAM", "DINO", "DINOv3", "支援ロボティクス", "RAMMP", "エッジAI", "アクセシビリティ", "フィジカルAI"],
-    },
-    {
-      id: "news-20261002-claude",
-      title: "Anthropic: 次世代「Claude Opus 5.5」発表（Fable 5.1同等性能で運用コスト40%削減）",
-      date: "2026/09/22",
-      category: "model",
-      categoryLabel: "基盤モデル・LLM",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "Anthropic公式Newsroomにて「Claude Opus 5.5」が正式公開されました。最上位モデルClaude Fable 5.1に匹敵する推論・コーディング性能を達成しながら、Opus 5比で40%の運用コスト削減を実現。先行して発表されたClaude Fable 5.1 / Claude Mythos 5.1と共に業界をリードしています。",
-      impactForStaff: "大規模なコードリファクタリングや仕様書の整合性レビューにおける精度が一段と向上し、API利用コストも大幅に抑制可能になります。",
-      recommendedFor: ["エンジニア", "アーキテクト", "データサイエンティスト"],
-      sourceName: "Anthropic Newsroom Official",
-      sourceUrl: "https://www.anthropic.com/news",
-      tags: ["Claude Opus 5.5", "Claude Fable 5.1", "Claude Mythos 5.1", "Anthropic", "HOT"],
-    },
-    {
-      id: "news-20261003-01",
-      title: "AI Park プリフライト受入テスト管理コンソール（/preflight）が全面稼働",
-      date: "2026/10/03",
-      category: "internal",
-      categoryLabel: "社内AI Park",
-      importance: "release",
-      importanceLabel: "社内リリース",
-      summary: "「自動テストだけでなく人間が実機で手動確認する」社内ガバナンス方針に基づき、4大評価軸（仕様・デザイン・操作性・視認性）の70項目詳細チェックリストおよびデプロイ前品質ゲートを完全統合しました。",
-      impactForStaff: "ポータル全体の信頼性と安全性が飛躍的に向上。推測や未検証機能の混入をブロックし、全社員が安心して利用できるポータルを維持します。",
-      recommendedFor: ["全社員", "開発者・推進担当", "管理者"],
-      sourceName: "MightyLINK AI推進窓口",
-      sourceUrl: "https://kanta13jp1.github.io/ai-park/preflight",
-      tags: ["品質ゲート", "手動UAT", "プリフライト", "ガバナンス"],
-    },
-    {
-      id: "news-20261003-02",
-      title: "ご意見・改善ToDoボードに「⚡ 未対応優先フィルター」が新設",
-      date: "2026/10/03",
-      category: "internal",
-      categoryLabel: "社内AI Park",
-      importance: "official",
-      importanceLabel: "公式発表",
-      summary: "社内Google Chatや全社から寄せられた改善要望・フィードバックのうち、対応中・検討中の未完了タスクを初期表示するフィルターを導入しました。",
-      impactForStaff: "社員が要望を出した後の進捗状況や、現在AI推進チームが取り組んでいる課題が一目で把握できるようになり、手戻りのない共創を実現します。",
-      recommendedFor: ["全社員", "フィードバック投稿者"],
-      sourceName: "MightyLINK AI推進窓口",
-      sourceUrl: "https://kanta13jp1.github.io/ai-park/feedback-todo",
-      tags: ["ToDoボード", "フィルター", "ユーザー改善", "共創"],
-    },
-    {
-      id: "news-20260930-codex",
-      title: "OpenAI: 進化した Codex 基盤と「キャンバス（Canvas）」によるコード・文章の共創体験",
-      date: "2026/09/30",
-      category: "model",
-      categoryLabel: "基盤モデル・LLM",
-      importance: "official",
-      importanceLabel: "公式発表",
-      summary: "OpenAI公式にて、ChatGPTを使用して文章やコードを書く新インターフェース「キャンバス（Canvas）」が展開。インラインでのドット指示（dots）や差分レビューを行いながら、人間とAIが並行してドキュメントやコードをブラッシュアップ可能です。",
-      impactForStaff: "チャット全体を再生成することなく、変更したい行・ドット（dots）単位で的確に修正指示を出せるため、ドキュメント校正やコードレビューの作業効率が劇的に向上します。",
-      recommendedFor: ["全社員", "ライター", "エンジニア"],
-      sourceName: "OpenAI Official (introducing-canvas)",
-      sourceUrl: "https://openai.com/ja-JP/index/introducing-canvas/",
-      tags: ["Codex", "Canvas", "dots", "OpenAI", "共同編集"],
-    },
-    {
-      id: "news-20260929-manus",
-      title: "汎用自律AIエージェント「Manus」：Web検索から実務実行・タスクバックアップ復元まで対応",
-      date: "2026/09/29",
-      category: "agent_mcp",
-      categoryLabel: "開発エージェント・MCP",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "ブラウザ操作・API呼び出し・ファイル作成・情報精査を横断し、人間が与えた高レベルな目的（Goal）を自律的にマルチステップで達成する汎用エージェント「Manus」。アカウント復元やタスクバックアップ機能も拡充され、実務運用の安定性が向上しています。",
-      impactForStaff: "「競合製品の価格比較表の作成」や「公開データの収集・グラフ化」などの定型リサーチ業務がワンプロンプトで完了可能になり、ナレッジワーカーの業務負担が劇的に軽減されます。",
-      recommendedFor: ["全社員", "リサーチ担当", "企画・営業推進"],
-      sourceName: "Manus AI Official",
-      sourceUrl: "https://manus.im/",
-      tags: ["Manus", "自律エージェント", "Web自動化", "業務完結", "HOT"],
-    },
-    {
-      id: "news-20260927-deepseek",
-      title: "DeepSeek: 最新モデル「DeepSeek-V4.1-Flash」正式リリース（ネイティブ視覚マルチモーダル & Agent性能向上）",
-      date: "2026/09/27",
-      category: "model",
-      categoryLabel: "基盤モデル・LLM",
-      importance: "tech",
-      importanceLabel: "技術解説",
-      summary: "DeepSeek公式（deepseek.com/en/）にて、最新フラッグシップ「DeepSeek-V4.1-Flash」が正式公開。テキストおよびAgent実行性能の包括的な向上に加え、ネイティブマルチモーダル視覚理解（visual understanding）能力を標準搭載しています。",
-      impactForStaff: "高精度なUI画像解析や図表読み取り、自律エージェントタスクが極めて低レイテンシ・低コストで実行可能となり、社内データ分析や検証の選択肢が広がります。",
-      recommendedFor: ["AIエンジニア", "インフラ担当", "研究開発"],
-      sourceName: "DeepSeek Official",
-      sourceUrl: "https://www.deepseek.com/en/",
-      tags: ["DeepSeek-V4.1-Flash", "DeepSeek", "マルチモーダル", "Agent強化"],
-    },
-    {
-      id: "news-20260924-grok",
-      title: "xAI: 最新モデル「Grok 4.7」発表（世界最大スーパークラスタColossusで学習したフロンティアAI）",
-      date: "2026/09/24",
-      category: "model",
-      categoryLabel: "基盤モデル・LLM",
-      importance: "official",
-      importanceLabel: "公式発表",
-      summary: "xAI公式（x.ai）にて、新モデル「Grok 4.7」が発表されました。世界最大規模のGPUスーパークラスタ「Colossus」によって学習され、高度な論理推論（Reasoning）、コード生成、音声、画像、動画を統合した次世代マルチモーダル基盤を実現しています。",
-      impactForStaff: "刻一刻と変化するリアルタイム情報検索力と、画像・動画を含むマルチモーダル推論により、高度な市場調査やクリエイティブ分析に強力な効果を発揮します。",
-      recommendedFor: ["経営企画", "マーケティング", "データサイエンティスト"],
-      sourceName: "xAI Official (x.ai)",
-      sourceUrl: "https://x.ai/",
-      tags: ["Grok 4.7", "xAI", "Colossus", "マルチモーダル推論"],
-    },
-    {
-      id: "news-20260922-devin",
-      title: "Cognition: 自律ソフトウェアエンジニア「Devin」のエンタープライズ統合とCI自律修正",
-      date: "2026/09/22",
-      category: "agent_mcp",
-      categoryLabel: "開発エージェント・MCP",
-      importance: "tech",
-      importanceLabel: "技術解説",
-      summary: "Cognitionは、世界初の自律AIソフトウェアエンジニア「Devin」のエンタープライズ向け機能として、GitHub CIのテスト失敗を自律検知してプルリクエスト修正まで自動完結するパイプラインを発表しました。",
-      impactForStaff: "夜間ビルドの依存関係エラーや型エラーの解消をDevinが自律修正するため、社内開発チームの開発サイクル（CI/CD）の停止時間がほぼゼロになります。",
-      recommendedFor: ["エンジニア", "CI/CD担当", "テックリード"],
-      sourceName: "Cognition Devin Official Blog",
-      sourceUrl: "https://cognition.ai/blog",
-      tags: ["Devin", "Cognition", "自律エンジニア", "CI/CD自動化"],
-    },
-    {
-      id: "news-20261002-01",
-      title: "Google DeepMind: Gemini 3.1 Pro がマルチステップ推論・コード生成で新水準を達成",
-      date: "2026/10/02",
-      category: "google",
-      categoryLabel: "Google / Antigravity",
-      importance: "hot",
-      importanceLabel: "HOT 🔥",
-      summary: "Google DeepMindが発表した「Gemini 3.1 Pro」は、長大なコードベースの理解と自己修正ループにおいて従来比30%の精度向上を記録。社内環境での先行トライアルを開始します。",
-      impactForStaff: "複雑なSQLやスクリプト作成、仕様書レビューの自動化精度が大幅に向上。Antigravity内での標準モデルとして利用可能になります。",
-      recommendedFor: ["エンジニア", "AI推進担当", "データアナリスト"],
-      sourceName: "Google DeepMind Official",
-      sourceUrl: "https://deepmind.google/technologies/gemini/",
-      tags: ["Gemini 3.1 Pro", "DeepMind", "推論モデル", "長大コンテキスト"],
-    },
-    {
-      id: "news-20261001-01",
-      title: "Google Antigravity 2.0 & Gemini 3.1 Pro 社内利用環境の正式認可・提供開始",
-      date: "2026/10/01",
-      category: "google",
-      categoryLabel: "Google / Antigravity",
-      importance: "official",
-      importanceLabel: "公式発表",
-      summary: "全社セキュリティ基準に適合したGoogle Antigravity 2.0の社内利用環境を全社員向けに正式オープン。GCP利用枠・クレジット保護機能とセットで安全に活用可能です。",
-      impactForStaff: "業務PC（Windows/Mac）から即日利用申請可能。社内専用テンプレートや安全ガイドラインが標準整備されています。",
-      recommendedFor: ["全社員", "マネージャー", "開発者"],
-      sourceName: "MightyLINK AI推進窓口",
-      sourceUrl: "https://kanta13jp1.github.io/ai-park/guide",
-      tags: ["Antigravity", "社内解禁", "GCP", "セキュリティ認可"],
-    },
-    {
-      id: "news-20260928-01",
-      title: "Model Context Protocol (MCP) の標準化が進展、対応ツールが急増中",
-      date: "2026/09/28",
-      category: "agent_mcp",
-      categoryLabel: "開発エージェント・MCP",
-      importance: "tech",
-      importanceLabel: "技術解説",
-      summary: "ClaudeやAntigravityで利用可能なオープンプロトコル「MCP」に対応した社内リソース連携サーバー（GitHub, Figma, BigQuery等）のオープンソース化が世界中で加速しています。",
-      impactForStaff: "AIエージェントが社内ツールとシームレスに対話可能になり、反復業務やデータ抽出の全自動化が容易になります。",
-      recommendedFor: ["エンジニア", "アーキテクト", "業務自動化推進"],
-      sourceName: "Model Context Protocol Docs",
-      sourceUrl: "https://modelcontextprotocol.io/",
-      tags: ["MCP", "オープン標準", "外部連携", "ツール拡張"],
-    },
-    {
-      id: "news-20260925-01",
-      title: "Google Cloud: Vertex AI での Spend Cap & コスト保護機能が強化",
-      date: "2026/09/25",
-      category: "google",
-      categoryLabel: "Google / Antigravity",
-      importance: "official",
-      importanceLabel: "公式発表",
-      summary: "Vertex AIのAPI呼び出しに対する日次・月次クォータ設定およびハードリミット保護機能が拡充。誤った無限ループ呼び出しによる想定外のクラウドコスト請求を物理的に遮断可能になりました。",
-      impactForStaff: "開発者や各部署が安心してプロトタイプ開発を実施できるように。月次予算の上限を超過する心配がゼロになります。",
-      recommendedFor: ["推進担当", "GCP管理者", "エンジニア"],
-      sourceName: "Google Cloud Release Notes",
-      sourceUrl: "https://cloud.google.com/vertex-ai/docs/release-notes",
-      tags: ["Spend Cap", "コスト管理", "Vertex AI", "クラウドガバナンス"],
-    },
-    {
-      id: "news-20260920-01",
-      title: "Web Audio API による触感音響（Haptic SFX）がモダンWeb UIの新潮流に",
-      date: "2026/09/20",
-      category: "internal",
-      categoryLabel: "社内AI Park",
-      importance: "tech",
-      importanceLabel: "技術解説",
-      summary: "Awwwards等の最先端Webデザインで採用されるWeb Audio APIを活用したリアルタイム周波数シンセサイズをAI Parkの主要ボタン・カードへ完全実装。操作感の質的向上が確認されました。",
-      impactForStaff: "ボタン押下やホバー時のクリック感が心地よく、長時間の業務でも疲れにくいインタラクション体験を提供します。",
-      recommendedFor: ["全社員", "フロントエンドエンジニア", "デザイナー"],
-      sourceName: "MightyLINK UI/UX Labs",
-      sourceUrl: "https://kanta13jp1.github.io/ai-park/",
-      tags: ["Web Audio API", "SFX", "UI/UX", "アクセシビリティ"],
-    },
-    {
-      id: "news-20260915-01",
-      title: "AIエージェントによるE2E実機テスト自動化とビジュアルリグレッション検知",
-      date: "2026/09/15",
-      category: "agent_mcp",
-      categoryLabel: "開発エージェント・MCP",
-      importance: "tech",
-      importanceLabel: "技術解説",
-      summary: "Puppeteer / Playwrightと自律サブエージェントを組み合わせた「公開前自動UATゲート」の運用を開始。目視チェックとコード解析を完全自動化する手法を確立しました。",
-      impactForStaff: "手動テスト工数を70%削減し、バグの混入を即時検知。新機能の安全・迅速な全社リリースを実現します。",
-      recommendedFor: ["QAエンジニア", "テックリード", "PM"],
-      sourceName: "MightyLINK Engineering Blog",
-      sourceUrl: "https://kanta13jp1.github.io/ai-park/preflight",
-      tags: ["E2Eテスト", "Puppeteer", "ビジュアルリグレッション", "品質保証"],
-    },
-    {
-      id: "news-20260910-01",
-      title: "Agentic Coding の新潮流：Single prompt から Subagent 自律協調へ",
-      date: "2026/09/10",
-      category: "model",
-      categoryLabel: "基盤モデル・LLM",
-      importance: "tech",
-      importanceLabel: "技術解説",
-      summary: "単一の巨大プロンプトで完結させる手法から、役割分担された軽量サブエージェントが自律的に連携するアーキテクチャへのシフトが加速。トークン効率と問題解決率が飛躍的に向上しています。",
-      impactForStaff: "大規模なシステム設計や調査タスクにおいて、より安価で高品質なAI支援を受けられるようになります。",
-      recommendedFor: ["エンジニア", "リサーチャー", "アーキテクト"],
-      sourceName: "AI Architecture Research",
-      sourceUrl: "https://kanta13jp1.github.io/ai-park/agent-cases",
-      tags: ["Subagents", "Agentic Coding", "自律協調", "アーキテクチャ"],
-    },
-    {
-      id: "news-20260905-01",
-      title: "生成AI 学習コンテンツ（プロンプト集＆セルフチェック）社内受講者が急増",
-      date: "2026/09/05",
-      category: "internal",
-      categoryLabel: "社内AI Park",
-      importance: "official",
-      importanceLabel: "公式発表",
-      summary: "全社員向けの実践プロンプト集およびセキュリティ遵守セルフチェック診断の受講者が累計500名を突破。業務での安全なAI活用が全社規模で定着しています。",
-      impactForStaff: "穴埋め形式ですぐに使えるプロンプト（議事録要約・メール校正等）により、日常業務の時短効果を即日体感できます。",
-      recommendedFor: ["全社員", "新入社員", "業務効率化担当"],
-      sourceName: "MightyLINK AI推進窓口",
-      sourceUrl: "https://kanta13jp1.github.io/ai-park/learning",
-      tags: ["学習コンテンツ", "プロンプト集", "セルフチェック", "実務直結"],
-    },
-  ];
+  // 1. 静的マスター（src/data/ai-news.ts）の読み込み
+  const baseNews = loadStaticMasterNews();
+  console.log(`[INFO] Loaded ${baseNews.length} master news items from src/data/ai-news.ts`);
 
   // 2. 各社公式フィードから最新ニュースを自動巡回取得
   const liveItems = [];
@@ -576,14 +222,14 @@ async function main() {
     liveItems.push(...fetched);
   }
 
-  // 3. 重複排除とマージ（タイトルおよびURLベース）
+  // 3. 重複排除とマージ（URLおよびタイトルベース）
   const seenUrls = new Set();
   const seenTitles = new Set();
   const mergedItems = [];
 
-  // ベース確定ニュース（詳細な日本語解説・要約付きマスタ）を最優先
+  // ベース確定ニュース（詳細な日本語解説・要約付きマスタ）を優先
   for (const item of baseNews) {
-    const cleanUrl = item.sourceUrl.split('?')[0];
+    const cleanUrl = item.sourceUrl.split('?')[0].replace(/\/$/, '');
     if (!seenUrls.has(cleanUrl) && !seenTitles.has(item.title)) {
       seenUrls.add(cleanUrl);
       seenTitles.add(item.title);
@@ -593,7 +239,7 @@ async function main() {
 
   // フィードから取得した最新の未登録ニュースを追加
   for (const item of liveItems) {
-    const cleanUrl = item.sourceUrl.split('?')[0];
+    const cleanUrl = item.sourceUrl.split('?')[0].replace(/\/$/, '');
     if (!seenUrls.has(cleanUrl) && !seenTitles.has(item.title)) {
       seenUrls.add(cleanUrl);
       seenTitles.add(item.title);
@@ -612,18 +258,18 @@ async function main() {
   const payload = {
     lastSyncedAt: nowIso,
     lastSyncedAtFormatted: new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }),
-    syncStatus: "live",
-    pipelineVersion: "v1.0-auto",
+    syncStatus: 'live',
+    pipelineVersion: 'v1.1-auto',
     totalCount: mergedItems.length,
     activeSources: [
-      "Google DeepMind Official Feed",
-      "Google Antigravity Official Blog",
-      "OpenAI Official Newsroom",
-      "Anthropic Official News",
-      "DeepSeek Official Releases",
-      "xAI Announcements",
-      "Manus AI Official",
-      "Cognition Devin Blog"
+      'Google DeepMind Official Feed',
+      'Google Antigravity Official Blog',
+      'OpenAI Official Newsroom',
+      'Anthropic Official News',
+      'DeepSeek Official Releases',
+      'xAI Announcements',
+      'Manus AI Official',
+      'Cognition Devin Blog',
     ],
     items: mergedItems,
   };
