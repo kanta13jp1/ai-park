@@ -1,18 +1,19 @@
 {
-  "lastSyncedAt": "2026-11-11T21:27:30.669Z",
-  "lastSyncedAtFormatted": "2026/11/12 6:27:30",
+  "lastSyncedAt": "2026-11-11T21:34:09.716Z",
+  "lastSyncedAtFormatted": "2026/11/12 6:34:09",
   "syncStatus": "live",
-  "pipelineVersion": "v1.1-auto",
-  "totalCount": 42,
+  "pipelineVersion": "v1.2-auto",
+  "totalCount": 50,
   "activeSources": [
     "Google DeepMind Official Feed",
-    "Google Antigravity Official Blog",
-    "OpenAI Official Newsroom",
-    "Anthropic Official News",
-    "DeepSeek Official Releases",
-    "xAI Announcements",
-    "Manus AI Official",
-    "Cognition Devin Blog"
+    "Google Antigravity Official Feed",
+    "OpenAI Official Feed",
+    "Mistral AI Official Feed",
+    "Hugging Face Official Feed",
+    "GitHub Blog (AI & ML) Official Feed",
+    "Figma Blog Official Feed",
+    "Latent Space Official Feed",
+    "Import AI Official Feed"
   ],
   "items": [
     {
@@ -116,6 +117,106 @@
       "isLiveSynced": true
     },
     {
+      "id": "live-huggingface-botpsy",
+      "title": "Hugging Face: BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model",
+      "date": "2026/11/11",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language...」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/qvac/botpsy",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-token-pooling",
+      "title": "Hugging Face: Token Pooling-Aware Training for Multi-Vector Embedding Models",
+      "date": "2026/11/11",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「Token Pooling-Aware Training for Multi-Vector Embedding Models」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/token-pooling",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-ainews-mercor-750m-series-d-at-20b-valuation-3b-",
+      "title": "Latent Space: [AINews] Mercor $750m Series D at $20B valuation, $3B run rate",
+      "date": "2026/11/11",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 10, 2026 — Google GA's Gemini 4 Carbon.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Mercor $750m Series D at $20B valuation, $3B run rate」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-mercor-750m-series-d-at-20b-valuation-3b-run-rate/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-codex-work",
+      "title": "Latent Space: AI Engineer Code Summit: OpenAI on New Ways of Working With Codex",
+      "date": "2026/11/11",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "On the first day of AIE Code Summit, OpenAI showed how developers can steer Codex by voice, hand off work to the cloud, and make use of dots.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「AI Engineer Code Summit: OpenAI on New Ways of Working With Codex」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/codex-work/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
       "id": "live-deepmind-20261110-0",
       "title": "Google DeepMind: Gemini 4 Carbon is now available",
       "date": "2026/11/10",
@@ -193,56 +294,6 @@
       ]
     },
     {
-      "id": "live-openai-helping-caregivers-use-ai-in-everyday-life",
-      "title": "OpenAI: Helping caregivers use AI in everyday life",
-      "date": "2026/11/10",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI Academy is bringing free, hands-on ChatGPT workshops to caregivers in five U.S. cities, helping them build practical AI skills for everyday life.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Helping caregivers use AI in everyday life」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/helping-caregivers-use-ai-in-everyday-life",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-introducing-businesses-chatgpt",
-      "title": "OpenAI: Introducing Businesses in ChatGPT",
-      "date": "2026/11/10",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Manage your business information, get insights about how your business shows up, and turn interest into action in ChatGPT.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing Businesses in ChatGPT」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/introducing-businesses-chatgpt",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-antigravity-20261109-1",
       "title": "Google Antigravity: Google Antigravity for Knowledge Work",
       "date": "2026/11/09",
@@ -293,6 +344,56 @@
       "isLiveSynced": true
     },
     {
+      "id": "live-figma-6-easy-ways-to-use-the-figma-agent-right-now",
+      "title": "Figma Blog: 6 easy ways to use the Figma agent right now",
+      "date": "2026/11/09",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "From making designs more expressive and automating busywork, to exploring more possibilities on the canvas, here are six ways to push designers further with the Figma agent.",
+      "impactForStaff": "Figma公式ブログ「6 easy ways to use the Figma agent right now」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
+      "recommendedFor": [
+        "デザイナー",
+        "フロントエンド開発者",
+        "プロダクトマネージャー"
+      ],
+      "sourceName": "Figma Blog Official Feed",
+      "sourceUrl": "https://www.figma.com/blog/6-easy-ways-to-use-the-figma-agent-right-now/",
+      "tags": [
+        "Figma",
+        "UI/UX",
+        "Design System",
+        "デザイン連携"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-importai-import-ai-480-self-sustaining-space",
+      "title": "Import AI: Import AI 480: Self-sustaining space economies; AI for science progress, and Meta builds perfect hands for a superintelligence",
+      "date": "2026/11/09",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "When do you think we'll have robots on the moon?",
+      "impactForStaff": "Import AI「Import AI 480: Self-sustaining space economies; AI for science progress, and Meta...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
+      "recommendedFor": [
+        "エンジニア",
+        "リサーチャー",
+        "企画担当"
+      ],
+      "sourceName": "Import AI Official Feed",
+      "sourceUrl": "https://importai.substack.com/p/import-ai-480-self-sustaining-space",
+      "tags": [
+        "Import AI",
+        "AI Research",
+        "AI安全性",
+        "先端動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
       "id": "live-antigravity-20261106-2",
       "title": "Google Antigravity: Voice mode in Antigravity",
       "date": "2026/11/06",
@@ -316,26 +417,76 @@
       ]
     },
     {
-      "id": "live-deepmind-gemini-omni-12-flash-fast-and-cost-effective-wit",
-      "title": "Google DeepMind: Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips",
-      "date": "2026/11/05",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "id": "live-github-ai-beyond-code-generation-a-developers-guide-to-age",
+      "title": "GitHub Blog (AI & ML): Beyond code generation: A developer&#8217;s guide to agentic engineering",
+      "date": "2026/11/06",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Writing code got faster. The work around it didn't. See how you can plan, write code, review changes, and investigate production issues with GitHub Copilot, and what work still needs your judgment. The post Beyond code generation: A developer&#8217;s guide...",
+      "impactForStaff": "GitHub公式AIブログ「Beyond code generation: A developer&#8217;s guide to agentic engineering」。GitHub連携・PRレビュー・AIネイティブ開発ワークフローの改善に役立ちます。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
-        "企画・データ推進"
+        "テックリード"
       ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/gemini-omni-12-flash-fast-and-cost-effective-with-longer-clips/",
+      "sourceName": "GitHub Blog (AI & ML) Official Feed",
+      "sourceUrl": "https://github.blog/ai-and-ml/github-copilot/beyond-code-generation-a-developers-guide-to-agentic-engineering/",
       "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
+        "GitHub",
+        "AI Coding",
+        "開発ワークフロー",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-figma-in-conversation-dylan-field-and-david-friedberg",
+      "title": "Figma Blog: In conversation: Dylan Field and David Friedberg on the human role in creating with AI",
+      "date": "2026/11/06",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "On why design is the new code, shaping AI’s creative output, and the human vision and judgment behind what we make.",
+      "impactForStaff": "Figma公式ブログ「In conversation: Dylan Field and David Friedberg on the human role in creating with...」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
+      "recommendedFor": [
+        "デザイナー",
+        "フロントエンド開発者",
+        "プロダクトマネージャー"
+      ],
+      "sourceName": "Figma Blog Official Feed",
+      "sourceUrl": "https://www.figma.com/blog/in-conversation-dylan-field-and-david-friedberg/",
+      "tags": [
+        "Figma",
+        "UI/UX",
+        "Design System",
+        "デザイン連携"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-mistral-build-with-studio",
+      "title": "Mistral AI: Le Chonk brings the brains. Studio puts it to work.",
+      "date": "2026/11/05",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Build and deploy enterprise agents, workflows and apps faster with Mistral Studio and Le Chonk full control over your models, data and infrastructure.",
+      "impactForStaff": "Mistral AIの公式発表「Le Chonk brings the brains. Studio puts it to work.」。オープンウェイトモデルや高効率推論基盤の技術動向として確認します。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Mistral AI Official Feed",
+      "sourceUrl": "https://mistral.ai/news/build-with-studio/",
+      "tags": [
+        "Mistral AI",
+        "Open Weights",
+        "基盤モデル",
         "公式発表"
       ],
       "isLiveSynced": true
@@ -389,6 +540,56 @@
         "Plugins",
         "公式ブログ"
       ]
+    },
+    {
+      "id": "live-mistral-mistral-large-4-oss",
+      "title": "Mistral AI: Le Chonk: Built for Coders, Trusted by Defenders.",
+      "date": "2026/10/29",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "The weights of Mistral Large 4 (Le Chonk) are now open. A 1T parameter multimodal model, and best open-weight model for coding, trained in Europe.",
+      "impactForStaff": "Mistral AIの公式発表「Le Chonk: Built for Coders, Trusted by Defenders.」。オープンウェイトモデルや高効率推論基盤の技術動向として確認します。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Mistral AI Official Feed",
+      "sourceUrl": "https://mistral.ai/news/mistral-large-4-oss/",
+      "tags": [
+        "Mistral AI",
+        "Open Weights",
+        "基盤モデル",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-github-ai-how-3-java-champions-are-using-github-copilot-fo",
+      "title": "GitHub Blog (AI & ML): How 3 Java Champions are using GitHub Copilot for increased productivity",
+      "date": "2026/10/20",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Three Java Champions share how they use GitHub Copilot to solve problems, accelerate development, and keep humans responsible for the results. The post How 3 Java Champions are using GitHub Copilot for increased productivity appeared first on The GitHub Blog.",
+      "impactForStaff": "GitHub公式AIブログ「How 3 Java Champions are using GitHub Copilot for increased productivity」。GitHub連携・PRレビュー・AIネイティブ開発ワークフローの改善に役立ちます。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "テックリード"
+      ],
+      "sourceName": "GitHub Blog (AI & ML) Official Feed",
+      "sourceUrl": "https://github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity/",
+      "tags": [
+        "GitHub",
+        "AI Coding",
+        "開発ワークフロー",
+        "技術解説"
+      ],
+      "isLiveSynced": true
     },
     {
       "id": "news-20261005-langchain-own-your-intelligence",

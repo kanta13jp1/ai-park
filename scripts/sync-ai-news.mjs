@@ -1,7 +1,8 @@
 /**
  * sync-ai-news.mjs
- * 各社公式フィード（Google DeepMind, Google Antigravity, OpenAI 等）を自動巡回し、
- * 最新AIニュースを public/data/ai-news-live.json に自動反映するデータパイプラインスクリプト
+ * 各社公式フィード（Google DeepMind, Google Antigravity, OpenAI, Mistral AI, Hugging Face,
+ * GitHub AI, Figma, Latent Space, The Gradient, Import AI 等）を自動巡回し、
+ * 最新AIニュースを public/data/ai-news-live.json に自動反映するデータパイプラインスクリプト。
  * ベースニュースは src/data/ai-news.ts (aiNewsMaster) を唯一の情報源（SSOT）として参照する。
  */
 
@@ -22,6 +23,7 @@ function decodeHtmlEntities(str) {
     .replace(/&amp;/gi, '&')
     .replace(/&quot;/gi, '"')
     .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&#x27;/gi, "'")
     .replace(/&rsquo;|&lsquo;/gi, "'")
     .replace(/&rdquo;|&ldquo;/gi, '"')
     .replace(/&ndash;/gi, '-')
@@ -41,20 +43,41 @@ function formatTitleForQuote(title, maxLen = 85) {
   return (lastSpace > 40 ? sliced.slice(0, lastSpace) : sliced) + '...';
 }
 
-// XML簡易パーサー（Node標準fetchと正規表現で高速・安全にパース）
-function parseRssXml(xmlText) {
+// RSS (<item>) および Atom (<entry>) 両対応のXMLパーサー
+function parseFeedXml(xmlText) {
   const items = [];
-  const itemMatches = xmlText.match(/<item[\s\S]*?<\/item>/gi) || [];
+  const itemMatches =
+    xmlText.match(/<item[\s\S]*?<\/item>/gi) ||
+    xmlText.match(/<entry[\s\S]*?<\/entry>/gi) ||
+    [];
 
   for (const itemXml of itemMatches) {
-    const titleMatch = itemXml.match(/<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/i);
-    const linkMatch = itemXml.match(/<link>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/i);
-    const descMatch = itemXml.match(/<description>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/i);
-    const pubDateMatch = itemXml.match(/<pubDate>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/pubDate>/i);
+    const titleMatch = itemXml.match(/<title[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/i);
 
-    if (titleMatch && linkMatch) {
+    // RSS <link>url</link> または Atom <link href="url" .../>
+    let link = '';
+    const linkHrefMatch =
+      itemXml.match(/<link[^>]+rel=["']alternate["'][^>]+href=["']([^"']+)["']/i) ||
+      itemXml.match(/<link[^>]+href=["']([^"']+)["']/i);
+    const linkTagMatch = itemXml.match(/<link[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/i);
+    if (linkTagMatch && linkTagMatch[1].trim().startsWith('http')) {
+      link = linkTagMatch[1].trim();
+    } else if (linkHrefMatch) {
+      link = linkHrefMatch[1].trim();
+    }
+
+    const descMatch =
+      itemXml.match(/<description[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/i) ||
+      itemXml.match(/<summary[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/summary>/i) ||
+      itemXml.match(/<content[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/content>/i);
+
+    const pubDateMatch =
+      itemXml.match(/<pubDate[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/pubDate>/i) ||
+      itemXml.match(/<published[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/published>/i) ||
+      itemXml.match(/<updated[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/updated>/i);
+
+    if (titleMatch && link) {
       const title = decodeHtmlEntities(titleMatch[1].replace(/<[^>]+>/g, ''));
-      const link = linkMatch[1].trim();
       let summary = descMatch ? decodeHtmlEntities(descMatch[1].replace(/<[^>]+>/g, '')) : '';
       if (summary.length > 260) {
         const sliced = summary.slice(0, 257);
@@ -64,7 +87,7 @@ function parseRssXml(xmlText) {
 
       let dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '/');
       if (pubDateMatch) {
-        const d = new Date(pubDateMatch[1]);
+        const d = new Date(pubDateMatch[1].trim());
         if (!isNaN(d.getTime())) {
           dateStr = d.toISOString().slice(0, 10).replace(/-/g, '/');
         }
@@ -104,7 +127,7 @@ function loadStaticMasterNews() {
   return [];
 }
 
-// 各社フィードの巡回設定
+// 各社公式フィードの巡回設定（Issue #118 拡充対応）
 const FEED_CONFIGS = [
   {
     feedId: 'deepmind',
@@ -114,6 +137,7 @@ const FEED_CONFIGS = [
     categoryLabel: 'Google / Antigravity',
     defaultImportance: 'hot',
     defaultImportanceLabel: 'HOT 🔥',
+    maxItems: 4,
     defaultAudience: ['全社員', 'エンジニア', '企画・データ推進'],
     impactGenerator: (title) =>
       `Google DeepMindの最新知能・推論モデル「${formatTitleForQuote(title)}」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。`,
@@ -127,6 +151,7 @@ const FEED_CONFIGS = [
     categoryLabel: 'Google / Antigravity',
     defaultImportance: 'hot',
     defaultImportanceLabel: 'HOT 🔥',
+    maxItems: 4,
     defaultAudience: ['全社員', 'エンジニア', 'モバイル開発者', 'セキュリティ担当'],
     impactGenerator: (title) =>
       `Google Antigravityの最新アップデート「${formatTitleForQuote(title)}」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。`,
@@ -140,10 +165,95 @@ const FEED_CONFIGS = [
     categoryLabel: '基盤モデル・LLM',
     defaultImportance: 'official',
     defaultImportanceLabel: '公式発表',
+    maxItems: 3,
     defaultAudience: ['全社員', 'エンジニア', 'ライター'],
     impactGenerator: (title) =>
       `OpenAIの最新機能・モデルアップデート「${formatTitleForQuote(title)}」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。`,
     tagGenerator: () => ['OpenAI', 'ChatGPT', 'Codex', '公式発表'],
+  },
+  {
+    feedId: 'mistral',
+    name: 'Mistral AI',
+    url: 'https://mistral.ai/rss.xml',
+    category: 'model',
+    categoryLabel: '基盤モデル・LLM',
+    defaultImportance: 'official',
+    defaultImportanceLabel: '公式発表',
+    maxItems: 2,
+    defaultAudience: ['エンジニア', 'アーキテクト', 'セキュリティ担当'],
+    impactGenerator: (title) =>
+      `Mistral AIの公式発表「${formatTitleForQuote(title)}」。オープンウェイトモデルや高効率推論基盤の技術動向として確認します。`,
+    tagGenerator: () => ['Mistral AI', 'Open Weights', '基盤モデル', '公式発表'],
+  },
+  {
+    feedId: 'huggingface',
+    name: 'Hugging Face',
+    url: 'https://huggingface.co/blog/feed.xml',
+    category: 'agent_mcp',
+    categoryLabel: '開発エージェント・MCP',
+    defaultImportance: 'tech',
+    defaultImportanceLabel: '技術解説',
+    maxItems: 2,
+    defaultAudience: ['エンジニア', 'データサイエンティスト', 'アーキテクト'],
+    impactGenerator: (title) =>
+      `Hugging Face公式ブログ「${formatTitleForQuote(title)}」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。`,
+    tagGenerator: () => ['Hugging Face', 'OSS AI', 'エージェント評価', '技術解説'],
+  },
+  {
+    feedId: 'github-ai',
+    name: 'GitHub Blog (AI & ML)',
+    url: 'https://github.blog/ai-and-ml/feed/',
+    category: 'agent_mcp',
+    categoryLabel: '開発エージェント・MCP',
+    defaultImportance: 'tech',
+    defaultImportanceLabel: '技術解説',
+    maxItems: 2,
+    defaultAudience: ['全社員', 'エンジニア', 'テックリード'],
+    impactGenerator: (title) =>
+      `GitHub公式AIブログ「${formatTitleForQuote(title)}」。GitHub連携・PRレビュー・AIネイティブ開発ワークフローの改善に役立ちます。`,
+    tagGenerator: () => ['GitHub', 'AI Coding', '開発ワークフロー', '技術解説'],
+  },
+  {
+    feedId: 'figma',
+    name: 'Figma Blog',
+    url: 'https://www.figma.com/blog/feed/atom.xml',
+    category: 'industry',
+    categoryLabel: '業界・最新技術',
+    defaultImportance: 'tech',
+    defaultImportanceLabel: '技術解説',
+    maxItems: 2,
+    defaultAudience: ['デザイナー', 'フロントエンド開発者', 'プロダクトマネージャー'],
+    impactGenerator: (title) =>
+      `Figma公式ブログ「${formatTitleForQuote(title)}」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。`,
+    tagGenerator: () => ['Figma', 'UI/UX', 'Design System', 'デザイン連携'],
+  },
+  {
+    feedId: 'latentspace',
+    name: 'Latent Space',
+    url: 'https://www.latent.space/feed',
+    category: 'industry',
+    categoryLabel: '業界・最新技術',
+    defaultImportance: 'tech',
+    defaultImportanceLabel: '技術解説',
+    maxItems: 2,
+    defaultAudience: ['エンジニア', 'アーキテクト', 'AI推進担当'],
+    impactGenerator: (title) =>
+      `AIエンジニアリング専門メディア Latent Space「${formatTitleForQuote(title)}」。最新のAIエージェント設計・実務適用のトレンドを把握できます。`,
+    tagGenerator: () => ['Latent Space', 'AI Engineering', 'Agentic AI', '技術動向'],
+  },
+  {
+    feedId: 'importai',
+    name: 'Import AI',
+    url: 'https://importai.substack.com/feed',
+    category: 'industry',
+    categoryLabel: '業界・最新技術',
+    defaultImportance: 'tech',
+    defaultImportanceLabel: '技術解説',
+    maxItems: 1,
+    defaultAudience: ['エンジニア', 'リサーチャー', '企画担当'],
+    impactGenerator: (title) =>
+      `Import AI「${formatTitleForQuote(title)}」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。`,
+    tagGenerator: () => ['Import AI', 'AI Research', 'AI安全性', '先端動向'],
   },
 ];
 
@@ -157,7 +267,7 @@ async function fetchFeedSafe(config) {
       signal: controller.signal,
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AI-Park-News-Bot/1.0',
-        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*',
       },
     });
     clearTimeout(timeout);
@@ -168,10 +278,11 @@ async function fetchFeedSafe(config) {
     }
 
     const xmlText = await res.text();
-    const parsed = parseRssXml(xmlText);
+    const parsed = parseFeedXml(xmlText);
     console.log(`[SUCCESS] Extracted ${parsed.length} items from ${config.name}`);
 
-    return parsed.slice(0, 5).map((item, idx) => {
+    const limit = config.maxItems || 3;
+    return parsed.slice(0, limit).map((item, idx) => {
       const urlSlug = (item.link || '')
         .split('?')[0]
         .replace(/\/$/, '')
@@ -222,17 +333,19 @@ async function main() {
     liveItems.push(...fetched);
   }
 
-  // 3. 重複排除とマージ（URLおよびタイトルベース）
+  // 3. 重複排除とマージ（URL・タイトル・IDベース）
   const seenUrls = new Set();
   const seenTitles = new Set();
+  const seenIds = new Set();
   const mergedItems = [];
 
   // ベース確定ニュース（詳細な日本語解説・要約付きマスタ）を優先
   for (const item of baseNews) {
     const cleanUrl = item.sourceUrl.split('?')[0].replace(/\/$/, '');
-    if (!seenUrls.has(cleanUrl) && !seenTitles.has(item.title)) {
+    if (!seenUrls.has(cleanUrl) && !seenTitles.has(item.title) && !seenIds.has(item.id)) {
       seenUrls.add(cleanUrl);
       seenTitles.add(item.title);
+      seenIds.add(item.id);
       mergedItems.push(item);
     }
   }
@@ -240,9 +353,10 @@ async function main() {
   // フィードから取得した最新の未登録ニュースを追加
   for (const item of liveItems) {
     const cleanUrl = item.sourceUrl.split('?')[0].replace(/\/$/, '');
-    if (!seenUrls.has(cleanUrl) && !seenTitles.has(item.title)) {
+    if (!seenUrls.has(cleanUrl) && !seenTitles.has(item.title) && !seenIds.has(item.id)) {
       seenUrls.add(cleanUrl);
       seenTitles.add(item.title);
+      seenIds.add(item.id);
       mergedItems.push(item);
     }
   }
@@ -259,18 +373,9 @@ async function main() {
     lastSyncedAt: nowIso,
     lastSyncedAtFormatted: new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' }),
     syncStatus: 'live',
-    pipelineVersion: 'v1.1-auto',
+    pipelineVersion: 'v1.2-auto',
     totalCount: mergedItems.length,
-    activeSources: [
-      'Google DeepMind Official Feed',
-      'Google Antigravity Official Blog',
-      'OpenAI Official Newsroom',
-      'Anthropic Official News',
-      'DeepSeek Official Releases',
-      'xAI Announcements',
-      'Manus AI Official',
-      'Cognition Devin Blog',
-    ],
+    activeSources: FEED_CONFIGS.map((c) => `${c.name} Official Feed`),
     items: mergedItems,
   };
 
