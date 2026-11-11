@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-11T05:10:21.001Z",
-  "lastSyncedAtFormatted": "2026/11/11 14:10:21",
+  "lastSyncedAt": "2026-11-11T13:45:20.523Z",
+  "lastSyncedAtFormatted": "2026/11/11 22:45:20",
   "syncStatus": "live",
   "pipelineVersion": "v1.0-auto",
   "totalCount": 41,
@@ -32,6 +32,31 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/gilbert-tobin-sam-nickless",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-model-20261111-1",
+      "title": "OpenAI: ChatGPT Plus for veterans and servicemembers",
+      "date": "2026/11/11",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "More than 20,000 veterans and transitioning service members have claimed a free year of ChatGPT Plus. See how they use it to prepare for civilian careers.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「ChatGPT Plus for veterans and 」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/chatgpt-plus-for-veterans",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -117,7 +142,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261110-1",
+      "id": "live-model-20261110-2",
       "title": "OpenAI: Helping caregivers use AI in everyday life",
       "date": "2026/11/10",
       "category": "model",
@@ -142,7 +167,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261110-2",
+      "id": "live-model-20261110-3",
       "title": "OpenAI: Introducing Businesses in ChatGPT",
       "date": "2026/11/10",
       "category": "model",
@@ -167,7 +192,7 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-model-20261110-3",
+      "id": "live-model-20261110-4",
       "title": "OpenAI: Closing the AI guidance gap in education",
       "date": "2026/11/10",
       "category": "model",
@@ -183,31 +208,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/closing-ai-guidance-gap-education",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-model-20261110-4",
-      "title": "OpenAI: Work at the Frontier: AI’s effect on freelance work",
-      "date": "2026/11/10",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "New research from OpenAI and Upwork finds shifting demand for freelance work, new skill combinations, and larger budgets and more hours for AI-related projects.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Work at the Frontier: AI’s eff」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/ai-effect-on-freelance-work",
       "tags": [
         "OpenAI",
         "ChatGPT",
