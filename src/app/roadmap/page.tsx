@@ -67,7 +67,7 @@ const badgeColorOf = (badge: string) =>
         : "bg-sky-100 text-sky-800 border-sky-300";
 
 const unverifiedReleaseSchedule: UnverifiedReleaseMilestone[] = featureStatusMaster
-  .filter((f) => !f.isVerified)
+  .filter((f) => !f.isVerified && f.id !== "roadmap")
   .map((f) => ({
     date: f.releaseDate,
     pageName: f.name,
@@ -79,24 +79,25 @@ const unverifiedReleaseSchedule: UnverifiedReleaseMilestone[] = featureStatusMas
   }));
 
 const tasksData: TaskItem[] = [
-  // Phase 1: 初期公開
+  // Phase 1: 完了（ポータル公開・基本ガイド・学習基盤）
   {
     id: "portal-launch",
-    title: "ポータル初期公開 & 導入ガイド",
+    title: "ポータル初期公開 & 導入ガイド・トラブル対処",
     pageName: "Antigravity導入ガイド",
     href: "/guide",
     phase: "Phase 1",
-    targetDate: "2026年9月18日(金)",
+    targetDate: "公開済み",
     status: "completed",
     currentVerificationBadge: "公開中",
-    releaseCondition: "トップ・導入ガイド・初級編チートシートの公開",
+    releaseCondition: "トップ・導入ガイド・初級編チートシート・トラブル対処手順の公開",
     category: "interaction",
     icon: "🚀",
-    description: "ポータルのトップと、画面キャプチャ付きの Antigravity 導入ガイド・会社の Google Cloud で使うための手順を公開しました。",
+    description: "ポータルのトップと、画面キャプチャ付きの Antigravity 導入ガイド・会社の Google Cloud で使うための手順・実機トラブル対処手順を公開しました。",
     items: [
       { text: "トップ・はじめての方向け3ステップ導線", done: true },
       { text: "Antigravity 導入ガイド（画面キャプチャ付き）と会社の Google Cloud 利用手順", done: true },
       { text: "初級編チートシート（頼み方・編集の流れ・エラー対処）", done: true },
+      { text: "権限エラー・チャット実行エラーの切り分け手順（/troubleshooting）", done: true },
     ],
   },
   {
@@ -105,7 +106,7 @@ const tasksData: TaskItem[] = [
     pageName: "お問い合わせ",
     href: "/contact",
     phase: "Phase 1",
-    targetDate: "2026年9月18日(金)",
+    targetDate: "公開済み",
     status: "completed",
     currentVerificationBadge: "公開中",
     releaseCondition: "相談内容のコピーと、Googleカレンダーへの仮予定追加リンクの確認",
@@ -117,42 +118,19 @@ const tasksData: TaskItem[] = [
       { text: "相談内容（所属・テーマ・事前メモ）のコピー", done: true },
     ],
   },
-  // Phase 2: 進行中
-  // いまの最優先：会社の Google アカウントで Antigravity を使えるようにする
-  {
-    id: "company-antigravity",
-    title: "【最優先】会社の Google アカウントで Antigravity を使えるようにする",
-    pageName: "Antigravity導入ガイド",
-    href: "/guide#gcp-setup-guide",
-    phase: "Phase 2",
-    targetDate: "未定",
-    status: "in-progress",
-    currentVerificationBadge: "最優先",
-    releaseCondition: "請求先アカウントのリンクと月額上限の設定、利用者への権限付与",
-    category: "system",
-    icon: "🔑",
-    description: "会社の Google アカウントのまま、会社の Google Cloud プロジェクト経由（使った分だけ払う Agent Platform）で Antigravity を使えるようにします。ほかの項目より先に進めます。",
-    items: [
-      { text: "会社の Google Cloud プロジェクトの用意", done: true },
-      { text: "管理者・利用者の手順を導入ガイドに掲載（画面キャプチャ付き）", done: true },
-      { text: "AI推進担当の会社アカウントでサインインできることを確認", done: true },
-      { text: "請求先アカウントのリンクと月額上限（1人あたり3,000円×人数）の設定", done: false },
-      { text: "使う人への権限付与（Agent Platform ユーザー）と社内への案内", done: false },
-    ],
-  },
   {
     id: "academy",
-    title: "Antigravity Academy",
+    title: "Antigravity Academy（3コース・12レッスン・動画・テスト）",
     pageName: "Antigravity Academy",
     href: "/academy",
-    phase: "Phase 2",
-    targetDate: "2026年10月16日(金)",
-    status: "in-progress",
+    phase: "Phase 1",
+    targetDate: "公開済み（β版）",
+    status: "completed",
     currentVerificationBadge: "β版",
     releaseCondition: "修了報告の受付（Google Chat）と AI推進担当 での記録",
     category: "interaction",
     icon: "🎓",
-    description: "3コース・12レッスンの動画付き学習コースと評価テスト・修了証を公開しました。",
+    description: "導入ガイド・注意事項と同じ公式ドキュメント／実機画面で確認済みの内容で、3コース・12レッスンの動画付き学習コースと評価テスト・修了証を公開しました。",
     items: [
       { text: "3コース・12レッスン（画面キャプチャ付き）", done: true },
       { text: "全レッスンの動画（読み上げ・字幕付き）", done: true },
@@ -160,89 +138,71 @@ const tasksData: TaskItem[] = [
       { text: "修了報告（報告文をコピーして Google Chat で AI推進担当 に送る）", done: true },
     ],
   },
+  // Phase 2: 完了・運用中（自動同期・コミュニティ・利用監視）
   {
-    id: "feedback-github-sync",
-    title: "ご意見・改善ToDoボードのGitHub Issue / Google Chat連携",
-    pageName: "ご意見・改善ToDoボード",
-    href: "/feedback-todo",
-    phase: "Phase 1",
-    targetDate: "2026年10月2日(金)",
-    status: "in-progress",
-    currentVerificationBadge: "β版",
-    releaseCondition: "Google Chat / GitHub Issue 双方向自動同期の稼働をもって正式運用へ移行",
-    category: "system",
-    icon: "📋",
-    description: "ラベル「feedback」付きGitHub Issueをボードへ自動掲載し、ボードからはIssueフォームへ入力内容をプリフィルして起票できるようにしました。Issueの起票・対応開始・完了はGitHub ActionsからGoogle Chatへ通知します。",
-    items: [
-      { text: "feedbackラベル付きIssueのボード自動同期（対応中ラベル / Closeでステータス反映）", done: true },
-      { text: "起票モーダルからIssueフォームへのプリフィル起票 & Issueテンプレート整備", done: true },
-      { text: "Issue起票・対応開始・完了時のGoogle Chat通知ワークフロー", done: true },
-      { text: "Google Chat Webhook（GOOGLE_CHAT_WEBHOOK_URL）の本番設定と通知の実機確認", done: true },
-      { text: "Google Chat 投稿からのIssue自動起票（Chatアプリ / GCP側の受け口整備）", done: false },
-    ],
-  },  {
-    id: "tools-sheets-sync",
-    title: "AIツール検証マトリックスの社内シート自動同期",
-    pageName: "AIツール一覧",
-    href: "/tools",
+    id: "news-pipeline",
+    title: "最新AIニュース & 公式フィード自動巡回パイプライン",
+    pageName: "最新AIニュース",
+    href: "/news",
     phase: "Phase 2",
-    targetDate: "2026年10月9日(金)",
-    status: "in-progress",
-    currentVerificationBadge: "🧪 PoC中",
-    releaseCondition: "社内マスターシートの内容（利用ステータス・適合度）の社内確認",
+    targetDate: "公開済み",
+    status: "completed",
+    currentVerificationBadge: "NEW",
+    releaseCondition: "各社公式RSS/Atomフィードの定時自動巡回と即時反映の確認",
     category: "data",
-    icon: "🤖",
-    description: "AIツールの一覧を、社内マスターシート（AIツールマスター）から自動で表示します。シートの内容は社内での確認がまだ済んでいません。",
+    icon: "📰",
+    description: "Google DeepMind、Google Antigravity、OpenAI、Mistral AI、Hugging Face、GitHub などの公式RSS/Atomフィードを GitHub Actions（6時間定時Cron）で自動巡回し、最新ニュースを反映しています。",
     items: [
-      { text: "マトリクス表示・4象限ポジションの画面", done: true },
-      { text: "社内Google Sheets（AIツールマスター）公開CSVからのマトリクス自動同期", done: true },
-      { text: "シートの内容（利用ステータス・適合度）の社内確認", done: false },
+      { text: "カテゴリ・重要度フィルターとキーワード検索", done: true },
+      { text: "GitHub Actions（6時間定時Cron）による公式RSS/Atomフィード自動巡回", done: true },
+      { text: "GitHub raw 優先取得による最新ニュースの即時反映", done: true },
     ],
-  },  {
-    id: "interviews-first-edition",
-    title: "現場のAI活用インタビュー 第1弾（2編）取材・公開",
-    pageName: "AI活用インタビュー",
-    href: "/interviews",
+  },
+  {
+    id: "gemini-stats-sync",
+    title: "Antigravity利用監視（Google Cloud 課金・利用実績の自動同期）",
+    pageName: "Antigravity利用監視",
+    href: "/gemini-stats",
     phase: "Phase 2",
-    targetDate: "2026年10月16日(金)",
-    status: "in-progress",
-    currentVerificationBadge: "📋 準備中",
-    releaseCondition: "実際の取材と、本人・上長の原稿確認が済んだ記事の公開",
-    category: "community",
-    icon: "🎙️",
-    description: "社内で AI を使っている人に取材し、工夫や効果を記事にして公開します。",
+    targetDate: "公開済み（β版）",
+    status: "completed",
+    currentVerificationBadge: "β版",
+    releaseCondition: "Google Cloud Billing / Cloud Logging からの自動同期稼働",
+    category: "data",
+    icon: "📊",
+    description: "社内 Google Cloud プロジェクト（antigravity-pj-xxxxxx）の90日無料トライアル残高・課金状況・リクエスト数を自動同期して表示しています（識別ID・個人名は匿名化済み）。",
     items: [
-      { text: "記事フォーマットと取材立候補フォーム", done: true },
-      { text: "取材立候補のGitHub Issue受付・Google Chat通知 & 取材キット（流れ・質問項目）公開", done: true },
-      { text: "社内での実際の取材（2件）", done: false },
-      { text: "記事校正・関係者レビュー完了後の正式公開", done: false },
+      { text: "90日無料トライアルクレジット残高・日別推移の表示", done: true },
+      { text: "BigQuery 課金エクスポート連携と予算アラート設定手順の掲載", done: true },
+      { text: "GitHub Actions / GAS API による定期自動同期とプロジェクトID・個人名のマスキング", done: true },
     ],
-  },  {
-    id: "ambassadors-kickoff",
-    title: "社内AIアンバサダー 第1期公募選定 & 相談窓口開設",
-    pageName: "AIアンバサダー",
-    href: "/ambassadors",
+  },
+  {
+    id: "ai-projects",
+    title: "社内AIプロジェクト一覧の公開・GitHub Issue 連携",
+    pageName: "社内AIプロジェクト一覧",
+    href: "/ai-projects",
     phase: "Phase 2",
-    targetDate: "2026年10月23日(金)",
-    status: "in-progress",
-    currentVerificationBadge: "📋 準備中",
-    releaseCondition: "第1期アンバサダー公募選定・各事業部リーダーの正式登録と相談窓口の開設",
+    targetDate: "公開済み（β版）",
+    status: "completed",
+    currentVerificationBadge: "β版",
+    releaseCondition: "GitHub Issue フォームからの登録・自動掲載・Google Chat 通知の確認",
     category: "community",
-    icon: "🤝",
-    description: "各事業部で AI 活用の相談役になる「AIアンバサダー」を募集・選定し、相談窓口を開きます。",
+    icon: "🏢",
+    description: "社内で進めているAI関連プロジェクトを一覧化。GitHub Issue フォームから登録すると一覧へ自動掲載され、Google Chat にも通知されます。",
     items: [
-      { text: "アンバサダー紹介の画面と応募フォーム", done: true },
-      { text: "応募のGitHub Issue受付・Google Chat通知 & 第1期制度（案）の公開", done: true },
-      { text: "第1期アンバサダーの全社公募・選定", done: false },
-      { text: "アンバサダーへの相談窓口（Google Chat）の正式稼働", done: false },
+      { text: "AI推進担当が進める実在プロジェクトの初期掲載", done: true },
+      { text: "ai-project ラベル付き GitHub Issue からの自動取得・一覧反映", done: true },
+      { text: "新規登録・更新時の Google Chat 自動通知", done: true },
     ],
-  },  {
+  },
+  {
     id: "ai-calendar",
     title: "AI Park カレンダーとAI勉強会アジェンダの自動追加",
     pageName: "AI Park カレンダー",
     href: "/calendar",
     phase: "Phase 2",
-    targetDate: "2026年9月28日(月)",
+    targetDate: "公開済み（β版）",
     status: "completed",
     currentVerificationBadge: "β版",
     releaseCondition: "「AI Park イベント」カレンダーの作成・共有とカレンダーIDの設定",
@@ -255,19 +215,140 @@ const tasksData: TaskItem[] = [
       { text: "アジェンダ用の状況ファイル（park-status.json）の自動更新", done: true },
     ],
   },
-  // Phase 3: 工事中（内容の準備待ち）
   {
-    id: "usage-data",
-    title: "利用状況（Gemini利用率・社内AI活用状況）の実データ連携",
-    pageName: "Gemini利用率・社内AI活用状況",
-    href: "/gemini-stats",
+    id: "idea-board",
+    title: "アイデア宣言ボードの受付開始",
+    pageName: "アイデア宣言ボード",
+    href: "/idea-board",
+    phase: "Phase 2",
+    targetDate: "公開済み（β版）",
+    status: "completed",
+    currentVerificationBadge: "β版",
+    releaseCondition: "宣言を保存・共有できる仕組み（GitHub Issues）との連携",
+    category: "interaction",
+    icon: "💡",
+    description: "アイデアの宣言を GitHub Issue で受け付け、ボードに自動掲載し、Google Chat に通知するようにしました。",
+    items: [
+      { text: "宣言フォーム（GitHub Issue フォーム）", done: true },
+      { text: "ボードへの自動掲載・状況と協力者募集での絞り込み・キーワード検索", done: true },
+      { text: "宣言・終了時の Google Chat 通知", done: true },
+    ],
+  },
+  // Phase 3: 進行中（社内展開・確認・取材・公募）
+  {
+    id: "company-antigravity",
+    title: "【最優先】会社の Google アカウントで Antigravity を使えるようにする",
+    pageName: "Antigravity導入ガイド",
+    href: "/guide#company-setup",
     phase: "Phase 3",
+    targetDate: "進行中",
+    status: "in-progress",
+    currentVerificationBadge: "最優先",
+    releaseCondition: "無料トライアル期間中のコスト消化ペース確認と、希望者への順次権限付与",
+    category: "system",
+    icon: "🔑",
+    description: "会社の Google アカウントのまま、会社の Google Cloud プロジェクト経由（従量課金・無料トライアルクレジット適用中）で Antigravity を使えるようにしています。",
+    items: [
+      { text: "会社の Google Cloud プロジェクト（antigravity-pj-xxxxxx）の用意", done: true },
+      { text: "管理者・利用者の手順を導入ガイドに掲載（画面キャプチャ・権限エラー対処付き）", done: true },
+      { text: "請求先アカウントのリンク・90日無料トライアル適用・予算上限アラートの設定確認", done: true },
+      { text: "先行メンバー（2名）の会社アカウントでのサインイン・利用監視（/gemini-stats）の確認", done: true },
+      { text: "300ドル無料トライアルの消化ペースを見ながら、利用希望者への権限付与（roles/cloudaicompanion.user）を順次拡大", done: false },
+    ],
+  },
+  {
+    id: "feedback-github-sync",
+    title: "ご意見・改善ToDoボードのGitHub Issue / Google Chat連携",
+    pageName: "ご意見・改善ToDoボード",
+    href: "/feedback-todo",
+    phase: "Phase 3",
+    targetDate: "公開済み（β版）",
+    status: "in-progress",
+    currentVerificationBadge: "β版",
+    releaseCondition: "Google Chat / GitHub Issue 連携の運用継続",
+    category: "system",
+    icon: "📋",
+    description: "ラベル「feedback」付きGitHub Issueをボードへ自動掲載し、ボードからはIssueフォームへ入力内容をプリフィルして起票できるようにしました。Issueの起票・対応開始・完了はGitHub ActionsからGoogle Chatへ通知します。",
+    items: [
+      { text: "feedbackラベル付きIssueのボード自動同期（対応中ラベル / Closeでステータス反映）", done: true },
+      { text: "起票モーダルからIssueフォームへのプリフィル起票 & Issueテンプレート整備", done: true },
+      { text: "Issue起票・対応開始・完了時のGoogle Chat通知ワークフロー", done: true },
+      { text: "Google Chat Webhook（GOOGLE_CHAT_WEBHOOK_URL）の本番設定と通知の実機確認", done: true },
+      { text: "Google Chat 投稿からのIssue自動起票（Chatアプリ / GCP側の受け口整備）", done: false },
+    ],
+  },
+  {
+    id: "tools-sheets-sync",
+    title: "AIツール検証マトリックスの社内シート自動同期・内容確認",
+    pageName: "AIツール一覧",
+    href: "/tools",
+    phase: "Phase 3",
+    targetDate: "未定（社内確認後）",
+    status: "in-progress",
+    currentVerificationBadge: "🧪 PoC中",
+    releaseCondition: "社内マスターシートの内容（利用ステータス・適合度）の社内確認",
+    category: "data",
+    icon: "🤖",
+    description: "AIツールの一覧を、社内マスターシート（AIツールマスター）から自動で表示します。シートの内容は社内での確認がまだ済んでいません。",
+    items: [
+      { text: "マトリクス表示・4象限ポジションの画面", done: true },
+      { text: "社内Google Sheets（AIツールマスター）公開CSVからのマトリクス自動同期", done: true },
+      { text: "シートの内容（利用ステータス・適合度）の社内確認", done: false },
+    ],
+  },
+  {
+    id: "interviews-first-edition",
+    title: "現場のAI活用インタビュー 第1弾 取材・公開",
+    pageName: "AI活用インタビュー",
+    href: "/interviews",
+    phase: "Phase 3",
+    targetDate: "未定（取材・確認後）",
+    status: "in-progress",
+    currentVerificationBadge: "📋 準備中",
+    releaseCondition: "実際の取材と、本人・上長の原稿確認が済んだ記事の公開",
+    category: "community",
+    icon: "🎙️",
+    description: "社内で AI を使っている人に取材し、工夫や効果を記事にして公開します。",
+    items: [
+      { text: "記事フォーマットと取材立候補フォーム", done: true },
+      { text: "取材立候補のGitHub Issue受付・Google Chat通知 & 取材キット（流れ・質問項目）公開", done: true },
+      { text: "社内での実際の取材", done: false },
+      { text: "本人・上長の原稿確認完了後の正式公開", done: false },
+    ],
+  },
+  {
+    id: "ambassadors-kickoff",
+    title: "社内AIアンバサダー 第1期公募選定 & 相談窓口開設",
+    pageName: "AIアンバサダー",
+    href: "/ambassadors",
+    phase: "Phase 3",
+    targetDate: "未定（公募・選定後）",
+    status: "in-progress",
+    currentVerificationBadge: "📋 準備中",
+    releaseCondition: "第1期アンバサダー公募選定・各事業部リーダーの正式登録と相談窓口の開設",
+    category: "community",
+    icon: "🤝",
+    description: "各事業部で AI 活用の相談役になる「AIアンバサダー」を募集・選定し、相談窓口を開きます。",
+    items: [
+      { text: "アンバサダー紹介の画面と応募フォーム", done: true },
+      { text: "応募のGitHub Issue受付・Google Chat通知 & 第1期制度（案）の公開", done: true },
+      { text: "第1期アンバサダーの公募・選定", done: false },
+      { text: "アンバサダーへの相談窓口（Google Chat）の開設", done: false },
+    ],
+  },
+  // Phase 4: 工事中（内容の準備待ち）
+  {
+    id: "adoption-data",
+    title: "社内AI活用状況の実データ連携",
+    pageName: "社内AI活用状況",
+    href: "/adoption",
+    phase: "Phase 4",
     targetDate: "未定",
     status: "planned",
     currentVerificationBadge: "🚧 工事中",
     releaseCondition: "利用ログやアンケートなどの実データとの連携",
     category: "data",
-    icon: "📊",
+    icon: "👀",
     description: "実データと連携できるまでは数値を表示しません。",
     items: [
       { text: "利用ログ・アンケートなど、使うデータの決定", done: false },
@@ -279,7 +360,7 @@ const tasksData: TaskItem[] = [
     title: "社内の活用事例・Skills の収集と掲載",
     pageName: "Subagents活用事例・社内Skillsカタログ",
     href: "/agent-cases",
-    phase: "Phase 3",
+    phase: "Phase 4",
     targetDate: "未定",
     status: "planned",
     currentVerificationBadge: "🚧 工事中",
@@ -293,30 +374,11 @@ const tasksData: TaskItem[] = [
     ],
   },
   {
-    id: "idea-board",
-    title: "アイデア宣言ボードの受付開始",
-    pageName: "アイデア宣言ボード",
-    href: "/idea-board",
-    phase: "Phase 2",
-    targetDate: "2026年9月28日(月)",
-    status: "completed",
-    currentVerificationBadge: "β版",
-    releaseCondition: "宣言を保存・共有できる仕組み（GitHub Issues）との連携",
-    category: "interaction",
-    icon: "💡",
-    description: "アイデアの宣言を GitHub Issue で受け付け、ボードに自動掲載し、Google Chat に通知するようにしました。",
-    items: [
-      { text: "宣言フォーム（GitHub Issue フォーム）", done: true },
-      { text: "ボードへの自動掲載・状況と協力者募集での絞り込み・キーワード検索", done: true },
-      { text: "宣言・終了時の Google Chat 通知", done: true },
-    ],
-  },
-  {
     id: "tools-policy",
     title: "会社として使えるAIツールと申請方法の決定",
     pageName: "AI Tools Hub",
     href: "/tools-hub",
-    phase: "Phase 3",
+    phase: "Phase 4",
     targetDate: "未定",
     status: "planned",
     currentVerificationBadge: "🚧 工事中",
@@ -334,7 +396,7 @@ const tasksData: TaskItem[] = [
     title: "AWS・MCP・Antigravity情報局の内容準備",
     pageName: "AWS・クラウド情報局 ほか",
     href: "/aws-info",
-    phase: "Phase 3",
+    phase: "Phase 4",
     targetDate: "未定",
     status: "planned",
     currentVerificationBadge: "🚧 工事中",
@@ -381,11 +443,11 @@ export default function RoadmapPage() {
             <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-500 text-white text-xs font-bold">いま最優先</span>
             <h2 className="text-lg font-bold text-slate-900">会社の Google アカウントで Antigravity を使えるようにする</h2>
             <p className="text-xs text-slate-700 leading-relaxed">
-              まずはこれを先に進めます。AI推進担当の会社アカウントではサインインを確認済みです。残りは、請求先アカウントのリンクと月額上限の設定、使う人への権限付与です。
+              会社の Google Cloud プロジェクト用意・請求先リンク（90日無料トライアル適用・予算上限アラート設定）・先行メンバー2名でのサインインと利用監視（/gemini-stats）まで完了しました。無料トライアルの消化ペースを見ながら、希望者への権限付与を順次進めています。
             </p>
           </div>
           <Link
-            href="/guide#gcp-setup-guide"
+            href="/guide#company-setup"
             className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-white text-xs font-bold self-start md:self-center"
           >
             手順を見る（導入ガイド）
@@ -404,7 +466,7 @@ export default function RoadmapPage() {
                   <span className="px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200/60 text-xs font-bold font-mono tracking-wider uppercase">
                     Project Schedule
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">最終更新: 2026年9月25日</span>
+                  <span className="text-xs text-slate-400 font-mono">最終更新: 2026年11月12日</span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1.5 tracking-tight">
                   AI Park 機能実装マイルストーン
@@ -423,7 +485,7 @@ export default function RoadmapPage() {
                 </div>
                 <div className="w-px h-8 bg-slate-200" />
                 <div className="text-center px-2">
-                  <div className="text-[11px] text-emerald-600 font-semibold">初期完了</div>
+                  <div className="text-[11px] text-emerald-600 font-semibold">公開・完了</div>
                   <div className="text-lg font-black text-emerald-600 font-mono">
                     <AnimatedCounter value={completedTasks} /> 件
                   </div>
@@ -473,10 +535,24 @@ export default function RoadmapPage() {
                       <span>✓</span>
                       <span>Phase 1 (完了)</span>
                     </span>
-                    <span className="text-[11px] text-emerald-600 font-mono font-semibold">9月下旬</span>
+                    <span className="text-[11px] text-emerald-600 font-mono font-semibold">公開済み</span>
                   </div>
                   <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">ポータル公開・学習基盤</h4>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">トップ、導入ガイド、初級編チートシート、Office Hour</p>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">トップ、導入ガイド、初級編チートシート、Academy、トラブル対処、Office Hour</p>
+                </div>
+              </TiltCard>
+
+              <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
+                <div onMouseEnter={() => playCyberHover()} className="p-4 rounded-2xl border border-emerald-200/90 bg-emerald-50/50 space-y-1.5 transition-all hover:bg-emerald-50/80 h-full cursor-default">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-emerald-800 px-2.5 py-0.5 bg-emerald-100/80 rounded-full border border-emerald-200 font-mono flex items-center space-x-1">
+                      <span>✓</span>
+                      <span>Phase 2 (完了・運用中)</span>
+                    </span>
+                    <span className="text-[11px] text-emerald-600 font-mono font-semibold">稼働中</span>
+                  </div>
+                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">自動同期・利用監視・共創</h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">AIニュース自動巡回、Antigravity利用監視、社内プロジェクト一覧、宣言ボード、カレンダー</p>
                 </div>
               </TiltCard>
 
@@ -485,12 +561,12 @@ export default function RoadmapPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-blue-800 px-2.5 py-0.5 bg-blue-100/80 rounded-full border border-blue-200 font-mono flex items-center space-x-1">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping mr-0.5" />
-                      <span>Phase 2 (進行中)</span>
+                      <span>Phase 3 (進行中)</span>
                     </span>
-                    <span className="text-[11px] text-blue-600 font-mono font-semibold">10月中</span>
+                    <span className="text-[11px] text-blue-600 font-mono font-semibold">現在進行中</span>
                   </div>
-                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">学習・ツール連携 & コミュニティ</h4>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">Academy、ご意見ボード、ツールシート同期、取材、アンバサダー、カレンダー</p>
+                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">社内展開・確認・取材・公募</h4>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">会社アカウント権限拡大、ご意見ボード連携、ツールシート確認、インタビュー取材、アンバサダー公募</p>
                 </div>
               </TiltCard>
 
@@ -498,25 +574,12 @@ export default function RoadmapPage() {
                 <div onMouseEnter={() => playCyberHover()} className="p-4 rounded-2xl border border-amber-200/90 bg-amber-50/50 space-y-1.5 transition-all hover:bg-amber-50/80 h-full cursor-default">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-amber-800 px-2.5 py-0.5 bg-amber-100/80 rounded-full border border-amber-200 font-mono">
-                      Phase 3 (準備中)
+                      Phase 4 (準備中)
                     </span>
-                    <span className="text-[11px] text-amber-600 font-mono font-semibold">11月中</span>
+                    <span className="text-[11px] text-amber-600 font-mono font-semibold">未定</span>
                   </div>
                   <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">工事中ページの内容準備</h4>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">利用状況の実データ、事例・Skills、ツール方針</p>
-                </div>
-              </TiltCard>
-
-              <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
-                <div onMouseEnter={() => playCyberHover()} className="p-4 rounded-2xl border border-purple-200/90 bg-purple-50/50 space-y-1.5 transition-all hover:bg-purple-50/80 h-full cursor-default">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-purple-800 px-2.5 py-0.5 bg-purple-100/80 rounded-full border border-purple-200 font-mono">
-                      Phase 4 (企画中)
-                    </span>
-                    <span className="text-[11px] text-purple-600 font-mono font-semibold">12月中旬〜</span>
-                  </div>
-                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">（未定）</h4>
-                  <p className="text-[11px] text-slate-600 leading-relaxed">Phase 3 の後に検討します</p>
+                  <p className="text-[11px] text-slate-600 leading-relaxed">社内AI活用状況の実データ、Subagents事例・Skills、ツール利用方針、AWS・MCP情報局</p>
                 </div>
               </TiltCard>
             </div>
@@ -532,7 +595,7 @@ export default function RoadmapPage() {
                   <Calendar size={13} className="text-emerald-400" />
                   <span>RELEASE TIMELINE</span>
                 </span>
-                <span className="text-xs text-slate-400">具体的なリリース目標日（昇順）</span>
+                <span className="text-xs text-slate-400">公開・解除に必要な条件一覧</span>
               </div>
               <h3 className="text-lg sm:text-2xl font-black text-white mt-1.5 tracking-tight">
                 📌 準備中・PoC中・工事中機能の正式稼働スケジュール

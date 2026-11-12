@@ -100,8 +100,8 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     evidence: "Google Chatでいただいた実在のご意見を初期タスクとして登録・起票機能稼働 / feedbackラベル付きGitHub Issueの自動同期・Issueフォーム起票・Google Chat通知の本番稼働確認済み（2026/09/25 テストIssue #1 で起票・完了通知を確認）",
     currentBadge: "β版",
     disclaimer: "",
-    releaseDate: "2026年10月2日(金)",
-    releaseCondition: "Google Chat / GitHub Issue 双方向自動同期の稼働をもって正式運用へ移行",
+    releaseDate: "公開済み（β版）",
+    releaseCondition: "Google Chat / GitHub Issue 連携の本番運用継続",
   },
   {
     id: "tools",
@@ -111,9 +111,9 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "poc_sample",
     evidence: "",
     currentBadge: "🧪 PoC中",
-    disclaimer: "【PoC検証中】ツールマトリクスは社内マスターGoogle Sheetsから自動同期していますが、適合度・残枠数の値は社内確認前のサンプルデータです。残ライセンス枠・申請フロー連携を準備中です。",
-    releaseDate: "2026年10月9日(金)",
-    releaseCondition: "社内Google SheetsマスターAPI自動同期 & 残ライセンス枠・申請フロー連携の完了",
+    disclaimer: "【PoC検証中】ツールマトリクスは社内マスターGoogle Sheetsから自動同期していますが、適合度・利用ステータスの値は社内確認前のデータです。",
+    releaseDate: "未定（社内確認後）",
+    releaseCondition: "社内Google Sheetsマスターの内容（利用ステータス・適合度）の社内確認完了",
   },
   {
     id: "interviews",
@@ -124,7 +124,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     evidence: "",
     currentBadge: "📋 準備中",
     disclaimer: "【準備中】インタビュー記事はまだありません。取材の立候補を受け付けています。",
-    releaseDate: "2026年10月16日(金)",
+    releaseDate: "未定（取材・確認後）",
     releaseCondition: "実際の取材と、本人・上長の原稿確認が済んだ記事の公開",
   },
   {
@@ -136,7 +136,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     evidence: "",
     currentBadge: "📋 準備中",
     disclaimer: "【準備中】アンバサダーはまだ決まっていません。第1期の応募を受け付けています。",
-    releaseDate: "2026年10月23日(金)",
+    releaseDate: "未定（公募・選定後）",
     releaseCondition: "第1期アンバサダー公募選定・各事業部リーダーの正式登録と相談窓口の開設",
   },
   {
@@ -161,7 +161,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     currentBadge: "🚧 工事中",
     disclaimer: "【工事中】利用ログやアンケートなどの実データと連携できるまで、数値は表示しません。",
     releaseDate: "未定",
-    releaseCondition: "2026年Q3全社AI利用アンケートの集計結果および部署別実測ROIの反映",
+    releaseCondition: "社内の利用ログやアンケートなどの実データの集計・確認",
   },
   {
     id: "gemini-stats",
@@ -172,8 +172,8 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     evidence: "GAS Live Web API (AKfycbz...) 経由でのGCP実数値（残高・課金・最終利用日時）リアルタイム取得および静的JSONフォールバックの二重化連携本番稼働確認済み",
     currentBadge: "β版",
     disclaimer: "",
-    releaseDate: "2026年10月1日(木)",
-    releaseCondition: "社内BigQuery利用ログデータパイプライン接続 & 日次MAU実データ自動集計バッチの稼働",
+    releaseDate: "公開済み（β版）",
+    releaseCondition: "Google Cloud Billing / Cloud Logging からの自動同期稼働済み",
   },
   {
     id: "tools-hub",
@@ -183,9 +183,9 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "🚧 工事中",
-    disclaimer: "【工事中】ライセンス利用申請フォームはUI試作版です。社内ワークフロー基盤（承認・Slack連携）への本番接続を準備中です。",
+    disclaimer: "【工事中】会社として利用を認めるAIツールと申請方法が決まり次第掲載します。",
     releaseDate: "未定",
-    releaseCondition: "社内ワークフロー基盤（承認ルート・Slack通知）との本番接続・即時利用申請受付の開始",
+    releaseCondition: "会社として利用を認めるAIツールと申請方法の社内決定",
   },
   {
     id: "skills-hub",
@@ -208,7 +208,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     evidence: "AI推進担当が進める実在プロジェクト2件を掲載。ai-projectラベル付きGitHub Issueの登録・自動掲載・Google Chat通知を実装",
     currentBadge: "β版",
     disclaimer: "",
-    releaseDate: "2026年10月2日(金)",
+    releaseDate: "公開済み（β版）",
     releaseCondition: "各部署からの登録が集まり、月次の状況更新が回り始めた時点で正式運用へ移行",
   },
   {
@@ -232,7 +232,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     evidence: "導入ガイド・注意事項と同じ公式ドキュメント／実機画面で確認済みの内容で3コース・12レッスン・評価テスト15問・全レッスンの動画を公開。進捗と修了証はブラウザ内保存、修了報告は報告文をコピーして Google Chat で送る",
     currentBadge: "β版",
     disclaimer: "",
-    releaseDate: "2026年10月16日(金)",
+    releaseDate: "公開済み（β版）",
     releaseCondition: "修了報告の受付（Google Chat）と AI推進担当 での記録",
   },
   {
@@ -291,8 +291,8 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "進行中",
-    disclaimer: "【進行中】各機能のUIプロトタイプは実装完了していますが、社内本番データ連携や実運用の確認を順次進めています。",
-    releaseDate: "2026年12月11日(金)",
-    releaseCondition: "全社共通基盤（SSO・Slack Bot）連携を含むPhase 4完了と全機能の本番移行",
+    disclaimer: "【進行中】準備中・PoC中・工事中となっている機能は、内容の確認が済んだものから順次公開しています。",
+    releaseDate: "随時更新",
+    releaseCondition: "準備中・PoC中・工事中の各ページの内容確認と順次公開",
   },
 ];
