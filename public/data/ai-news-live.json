@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-11T21:34:09.716Z",
-  "lastSyncedAtFormatted": "2026/11/12 6:34:09",
+  "lastSyncedAt": "2026-11-12T00:12:12.393Z",
+  "lastSyncedAtFormatted": "2026/11/12 9:12:12",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 50,
+  "totalCount": 49,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -365,31 +365,6 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-importai-import-ai-480-self-sustaining-space",
-      "title": "Import AI: Import AI 480: Self-sustaining space economies; AI for science progress, and Meta builds perfect hands for a superintelligence",
-      "date": "2026/11/09",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "When do you think we'll have robots on the moon?",
-      "impactForStaff": "Import AI「Import AI 480: Self-sustaining space economies; AI for science progress, and Meta...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
-      "recommendedFor": [
-        "エンジニア",
-        "リサーチャー",
-        "企画担当"
-      ],
-      "sourceName": "Import AI Official Feed",
-      "sourceUrl": "https://importai.substack.com/p/import-ai-480-self-sustaining-space",
-      "tags": [
-        "Import AI",
-        "AI Research",
-        "AI安全性",
-        "先端動向"
       ],
       "isLiveSynced": true
     },
