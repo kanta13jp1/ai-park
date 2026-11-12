@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-12T14:48:57.398Z",
-  "lastSyncedAtFormatted": "2026/11/12 23:48:57",
+  "lastSyncedAt": "2026-11-12T23:18:24.770Z",
+  "lastSyncedAtFormatted": "2026/11/13 8:18:24",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -16,6 +16,107 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-deepmind-introducing-gemini-4-hydrogen",
+      "title": "Google DeepMind: Introducing Gemini 4 Hydrogen",
+      "date": "2026/11/12",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Introducing Gemini 4 Hydrogen」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/introducing-gemini-4-hydrogen/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-antigravity-gemini-4-hydrogen-in-google-antigravity",
+      "title": "Google Antigravity: Gemini 4 Hydrogen and Orchestrator",
+      "date": "2026/11/12",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Gemini 4 Hydrogen and Orchestrator」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/gemini-4-hydrogen-in-google-antigravity",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-amplitude",
+      "title": "OpenAI: How Amplitude ships product improvements in 1–2 days with OpenAI",
+      "date": "2026/11/12",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Built primarily on OpenAI models, Amplitude’s proactive product agent, Wave, identifies what to build, helps teams ship changes with coding agents, and measures the impact.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Amplitude ships product improvements in 1–2 days with OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/amplitude",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-gondola",
+      "title": "OpenAI: Gondola doubles revenue as its team builds more with Codex",
+      "date": "2026/11/12",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Gondola helps creatives get credit and get hired, with Codex raising its lead engineer’s output by 50% and ChatGPT simplifying daily work.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Gondola doubles revenue as its team builds more with Codex」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/customer-stories/gondola",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-openai-holidays-extras-codex",
       "title": "OpenAI: Holiday Extras is rethinking what it can build with Codex",
@@ -42,52 +143,27 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-children-first-declaration",
-      "title": "OpenAI: Supporting research on AI and children’s safety",
+      "id": "live-huggingface-llmon-an-llm-native-markup-language-now-in-grani",
+      "title": "Hugging Face: LLMON: An LLM-Native Markup Language, now in Granite 4.1 3B and 8B",
       "date": "2026/11/12",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI commits $2 million to research on AI and children’s safety. The work supports shared tools to measure risks and opportunities for young people.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Supporting research on AI and children’s safety」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「LLMON: An LLM-Native Markup Language, now in Granite 4.1 3B and 8B」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
       "recommendedFor": [
-        "全社員",
         "エンジニア",
-        "ライター"
+        "データサイエンティスト",
+        "アーキテクト"
       ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/children-first-declaration",
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/ibm-granite/llmon-an-llm-native-markup-language-now-in-granite",
       "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-gilbert-tobin-sam-nickless",
-      "title": "OpenAI: Gilbert + Tobin rethinks the business of law with AI",
-      "date": "2026/11/12",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "A conversation with Sam Nickless, Partner and Chief Executive Officer at Gilbert + Tobin.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Gilbert + Tobin rethinks the business of law with AI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/gilbert-tobin-sam-nickless",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
       ],
       "isLiveSynced": true
     },
@@ -112,6 +188,31 @@
         "Hugging Face",
         "OSS AI",
         "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-github-ai-build-once-run-on-any-agent-a-practical-guide-to",
+      "title": "GitHub Blog (AI & ML): Build once, run on any agent: A practical guide to agent skills",
+      "date": "2026/11/12",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Agent skills capture repeatable engineering work in files teams can review and reuse, while tools, project context, and permissions remain specific to the host that runs them. The post Build once, run on any agent: A practical guide to agent skills...",
+      "impactForStaff": "GitHub公式AIブログ「Build once, run on any agent: A practical guide to agent skills」。GitHub連携・PRレビュー・AIネイティブ開発ワークフローの改善に役立ちます。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "テックリード"
+      ],
+      "sourceName": "GitHub Blog (AI & ML) Official Feed",
+      "sourceUrl": "https://github.blog/ai-and-ml/github-copilot/build-once-run-on-any-agent-a-practical-guide-to-agent-skills/",
+      "tags": [
+        "GitHub",
+        "AI Coding",
+        "開発ワークフロー",
         "技術解説"
       ],
       "isLiveSynced": true
@@ -213,31 +314,6 @@
         "Frontier AI",
         "Gemini",
         "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-botpsy",
-      "title": "Hugging Face: BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model",
-      "date": "2026/11/11",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language...」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/qvac/botpsy",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
       ],
       "isLiveSynced": true
     },
@@ -344,31 +420,6 @@
       ]
     },
     {
-      "id": "live-deepmind-gemini-robotics-2-5-accelerates-real-world-physi",
-      "title": "Google DeepMind: Gemini Robotics 2.5 accelerates real-world general dexterity",
-      "date": "2026/11/09",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Our most capable vision-language-action model enhances robot dexterity, reliability, and safety",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Gemini Robotics 2.5 accelerates real-world general dexterity」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/gemini-robotics-2-5-accelerates-real-world-physical-intelligence/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-figma-6-easy-ways-to-use-the-figma-agent-right-now",
       "title": "Figma Blog: 6 easy ways to use the Figma agent right now",
       "date": "2026/11/09",
@@ -467,32 +518,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-antigravity-modernizing-40-year-old-scientific-code-with-gem",
-      "title": "Google Antigravity: Modernizing 40-year-old scientific code with Gemini 4 Argon",
-      "date": "2026/11/03",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Modernizing 40-year-old scientific code with Gemini 4 Argon」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
-      ],
-      "sourceName": "Google Antigravity Official Feed",
-      "sourceUrl": "https://antigravity.google/blog/modernizing-40-year-old-scientific-code-with-gemini-4-argon",
-      "tags": [
-        "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
-        "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-antigravity-20261029-4",
       "title": "Google Antigravity: Plugin Marketplace in Antigravity",
       "date": "2026/10/29",
@@ -538,31 +563,6 @@
         "Open Weights",
         "基盤モデル",
         "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-github-ai-how-3-java-champions-are-using-github-copilot-fo",
-      "title": "GitHub Blog (AI & ML): How 3 Java Champions are using GitHub Copilot for increased productivity",
-      "date": "2026/10/20",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Three Java Champions share how they use GitHub Copilot to solve problems, accelerate development, and keep humans responsible for the results. The post How 3 Java Champions are using GitHub Copilot for increased productivity appeared first on The GitHub Blog.",
-      "impactForStaff": "GitHub公式AIブログ「How 3 Java Champions are using GitHub Copilot for increased productivity」。GitHub連携・PRレビュー・AIネイティブ開発ワークフローの改善に役立ちます。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "テックリード"
-      ],
-      "sourceName": "GitHub Blog (AI & ML) Official Feed",
-      "sourceUrl": "https://github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity/",
-      "tags": [
-        "GitHub",
-        "AI Coding",
-        "開発ワークフロー",
-        "技術解説"
       ],
       "isLiveSynced": true
     },
