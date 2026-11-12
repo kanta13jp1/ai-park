@@ -255,7 +255,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "🚧 工事中",
-    disclaimer: "【工事中】社内の AWS の利用ルールや相談窓口が決まり次第掲載します。",
+    disclaimer: "【一部工事中】AWS SAA-C03 学習ハブを掲載中。社内の AWS 利用ルールや相談窓口は決まり次第掲載します。",
     releaseDate: "未定",
     releaseCondition: "社内の AWS 利用ルール・相談窓口の決定",
   },
