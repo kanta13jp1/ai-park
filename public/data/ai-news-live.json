@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-12T00:12:12.393Z",
-  "lastSyncedAtFormatted": "2026/11/12 9:12:12",
+  "lastSyncedAt": "2026-11-12T14:48:57.398Z",
+  "lastSyncedAtFormatted": "2026/11/12 23:48:57",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -16,6 +16,56 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-openai-holidays-extras-codex",
+      "title": "OpenAI: Holiday Extras is rethinking what it can build with Codex",
+      "date": "2026/11/12",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "With Codex, Holiday Extras is turning customer expertise into better apps, higher booking conversion and new possibilities for growth.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Holiday Extras is rethinking what it can build with Codex」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/customer-stories/holidays-extras-codex",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-children-first-declaration",
+      "title": "OpenAI: Supporting research on AI and children’s safety",
+      "date": "2026/11/12",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI commits $2 million to research on AI and children’s safety. The work supports shared tools to measure risks and opportunities for young people.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Supporting research on AI and children’s safety」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/children-first-declaration",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-openai-gilbert-tobin-sam-nickless",
       "title": "OpenAI: Gilbert + Tobin rethinks the business of law with AI",
@@ -38,6 +88,106 @@
         "ChatGPT",
         "Codex",
         "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-3d-lora-finetuning",
+      "title": "Hugging Face: The Definitive Fine-Tuning Guide for 3D Generation Models",
+      "date": "2026/11/12",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「The Definitive Fine-Tuning Guide for 3D Generation Models」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/3d-lora-finetuning",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-figma-how-3d-transforms-and-figmas-agent-brought-a-lau",
+      "title": "Figma Blog: How 3D transforms and Figma’s agent brought a launch video to life",
+      "date": "2026/11/12",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "See how Figma’s Brand Studio team combined 3D design, agent-built plugins, shaders, and motion to create a video together on the canvas.",
+      "impactForStaff": "Figma公式ブログ「How 3D transforms and Figma’s agent brought a launch video to life」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
+      "recommendedFor": [
+        "デザイナー",
+        "フロントエンド開発者",
+        "プロダクトマネージャー"
+      ],
+      "sourceName": "Figma Blog Official Feed",
+      "sourceUrl": "https://www.figma.com/blog/how-3d-transforms-and-figmas-agent-brought-a-launch-video-to-life/",
+      "tags": [
+        "Figma",
+        "UI/UX",
+        "Design System",
+        "デザイン連携"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-ainews-d-day-decision-models-day",
+      "title": "Latent Space: [AINews] D-Day (Decision Models Day)",
+      "date": "2026/11/12",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 11, 2026 — Google enters the decision model market. At AI Engineer, Cloudflare showed which parts of a build failure a classifier could handle. TypeSafe AI showed off their production customers.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] D-Day (Decision Models Day)」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-d-day-decision-models-day/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-jev-revolution",
+      "title": "Latent Space: The Jev Revolution: What Engineers Are Already Building with System One Models",
+      "date": "2026/11/12",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "At AI Engineer Code Summit, lead Jev creator Diogo Almeida called on developers to automate everything. Also, Glean and others showed how they’re using Jev.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「The Jev Revolution: What Engineers Are Already Building with System One Models」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/jev-revolution/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
       ],
       "isLiveSynced": true
     },
@@ -67,56 +217,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-chatgpt-plus-for-veterans",
-      "title": "OpenAI: ChatGPT Plus for veterans and servicemembers",
-      "date": "2026/11/11",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "More than 20,000 veterans and transitioning service members have claimed a free year of ChatGPT Plus. See how they use it to prepare for civilian careers.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「ChatGPT Plus for veterans and servicemembers」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/chatgpt-plus-for-veterans",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-jiostar-vijay-seshadri",
-      "title": "OpenAI: JioStar’s chief architect on AI discovery at 500M-user scale",
-      "date": "2026/11/11",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "JioStar’s Vijay Seshadri explains AI discovery at 500M-user scale. Read his lessons on evals, guardrails, and taking AI into production.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「JioStar’s chief architect on AI discovery at 500M-user scale」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/jiostar-vijay-seshadri",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-huggingface-botpsy",
       "title": "Hugging Face: BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model",
       "date": "2026/11/11",
@@ -138,81 +238,6 @@
         "OSS AI",
         "エージェント評価",
         "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-token-pooling",
-      "title": "Hugging Face: Token Pooling-Aware Training for Multi-Vector Embedding Models",
-      "date": "2026/11/11",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「Token Pooling-Aware Training for Multi-Vector Embedding Models」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/token-pooling",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-ainews-mercor-750m-series-d-at-20b-valuation-3b-",
-      "title": "Latent Space: [AINews] Mercor $750m Series D at $20B valuation, $3B run rate",
-      "date": "2026/11/11",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 10, 2026 — Google GA's Gemini 4 Carbon.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Mercor $750m Series D at $20B valuation, $3B run rate」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-mercor-750m-series-d-at-20b-valuation-3b-run-rate/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-codex-work",
-      "title": "Latent Space: AI Engineer Code Summit: OpenAI on New Ways of Working With Codex",
-      "date": "2026/11/11",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "On the first day of AIE Code Summit, OpenAI showed how developers can steer Codex by voice, hand off work to the cloud, and make use of dots.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「AI Engineer Code Summit: OpenAI on New Ways of Working With Codex」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/codex-work/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
       ],
       "isLiveSynced": true
     },
@@ -413,31 +438,6 @@
         "AI Coding",
         "開発ワークフロー",
         "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-figma-in-conversation-dylan-field-and-david-friedberg",
-      "title": "Figma Blog: In conversation: Dylan Field and David Friedberg on the human role in creating with AI",
-      "date": "2026/11/06",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "On why design is the new code, shaping AI’s creative output, and the human vision and judgment behind what we make.",
-      "impactForStaff": "Figma公式ブログ「In conversation: Dylan Field and David Friedberg on the human role in creating with...」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
-      "recommendedFor": [
-        "デザイナー",
-        "フロントエンド開発者",
-        "プロダクトマネージャー"
-      ],
-      "sourceName": "Figma Blog Official Feed",
-      "sourceUrl": "https://www.figma.com/blog/in-conversation-dylan-field-and-david-friedberg/",
-      "tags": [
-        "Figma",
-        "UI/UX",
-        "Design System",
-        "デザイン連携"
       ],
       "isLiveSynced": true
     },
