@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-13T05:36:18.602Z",
-  "lastSyncedAtFormatted": "2026/11/13 14:36:18",
+  "lastSyncedAt": "2026-11-13T14:07:06.889Z",
+  "lastSyncedAtFormatted": "2026/11/13 23:07:06",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -16,6 +16,56 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-huggingface-llama-cpp-v1",
+      "title": "Hugging Face: llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem",
+      "date": "2026/11/13",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-ainews-jensen-huang-resigns-after-33-years-leadi",
+      "title": "Latent Space: [AINews] Jensen Huang resigns after 33 years leading NVIDIA",
+      "date": "2026/11/13",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 12, 2026 — Colette Kress takes over as interim CEO. What happens to open source/American AI leadership?",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Jensen Huang resigns after 33 years leading NVIDIA」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-jensen-huang-resigns-after-33-years-leading-nvidia/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-latentspace-artcraft",
       "title": "Latent Space: AI Ambition: ArtCraft Cloned Photoshop and Now Wants to \"Rebuild Everything\"",
@@ -193,31 +243,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-huggingface-3d-lora-finetuning",
-      "title": "Hugging Face: The Definitive Fine-Tuning Guide for 3D Generation Models",
-      "date": "2026/11/12",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「The Definitive Fine-Tuning Guide for 3D Generation Models」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/3d-lora-finetuning",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-github-ai-build-once-run-on-any-agent-a-practical-guide-to",
       "title": "GitHub Blog (AI & ML): Build once, run on any agent: A practical guide to agent skills",
       "date": "2026/11/12",
@@ -264,31 +289,6 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-ainews-d-day-decision-models-day",
-      "title": "Latent Space: [AINews] D-Day (Decision Models Day)",
-      "date": "2026/11/12",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 11, 2026 — Google enters the decision model market. At AI Engineer, Cloudflare showed which parts of a build failure a classifier could handle. TypeSafe AI showed off their production customers.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] D-Day (Decision Models Day)」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-d-day-decision-models-day/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
       ],
       "isLiveSynced": true
     },
