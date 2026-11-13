@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-12T23:18:24.770Z",
-  "lastSyncedAtFormatted": "2026/11/13 8:18:24",
+  "lastSyncedAt": "2026-11-13T05:36:18.602Z",
+  "lastSyncedAtFormatted": "2026/11/13 14:36:18",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-latentspace-artcraft",
+      "title": "Latent Space: AI Ambition: ArtCraft Cloned Photoshop and Now Wants to \"Rebuild Everything\"",
+      "date": "2026/11/13",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "ArtCraft used AI to rewrite Photoshop as open source software. For CEO Brandon Thomas, the vision is even bigger: to take back the internet!",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「AI Ambition: ArtCraft Cloned Photoshop and Now Wants to \"Rebuild Everything\"」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/artcraft/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-deepmind-introducing-gemini-4-hydrogen",
       "title": "Google DeepMind: Introducing Gemini 4 Hydrogen",
@@ -83,7 +108,7 @@
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/amplitude",
+      "sourceUrl": "https://openai.com/business/customer-stories/amplitude",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -259,31 +284,6 @@
       ],
       "sourceName": "Latent Space Official Feed",
       "sourceUrl": "https://latent.space/p/ainews-d-day-decision-models-day/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-jev-revolution",
-      "title": "Latent Space: The Jev Revolution: What Engineers Are Already Building with System One Models",
-      "date": "2026/11/12",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "At AI Engineer Code Summit, lead Jev creator Diogo Almeida called on developers to automate everything. Also, Glean and others showed how they’re using Jev.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「The Jev Revolution: What Engineers Are Already Building with System One Models」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/jev-revolution/",
       "tags": [
         "Latent Space",
         "AI Engineering",
