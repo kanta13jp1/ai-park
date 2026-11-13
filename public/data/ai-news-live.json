@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-13T14:07:06.889Z",
-  "lastSyncedAtFormatted": "2026/11/13 23:07:06",
+  "lastSyncedAt": "2026-11-13T23:21:41.638Z",
+  "lastSyncedAtFormatted": "2026/11/14 8:21:41",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -17,27 +17,102 @@
   ],
   "items": [
     {
-      "id": "live-huggingface-llama-cpp-v1",
-      "title": "Hugging Face: llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem",
+      "id": "live-openai-introducing-chatgpt-wallet",
+      "title": "OpenAI: Introducing ChatGPT Wallet",
+      "date": "2026/11/13",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Introducing ChatGPT Wallet, a secure way for agents in ChatGPT Work, Codex, and dots to complete purchases with user approval and existing card protections.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing ChatGPT Wallet」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/introducing-chatgpt-wallet",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-simready-assets-robot-pick-and-place",
+      "title": "Hugging Face: Build a Robot Pick-and-Place Simulation with SimReady Assets",
       "date": "2026/11/13",
       "category": "agent_mcp",
       "categoryLabel": "開発エージェント・MCP",
       "importance": "tech",
       "importanceLabel": "技術解説",
       "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "impactForStaff": "Hugging Face公式ブログ「Build a Robot Pick-and-Place Simulation with SimReady Assets」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
       "recommendedFor": [
         "エンジニア",
         "データサイエンティスト",
         "アーキテクト"
       ],
       "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
+      "sourceUrl": "https://huggingface.co/blog/nvidia/simready-assets-robot-pick-and-place",
       "tags": [
         "Hugging Face",
         "OSS AI",
         "エージェント評価",
         "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-xybench",
+      "title": "Hugging Face: XYBench: Helping with the problem behind the question",
+      "date": "2026/11/13",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「XYBench: Helping with the problem behind the question」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/allenai/xybench",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-figma-ai-role-in-the-creative-process",
+      "title": "Figma Blog: AI’s role in the creative process",
+      "date": "2026/11/13",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Which parts of the creative process can AI do for us—and which do we insist on keeping for ourselves?",
+      "impactForStaff": "Figma公式ブログ「AI’s role in the creative process」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
+      "recommendedFor": [
+        "デザイナー",
+        "フロントエンド開発者",
+        "プロダクトマネージャー"
+      ],
+      "sourceName": "Figma Blog Official Feed",
+      "sourceUrl": "https://www.figma.com/blog/ai-role-in-the-creative-process/",
+      "tags": [
+        "Figma",
+        "UI/UX",
+        "Design System",
+        "デザイン連携"
       ],
       "isLiveSynced": true
     },
@@ -189,56 +264,6 @@
         "ChatGPT",
         "Codex",
         "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-holidays-extras-codex",
-      "title": "OpenAI: Holiday Extras is rethinking what it can build with Codex",
-      "date": "2026/11/12",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "With Codex, Holiday Extras is turning customer expertise into better apps, higher booking conversion and new possibilities for growth.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Holiday Extras is rethinking what it can build with Codex」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/customer-stories/holidays-extras-codex",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-llmon-an-llm-native-markup-language-now-in-grani",
-      "title": "Hugging Face: LLMON: An LLM-Native Markup Language, now in Granite 4.1 3B and 8B",
-      "date": "2026/11/12",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「LLMON: An LLM-Native Markup Language, now in Granite 4.1 3B and 8B」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/ibm-granite/llmon-an-llm-native-markup-language-now-in-granite",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
       ],
       "isLiveSynced": true
     },
@@ -418,31 +443,6 @@
         "業務効率化",
         "公式ブログ"
       ]
-    },
-    {
-      "id": "live-figma-6-easy-ways-to-use-the-figma-agent-right-now",
-      "title": "Figma Blog: 6 easy ways to use the Figma agent right now",
-      "date": "2026/11/09",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "From making designs more expressive and automating busywork, to exploring more possibilities on the canvas, here are six ways to push designers further with the Figma agent.",
-      "impactForStaff": "Figma公式ブログ「6 easy ways to use the Figma agent right now」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
-      "recommendedFor": [
-        "デザイナー",
-        "フロントエンド開発者",
-        "プロダクトマネージャー"
-      ],
-      "sourceName": "Figma Blog Official Feed",
-      "sourceUrl": "https://www.figma.com/blog/6-easy-ways-to-use-the-figma-agent-right-now/",
-      "tags": [
-        "Figma",
-        "UI/UX",
-        "Design System",
-        "デザイン連携"
-      ],
-      "isLiveSynced": true
     },
     {
       "id": "live-antigravity-20261106-2",
