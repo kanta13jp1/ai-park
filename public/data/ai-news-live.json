@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-14T05:26:45.984Z",
-  "lastSyncedAtFormatted": "2026/11/14 14:26:45",
+  "lastSyncedAt": "2026-11-14T13:08:31.027Z",
+  "lastSyncedAtFormatted": "2026/11/14 22:08:31",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 50,
+  "totalCount": 49,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-latentspace-ainews-the-no-ai-slop-manifesto",
+      "title": "Latent Space: [AINews] The No AI Slop Manifesto",
+      "date": "2026/11/14",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 13, 2026 — AIE speakers unite to lay out how to fight slop.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] The No AI Slop Manifesto」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-the-no-ai-slop-manifesto/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-openai-introducing-chatgpt-wallet",
       "title": "OpenAI: Introducing ChatGPT Wallet",
@@ -158,31 +183,6 @@
       ],
       "sourceName": "Latent Space Official Feed",
       "sourceUrl": "https://latent.space/p/ainews-jensen-huang-resigns-after-33-years-leading-nvidia/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-artcraft",
-      "title": "Latent Space: AI Ambition: ArtCraft Cloned Photoshop and Now Wants to \"Rebuild Everything\"",
-      "date": "2026/11/13",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "ArtCraft used AI to rewrite Photoshop as open source software. For CEO Brandon Thomas, the vision is even bigger: to take back the internet!",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「AI Ambition: ArtCraft Cloned Photoshop and Now Wants to \"Rebuild Everything\"」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/artcraft/",
       "tags": [
         "Latent Space",
         "AI Engineering",
@@ -443,31 +443,6 @@
         "業務効率化",
         "公式ブログ"
       ]
-    },
-    {
-      "id": "live-importai-import-ai-480-self-sustaining-space",
-      "title": "Import AI: Import AI 480: Self-sustaining space economies; AI for science progress, and Meta builds perfect hands for a superintelligence",
-      "date": "2026/11/09",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "When do you think we'll have robots on the moon?",
-      "impactForStaff": "Import AI「Import AI 480: Self-sustaining space economies; AI for science progress, and Meta...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
-      "recommendedFor": [
-        "エンジニア",
-        "リサーチャー",
-        "企画担当"
-      ],
-      "sourceName": "Import AI Official Feed",
-      "sourceUrl": "https://importai.substack.com/p/import-ai-480-self-sustaining-space",
-      "tags": [
-        "Import AI",
-        "AI Research",
-        "AI安全性",
-        "先端動向"
-      ],
-      "isLiveSynced": true
     },
     {
       "id": "live-antigravity-20261106-2",
