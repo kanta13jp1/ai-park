@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-13T23:21:41.638Z",
-  "lastSyncedAtFormatted": "2026/11/14 8:21:41",
+  "lastSyncedAt": "2026-11-14T05:26:45.984Z",
+  "lastSyncedAtFormatted": "2026/11/14 14:26:45",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 49,
+  "totalCount": 50,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -33,6 +33,31 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/introducing-chatgpt-wallet",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-shield",
+      "title": "OpenAI: Shield helps technicians hand off legacy portal work with OpenAI",
+      "date": "2026/11/13",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Shield uses OpenAI to help IT technicians hand off work in legacy portals. Its Forge agents navigate systems so technicians can focus on issues needing their judgment.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Shield helps technicians hand off legacy portal work with OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/customer-stories/shield",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -243,31 +268,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-gondola",
-      "title": "OpenAI: Gondola doubles revenue as its team builds more with Codex",
-      "date": "2026/11/12",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Gondola helps creatives get credit and get hired, with Codex raising its lead engineer’s output by 50% and ChatGPT simplifying daily work.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Gondola doubles revenue as its team builds more with Codex」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/customer-stories/gondola",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-github-ai-build-once-run-on-any-agent-a-practical-guide-to",
       "title": "GitHub Blog (AI & ML): Build once, run on any agent: A practical guide to agent skills",
       "date": "2026/11/12",
@@ -443,6 +443,31 @@
         "業務効率化",
         "公式ブログ"
       ]
+    },
+    {
+      "id": "live-importai-import-ai-480-self-sustaining-space",
+      "title": "Import AI: Import AI 480: Self-sustaining space economies; AI for science progress, and Meta builds perfect hands for a superintelligence",
+      "date": "2026/11/09",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "When do you think we'll have robots on the moon?",
+      "impactForStaff": "Import AI「Import AI 480: Self-sustaining space economies; AI for science progress, and Meta...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
+      "recommendedFor": [
+        "エンジニア",
+        "リサーチャー",
+        "企画担当"
+      ],
+      "sourceName": "Import AI Official Feed",
+      "sourceUrl": "https://importai.substack.com/p/import-ai-480-self-sustaining-space",
+      "tags": [
+        "Import AI",
+        "AI Research",
+        "AI安全性",
+        "先端動向"
+      ],
+      "isLiveSynced": true
     },
     {
       "id": "live-antigravity-20261106-2",
