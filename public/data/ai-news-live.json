@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-15T13:38:21.772Z",
-  "lastSyncedAtFormatted": "2026/11/15 22:38:21",
+  "lastSyncedAt": "2026-11-15T22:36:11.253Z",
+  "lastSyncedAtFormatted": "2026/11/16 7:36:11",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -16,6 +16,56 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-openai-step-toward-defining-the-standard-model",
+      "title": "OpenAI: A step toward defining the Standard Model on a lattice",
+      "date": "2026/11/15",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Explore a candidate nonperturbative lattice definition of the Standard Model and how GPT-6 Astra helped turn the idea into a detailed proof.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「A step toward defining the Standard Model on a lattice」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/step-toward-defining-the-standard-model",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-our-new-blog-for-science",
+      "title": "OpenAI: Our new blog for science",
+      "date": "2026/11/15",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "The OpenAI science blog shares new findings, practical methods, and firsthand accounts from researchers using AI to advance scientific discovery.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Our new blog for science」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/our-new-blog-for-science",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-latentspace-ainews-the-no-ai-slop-manifesto",
       "title": "Latent Space: [AINews] The No AI Slop Manifesto",
@@ -58,31 +108,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/introducing-chatgpt-wallet",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-shield",
-      "title": "OpenAI: Shield helps technicians hand off legacy portal work with OpenAI",
-      "date": "2026/11/13",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Shield uses OpenAI to help IT technicians hand off work in legacy portals. Its Forge agents navigate systems so technicians can focus on issues needing their judgment.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Shield helps technicians hand off legacy portal work with OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/customer-stories/shield",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -239,31 +264,6 @@
         "Custom Agents",
         "Plugins",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-amplitude",
-      "title": "OpenAI: How Amplitude ships product improvements in 1–2 days with OpenAI",
-      "date": "2026/11/12",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Built primarily on OpenAI models, Amplitude’s proactive product agent, Wave, identifies what to build, helps teams ship changes with coding agents, and measures the impact.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Amplitude ships product improvements in 1–2 days with OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/customer-stories/amplitude",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
       ],
       "isLiveSynced": true
     },
