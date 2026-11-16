@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-16T05:22:00.814Z",
-  "lastSyncedAtFormatted": "2026/11/16 14:22:00",
+  "lastSyncedAt": "2026-11-16T15:08:22.118Z",
+  "lastSyncedAtFormatted": "2026/11/17 0:08:22",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -17,22 +17,22 @@
   ],
   "items": [
     {
-      "id": "live-openai-step-toward-defining-the-standard-model",
-      "title": "OpenAI: A step toward defining the Standard Model on a lattice",
-      "date": "2026/11/15",
+      "id": "live-openai-lvmh-media-division-partnership",
+      "title": "OpenAI: LVMH’s Media Division announces strategic partnership with OpenAI",
+      "date": "2026/11/16",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "Explore a candidate nonperturbative lattice definition of the Standard Model and how GPT-6 Astra helped turn the idea into a detailed proof.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「A step toward defining the Standard Model on a lattice」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "LVMH’s Media Division and OpenAI announce a partnership to support journalism with AI and make its publications more accessible through ChatGPT.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「LVMH’s Media Division announces strategic partnership with OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/step-toward-defining-the-standard-model",
+      "sourceUrl": "https://openai.com/index/lvmh-media-division-partnership",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -42,22 +42,47 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-our-new-blog-for-science",
-      "title": "OpenAI: Our new blog for science",
-      "date": "2026/11/15",
+      "id": "live-openai-advancing-computer-use-for-healthcare-teams",
+      "title": "OpenAI: Advancing computer-use agents for healthcare teams",
+      "date": "2026/11/16",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "The OpenAI science blog shares new findings, practical methods, and firsthand accounts from researchers using AI to advance scientific discovery.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Our new blog for science」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "OpenAI 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Advancing computer-use agents for healthcare teams」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/our-new-blog-for-science",
+      "sourceUrl": "https://openai.com/index/advancing-computer-use-for-healthcare-teams",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-more-ways-to-move-care-forward-with-chatgpt-for-",
+      "title": "OpenAI: More ways to move care forward with ChatGPT for Healthcare",
+      "date": "2026/11/16",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Introducing computer-use agents, improved clinical answers, and new healthcare plugins that work across healthcare software to get real work done.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「More ways to move care forward with ChatGPT for Healthcare」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/more-ways-to-move-care-forward-with-chatgpt-for-healthcare",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -88,31 +113,6 @@
         "AI Engineering",
         "Agentic AI",
         "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-introducing-chatgpt-wallet",
-      "title": "OpenAI: Introducing ChatGPT Wallet",
-      "date": "2026/11/13",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Introducing ChatGPT Wallet, a secure way for agents in ChatGPT Work, Codex, and dots to complete purchases with user approval and existing card protections.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing ChatGPT Wallet」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/introducing-chatgpt-wallet",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
       ],
       "isLiveSynced": true
     },
