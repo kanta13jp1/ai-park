@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-16T15:08:22.118Z",
-  "lastSyncedAtFormatted": "2026/11/17 0:08:22",
+  "lastSyncedAt": "2026-11-17T01:42:53.413Z",
+  "lastSyncedAtFormatted": "2026/11/17 10:42:53",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -17,22 +17,22 @@
   ],
   "items": [
     {
-      "id": "live-openai-lvmh-media-division-partnership",
-      "title": "OpenAI: LVMH’s Media Division announces strategic partnership with OpenAI",
+      "id": "live-openai-expanding-chatgpt-for-academic-researchers",
+      "title": "OpenAI: Broadening access to AI for scientists",
       "date": "2026/11/16",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "LVMH’s Media Division and OpenAI announce a partnership to support journalism with AI and make its publications more accessible through ChatGPT.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「LVMH’s Media Division announces strategic partnership with OpenAI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "We’re expanding our ChatGPT for Academic Researchers program to offer 200,000 researchers worldwide free access to our frontier models.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Broadening access to AI for scientists」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/lvmh-media-division-partnership",
+      "sourceUrl": "https://openai.com/index/expanding-chatgpt-for-academic-researchers",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -42,22 +42,22 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-advancing-computer-use-for-healthcare-teams",
-      "title": "OpenAI: Advancing computer-use agents for healthcare teams",
+      "id": "live-openai-strengthening-online-child-safety",
+      "title": "OpenAI: Strengthening the fight against online child sexual abuse with new tools and support",
       "date": "2026/11/16",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "OpenAI 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Advancing computer-use agents for healthcare teams」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "New tools, practical guidance, and partnerships will help prevent, detect and respond to online child sexual exploitation and abuse.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Strengthening the fight against online child sexual abuse with new tools and support」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/advancing-computer-use-for-healthcare-teams",
+      "sourceUrl": "https://openai.com/index/strengthening-online-child-safety",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -67,27 +67,102 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-more-ways-to-move-care-forward-with-chatgpt-for-",
-      "title": "OpenAI: More ways to move care forward with ChatGPT for Healthcare",
+      "id": "live-openai-science-at-the-frontier",
+      "title": "OpenAI: Science at the Frontier: How scientists use ChatGPT",
       "date": "2026/11/16",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "Introducing computer-use agents, improved clinical answers, and new healthcare plugins that work across healthcare software to get real work done.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「More ways to move care forward with ChatGPT for Healthcare」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "Explore how more than 1,800 scientists use ChatGPT in research. See findings on daily workflows, reported productivity, and expectations for discovery.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Science at the Frontier: How scientists use ChatGPT」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/more-ways-to-move-care-forward-with-chatgpt-for-healthcare",
+      "sourceUrl": "https://openai.com/index/science-at-the-frontier",
       "tags": [
         "OpenAI",
         "ChatGPT",
         "Codex",
         "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-openrouter",
+      "title": "Hugging Face: Hugging Face and OpenRouter join forces to make open-weight models easy to run",
+      "date": "2026/11/16",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「Hugging Face and OpenRouter join forces to make open-weight models easy to run」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/openrouter",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-figma-1password-figma-make",
+      "title": "Figma Blog: How 1Password uses Figma Make to design for trust and certainty",
+      "date": "2026/11/16",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "From autofill to AI agent approvals, every 1Password interaction counts. Here's how the design team uses Figma Make to design moments users trust.",
+      "impactForStaff": "Figma公式ブログ「How 1Password uses Figma Make to design for trust and certainty」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
+      "recommendedFor": [
+        "デザイナー",
+        "フロントエンド開発者",
+        "プロダクトマネージャー"
+      ],
+      "sourceName": "Figma Blog Official Feed",
+      "sourceUrl": "https://www.figma.com/blog/1password-figma-make/",
+      "tags": [
+        "Figma",
+        "UI/UX",
+        "Design System",
+        "デザイン連携"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-bfl",
+      "title": "Latent Space: Building Visual Intelligence — Andreas Blattmann & Dustin Podell, Black Forest Labs",
+      "date": "2026/11/16",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Black Forest Labs’ case for learning AGI from pixels, motion and sound.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「Building Visual Intelligence — Andreas Blattmann & Dustin Podell, Black Forest Labs」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/bfl/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
       ],
       "isLiveSynced": true
     },
@@ -142,31 +217,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-huggingface-xybench",
-      "title": "Hugging Face: XYBench: Helping with the problem behind the question",
-      "date": "2026/11/13",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「XYBench: Helping with the problem behind the question」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/allenai/xybench",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-figma-ai-role-in-the-creative-process",
       "title": "Figma Blog: AI’s role in the creative process",
       "date": "2026/11/13",
@@ -188,31 +238,6 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-ainews-jensen-huang-resigns-after-33-years-leadi",
-      "title": "Latent Space: [AINews] Jensen Huang resigns after 33 years leading NVIDIA",
-      "date": "2026/11/13",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 12, 2026 — Colette Kress takes over as interim CEO. What happens to open source/American AI leadership?",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Jensen Huang resigns after 33 years leading NVIDIA」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-jensen-huang-resigns-after-33-years-leading-nvidia/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
       ],
       "isLiveSynced": true
     },
@@ -289,31 +314,6 @@
         "AI Coding",
         "開発ワークフロー",
         "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-figma-how-3d-transforms-and-figmas-agent-brought-a-lau",
-      "title": "Figma Blog: How 3D transforms and Figma’s agent brought a launch video to life",
-      "date": "2026/11/12",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "See how Figma’s Brand Studio team combined 3D design, agent-built plugins, shaders, and motion to create a video together on the canvas.",
-      "impactForStaff": "Figma公式ブログ「How 3D transforms and Figma’s agent brought a launch video to life」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
-      "recommendedFor": [
-        "デザイナー",
-        "フロントエンド開発者",
-        "プロダクトマネージャー"
-      ],
-      "sourceName": "Figma Blog Official Feed",
-      "sourceUrl": "https://www.figma.com/blog/how-3d-transforms-and-figmas-agent-brought-a-launch-video-to-life/",
-      "tags": [
-        "Figma",
-        "UI/UX",
-        "Design System",
-        "デザイン連携"
       ],
       "isLiveSynced": true
     },
