@@ -19,16 +19,21 @@ import {
   RotateCcw,
   Award,
   Lightbulb,
+  Search,
+  EyeOff,
+  ChevronsUpDown,
+  Sparkles,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
 import SpotlightCard from "@/components/SpotlightCard";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
-import AwsSaaPracticeQuiz from "@/components/aws/AwsSaaPracticeQuiz";
+import AwsSaaPracticeQuiz, { isQuestionCorrect } from "@/components/aws/AwsSaaPracticeQuiz";
 import {
   saaExamFacts,
   saaDomains,
   saaComparisons,
+  saaQuickLookup,
   saaPracticeQuestions,
   saaOfficialResources,
   type SaaDomain,
@@ -39,7 +44,7 @@ type TabId = "domains" | "comparisons" | "quiz" | "resources";
 
 interface AwsSaaProgress {
   completedTopics: string[];
-  quizAnswers: Record<string, number>;
+  quizAnswers: Record<string, number[]>;
 }
 
 const STORAGE_KEY = "ai-park-aws-saa-progress-v1";
@@ -95,6 +100,20 @@ const COMPARISON_CATEGORIES = [
   "データベース",
 ] as const;
 
+function normalizeQuizAnswers(raw: unknown): Record<string, number[]> {
+  if (!raw || typeof raw !== "object") return {};
+  const result: Record<string, number[]> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (Array.isArray(v)) {
+      result[k] = v.filter((n): n is number => typeof n === "number");
+    } else if (typeof v === "number") {
+      // 旧バージョン (number) からの後方互換マイグレーション
+      result[k] = [v];
+    }
+  }
+  return result;
+}
+
 export default function AwsInfoPage() {
   const [activeTab, setActiveTab] = useState<TabId>("domains");
   const [progress, setProgress] = useState<AwsSaaProgress>(DEFAULT_PROGRESS);
@@ -104,17 +123,26 @@ export default function AwsInfoPage() {
     "domain-3": false,
     "domain-4": false,
   });
+  const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
+  const [topicQuery, setTopicQuery] = useState<string>("");
   const [compCategory, setCompCategory] = useState<string>("すべて");
+  const [compQuery, setCompQuery] = useState<string>("");
+  const [confirmReset, setConfirmReset] = useState<boolean>(false);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as Partial<AwsSaaProgress>;
+        const parsed = JSON.parse(raw) as {
+          completedTopics?: unknown;
+          quizAnswers?: unknown;
+        };
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setProgress({
-          completedTopics: Array.isArray(parsed.completedTopics) ? parsed.completedTopics : [],
-          quizAnswers: parsed.quizAnswers && typeof parsed.quizAnswers === "object" ? parsed.quizAnswers : {},
+          completedTopics: Array.isArray(parsed.completedTopics)
+            ? parsed.completedTopics.filter((s): s is string => typeof s === "string")
+            : [],
+          quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
         });
       }
     } catch {
@@ -140,10 +168,10 @@ export default function AwsInfoPage() {
     saveProgress({ ...progress, completedTopics });
   };
 
-  const handleSelectAnswer = (questionId: string, optionIndex: number) => {
+  const handleSubmitAnswer = (questionId: string, selectedIndices: number[]) => {
     saveProgress({
       ...progress,
-      quizAnswers: { ...progress.quizAnswers, [questionId]: optionIndex },
+      quizAnswers: { ...progress.quizAnswers, [questionId]: selectedIndices },
     });
   };
 
@@ -151,9 +179,24 @@ export default function AwsInfoPage() {
     saveProgress({ ...progress, quizAnswers: {} });
   };
 
-  const handleResetAll = () => {
+  const handleResetAllClick = () => {
     playCyberClick();
+    if (!confirmReset) {
+      setConfirmReset(true);
+      setTimeout(() => setConfirmReset(false), 4000);
+      return;
+    }
     saveProgress(DEFAULT_PROGRESS);
+    setConfirmReset(false);
+  };
+
+  const handleExpandAllDomains = (expand: boolean) => {
+    playCyberClick();
+    const next: Record<string, boolean> = {};
+    for (const d of saaDomains) {
+      next[d.id] = expand;
+    }
+    setExpandedDomains(next);
   };
 
   const totalTopics = useMemo(
@@ -164,20 +207,44 @@ export default function AwsInfoPage() {
   const topicPct = totalTopics > 0 ? Math.round((doneTopicsCount / totalTopics) * 100) : 0;
 
   const answeredCount = Object.keys(progress.quizAnswers).length;
-  const correctCount = saaPracticeQuestions.filter(
-    (q) => progress.quizAnswers[q.id] === q.correctIndex
+  const correctCount = saaPracticeQuestions.filter((q) =>
+    isQuestionCorrect(q, progress.quizAnswers[q.id])
   ).length;
   const quizPct =
     answeredCount > 0 ? Math.round((correctCount / saaPracticeQuestions.length) * 100) : 0;
 
+  const normalizedCompQuery = compQuery.trim().toLowerCase();
+
   const filteredComparisons = useMemo(() => {
-    if (compCategory === "すべて") return saaComparisons;
-    return saaComparisons.filter((c) => c.category === compCategory);
-  }, [compCategory]);
+    return saaComparisons.filter((c) => {
+      if (compCategory !== "すべて" && c.category !== compCategory) return false;
+      if (!normalizedCompQuery) return true;
+      const haystack = [
+        c.title,
+        c.subtitle,
+        c.decisionRule,
+        ...c.rows.flatMap((r) => [r.feature, ...r.values]),
+      ]
+        .join(" ")
+        .toLowerCase();
+      return haystack.includes(normalizedCompQuery);
+    });
+  }, [compCategory, normalizedCompQuery]);
+
+  const filteredQuickLookup = useMemo(() => {
+    if (!normalizedCompQuery) return saaQuickLookup;
+    return saaQuickLookup.filter((item) =>
+      `${item.keyword} ${item.category} ${item.recommended} ${item.reason}`
+        .toLowerCase()
+        .includes(normalizedCompQuery)
+    );
+  }, [normalizedCompQuery]);
+
+  const normalizedTopicQuery = topicQuery.trim().toLowerCase();
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     { id: "domains", label: "4ドメイン攻略", icon: BookOpen, badge: `${doneTopicsCount}/${totalTopics}` },
-    { id: "comparisons", label: "頻出比較表", icon: TableProperties, badge: `${saaComparisons.length}` },
+    { id: "comparisons", label: "頻出比較 & 逆引き", icon: TableProperties, badge: `${saaComparisons.length}` },
     {
       id: "quiz",
       label: "実践演習クイズ",
@@ -186,6 +253,8 @@ export default function AwsInfoPage() {
     },
     { id: "resources", label: "学習ロードマップ", icon: Compass },
   ];
+
+  const allExpanded = saaDomains.every((d) => expandedDomains[d.id]);
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
@@ -196,7 +265,7 @@ export default function AwsInfoPage() {
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* SAA-C03 学習ステータス HUD バナー */}
-        <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
+        <TiltCard maxTilt={2} glareOpacity={0.05} className="rounded-3xl">
           <div
             onMouseEnter={() => playCyberHover()}
             className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border border-indigo-700/50 p-6 sm:p-8 text-white shadow-xl"
@@ -210,19 +279,19 @@ export default function AwsInfoPage() {
                     <span>AWS SAA-C03 STUDY HUB</span>
                   </span>
                   <span className="text-xs text-slate-300">
-                    4ドメイン体系整理 ・ 頻出比較表 ・ シナリオ演習クイズ
+                    4ドメイン {totalTopics} トピック ・ 比較表 {saaComparisons.length} 種 ・ 実践演習 {saaPracticeQuestions.length} 問
                   </span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
                   AWS認定ソリューションアーキテクト - アソシエイト 合格対策
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                  試験ガイド（SAA-C03）の4つの出題ドメインに沿って、頻出サービスの選定基準・設計パターン・実践問題をまとめた学習サイトです。学習チェックや演習結果はブラウザに自動保存されます。
+                  試験ガイド（SAA-C03）の4つの出題ドメインに沿って、頻出サービスの選定基準・設計パターン・択一＆複数選択の実践問題をまとめた学習サイトです。学習チェックや演習結果はブラウザに自動保存されます。
                 </p>
               </div>
 
               {/* 進捗ゲージカード */}
-              <div className="shrink-0 grid grid-cols-2 gap-3 sm:min-w-[280px]">
+              <div className="shrink-0 grid grid-cols-2 gap-3 sm:min-w-[290px]">
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-4 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
                   <div className="text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
@@ -294,11 +363,15 @@ export default function AwsInfoPage() {
 
           <button
             type="button"
-            onClick={handleResetAll}
-            className="inline-flex items-center space-x-1 text-[11px] font-bold text-slate-400 hover:text-slate-700 transition-colors cursor-pointer"
+            onClick={handleResetAllClick}
+            className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-colors cursor-pointer ${
+              confirmReset
+                ? "bg-rose-600 text-white"
+                : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+            }`}
           >
             <RotateCcw size={12} />
-            <span>全進捗リセット</span>
+            <span>{confirmReset ? "もう一度押すと全進捗をリセット" : "全進捗リセット"}</span>
           </button>
         </div>
 
@@ -329,7 +402,7 @@ export default function AwsInfoPage() {
 
             {/* 4つの出題ドメイン */}
             <section className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-black text-slate-900">
                     4つの出題ドメイン別 攻略チェックリスト
@@ -338,16 +411,74 @@ export default function AwsInfoPage() {
                     各トピックを確認したらチェックを入れて進捗を管理できます。
                   </p>
                 </div>
+
+                {/* 検索 & コントロール */}
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="relative">
+                    <Search
+                      size={14}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+                    <input
+                      type="text"
+                      value={topicQuery}
+                      onChange={(e) => setTopicQuery(e.target.value)}
+                      placeholder="サービス名・キーワード検索..."
+                      className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-52"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setOnlyIncompleteTopics((v) => !v);
+                    }}
+                    className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                      onlyIncompleteTopics
+                        ? "bg-indigo-600 text-white border-indigo-600"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
+                    }`}
+                  >
+                    <EyeOff size={13} />
+                    <span>未完了のみ</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleExpandAllDomains(!allExpanded)}
+                    className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-600 hover:border-indigo-300 cursor-pointer"
+                  >
+                    <ChevronsUpDown size={13} />
+                    <span>{allExpanded ? "すべて折りたたむ" : "すべて展開"}</span>
+                  </button>
+                </div>
               </div>
 
               <div className="space-y-4">
                 {saaDomains.map((domain) => {
                   const Icon = DOMAIN_ICONS[domain.id] ?? Cloud;
                   const style = ACCENT_STYLES[domain.accentColor];
-                  const isExpanded = !!expandedDomains[domain.id];
+                  const isExpanded = !!expandedDomains[domain.id] || normalizedTopicQuery.length > 0;
                   const doneInDomain = domain.topics.filter((t) =>
                     progress.completedTopics.includes(t.id)
                   ).length;
+                  const isDomainComplete = doneInDomain === domain.topics.length;
+
+                  const visibleTopics = domain.topics.filter((t) => {
+                    if (onlyIncompleteTopics && progress.completedTopics.includes(t.id)) {
+                      return false;
+                    }
+                    if (!normalizedTopicQuery) return true;
+                    const hay = [t.title, ...t.services, ...t.keyPoints, t.examTip]
+                      .join(" ")
+                      .toLowerCase();
+                    return hay.includes(normalizedTopicQuery);
+                  });
+
+                  if (normalizedTopicQuery && visibleTopics.length === 0) {
+                    return null;
+                  }
 
                   return (
                     <SpotlightCard
@@ -383,6 +514,12 @@ export default function AwsInfoPage() {
                               <span className="text-[11px] font-mono font-bold text-slate-500">
                                 {doneInDomain}/{domain.topics.length} 完了
                               </span>
+                              {isDomainComplete && (
+                                <span className="inline-flex items-center space-x-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                                  <Sparkles size={10} />
+                                  <span>達成済み</span>
+                                </span>
+                              )}
                             </div>
                             <h4 className="text-base sm:text-lg font-black text-slate-900">
                               {domain.title}
@@ -413,70 +550,76 @@ export default function AwsInfoPage() {
                       {/* トピック一覧 */}
                       {isExpanded && (
                         <div className="border-t border-slate-100 divide-y divide-slate-100 bg-slate-50/40">
-                          {domain.topics.map((topic) => {
-                            const checked = progress.completedTopics.includes(topic.id);
-                            return (
-                              <div key={topic.id} className="p-5 sm:p-6 space-y-3">
-                                <div className="flex items-start justify-between gap-4">
-                                  <button
-                                    type="button"
-                                    onClick={() => toggleTopic(topic.id)}
-                                    className="flex items-start space-x-3 text-left group cursor-pointer"
-                                  >
-                                    {checked ? (
-                                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                                    ) : (
-                                      <Circle className="w-5 h-5 text-slate-300 group-hover:text-indigo-500 shrink-0 mt-0.5 transition-colors" />
-                                    )}
-                                    <span
-                                      className={`text-sm sm:text-base font-bold transition-colors ${
-                                        checked
-                                          ? "text-emerald-800 line-through decoration-emerald-400/60"
-                                          : "text-slate-900 group-hover:text-indigo-700"
-                                      }`}
+                          {visibleTopics.length === 0 ? (
+                            <div className="p-6 text-xs text-slate-500 text-center">
+                              このドメインのトピックはすべて完了しています。
+                            </div>
+                          ) : (
+                            visibleTopics.map((topic) => {
+                              const checked = progress.completedTopics.includes(topic.id);
+                              return (
+                                <div key={topic.id} className="p-5 sm:p-6 space-y-3">
+                                  <div className="flex items-start justify-between gap-4">
+                                    <button
+                                      type="button"
+                                      onClick={() => toggleTopic(topic.id)}
+                                      className="flex items-start space-x-3 text-left group cursor-pointer"
                                     >
-                                      {topic.title}
-                                    </span>
-                                  </button>
-                                </div>
-
-                                <div className="pl-8 space-y-3">
-                                  {/* 関連サービスバッジ */}
-                                  <div className="flex flex-wrap gap-1.5">
-                                    {topic.services.map((svc) => (
+                                      {checked ? (
+                                        <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                      ) : (
+                                        <Circle className="w-5 h-5 text-slate-300 group-hover:text-indigo-500 shrink-0 mt-0.5 transition-colors" />
+                                      )}
                                       <span
-                                        key={svc}
-                                        className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700"
+                                        className={`text-sm sm:text-base font-bold transition-colors ${
+                                          checked
+                                            ? "text-emerald-800 line-through decoration-emerald-400/60"
+                                            : "text-slate-900 group-hover:text-indigo-700"
+                                        }`}
                                       >
-                                        {svc}
+                                        {topic.title}
                                       </span>
-                                    ))}
+                                    </button>
                                   </div>
 
-                                  {/* 押さえるべきポイント */}
-                                  <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700 list-disc pl-4">
-                                    {topic.keyPoints.map((pt, idx) => (
-                                      <li key={idx} className="leading-relaxed">
-                                        {pt}
-                                      </li>
-                                    ))}
-                                  </ul>
+                                  <div className="pl-8 space-y-3">
+                                    {/* 関連サービスバッジ */}
+                                    <div className="flex flex-wrap gap-1.5">
+                                      {topic.services.map((svc) => (
+                                        <span
+                                          key={svc}
+                                          className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700"
+                                        >
+                                          {svc}
+                                        </span>
+                                      ))}
+                                    </div>
 
-                                  {/* 試験テクニック */}
-                                  <div className="rounded-xl bg-amber-50/70 border border-amber-200/80 px-3.5 py-2.5 flex items-start space-x-2 text-xs text-amber-950">
-                                    <Lightbulb
-                                      size={15}
-                                      className="text-amber-600 shrink-0 mt-0.5"
-                                    />
-                                    <span>
-                                      <strong className="font-bold">試験の狙い目：</strong>
-                                      {topic.examTip}
-                                    </span>
+                                    {/* 押さえるべきポイント */}
+                                    <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700 list-disc pl-4">
+                                      {topic.keyPoints.map((pt, idx) => (
+                                        <li key={idx} className="leading-relaxed">
+                                          {pt}
+                                        </li>
+                                      ))}
+                                    </ul>
+
+                                    {/* 試験テクニック */}
+                                    <div className="rounded-xl bg-amber-50/70 border border-amber-200/80 px-3.5 py-2.5 flex items-start space-x-2 text-xs text-amber-950">
+                                      <Lightbulb
+                                        size={15}
+                                        className="text-amber-600 shrink-0 mt-0.5"
+                                      />
+                                      <span>
+                                        <strong className="font-bold">試験の狙い目：</strong>
+                                        {topic.examTip}
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              );
+                            })
+                          )}
                         </div>
                       )}
                     </SpotlightCard>
@@ -487,32 +630,81 @@ export default function AwsInfoPage() {
           </div>
         )}
 
-        {/* Tab 2: 頻出サービス比較表 */}
+        {/* Tab 2: 頻出サービス比較表 & 要件逆引き */}
         {activeTab === "comparisons" && (
-          <div className="space-y-6">
-            <div className="flex flex-wrap items-center gap-2">
-              {COMPARISON_CATEGORIES.map((cat) => {
-                const active = compCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => {
-                      playCyberClick();
-                      setCompCategory(cat);
-                    }}
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                      active
-                        ? "bg-indigo-600 text-white shadow-xs"
-                        : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-300"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
+          <div className="space-y-8">
+            {/* 検索 & カテゴリフィルター */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                {COMPARISON_CATEGORIES.map((cat) => {
+                  const active = compCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setCompCategory(cat);
+                      }}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        active
+                          ? "bg-indigo-600 text-white shadow-xs"
+                          : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-300"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="relative">
+                <Search
+                  size={14}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <input
+                  type="text"
+                  value={compQuery}
+                  onChange={(e) => setCompQuery(e.target.value)}
+                  placeholder="比較表・逆引きを検索..."
+                  className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-full sm:w-56"
+                />
+              </div>
             </div>
 
+            {/* 要件→サービス即断逆引きチートシート */}
+            <section className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
+                  <Zap size={17} className="text-amber-500" />
+                  <span>本番直前：要件キーワード → 推奨サービス即断チートシート</span>
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {filteredQuickLookup.map((item) => (
+                  <div
+                    key={item.keyword}
+                    className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col justify-between gap-2"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <span className="text-xs font-bold text-slate-900 leading-snug">
+                        「{item.keyword}」
+                      </span>
+                      <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                        {item.category}
+                      </span>
+                    </div>
+                    <div className="text-xs font-mono font-black text-indigo-700 bg-indigo-50/70 border border-indigo-100 px-3 py-1.5 rounded-lg">
+                      → {item.recommended}
+                    </div>
+                    <p className="text-[11px] text-slate-600 leading-relaxed">{item.reason}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 比較テーブル一覧 */}
             <div className="space-y-6">
               {filteredComparisons.map((table) => (
                 <div
@@ -576,7 +768,7 @@ export default function AwsInfoPage() {
         {activeTab === "quiz" && (
           <AwsSaaPracticeQuiz
             answers={progress.quizAnswers}
-            onSelectAnswer={handleSelectAnswer}
+            onSubmitAnswer={handleSubmitAnswer}
             onResetQuiz={handleResetQuiz}
           />
         )}

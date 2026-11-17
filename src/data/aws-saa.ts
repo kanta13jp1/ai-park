@@ -38,14 +38,22 @@ export interface SaaComparisonTable {
   decisionRule: string;
 }
 
+export interface SaaQuickLookupItem {
+  keyword: string;
+  category: string;
+  recommended: string;
+  reason: string;
+}
+
 export interface SaaQuestion {
   id: string;
   domainId: string;
   domainLabel: string;
   difficulty: "基礎" | "標準" | "応用";
+  selectCount: 1 | 2; // 1 = 択一, 2 = 2つ選択
   question: string;
   options: string[];
-  correctIndex: number;
+  correctIndices: number[];
   explanation: string;
   keywords: string[];
 }
@@ -76,7 +84,7 @@ export const saaDomains: SaaDomain[] = [
     weight: 30,
     accentColor: "indigo",
     summary:
-      "出題比率最大の30%。IAMの最小権限設計、VPCの境界防御、データの暗号化（保管時・転送時）、マルチアカウント統制が問われます。",
+      "出題比率最大の30%。IAMの最小権限設計、VPCの境界防御、データの暗号化（保管時・転送時）、監査・脅威検知、マルチアカウント統制が問われます。",
     topics: [
       {
         id: "d1-iam",
@@ -102,14 +110,25 @@ export const saaDomains: SaaDomain[] = [
       },
       {
         id: "d1-encryption",
-        title: "暗号化・鍵管理・脅威検知",
-        services: ["AWS KMS", "Secrets Manager", "ACM", "CloudTrail", "GuardDuty", "Macie"],
+        title: "暗号化・鍵管理・シークレット保護",
+        services: ["AWS KMS", "Secrets Manager", "Parameter Store", "ACM", "S3 Encryption"],
         keyPoints: [
           "Secrets Manager は RDS などの認証情報の「自動ローテーション」に対応（Parameter Store は自動ローテーション非対応）",
           "KMS のカスタマーマネージドキー (CMK) は鍵のローテーション制御やクロスアカウント共有・詳細なアクセス制御が可能",
-          "Amazon Macie は S3 バケット内の PII（個人情報・機密データ）を機械学習で自動検出する",
+          "ACM（AWS Certificate Manager）は ALB や CloudFront に統合して SSL/TLS 証明書を無料発行・自動更新する",
         ],
-        examTip: "「DBパスワードの自動ローテーション」＝ Secrets Manager。「S3内の個人情報検出」＝ Macie。",
+        examTip: "「DBパスワードの自動ローテーション」＝ Secrets Manager。「証明書の自動更新」＝ ACM。",
+      },
+      {
+        id: "d1-audit",
+        title: "監査ログ・脅威検知・コンプライアンス",
+        services: ["CloudTrail", "AWS Config", "Amazon GuardDuty", "Amazon Macie", "Security Hub", "Inspector"],
+        keyPoints: [
+          "CloudTrail は誰がいつどの API を呼んだかを記録（操作監査）。AWS Config はリソースの設定変更履歴とルール準拠を記録",
+          "GuardDuty は VPC フローログ・DNS ログ・CloudTrail を分析して不正アクセスや暗号資産マイニング等の脅威を検知",
+          "Amazon Macie は S3 バケット内の PII（個人情報・機密データ）を機械学習で自動検出し、Inspector は EC2/ECR/Lambda の脆弱性をスキャン",
+        ],
+        examTip: "「誰が削除したか追跡」＝ CloudTrail。「設定準拠チェック」＝ Config。「S3内の個人情報検出」＝ Macie。",
       },
     ],
   },
@@ -126,22 +145,33 @@ export const saaDomains: SaaDomain[] = [
       {
         id: "d2-ha-scaling",
         title: "Multi-AZ・ELB・Auto Scaling による高可用性",
-        services: ["ALB", "NLB", "Auto Scaling", "Route 53", "RDS Multi-AZ"],
+        services: ["ALB", "NLB", "EC2 Auto Scaling", "RDS Multi-AZ"],
         keyPoints: [
           "RDS Multi-AZ は同期レプリケーションでスタンバイを維持し、障害時に自動フェイルオーバー（可用性向上・読み取り分散は不可）",
           "ALB は L7（HTTP/HTTPS、パス/ホストベースルーティング）、NLB は L4（超低レイテンシ、固定IP、TCP/UDP）",
-          "Route 53 のフェイルオーバールーティングとヘルスチェックを組み合わせ、リージョン障害時の自動切り替えを実現",
+          "Auto Scaling の予測スケーリング（Predictive）は過去のトラフィック傾向を学習し、スパイク前に先回りでインスタンスを起動する",
         ],
         examTip: "「読み取り負荷分散」は Read Replica、「自動フェイルオーバー」は Multi-AZ。「固定IPが必要」なELBは NLB。",
+      },
+      {
+        id: "d2-dns-routing",
+        title: "Route 53 ルーティングポリシーとマルチリージョン制御",
+        services: ["Route 53", "Route 53 Health Check", "Alias Record"],
+        keyPoints: [
+          "フェイルオーバールーティング＋ヘルスチェックで、プライマリリージョン障害時にセカンダリへ自動切り替え",
+          "レイテンシールーティングはユーザーに最も遅延の少ないリージョンへ案内。位置情報（Geolocation）は国・地域制限やコンプライアンス向け",
+          "加重（Weighted）ルーティングはカナリアリリースやブルー/グリーン展開のトラフィック比率制御に活用",
+        ],
+        examTip: "「特定国のユーザーを自国リージョンに固定（コンプライアンス）」＝ 位置情報（Geolocation）。「最速応答」＝ レイテンシ。",
       },
       {
         id: "d2-decoupling",
         title: "疎結合アーキテクチャと非同期処理",
         services: ["Amazon SQS", "Amazon SNS", "EventBridge", "Step Functions", "API Gateway"],
         keyPoints: [
-          "SQS は 1対1 のキューイング（スパイク吸収・バックプレッシャー対策）。順序厳密かつ重複排除なら FIFO キュー（最大300 TPS、バッチで3000）",
+          "SQS は 1対1 のキューイング（スパイク吸収・バックプレッシャー対策）。順序厳密かつ重複排除なら FIFO キュー",
           "SNS は 1対多の Pub/Sub ファンアウト。SNS トピック → 複数の SQS キューへの Fan-out パターンは頻出",
-          "EventBridge はルールベースのイベントルーティング（SaaS連携・スケジュール実行・コンテンツフィルタリング）に最適",
+          "Step Functions は複数 Lambda や ECS タスクのワークフロー制御（リトライ・分岐・最大1年間の状態保持）に最適",
         ],
         examTip: "「処理のスパイクを平準化・バックエンド保護」＝ SQS。「複数システムへ同時通知」＝ SNS + SQS Fan-out。",
       },
@@ -191,15 +221,26 @@ export const saaDomains: SaaDomain[] = [
         examTip: "「HTTPキャッシュ配信」＝ CloudFront。「非HTTP/UDP/固定IPでグローバル高速化」＝ Global Accelerator。",
       },
       {
-        id: "d3-db-compute",
-        title: "データベース最適化とサーバーレス/コンテナ",
-        services: ["Aurora", "DynamoDB", "Redshift", "AWS Lambda", "ECS / Fargate"],
+        id: "d3-db",
+        title: "データベース最適化（RDB / NoSQL / 分析）",
+        services: ["Aurora", "DynamoDB", "DAX", "Redshift", "OpenSearch"],
         keyPoints: [
           "DynamoDB はミリ秒単位のキーバリュー/ドキュメントDB。マイクロ秒の読み取りキャッシュが必要なら DAX (DynamoDB Accelerator)",
-          "Lambda は最大実行時間15分。15分を超えるバッチや長時間コンテナ処理は ECS on Fargate / AWS Batch を選択",
-          "Aurora Serverless v2 は予測不能・断続的なワークロードに対し、キャパシティを瞬時に自動スケールする",
+          "DynamoDB のホットパーティション対策はカーディナリティの高いパーティションキー選定。別軸検索には GSI（グローバルセカンダリインデックス）",
+          "Aurora Serverless v2 は予測不能・断続的なワークロードに対し、キャパシティを瞬時に自動スケール。分析(OLAP)は Redshift、全文検索は OpenSearch",
         ],
-        examTip: "「15分以上の処理」で Lambda を除外し Fargate/Batch を選ぶ問題は定番。",
+        examTip: "「DynamoDB でマイクロ秒レスポンス」＝ DAX。「数TB〜PBのSQL集計/BI分析」＝ Redshift。",
+      },
+      {
+        id: "d3-compute",
+        title: "コンピューティング最適化（サーバーレス / コンテナ / HPC）",
+        services: ["AWS Lambda", "ECS / Fargate", "EKS", "AWS Batch", "Placement Groups"],
+        keyPoints: [
+          "Lambda は最大実行時間15分・メモリ最大10GB。15分を超えるバッチや長時間コンテナ処理は ECS on Fargate / AWS Batch を選択",
+          "EC2 クラスタープレイスメントグループは同一 AZ 内の近接配置により、HPC 等で超低レイテンシ・高スループットを実現",
+          "スプレッドプレイスメントグループは各インスタンスを異なるハードウェアに分散配置し、同時障害リスクを低減（最大7台/AZ）",
+        ],
+        examTip: "「15分以上の処理」で Lambda を除外し Fargate/Batch を選ぶ問題は定番。「HPC低遅延」＝ クラスタープレイスメントグループ。",
       },
     ],
   },
@@ -225,15 +266,37 @@ export const saaDomains: SaaDomain[] = [
         examTip: "「中断されても再開可能なバッチ処理でコスト最小化」＝ スポットインスタンス。「1〜3年の安定稼働で柔軟性重視」＝ Compute Savings Plans。",
       },
       {
-        id: "d4-storage-net-cost",
-        title: "S3 コスト最適化とデータ転送料金削減",
-        services: ["S3 Intelligent-Tiering", "S3 Glacier", "S3 Lifecycle", "Gateway Endpoint", "AWS Budgets"],
+        id: "d4-storage-cost",
+        title: "S3・EBS ストレージ階層化とライフサイクル",
+        services: ["S3 Intelligent-Tiering", "S3 Glacier", "S3 Lifecycle", "EBS gp3"],
         keyPoints: [
           "アクセスパターンが不明・変化するデータは S3 Intelligent-Tiering が自動で最適階層へ移動（取り出し料金なし）",
+          "S3 ライフサイクルルールで古いオブジェクトを Glacier Flexible / Deep Archive へ自動移行、または不完全なマルチパートアップロードを自動削除",
+          "EBS は旧世代 gp2 より gp3 の方が約20%安価で、IOPS とスループットを容量と独立してプロビジョニング可能",
+        ],
+        examTip: "「アクセス頻度不明」＝ Intelligent-Tiering。「7年保存で年1回未満」＝ Glacier Deep Archive。",
+      },
+      {
+        id: "d4-network-cost",
+        title: "データ転送料金・NAT Gateway コストの削減",
+        services: ["Gateway VPC Endpoint", "CloudFront", "Same-AZ Placement"],
+        keyPoints: [
           "NAT Gateway は時間課金＋データ処理課金がかかる。Private Subnet から S3/DynamoDB へは無料の Gateway型 VPC エンドポイントを使うと大幅削減",
-          "AWS Budgets はコストや使用量がしきい値を超えた（または予測された）際にアラート通知・自動アクションを実行",
+          "インターネット向けの大容量配信では S3 直接配信より CloudFront 経由の方がインターネット転送料単価が安く、キャッシュヒット時はオリジン転送もゼロ",
+          "同一 AZ 内のプライベート IP 通信は無料だが、異なる AZ 間の通信にはデータ転送料（GB単位）が発生する",
         ],
         examTip: "「NAT Gateway のコストが高い原因が S3 への大量転送」→ Gateway型 VPC エンドポイントを追加！",
+      },
+      {
+        id: "d4-governance-cost",
+        title: "コスト可視化・予算管理・異常検知",
+        services: ["AWS Budgets", "Cost Explorer", "Cost Anomaly Detection", "Trusted Advisor"],
+        keyPoints: [
+          "AWS Budgets はコストや使用量がしきい値を超えた（または予測された）際に SNS/Email 通知や自動 IAM 制限アクションを実行",
+          "Cost Explorer は過去の利用傾向の可視化と将来予測、リザーブド/Savings Plans の推奨購入額を提示",
+          "AWS Cost Anomaly Detection は機械学習で予期せぬコスト急増を自動検知しアラート通知",
+        ],
+        examTip: "「予算超過の事前アラート・自動制限」＝ AWS Budgets。「異常スパイクの自動検知」＝ Cost Anomaly Detection。",
       },
     ],
   },
@@ -268,6 +331,32 @@ export const saaComparisons: SaaComparisonTable[] = [
     decisionRule: "「WebのURLパスで振り分けたい」なら ALB、「TCP/UDPや固定IP・超低遅延」なら NLB。",
   },
   {
+    id: "comp-vpc-connect",
+    category: "ネットワーク",
+    title: "VPC Peering vs Transit Gateway vs PrivateLink",
+    subtitle: "VPC間・オンプレミス・サービス間の接続設計",
+    columns: ["方式", "接続トポロジ", "主な特徴・制約"],
+    rows: [
+      { feature: "VPC Peering", values: ["1対1（非推移的）", "少数VPCの低コスト直結。10個以上増えるとフルメッシュ管理が煩雑"] },
+      { feature: "AWS Transit Gateway", values: ["ハブ＆スポーク", "数十〜数千のVPCとSite-to-Site VPN/Direct Connectを一元接続"] },
+      { feature: "AWS PrivateLink", values: ["サービス公開（単方向）", "CIDR重複があっても安全に特定サービスのみ公開・接続可能"] },
+    ],
+    decisionRule: "「多数のVPCを一元ハブで接続」＝ Transit Gateway。「CIDR重複環境でサービスだけ公開」＝ PrivateLink。",
+  },
+  {
+    id: "comp-global-accel",
+    category: "ネットワーク",
+    title: "CloudFront vs Global Accelerator vs S3 Transfer Acceleration",
+    subtitle: "グローバルユーザーのアクセス高速化",
+    columns: ["サービス", "プロトコル", "キャッシュ", "主な用途"],
+    rows: [
+      { feature: "Amazon CloudFront", values: ["HTTP / HTTPS", "エッジでキャッシュ", "Webサイト、画像/動画配信、APIレスポンス高速化"] },
+      { feature: "AWS Global Accelerator", values: ["TCP / UDP", "なし（経路最適化）", "ゲーム/IoT/VoIP、固定Anycast IP、瞬時フェイルオーバー"] },
+      { feature: "S3 Transfer Acceleration", values: ["HTTP / HTTPS", "なし（エッジ経由アップロード）", "遠隔地からS3バケットへの大容量ファイルアップロード高速化"] },
+    ],
+    decisionRule: "「静的コンテンツをエッジにキャッシュ」＝ CloudFront。「非HTTPや固定IP」＝ Global Accelerator。",
+  },
+  {
     id: "comp-messaging",
     category: "非同期・連携",
     title: "SQS vs SNS vs EventBridge vs Kinesis",
@@ -280,6 +369,20 @@ export const saaComparisons: SaaComparisonTable[] = [
       { feature: "Kinesis Data Streams", values: ["リアルタイムストリーム", "IoT/ログ等の連続データを複数コンシューマが順序維持してリアルタイム処理"] },
     ],
     decisionRule: "「複数の後続処理に同時に同じイベントを配りつつ各処理を平準化」＝ SNS + SQS Fan-out パターン。",
+  },
+  {
+    id: "comp-storage-types",
+    category: "ストレージ",
+    title: "EBS vs EFS vs FSx vs S3",
+    subtitle: "ストレージ4種別のアーキテクチャ選定",
+    columns: ["サービス", "種別", "アクセス元", "適したワークロード"],
+    rows: [
+      { feature: "Amazon EBS", values: ["ブロックストレージ", "単一AZの単一EC2", "OSルートボリューム、高IOPSデータベース (io2)"] },
+      { feature: "Amazon EFS", values: ["NFS共有ファイル (Linux)", "複数AZの多数EC2/ECS/Lambda", "CMS共有ファイル、コンテナ永続共有ストレージ"] },
+      { feature: "Amazon FSx", values: ["マネージド専用ファイル", "Windows(SMB) / Lustre(HPC)", "AD連携Windowsファイル共有、機械学習/HPC高速演算"] },
+      { feature: "Amazon S3", values: ["オブジェクトストレージ", "HTTPS API (どこからでも)", "静的資産、データレイク、バックアップ、静的Webホスティング"] },
+    ],
+    decisionRule: "「複数AZのLinuxでマウント共有」＝ EFS。「Windows/SMB/AD」＝ FSx for Windows。「11個の9の耐久性」＝ S3。",
   },
   {
     id: "comp-storage",
@@ -312,12 +415,76 @@ export const saaComparisons: SaaComparisonTable[] = [
   },
 ];
 
+export const saaQuickLookup: SaaQuickLookupItem[] = [
+  {
+    keyword: "DBパスワードの自動ローテーション",
+    category: "セキュリティ",
+    recommended: "AWS Secrets Manager",
+    reason: "RDS / Aurora / Redshift 等の認証情報ローテーションをネイティブに自動化可能。",
+  },
+  {
+    keyword: "S3 バケット内の個人情報 (PII) 自動検出",
+    category: "セキュリティ",
+    recommended: "Amazon Macie",
+    reason: "機械学習を用いて S3 内の機密データ・個人情報をスキャンして可視化。",
+  },
+  {
+    keyword: "特定IPアドレスの通信拒否 (Deny)",
+    category: "セキュリティ",
+    recommended: "Network ACL / AWS WAF",
+    reason: "Security Group は Allow のみ。IP拒否は NACL（VPC層）または WAF（L7層）。",
+  },
+  {
+    keyword: "NAT Gateway の S3 転送コスト削減",
+    category: "コスト最適化",
+    recommended: "Gateway 型 VPC エンドポイント",
+    reason: "S3 / DynamoDB への通信を無料のプライベート経路へ逃がせる。",
+  },
+  {
+    keyword: "15分を超えるサーバーレス/コンテナ処理",
+    category: "コンピュート",
+    recommended: "ECS on Fargate / AWS Batch",
+    reason: "Lambda の最大実行時間は15分のため、長時間処理はコンテナまたは Batch。",
+  },
+  {
+    keyword: "DynamoDB のマイクロ秒レベル読み取り",
+    category: "データベース",
+    recommended: "DynamoDB Accelerator (DAX)",
+    reason: "DynamoDB API 互換のインメモリキャッシュによりミリ秒→マイクロ秒へ高速化。",
+  },
+  {
+    keyword: "複数AZ・多数のLinuxから同時マウント",
+    category: "ストレージ",
+    recommended: "Amazon EFS",
+    reason: "POSIX準拠のフルマネージド NFS。EBS は単一AZ・原則単一EC2限定。",
+  },
+  {
+    keyword: "Windows SMB 共有 + Active Directory 連携",
+    category: "ストレージ",
+    recommended: "Amazon FSx for Windows File Server",
+    reason: "NTFS / SMB / AD統合にネイティブ対応したマネージドファイルサーバー。",
+  },
+  {
+    keyword: "スパイク吸収・バックエンドDB保護",
+    category: "疎結合",
+    recommended: "Amazon SQS",
+    reason: "リクエストをキューにバッファリングし、ワーカーが処理可能な速度で処理。",
+  },
+  {
+    keyword: "固定Anycast IP + TCP/UDP グローバル高速化",
+    category: "ネットワーク",
+    recommended: "AWS Global Accelerator",
+    reason: "CloudFront は HTTP/HTTPS 専用。非HTTPや固定IPが必要な場合は Global Accelerator。",
+  },
+];
+
 export const saaPracticeQuestions: SaaQuestion[] = [
   {
     id: "q1",
     domainId: "domain-1",
     domainLabel: "Domain 1: セキュアなアーキテクチャ",
     difficulty: "基礎",
+    selectCount: 1,
     question:
       "Amazon EC2 インスタンス上で動作するアプリケーションから Amazon S3 バケットへファイルをアップロードする必要があります。セキュリティのベストプラクティスとして最も適切な方法はどれですか？",
     options: [
@@ -326,7 +493,7 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "S3 バケットポリシーで EC2 インスタンスのパブリック IP アドレスからの書き込みを許可する",
       "ルートアカウントの認証情報を使用して S3 API を呼び出す",
     ],
-    correctIndex: 1,
+    correctIndices: [1],
     explanation:
       "EC2 から AWS サービスへアクセスする場合、静的なアクセスキーをインスタンス内に保存せず、IAM ロール（インスタンスプロファイル）を割り当てて STS による一時的な認証情報を自動ローテーションで取得するのがベストプラクティスです。",
     keywords: ["IAMロール", "一時的認証情報", "アクセスキー非保存"],
@@ -336,6 +503,7 @@ export const saaPracticeQuestions: SaaQuestion[] = [
     domainId: "domain-1",
     domainLabel: "Domain 1: セキュアなアーキテクチャ",
     difficulty: "標準",
+    selectCount: 1,
     question:
       "プライベートサブネット内の多数の EC2 インスタンスが、Amazon S3 上の巨大なデータセットを頻繁に読み書きしています。現在 NAT Gateway 経由で通信しているためデータ処理料金が高額になっています。インターネットを経由せずセキュアかつ最もコスト効率よくこの問題を解決する方法はどれですか？",
     options: [
@@ -344,7 +512,7 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "NAT Gateway を NAT インスタンス（t3.micro）に置き換える",
       "EC2 インスタンスをパブリックサブネットに移動し、Internet Gateway 経由で通信させる",
     ],
-    correctIndex: 1,
+    correctIndices: [1],
     explanation:
       "Amazon S3 と DynamoDB に対しては「Gateway 型 VPC エンドポイント」が無料で提供されており、時間課金やデータ処理課金がかかりません。Interface 型（PrivateLink）は時間・データ課金が発生するため、VPC 内からの S3 アクセス削減には Gateway 型が最適です。",
     keywords: ["Gateway型VPCエンドポイント", "S3", "NAT Gatewayコスト削減"],
@@ -354,6 +522,7 @@ export const saaPracticeQuestions: SaaQuestion[] = [
     domainId: "domain-1",
     domainLabel: "Domain 1: セキュアなアーキテクチャ",
     difficulty: "標準",
+    selectCount: 1,
     question:
       "企業は AWS Organizations を使用して複数の AWS アカウントを管理しています。開発者アカウントの管理者（AdministratorAccess を持つ IAM ユーザー）であっても、特定の高価な GPU インスタンスを起動したり、CloudTrail を無効化したりできないように強制したいと考えています。どの機能を使用すべきですか？",
     options: [
@@ -362,16 +531,37 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "AWS Config ルールを設定し、違反リソースを検知してアラートメールを送る",
       "Amazon GuardDuty を有効化して不審な API コールをブロックする",
     ],
-    correctIndex: 1,
+    correctIndices: [1],
     explanation:
       "AWS Organizations の SCP（サービスコントロールポリシー）は、アカウント内のルートユーザーや AdministratorAccess を持つ IAM ユーザーに対しても権限の上限（ガードレール）を強制できます。Config や GuardDuty は検知サービスであり予防的制限ではありません。",
     keywords: ["AWS Organizations", "SCP", "マルチアカウント統制"],
   },
   {
     id: "q4",
+    domainId: "domain-1",
+    domainLabel: "Domain 1: セキュアなアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 2,
+    question:
+      "Amazon S3 バケットに顧客の機密ドキュメントを保管しています。意図しないパブリック公開や暗号化されていないオブジェクトの保存を防ぎ、さらにバケット内に個人情報（PII）が含まれていないか自動検出したいと考えています。採用すべき組み合わせを【2つ】選んでください。",
+    options: [
+      "S3 バケットおよびアカウントレベルで「S3 パブリックアクセスブロック」を有効化する",
+      "Amazon GuardDuty を有効にして S3 内のテキストファイルを全文解析する",
+      "Amazon Macie を有効化して S3 バケット内の機密データ・個人情報を自動検出する",
+      "Network ACL を設定して S3 バケットへの HTTP 接続を拒否する",
+      "EC2 セキュリティグループで S3 のアウトバウンドポートを制限する",
+    ],
+    correctIndices: [0, 2],
+    explanation:
+      "S3 の意図しない公開防止には「S3 パブリックアクセスブロック」が最も確実です。また、S3 バケット内の PII（個人情報）検出には Amazon Macie を使用します（GuardDuty は不審な API やアクセスパターンの脅威検知であり、ファイル内容の PII 検出ではありません）。",
+    keywords: ["S3パブリックアクセスブロック", "Amazon Macie", "複数選択"],
+  },
+  {
+    id: "q5",
     domainId: "domain-2",
     domainLabel: "Domain 2: 弾力性に優れたアーキテクチャ",
     difficulty: "標準",
+    selectCount: 1,
     question:
       "Web サイトで注文データを受け付ける際、セール期間中にトラフィックが急増するとバックエンドのデータベース処理が追いつかずタイムアウトが発生します。注文リクエストを失うことなく受け付け、バックエンドが処理可能なペースで非同期に処理できる疎結合アーキテクチャはどれですか？",
     options: [
@@ -380,16 +570,17 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "Amazon CloudFront で POST リクエストをキャッシュし、バックエンドへの到達を遅らせる",
       "Amazon SNS トピックから直接 Amazon RDS へデータを書き込む",
     ],
-    correctIndex: 0,
+    correctIndices: [0],
     explanation:
       "Amazon SQS をバッファ（キュー）として前段に配置し、ワーカー層（EC2 / ECS / Lambda）が処理可能なペースでメッセージを取得・処理することで、急激なスパイクによる DB 過負荷を防ぎリクエストの取りこぼしも防止できます。",
     keywords: ["Amazon SQS", "疎結合", "スパイク吸収"],
   },
   {
-    id: "q5",
+    id: "q6",
     domainId: "domain-2",
     domainLabel: "Domain 2: 弾力性に優れたアーキテクチャ",
     difficulty: "応用",
+    selectCount: 1,
     question:
       "あるミッションクリティカルなシステムでは、リージョン全体が停止した場合でも RTO（目標復旧時間）を数分以内、RPO（目標復旧時点）を数秒以内に抑える必要があります。かつ平時のコストは Active-Active 構成より抑えたい場合、最適な DR（ディザスタリカバリ）戦略はどれですか？",
     options: [
@@ -398,16 +589,56 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "Multi-Site Active/Active（両リージョンで常にフルキャパシティで稼働）",
       "単一リージョン内での Multi-AZ 構成のみを維持する",
     ],
-    correctIndex: 1,
+    correctIndices: [1],
     explanation:
       "Pilot Light はコアとなるデータベース（Aurora Global Database など）を常に稼働・レプリケーションさせておき、アプリサーバー等は障害時に起動・スケールさせる方式で、RPO/RTO を短く保ちつつ平時コストを抑えられます。単一リージョンの Multi-AZ はリージョン障害に対応できません。",
     keywords: ["DR戦略", "Pilot Light", "RTO/RPO"],
   },
   {
-    id: "q6",
+    id: "q7",
+    domainId: "domain-2",
+    domainLabel: "Domain 2: 弾力性に優れたアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "注文イベントが発生した際、「在庫引き当て」「メール通知」「分析データ保存」の3つの独立したマイクロサービスへ同時に同じイベントを配信し、各サービスが自身のペースで確実に処理できるようにしたいと考えています。最も適切な AWS 構成はどれですか？",
+    options: [
+      "1つの Amazon SQS キューに3つのマイクロサービスを接続して競合消費させる",
+      "Amazon SNS トピックにイベントを送信し、3つの Amazon SQS キューをサブスクライブさせる（Fan-out 構成）",
+      "Application Load Balancer でパスごとに3つの EC2 へ同時複製する",
+      "Amazon RDS のトリガーから直接3つの外部 API を同期呼び出しする",
+    ],
+    correctIndices: [1],
+    explanation:
+      "1対多の配信と各バックエンドの非同期バッファリングを両立する王道パターンが「SNS + SQS Fan-out」です。1つの SQS キューを複数サービスで共有すると、誰か1つがメッセージを削除してしまい全サービスに届きません。",
+    keywords: ["SNS + SQS Fan-out", "1対多配信", "疎結合"],
+  },
+  {
+    id: "q8",
+    domainId: "domain-2",
+    domainLabel: "Domain 2: 弾力性に優れたアーキテクチャ",
+    difficulty: "基礎",
+    selectCount: 2,
+    question:
+      "Amazon RDS for PostgreSQL を本番運用しています。AZ（アベイラビリティーゾーン）障害時の自動フェイルオーバーによる高可用性と、ダッシュボード系クエリによる読み取り負荷の分散の両方を実現したい場合、設定すべき構成を【2つ】選んでください。",
+    options: [
+      "RDS インスタンスで Multi-AZ 配置を有効化する",
+      "RDS インスタンスのストレージタイプを gp3 から io2 に変更する",
+      "RDS のリードレプリカ（Read Replica）を作成し、参照系クエリを振り向ける",
+      "EC2 上にセルフマネージドのスタンドアロン PostgreSQL を構築する",
+      "RDS スナップショットを毎時 S3 へエクスポートする",
+    ],
+    correctIndices: [0, 2],
+    explanation:
+      "RDS Multi-AZ はスタンバイ機を同期維持して障害時の自動フェイルオーバー（高可用性）を担いますが、スタンバイは読み取りに使えません。読み取り負荷の分散には別途リードレプリカ（非同期）を作成します。",
+    keywords: ["RDS Multi-AZ", "リードレプリカ", "複数選択"],
+  },
+  {
+    id: "q9",
     domainId: "domain-3",
     domainLabel: "Domain 3: 高パフォーマンスなアーキテクチャ",
     difficulty: "基礎",
+    selectCount: 1,
     question:
       "複数のアベイラビリティーゾーン（AZ）にまたがって稼働する多数の Linux EC2 インスタンスから、共通のディレクトリに同時に読み書きできる POSIX 準拠の共有ファイルシステムが必要です。運用負荷を最小限に抑えるマネージドサービスはどれですか？",
     options: [
@@ -416,16 +647,17 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "Amazon S3",
       "Amazon FSx for Windows File Server",
     ],
-    correctIndex: 1,
+    correctIndices: [1],
     explanation:
       "Amazon EFS はサーバーレスで自動拡張する NFSv4 ベースの共有ファイルシステムであり、複数 AZ の多数の Linux EC2 / ECS / Lambda から同時にマウントして POSIX 互換のファイル操作が可能です。EBS は単一 AZ 限定、S3 はオブジェクトストレージ（POSIX非準拠）です。",
     keywords: ["Amazon EFS", "複数AZ共有", "POSIX/NFS"],
   },
   {
-    id: "q7",
+    id: "q10",
     domainId: "domain-3",
     domainLabel: "Domain 3: 高パフォーマンスなアーキテクチャ",
     difficulty: "標準",
+    selectCount: 1,
     question:
       "グローバルに展開するオンラインゲームのバックエンドで、TCP および UDP プロトコルを使用する低レイテンシ通信が必要です。また、クライアント側のファイアウォール設定のために固定の Anycast IP アドレスを提供する必要があります。最適なサービスはどれですか？",
     options: [
@@ -434,16 +666,55 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "Application Load Balancer (ALB)",
       "Amazon Route 53 レイテンシールーティング",
     ],
-    correctIndex: 1,
+    correctIndices: [1],
     explanation:
       "AWS Global Accelerator は 2 つの固定 Anycast IP アドレスを提供し、エッジロケーションから AWS のプライベートバックボーンネットワーク経由で最寄りのリージョンへ TCP/UDP トラフィックを高速転送します。CloudFront は HTTP/HTTPS 専用です。",
     keywords: ["Global Accelerator", "TCP/UDP", "固定Anycast IP"],
   },
   {
-    id: "q8",
+    id: "q11",
+    domainId: "domain-3",
+    domainLabel: "Domain 3: 高パフォーマンスなアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "Amazon DynamoDB をバックエンドに使用するモバイルアプリで、新キャンペーン開始に伴い読み取りトラフィックが急増し、数ミリ秒のレイテンシをさらに「マイクロ秒」レベルまで短縮しつつ、既存の DynamoDB API 呼び出しコードの変更を最小限に抑えたいと考えています。最適な選択はどれですか？",
+    options: [
+      "Amazon ElastiCache for Memcached を導入し、アプリ側でキャッシュ制御ロジックを書き直す",
+      "Amazon DynamoDB Accelerator (DAX) クラスターを前段に配置する",
+      "DynamoDB のグローバルテーブルを有効化する",
+      "Amazon Redshift にデータをコピーして参照させる",
+    ],
+    correctIndices: [1],
+    explanation:
+      "DAX (DynamoDB Accelerator) は DynamoDB 専用のフルマネージド・インメモリキャッシュであり、DynamoDB と API 互換性があるため、クライアントのエンドポイントを変更するだけでマイクロ秒レベルの読み取り性能を実現できます。",
+    keywords: ["DynamoDB", "DAX", "マイクロ秒キャッシュ"],
+  },
+  {
+    id: "q12",
+    domainId: "domain-3",
+    domainLabel: "Domain 3: 高パフォーマンスなアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "動画ファイルのエンコード処理を実行するサーバーレスパイプラインを設計しています。1ファイルあたりの処理時間は平均 25〜40 分かかります。サーバー管理の手間を最小限に抑えつつこの処理を実行する最適なコンピューティングサービスはどれですか？",
+    options: [
+      "AWS Lambda（メモリ 10GB 設定）",
+      "Amazon ECS on AWS Fargate",
+      "Amazon API Gateway 統合レスポンス",
+      "Amazon CloudFront Functions",
+    ],
+    correctIndices: [1],
+    explanation:
+      "AWS Lambda の最大実行時間は 15 分であるため、25〜40 分かかる処理はタイムアウトします。サーバー管理不要（サーバーレス）で長時間コンテナを実行できる Amazon ECS on AWS Fargate（または AWS Batch）が最適です。",
+    keywords: ["AWS Fargate", "Lambda 15分制限", "長時間バッチ"],
+  },
+  {
+    id: "q13",
     domainId: "domain-4",
     domainLabel: "Domain 4: コストを最適化したアーキテクチャ",
     difficulty: "標準",
+    selectCount: 1,
     question:
       "大量の画像ファイルを Amazon S3 に保存しています。アップロード直後は頻繁にアクセスされますが、30日以降はアクセス頻度が予測不能に変動します。手動の運用なしにストレージコストを自動的に最適化するにはどのストレージクラスを使うべきですか？",
     options: [
@@ -452,16 +723,17 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "S3 Glacier Deep Archive",
       "S3 One Zone-IA",
     ],
-    correctIndex: 1,
+    correctIndices: [1],
     explanation:
       "S3 Intelligent-Tiering はアクセスパターンを自動監視し、アクセス頻度に応じて「頻繁」「低頻度」「アーカイブインスタント」等の階層へ自動移動させます。取り出し料金も発生しないため、アクセスパターンが不明または変動するデータに最適です。",
     keywords: ["S3 Intelligent-Tiering", "コスト自動最適化", "アクセス頻度変動"],
   },
   {
-    id: "q9",
+    id: "q14",
     domainId: "domain-4",
     domainLabel: "Domain 4: コストを最適化したアーキテクチャ",
     difficulty: "基礎",
+    selectCount: 1,
     question:
       "動画レンダリングのバッチ処理システムを構築しています。処理は中断されてもチェックポイントから再開可能であり、EC2 インスタンスの計算コストを最大限（最大90%程度）削減したいと考えています。どの EC2 購入オプションが最適ですか？",
     options: [
@@ -470,10 +742,48 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "専用ホスト (Dedicated Hosts)",
       "スタンダードリザーブドインスタンス（1年契約）",
     ],
-    correctIndex: 1,
+    correctIndices: [1],
     explanation:
       "EC2 スポットインスタンスは AWS の未使用キャパシティを利用することでオンデマンド比最大90%の割引を受けられます。2分前の通知で中断される可能性がありますが、中断・再開に耐えられるステートレス/バッチ処理には最もコスト効率が高い選択肢です。",
     keywords: ["スポットインスタンス", "耐障害バッチ", "最大コスト削減"],
+  },
+  {
+    id: "q15",
+    domainId: "domain-4",
+    domainLabel: "Domain 4: コストを最適化したアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "コンプライアンス要件により、監査ログを最低 7 年間保管する必要があります。普段このデータにアクセスすることはほぼありませんが、監査時には最大 12〜48 時間以内に取り出せれば許容されます。最もストレージコストを抑えられる S3 ストレージクラスはどれですか？",
+    options: [
+      "S3 Standard-IA",
+      "S3 Glacier Instant Retrieval",
+      "S3 Glacier Flexible Retrieval",
+      "S3 Glacier Deep Archive",
+    ],
+    correctIndices: [3],
+    explanation:
+      "S3 Glacier Deep Archive は 12〜48 時間での取り出しを許容する代わりに、S3 の中で最も低いストレージ単価（長期アーカイブ向け、最低保存期間180日）を提供します。",
+    keywords: ["Glacier Deep Archive", "7年保管", "最安アーカイブ"],
+  },
+  {
+    id: "q16",
+    domainId: "domain-4",
+    domainLabel: "Domain 4: コストを最適化したアーキテクチャ",
+    difficulty: "応用",
+    selectCount: 1,
+    question:
+      "複数の AWS リージョンや異なるインスタンスファミリー（EC2）に加えて、今後 AWS Fargate や AWS Lambda への移行も検討しています。今後 1〜3 年間の継続的なコンピューティング利用に対して、アーキテクチャ変更の柔軟性を維持しつつ大幅なコスト削減を実現できる割引プランはどれですか？",
+    options: [
+      "スタンダードリザーブドインスタンス (Standard RI)",
+      "Compute Savings Plans",
+      "EC2 Instance Savings Plans",
+      "オンデマンドキャパシティ予約",
+    ],
+    correctIndices: [1],
+    explanation:
+      "Compute Savings Plans はインスタンスファミリー・サイズ・OS・リージョンを問わず適用でき、さらに EC2 だけでなく AWS Fargate や AWS Lambda の利用料金にも自動的に割引が適用されるため、最も柔軟性が高い割引オプションです。",
+    keywords: ["Compute Savings Plans", "Fargate/Lambda適用", "柔軟なコスト最適化"],
   },
 ];
 
