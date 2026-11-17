@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-17T01:42:53.413Z",
-  "lastSyncedAtFormatted": "2026/11/17 10:42:53",
+  "lastSyncedAt": "2026-11-17T15:39:51.330Z",
+  "lastSyncedAtFormatted": "2026/11/18 0:39:51",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -16,6 +16,106 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-openai-strengthening-nato-allied-cyber-defences-ai",
+      "title": "OpenAI: Strengthening NATO and allied cyber defenses with AI",
+      "date": "2026/11/17",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "How OpenAI is working with NATO and allied cyber agencies to help trusted defenders find vulnerabilities, test fixes and protect essential systems.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Strengthening NATO and allied cyber defenses with AI」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/strengthening-nato-allied-cyber-defences-ai",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-introducing-openai-for-chile",
+      "title": "OpenAI: Introducing OpenAI for Chile",
+      "date": "2026/11/17",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI and the Government of Chile are partnering to support responsible AI adoption, build public-sector skills and help local startups develop AI applications.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing OpenAI for Chile」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/introducing-openai-for-chile",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-cloudflare",
+      "title": "Latent Space: Cloudflare Joins the Jevolution and Labels Itself a Neolab",
+      "date": "2026/11/17",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Cloudflare made its name speeding up the web. Now it's building System One models to make decisions and pull data in milliseconds.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「Cloudflare Joins the Jevolution and Labels Itself a Neolab」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/cloudflare/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-ainews-perplexity-hits-a-1b-revenue-run-rate-up-",
+      "title": "Latent Space: [AINews] Perplexity hits a $1B revenue run rate, up 4x in 2026",
+      "date": "2026/11/17",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 16, 2026 — Computer gets Teammates, Perplexity ships Monitor API, and a new research lab launches.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Perplexity hits a $1B revenue run rate, up 4x in 2026」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-perplexity-hits-a-1b-revenue-run-rate-up-4x-in-2026/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-openai-expanding-chatgpt-for-academic-researchers",
       "title": "OpenAI: Broadening access to AI for scientists",
@@ -33,56 +133,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/expanding-chatgpt-for-academic-researchers",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-strengthening-online-child-safety",
-      "title": "OpenAI: Strengthening the fight against online child sexual abuse with new tools and support",
-      "date": "2026/11/16",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "New tools, practical guidance, and partnerships will help prevent, detect and respond to online child sexual exploitation and abuse.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Strengthening the fight against online child sexual abuse with new tools and support」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/strengthening-online-child-safety",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-science-at-the-frontier",
-      "title": "OpenAI: Science at the Frontier: How scientists use ChatGPT",
-      "date": "2026/11/16",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Explore how more than 1,800 scientists use ChatGPT in research. See findings on daily workflows, reported productivity, and expectations for discovery.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Science at the Frontier: How scientists use ChatGPT」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/science-at-the-frontier",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -138,56 +188,6 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-bfl",
-      "title": "Latent Space: Building Visual Intelligence — Andreas Blattmann & Dustin Podell, Black Forest Labs",
-      "date": "2026/11/16",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Black Forest Labs’ case for learning AGI from pixels, motion and sound.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「Building Visual Intelligence — Andreas Blattmann & Dustin Podell, Black Forest Labs」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/bfl/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-ainews-the-no-ai-slop-manifesto",
-      "title": "Latent Space: [AINews] The No AI Slop Manifesto",
-      "date": "2026/11/14",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 13, 2026 — AIE speakers unite to lay out how to fight slop.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] The No AI Slop Manifesto」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-the-no-ai-slop-manifesto/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
       ],
       "isLiveSynced": true
     },
