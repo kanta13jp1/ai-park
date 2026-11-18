@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-17T15:39:51.330Z",
-  "lastSyncedAtFormatted": "2026/11/18 0:39:51",
+  "lastSyncedAt": "2026-11-18T00:41:47.940Z",
+  "lastSyncedAtFormatted": "2026/11/18 9:41:47",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 49,
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-openai-introducing-gpt-6-2-astra-sol",
+      "title": "OpenAI: Introducing GPT-6.2 Astra and Sol",
+      "date": "2026/11/17",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Introducing GPT‑6.2 Astra and Sol, with better professional outputs, coding, computer use, and efficiency at lower cost across ChatGPT Work, Codex, and the API.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing GPT-6.2 Astra and Sol」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/introducing-gpt-6-2-astra-sol",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-openai-strengthening-nato-allied-cyber-defences-ai",
       "title": "OpenAI: Strengthening NATO and allied cyber defenses with AI",
@@ -42,22 +67,22 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-introducing-openai-for-chile",
-      "title": "OpenAI: Introducing OpenAI for Chile",
+      "id": "live-openai-introducing-chatgpt-for-sales",
+      "title": "OpenAI: Introducing ChatGPT for Sales",
       "date": "2026/11/17",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "OpenAI and the Government of Chile are partnering to support responsible AI adoption, build public-sector skills and help local startups develop AI applications.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing OpenAI for Chile」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "Explore the new Sales plugin and 30+ new and expanded partner plugins in ChatGPT to research prospects, prepare pitches, update your CRM, and move deals forward.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Introducing ChatGPT for Sales」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/introducing-openai-for-chile",
+      "sourceUrl": "https://openai.com/index/introducing-chatgpt-for-sales",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -113,31 +138,6 @@
         "AI Engineering",
         "Agentic AI",
         "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-expanding-chatgpt-for-academic-researchers",
-      "title": "OpenAI: Broadening access to AI for scientists",
-      "date": "2026/11/16",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "We’re expanding our ChatGPT for Academic Researchers program to offer 200,000 researchers worldwide free access to our frontier models.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Broadening access to AI for scientists」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/expanding-chatgpt-for-academic-researchers",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
       ],
       "isLiveSynced": true
     },
