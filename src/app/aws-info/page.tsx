@@ -23,12 +23,15 @@ import {
   EyeOff,
   ChevronsUpDown,
   Sparkles,
+  Layers2,
+  ArrowRight,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
 import SpotlightCard from "@/components/SpotlightCard";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import AwsSaaPracticeQuiz, { isQuestionCorrect } from "@/components/aws/AwsSaaPracticeQuiz";
+import AwsSaaFlashcards from "@/components/aws/AwsSaaFlashcards";
 import {
   saaExamFacts,
   saaDomains,
@@ -36,15 +39,18 @@ import {
   saaQuickLookup,
   saaPracticeQuestions,
   saaOfficialResources,
+  saaArchitecturePatterns,
   type SaaDomain,
 } from "@/data/aws-saa";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
-type TabId = "domains" | "comparisons" | "quiz" | "resources";
+type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
 interface AwsSaaProgress {
   completedTopics: string[];
   quizAnswers: Record<string, number[]>;
+  bookmarkedQuestions: string[];
+  masteredCards: string[];
 }
 
 const STORAGE_KEY = "ai-park-aws-saa-progress-v1";
@@ -52,6 +58,8 @@ const STORAGE_KEY = "ai-park-aws-saa-progress-v1";
 const DEFAULT_PROGRESS: AwsSaaProgress = {
   completedTopics: [],
   quizAnswers: {},
+  bookmarkedQuestions: [],
+  masteredCards: [],
 };
 
 const DOMAIN_ICONS: Record<string, typeof ShieldCheck> = {
@@ -107,15 +115,19 @@ function normalizeQuizAnswers(raw: unknown): Record<string, number[]> {
     if (Array.isArray(v)) {
       result[k] = v.filter((n): n is number => typeof n === "number");
     } else if (typeof v === "number") {
-      // 旧バージョン (number) からの後方互換マイグレーション
       result[k] = [v];
     }
   }
   return result;
 }
 
+function normalizeStringArray(raw: unknown): string[] {
+  return Array.isArray(raw) ? raw.filter((s): s is string => typeof s === "string") : [];
+}
+
 export default function AwsInfoPage() {
   const [activeTab, setActiveTab] = useState<TabId>("domains");
+  const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
   const [progress, setProgress] = useState<AwsSaaProgress>(DEFAULT_PROGRESS);
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>({
     "domain-1": true,
@@ -133,16 +145,13 @@ export default function AwsInfoPage() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw) as {
-          completedTopics?: unknown;
-          quizAnswers?: unknown;
-        };
+        const parsed = JSON.parse(raw) as Record<string, unknown>;
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setProgress({
-          completedTopics: Array.isArray(parsed.completedTopics)
-            ? parsed.completedTopics.filter((s): s is string => typeof s === "string")
-            : [],
+          completedTopics: normalizeStringArray(parsed.completedTopics),
           quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
+          bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
+          masteredCards: normalizeStringArray(parsed.masteredCards),
         });
       }
     } catch {
@@ -175,8 +184,28 @@ export default function AwsInfoPage() {
     });
   };
 
+  const handleToggleBookmark = (questionId: string) => {
+    const exists = progress.bookmarkedQuestions.includes(questionId);
+    const bookmarkedQuestions = exists
+      ? progress.bookmarkedQuestions.filter((id) => id !== questionId)
+      : [...progress.bookmarkedQuestions, questionId];
+    saveProgress({ ...progress, bookmarkedQuestions });
+  };
+
+  const handleToggleMasteredCard = (keyword: string) => {
+    const exists = progress.masteredCards.includes(keyword);
+    const masteredCards = exists
+      ? progress.masteredCards.filter((k) => k !== keyword)
+      : [...progress.masteredCards, keyword];
+    saveProgress({ ...progress, masteredCards });
+  };
+
   const handleResetQuiz = () => {
     saveProgress({ ...progress, quizAnswers: {} });
+  };
+
+  const handleResetMasteredCards = () => {
+    saveProgress({ ...progress, masteredCards: [] });
   };
 
   const handleResetAllClick = () => {
@@ -197,6 +226,13 @@ export default function AwsInfoPage() {
       next[d.id] = expand;
     }
     setExpandedDomains(next);
+  };
+
+  const handleJumpToDomainQuiz = (domainId: string) => {
+    playCyberClick();
+    setQuizDomainTarget(domainId);
+    setActiveTab("quiz");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const totalTopics = useMemo(
@@ -246,6 +282,12 @@ export default function AwsInfoPage() {
     { id: "domains", label: "4ドメイン攻略", icon: BookOpen, badge: `${doneTopicsCount}/${totalTopics}` },
     { id: "comparisons", label: "頻出比較 & 逆引き", icon: TableProperties, badge: `${saaComparisons.length}` },
     {
+      id: "flashcards",
+      label: "フラッシュカード",
+      icon: Layers2,
+      badge: `${progress.masteredCards.length}/${saaQuickLookup.length}`,
+    },
+    {
       id: "quiz",
       label: "実践演習クイズ",
       icon: HelpCircle,
@@ -279,22 +321,22 @@ export default function AwsInfoPage() {
                     <span>AWS SAA-C03 STUDY HUB</span>
                   </span>
                   <span className="text-xs text-slate-300">
-                    4ドメイン {totalTopics} トピック ・ 比較表 {saaComparisons.length} 種 ・ 実践演習 {saaPracticeQuestions.length} 問
+                    {totalTopics} トピック ・ 比較表 {saaComparisons.length} 種 ・ カード {saaQuickLookup.length} 枚 ・ 演習 {saaPracticeQuestions.length} 問
                   </span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
                   AWS認定ソリューションアーキテクト - アソシエイト 合格対策
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                  試験ガイド（SAA-C03）の4つの出題ドメインに沿って、頻出サービスの選定基準・設計パターン・択一＆複数選択の実践問題をまとめた学習サイトです。学習チェックや演習結果はブラウザに自動保存されます。
+                  試験ガイド（SAA-C03）の4つの出題ドメインに沿って、頻出サービスの選定基準・フラッシュカード暗記・択一＆複数選択の実践問題をまとめた学習サイトです。学習記録はブラウザに自動保存されます。
                 </p>
               </div>
 
               {/* 進捗ゲージカード */}
-              <div className="shrink-0 grid grid-cols-2 gap-3 sm:min-w-[290px]">
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-4 backdrop-blur-xs space-y-1.5">
+              <div className="shrink-0 grid grid-cols-3 gap-2.5 sm:min-w-[360px]">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
-                  <div className="text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
+                  <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
                   <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
                     <div
                       className="h-full bg-cyan-400 transition-all duration-500"
@@ -302,13 +344,31 @@ export default function AwsInfoPage() {
                     />
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    {doneTopicsCount} / {totalTopics} トピック完了
+                    {doneTopicsCount} / {totalTopics} 完了
                   </div>
                 </div>
 
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-4 backdrop-blur-xs space-y-1.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+                  <div className="text-[11px] text-slate-400 font-semibold">カード暗記</div>
+                  <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
+                    {Math.round((progress.masteredCards.length / saaQuickLookup.length) * 100)}%
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+                    <div
+                      className="h-full bg-amber-400 transition-all duration-500"
+                      style={{
+                        width: `${Math.round((progress.masteredCards.length / saaQuickLookup.length) * 100)}%`,
+                      }}
+                    />
+                  </div>
+                  <div className="text-[10px] text-slate-400">
+                    {progress.masteredCards.length} / {saaQuickLookup.length} 枚
+                  </div>
+                </div>
+
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">演習正答率</div>
-                  <div className="text-2xl font-black text-emerald-300 font-mono">{quizPct}%</div>
+                  <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">{quizPct}%</div>
                   <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
                     <div
                       className="h-full bg-emerald-400 transition-all duration-500"
@@ -559,28 +619,26 @@ export default function AwsInfoPage() {
                               const checked = progress.completedTopics.includes(topic.id);
                               return (
                                 <div key={topic.id} className="p-5 sm:p-6 space-y-3">
-                                  <div className="flex items-start justify-between gap-4">
-                                    <button
-                                      type="button"
-                                      onClick={() => toggleTopic(topic.id)}
-                                      className="flex items-start space-x-3 text-left group cursor-pointer"
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleTopic(topic.id)}
+                                    className="w-full flex items-start space-x-3 text-left group cursor-pointer"
+                                  >
+                                    {checked ? (
+                                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    ) : (
+                                      <Circle className="w-5 h-5 text-slate-300 group-hover:text-indigo-500 shrink-0 mt-0.5 transition-colors" />
+                                    )}
+                                    <span
+                                      className={`text-sm sm:text-base font-bold transition-colors ${
+                                        checked
+                                          ? "text-emerald-800 line-through decoration-emerald-400/60"
+                                          : "text-slate-900 group-hover:text-indigo-700"
+                                      }`}
                                     >
-                                      {checked ? (
-                                        <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                                      ) : (
-                                        <Circle className="w-5 h-5 text-slate-300 group-hover:text-indigo-500 shrink-0 mt-0.5 transition-colors" />
-                                      )}
-                                      <span
-                                        className={`text-sm sm:text-base font-bold transition-colors ${
-                                          checked
-                                            ? "text-emerald-800 line-through decoration-emerald-400/60"
-                                            : "text-slate-900 group-hover:text-indigo-700"
-                                        }`}
-                                      >
-                                        {topic.title}
-                                      </span>
-                                    </button>
-                                  </div>
+                                      {topic.title}
+                                    </span>
+                                  </button>
 
                                   <div className="pl-8 space-y-3">
                                     {/* 関連サービスバッジ */}
@@ -620,6 +678,18 @@ export default function AwsInfoPage() {
                               );
                             })
                           )}
+
+                          {/* ドメイン→演習直行導線 */}
+                          <div className="px-5 sm:px-6 py-3.5 bg-white/80 flex items-center justify-end">
+                            <button
+                              type="button"
+                              onClick={() => handleJumpToDomainQuiz(domain.id)}
+                              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold border border-indigo-200 transition-colors cursor-pointer"
+                            >
+                              <span>Domain {domain.number} の実践問題を解く</span>
+                              <ArrowRight size={14} />
+                            </button>
+                          </div>
                         </div>
                       )}
                     </SpotlightCard>
@@ -633,7 +703,6 @@ export default function AwsInfoPage() {
         {/* Tab 2: 頻出サービス比較表 & 要件逆引き */}
         {activeTab === "comparisons" && (
           <div className="space-y-8">
-            {/* 検索 & カテゴリフィルター */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 {COMPARISON_CATEGORIES.map((cat) => {
@@ -764,16 +833,29 @@ export default function AwsInfoPage() {
           </div>
         )}
 
-        {/* Tab 3: 実践演習クイズ */}
+        {/* Tab 3: フラッシュカード暗記 */}
+        {activeTab === "flashcards" && (
+          <AwsSaaFlashcards
+            masteredKeywords={progress.masteredCards}
+            onToggleMastered={handleToggleMasteredCard}
+            onResetMastered={handleResetMasteredCards}
+          />
+        )}
+
+        {/* Tab 4: 実践演習クイズ */}
         {activeTab === "quiz" && (
           <AwsSaaPracticeQuiz
+            key={quizDomainTarget}
             answers={progress.quizAnswers}
+            bookmarkedIds={progress.bookmarkedQuestions}
+            initialDomain={quizDomainTarget}
             onSubmitAnswer={handleSubmitAnswer}
+            onToggleBookmark={handleToggleBookmark}
             onResetQuiz={handleResetQuiz}
           />
         )}
 
-        {/* Tab 4: 学習ロードマップ・公式リソース */}
+        {/* Tab 5: 学習ロードマップ・公式リソース */}
         {activeTab === "resources" && (
           <div className="space-y-8">
             <section className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-5">
@@ -800,8 +882,8 @@ export default function AwsInfoPage() {
                   },
                   {
                     step: "STEP 3",
-                    title: "シナリオ問題で定着",
-                    desc: "実践演習クイズや AWS Skill Builder の公式練習問題で「なぜ他の選択肢が誤りか」を言語化する。",
+                    title: "カード暗記 & シナリオ演習",
+                    desc: "フラッシュカードで即答力を鍛え、実践演習クイズや AWS Skill Builder で誤答理由を言語化する。",
                   },
                   {
                     step: "STEP 4",
@@ -818,6 +900,57 @@ export default function AwsInfoPage() {
                     </span>
                     <h4 className="text-sm font-black text-slate-900">{item.title}</h4>
                     <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 定番アーキテクチャ設計パターン 4選 */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">
+                  SAA-C03 定番アーキテクチャ設計パターン 4選
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  試験で頻出する標準構成のつながり（フロー）と設計上の勘所を押さえましょう。
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {saaArchitecturePatterns.map((pat) => (
+                  <div
+                    key={pat.id}
+                    className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-3"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
+                      <span className="shrink-0 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                        {pat.badge}
+                      </span>
+                    </div>
+
+                    {/* フロー図チェーン */}
+                    <div className="flex flex-wrap items-center gap-1.5 bg-slate-50 border border-slate-200/70 rounded-xl p-3">
+                      {pat.flow.map((node, idx) => (
+                        <div key={node} className="flex items-center gap-1.5">
+                          <span className="text-[11px] font-mono font-bold px-2 py-1 rounded-lg bg-white border border-slate-200 text-slate-800 shadow-2xs">
+                            {node}
+                          </span>
+                          {idx < pat.flow.length - 1 && (
+                            <ArrowRight size={12} className="text-indigo-400 shrink-0" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed">{pat.summary}</p>
+
+                    <ul className="space-y-1 text-xs text-slate-700 list-disc pl-4">
+                      {pat.keyDesignPoints.map((pt, idx) => (
+                        <li key={idx} className="leading-relaxed">
+                          {pt}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>

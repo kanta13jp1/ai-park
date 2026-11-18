@@ -65,6 +65,15 @@ export interface SaaOfficialResource {
   badge: string;
 }
 
+export interface SaaArchitecturePattern {
+  id: string;
+  title: string;
+  badge: string;
+  flow: string[];
+  summary: string;
+  keyDesignPoints: string[];
+}
+
 // 出典: AWS Certified Solutions Architect - Associate (SAA-C03) 公式試験ガイド
 export const saaExamFacts: SaaExamFact[] = [
   { label: "試験コード", value: "SAA-C03", detail: "Associate レベル" },
@@ -476,6 +485,42 @@ export const saaQuickLookup: SaaQuickLookupItem[] = [
     recommended: "AWS Global Accelerator",
     reason: "CloudFront は HTTP/HTTPS 専用。非HTTPや固定IPが必要な場合は Global Accelerator。",
   },
+  {
+    keyword: "複数アカウントの最大権限を一括制限 (Admin含む)",
+    category: "セキュリティ",
+    recommended: "AWS Organizations (SCP)",
+    reason: "SCP はメンバーアカウント内のルートや管理者にも適用される予防的ガードレール。",
+  },
+  {
+    keyword: "1つのイベントを複数の後続システムへ同時並列配信",
+    category: "疎結合",
+    recommended: "Amazon SNS + SQS (Fan-out)",
+    reason: "SNS トピックへ発行し、各処理専用の SQS キューにサブスクライブさせる。",
+  },
+  {
+    keyword: "RPO数秒・RTO数分でリージョン障害対策（コスト抑制）",
+    category: "弾力性・DR",
+    recommended: "Pilot Light (Aurora Global Database 等)",
+    reason: "コアDBのみセカンダリで同期稼働させ、障害時にアプリ層を起動・スケールする。",
+  },
+  {
+    keyword: "アクセスパターン不明・変動する S3 コスト最適化",
+    category: "コスト最適化",
+    recommended: "S3 Intelligent-Tiering",
+    reason: "アクセス頻度を自動監視して最適階層へ移動し、取り出し料金もかからない。",
+  },
+  {
+    keyword: "中断可能だが最大90%コスト削減したいバッチ処理",
+    category: "コスト最適化",
+    recommended: "EC2 スポットインスタンス",
+    reason: "未使用キャパシティを活用。チェックポイントから再開可能なワークロードに最適。",
+  },
+  {
+    keyword: "HPC 向けの超低レイテンシ・インスタンス間高速通信",
+    category: "コンピュート",
+    recommended: "クラスタープレイスメントグループ",
+    reason: "同一 AZ 内の近接したハードウェア上に EC2 を配置しネットワーク帯域を最大化。",
+  },
 ];
 
 export const saaPracticeQuestions: SaaQuestion[] = [
@@ -811,5 +856,52 @@ export const saaOfficialResources: SaaOfficialResource[] = [
     description: "リファレンスアーキテクチャ図やベストプラクティス集。本番問題の構成パターン理解に役立ちます。",
     url: "https://aws.amazon.com/jp/architecture/",
     badge: "構成図集",
+  },
+];
+
+export const saaArchitecturePatterns: SaaArchitecturePattern[] = [
+  {
+    id: "pat-web-3tier",
+    title: "高可用性 Web 3層アーキテクチャ",
+    badge: "王道パターン",
+    flow: ["Route 53", "CloudFront + WAF", "ALB (Public)", "Auto Scaling (Private)", "RDS Multi-AZ (Private)"],
+    summary: "SPOF（単一障害点）を排除し、静的配信キャッシュと L7 防御、Multi-AZ データベースを組み合わせた標準的な Web 基盤。",
+    keyDesignPoints: [
+      "アプリ層と DB 層はプライベートサブネットに配置し、外部からの直接アクセスを遮断",
+      "静的コンテンツは S3 + CloudFront (OAC) へオフロードしてオリジン負荷と転送料を削減",
+    ],
+  },
+  {
+    id: "pat-serverless-api",
+    title: "サーバーレス REST API 構成",
+    badge: "運用最小化",
+    flow: ["API Gateway", "AWS Lambda", "DynamoDB (+ DAX)", "S3 (静的UI)"],
+    summary: "サーバー管理ゼロでリクエスト数に応じて自動スケールし、使った分だけ課金されるイベント駆動 API 構成。",
+    keyDesignPoints: [
+      "Lambda の最大実行時間（15分）を超える処理は Step Functions 分割または ECS on Fargate へ逃がす",
+      "Private Subnet 内から S3/DynamoDB へアクセスする場合は Gateway 型 VPC エンドポイントを使用",
+    ],
+  },
+  {
+    id: "pat-decoupled-fanout",
+    title: "疎結合 Fan-out 非同期処理構成",
+    badge: "耐障害・平準化",
+    flow: ["API / Producer", "Amazon SNS", "複数 SQS キュー", "ECS / Lambda Worker", "DLQ (退避)"],
+    summary: "1つのイベントを複数の独立システムへ同時配信しつつ、各ワーカーの処理速度に合わせてスパイクを平準化する構成。",
+    keyDesignPoints: [
+      "SQS に DLQ（デッドレターキュー）を設定し、繰り返し失敗するメッセージを隔離して調査可能にする",
+      "厳密な順序保証・重複排除が必要な場合のみ FIFO トピック＋FIFO キューを選択",
+    ],
+  },
+  {
+    id: "pat-hybrid-secure",
+    title: "オンプレミス連携 & マルチアカウント統制",
+    badge: "エンタープライズ",
+    flow: ["オンプレミス", "Direct Connect (+ VPN予備)", "Transit Gateway", "共有サービス / アプリ VPC"],
+    summary: "多数の VPC とオンプレミス拠点を有線専用線（冗長化あり）でハブ接続し、Organizations + SCP で統制する構成。",
+    keyDesignPoints: [
+      "Direct Connect の冗長化には複数ロケーション接続、またはコスト重視のバックアップとして Site-to-Site VPN を併用",
+      "Transit Gateway により VPC 間のフルメッシュピアリング管理を解消",
+    ],
   },
 ];

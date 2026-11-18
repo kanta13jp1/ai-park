@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   CheckCircle2,
   XCircle,
@@ -12,6 +12,8 @@ import {
   Shuffle,
   Target,
   Award,
+  Star,
+  Clock,
 } from "lucide-react";
 import { saaDomains, saaPracticeQuestions, type SaaQuestion } from "@/data/aws-saa";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
@@ -25,7 +27,10 @@ export function isQuestionCorrect(question: SaaQuestion, userChoices?: number[])
 
 interface AwsSaaPracticeQuizProps {
   answers: Record<string, number[]>;
+  bookmarkedIds: string[];
+  initialDomain?: string;
   onSubmitAnswer: (questionId: string, selectedIndices: number[]) => void;
+  onToggleBookmark: (questionId: string) => void;
   onResetQuiz: () => void;
 }
 
@@ -37,18 +42,39 @@ const DOMAIN_FILTERS = [
   { id: "domain-4", label: "D4: コスト最適化" },
 ];
 
-type StatusFilter = "all" | "unanswered" | "wrong";
+type StatusFilter = "all" | "unanswered" | "wrong" | "bookmarked";
 
 export default function AwsSaaPracticeQuiz({
   answers,
+  bookmarkedIds,
+  initialDomain = "all",
   onSubmitAnswer,
+  onToggleBookmark,
   onResetQuiz,
 }: AwsSaaPracticeQuizProps) {
-  const [selectedDomain, setSelectedDomain] = useState<string>("all");
+  const [selectedDomain, setSelectedDomain] = useState<string>(initialDomain);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [shuffledOrder, setShuffledOrder] = useState<string[] | null>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [draftMulti, setDraftMulti] = useState<Record<string, number[]>>({});
+  const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const [timerRunning, setTimerRunning] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (!timerRunning) return;
+    const timer = setInterval(() => {
+      setElapsedSeconds((s) => s + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timerRunning]);
+
+  const formattedTime = useMemo(() => {
+    const m = Math.floor(elapsedSeconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (elapsedSeconds % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  }, [elapsedSeconds]);
 
   const orderedQuestions = useMemo<SaaQuestion[]>(() => {
     if (!shuffledOrder) return saaPracticeQuestions;
@@ -62,9 +88,10 @@ export default function AwsSaaPracticeQuiz({
       const ans = answers[q.id];
       if (statusFilter === "unanswered") return ans === undefined;
       if (statusFilter === "wrong") return ans !== undefined && !isQuestionCorrect(q, ans);
+      if (statusFilter === "bookmarked") return bookmarkedIds.includes(q.id);
       return true;
     });
-  }, [orderedQuestions, selectedDomain, statusFilter, answers]);
+  }, [orderedQuestions, selectedDomain, statusFilter, answers, bookmarkedIds]);
 
   const safeIndex = Math.min(currentIndex, Math.max(0, filteredQuestions.length - 1));
   const currentQuestion = filteredQuestions[safeIndex];
@@ -108,7 +135,6 @@ export default function AwsSaaPracticeQuiz({
       return;
     }
 
-    // 複数選択問題：回答済みでも再選択できるようにドラフトを更新
     const currentDraft = draftMulti[q.id] ?? answers[q.id] ?? [];
     const exists = currentDraft.includes(optIdx);
     let nextDraft: number[];
@@ -149,6 +175,20 @@ export default function AwsSaaPracticeQuiz({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            {/* ペースタイマー */}
+            <button
+              type="button"
+              onClick={() => {
+                playCyberClick();
+                setTimerRunning((r) => !r);
+              }}
+              title="クリックで一時停止/再開（本番目安: 1問2分）"
+              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-mono font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
+            >
+              <Clock size={14} className={timerRunning ? "text-indigo-600" : "text-slate-400"} />
+              <span>{formattedTime}</span>
+            </button>
+
             <button
               type="button"
               onClick={handleToggleShuffle}
@@ -169,6 +209,7 @@ export default function AwsSaaPracticeQuiz({
                 playCyberClick();
                 onResetQuiz();
                 setDraftMulti({});
+                setElapsedSeconds(0);
                 setCurrentIndex(0);
               }}
               onMouseEnter={() => playCyberHover()}
@@ -231,8 +272,8 @@ export default function AwsSaaPracticeQuiz({
               </div>
               <p className="text-xs leading-relaxed opacity-90">
                 {scorePct >= 72
-                  ? "素晴らしい理解度です。間違えた問題があれば下の「不正解のみ」フィルターで復習し、AWS公式模擬試験へ進みましょう。"
-                  : "下の「不正解のみ」フィルターに切り替えて、解説と試験キーワードを重点的に復習してみてください。"}
+                  ? "素晴らしい理解度です。間違えた問題があれば下の「不正解」フィルターで復習し、AWS公式模擬試験へ進みましょう。"
+                  : "下の「不正解」フィルターに切り替えて、解説と試験キーワードを重点的に復習してみてください。"}
               </p>
             </div>
           </div>
@@ -249,7 +290,7 @@ export default function AwsSaaPracticeQuiz({
       )}
 
       {/* ドメイン & ステータスフィルター */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="inline-flex items-center space-x-1 text-xs font-bold text-slate-500 mr-1">
             <Filter size={13} />
@@ -275,7 +316,7 @@ export default function AwsSaaPracticeQuiz({
           })}
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5">
           <span className="inline-flex items-center space-x-1 text-xs font-bold text-slate-500 mr-1">
             <Target size={13} />
             <span>状態:</span>
@@ -285,6 +326,7 @@ export default function AwsSaaPracticeQuiz({
               { id: "all", label: "全問" },
               { id: "unanswered", label: "未回答" },
               { id: "wrong", label: "不正解" },
+              { id: "bookmarked", label: `★ 要復習 (${bookmarkedIds.length})` },
             ] as const
           ).map((st) => (
             <button
@@ -332,6 +374,7 @@ export default function AwsSaaPracticeQuiz({
             {filteredQuestions.map((q, idx) => {
               const ans = answers[q.id];
               const isCur = idx === safeIndex;
+              const isBookmarked = bookmarkedIds.includes(q.id);
               const statusClass =
                 ans === undefined
                   ? "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
@@ -347,12 +390,15 @@ export default function AwsSaaPracticeQuiz({
                     playCyberClick();
                     setCurrentIndex(idx);
                   }}
-                  className={`w-9 h-9 rounded-xl border text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${statusClass} ${
+                  className={`relative w-9 h-9 rounded-xl border text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${statusClass} ${
                     isCur ? "ring-2 ring-indigo-500 ring-offset-1 scale-105" : ""
                   }`}
                   title={`問題 ${idx + 1}`}
                 >
                   {idx + 1}
+                  {isBookmarked && (
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border border-white" />
+                  )}
                 </button>
               );
             })}
@@ -363,6 +409,7 @@ export default function AwsSaaPracticeQuiz({
             const userChoices = answers[currentQuestion.id];
             const hasAnswered = userChoices !== undefined;
             const isCorrect = isQuestionCorrect(currentQuestion, userChoices);
+            const isBookmarked = bookmarkedIds.includes(currentQuestion.id);
             const activeSelection =
               currentQuestion.selectCount > 1
                 ? (draftMulti[currentQuestion.id] ?? userChoices ?? [])
@@ -384,9 +431,30 @@ export default function AwsSaaPracticeQuiz({
                       </span>
                     )}
                   </div>
-                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                    難易度: {currentQuestion.difficulty}
-                  </span>
+
+                  <div className="flex items-center space-x-2">
+                    <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                      難易度: {currentQuestion.difficulty}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        onToggleBookmark(currentQuestion.id);
+                      }}
+                      className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-colors cursor-pointer ${
+                        isBookmarked
+                          ? "bg-amber-50 text-amber-800 border-amber-300"
+                          : "bg-white text-slate-500 border-slate-200 hover:border-amber-300 hover:text-amber-700"
+                      }`}
+                    >
+                      <Star
+                        size={12}
+                        className={isBookmarked ? "fill-amber-400 text-amber-500" : ""}
+                      />
+                      <span>{isBookmarked ? "要復習" : "ブックマーク"}</span>
+                    </button>
+                  </div>
                 </div>
 
                 <p className="text-sm sm:text-base font-bold text-slate-900 leading-relaxed">
@@ -402,7 +470,10 @@ export default function AwsSaaPracticeQuiz({
                     let optionStyle =
                       "border-slate-200 bg-slate-50/50 hover:bg-indigo-50/40 hover:border-indigo-300 text-slate-800";
 
-                    if (hasAnswered && (currentQuestion.selectCount === 1 || !draftMulti[currentQuestion.id])) {
+                    if (
+                      hasAnswered &&
+                      (currentQuestion.selectCount === 1 || !draftMulti[currentQuestion.id])
+                    ) {
                       if (isCorrectOpt) {
                         optionStyle =
                           "border-emerald-400 bg-emerald-50/80 text-emerald-950 font-semibold";
@@ -412,7 +483,8 @@ export default function AwsSaaPracticeQuiz({
                         optionStyle = "border-slate-200 bg-slate-50/40 text-slate-400";
                       }
                     } else if (isSelected) {
-                      optionStyle = "border-indigo-500 bg-indigo-50/70 text-indigo-950 font-semibold";
+                      optionStyle =
+                        "border-indigo-500 bg-indigo-50/70 text-indigo-950 font-semibold";
                     }
 
                     return (
