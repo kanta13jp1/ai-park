@@ -122,8 +122,8 @@ const siteSearchIndex: SearchIndexItem[] = [
     title: "AI勉強会アーカイブ",
     category: "コミュニティ・イベント",
     href: "/study-archive",
-    description: "AI勉強会の開催回ごとの録画動画・議事メモ・次回課題をまとめて確認（PoC中・社内 Google Workspace 限定公開）",
-    keywords: ["勉強会", "アーカイブ", "録画", "動画", "議事メモ", "議事録", "課題", "study-archive", "poc"],
+    description: "AI勉強会の開催回ごとの録画動画・議事メモ・次回課題をまとめて確認（β版・社内 Google Workspace 限定公開）",
+    keywords: ["勉強会", "アーカイブ", "録画", "動画", "議事メモ", "議事録", "課題", "study-archive"],
   },
   {
     title: "社内AIアンバサダー",

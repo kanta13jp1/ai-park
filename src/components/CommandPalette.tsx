@@ -121,7 +121,7 @@ const paletteItems: PaletteItem[] = [
     title: "AI勉強会アーカイブ",
     category: "共創 & コミュニティ",
     href: "/study-archive",
-    description: "開催回ごとの録画動画・議事メモ・次回課題（社内限定公開・PoC中）",
+    description: "開催回ごとの録画動画・議事メモ・次回課題（β版・社内限定公開）",
     icon: Video,
   },
   {
