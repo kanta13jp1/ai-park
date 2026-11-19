@@ -336,6 +336,24 @@ const tasksData: TaskItem[] = [
       { text: "アンバサダーへの相談窓口（Google Chat）の開設", done: false },
     ],
   },
+  {
+    id: "study-archive",
+    title: "AI勉強会アーカイブ（録画・議事メモ・次回課題）",
+    pageName: "AI勉強会アーカイブ",
+    href: "/study-archive",
+    phase: "Phase 3",
+    targetDate: "未定",
+    status: "in-progress",
+    currentVerificationBadge: "🧪 PoC中",
+    releaseCondition: "社内Google Workspaceアカウントでの動画・議事メモ閲覧の動作確認",
+    category: "community",
+    icon: "🎥",
+    description: "AI勉強会の開催回ごとの録画動画・議事メモ・次回課題を社内限定公開で閲覧できるアーカイブページを整備しています。",
+    items: [
+      { text: "開催回ごとの録画動画・議事メモ・次回課題のプレビューUI構築", done: true },
+      { text: "社内Google Workspaceアカウントでの閲覧・埋め込み動作確認", done: false },
+    ],
+  },
   // Phase 4: 工事中（内容の準備待ち）
   {
     id: "adoption-data",

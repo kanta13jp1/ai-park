@@ -21,6 +21,7 @@ import {
   HelpCircle,
   Compass,
   FileCheck2,
+  Video,
   LucideIcon,
 } from "lucide-react";
 import { playCyberOpen, playCyberClick, playCyberHover } from "@/lib/sound";
@@ -115,6 +116,22 @@ const paletteItems: PaletteItem[] = [
     href: "/calendar",
     description: "社内AI勉強会・Office Hour・募集スケジュールの共有",
     icon: Calendar,
+  },
+  {
+    id: "study-archive",
+    title: "AI勉強会アーカイブ",
+    category: "共創 & コミュニティ",
+    href: "/study-archive",
+    description: "開催回ごとの録画動画・議事メモ・次回課題まとめ（PoC中・社内限定公開）",
+    icon: BookOpen,
+  },
+  {
+    id: "study-archive",
+    title: "AI勉強会アーカイブ",
+    category: "共創 & コミュニティ",
+    href: "/study-archive",
+    description: "開催回ごとの録画動画・議事メモ・次回課題（社内限定公開・PoC中）",
+    icon: Video,
   },
   {
     id: "roadmap",

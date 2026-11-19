@@ -94,11 +94,11 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["活用状況", "roi", "シミュレータ", "削減時間", "コスト", "アンケート", "満足度", "フェーズ"],
   },
   {
-    title: "Gemini利用率",
+    title: "Antigravity利用監視（Gemini利用率）",
     category: "統計分析",
     href: "/gemini-stats",
-    description: "部署別Gemini利用回数統計（工事中：実データ連携の準備中）",
-    keywords: ["統計", "ダッシュボード", "利用率", "gemini", "中央値", "平均値", "プロンプト", "csv", "部署", "エクスポート"],
+    description: "社内 Google Cloud プロジェクト経由の Antigravity 利用回数・90日無料トライアル残高・課金推移の自動同期ダッシュボード（β版）",
+    keywords: ["統計", "ダッシュボード", "利用率", "gemini", "antigravity", "利用監視", "無料トライアル", "課金", "bigquery", "コスト"],
   },
   {
     title: "Antigravity Academy",
@@ -120,6 +120,20 @@ const siteSearchIndex: SearchIndexItem[] = [
     href: "/calendar",
     description: "社内AI勉強会などのイベント予定（社内アカウントで表示）、AI勉強会アジェンダの自動追加",
     keywords: ["カレンダー", "予定", "勉強会", "イベント", "スケジュール", "アジェンダ", "gas", "office hour"],
+  },
+  {
+    title: "AI勉強会アーカイブ",
+    category: "コミュニティ・イベント",
+    href: "/study-archive",
+    description: "開催回ごとの録画動画・議事メモ・次回課題（社内 Google Workspace 限定公開・PoC中）",
+    keywords: ["勉強会", "アーカイブ", "録画", "動画", "議事メモ", "議事録", "課題", "drive", "study"],
+  },
+  {
+    title: "AI勉強会アーカイブ",
+    category: "コミュニティ・イベント",
+    href: "/study-archive",
+    description: "AI勉強会の開催回ごとの録画動画・議事メモ・次回課題をまとめて確認（PoC中・社内 Google Workspace 限定公開）",
+    keywords: ["勉強会", "アーカイブ", "録画", "動画", "議事メモ", "議事録", "課題", "study-archive", "poc"],
   },
   {
     title: "社内AIアンバサダー",
