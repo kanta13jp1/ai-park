@@ -129,6 +129,25 @@ export default function AwsSaaPracticeQuiz({
   const safeIndex = Math.min(currentIndex, Math.max(0, filteredQuestions.length - 1));
   const currentQuestion = filteredQuestions[safeIndex];
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
+
+      if (e.key === "ArrowLeft" && safeIndex > 0) {
+        e.preventDefault();
+        playCyberClick();
+        setCurrentIndex(safeIndex - 1);
+      } else if (e.key === "ArrowRight" && safeIndex < filteredQuestions.length - 1) {
+        e.preventDefault();
+        playCyberClick();
+        setCurrentIndex(safeIndex + 1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [safeIndex, filteredQuestions.length]);
+
   const answeredCount = Object.keys(activeAnswers).length;
   const correctCount = saaPracticeQuestions.filter((q) =>
     isQuestionCorrect(q, activeAnswers[q.id])
@@ -766,6 +785,16 @@ export default function AwsSaaPracticeQuiz({
                   >
                     ← 前の問題
                   </button>
+
+                  <span className="hidden sm:inline text-[11px] text-slate-400">
+                    <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-slate-600">
+                      ←
+                    </kbd>{" "}
+                    <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-slate-600">
+                      →
+                    </kbd>{" "}
+                    で移動
+                  </span>
 
                   <button
                     type="button"

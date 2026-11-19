@@ -30,6 +30,7 @@ import {
   Copy,
   Check,
   Download,
+  AlertTriangle,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -45,6 +46,7 @@ import {
   saaPracticeQuestions,
   saaOfficialResources,
   saaArchitecturePatterns,
+  saaPitfalls,
   type SaaDomain,
 } from "@/data/aws-saa";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
@@ -346,6 +348,63 @@ export default function AwsInfoPage() {
     );
   }, [normalizedCompQuery]);
 
+  const filteredPitfalls = useMemo(() => {
+    if (!normalizedCompQuery) return saaPitfalls;
+    return saaPitfalls.filter((p) =>
+      `${p.trap} ${p.whyWrong} ${p.correctApproach}`.toLowerCase().includes(normalizedCompQuery)
+    );
+  }, [normalizedCompQuery]);
+
+  // 進捗に応じた次のおすすめアクション
+  const nextRecommendation = useMemo(() => {
+    const nextDomain = saaDomains.find((d) =>
+      d.topics.some((t) => !progress.completedTopics.includes(t.id))
+    );
+    if (doneTopicsCount < totalTopics && nextDomain) {
+      return {
+        label: `次は Domain ${nextDomain.number}（${nextDomain.title}）の未完了トピックを確認しましょう`,
+        actionLabel: "ドメインを開く",
+        onClick: () => {
+          playCyberClick();
+          setActiveTab("domains");
+          setExpandedDomains((prev) => ({ ...prev, [nextDomain.id]: true }));
+        },
+      };
+    }
+    if (progress.masteredCards.length < saaQuickLookup.length) {
+      return {
+        label: `全トピック完了！次はフラッシュカードで即答力を鍛えましょう（残り ${
+          saaQuickLookup.length - progress.masteredCards.length
+        } 枚）`,
+        actionLabel: "フラッシュカードへ",
+        onClick: () => {
+          playCyberClick();
+          setActiveTab("flashcards");
+        },
+      };
+    }
+    if (answeredCount < saaPracticeQuestions.length) {
+      return {
+        label: `演習クイズ・模擬試験モードで実力を試しましょう（残り ${
+          saaPracticeQuestions.length - answeredCount
+        } 問）`,
+        actionLabel: "実践演習へ",
+        onClick: () => {
+          playCyberClick();
+          setActiveTab("quiz");
+        },
+      };
+    }
+    return {
+      label: "全カリキュラム完了！模擬試験モード（40分制限）や不正解の復習で仕上げましょう。",
+      actionLabel: "模擬試験に挑戦",
+      onClick: () => {
+        playCyberClick();
+        setActiveTab("quiz");
+      },
+    };
+  }, [doneTopicsCount, totalTopics, progress.completedTopics, progress.masteredCards.length, answeredCount]);
+
   const normalizedTopicQuery = topicQuery.trim().toLowerCase();
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
@@ -453,6 +512,24 @@ export default function AwsInfoPage() {
             </div>
           </div>
         </TiltCard>
+
+        {/* スマート学習ガイドバー */}
+        <div className="bg-white rounded-2xl border border-indigo-200/80 px-4 py-3 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center space-x-2 text-xs text-slate-700">
+            <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold text-[10px] shrink-0">
+              NEXT STEP
+            </span>
+            <span className="font-medium">{nextRecommendation.label}</span>
+          </div>
+          <button
+            type="button"
+            onClick={nextRecommendation.onClick}
+            className="self-start sm:self-auto shrink-0 inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
+          >
+            <span>{nextRecommendation.actionLabel}</span>
+            <ArrowRight size={13} />
+          </button>
+        </div>
 
         {/* タブナビゲーション */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-3">
@@ -995,6 +1072,39 @@ export default function AwsInfoPage() {
                 </div>
               ))}
             </div>
+
+            {/* 試験のひっかけ回避：典型的な誤答パターン */}
+            <section className="space-y-3 pt-2">
+              <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
+                <AlertTriangle size={17} className="text-rose-500" />
+                <span>試験のひっかけ回避：典型的な誤答パターン {filteredPitfalls.length} 選</span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredPitfalls.map((pit) => (
+                  <div
+                    key={pit.id}
+                    className="bg-white rounded-2xl border border-rose-200/70 p-4 shadow-xs space-y-2.5"
+                  >
+                    <div className="flex items-start space-x-2">
+                      <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 mt-0.5">
+                        ✕ ひっかけ
+                      </span>
+                      <span className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                        {pit.trap}
+                      </span>
+                    </div>
+                    <p className="text-xs text-rose-900/80 bg-rose-50/60 rounded-lg px-3 py-2 leading-relaxed">
+                      <strong>なぜ誤りか：</strong>
+                      {pit.whyWrong}
+                    </p>
+                    <p className="text-xs text-emerald-950 bg-emerald-50/70 rounded-lg px-3 py-2 leading-relaxed">
+                      <strong>正解の考え方：</strong>
+                      {pit.correctApproach}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         )}
 

@@ -74,6 +74,13 @@ export interface SaaArchitecturePattern {
   keyDesignPoints: string[];
 }
 
+export interface SaaPitfall {
+  id: string;
+  trap: string;
+  whyWrong: string;
+  correctApproach: string;
+}
+
 // 出典: AWS Certified Solutions Architect - Associate (SAA-C03) 公式試験ガイド
 export const saaExamFacts: SaaExamFact[] = [
   { label: "試験コード", value: "SAA-C03", detail: "Associate レベル" },
@@ -979,5 +986,44 @@ export const saaArchitecturePatterns: SaaArchitecturePattern[] = [
       "Direct Connect の冗長化には複数ロケーション接続、またはコスト重視のバックアップとして Site-to-Site VPN を併用",
       "Transit Gateway により VPC 間のフルメッシュピアリング管理を解消",
     ],
+  },
+];
+
+export const saaPitfalls: SaaPitfall[] = [
+  {
+    id: "pit-sg-deny",
+    trap: "Security Group で特定の不正 IP アドレスを「拒否（Deny）」する",
+    whyWrong: "Security Group は「許可（Allow）」ルールのみ定義でき、明示的拒否は設定できません。",
+    correctApproach: "VPC サブネット層なら Network ACL（NACL）、HTTP/L7 層なら AWS WAF で IP 拒否を設定する。",
+  },
+  {
+    id: "pit-rds-multiaz",
+    trap: "RDS Multi-AZ を有効化して、スタンバイ機で読み取りクエリを負荷分散する",
+    whyWrong: "Multi-AZ のスタンバイは障害時の自動フェイルオーバー専用であり、通常の読み取り接続はできません。",
+    correctApproach: "読み取り負荷分散には「Read Replica」、高可用性には「Multi-AZ」と目的で使い分ける。",
+  },
+  {
+    id: "pit-lambda-15m",
+    trap: "20〜40分かかる重いバッチ処理を AWS Lambda（メモリ最大 10GB）で実行する",
+    whyWrong: "Lambda の最大タイムアウトは 15 分であり、メモリを増やしても 15 分を超える処理は強制終了されます。",
+    correctApproach: "15 分を超える処理は ECS on AWS Fargate / AWS Batch、または Step Functions で分割実行する。",
+  },
+  {
+    id: "pit-gw-endpoint",
+    trap: "Gateway 型 VPC エンドポイントを使って RDS や Secrets Manager へプライベート接続する",
+    whyWrong: "無料の Gateway 型 VPC エンドポイントが対応しているのは「Amazon S3」と「DynamoDB」のみです。",
+    correctApproach: "それ以外の AWS サービスへのプライベート接続には Interface 型 VPC エンドポイント（AWS PrivateLink）を使う。",
+  },
+  {
+    id: "pit-param-rotate",
+    trap: "Systems Manager Parameter Store を使って RDS パスワードを「自動ローテーション」する",
+    whyWrong: "Parameter Store にはパスワードの組み込み自動ローテーション機能がありません。",
+    correctApproach: "認証情報の自動ローテーションが要件にある場合は「AWS Secrets Manager」を選択する。",
+  },
+  {
+    id: "pit-s3-crr",
+    trap: "S3 クロスリージョンレプリケーション (CRR) を有効化したのに、既存の過去ファイルも自動で複製されると思う",
+    whyWrong: "CRR は設定有効化「以降」に新規追加・更新されたオブジェクトのみを対象とし、既存オブジェクトは自動複製されません。",
+    correctApproach: "送信元・送信先両方でバージョニングを有効化した上で、既存データには S3 Batch Replication を使う。",
   },
 ];
