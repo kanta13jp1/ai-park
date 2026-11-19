@@ -830,6 +830,82 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "Compute Savings Plans はインスタンスファミリー・サイズ・OS・リージョンを問わず適用でき、さらに EC2 だけでなく AWS Fargate や AWS Lambda の利用料金にも自動的に割引が適用されるため、最も柔軟性が高い割引オプションです。",
     keywords: ["Compute Savings Plans", "Fargate/Lambda適用", "柔軟なコスト最適化"],
   },
+  {
+    id: "q17",
+    domainId: "domain-1",
+    domainLabel: "Domain 1: セキュアなアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "有料会員向けの動画・PDF コンテンツを Amazon S3 に保存し、Amazon CloudFront 経由で世界中に配信しています。未認証ユーザーの S3 バケットへの直接アクセスを防ぎつつ、ログイン済み会員のみが一定時間だけ複数ファイルへアクセスできるようにする最適な構成はどれですか？",
+    options: [
+      "S3 バケットをパブリック公開し、アプリケーション側でランダムなファイル名を生成する",
+      "CloudFront に OAC (Origin Access Control) を設定して S3 直接アクセスを遮断し、CloudFront の署名付き Cookie を発行する",
+      "各会員に個別の IAM ユーザーを作成し、S3 へのアクセスキーを配布する",
+      "S3 バケットポリシーで会員の自宅 IP アドレスをすべて手作業で許可する",
+    ],
+    correctIndices: [1],
+    explanation:
+      "S3 への直接アクセスを遮断するには CloudFront の OAC (Origin Access Control) を使用します。また、有料会員向けに複数の保護されたファイルへのアクセス制御を行う場合は、CloudFront の署名付き Cookie（単一ファイルなら署名付き URL）が最適です。",
+    keywords: ["CloudFront OAC", "署名付きCookie", "限定コンテンツ配信"],
+  },
+  {
+    id: "q18",
+    domainId: "domain-2",
+    domainLabel: "Domain 2: 弾力性に優れたアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "グローバルなニュースサイトを運用しており、欧州・北米・アジアの3リージョンに環境を構築しています。EU のデータ保護規制により、フランスおよびドイツからのアクセスは必ず欧州リージョン（eu-central-1）にルーティングし、他の地域のユーザーは最寄りのリージョンへ案内したい場合、Amazon Route 53 でどのルーティングポリシーを組み合わせるべきですか？",
+    options: [
+      "シンプルルーティングのみ",
+      "位置情報ルーティング（Geolocation）を使用して国・地域ごとにエンドポイントを指定する",
+      "複数値回答ルーティング（Multivalue Answer）",
+      "加重ルーティング（Weighted）で均等分散する",
+    ],
+    correctIndices: [1],
+    explanation:
+      "コンプライアンスや地域限定のコンテンツ制御など「ユーザーの地理的位置（国・大陸）に基づいて必ず特定リージョンへルーティングする」要件には、Route 53 の位置情報ルーティング（Geolocation）を使用します（レイテンシベースは遅延最小化目的であり地域固定には使いません）。",
+    keywords: ["Route 53", "位置情報ルーティング", "データレジデンシー"],
+  },
+  {
+    id: "q19",
+    domainId: "domain-3",
+    domainLabel: "Domain 3: 高パフォーマンスなアーキテクチャ",
+    difficulty: "基礎",
+    selectCount: 1,
+    question:
+      "毎日数億件のクリックストリームログ（Parquet 形式）が Amazon S3 に蓄積されています。サーバーやクラスターのプロビジョニング・管理を一切行わず、必要なときだけ S3 上のファイルに対して直接標準 SQL クエリを実行してアドホック分析したい場合、最も適切なサービスはどれですか？",
+    options: [
+      "Amazon Redshift プロビジョンドクラスター",
+      "Amazon Athena",
+      "Amazon EMR（常時稼働クラスター）",
+      "Amazon RDS for MySQL",
+    ],
+    correctIndices: [1],
+    explanation:
+      "Amazon Athena はサーバーレスのインタラクティブクエリサービスで、インフラ管理不要で S3 上のデータ（Parquet/JSON/CSV 等）に対して標準 SQL を直接実行し、スキャンしたデータ量に応じた従量課金で利用できます。",
+    keywords: ["Amazon Athena", "サーバーレスSQL", "S3直接分析"],
+  },
+  {
+    id: "q20",
+    domainId: "domain-4",
+    domainLabel: "Domain 4: コストを最適化したアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "Amazon S3 バケットに対して大容量ファイルのマルチパートアップロードが頻繁に行われていますが、ネットワーク切断等で中断された「不完全なマルチパートアップロード」のパーツが大量に残り、不要なストレージ課金が発生しています。運用負荷なくこのコストを削減する方法はどれですか？",
+    options: [
+      "AWS Lambda 関数を毎時間起動し、全バケットのパーツをスキャンして削除する",
+      "S3 ライフサイクルルールを設定し、開始から一定日数（例：7日）経過した不完全なマルチパートアップロードを自動削除する",
+      "S3 Intelligent-Tiering を有効にしてパーツを別階層へ移動させる",
+      "S3 バージョニングを無効化する",
+    ],
+    correctIndices: [1],
+    explanation:
+      "S3 ライフサイクルポリシーの「不完全なマルチパートアップロードの削除（AbortIncompleteMultipartUpload）」アクションを設定するだけで、指定日数後に未完了パーツが自動クリーンアップされ、追加の開発や運用コストなしでストレージ課金を削減できます。",
+    keywords: ["S3ライフサイクル", "マルチパートアップロード削除", "不要コスト削減"],
+  },
 ];
 
 export const saaOfficialResources: SaaOfficialResource[] = [

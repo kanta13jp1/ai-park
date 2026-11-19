@@ -14,6 +14,8 @@ import {
   Award,
   Star,
   Clock,
+  ClipboardCheck,
+  BookOpenCheck,
 } from "lucide-react";
 import { saaDomains, saaPracticeQuestions, type SaaQuestion } from "@/data/aws-saa";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
@@ -43,6 +45,18 @@ const DOMAIN_FILTERS = [
 ];
 
 type StatusFilter = "all" | "unanswered" | "wrong" | "bookmarked";
+type QuizMode = "practice" | "exam";
+
+const EXAM_DURATION_SECONDS = saaPracticeQuestions.length * 120; // 1問2分ペース
+
+function formatTimer(totalSeconds: number): string {
+  const safe = Math.max(0, totalSeconds);
+  const m = Math.floor(safe / 60)
+    .toString()
+    .padStart(2, "0");
+  const s = (safe % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
 
 export default function AwsSaaPracticeQuiz({
   answers,
@@ -52,29 +66,44 @@ export default function AwsSaaPracticeQuiz({
   onToggleBookmark,
   onResetQuiz,
 }: AwsSaaPracticeQuizProps) {
+  const [quizMode, setQuizMode] = useState<QuizMode>("practice");
   const [selectedDomain, setSelectedDomain] = useState<string>(initialDomain);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [shuffledOrder, setShuffledOrder] = useState<string[] | null>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [draftMulti, setDraftMulti] = useState<Record<string, number[]>>({});
+
+  // 練習モード用経過タイマー
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [timerRunning, setTimerRunning] = useState<boolean>(true);
 
-  useEffect(() => {
-    if (!timerRunning) return;
-    const timer = setInterval(() => {
-      setElapsedSeconds((s) => s + 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [timerRunning]);
+  // 模擬試験モード用ステート
+  const [examAnswers, setExamAnswers] = useState<Record<string, number[]>>({});
+  const [examSubmitted, setExamSubmitted] = useState<boolean>(false);
+  const [examRemainingSeconds, setExamRemainingSeconds] = useState<number>(EXAM_DURATION_SECONDS);
 
-  const formattedTime = useMemo(() => {
-    const m = Math.floor(elapsedSeconds / 60)
-      .toString()
-      .padStart(2, "0");
-    const s = (elapsedSeconds % 60).toString().padStart(2, "0");
-    return `${m}:${s}`;
-  }, [elapsedSeconds]);
+  useEffect(() => {
+    if (quizMode === "practice") {
+      if (!timerRunning) return;
+      const timer = setInterval(() => setElapsedSeconds((s) => s + 1), 1000);
+      return () => clearInterval(timer);
+    }
+
+    if (examSubmitted) return;
+    const examTimer = setInterval(() => {
+      setExamRemainingSeconds((prev) => {
+        if (prev <= 1) {
+          setExamSubmitted(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(examTimer);
+  }, [quizMode, timerRunning, examSubmitted]);
+
+  const activeAnswers = quizMode === "exam" ? examAnswers : answers;
+  const showFeedback = quizMode === "practice" || examSubmitted;
 
   const orderedQuestions = useMemo<SaaQuestion[]>(() => {
     if (!shuffledOrder) return saaPracticeQuestions;
@@ -84,22 +113,42 @@ export default function AwsSaaPracticeQuiz({
 
   const filteredQuestions = useMemo<SaaQuestion[]>(() => {
     return orderedQuestions.filter((q) => {
-      if (selectedDomain !== "all" && q.domainId !== selectedDomain) return false;
-      const ans = answers[q.id];
+      if (quizMode === "practice" && selectedDomain !== "all" && q.domainId !== selectedDomain) {
+        return false;
+      }
+      const ans = activeAnswers[q.id];
       if (statusFilter === "unanswered") return ans === undefined;
-      if (statusFilter === "wrong") return ans !== undefined && !isQuestionCorrect(q, ans);
+      if (statusFilter === "wrong") {
+        return showFeedback && ans !== undefined && !isQuestionCorrect(q, ans);
+      }
       if (statusFilter === "bookmarked") return bookmarkedIds.includes(q.id);
       return true;
     });
-  }, [orderedQuestions, selectedDomain, statusFilter, answers, bookmarkedIds]);
+  }, [orderedQuestions, quizMode, selectedDomain, statusFilter, activeAnswers, showFeedback, bookmarkedIds]);
 
   const safeIndex = Math.min(currentIndex, Math.max(0, filteredQuestions.length - 1));
   const currentQuestion = filteredQuestions[safeIndex];
 
-  const answeredCount = Object.keys(answers).length;
-  const correctCount = saaPracticeQuestions.filter((q) => isQuestionCorrect(q, answers[q.id])).length;
+  const answeredCount = Object.keys(activeAnswers).length;
+  const correctCount = saaPracticeQuestions.filter((q) =>
+    isQuestionCorrect(q, activeAnswers[q.id])
+  ).length;
   const scorePct = Math.round((correctCount / saaPracticeQuestions.length) * 100);
+  const scaledScore = Math.round(100 + (correctCount / saaPracticeQuestions.length) * 900);
   const allCompleted = answeredCount === saaPracticeQuestions.length;
+
+  const handleSwitchMode = (mode: QuizMode) => {
+    playCyberClick();
+    setQuizMode(mode);
+    setStatusFilter("all");
+    setDraftMulti({});
+    setCurrentIndex(0);
+    if (mode === "exam") {
+      setExamAnswers({});
+      setExamSubmitted(false);
+      setExamRemainingSeconds(EXAM_DURATION_SECONDS);
+    }
+  };
 
   const handleDomainChange = (domainId: string) => {
     playCyberClick();
@@ -128,14 +177,24 @@ export default function AwsSaaPracticeQuiz({
     setCurrentIndex(0);
   };
 
+  const commitAnswer = (questionId: string, selectedIndices: number[]) => {
+    if (quizMode === "exam") {
+      if (examSubmitted) return;
+      setExamAnswers((prev) => ({ ...prev, [questionId]: selectedIndices }));
+    } else {
+      onSubmitAnswer(questionId, selectedIndices);
+    }
+  };
+
   const handleOptionClick = (q: SaaQuestion, optIdx: number) => {
+    if (quizMode === "exam" && examSubmitted) return;
     playCyberClick();
     if (q.selectCount === 1) {
-      onSubmitAnswer(q.id, [optIdx]);
+      commitAnswer(q.id, [optIdx]);
       return;
     }
 
-    const currentDraft = draftMulti[q.id] ?? answers[q.id] ?? [];
+    const currentDraft = draftMulti[q.id] ?? activeAnswers[q.id] ?? [];
     const exists = currentDraft.includes(optIdx);
     let nextDraft: number[];
     if (exists) {
@@ -152,105 +211,183 @@ export default function AwsSaaPracticeQuiz({
     const selected = draftMulti[q.id] ?? [];
     if (selected.length !== q.selectCount) return;
     playCyberClick();
-    onSubmitAnswer(q.id, selected);
+    commitAnswer(q.id, selected);
   };
 
   return (
     <div className="space-y-6">
-      {/* クイズヘッダー＆サマリー */}
+      {/* クイズヘッダー＆モード切替 */}
       <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
-                SAA-C03 本番形式演習（択一・複数選択対応）
+                SAA-C03 本番形式演習（全 {saaPracticeQuestions.length} 問）
               </span>
               <span className="text-xs text-slate-500 font-medium">
-                全 {saaPracticeQuestions.length} 問 / 回答済み {answeredCount} 問 / 正解 {correctCount} 問（{scorePct}%）
+                回答済み {answeredCount} / {saaPracticeQuestions.length} 問
+                {showFeedback && ` ・ 正解 ${correctCount} 問（${scorePct}%）`}
               </span>
             </div>
             <h3 className="text-lg font-black text-slate-900">
-              実践ミニ模擬テスト（即時採点・詳細解説付き）
+              {quizMode === "practice"
+                ? "練習モード（1問ごとに即時採点・解説）"
+                : "模擬試験モード（制限時間 40:00 ・一括採点）"}
             </h3>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {/* ペースタイマー */}
-            <button
-              type="button"
-              onClick={() => {
-                playCyberClick();
-                setTimerRunning((r) => !r);
-              }}
-              title="クリックで一時停止/再開（本番目安: 1問2分）"
-              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-mono font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
-            >
-              <Clock size={14} className={timerRunning ? "text-indigo-600" : "text-slate-400"} />
-              <span>{formattedTime}</span>
-            </button>
+            {/* モード切り替え */}
+            <div className="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+              <button
+                type="button"
+                onClick={() => handleSwitchMode("practice")}
+                className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  quizMode === "practice"
+                    ? "bg-white text-slate-900 shadow-xs"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <BookOpenCheck size={13} />
+                <span>練習モード</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSwitchMode("exam")}
+                className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  quizMode === "exam"
+                    ? "bg-indigo-600 text-white shadow-xs"
+                    : "text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                <ClipboardCheck size={13} />
+                <span>模擬試験</span>
+              </button>
+            </div>
+
+            {/* タイマー */}
+            {quizMode === "practice" ? (
+              <button
+                type="button"
+                onClick={() => {
+                  playCyberClick();
+                  setTimerRunning((r) => !r);
+                }}
+                title="クリックで一時停止/再開"
+                className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-mono font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
+              >
+                <Clock size={14} className={timerRunning ? "text-indigo-600" : "text-slate-400"} />
+                <span>{formatTimer(elapsedSeconds)}</span>
+              </button>
+            ) : (
+              <div
+                className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border text-xs font-mono font-bold ${
+                  examRemainingSeconds <= 300 && !examSubmitted
+                    ? "border-rose-300 bg-rose-50 text-rose-700 animate-pulse"
+                    : "border-indigo-200 bg-indigo-50 text-indigo-800"
+                }`}
+              >
+                <Clock size={14} />
+                <span>残り {formatTimer(examRemainingSeconds)}</span>
+              </div>
+            )}
 
             <button
               type="button"
               onClick={handleToggleShuffle}
               onMouseEnter={() => playCyberHover()}
-              className={`inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+              className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
                 shuffledOrder
                   ? "bg-indigo-600 text-white border-indigo-600"
                   : "border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900"
               }`}
             >
               <Shuffle size={14} />
-              <span>{shuffledOrder ? "シャッフル中" : "ランダム出題"}</span>
+              <span>{shuffledOrder ? "シャッフル中" : "ランダム"}</span>
             </button>
 
             <button
               type="button"
               onClick={() => {
                 playCyberClick();
-                onResetQuiz();
+                if (quizMode === "exam") {
+                  setExamAnswers({});
+                  setExamSubmitted(false);
+                  setExamRemainingSeconds(EXAM_DURATION_SECONDS);
+                } else {
+                  onResetQuiz();
+                  setElapsedSeconds(0);
+                }
                 setDraftMulti({});
-                setElapsedSeconds(0);
                 setCurrentIndex(0);
               }}
               onMouseEnter={() => playCyberHover()}
-              className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer"
+              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer"
             >
               <RotateCcw size={14} />
-              <span>リセット</span>
+              <span>{quizMode === "exam" ? "やり直す" : "リセット"}</span>
             </button>
           </div>
         </div>
 
-        {/* ドメイン別正答率ミニバー */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2 border-t border-slate-100">
-          {saaDomains.map((d) => {
-            const domainQs = saaPracticeQuestions.filter((q) => q.domainId === d.id);
-            const domainCorrect = domainQs.filter((q) => isQuestionCorrect(q, answers[q.id])).length;
-            const pct = domainQs.length > 0 ? Math.round((domainCorrect / domainQs.length) * 100) : 0;
-            return (
-              <div key={d.id} className="rounded-xl bg-slate-50 border border-slate-200/70 px-3 py-2 space-y-1">
-                <div className="flex items-center justify-between text-[11px]">
-                  <span className="font-bold text-slate-700">Domain {d.number}</span>
-                  <span className="font-mono font-bold text-slate-600">
-                    {domainCorrect}/{domainQs.length} ({pct}%)
-                  </span>
+        {/* 模擬試験モードの提出バー */}
+        {quizMode === "exam" && !examSubmitted && (
+          <div className="rounded-xl bg-indigo-50/80 border border-indigo-200 px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <span className="text-xs text-indigo-950 font-medium">
+              模擬試験モード中は正解と解説が非表示になります。全 {saaPracticeQuestions.length} 問の回答が終わったら採点してください。
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                playCyberClick();
+                setExamSubmitted(true);
+                setCurrentIndex(0);
+              }}
+              className="shrink-0 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-xs cursor-pointer"
+            >
+              テストを提出して採点する ({answeredCount}/{saaPracticeQuestions.length})
+            </button>
+          </div>
+        )}
+
+        {/* ドメイン別正答率ミニバー（結果表示時のみ） */}
+        {showFeedback && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-2 border-t border-slate-100">
+            {saaDomains.map((d) => {
+              const domainQs = saaPracticeQuestions.filter((q) => q.domainId === d.id);
+              const domainCorrect = domainQs.filter((q) =>
+                isQuestionCorrect(q, activeAnswers[q.id])
+              ).length;
+              const pct =
+                domainQs.length > 0 ? Math.round((domainCorrect / domainQs.length) * 100) : 0;
+              return (
+                <div
+                  key={d.id}
+                  className="rounded-xl bg-slate-50 border border-slate-200/70 px-3 py-2 space-y-1"
+                >
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="font-bold text-slate-700">Domain {d.number}</span>
+                    <span className="font-mono font-bold text-slate-600">
+                      {domainCorrect}/{domainQs.length} ({pct}%)
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
+                    <div
+                      className={`h-full transition-all duration-300 ${
+                        pct >= 72 ? "bg-emerald-500" : pct > 0 ? "bg-amber-500" : "bg-slate-300"
+                      }`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
                 </div>
-                <div className="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
-                  <div
-                    className={`h-full transition-all duration-300 ${
-                      pct >= 72 ? "bg-emerald-500" : pct > 0 ? "bg-amber-500" : "bg-slate-300"
-                    }`}
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
-      {/* 全問完了時の合格ライン判定バナー */}
-      {allCompleted && (
+      {/* 合格ライン判定バナー（練習全問完了 または 模擬試験提出後） */}
+      {((quizMode === "practice" && allCompleted) || (quizMode === "exam" && examSubmitted)) && (
         <div
           className={`rounded-2xl border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
             scorePct >= 72
@@ -266,9 +403,9 @@ export default function AwsSaaPracticeQuiz({
             />
             <div className="space-y-1">
               <div className="font-black text-sm sm:text-base">
-                {scorePct >= 72
-                  ? `全問完了！正答率 ${scorePct}%（合格目安 72% クリア）`
-                  : `全問完了！正答率 ${scorePct}%（目標 72% まであと少し）`}
+                {quizMode === "exam" ? "模擬試験結果：" : "全問完了！"}
+                正答率 {scorePct}%（目安スコア {scaledScore} / 1000点 ・{" "}
+                {scaledScore >= 720 ? "合格ライン 720点到達！" : "合格ライン 720点まであと少し"}）
               </div>
               <p className="text-xs leading-relaxed opacity-90">
                 {scorePct >= 72
@@ -291,30 +428,36 @@ export default function AwsSaaPracticeQuiz({
 
       {/* ドメイン & ステータスフィルター */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-1.5">
-          <span className="inline-flex items-center space-x-1 text-xs font-bold text-slate-500 mr-1">
-            <Filter size={13} />
-            <span>分野:</span>
-          </span>
-          {DOMAIN_FILTERS.map((df) => {
-            const active = selectedDomain === df.id;
-            return (
-              <button
-                key={df.id}
-                type="button"
-                onClick={() => handleDomainChange(df.id)}
-                onMouseEnter={() => playCyberHover()}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  active
-                    ? "bg-indigo-600 text-white shadow-xs"
-                    : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-300 hover:text-indigo-700"
-                }`}
-              >
-                {df.label}
-              </button>
-            );
-          })}
-        </div>
+        {quizMode === "practice" ? (
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="inline-flex items-center space-x-1 text-xs font-bold text-slate-500 mr-1">
+              <Filter size={13} />
+              <span>分野:</span>
+            </span>
+            {DOMAIN_FILTERS.map((df) => {
+              const active = selectedDomain === df.id;
+              return (
+                <button
+                  key={df.id}
+                  type="button"
+                  onClick={() => handleDomainChange(df.id)}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    active
+                      ? "bg-indigo-600 text-white shadow-xs"
+                      : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-300 hover:text-indigo-700"
+                  }`}
+                >
+                  {df.label}
+                </button>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-xs font-bold text-slate-600">
+            全 {saaPracticeQuestions.length} 問通し演習（問題番号をクリックして自由に前後移動できます）
+          </div>
+        )}
 
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="inline-flex items-center space-x-1 text-xs font-bold text-slate-500 mr-1">
@@ -325,7 +468,7 @@ export default function AwsSaaPracticeQuiz({
             [
               { id: "all", label: "全問" },
               { id: "unanswered", label: "未回答" },
-              { id: "wrong", label: "不正解" },
+              ...(showFeedback ? [{ id: "wrong" as const, label: "不正解" }] : []),
               { id: "bookmarked", label: `★ 要復習 (${bookmarkedIds.length})` },
             ] as const
           ).map((st) => (
@@ -349,9 +492,7 @@ export default function AwsSaaPracticeQuiz({
       {!currentQuestion ? (
         <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3">
           <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
-          <div className="text-base font-black text-slate-900">
-            該当する問題はありません
-          </div>
+          <div className="text-base font-black text-slate-900">該当する問題はありません</div>
           <p className="text-xs text-slate-500">
             選択した条件（分野・状態）に当てはまる問題がありません。フィルターを「全問」に戻してください。
           </p>
@@ -372,15 +513,21 @@ export default function AwsSaaPracticeQuiz({
           {/* 問題番号インジケーター */}
           <div className="flex flex-wrap gap-2">
             {filteredQuestions.map((q, idx) => {
-              const ans = answers[q.id];
+              const ans = activeAnswers[q.id];
               const isCur = idx === safeIndex;
               const isBookmarked = bookmarkedIds.includes(q.id);
-              const statusClass =
-                ans === undefined
-                  ? "bg-white text-slate-600 border-slate-200 hover:border-indigo-300"
-                  : isQuestionCorrect(q, ans)
-                    ? "bg-emerald-50 text-emerald-700 border-emerald-300"
-                    : "bg-rose-50 text-rose-700 border-rose-300";
+              let statusClass =
+                "bg-white text-slate-600 border-slate-200 hover:border-indigo-300";
+
+              if (ans !== undefined) {
+                if (!showFeedback) {
+                  statusClass = "bg-indigo-50 text-indigo-700 border-indigo-300";
+                } else if (isQuestionCorrect(q, ans)) {
+                  statusClass = "bg-emerald-50 text-emerald-700 border-emerald-300";
+                } else {
+                  statusClass = "bg-rose-50 text-rose-700 border-rose-300";
+                }
+              }
 
               return (
                 <button
@@ -406,7 +553,7 @@ export default function AwsSaaPracticeQuiz({
 
           {/* 問題本体カード */}
           {(() => {
-            const userChoices = answers[currentQuestion.id];
+            const userChoices = activeAnswers[currentQuestion.id];
             const hasAnswered = userChoices !== undefined;
             const isCorrect = isQuestionCorrect(currentQuestion, userChoices);
             const isBookmarked = bookmarkedIds.includes(currentQuestion.id);
@@ -471,6 +618,7 @@ export default function AwsSaaPracticeQuiz({
                       "border-slate-200 bg-slate-50/50 hover:bg-indigo-50/40 hover:border-indigo-300 text-slate-800";
 
                     if (
+                      showFeedback &&
                       hasAnswered &&
                       (currentQuestion.selectCount === 1 || !draftMulti[currentQuestion.id])
                     ) {
@@ -503,10 +651,14 @@ export default function AwsSaaPracticeQuiz({
                           {String.fromCharCode(65 + optIdx)}
                         </span>
                         <span className="text-xs sm:text-sm leading-relaxed flex-1">{option}</span>
-                        {hasAnswered && !draftMulti[currentQuestion.id] && isCorrectOpt && (
-                          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                        )}
-                        {hasAnswered &&
+                        {showFeedback &&
+                          hasAnswered &&
+                          !draftMulti[currentQuestion.id] &&
+                          isCorrectOpt && (
+                            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                          )}
+                        {showFeedback &&
+                          hasAnswered &&
                           !draftMulti[currentQuestion.id] &&
                           isSelected &&
                           !isCorrectOpt && (
@@ -518,7 +670,7 @@ export default function AwsSaaPracticeQuiz({
                 </div>
 
                 {/* 複数選択の確定ボタン */}
-                {currentQuestion.selectCount > 1 && (
+                {currentQuestion.selectCount > 1 && !(quizMode === "exam" && examSubmitted) && (
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-xs text-slate-500">
                       選択中: {activeSelection.length} / {currentQuestion.selectCount} 個
@@ -542,7 +694,7 @@ export default function AwsSaaPracticeQuiz({
                 )}
 
                 {/* 解説パネル */}
-                {hasAnswered ? (
+                {showFeedback && hasAnswered ? (
                   <div
                     className={`rounded-xl p-5 border space-y-3 ${
                       isCorrect
@@ -592,9 +744,11 @@ export default function AwsSaaPracticeQuiz({
                   <div className="flex items-center space-x-2 text-xs text-slate-400">
                     <Sparkles size={14} />
                     <span>
-                      {currentQuestion.selectCount > 1
-                        ? `${currentQuestion.selectCount}つ選択して「回答を確定する」を押すと解説が表示されます`
-                        : "選択肢をクリックすると即座に正誤判定と解説が表示されます"}
+                      {quizMode === "exam" && !examSubmitted
+                        ? "模擬試験モード：全問回答後に「テストを提出して採点する」を押すと結果と解説が表示されます"
+                        : currentQuestion.selectCount > 1
+                          ? `${currentQuestion.selectCount}つ選択して「回答を確定する」を押すと解説が表示されます`
+                          : "選択肢をクリックすると即座に正誤判定と解説が表示されます"}
                     </span>
                   </div>
                 )}

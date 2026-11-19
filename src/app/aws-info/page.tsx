@@ -152,6 +152,7 @@ export default function AwsInfoPage() {
     "domain-4": false,
   });
   const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
+  const [onlyWithNotesTopics, setOnlyWithNotesTopics] = useState<boolean>(false);
   const [topicQuery, setTopicQuery] = useState<string>("");
   const [compCategory, setCompCategory] = useState<string>("すべて");
   const [compQuery, setCompQuery] = useState<string>("");
@@ -585,6 +586,22 @@ export default function AwsInfoPage() {
 
                   <button
                     type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setOnlyWithNotesTopics((v) => !v);
+                    }}
+                    className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                      onlyWithNotesTopics
+                        ? "bg-amber-600 text-white border-amber-600"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-amber-300"
+                    }`}
+                  >
+                    <StickyNote size={13} />
+                    <span>メモあり</span>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => handleExpandAllDomains(!allExpanded)}
                     className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-600 hover:border-indigo-300 cursor-pointer"
                   >
@@ -598,7 +615,10 @@ export default function AwsInfoPage() {
                 {saaDomains.map((domain) => {
                   const Icon = DOMAIN_ICONS[domain.id] ?? Cloud;
                   const style = ACCENT_STYLES[domain.accentColor];
-                  const isExpanded = !!expandedDomains[domain.id] || normalizedTopicQuery.length > 0;
+                  const isExpanded =
+                    !!expandedDomains[domain.id] ||
+                    normalizedTopicQuery.length > 0 ||
+                    onlyWithNotesTopics;
                   const doneInDomain = domain.topics.filter((t) =>
                     progress.completedTopics.includes(t.id)
                   ).length;
@@ -608,6 +628,12 @@ export default function AwsInfoPage() {
                     if (onlyIncompleteTopics && progress.completedTopics.includes(t.id)) {
                       return false;
                     }
+                    if (
+                      onlyWithNotesTopics &&
+                      !(progress.topicNotes[t.id] && progress.topicNotes[t.id].trim().length > 0)
+                    ) {
+                      return false;
+                    }
                     if (!normalizedTopicQuery) return true;
                     const hay = [t.title, ...t.services, ...t.keyPoints, t.examTip]
                       .join(" ")
@@ -615,7 +641,7 @@ export default function AwsInfoPage() {
                     return hay.includes(normalizedTopicQuery);
                   });
 
-                  if (normalizedTopicQuery && visibleTopics.length === 0) {
+                  if ((normalizedTopicQuery || onlyWithNotesTopics) && visibleTopics.length === 0) {
                     return null;
                   }
 
