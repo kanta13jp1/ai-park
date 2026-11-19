@@ -295,4 +295,16 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     releaseDate: "随時更新",
     releaseCondition: "準備中・PoC中・工事中の各ページの内容確認と順次公開",
   },
+  {
+    id: "study-archive",
+    name: "AI勉強会アーカイブ",
+    href: "/study-archive",
+    isVerified: false,
+    status: "in_development",
+    evidence: "",
+    currentBadge: "🧪 PoC中",
+    disclaimer: "【PoC中】録画・議事メモの社内限定公開プレビューの動作を実機確認中です。",
+    releaseDate: "未定",
+    releaseCondition: "社内Google Workspaceアカウントでの動画・議事メモ閲覧の動作確認",
+  },
 ];
