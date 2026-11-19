@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-19T00:00:13.904Z",
-  "lastSyncedAtFormatted": "2026/11/19 9:00:13",
+  "lastSyncedAt": "2026-11-19T07:11:25.218Z",
+  "lastSyncedAtFormatted": "2026/11/19 16:11:25",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 53,
+  "totalCount": 52,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-latentspace-ainews-gemini-4-neon-gdm-s-opus-sol-contender",
+      "title": "Latent Space: [AINews] Gemini 4 Neon: GDM's Opus/Sol Contender",
+      "date": "2026/11/19",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 18, 2026 — Google’s middle tier scores 61 on the Intelligence Index. Plus, Anthropic prices its IPO at $83.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Gemini 4 Neon: GDM's Opus/Sol Contender」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-gemini-4-neon-gdm-s-opus-sol-contender/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-deepmind-introducing-gemini-4-neon",
       "title": "Google DeepMind: Introducing Gemini 4 Neon",
@@ -268,31 +293,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-latentspace-cloudflare",
-      "title": "Latent Space: Cloudflare Joins the Jevolution and Labels Itself a Neolab",
-      "date": "2026/11/17",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Cloudflare made its name speeding up the web. Now it's building System One models to make decisions and pull data in milliseconds.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「Cloudflare Joins the Jevolution and Labels Itself a Neolab」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/cloudflare/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-figma-1password-figma-make",
       "title": "Figma Blog: How 1Password uses Figma Make to design for trust and certainty",
       "date": "2026/11/16",
@@ -314,31 +314,6 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-importai-import-ai-481-ai-sub-contractors",
-      "title": "Import AI: Import AI 481: AI sub-contractors; a wet lab for AI; and subterfuge during development",
-      "date": "2026/11/16",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Plus: CucumberVision!",
-      "impactForStaff": "Import AI「Import AI 481: AI sub-contractors; a wet lab for AI; and subterfuge during...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
-      "recommendedFor": [
-        "エンジニア",
-        "リサーチャー",
-        "企画担当"
-      ],
-      "sourceName": "Import AI Official Feed",
-      "sourceUrl": "https://importai.substack.com/p/import-ai-481-ai-sub-contractors",
-      "tags": [
-        "Import AI",
-        "AI Research",
-        "AI安全性",
-        "先端動向"
       ],
       "isLiveSynced": true
     },
