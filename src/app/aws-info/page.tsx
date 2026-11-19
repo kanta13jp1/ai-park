@@ -25,6 +25,11 @@ import {
   Sparkles,
   Layers2,
   ArrowRight,
+  X,
+  StickyNote,
+  Copy,
+  Check,
+  Download,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -51,6 +56,7 @@ interface AwsSaaProgress {
   quizAnswers: Record<string, number[]>;
   bookmarkedQuestions: string[];
   masteredCards: string[];
+  topicNotes: Record<string, string>;
 }
 
 const STORAGE_KEY = "ai-park-aws-saa-progress-v1";
@@ -60,6 +66,7 @@ const DEFAULT_PROGRESS: AwsSaaProgress = {
   quizAnswers: {},
   bookmarkedQuestions: [],
   masteredCards: [],
+  topicNotes: {},
 };
 
 const DOMAIN_ICONS: Record<string, typeof ShieldCheck> = {
@@ -125,6 +132,15 @@ function normalizeStringArray(raw: unknown): string[] {
   return Array.isArray(raw) ? raw.filter((s): s is string => typeof s === "string") : [];
 }
 
+function normalizeStringRecord(raw: unknown): Record<string, string> {
+  if (!raw || typeof raw !== "object") return {};
+  const result: Record<string, string> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (typeof v === "string") result[k] = v;
+  }
+  return result;
+}
+
 export default function AwsInfoPage() {
   const [activeTab, setActiveTab] = useState<TabId>("domains");
   const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
@@ -140,6 +156,11 @@ export default function AwsInfoPage() {
   const [compCategory, setCompCategory] = useState<string>("すべて");
   const [compQuery, setCompQuery] = useState<string>("");
   const [confirmReset, setConfirmReset] = useState<boolean>(false);
+  const [openNoteTopics, setOpenNoteTopics] = useState<Record<string, boolean>>({});
+  const [showBackupPanel, setShowBackupPanel] = useState<boolean>(false);
+  const [backupInput, setBackupInput] = useState<string>("");
+  const [copiedBackup, setCopiedBackup] = useState<boolean>(false);
+  const [importMessage, setImportMessage] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -152,6 +173,7 @@ export default function AwsInfoPage() {
           quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
           bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
           masteredCards: normalizeStringArray(parsed.masteredCards),
+          topicNotes: normalizeStringRecord(parsed.topicNotes),
         });
       }
     } catch {
@@ -233,6 +255,53 @@ export default function AwsInfoPage() {
     setQuizDomainTarget(domainId);
     setActiveTab("quiz");
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleJumpToServiceComparison = (serviceName: string) => {
+    playCyberClick();
+    // "Amazon S3" -> "S3", "EC2 Auto Scaling" -> "EC2" のように比較表にヒットしやすい語を抽出
+    const cleanQuery = serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
+    setCompCategory("すべて");
+    setCompQuery(cleanQuery);
+    setActiveTab("comparisons");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleUpdateTopicNote = (topicId: string, note: string) => {
+    saveProgress({
+      ...progress,
+      topicNotes: { ...progress.topicNotes, [topicId]: note },
+    });
+  };
+
+  const handleCopyBackup = async () => {
+    playCyberClick();
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(progress));
+      setCopiedBackup(true);
+      setTimeout(() => setCopiedBackup(false), 2500);
+    } catch {
+      setImportMessage("クリップボードへのコピーに失敗しました。");
+    }
+  };
+
+  const handleRestoreBackup = () => {
+    playCyberClick();
+    try {
+      const parsed = JSON.parse(backupInput.trim()) as Record<string, unknown>;
+      saveProgress({
+        completedTopics: normalizeStringArray(parsed.completedTopics),
+        quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
+        bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
+        masteredCards: normalizeStringArray(parsed.masteredCards),
+        topicNotes: normalizeStringRecord(parsed.topicNotes),
+      });
+      setBackupInput("");
+      setImportMessage("学習進捗を復元しました。");
+      setTimeout(() => setImportMessage(null), 3000);
+    } catch {
+      setImportMessage("JSON の形式が正しくありません。コピーした文字列をそのまま貼り付けてください。");
+    }
   };
 
   const totalTopics = useMemo(
@@ -484,8 +553,18 @@ export default function AwsInfoPage() {
                       value={topicQuery}
                       onChange={(e) => setTopicQuery(e.target.value)}
                       placeholder="サービス名・キーワード検索..."
-                      className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-52"
+                      className="pl-8 pr-7 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-52"
                     />
+                    {topicQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setTopicQuery("")}
+                        aria-label="検索をクリア"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 cursor-pointer"
+                      >
+                        <X size={13} />
+                      </button>
+                    )}
                   </div>
 
                   <button
@@ -641,15 +720,18 @@ export default function AwsInfoPage() {
                                   </button>
 
                                   <div className="pl-8 space-y-3">
-                                    {/* 関連サービスバッジ */}
-                                    <div className="flex flex-wrap gap-1.5">
+                                    {/* 関連サービスバッジ（クリックで比較表・逆引き検索へ） */}
+                                    <div className="flex flex-wrap items-center gap-1.5">
                                       {topic.services.map((svc) => (
-                                        <span
+                                        <button
                                           key={svc}
-                                          className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700"
+                                          type="button"
+                                          onClick={() => handleJumpToServiceComparison(svc)}
+                                          title={`「${svc}」を比較表・逆引きで検索`}
+                                          className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-700 transition-colors cursor-pointer"
                                         >
                                           {svc}
-                                        </span>
+                                        </button>
                                       ))}
                                     </div>
 
@@ -673,6 +755,53 @@ export default function AwsInfoPage() {
                                         {topic.examTip}
                                       </span>
                                     </div>
+
+                                    {/* トピック別マイメモ */}
+                                    {(() => {
+                                      const noteVal = progress.topicNotes[topic.id] ?? "";
+                                      const hasNote = noteVal.trim().length > 0;
+                                      const isNoteOpen = !!openNoteTopics[topic.id];
+                                      return (
+                                        <div className="space-y-2">
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              playCyberClick();
+                                              setOpenNoteTopics((prev) => ({
+                                                ...prev,
+                                                [topic.id]: !prev[topic.id],
+                                              }));
+                                            }}
+                                            className={`inline-flex items-center space-x-1.5 text-[11px] font-bold px-2.5 py-1 rounded-lg border transition-colors cursor-pointer ${
+                                              hasNote
+                                                ? "bg-indigo-50 text-indigo-700 border-indigo-200"
+                                                : "bg-white text-slate-500 border-slate-200 hover:border-indigo-300 hover:text-indigo-700"
+                                            }`}
+                                          >
+                                            <StickyNote size={12} />
+                                            <span>
+                                              {isNoteOpen
+                                                ? "マイメモを閉じる"
+                                                : hasNote
+                                                  ? "マイメモあり（編集）"
+                                                  : "マイメモを追加"}
+                                            </span>
+                                          </button>
+
+                                          {isNoteOpen && (
+                                            <textarea
+                                              value={noteVal}
+                                              onChange={(e) =>
+                                                handleUpdateTopicNote(topic.id, e.target.value)
+                                              }
+                                              rows={2}
+                                              placeholder="このトピックで自分が迷いやすい点や暗記メモを記録（ブラウザに自動保存）..."
+                                              className="w-full rounded-xl border border-indigo-200 bg-white px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400"
+                                            />
+                                          )}
+                                        </div>
+                                      );
+                                    })()}
                                   </div>
                                 </div>
                               );
@@ -737,8 +866,18 @@ export default function AwsInfoPage() {
                   value={compQuery}
                   onChange={(e) => setCompQuery(e.target.value)}
                   placeholder="比較表・逆引きを検索..."
-                  className="pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-full sm:w-56"
+                  className="pl-8 pr-7 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-full sm:w-56"
                 />
+                {compQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setCompQuery("")}
+                    aria-label="検索をクリア"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 cursor-pointer"
+                  >
+                    <X size={13} />
+                  </button>
+                )}
               </div>
             </div>
 
@@ -990,6 +1129,73 @@ export default function AwsInfoPage() {
             </section>
           </div>
         )}
+
+        {/* 学習進捗バックアップ・復元 */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center space-x-2 text-xs text-slate-600">
+              <Download size={14} className="text-indigo-600" />
+              <span className="font-bold text-slate-800">学習データの引き継ぎ・バックアップ</span>
+              <span className="text-slate-400 hidden sm:inline">
+                （別PCや別ブラウザへ学習記録・マイメモを移行できます）
+              </span>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <button
+                type="button"
+                onClick={handleCopyBackup}
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-indigo-50 hover:border-indigo-300 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+              >
+                {copiedBackup ? (
+                  <>
+                    <Check size={13} className="text-emerald-600" />
+                    <span className="text-emerald-700">コピーしました</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={13} />
+                    <span>進捗JSONをコピー</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  playCyberClick();
+                  setShowBackupPanel((v) => !v);
+                }}
+                className="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-600 cursor-pointer"
+              >
+                {showBackupPanel ? "閉じる" : "復元する"}
+              </button>
+            </div>
+          </div>
+
+          {showBackupPanel && (
+            <div className="pt-2 border-t border-slate-100 space-y-2">
+              <textarea
+                value={backupInput}
+                onChange={(e) => setBackupInput(e.target.value)}
+                rows={2}
+                placeholder="コピーした学習進捗 JSON をここに貼り付けて「復元を実行」を押してください..."
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-400"
+              />
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs text-indigo-700 font-semibold">{importMessage ?? ""}</span>
+                <button
+                  type="button"
+                  disabled={!backupInput.trim()}
+                  onClick={handleRestoreBackup}
+                  className="px-4 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 disabled:opacity-40 cursor-pointer"
+                >
+                  復元を実行
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* 社内ルール・相談窓口についての誠実な未完了注記 */}
         <UnderConstructionAlert
