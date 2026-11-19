@@ -6,10 +6,7 @@ import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { playCyberHover, playCyberClick } from "@/lib/sound";
-import {
-  preflightChecklistMaster,
-  type FeaturePreflightRecord,
-} from "@/data/preflight-checklist";
+import { preflightChecklistMaster } from "@/data/preflight-checklist";
 import { featureStatusMaster } from "@/data/feature-status";
 import {
   ShieldCheck,
@@ -27,14 +24,11 @@ import {
 import Link from "next/link";
 
 export default function PreflightUatPage() {
-  const [records, setRecords] = useState<FeaturePreflightRecord[]>(
-    preflightChecklistMaster
-  );
+  const records = preflightChecklistMaster;
   const [selectedFeatureId, setSelectedFeatureId] = useState<string>(
     preflightChecklistMaster[0]?.id || "home"
   );
   const [copiedReport, setCopiedReport] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<"all" | "passed" | "needs_work">("all");
 
   const selectedRecord = records.find((r) => r.id === selectedFeatureId) || records[0];
 

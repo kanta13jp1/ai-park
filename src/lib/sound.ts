@@ -2,7 +2,6 @@
 // Awwwards / FWA 水準のインタラクティブ・タクタイルフィードバックを提供
 
 let audioCtx: AudioContext | null = null;
-let soundEnabled = false;
 
 // ブラウザの初期化
 function getAudioContext(): AudioContext | null {
@@ -30,7 +29,6 @@ export function isSoundEnabled(): boolean {
 }
 
 export function setSoundEnabled(enabled: boolean) {
-  soundEnabled = enabled;
   if (typeof window !== "undefined") {
     localStorage.setItem("ai_park_sound", enabled ? "true" : "false");
     window.dispatchEvent(new CustomEvent("ai-park-sound-changed", { detail: { enabled } }));

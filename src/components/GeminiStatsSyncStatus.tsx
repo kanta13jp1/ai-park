@@ -26,7 +26,6 @@ interface GeminiStatsSyncStatusProps {
 export default function GeminiStatsSyncStatus({
   syncedAt,
   dataSource,
-  isLive,
   isLoading,
   onRefresh,
   projectId,

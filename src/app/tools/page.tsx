@@ -278,13 +278,6 @@ export default function ToolsPage() {
   const [draftModalTool, setDraftModalTool] = useState<MatrixTool | null>(null);
   const [isDraftModalOpen, setIsDraftModalOpen] = useState<boolean>(false);
 
-  // 診断ウィザード用状態
-  const [diagnosisAnswers, setDiagnosisAnswers] = useState({
-    purpose: "",
-    skillLevel: "",
-    dataLevel: "",
-  });
-
   // 社内推奨ランク判定ヘルパー
   const getToolRank = (tool: MatrixTool): "S" | "A" | "B" | "PoC" => {
     if (tool.id === 2 || tool.id === 7 || tool.id === 3) return "S"; // Gemini, Antigravity, NotebookLM
@@ -467,37 +460,6 @@ export default function ToolsPage() {
         </span>
       </div>
     );
-  };
-
-  // 社内推奨ランクバッジレンダラー
-  const renderRankBadge = (tool: MatrixTool) => {
-    const rank = getToolRank(tool);
-    switch (rank) {
-      case "S":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-amber-50 text-amber-700 border border-amber-300 shadow-2xs">
-            ⭐ S公式
-          </span>
-        );
-      case "A":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-indigo-50 text-indigo-700 border border-indigo-300 shadow-2xs">
-            💻 A推奨
-          </span>
-        );
-      case "B":
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-sky-50 text-sky-700 border border-sky-300 shadow-2xs">
-            📊 B特化
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-600 border border-slate-300">
-            🧪 PoC
-          </span>
-        );
-    }
   };
 
   // ステータスバッジレンダラー
