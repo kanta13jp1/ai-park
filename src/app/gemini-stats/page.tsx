@@ -150,18 +150,40 @@ export default function GeminiStatsPage() {
   // GAS Web API エンドポイント（v6: 公開設定=全員）
   const GAS_ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbw9ZDjn5OdbGFwSYglwZlk5ASMVYPLDQ7zvty_rcB76LLqgl-XUz1wO_-w5QL_0YDfuEg/exec";
 
-  // 自動同期データのフェッチ (GAS Live API -> 静的JSONフォールバック)
+  // GitHub Actions（日次Cron）が main ブランチへ [skip ci] で自動コミットするため、
+  // GitHub raw を優先参照し、到達不能時はビルド同梱の静的 JSON にフォールバックする
+  const fetchLatestGcpUsagePayload = useCallback(async () => {
+    const urls = [
+      "https://raw.githubusercontent.com/kanta13jp1/ai-park/main/public/data/gcp-usage-live.json",
+      `${basePath}/data/gcp-usage-live.json`,
+    ];
+    const cacheBuster = Date.now();
+    for (const url of urls) {
+      try {
+        const res = await fetch(`${url}?t=${cacheBuster}`, { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && (data.gcpInfo || Array.isArray(data.users))) {
+            return data;
+          }
+        }
+      } catch {
+        // 次のエンドポイントへフォールバック
+      }
+    }
+    return null;
+  }, []);
+
+  // 自動同期データのフェッチ (検証済み最新JSON -> GAS Live API)
   const fetchLiveData = useCallback(async (isManual = false) => {
     if (isManual) {
       setIsLoading(true);
     }
-    let loaded = false;
 
-    // 1. まず Cloud Billing 実画面確定の検証済みJSONを確実にロード
+    // 1. まず Cloud Billing 実画面確定の検証済みJSON（GitHub raw 優先）をロード
     try {
-      const res = await fetch(`${basePath}/data/gcp-usage-live.json?t=${Date.now()}`);
-      if (res.ok) {
-        const data = await res.json();
+      const data = await fetchLatestGcpUsagePayload();
+      if (data) {
         if (data.users && Array.isArray(data.users)) setUsers(data.users);
         if (data.dailyHistory && Array.isArray(data.dailyHistory)) setDailyData(data.dailyHistory);
         if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
@@ -170,7 +192,6 @@ export default function GeminiStatsPage() {
         setSyncedAt(data.syncedAt || "Cloud Billing 実画面同期");
         setDataSource(data.dataSource || "Google Cloud Billing Live Verified");
         setIsLive(true);
-        loaded = true;
       }
     } catch (err) {
       console.warn("Failed to load verified sync data", err);
@@ -196,15 +217,14 @@ export default function GeminiStatsPage() {
       // GASフェッチ失敗時は検証済みデータを維持
     }
     setIsLoading(false);
-  }, []);
+  }, [fetchLatestGcpUsagePayload]);
 
   useEffect(() => {
     let ignore = false;
     const initFetch = async () => {
       try {
-        const res = await fetch(`${basePath}/data/gcp-usage-live.json?t=${Date.now()}`);
-        if (res.ok && !ignore) {
-          const data = await res.json();
+        const data = await fetchLatestGcpUsagePayload();
+        if (data && !ignore) {
           if (data.users && Array.isArray(data.users)) setUsers(data.users);
           if (data.dailyHistory && Array.isArray(data.dailyHistory)) setDailyData(data.dailyHistory);
           if (data.gcpInfo) setGcpInfo((prev) => ({ ...prev, ...data.gcpInfo }));
@@ -243,7 +263,7 @@ export default function GeminiStatsPage() {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [fetchLatestGcpUsagePayload]);
 
   // 集計計算
   const totalCostUsd = useMemo(

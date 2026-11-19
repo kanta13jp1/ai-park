@@ -91,10 +91,10 @@ export default function HowToPage() {
       icon: <Wrench className="text-purple-600" size={32} />,
       iconBg: "bg-purple-50 border-purple-100",
       href: "/skills-hub",
-      badge: "✅ 認定公開中",
-      badgeColor: "bg-purple-100 text-purple-700 font-bold",
+      badge: "🚧 工事中",
+      badgeColor: "bg-amber-100 text-amber-800 font-bold",
       tags: ["準備中"],
-      highlights: "社内で共有する認定 Skills カタログ（全8スキル・プロンプト即時コピー・申請フォーム完備）",
+      highlights: "社内で作成・確認した Skills を掲載予定（現在は工事中・新規提案フォームのみ公開）",
     },
     {
       id: "troubleshooting",

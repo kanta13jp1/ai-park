@@ -577,7 +577,7 @@ export default function ToolsPage() {
             title="🧪 PoC検証中：内容は社内でまだ確認していません"
             message="表は社内マスターシート（AIツールマスター）の登録内容を表示しています。利用ステータスや適合度は社内での確認がまだ済んでいません。業務で使う前に、AI推進担当に確認してください。"
             prepDetails="スプレッドシート連携APIおよび権限管理仕様の策定フェーズ"
-            releaseDate="2026年10月9日(金)"
+            releaseDate="未定（社内確認後）"
           />
 
           {/* 4大KPIカード */}

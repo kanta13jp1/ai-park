@@ -100,8 +100,8 @@ const coeProjects: AiProject[] = [
     tools: "Claude Code, GitHub Actions, Google Sheets",
     summary:
       "社内のAI活用情報をまとめたポータル。ご意見・取材立候補・プロジェクト登録を GitHub Issue で受け付け、Google Chat に自動通知しています。",
-    effect: "Google Chat でいただいたご意見8件のうち6件を反映済み（2026年9月時点）。",
-    updated: "2026/09/26",
+    effect: "Google Chat でいただいたご意見10件（TODO-01〜10）を反映済み。GitHub Issue 連携による追加受付・自動掲載が稼働中です。",
+    updated: "2026/11/20",
   },
   {
     id: "COE-02",
@@ -112,8 +112,8 @@ const coeProjects: AiProject[] = [
     tools: "Google Antigravity, Google Cloud",
     summary:
       "会社の Google アカウントのまま Antigravity を使えるよう、会社の Google Cloud プロジェクト経由（従量課金）の利用環境を整備中。利用者1人あたり月3,000円を目安に上限を設定します。",
-    effect: "いまの最優先の取り組みです。AI推進担当の会社アカウントではサインインを確認済み。残りは、請求先アカウントのリンクと月額上限の設定、使う人への権限付与です。手順は導入ガイドに公開済み。",
-    updated: "2026/10/04",
+    effect: "会社の Google Cloud プロジェクト用意・請求先リンク（90日無料トライアル適用・予算上限アラート設定）・先行メンバー2名でのサインインと利用監視（/gemini-stats）まで完了。無料トライアルの消化ペースを見ながら、希望者への権限付与を順次進めています。",
+    updated: "2026/11/20",
   },
 ];
 

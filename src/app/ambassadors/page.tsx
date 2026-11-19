@@ -132,7 +132,7 @@ export default function AmbassadorsPage() {
           title="📋 準備中：第1期アンバサダーを募集中です"
           message="各事業部のAI活用を牽引するアンバサダーは現在公募・選定準備中です。"
           prepDetails="自薦・他薦問わず、上の「アンバサダーに立候補する」ボタンからご応募いただけます。"
-          releaseDate="2026年10月23日(金)"
+          releaseDate="未定（公募・選定後）"
         />
 
         {/* バナー: アンバサダー稼働中 */}
