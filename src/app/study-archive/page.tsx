@@ -22,6 +22,8 @@ import {
   FlaskConical,
   ArrowRight,
   Clock,
+  Copy,
+  Check,
 } from "lucide-react";
 
 type MediaTab = "video" | "minutes" | "tasks";
@@ -29,6 +31,7 @@ type MediaTab = "video" | "minutes" | "tasks";
 export default function StudyArchivePage() {
   const [selectedId, setSelectedId] = useState<string>(studySessions[0]?.id ?? "");
   const [activeTab, setActiveTab] = useState<MediaTab>("video");
+  const [copiedTasks, setCopiedTasks] = useState(false);
 
   const currentSession =
     studySessions.find((s) => s.id === selectedId) ?? studySessions[0];
@@ -78,10 +81,10 @@ export default function StudyArchivePage() {
                 </div>
                 <div className="space-y-1">
                   <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">
-                    🧪 PoC中・公開ポリシー
+                    公開ポリシー（β版）
                   </h4>
                   <p className="text-slate-600 leading-relaxed font-normal">
-                    このページは社内検証中の PoC 機能です。公開サイト上のため、議事メモの本文や個人情報・案件固有名詞はページ内に記載せず、Google Drive の共有権限で保護しています。
+                    公開サイト上のため、議事メモの本文や個人情報・案件固有名詞はページ内に記載せず、Google Drive の共有権限（社内限定公開）で保護しています。
                   </p>
                 </div>
               </div>
@@ -341,35 +344,71 @@ export default function StudyArchivePage() {
             )}
 
             {activeTab === "tasks" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {currentSession.tasks.map((task) => (
-                  <div
-                    key={task.step}
-                    className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs space-y-2"
+              <div className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2 bg-white rounded-2xl border border-slate-200 px-4 py-3 shadow-2xs">
+                  <span className="text-xs font-bold text-slate-600">
+                    勉強会後のフォローや共有にそのまま使えます
+                  </span>
+                  <button
+                    onClick={() => {
+                      playCyberClick();
+                      const text = [
+                        `【${currentSession.roundLabel}（${currentSession.date}）課題一覧】`,
+                        ...currentSession.tasks.map(
+                          (t) => `■ ${t.step}: ${t.title}\n  ${t.description}`
+                        ),
+                      ].join("\n\n");
+                      navigator.clipboard.writeText(text);
+                      setCopiedTasks(true);
+                      setTimeout(() => setCopiedTasks(false), 2000);
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all cursor-pointer"
                   >
-                    <div className="text-[11px] font-extrabold text-indigo-600">
-                      {task.step}
-                    </div>
-                    <h4 className="text-sm font-extrabold text-slate-900">
-                      {task.title}
-                    </h4>
-                    <p className="text-xs text-slate-600 leading-relaxed">
-                      {task.description}
-                    </p>
-                    {task.relatedHref && task.relatedLabel && (
-                      <div className="pt-1">
-                        <Link
-                          href={task.relatedHref}
-                          onClick={() => playCyberClick()}
-                          className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700"
-                        >
-                          <span>{task.relatedLabel}を見る</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </div>
+                    {copiedTasks ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span>コピーしました</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Google Chat 用に課題をコピー</span>
+                      </>
                     )}
-                  </div>
-                ))}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {currentSession.tasks.map((task) => (
+                    <div
+                      key={task.step}
+                      className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs space-y-2"
+                    >
+                      <div className="text-[11px] font-extrabold text-indigo-600">
+                        {task.step}
+                      </div>
+                      <h4 className="text-sm font-extrabold text-slate-900">
+                        {task.title}
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {task.description}
+                      </p>
+                      {task.relatedHref && task.relatedLabel && (
+                        <div className="pt-1">
+                          <Link
+                            href={task.relatedHref}
+                            onClick={() => playCyberClick()}
+                            className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700"
+                          >
+                            <span>{task.relatedLabel}を見る</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>

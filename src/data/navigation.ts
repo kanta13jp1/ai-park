@@ -52,7 +52,7 @@ export const navigationSections: NavSection[] = [
     items: [
       { name: "AIアンバサダー", href: "/ambassadors", icon: "🤝", badge: "📋 準備中" },
       { name: "AI Park カレンダー", href: "/calendar", icon: "🗓️", badge: "β版" },
-      { name: "AI勉強会アーカイブ", href: "/study-archive", icon: "🎥", badge: "🧪 PoC中" },
+      { name: "AI勉強会アーカイブ", href: "/study-archive", icon: "🎥", badge: "β版" },
       { name: "ご意見・改善ToDo", href: "/feedback-todo", icon: "📋", badge: "β版" },
       { name: "UAT品質ゲート管理", href: "/preflight", icon: "🛡️", badge: "推進専用" },
     ]
