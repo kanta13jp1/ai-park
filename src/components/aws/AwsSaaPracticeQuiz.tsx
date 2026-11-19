@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import {
   CheckCircle2,
   XCircle,
@@ -129,25 +129,6 @@ export default function AwsSaaPracticeQuiz({
   const safeIndex = Math.min(currentIndex, Math.max(0, filteredQuestions.length - 1));
   const currentQuestion = filteredQuestions[safeIndex];
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
-
-      if (e.key === "ArrowLeft" && safeIndex > 0) {
-        e.preventDefault();
-        playCyberClick();
-        setCurrentIndex(safeIndex - 1);
-      } else if (e.key === "ArrowRight" && safeIndex < filteredQuestions.length - 1) {
-        e.preventDefault();
-        playCyberClick();
-        setCurrentIndex(safeIndex + 1);
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [safeIndex, filteredQuestions.length]);
-
   const answeredCount = Object.keys(activeAnswers).length;
   const correctCount = saaPracticeQuestions.filter((q) =>
     isQuestionCorrect(q, activeAnswers[q.id])
@@ -196,35 +177,66 @@ export default function AwsSaaPracticeQuiz({
     setCurrentIndex(0);
   };
 
-  const commitAnswer = (questionId: string, selectedIndices: number[]) => {
-    if (quizMode === "exam") {
-      if (examSubmitted) return;
-      setExamAnswers((prev) => ({ ...prev, [questionId]: selectedIndices }));
-    } else {
-      onSubmitAnswer(questionId, selectedIndices);
-    }
-  };
+  const commitAnswer = useCallback(
+    (questionId: string, selectedIndices: number[]) => {
+      if (quizMode === "exam") {
+        if (examSubmitted) return;
+        setExamAnswers((prev) => ({ ...prev, [questionId]: selectedIndices }));
+      } else {
+        onSubmitAnswer(questionId, selectedIndices);
+      }
+    },
+    [quizMode, examSubmitted, onSubmitAnswer]
+  );
 
-  const handleOptionClick = (q: SaaQuestion, optIdx: number) => {
-    if (quizMode === "exam" && examSubmitted) return;
-    playCyberClick();
-    if (q.selectCount === 1) {
-      commitAnswer(q.id, [optIdx]);
-      return;
-    }
+  const handleOptionClick = useCallback(
+    (q: SaaQuestion, optIdx: number) => {
+      if (quizMode === "exam" && examSubmitted) return;
+      playCyberClick();
+      if (q.selectCount === 1) {
+        commitAnswer(q.id, [optIdx]);
+        return;
+      }
 
-    const currentDraft = draftMulti[q.id] ?? activeAnswers[q.id] ?? [];
-    const exists = currentDraft.includes(optIdx);
-    let nextDraft: number[];
-    if (exists) {
-      nextDraft = currentDraft.filter((i) => i !== optIdx);
-    } else if (currentDraft.length < q.selectCount) {
-      nextDraft = [...currentDraft, optIdx];
-    } else {
-      nextDraft = [...currentDraft.slice(1), optIdx];
-    }
-    setDraftMulti((prev) => ({ ...prev, [q.id]: nextDraft }));
-  };
+      const currentDraft = draftMulti[q.id] ?? activeAnswers[q.id] ?? [];
+      const exists = currentDraft.includes(optIdx);
+      let nextDraft: number[];
+      if (exists) {
+        nextDraft = currentDraft.filter((i) => i !== optIdx);
+      } else if (currentDraft.length < q.selectCount) {
+        nextDraft = [...currentDraft, optIdx];
+      } else {
+        nextDraft = [...currentDraft.slice(1), optIdx];
+      }
+      setDraftMulti((prev) => ({ ...prev, [q.id]: nextDraft }));
+    },
+    [quizMode, examSubmitted, commitAnswer, draftMulti, activeAnswers]
+  );
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
+
+      if (e.key === "ArrowLeft" && safeIndex > 0) {
+        e.preventDefault();
+        playCyberClick();
+        setCurrentIndex(safeIndex - 1);
+      } else if (e.key === "ArrowRight" && safeIndex < filteredQuestions.length - 1) {
+        e.preventDefault();
+        playCyberClick();
+        setCurrentIndex(safeIndex + 1);
+      } else if (currentQuestion && ["1", "2", "3", "4", "5"].includes(e.key)) {
+        const idx = Number(e.key) - 1;
+        if (idx < currentQuestion.options.length) {
+          e.preventDefault();
+          handleOptionClick(currentQuestion, idx);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [safeIndex, filteredQuestions.length, currentQuestion, handleOptionClick]);
 
   const handleConfirmMulti = (q: SaaQuestion) => {
     const selected = draftMulti[q.id] ?? [];
@@ -787,6 +799,14 @@ export default function AwsSaaPracticeQuiz({
                   </button>
 
                   <span className="hidden sm:inline text-[11px] text-slate-400">
+                    <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-slate-600">
+                      1
+                    </kbd>
+                    -
+                    <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-slate-600">
+                      5
+                    </kbd>{" "}
+                    で選択 /{" "}
                     <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-slate-600">
                       ←
                     </kbd>{" "}

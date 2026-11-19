@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, Copy, Check, Sparkles, ShieldCheck, Wrench, Send, AlertTriangle } from "lucide-react";
+import { X, Copy, Check, ShieldCheck, Wrench } from "lucide-react";
 import { playCyberClick, playCyberSuccess } from "@/lib/sound";
 
 interface SkillApplicationModalProps {

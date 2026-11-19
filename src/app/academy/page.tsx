@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Award, BookOpen, Clock, ListChecks, Sparkles, ArrowRight, CheckCircle2, Trophy, Flame } from "lucide-react";
+import { Award, BookOpen, Clock, ListChecks, ArrowRight, CheckCircle2, Trophy, Flame } from "lucide-react";
 import { courses, courseMinutes } from "@/data/academy";
 import { loadProgress, type CourseProgress } from "@/lib/academyProgress";
 import { stepCounts } from "@/components/academy/useCourseProgress";

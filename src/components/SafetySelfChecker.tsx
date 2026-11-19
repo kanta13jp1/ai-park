@@ -4,13 +4,10 @@ import { useState } from "react";
 import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 import {
   ShieldCheck,
-  ShieldAlert,
   AlertTriangle,
   CheckCircle2,
   XCircle,
-  HelpCircle,
   RotateCcw,
-  ArrowRight,
   Lock,
   UserX,
   KeyRound,

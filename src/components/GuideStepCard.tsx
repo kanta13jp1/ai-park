@@ -1,5 +1,5 @@
 import { basePath } from "@/lib/basePath";
-import { ImageIcon, ExternalLink, ZoomIn, Sparkles, CheckCircle2 } from "lucide-react";
+import { ImageIcon, ExternalLink, ZoomIn } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 

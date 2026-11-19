@@ -35,8 +35,6 @@ import {
   MessageSquareShare,
   RefreshCw,
   Radio,
-  Activity,
-  ShieldCheck,
   Globe,
 } from "lucide-react";
 

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import TiltCard from "@/components/TiltCard";
-import SpotlightCard from "@/components/SpotlightCard";
 import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 import {
   Wrench,
@@ -11,13 +10,7 @@ import {
   Search,
   AlertTriangle,
   Terminal,
-  ShieldAlert,
-  Key,
-  Database,
   ExternalLink,
-  ChevronDown,
-  Sparkles,
-  HelpCircle,
 } from "lucide-react";
 
 interface TroubleshootingItem {

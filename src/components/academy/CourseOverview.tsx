@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Award, BookOpen, CheckCircle2, ChevronRight, Circle, Clock, ListChecks, PlayCircle, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Award, BookOpen, CheckCircle2, Circle, Clock, ListChecks, PlayCircle, Sparkles } from "lucide-react";
 import { courseMinutes, PASS_RATE, type Course } from "@/data/academy";
 import { stepCounts, useCourseProgress } from "./useCourseProgress";
 import TiltCard from "@/components/TiltCard";

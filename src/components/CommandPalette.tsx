@@ -8,7 +8,6 @@ import {
   BookOpen,
   Calendar,
   Sparkles,
-  Command,
   X,
   Layers,
   Terminal,

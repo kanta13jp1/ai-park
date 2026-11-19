@@ -10,7 +10,7 @@ import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import { playCyberHover, playCyberClick } from "@/lib/sound";
-import { GraduationCap, ArrowRight, Sparkles, BookOpen } from "lucide-react";
+import { GraduationCap, ArrowRight } from "lucide-react";
 
 export default function LearningPage() {
   return (

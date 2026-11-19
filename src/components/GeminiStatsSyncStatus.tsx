@@ -4,15 +4,12 @@ import { useState } from "react";
 import {
   RefreshCw,
   CheckCircle2,
-  Clock,
   HelpCircle,
   ChevronDown,
   ChevronUp,
-  AlertTriangle,
   ShieldCheck,
   Building,
   KeyRound,
-  ExternalLink,
 } from "lucide-react";
 
 interface GeminiStatsSyncStatusProps {

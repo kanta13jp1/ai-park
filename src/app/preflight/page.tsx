@@ -5,7 +5,7 @@ import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
-import { playCyberHover, playCyberClick, playCyberSuccess } from "@/lib/sound";
+import { playCyberHover, playCyberClick } from "@/lib/sound";
 import {
   preflightChecklistMaster,
   type FeaturePreflightRecord,
@@ -15,7 +15,6 @@ import {
   ShieldCheck,
   CheckCircle2,
   AlertTriangle,
-  XCircle,
   Eye,
   Layout,
   MousePointerClick,
@@ -24,9 +23,6 @@ import {
   Check,
   ExternalLink,
   Laptop,
-  UserCheck,
-  HelpCircle,
-  Filter,
 } from "lucide-react";
 import Link from "next/link";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Sparkles, Command } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 import { playCyberClick } from "@/lib/sound";
 

@@ -4,35 +4,23 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   MessageSquarePlus,
-  CheckCircle2,
-  Clock,
   AlertCircle,
   Download,
-  Filter,
   Search,
-  Tag,
   User,
   Plus,
   X,
   Sparkles,
-  ArrowRight,
   Send,
-  Building,
-  Check,
   ChevronRight,
-  HelpCircle,
   Calendar,
   CircleDot,
   RefreshCw,
   ExternalLink,
   LayoutGrid,
   List,
-  Trophy,
-  Award,
 } from "lucide-react";
-import TiltCard from "@/components/TiltCard";
-import SpotlightCard from "@/components/SpotlightCard";
-import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
+
 import {
   GITHUB_REPO,
   FEEDBACK_LABEL,

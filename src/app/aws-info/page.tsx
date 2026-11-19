@@ -462,7 +462,7 @@ export default function AwsInfoPage() {
               </div>
 
               {/* 進捗ゲージカード */}
-              <div className="shrink-0 grid grid-cols-3 gap-2.5 sm:min-w-[360px]">
+              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:min-w-[360px]">
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
                   <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
@@ -689,6 +689,46 @@ export default function AwsInfoPage() {
               </div>
 
               <div className="space-y-4">
+                {saaDomains.every((domain) => {
+                  const hasVisible = domain.topics.some((t) => {
+                    if (onlyIncompleteTopics && progress.completedTopics.includes(t.id)) return false;
+                    if (
+                      onlyWithNotesTopics &&
+                      !(progress.topicNotes[t.id] && progress.topicNotes[t.id].trim().length > 0)
+                    ) {
+                      return false;
+                    }
+                    if (!normalizedTopicQuery) return true;
+                    return [t.title, ...t.services, ...t.keyPoints, t.examTip]
+                      .join(" ")
+                      .toLowerCase()
+                      .includes(normalizedTopicQuery);
+                  });
+                  return !hasVisible;
+                }) && (
+                  <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3">
+                    <Search className="w-8 h-8 text-slate-300 mx-auto" />
+                    <div className="text-sm font-black text-slate-900">
+                      条件に一致するトピックがありません
+                    </div>
+                    <p className="text-xs text-slate-500">
+                      検索キーワードや「未完了のみ」「メモあり」の絞り込み条件を解除してください。
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setTopicQuery("");
+                        setOnlyIncompleteTopics(false);
+                        setOnlyWithNotesTopics(false);
+                      }}
+                      className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 cursor-pointer"
+                    >
+                      フィルターをすべて解除
+                    </button>
+                  </div>
+                )}
+
                 {saaDomains.map((domain) => {
                   const Icon = DOMAIN_ICONS[domain.id] ?? Cloud;
                   const style = ACCENT_STYLES[domain.accentColor];
@@ -984,7 +1024,34 @@ export default function AwsInfoPage() {
               </div>
             </div>
 
+            {/* すべて0件時のエンプティステート */}
+            {filteredQuickLookup.length === 0 &&
+              filteredComparisons.length === 0 &&
+              filteredPitfalls.length === 0 && (
+                <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3">
+                  <Search className="w-8 h-8 text-slate-300 mx-auto" />
+                  <div className="text-sm font-black text-slate-900">
+                    「{compQuery}」に一致する項目が見つかりませんでした
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    別のキーワード（例：S3、RDS、ALB、IAM）で検索するか、条件をリセットしてください。
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setCompCategory("すべて");
+                      setCompQuery("");
+                    }}
+                    className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 cursor-pointer"
+                  >
+                    検索・カテゴリをリセット
+                  </button>
+                </div>
+              )}
+
             {/* 要件→サービス即断逆引きチートシート */}
+            {filteredQuickLookup.length > 0 && (
             <section className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
@@ -1014,8 +1081,10 @@ export default function AwsInfoPage() {
                 ))}
               </div>
             </section>
+            )}
 
             {/* 比較テーブル一覧 */}
+            {filteredComparisons.length > 0 && (
             <div className="space-y-6">
               {filteredComparisons.map((table) => (
                 <div
@@ -1072,8 +1141,10 @@ export default function AwsInfoPage() {
                 </div>
               ))}
             </div>
+            )}
 
             {/* 試験のひっかけ回避：典型的な誤答パターン */}
+            {filteredPitfalls.length > 0 && (
             <section className="space-y-3 pt-2">
               <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
                 <AlertTriangle size={17} className="text-rose-500" />
@@ -1105,6 +1176,7 @@ export default function AwsInfoPage() {
                 ))}
               </div>
             </section>
+            )}
           </div>
         )}
 

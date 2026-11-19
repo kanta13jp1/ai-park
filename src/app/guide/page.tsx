@@ -21,10 +21,6 @@ import {
   ExternalLink,
   Copy,
   Check,
-  CheckCircle2,
-  Sparkles,
-  Layers,
-  ShieldCheck,
 } from "lucide-react";
 
 // 手順は Google Antigravity 公式ドキュメント（2026年9月25日確認）に基づく

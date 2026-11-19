@@ -5,19 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   Keyboard,
   X,
-  Volume2,
-  VolumeX,
-  Command,
-  Compass,
-  ArrowRight,
-  GraduationCap,
-  Sparkles,
-  BarChart3,
-  Calendar,
-  Layers,
-  Bot,
-  Newspaper,
-  CheckCircle2,
 } from "lucide-react";
 import {
   isSoundEnabled,

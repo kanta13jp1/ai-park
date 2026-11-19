@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
-import { BookOpen, MessageSquareText, FileCheck2, LifeBuoy, Sparkles, Copy, Check } from "lucide-react";
+import { BookOpen, MessageSquareText, FileCheck2, LifeBuoy, Copy, Check } from "lucide-react";
 import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 
 // ご意見TODO-03「ここ見てやってみて」と言える AI初級編 チートシート

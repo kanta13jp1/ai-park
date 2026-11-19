@@ -1,6 +1,6 @@
 "use client";
 
-import { Construction, AlertCircle, Calendar } from "lucide-react";
+import { Construction, Calendar } from "lucide-react";
 import Link from "next/link";
 
 interface UnderConstructionBannerProps {

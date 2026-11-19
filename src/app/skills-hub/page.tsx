@@ -9,22 +9,15 @@ import SkillApplicationModal from "@/components/skills/SkillApplicationModal";
 import { playCyberClick, playCyberSuccess, playCyberHover } from "@/lib/sound";
 import {
   Wrench,
-  Sparkles,
   Copy,
   Check,
   ShieldCheck,
-  Code2,
-  FileText,
   Search,
   Filter,
   ArrowRight,
-  Cpu,
   Layers,
-  Terminal,
-  Database,
   Plus,
   Compass,
-  CheckCircle2
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import Link from "next/link";

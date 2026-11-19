@@ -5,28 +5,19 @@ import Link from "next/link";
 import {
   RefreshCw,
   Search,
-  ExternalLink,
-  ShieldCheck,
-  CheckCircle2,
-  FileText,
-  Sliders,
-  HelpCircle,
   Sparkles,
-  ChevronRight,
-  ArrowRight,
   Layers,
   X,
   Compass,
   BarChart3,
   Bot,
-  Zap,
 } from "lucide-react";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import { TOOLS_SHEET_CSV_URL, fetchSheetTools } from "@/lib/toolsSheet";
-import { playCyberClick, playCyberHover, playCyberOpen, playCyberSuccess } from "@/lib/sound";
+import { playCyberClick, playCyberHover, playCyberOpen } from "@/lib/sound";
 import ToolApplicationDraftModal from "@/components/tools/ToolApplicationDraftModal";
 
 interface MatrixTool {

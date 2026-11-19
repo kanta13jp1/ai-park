@@ -6,8 +6,6 @@ import {
   Upload,
   Copy,
   Check,
-  Share2,
-  RefreshCw,
   FileJson,
   MessageSquare,
   ShieldCheck,
@@ -18,10 +16,8 @@ import {
   exportProgressJSON,
   importProgressJSON,
   generateChatReportText,
-  type CourseProgress,
 } from "@/lib/academyProgress";
 import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
-import TiltCard from "@/components/TiltCard";
 
 interface ProgressManagerProps {
   totalLessons: number;

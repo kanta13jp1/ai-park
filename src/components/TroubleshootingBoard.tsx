@@ -14,11 +14,7 @@ import {
   Check,
   AlertTriangle,
   Flame,
-  Filter,
   ShieldCheck,
-  Cpu,
-  Layers,
-  Sparkles,
   HelpCircle,
   X,
 } from "lucide-react";

@@ -5,11 +5,8 @@ import { useState, useEffect } from "react";
 import {
   Search,
   ArrowRight,
-  Sparkles,
-  FileText,
   Tag,
   X,
-  ExternalLink,
 } from "lucide-react";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 

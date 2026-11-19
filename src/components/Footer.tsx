@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, ExternalLink, ShieldCheck, Heart, Terminal, Compass, BookOpen, Layers } from "lucide-react";
+import { Sparkles, ExternalLink, ShieldCheck, Heart, BookOpen, Layers } from "lucide-react";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 import SoundToggle from "@/components/SoundToggle";
 

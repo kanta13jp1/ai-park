@@ -4,7 +4,7 @@ import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
-import { Mail, MessageSquare, Send, HelpCircle, ExternalLink, CheckCircle2, Search } from "lucide-react";
+import { MessageSquare, Send, HelpCircle, ExternalLink, CheckCircle2, Search } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 import { playCyberSuccess, playCyberClick, playCyberHover } from "@/lib/sound";

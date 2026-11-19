@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Copy, Check, Sparkles, Shield, Clock, FileCheck } from "lucide-react";
+import { X, Copy, Check, Sparkles, Clock } from "lucide-react";
 import { playCyberClick, playCyberSuccess } from "@/lib/sound";
 
 interface MatrixToolRef {

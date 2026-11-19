@@ -12,13 +12,10 @@ import {
   Sparkles,
   MessageCircle,
   Search,
-  Filter,
   CheckCircle2,
   Send,
   X,
-  Building,
   UserPlus,
-  ExternalLink,
   Award,
 } from "lucide-react";
 import { useState } from "react";

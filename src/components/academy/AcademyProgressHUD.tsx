@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Trophy, Award, Flame, Sparkles, CheckCircle2 } from "lucide-react";
+import { Trophy, Award, Flame, Sparkles } from "lucide-react";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import TiltCard from "@/components/TiltCard";
 import { playCyberHover } from "@/lib/sound";

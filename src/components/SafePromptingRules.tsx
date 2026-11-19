@@ -1,8 +1,8 @@
 "use client";
 
-import { ShieldCheck, ShieldAlert, CheckCircle2, XCircle, Lock, EyeOff, AlertTriangle, FileText, Printer, Sparkles } from "lucide-react";
+import { ShieldCheck, CheckCircle2, XCircle, EyeOff, Printer } from "lucide-react";
 import TiltCard from "@/components/TiltCard";
-import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
+import { playCyberHover, playCyberSuccess } from "@/lib/sound";
 
 export default function SafePromptingRules() {
   const handlePrint = () => {

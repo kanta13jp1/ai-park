@@ -15,16 +15,7 @@ import {
   Clock,
   ArrowRight,
   Sparkles,
-  Layers,
-  Search,
   Filter,
-  Bot,
-  Wrench,
-  BarChart3,
-  Users,
-  Lightbulb,
-  ExternalLink,
-  ChevronRight,
 } from "lucide-react";
 
 type StatusType = "all" | "in-progress" | "planned" | "completed";

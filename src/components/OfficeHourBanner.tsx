@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import BookingModal from "./BookingModal";
-import { Calendar, ArrowRight, Sparkles, Clock } from "lucide-react";
+import { Calendar, ArrowRight, Sparkles } from "lucide-react";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 export default function OfficeHourBanner() {
