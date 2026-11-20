@@ -402,8 +402,8 @@ const tasksData: TaskItem[] = [
   },
   {
     id: "info-pages",
-    title: "AWS・MCP・Antigravity情報局の内容準備",
-    pageName: "AWS・クラウド情報局 ほか",
+    title: "AWS・LPIC・MCP・Antigravity情報局の内容準備",
+    pageName: "AWS・LPIC情報局 ほか",
     href: "/aws-info",
     phase: "Phase 4",
     targetDate: "未定",
@@ -412,9 +412,10 @@ const tasksData: TaskItem[] = [
     releaseCondition: "社内ルール・相談窓口・使ってよいツールの決定",
     category: "system",
     icon: "☁️",
-    description: "社内の AWS 利用ルール、使ってよい MCP サーバー、Antigravity の社内向けお知らせを準備します。",
+    description: "AWS SAA-C03 / LPIC-1 学習ハブは先行掲載中。社内の AWS 利用ルール・資格支援ルール、使ってよい MCP サーバー、Antigravity の社内向けお知らせを準備します。",
     items: [
-      { text: "社内の AWS 利用ルールと相談窓口", done: false },
+      { text: "AWS SAA-C03 学習ハブ（/aws-info）と LPIC-1 学習ハブ（/lpic-info）の先行公開", done: true },
+      { text: "社内の AWS 利用ルール・資格取得支援ルールと相談窓口", done: false },
       { text: "使ってよい MCP サーバーと設定方法", done: false },
       { text: "Antigravity の社内向けお知らせ・よくある質問", done: false },
     ],

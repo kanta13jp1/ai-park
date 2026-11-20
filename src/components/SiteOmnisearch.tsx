@@ -70,6 +70,20 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["情報局", "相談", "office hour", "予約", "coe", "メンター", "サポート", "カレンダー"],
   },
   {
+    title: "AWS・クラウド情報局 (SAA-C03学習ハブ)",
+    category: "資格・クラウド",
+    href: "/aws-info",
+    description: "AWS認定ソリューションアーキテクト(SAA-C03)学習ハブ・練習クイズ・比較表を掲載中（社内AWS利用ルール等は工事中）",
+    keywords: ["aws", "saa", "saa-c03", "クラウド", "試験", "模擬試験", "クイズ", "flashcards", "well-architected"],
+  },
+  {
+    title: "LPIC・Linux情報局 (LPIC-1学習ハブ)",
+    category: "資格・Linux",
+    href: "/lpic-info",
+    description: "LPIC-1（101-500 / 102-500）学習ハブ・練習クイズ・コマンド早見表を掲載中（社内資格支援ルール等は工事中）",
+    keywords: ["lpic", "lpic-1", "101-500", "102-500", "linux", "コマンド", "試験", "クイズ", "flashcards"],
+  },
+  {
     title: "アイデア宣言ボード",
     category: "共創",
     href: "/idea-board",

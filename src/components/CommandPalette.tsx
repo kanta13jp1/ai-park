@@ -165,6 +165,22 @@ const paletteItems: PaletteItem[] = [
     icon: Terminal,
   },
   {
+    id: "aws-info",
+    title: "AWS・クラウド情報局 (SAA-C03学習)",
+    category: "Academy & 学習",
+    href: "/aws-info",
+    description: "SAA-C03 学習ハブ・フラッシュカード・模擬試験（社内AWSルール等は工事中）",
+    icon: Compass,
+  },
+  {
+    id: "lpic-info",
+    title: "LPIC・Linux情報局 (LPIC-1学習)",
+    category: "Academy & 学習",
+    href: "/lpic-info",
+    description: "LPIC-1 (101-500 / 102-500) 学習ハブ・練習クイズ（社内支援ルール等は工事中）",
+    icon: Terminal,
+  },
+  {
     id: "safety-checker",
     title: "社内AI入力 セルフチェック診断ツール",
     category: "ガバナンス & サポート",
