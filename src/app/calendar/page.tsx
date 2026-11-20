@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
+import { studySessions } from "@/data/study-archive";
 import {
   CalendarDays,
   Lock,
@@ -13,6 +15,8 @@ import {
   ExternalLink,
   Layers,
   ListFilter,
+  Video,
+  ArrowRight,
 } from "lucide-react";
 
 // 「AI Park イベント」カレンダーのカレンダーID（社内限定で共有。gas/ai-study-agenda/README.md 参照）
@@ -34,6 +38,7 @@ export default function CalendarPage() {
   const googleCalendarDirectUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(
     AI_PARK_CALENDAR_ID
   )}`;
+  const latestSession = studySessions[0];
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
@@ -83,6 +88,37 @@ export default function CalendarPage() {
             </SpotlightCard>
           </TiltCard>
         </div>
+
+        {/* 過去のAI勉強会アーカイブへの相互導線バナー */}
+        {latestSession && (
+          <Link
+            href="/study-archive"
+            onClick={() => playCyberClick()}
+            onMouseEnter={() => playCyberHover()}
+            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white hover:bg-indigo-50/40 border border-slate-200/90 hover:border-indigo-300 rounded-2xl p-4 sm:px-5 shadow-2xs transition-all"
+          >
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600 shadow-2xs">
+                <Video className="w-5 h-5" />
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex flex-wrap items-center gap-2 text-xs font-extrabold text-slate-900">
+                  <span>過去の録画動画・議事メモ・次回課題は AI勉強会アーカイブへ</span>
+                  <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 text-[10px]">
+                    最新: {latestSession.roundLabel}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 line-clamp-1">
+                  {latestSession.date} 開催：{latestSession.title}
+                </p>
+              </div>
+            </div>
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 group-hover:text-indigo-700 shrink-0 self-end sm:self-center">
+              <span>アーカイブを開く</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+            </span>
+          </Link>
+        )}
 
         {AI_PARK_CALENDAR_ID ? (
           <div className="space-y-6">
