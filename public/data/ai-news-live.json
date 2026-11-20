@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-20T06:12:56.980Z",
-  "lastSyncedAtFormatted": "2026/11/20 15:12:56",
+  "lastSyncedAt": "2026-11-20T19:44:10.408Z",
+  "lastSyncedAtFormatted": "2026/11/21 4:44:10",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 52,
@@ -16,6 +16,106 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-openai-combatting-adversarial-distillation",
+      "title": "OpenAI: Combatting adversarial distillation",
+      "date": "2026/11/20",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "OpenAI’s layered approach to adversarial distillation combines model training, safeguards, detection, and enforcement to protect against capability extraction.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Combatting adversarial distillation」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/combatting-adversarial-distillation",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-introducing-medchembench",
+      "title": "OpenAI: Can AI help scientists identify promising drug candidates?",
+      "date": "2026/11/20",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "MedChemBench evaluates how well AI models interpret molecular structures, reason from experimental evidence, and select compounds in early drug discovery.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Can AI help scientists identify promising drug candidates?」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/introducing-medchembench",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-harness-adapters-at-scale",
+      "title": "Hugging Face: Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
+      "date": "2026/11/20",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「Introducing harness adapters: adapt your favorite model to your harness to improve...」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/harness-adapters-at-scale",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-ainews-anthropic-successfully-completes-largest-",
+      "title": "Latent Space: [AINews] Anthropic successfully completes largest IPO in history, valued at $1.5T",
+      "date": "2026/11/20",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 19, 2026 — ANT went from $83 at pricing to $111.50 at the open and $97.17 at the close. Plus, Google opens Genie 4 to developers.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Anthropic successfully completes largest IPO in history, valued at $1.5T」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-anthropic-successfully-completes-largest-ipo-in-history-valued-at-1-5t/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-openai-how-openai-performance-factory-keeps-chatgpt-fas",
       "title": "OpenAI: How OpenAI’s Performance Factory keeps ChatGPT fast",
@@ -42,56 +142,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-deploying-daybreak-red",
-      "title": "OpenAI: Deploying Daybreak Red",
-      "date": "2026/11/19",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Explore a reference architecture for supervised security investigations with Daybreak Red, including safety controls, setup, and monitoring.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Deploying Daybreak Red」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/learn/deploying-daybreak-red",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-pr-scans-demo",
-      "title": "OpenAI: See PR scans in action",
-      "date": "2026/11/19",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Watch a walkthrough of PR scans and see how the presenter reviews scan results in a pull request workflow.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「See PR scans in action」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/learn/pr-scans-demo",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-latentspace-linear-scaling",
       "title": "Latent Space: Scaling Linear’s GTM to $100M ARR — Cristina Cordova, COO",
       "date": "2026/11/19",
@@ -108,31 +158,6 @@
       ],
       "sourceName": "Latent Space Official Feed",
       "sourceUrl": "https://latent.space/p/linear-scaling/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-ainews-gemini-4-neon-gdm-s-opus-sol-contender",
-      "title": "Latent Space: [AINews] Gemini 4 Neon: GDM's Opus/Sol Contender",
-      "date": "2026/11/19",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 18, 2026 — Google’s middle tier scores 61 on the Intelligence Index. Plus, Anthropic prices its IPO at $83.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Gemini 4 Neon: GDM's Opus/Sol Contender」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-gemini-4-neon-gdm-s-opus-sol-contender/",
       "tags": [
         "Latent Space",
         "AI Engineering",
@@ -234,31 +259,6 @@
       ],
       "sourceName": "Hugging Face Official Feed",
       "sourceUrl": "https://huggingface.co/blog/RadixArk/daisyrose-27b-pushing-the-frontier-of-post-trainin",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-predicting-fine-tuning-time",
-      "title": "Hugging Face: Why your fine-tuning job takes longer than the FLOPs say",
-      "date": "2026/11/18",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「Why your fine-tuning job takes longer than the FLOPs say」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/Dharma-AI/predicting-fine-tuning-time",
       "tags": [
         "Hugging Face",
         "OSS AI",
@@ -823,7 +823,7 @@
       "categoryLabel": "社内AI Park",
       "importance": "release",
       "importanceLabel": "社内リリース",
-      "summary": "「自動テストだけでなく人間が実機で手動確認する」社内ガバナンス方針に基づき、4大評価軸（仕様・デザイン・操作性・視認性）の70項目詳細チェックリストおよびデプロイ前品質ゲートを完全統合しました。",
+      "summary": "「自動テストだけでなく人間が実機で手動確認する」社内ガバナンス方針に基づき、4大評価軸（仕様・デザイン・操作性・視認性）の詳細チェックリストおよびデプロイ前品質ゲートを完全統合しました。",
       "impactForStaff": "ポータル全体の信頼性と安全性が飛躍的に向上。推測や未検証機能の混入をブロックし、全社員が安心して利用できるポータルを維持します。",
       "recommendedFor": [
         "全社員",
