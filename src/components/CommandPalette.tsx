@@ -181,6 +181,22 @@ const paletteItems: PaletteItem[] = [
     icon: Terminal,
   },
   {
+    id: "ipa-info",
+    title: "情報処理技術者試験情報局 (IP/FE/AP/高度)",
+    category: "Academy & 学習",
+    href: "/ipa-info",
+    description: "IP・FE・AP・高度試験(SC/DB/NW) 統合学習ハブ（社内支援ルール等は工事中）",
+    icon: BookOpen,
+  },
+  {
+    id: "antigravity-info",
+    title: "Antigravity情報局",
+    category: "ツール & ガイド",
+    href: "/antigravity-info",
+    description: "Antigravity 機能解説と実務活用の実行例（社内Q&A等は工事中）",
+    icon: Sparkles,
+  },
+  {
     id: "safety-checker",
     title: "社内AI入力 セルフチェック診断ツール",
     category: "ガバナンス & サポート",

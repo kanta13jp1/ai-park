@@ -66,8 +66,8 @@ const siteSearchIndex: SearchIndexItem[] = [
     title: "Antigravity情報局",
     category: "サポート",
     href: "/antigravity-info",
-    description: "Antigravity の社内向けお知らせ・よくある質問（工事中）",
-    keywords: ["情報局", "相談", "office hour", "予約", "coe", "メンター", "サポート", "カレンダー"],
+    description: "Antigravity 機能解説と実務活用の実行例を掲載中（社内向けQ&A・お知らせは工事中）",
+    keywords: ["情報局", "antigravity", "機能解説", "実行例", "相談", "office hour", "サポート"],
   },
   {
     title: "AWS・クラウド情報局 (SAA-C03学習ハブ)",
@@ -82,6 +82,13 @@ const siteSearchIndex: SearchIndexItem[] = [
     href: "/lpic-info",
     description: "LPIC-1（101-500 / 102-500）学習ハブ・練習クイズ・コマンド早見表を掲載中（社内資格支援ルール等は工事中）",
     keywords: ["lpic", "lpic-1", "101-500", "102-500", "linux", "コマンド", "試験", "クイズ", "flashcards"],
+  },
+  {
+    title: "情報処理技術者試験情報局 (IP/FE/AP/高度)",
+    category: "資格・IPA",
+    href: "/ipa-info",
+    description: "ITパスポート・基本情報・応用情報・高度試験（SC/DB/NW）統合学習ハブを掲載中（社内資格支援ルール等は工事中）",
+    keywords: ["ipa", "情報処理技術者試験", "itパスポート", "ip", "基本情報", "fe", "応用情報", "ap", "sc", "db", "nw", "セキュリティ"],
   },
   {
     title: "アイデア宣言ボード",
