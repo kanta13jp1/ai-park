@@ -35,12 +35,14 @@ unverifiedHrefs.forEach((href) => console.log(`   - ${href}`));
 console.log("");
 
 // 2. ナビゲーション類の検査（未確認機能が「稼働中」「公開中」「NEW」「β版」になっていないか）
-//    サイドバー（navigation.ts, Sidebar.tsx）、目的別ナビ（PurposeJump.tsx）、コマンドパレット（CommandPalette.tsx）を対象にする
+//    サイドバー（navigation.ts, Sidebar.tsx）、目的別ナビ（PurposeJump.tsx）、コマンドパレット（CommandPalette.tsx）、総合ハブ（how-to, agent-tools）を対象にする
 const navFiles = [
   "src/data/navigation.ts",
   "src/components/PurposeJump.tsx",
   "src/components/Sidebar.tsx",
   "src/components/CommandPalette.tsx",
+  "src/app/how-to/page.tsx",
+  "src/app/agent-tools/page.tsx",
 ];
 const navContent = navFiles
   .filter((rel) => fs.existsSync(path.join(rootDir, rel)))
@@ -127,7 +129,6 @@ let recordMatch;
 let uatPassedCount = 0;
 
 while ((recordMatch = recordBlockRegex.exec(preflightContent)) !== null) {
-  const fId = recordMatch[1];
   const fName = recordMatch[2];
   const fPath = recordMatch[3];
   const block = recordMatch[4];
