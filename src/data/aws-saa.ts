@@ -88,6 +88,14 @@ export interface SaaLimitFact {
   detail: string;
 }
 
+export interface SaaWellArchitectedPillar {
+  id: string;
+  name: string;
+  englishName: string;
+  examKeywords: string[];
+  focus: string;
+}
+
 // 出典: AWS Certified Solutions Architect - Associate (SAA-C03) 公式試験ガイド
 export const saaExamFacts: SaaExamFact[] = [
   { label: "試験コード", value: "SAA-C03", detail: "Associate レベル" },
@@ -1105,5 +1113,50 @@ export const saaKeyLimits: SaaLimitFact[] = [
     service: "S3 Glacier 取り出し時間",
     limitValue: "Instant ミリ秒 / Flexible 数分〜12h / Deep 12〜48h",
     detail: "最低保存期間は Instant・Flexible が 90日、Deep Archive が 180日。",
+  },
+];
+
+export const saaWellArchitectedPillars: SaaWellArchitectedPillar[] = [
+  {
+    id: "wa-ops",
+    name: "運用上の優秀性",
+    englishName: "Operational Excellence",
+    examKeywords: ["運用負荷を最小化", "IaC", "自動化", "サーバー管理不要"],
+    focus: "CloudFormation / CDK によるコード化、マネージド・サーバーレス採用による運用オーバーヘッド削減。",
+  },
+  {
+    id: "wa-sec",
+    name: "セキュリティ",
+    englishName: "Security",
+    examKeywords: ["最小権限", "暗号化", "インターネット非経由", "監査証跡"],
+    focus: "IAM ロール/STS、KMS/Secrets Manager、PrivateLink/VPC Endpoint、CloudTrail/GuardDuty。",
+  },
+  {
+    id: "wa-rel",
+    name: "信頼性",
+    englishName: "Reliability",
+    examKeywords: ["高可用性", "耐障害性", "自動復旧", "RTO/RPO"],
+    focus: "Multi-AZ 構成、Auto Scaling、Route 53 フェイルオーバー、SQS 疎結合、DR 戦略。",
+  },
+  {
+    id: "wa-perf",
+    name: "パフォーマンス効率",
+    englishName: "Performance Efficiency",
+    examKeywords: ["低レイテンシ", "マイクロ秒", "スループット最大化", "キャッシュ"],
+    focus: "CloudFront / Global Accelerator、ElastiCache / DAX、EBS io2 / FSx for Lustre。",
+  },
+  {
+    id: "wa-cost",
+    name: "コスト最適化",
+    englishName: "Cost Optimization",
+    examKeywords: ["最もコスト効率よく", "データ転送料削減", "従量課金"],
+    focus: "Savings Plans / スポット、S3 Intelligent-Tiering / Glacier、Gateway 型 VPC エンドポイント。",
+  },
+  {
+    id: "wa-sus",
+    name: "持続可能性",
+    englishName: "Sustainability",
+    examKeywords: ["リソース使用率最大化", "Graviton", "不要データ削除"],
+    focus: "Graviton プロセッサの活用、サーバーレス/オートスケールによる遊休リソース削減、S3 ライフサイクル。",
   },
 ];

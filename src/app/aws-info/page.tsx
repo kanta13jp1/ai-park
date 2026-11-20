@@ -52,6 +52,7 @@ import {
   saaArchitecturePatterns,
   saaPitfalls,
   saaKeyLimits,
+  saaWellArchitectedPillars,
   type SaaDomain,
 } from "@/data/aws-saa";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
@@ -1379,11 +1380,11 @@ export default function AwsInfoPage() {
               </div>
             </section>
 
-            {/* 定番アーキテクチャ設計パターン 4選 */}
+            {/* 定番アーキテクチャ設計パターン */}
             <section className="space-y-4">
               <div>
                 <h3 className="text-lg font-black text-slate-900">
-                  SAA-C03 定番アーキテクチャ設計パターン 4選
+                  SAA-C03 定番アーキテクチャ設計パターン {saaArchitecturePatterns.length}選
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
                   試験で頻出する標準構成のつながり（フロー）と設計上の勘所を押さえましょう。
@@ -1425,6 +1426,44 @@ export default function AwsInfoPage() {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 設計判断の軸：AWS Well-Architected 6つの柱 */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">
+                  設計判断の軸：AWS Well-Architected 6つの柱
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  問題文が「どの柱を最優先に問うているか」を見抜くと、正解の選択肢を迷わず選べます。
+                </p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {saaWellArchitectedPillars.map((pillar) => (
+                  <div
+                    key={pillar.id}
+                    className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-2.5"
+                  >
+                    <div>
+                      <div className="text-[10px] font-mono font-bold text-indigo-600 uppercase">
+                        {pillar.englishName}
+                      </div>
+                      <h4 className="text-sm font-black text-slate-900">{pillar.name}</h4>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {pillar.examKeywords.map((kw) => (
+                        <span
+                          key={kw}
+                          className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200/70"
+                        >
+                          {kw}
+                        </span>
+                      ))}
+                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed">{pillar.focus}</p>
                   </div>
                 ))}
               </div>
