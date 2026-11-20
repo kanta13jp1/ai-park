@@ -289,7 +289,7 @@ export default function GuidePage() {
         </div>
 
         {/* Windows トラブルシューティング＆エラー解決早見表 */}
-        <div id="troubleshooting-board">
+        <div>
           <TroubleshootingBoard />
         </div>
 

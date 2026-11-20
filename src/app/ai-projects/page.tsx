@@ -56,7 +56,7 @@ const DEPT_PRACTICES: DeptPractice[] = [
       "3. 境界値（null, undefined）が網羅されているかレビューしてコミット",
     ],
     recommendedModel: "Gemini 3.1 Pro (思考型)",
-    effect: "テスト記述工数を約60%削減、型エラーの早期発見",
+    effect: "テスト記述の負担軽減、型エラーの早期発見（活用例）",
   },
   {
     dept: "営業・企画",
@@ -69,7 +69,7 @@ const DEPT_PRACTICES: DeptPractice[] = [
       "3. 叩き台をもとに提案スライドやメール文面に反映",
     ],
     recommendedModel: "Gemini 3.1 Flash / Pro",
-    effect: "企画初期ドラフトの作成時間を2時間 ➔ 20分に短縮",
+    effect: "企画初期ドラフト・比較表の叩き台作成の迅速化（活用例）",
   },
   {
     dept: "人事・総務・バックオフィス",
@@ -425,7 +425,7 @@ export default function AiProjectsPage() {
         </div>
 
         {/* 部署別 実務ベストプラクティス・実践フロー */}
-        <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+        <section id="dept-templates" className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6 scroll-mt-24">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
               <div className="flex items-center gap-2">

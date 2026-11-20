@@ -177,7 +177,7 @@ const siteSearchIndex: SearchIndexItem[] = [
   {
     title: "穴埋めプロンプト集（実務テンプレ）",
     category: "プロンプト",
-    href: "/learning#fill-in-prompts",
+    href: "/learning#interactive-prompts",
     description: "コピペですぐ使える要約・コード生成・エラー調査・メール作成の穴埋め型実務プロンプト集",
     keywords: ["プロンプト", "穴埋め", "テンプレ", "コピペ", "要約", "コード生成", "エラー調査", "メール作成"],
   },
@@ -189,18 +189,18 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["安全ルール", "禁止入力", "機密漏洩防止", "プレースホルダー", "ガイドライン", "ルール"],
   },
   {
-    title: "Gemini利用統計 FAQ & データ仕様",
+    title: "Gemini利用統計 同期ステータス & 確認チェック",
     category: "統計分析",
-    href: "/gemini-stats#faq",
-    description: "全社・部署別Gemini利用回数、確定プロジェクト情報、集計期間・仕様FAQ",
-    keywords: ["gemini統計", "faq", "プライバシー", "集計期間", "更新頻度", "ログ仕様", "antigravity-pj-xxxxxx"],
+    href: "/gemini-stats#sync-status",
+    description: "Antigravity利用監視のデータ同期状況、確定プロジェクト情報、反映確認チェックリスト",
+    keywords: ["gemini統計", "faq", "プライバシー", "同期ステータス", "更新頻度", "ログ仕様", "antigravity-pj-xxxxxx"],
   },
   {
     title: "部署別実践テンプレ＆実務フロー",
     category: "活用事例",
     href: "/ai-projects#dept-templates",
-    description: "営業・開発・マーケ・人事・法務など各部署の具体的活用ステップと削減効果",
-    keywords: ["部署別", "テンプレ", "営業", "開発", "マーケティング", "人事", "総務", "法務", "財務", "実務フロー"],
+    description: "開発・営業/企画・人事/総務などの実務フロー例",
+    keywords: ["部署別", "テンプレ", "営業", "開発", "企画", "人事", "総務", "実務フロー"],
   },
   {
     title: "開発者手動UAT管理コンソール（プリフライト）",

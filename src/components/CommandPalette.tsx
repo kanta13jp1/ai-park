@@ -176,7 +176,7 @@ const paletteItems: PaletteItem[] = [
     id: "fill-in-prompts",
     title: "穴埋めプロンプト集（実務テンプレ）",
     category: "Academy & 学習",
-    href: "/learning#fill-in-prompts",
+    href: "/learning#interactive-prompts",
     description: "コピペですぐ使える要約・コード生成・エラー調査・メール作成の穴埋め型プロンプト集",
     icon: Sparkles,
   },
@@ -201,7 +201,7 @@ const paletteItems: PaletteItem[] = [
     title: "部署別実践テンプレ＆実務フロー",
     category: "共創 & コミュニティ",
     href: "/ai-projects#dept-templates",
-    description: "営業・開発・マーケ・人事・法務など各部署の具体的活用ステップと削減効果",
+    description: "開発・営業/企画・人事/総務などの実務フロー例",
     icon: Building,
   },
   {

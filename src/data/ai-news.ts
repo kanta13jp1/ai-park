@@ -303,7 +303,7 @@ export const aiNewsMaster: AINewsItem[] = [
     categoryLabel: "社内AI Park",
     importance: "release",
     importanceLabel: "社内リリース",
-    summary: "「自動テストだけでなく人間が実機で手動確認する」社内ガバナンス方針に基づき、4大評価軸（仕様・デザイン・操作性・視認性）の70項目詳細チェックリストおよびデプロイ前品質ゲートを完全統合しました。",
+    summary: "「自動テストだけでなく人間が実機で手動確認する」社内ガバナンス方針に基づき、4大評価軸（仕様・デザイン・操作性・視認性）の詳細チェックリストおよびデプロイ前品質ゲートを完全統合しました。",
     impactForStaff: "ポータル全体の信頼性と安全性が飛躍的に向上。推測や未検証機能の混入をブロックし、全社員が安心して利用できるポータルを維持します。",
     recommendedFor: ["全社員", "開発者・推進担当", "管理者"],
     sourceName: "MightyLINK AI推進窓口",

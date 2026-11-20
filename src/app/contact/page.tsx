@@ -170,7 +170,7 @@ export default function ContactPage() {
                     name="email"
                     type="email"
                     required
-                    placeholder="taro.yamada@mightylink.co.jp"
+                    placeholder="example@ml-mightylink.com"
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 text-xs font-medium"
                   />
                 </div>

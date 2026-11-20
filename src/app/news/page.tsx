@@ -649,7 +649,7 @@ export default function AiNewsPage() {
                     <span>プリフライト品質ゲートの全面稼働</span>
                   </p>
                   <p className="text-[11px] text-slate-300 pl-3">
-                    人間による手動受入テスト（70項目）とCIゲートにより、虚偽や推測の混入をゼロガード。
+                    人間による手動受入テストとCIゲートにより、虚偽や推測の混入をゼロガード。
                   </p>
                 </div>
               </div>

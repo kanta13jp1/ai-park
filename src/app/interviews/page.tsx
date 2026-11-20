@@ -217,7 +217,7 @@ export default function InterviewsPage() {
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              開発・エンジニアリング (1)
+              開発・エンジニアリング ({initialInterviewArticles.filter((a) => a.category === "dev").length})
             </button>
             <button
               onClick={() => {
@@ -230,7 +230,7 @@ export default function InterviewsPage() {
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              営業・CS (1)
+              営業・CS ({initialInterviewArticles.filter((a) => a.category === "sales").length})
             </button>
             <button
               onClick={() => {
@@ -243,7 +243,7 @@ export default function InterviewsPage() {
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              コーポレート・総務 (1)
+              コーポレート・総務 ({initialInterviewArticles.filter((a) => a.category === "corp").length})
             </button>
           </div>
         </div>

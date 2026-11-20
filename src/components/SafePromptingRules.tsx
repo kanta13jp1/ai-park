@@ -17,7 +17,7 @@ export default function SafePromptingRules() {
       {/* 印刷時専用ヘッダー */}
       <div className="hidden print:block border-b-2 border-slate-900 pb-3 mb-4">
         <div className="flex items-center justify-between text-xs text-slate-500 font-mono">
-          <span>株式会社マイティリンク 社内AI利用ガイドライン（2026年改訂版）</span>
+          <span>株式会社Mighty LINK 社内AI利用ガイドライン（暫定版 2026/09/26〜）</span>
           <span>社内デスク常備・研修配布用 A4早見表</span>
         </div>
       </div>
@@ -179,7 +179,7 @@ export default function SafePromptingRules() {
       <div className="hidden print:block pt-4 border-t-2 border-slate-900 mt-6">
         <div className="flex items-center justify-between text-[11px] text-slate-600">
           <div>
-            <p><strong>問合せ先:</strong> AI推進担当 / 法務・コンプライアンス室（Google Chat「AI Park 相談窓口」）</p>
+            <p><strong>問合せ先:</strong> AI推進担当（Google Chat「AI勉強会」スペース / お問い合わせページ）</p>
             <p><strong>社内ポータル:</strong> MightyLINK AI Park（https://kanta13jp1.github.io/ai-park/）</p>
           </div>
           <div className="text-right">

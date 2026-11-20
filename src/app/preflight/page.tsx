@@ -303,6 +303,7 @@ export default function PreflightUatPage() {
                     <Link
                       href={selectedRecord.path}
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-700 text-xs font-bold transition-colors"
                     >
                       <span>画面を開く</span>

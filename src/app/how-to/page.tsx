@@ -110,23 +110,23 @@ export default function HowToPage() {
     },
     {
       id: "gemini-stats",
-      title: "Gemini利用統計 & SKU",
-      desc: "社内でのGemini活用状況、SKU別料金・モデル仕様の可視化ダッシュボード！",
+      title: "Antigravity利用監視（Gemini利用率）",
+      desc: "社内での Antigravity 利用状況・課金推移・90日無料トライアル残高の可視化ダッシュボード",
       icon: <BarChart3 className="text-emerald-600" size={32} />,
       iconBg: "bg-emerald-50 border-emerald-100",
       href: "/gemini-stats",
-      badge: "利用統計・可視化",
+      badge: "β版",
       badgeColor: "bg-emerald-100 text-emerald-700 font-bold",
-      tags: ["利用統計", "SKU・料金", "モデル比較"],
-      highlights: "社内利用トレンドのグラフ分析とGemini 3.1 Pro/Flashのスペック早見表",
+      tags: ["利用統計", "課金推移", "無料トライアル"],
+      highlights: "社内 Google Cloud プロジェクトの自動同期データと日次利用トレンド",
     },
   ];
 
   const steps = [
     {
       step: "01",
-      title: "社内で使えるツールを確認",
-      desc: "まずは「AIツール一覧」で業務に使える公認ツールとデータ取り扱いルールを確認します。",
+      title: "ツールの特徴と社内状況を確認",
+      desc: "まずは「AIツール一覧（PoC中）」で、社内確認中のAIツール候補と特徴を確認します（業務利用前にはAI推進担当へご確認ください）。",
       linkText: "AIツール一覧を見る",
       href: "/tools",
     },

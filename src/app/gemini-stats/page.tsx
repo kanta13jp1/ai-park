@@ -451,7 +451,7 @@ function doGet() {
                   </span>
                   <span className="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-0.5 rounded-full flex items-center gap-1 font-mono">
                     <CheckCircle2 size={11} />
-                    <span>自動同期稼働中 ({syncedAt})</span>
+                    <span>{syncMode === "api_live" ? "自動同期稼働中" : "検証済みスナップショット"} ({syncedAt})</span>
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 mt-1 font-mono">
@@ -714,7 +714,7 @@ function doGet() {
                 </div>
                 <div className="space-y-1">
                   <div className="flex justify-between text-[11px] text-slate-600 font-semibold">
-                    <span>月額上限予算 ($20 / 3,000円)</span>
+                    <span>月額上限予算 (${gcpInfo.monthlyBudgetUsd} / {(gcpInfo.monthlyBudgetUsd * USD_JPY).toLocaleString()}円)</span>
                     <span className="font-mono text-indigo-700">
                       {budgetUsagePercent.toFixed(1)}%
                     </span>
@@ -764,7 +764,7 @@ function doGet() {
                 </div>
                 <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-600">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>本日利用: 2名</span>
+                  <span>登録アカウント: {users.length}名</span>
                 </div>
               </div>
             </SpotlightCard>
@@ -1297,7 +1297,7 @@ powershell -ExecutionPolicy Bypass -File ./scripts/setup-gcp-sa.ps1
                       <a
                         href="https://console.cloud.google.com/billing"
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs transition-colors"
                       >
                         <span>課金データのエクスポート設定を開く</span>

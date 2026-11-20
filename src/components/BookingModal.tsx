@@ -175,7 +175,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   <input
                     type="text"
                     required
-                    placeholder="山田 太郎"
+                    placeholder="例: お名前"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
@@ -192,7 +192,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                   <input
                     type="text"
                     required
-                    placeholder="DX推進部 / クラウド基盤"
+                    placeholder="例: 所属部署・チーム"
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     className="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
@@ -231,7 +231,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
             <div className="space-y-1">
               <label className="block font-bold text-slate-700">
-                希望日時候補 (平日 10:00〜18:00)
+                希望日時候補
               </label>
               <div className="relative">
                 <Clock className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />

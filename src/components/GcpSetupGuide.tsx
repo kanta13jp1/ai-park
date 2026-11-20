@@ -9,7 +9,7 @@ export const COMPANY_GCP_INFO = {
   org: "ml-mightylink.com",
   projectName: "antigravity-pj",
   projectId: "antigravity-pj-xxxxxx",
-  projectNumber: "470325701687",
+  projectNumber: "xxxxxxxxxxxx",
   plan: "Agent Platform (Managed by your organization)",
   billingAccountId: "012EB1-xxxxxx-xxxxxx",
 };

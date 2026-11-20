@@ -48,7 +48,7 @@ export default function Footer() {
               <li>
                 <Link href="/skills-hub" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer flex items-center gap-1.5">
                   <span>社内Skillsカタログ</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono font-bold">準備中</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 font-mono font-bold">工事中</span>
                 </Link>
               </li>
               <li>
@@ -84,7 +84,7 @@ export default function Footer() {
               <li>
                 <Link href="/news" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer flex items-center gap-1.5">
                   <span>最新AIニュース & レーダー</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">LIVE</span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 font-mono font-bold">NEW</span>
                 </Link>
               </li>
               <li>
@@ -105,6 +105,11 @@ export default function Footer() {
               <li>
                 <Link href="/calendar" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
                   AI Park カレンダー
+                </Link>
+              </li>
+              <li>
+                <Link href="/study-archive" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
+                  AI勉強会アーカイブ
                 </Link>
               </li>
               <li>
@@ -129,7 +134,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/gemini-stats" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
-                  Gemini利用統計 & SKUスペック
+                  Antigravity利用監視（利用統計）
                 </Link>
               </li>
               <li>

@@ -7,7 +7,7 @@ body:
     id: author
     attributes:
       label: お名前 / 起票元
-      placeholder: 例: 亮一杉村
+      placeholder: 例: お名前（ニックネーム可）
     validations:
       required: true
   - type: input

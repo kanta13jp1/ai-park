@@ -591,12 +591,12 @@ export default function Home() {
             </p>
             <div className="pt-2">
               <Link
-                href="/antigravity-info"
+                href="/contact"
                 onClick={() => playCyberClick()}
                 onMouseEnter={() => playCyberHover()}
                 className="inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-xs rounded-xl transition-all shadow-lg hover:shadow-cyan-400/25 active:scale-95 cursor-pointer"
               >
-                <span>Antigravity情報局・相談予約へ</span>
+                <span>お問い合わせ・Office Hour 相談へ</span>
                 <ArrowRight size={14} />
               </Link>
             </div>

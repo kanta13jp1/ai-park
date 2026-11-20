@@ -590,8 +590,8 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             id: "stats-fact-03",
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
-            label: "実在社員アカウント・利用モデルの事実性",
-            detail: "寛太 梅澤（k***@ml-mightylink.com）、小林 雅水（k***@ml-mightylink.com）の2名が実在する社員アカウントであり、利用モデル（Gemini 3.8 Flash / 3.1 Pro）の実績と一致していること。",
+            label: "社内アカウント・利用モデルの事実性",
+            detail: "社内アカウント（利用者A・利用者Bの2名、匿名化済み）および利用モデル（Gemini 3.8 Flash / 3.1 Pro）の実績と一致していること。",
             verified: true,
           },
           {
@@ -1296,8 +1296,8 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     checks: {
       factAndSpec: {
         passed: true,
-        evidence: "未取材の架空事例を除外し、準備中バナー・取材キット（流れ5ステップ・質問5項目）・取材立候補フォーム（GitHub Issue 受付）のみを公開していることを確認",
-        points: ["準備中バナーの表示", "取材フロー・質問項目の正確性", "取材立候補モーダル（GitHub Issue遷移）の動作"],
+        evidence: "未取材の架空事例を除外し、準備中バナー・取材キット（流れ5ステップ・質問5項目）・取材立候補モーダル（Google Chat提出用文面コピー）のみを公開していることを確認",
+        points: ["準備中バナーの表示", "取材フロー・質問項目の正確性", "取材立候補モーダル（文面生成・コピー）の動作"],
         subChecks: [
           {
             id: "iv-spec-1",
@@ -1311,8 +1311,8 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             id: "iv-spec-2",
             category: "link_integrity",
             groupTitle: "③ リンク先・出力機能が実在するか（機能・リンク検証確認済み）",
-            label: "取材立候補フォームのGitHub Issue連携",
-            detail: "立候補モーダルから GitHub Issue フォームへ遷移できること。",
+            label: "取材立候補モーダルの文面生成・コピー動作",
+            detail: "立候補モーダルで入力内容から Google Chat 提出用の応募文面を生成し、クリップボードへコピーできること。",
             verified: true,
           },
         ],
@@ -1324,7 +1324,7 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
       },
       usability: {
         passed: true,
-        evidence: "取材立候補モーダル起動、入力、GitHub Issue 起票遷移の動作を確認",
+        evidence: "取材立候補モーダル起動、入力、Google Chat 提出用文面コピーの動作を確認",
         points: ["モーダル開閉と入力補助", "Web Audio API触覚音響の連動"],
       },
       readability: {

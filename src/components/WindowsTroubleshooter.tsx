@@ -92,7 +92,7 @@ const troubleshootList: TroubleshootingItem[] = [
     errorSnippet: "The user does not have permission 'billing.accounts.updateUsageExportSpec' on billing account",
     cause: "課金エクスポート設定には「請求先アカウント管理者（roles/billing.admin）」権限が必要です。一般のプロジェクト閲覧者では保存できません。",
     command: "gcloud billing accounts get-iam-policy 012EB1-xxxxxx-xxxxxx",
-    commandExplanation: "請求先アカウントの管理者（小林雅水様）を確認し、コンソールの「アクセスをリクエスト」または社内Chatで設定依頼を行ってください。",
+    commandExplanation: "請求先アカウントの管理者を確認し、コンソールの「アクセスをリクエスト」または社内Chatで設定依頼を行ってください。",
     docUrl: "https://cloud.google.com/billing/docs/how-to/export-data-bigquery",
   },
 ];
@@ -263,7 +263,7 @@ export default function WindowsTroubleshooter() {
                       <a
                         href={item.docUrl}
                         target="_blank"
-                        rel="noreferrer"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-[11px] text-cyan-400 hover:text-cyan-300 hover:underline"
                       >
                         <span>公式リファレンスを見る</span>
