@@ -485,8 +485,9 @@ export default function LpicInfoPage() {
                     {allTopics.length} トピック ・ 比較表 {lpic1Comparisons.length} 種 ・ カード {lpic1QuickLookup.length} 枚 ・ 演習 {lpic1PracticeQuestions.length} 問
                   </span>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                  LPIC-1（101-500 / 102-500）合格対策学習ハブ
+                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-keep">
+                  <span className="inline-block">LPIC-1（101-500 / 102-500）</span>
+                  <span className="inline-block">合格対策学習ハブ</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
                   LPI 公式試験範囲（Version 5.0）の Topic 101〜110 に沿って、コマンド比較表・フラッシュカード暗記・択一＆複数選択の実践問題をまとめた学習ページです。学習記録はブラウザに自動保存されます。
@@ -528,7 +529,7 @@ export default function LpicInfoPage() {
             className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1"
           >
             <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
-            <div className="text-base sm:text-lg font-black text-slate-900">{fact.value}</div>
+            <div className="text-sm sm:text-base font-black text-slate-900 whitespace-nowrap">{fact.value}</div>
             <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
           </div>
         ))}
@@ -632,13 +633,13 @@ export default function LpicInfoPage() {
                 setActiveTab(tab.id);
               }}
               onMouseEnter={() => playCyberHover()}
-              className={`flex-1 min-w-[130px] inline-flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+              className={`flex-1 min-w-fit inline-flex items-center justify-center space-x-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
                 active
                   ? "bg-white text-slate-900 shadow-sm border border-slate-200/70"
                   : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
               }`}
             >
-              <Icon size={16} className={active ? "text-cyan-600" : "text-slate-400"} />
+              <Icon size={15} className={`shrink-0 ${active ? "text-cyan-600" : "text-slate-400"}`} />
               <span>{tab.label}</span>
               {tab.badge && (
                 <span
@@ -675,7 +676,7 @@ export default function LpicInfoPage() {
                       playCyberClick();
                       setExamFilter(ef.id);
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
                       examFilter === ef.id
                         ? "bg-slate-900 text-white"
                         : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -687,7 +688,7 @@ export default function LpicInfoPage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
-                <div className="relative flex-1 sm:w-60">
+                <div className="relative flex-1 sm:w-64">
                   <Search
                     size={14}
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -696,7 +697,7 @@ export default function LpicInfoPage() {
                     type="text"
                     value={topicQuery}
                     onChange={(e) => setTopicQuery(e.target.value)}
-                    placeholder="コマンド・設定ファイルで検索..."
+                    placeholder="コマンド・設定ファイル検索..."
                     className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
                   />
                   {topicQuery && (
