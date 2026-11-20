@@ -260,6 +260,18 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     releaseCondition: "社内の AWS 利用ルール・相談窓口の決定",
   },
   {
+    id: "lpic-info",
+    name: "LPIC・Linux情報局",
+    href: "/lpic-info",
+    isVerified: false,
+    status: "in_development",
+    evidence: "",
+    currentBadge: "🚧 工事中",
+    disclaimer: "【一部工事中】LPIC-1（101-500 / 102-500）学習ハブを掲載中。社内の資格取得支援ルール等は決まり次第掲載します。",
+    releaseDate: "未定",
+    releaseCondition: "社内の資格取得支援・受験補助ルール等の確定",
+  },
+  {
     id: "antigravity-info",
     name: "Antigravity情報局",
     href: "/antigravity-info",

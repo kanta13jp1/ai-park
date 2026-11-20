@@ -85,6 +85,18 @@ export default function HowToPage() {
       highlights: "社内での AWS・クラウド活用の情報（準備中）",
     },
     {
+      id: "lpic-info",
+      title: "LPIC・Linux情報局",
+      desc: "LPIC-1（101-500 / 102-500）の要点整理・フラッシュカード・模擬試験！",
+      icon: <Terminal className="text-indigo-600" size={32} />,
+      iconBg: "bg-indigo-50 border-indigo-100",
+      href: "/lpic-info",
+      badge: "🚧 工事中",
+      badgeColor: "bg-indigo-100 text-indigo-700",
+      tags: ["LPIC-1", "101-500", "102-500"],
+      highlights: "LPIC-1 公式試験範囲に基づく学習ハブ（社内受験補助ルール等は準備中）",
+    },
+    {
       id: "skills-hub",
       title: "社内Skillsカタログ",
       desc: "社内で共有する Antigravity の Skills（準備中）",
