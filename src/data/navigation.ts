@@ -29,10 +29,10 @@ export const navigationSections: NavSection[] = [
       { name: "Antigravity Academy", href: "/academy", icon: "🎓", badge: "おすすめ" },
       { name: "教育用コンテンツ", href: "/learning", icon: "✍️" },
       { name: "AI活用インタビュー", href: "/interviews", icon: "🎙️", badge: "📋 準備中" },
-      { name: "Antigravity Q&A・情報局", href: "/antigravity-info", icon: "💡", badge: "🚧 工事中" },
+      { name: "Antigravity情報局", href: "/antigravity-info", icon: "💡", badge: "🚧 工事中" },
       { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️", badge: "🚧 工事中" },
       { name: "LPIC・Linux情報局", href: "/lpic-info", icon: "🐧", badge: "🚧 工事中" },
-      { name: "情報処理技術者試験情報局", href: "/ipa-info", icon: "📜", badge: "🚧 工事中" },
+      { name: "情報処理試験 (IPA)", href: "/ipa-info", icon: "📜", badge: "🚧 工事中" },
       { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "🚧 工事中" },
     ]
   },
