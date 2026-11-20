@@ -27,12 +27,21 @@ export function isQuestionCorrect(question: SaaQuestion, userChoices?: number[])
   return sortedUser.every((val, idx) => val === sortedCorrect[idx]);
 }
 
+export interface MockExamRecord {
+  date: string;
+  correct: number;
+  total: number;
+  scaledScore: number;
+}
+
 interface AwsSaaPracticeQuizProps {
   answers: Record<string, number[]>;
   bookmarkedIds: string[];
+  mockExamHistory: MockExamRecord[];
   initialDomain?: string;
   onSubmitAnswer: (questionId: string, selectedIndices: number[]) => void;
   onToggleBookmark: (questionId: string) => void;
+  onRecordMockExam: (record: MockExamRecord) => void;
   onResetQuiz: () => void;
 }
 
@@ -61,9 +70,11 @@ function formatTimer(totalSeconds: number): string {
 export default function AwsSaaPracticeQuiz({
   answers,
   bookmarkedIds,
+  mockExamHistory,
   initialDomain = "all",
   onSubmitAnswer,
   onToggleBookmark,
+  onRecordMockExam,
   onResetQuiz,
 }: AwsSaaPracticeQuizProps) {
   const [quizMode, setQuizMode] = useState<QuizMode>("practice");
@@ -373,11 +384,41 @@ export default function AwsSaaPracticeQuiz({
                 playCyberClick();
                 setExamSubmitted(true);
                 setCurrentIndex(0);
+                onRecordMockExam({
+                  date: new Date().toLocaleString("ja-JP", {
+                    month: "2-digit",
+                    day: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                  correct: correctCount,
+                  total: saaPracticeQuestions.length,
+                  scaledScore,
+                });
               }}
               className="shrink-0 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-xs cursor-pointer"
             >
               テストを提出して採点する ({answeredCount}/{saaPracticeQuestions.length})
             </button>
+          </div>
+        )}
+
+        {/* 模擬試験モード時の直近スコア履歴 */}
+        {quizMode === "exam" && mockExamHistory.length > 0 && (
+          <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-2">
+            <span className="text-[11px] font-bold text-slate-500">直近の模試スコア:</span>
+            {mockExamHistory.map((rec, idx) => (
+              <span
+                key={`${rec.date}-${idx}`}
+                className={`text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border ${
+                  rec.scaledScore >= 720
+                    ? "bg-emerald-50 text-emerald-800 border-emerald-200"
+                    : "bg-slate-50 text-slate-700 border-slate-200"
+                }`}
+              >
+                {rec.date} : {rec.scaledScore}点 ({rec.correct}/{rec.total})
+              </span>
+            ))}
           </div>
         )}
 

@@ -987,6 +987,28 @@ export const saaArchitecturePatterns: SaaArchitecturePattern[] = [
       "Transit Gateway により VPC 間のフルメッシュピアリング管理を解消",
     ],
   },
+  {
+    id: "pat-serverless-analytics",
+    title: "サーバーレス・データ分析 / ETL パイプライン",
+    badge: "データレイク",
+    flow: ["Kinesis / Firehose", "Amazon S3 (Parquet)", "AWS Glue (ETL/Catalog)", "Amazon Athena", "QuickSight"],
+    summary: "サーバー管理不要でリアルタイム収集したデータを列指向 (Parquet) で S3 に蓄積し、SQL クエリと BI 可視化を行う構成。",
+    keyDesignPoints: [
+      "CSV/JSON を Parquet 変換＋パーティショニングすることで Athena のスキャン量とコストを劇的に削減",
+      "長期保管データは S3 ライフサイクルで Glacier へ自動アーカイブ",
+    ],
+  },
+  {
+    id: "pat-multiregion-dr",
+    title: "マルチリージョン DR (Pilot Light) 構成",
+    badge: "災害復旧",
+    flow: ["Route 53 (Failover)", "Primary ALB + ECS", "Aurora Global DB", "Secondary ECS (最小)", "S3 CRR"],
+    summary: "平時はセカンダリリージョンのコア DB のみ同期維持してコストを抑え、リージョン障害時に数分で切り替える DR 構成。",
+    keyDesignPoints: [
+      "S3 クロスリージョンレプリケーション (CRR) は送信元・送信先両方のバケットでバージョニング有効化が必須",
+      "Route 53 ヘルスチェックと連動させ、プライマリ異常時に DNS レコードを自動でセカンダリへフェイルオーバー",
+    ],
+  },
 ];
 
 export const saaPitfalls: SaaPitfall[] = [

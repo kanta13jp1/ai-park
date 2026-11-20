@@ -36,7 +36,10 @@ import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
 import SpotlightCard from "@/components/SpotlightCard";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
-import AwsSaaPracticeQuiz, { isQuestionCorrect } from "@/components/aws/AwsSaaPracticeQuiz";
+import AwsSaaPracticeQuiz, {
+  isQuestionCorrect,
+  type MockExamRecord,
+} from "@/components/aws/AwsSaaPracticeQuiz";
 import AwsSaaFlashcards from "@/components/aws/AwsSaaFlashcards";
 import {
   saaExamFacts,
@@ -59,6 +62,7 @@ interface AwsSaaProgress {
   bookmarkedQuestions: string[];
   masteredCards: string[];
   topicNotes: Record<string, string>;
+  mockExamHistory: MockExamRecord[];
 }
 
 const STORAGE_KEY = "ai-park-aws-saa-progress-v1";
@@ -69,6 +73,7 @@ const DEFAULT_PROGRESS: AwsSaaProgress = {
   bookmarkedQuestions: [],
   masteredCards: [],
   topicNotes: {},
+  mockExamHistory: [],
 };
 
 const DOMAIN_ICONS: Record<string, typeof ShieldCheck> = {
@@ -143,6 +148,21 @@ function normalizeStringRecord(raw: unknown): Record<string, string> {
   return result;
 }
 
+function normalizeMockExamHistory(raw: unknown): MockExamRecord[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .filter(
+      (item): item is MockExamRecord =>
+        Boolean(item) &&
+        typeof item === "object" &&
+        typeof (item as MockExamRecord).date === "string" &&
+        typeof (item as MockExamRecord).correct === "number" &&
+        typeof (item as MockExamRecord).total === "number" &&
+        typeof (item as MockExamRecord).scaledScore === "number"
+    )
+    .slice(0, 5);
+}
+
 export default function AwsInfoPage() {
   const [activeTab, setActiveTab] = useState<TabId>("domains");
   const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
@@ -177,6 +197,7 @@ export default function AwsInfoPage() {
           bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
           masteredCards: normalizeStringArray(parsed.masteredCards),
           topicNotes: normalizeStringRecord(parsed.topicNotes),
+          mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
         });
       }
     } catch {
@@ -277,6 +298,13 @@ export default function AwsInfoPage() {
     });
   };
 
+  const handleRecordMockExam = (record: MockExamRecord) => {
+    saveProgress({
+      ...progress,
+      mockExamHistory: [record, ...progress.mockExamHistory].slice(0, 5),
+    });
+  };
+
   const handleCopyBackup = async () => {
     playCyberClick();
     try {
@@ -298,6 +326,7 @@ export default function AwsInfoPage() {
         bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
         masteredCards: normalizeStringArray(parsed.masteredCards),
         topicNotes: normalizeStringRecord(parsed.topicNotes),
+        mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
       });
       setBackupInput("");
       setImportMessage("学習進捗を復元しました。");
@@ -604,6 +633,40 @@ export default function AwsInfoPage() {
                     <div className="text-[10px] text-slate-400">{fact.detail}</div>
                   </div>
                 ))}
+              </div>
+
+              {/* 出題ドメイン配分バランスバー */}
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                  <span className="font-bold text-slate-700">出題ドメイン配分ウェイト（合計 100%）</span>
+                  <span className="text-[11px] text-slate-400">
+                    Domain 1（30%）と Domain 2（26%）で過半数を占めます
+                  </span>
+                </div>
+                <div className="w-full h-3 rounded-full overflow-hidden flex bg-slate-100">
+                  <div className="bg-indigo-500 h-full" style={{ width: "30%" }} title="Domain 1: 30%" />
+                  <div className="bg-emerald-500 h-full" style={{ width: "26%" }} title="Domain 2: 26%" />
+                  <div className="bg-amber-500 h-full" style={{ width: "24%" }} title="Domain 3: 24%" />
+                  <div className="bg-cyan-500 h-full" style={{ width: "20%" }} title="Domain 4: 20%" />
+                </div>
+                <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-600">
+                  <span className="inline-flex items-center space-x-1.5">
+                    <span className="w-2.5 h-2.5 rounded-xs bg-indigo-500" />
+                    <span>D1 セキュア (30%)</span>
+                  </span>
+                  <span className="inline-flex items-center space-x-1.5">
+                    <span className="w-2.5 h-2.5 rounded-xs bg-emerald-500" />
+                    <span>D2 弾力性 (26%)</span>
+                  </span>
+                  <span className="inline-flex items-center space-x-1.5">
+                    <span className="w-2.5 h-2.5 rounded-xs bg-amber-500" />
+                    <span>D3 高パフォーマンス (24%)</span>
+                  </span>
+                  <span className="inline-flex items-center space-x-1.5">
+                    <span className="w-2.5 h-2.5 rounded-xs bg-cyan-500" />
+                    <span>D4 コスト最適化 (20%)</span>
+                  </span>
+                </div>
               </div>
             </section>
 
@@ -1195,9 +1258,11 @@ export default function AwsInfoPage() {
             key={quizDomainTarget}
             answers={progress.quizAnswers}
             bookmarkedIds={progress.bookmarkedQuestions}
+            mockExamHistory={progress.mockExamHistory}
             initialDomain={quizDomainTarget}
             onSubmitAnswer={handleSubmitAnswer}
             onToggleBookmark={handleToggleBookmark}
+            onRecordMockExam={handleRecordMockExam}
             onResetQuiz={handleResetQuiz}
           />
         )}
