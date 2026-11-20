@@ -469,7 +469,7 @@ export default function ToolsPage() {
         return (
           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5"></span>
-            全社員利用可能
+            利用可能（確認中）
           </span>
         );
       case "利用可能":
@@ -569,9 +569,9 @@ export default function ToolsPage() {
                 className="bg-white/5 backdrop-blur-md border-white/10 h-full rounded-2xl"
               >
                 <div className="p-4">
-                  <span className="text-xs font-mono text-slate-400 block">全社員利用可能</span>
+                  <span className="text-xs font-mono text-slate-400 block">検証中・確認待ち</span>
                   <span className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 block tracking-tight font-mono">
-                    <AnimatedCounter value={tools.filter((t) => t.status === "全社員利用可能").length} />
+                    <AnimatedCounter value={tools.filter((t) => t.status === "検証中" || t.status === "リストアップ").length} />
                   </span>
                 </div>
               </SpotlightCard>
@@ -724,7 +724,7 @@ export default function ToolsPage() {
                   {(
                     [
                       { id: "all", label: "全ランク" },
-                      { id: "S", label: "⭐ S (全社公式)" },
+                      { id: "S", label: "⭐ S (主力候補)" },
                       { id: "A", label: "💻 A (エンジニア)" },
                       { id: "B", label: "📊 B (業務特化)" },
                       { id: "PoC", label: "🧪 PoC検証" },
@@ -1044,7 +1044,7 @@ export default function ToolsPage() {
                 <div>
                   <span className="text-slate-500 font-semibold block text-[11px]">社内推奨ランク</span>
                   <span className="font-bold text-slate-800 text-xs">
-                    {getToolRank(selectedTool) === "S" && "⭐ Sランク（全社公式推奨）"}
+                    {getToolRank(selectedTool) === "S" && "⭐ Sランク（主力候補・社内確認中）"}
                     {getToolRank(selectedTool) === "A" && "💻 Aランク（エンジニア推奨）"}
                     {getToolRank(selectedTool) === "B" && "📊 Bランク（業務特化）"}
                     {getToolRank(selectedTool) === "PoC" && "🧪 PoC（検証中）"}

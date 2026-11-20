@@ -26,7 +26,7 @@ interface SkillItem {
   id: string;
   name: string;
   category: "コード・品質" | "データ・SQL" | "ドキュメント・要件" | "セキュリティ" | "運用自動化";
-  status: "社内認定 (Verified)" | "PoC検証中" | "試作カタログ";
+  status: "確認済み (Verified)" | "PoC検証中" | "試作カタログ";
   description: string;
   triggerPhrase: string;
   author: string;
@@ -254,7 +254,7 @@ export default function SkillsHubPage() {
                         <div className="flex items-center justify-between gap-2 font-mono">
                           <span
                             className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
-                              skill.status.includes("社内認定")
+                              skill.status.includes("確認済み")
                                 ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                                 : skill.status.includes("PoC")
                                 ? "bg-indigo-50 text-indigo-700 border-indigo-200"
@@ -308,12 +308,12 @@ export default function SkillsHubPage() {
                         <span className="text-slate-400">作成: {skill.author}</span>
                         <span
                           className={`font-bold ${
-                            skill.status.includes("社内認定")
+                            skill.status.includes("確認済み")
                               ? "text-emerald-600"
                               : "text-indigo-600"
                           }`}
                         >
-                          審査ステータス: {skill.status.includes("社内認定") ? "適合 (公式認定)" : "適合 (PoC)"}
+                          審査ステータス: {skill.status.includes("確認済み") ? "適合 (確認済み)" : "適合 (PoC)"}
                         </span>
                       </div>
                     </div>

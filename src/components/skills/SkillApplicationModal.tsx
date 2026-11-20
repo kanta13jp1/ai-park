@@ -22,7 +22,7 @@ export default function SkillApplicationModal({ isOpen, onClose }: SkillApplicat
 
   if (!isOpen) return null;
 
-  const generatedDraft = `【社内認定Skill 登録・提案申請】
+  const generatedDraft = `【社内Skill 登録・提案申請】
 --------------------------------------------------
 ■ スキル名: ${skillName || "（未入力）"}
 ■ カテゴリ: ${category}
@@ -39,7 +39,7 @@ ${description || "（未入力）"}
   [${securityChecked ? "x" : " "}] 破壊的コマンド（DROP/TRUNCATE/rm -rf等）の実行抑止を確認済
   [${securityChecked ? "x" : " "}] 社内ガイドライン準拠（Antigravity 2.0 stdio安全実行設計）
 --------------------------------------------------
-上記スキルの社内公式ライブラリへの採用・セキュリティ審査をお願いいたします。`;
+上記スキルの社内Skillsカタログへの掲載・セキュリティ審査をお願いいたします。`;
 
   const handleCopy = () => {
     playCyberClick();
