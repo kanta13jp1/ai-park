@@ -37,6 +37,13 @@ import {
   Download,
   AlertTriangle,
   Gauge,
+  Activity,
+  Database,
+  Globe,
+  Mail,
+  Server,
+  Share2,
+  Wrench,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -46,7 +53,13 @@ import CertificationFlashcards from "@/components/certification/CertificationFla
 import CertificationPracticeQuiz, {
   isQuestionCorrect,
 } from "@/components/certification/CertificationPracticeQuiz";
-import type { CertMockExamRecord } from "@/components/certification/types";
+import type {
+  CertExamFact,
+  CertFlashcardItem,
+  CertMockExamRecord,
+  CertPassingConfig,
+  CertQuestion,
+} from "@/components/certification/types";
 import {
   lpic1ExamFacts,
   lpic1Domains,
@@ -57,12 +70,134 @@ import {
   lpic1Patterns,
   lpic1Pitfalls,
   lpic1KeyPaths,
-  type LpicDomain,
+  type LpicTopicItem,
+  type LpicComparisonTable,
+  type LpicWorkflowPattern,
+  type LpicPitfall,
+  type LpicKeyPathFact,
+  type LpicOfficialResource,
 } from "@/data/lpic-1";
+import {
+  lpic2ExamFacts,
+  lpic2Domains,
+  lpic2Comparisons,
+  lpic2QuickLookup,
+  lpic2PracticeQuestions,
+  lpic2OfficialResources,
+  lpic2Patterns,
+  lpic2Pitfalls,
+  lpic2KeyPaths,
+} from "@/data/lpic-2";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
+type LpicLevel = "lpic-1" | "lpic-2";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
-type ExamFilter = "all" | "101-500" | "102-500";
+
+interface UnifiedLpicDomain {
+  id: string;
+  exam: string;
+  number: string;
+  title: string;
+  englishTitle: string;
+  accentColor: "indigo" | "emerald" | "amber" | "cyan";
+  summary: string;
+  topics: LpicTopicItem[];
+}
+
+interface LpicLevelConfig {
+  id: LpicLevel;
+  label: string;
+  badgeText: string;
+  shortExamCode: string;
+  headline: string;
+  description: string;
+  storageKey: string;
+  examFacts: CertExamFact[];
+  domains: UnifiedLpicDomain[];
+  comparisons: LpicComparisonTable[];
+  patterns: LpicWorkflowPattern[];
+  pitfalls: LpicPitfall[];
+  keyPaths: LpicKeyPathFact[];
+  quickLookup: CertFlashcardItem[];
+  practiceQuestions: CertQuestion[];
+  officialResources: LpicOfficialResource[];
+  examFilters: { id: string; label: string }[];
+  defaultExpanded: Record<string, boolean>;
+  passingConfig: CertPassingConfig;
+  quizBadgeLabel: string;
+  flashcardTitle: string;
+}
+
+const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
+  "lpic-1": {
+    id: "lpic-1",
+    label: "LPIC-1 (101 / 102)",
+    badgeText: "LPIC-1 (101 / 102) STUDY HUB",
+    shortExamCode: "101-500 / 102-500",
+    headline: "LPIC-1（101-500 / 102-500）",
+    description:
+      "LPI 公式試験範囲（Version 5.0）の Topic 101〜110 に沿って、コマンド比較表・フラッシュカード暗記・択一＆複数選択の実践問題をまとめた学習ページです。学習記録はブラウザに自動保存されます。",
+    storageKey: "ai-park-lpic-1-progress-v1",
+    examFacts: lpic1ExamFacts,
+    domains: lpic1Domains,
+    comparisons: lpic1Comparisons,
+    patterns: lpic1Patterns,
+    pitfalls: lpic1Pitfalls,
+    keyPaths: lpic1KeyPaths,
+    quickLookup: lpic1QuickLookup,
+    practiceQuestions: lpic1PracticeQuestions,
+    officialResources: lpic1OfficialResources,
+    examFilters: [
+      { id: "all", label: "全トピック (101-110)" },
+      { id: "101-500", label: "Exam 101-500 (101-104)" },
+      { id: "102-500", label: "Exam 102-500 (105-110)" },
+    ],
+    defaultExpanded: { "topic-101": true },
+    passingConfig: {
+      minScore: 200,
+      maxScore: 800,
+      passingScore: 500,
+      passingPct: 63,
+      officialExamLabel: "LPIC-1 本試験（101-500 / 102-500）",
+    },
+    quizBadgeLabel: "LPIC-1 (101/102) 演習",
+    flashcardTitle: "要件・用途 → コマンド / 設定ファイル 即答トレーニング",
+  },
+  "lpic-2": {
+    id: "lpic-2",
+    label: "LPIC-2 (201 / 202)",
+    badgeText: "LPIC-2 (201 / 202) STUDY HUB",
+    shortExamCode: "201-450 / 202-450",
+    headline: "LPIC-2（201-450 / 202-450）",
+    description:
+      "LPI 公式試験範囲（Version 4.5）の Topic 200〜212 に沿って、カーネル・LVM/RAID・BIND・Nginx/Apache・Samba/NFS・PAM・Postfix・iptables 等の実務＆試験対策をまとめた学習ページです。",
+    storageKey: "ai-park-lpic-2-progress-v1",
+    examFacts: lpic2ExamFacts,
+    domains: lpic2Domains,
+    comparisons: lpic2Comparisons,
+    patterns: lpic2Patterns,
+    pitfalls: lpic2Pitfalls,
+    keyPaths: lpic2KeyPaths,
+    quickLookup: lpic2QuickLookup,
+    practiceQuestions: lpic2PracticeQuestions,
+    officialResources: lpic2OfficialResources,
+    examFilters: [
+      { id: "all", label: "全トピック (200-212)" },
+      { id: "201-450", label: "Exam 201-450 (200-206)" },
+      { id: "202-450", label: "Exam 202-450 (207-212)" },
+    ],
+    defaultExpanded: { "topic-200": true },
+    passingConfig: {
+      minScore: 200,
+      maxScore: 800,
+      passingScore: 500,
+      passingPct: 63,
+      officialExamLabel: "LPIC-2 本試験（201-450 / 202-450）",
+    },
+    quizBadgeLabel: "LPIC-2 (201/202) 演習",
+    flashcardTitle: "LPIC-2 要件・運用課題 → コマンド / 設定 即答トレーニング",
+  },
+};
 
 interface LpicProgress {
   completedTopics: string[];
@@ -72,8 +207,6 @@ interface LpicProgress {
   topicNotes: Record<string, string>;
   mockExamHistory: CertMockExamRecord[];
 }
-
-const STORAGE_KEY = "ai-park-lpic-1-progress-v1";
 
 const DEFAULT_PROGRESS: LpicProgress = {
   completedTopics: [],
@@ -95,10 +228,23 @@ const DOMAIN_ICONS: Record<string, typeof Cpu> = {
   "topic-108": Clock,
   "topic-109": Network,
   "topic-110": Shield,
+  "topic-200": Activity,
+  "topic-201": Cpu,
+  "topic-202": Terminal,
+  "topic-203": HardDrive,
+  "topic-204": Database,
+  "topic-205": Network,
+  "topic-206": Wrench,
+  "topic-207": Globe,
+  "topic-208": Server,
+  "topic-209": Share2,
+  "topic-210": Users,
+  "topic-211": Mail,
+  "topic-212": Shield,
 };
 
 const ACCENT_STYLES: Record<
-  LpicDomain["accentColor"],
+  UnifiedLpicDomain["accentColor"],
   { badge: string; bar: string; border: string; iconBg: string }
 > = {
   indigo: {
@@ -134,21 +280,6 @@ const COMPARISON_CATEGORIES = [
   "プロセス・ログ",
   "ネットワーク",
 ] as const;
-
-const QUIZ_DOMAINS = lpic1Domains.map((d) => ({
-  id: d.id,
-  number: d.number,
-  shortLabel: `T${d.number}`,
-  filterLabel: `${d.number}: ${d.title}`,
-}));
-
-const LPIC_PASSING_CONFIG = {
-  minScore: 200,
-  maxScore: 800,
-  passingScore: 500,
-  passingPct: 63,
-  officialExamLabel: "LPIC-1 本試験（101-500 / 102-500）",
-};
 
 function normalizeQuizAnswers(raw: unknown): Record<string, number[]> {
   if (!raw || typeof raw !== "object") return {};
@@ -191,22 +322,36 @@ function normalizeMockExamHistory(raw: unknown): CertMockExamRecord[] {
     .slice(0, 5);
 }
 
+function loadProgressFromStorage(storageKey: string): LpicProgress {
+  try {
+    const raw = localStorage.getItem(storageKey);
+    if (!raw) return DEFAULT_PROGRESS;
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    return {
+      completedTopics: normalizeStringArray(parsed.completedTopics),
+      quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
+      bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
+      masteredCards: normalizeStringArray(parsed.masteredCards),
+      topicNotes: normalizeStringRecord(parsed.topicNotes),
+      mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
+    };
+  } catch {
+    return DEFAULT_PROGRESS;
+  }
+}
+
 export default function LpicInfoPage() {
+  const [level, setLevel] = useState<LpicLevel>("lpic-1");
   const [activeTab, setActiveTab] = useState<TabId>("domains");
-  const [examFilter, setExamFilter] = useState<ExamFilter>("all");
+  const [examFilter, setExamFilter] = useState<string>("all");
   const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
-  const [progress, setProgress] = useState<LpicProgress>(DEFAULT_PROGRESS);
+  const [progressMap, setProgressMap] = useState<Record<LpicLevel, LpicProgress>>({
+    "lpic-1": DEFAULT_PROGRESS,
+    "lpic-2": DEFAULT_PROGRESS,
+  });
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>({
     "topic-101": true,
-    "topic-102": false,
-    "topic-103": false,
-    "topic-104": false,
-    "topic-105": false,
-    "topic-106": false,
-    "topic-107": false,
-    "topic-108": false,
-    "topic-109": false,
-    "topic-110": false,
+    "topic-200": true,
   });
   const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
   const [onlyWithNotesTopics, setOnlyWithNotesTopics] = useState<boolean>(false);
@@ -221,32 +366,36 @@ export default function LpicInfoPage() {
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Record<string, unknown>;
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setProgress({
-          completedTopics: normalizeStringArray(parsed.completedTopics),
-          quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
-          bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
-          masteredCards: normalizeStringArray(parsed.masteredCards),
-          topicNotes: normalizeStringRecord(parsed.topicNotes),
-          mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
-        });
-      }
-    } catch {
-      // localStorage 読み取り失敗時は初期状態のまま
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setProgressMap({
+      "lpic-1": loadProgressFromStorage(LEVEL_CONFIG["lpic-1"].storageKey),
+      "lpic-2": loadProgressFromStorage(LEVEL_CONFIG["lpic-2"].storageKey),
+    });
   }, []);
 
+  const config = LEVEL_CONFIG[level];
+  const progress = progressMap[level];
+
   const saveProgress = (next: LpicProgress) => {
-    setProgress(next);
+    setProgressMap((prev) => ({ ...prev, [level]: next }));
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      localStorage.setItem(config.storageKey, JSON.stringify(next));
     } catch {
       // ignore storage quota errors
     }
+  };
+
+  const handleSwitchLevel = (nextLevel: LpicLevel) => {
+    if (nextLevel === level) return;
+    playCyberClick();
+    setLevel(nextLevel);
+    setExamFilter("all");
+    setQuizDomainTarget("all");
+    setCompCategory("すべて");
+    setCompQuery("");
+    setTopicQuery("");
+    setConfirmReset(false);
+    setImportMessage(null);
   };
 
   const toggleTopic = (topicId: string) => {
@@ -302,8 +451,8 @@ export default function LpicInfoPage() {
 
   const handleExpandAllDomains = (expand: boolean) => {
     playCyberClick();
-    const next: Record<string, boolean> = {};
-    for (const d of lpic1Domains) {
+    const next: Record<string, boolean> = { ...expandedDomains };
+    for (const d of config.domains) {
       next[d.id] = expand;
     }
     setExpandedDomains(next);
@@ -364,34 +513,46 @@ export default function LpicInfoPage() {
       };
       saveProgress(restored);
       setBackupInput("");
-      setImportMessage("学習データを復元しました。");
+      setImportMessage(`${config.label} の学習データを復元しました。`);
       setTimeout(() => setImportMessage(null), 3000);
     } catch {
       setImportMessage("JSON形式が正しくありません。コピーしたバックアップ文字列を確認してください。");
     }
   };
 
-  const allTopics = useMemo(() => lpic1Domains.flatMap((d) => d.topics), []);
+  const allTopics = useMemo(() => config.domains.flatMap((d) => d.topics), [config.domains]);
   const completedTopicCount = allTopics.filter((t) =>
     progress.completedTopics.includes(t.id)
   ).length;
   const topicPct = allTopics.length > 0 ? Math.round((completedTopicCount / allTopics.length) * 100) : 0;
 
   const answeredQuizCount = Object.keys(progress.quizAnswers).length;
-  const correctQuizCount = lpic1PracticeQuestions.filter((q) =>
+  const correctQuizCount = config.practiceQuestions.filter((q) =>
     isQuestionCorrect(q, progress.quizAnswers[q.id])
   ).length;
 
   const masteredCardCount = progress.masteredCards.length;
   const notedTopicCount = Object.values(progress.topicNotes).filter((v) => v.trim().length > 0).length;
 
-  const totalActions = allTopics.length + lpic1PracticeQuestions.length + lpic1QuickLookup.length;
+  const totalActions =
+    allTopics.length + config.practiceQuestions.length + config.quickLookup.length;
   const doneActions = completedTopicCount + answeredQuizCount + masteredCardCount;
   const overallPct = totalActions > 0 ? Math.round((doneActions / totalActions) * 100) : 0;
 
+  const quizDomains = useMemo(
+    () =>
+      config.domains.map((d) => ({
+        id: d.id,
+        number: d.number,
+        shortLabel: `T${d.number}`,
+        filterLabel: `${d.number}: ${d.title}`,
+      })),
+    [config.domains]
+  );
+
   const filteredDomains = useMemo(() => {
     const q = topicQuery.trim().toLowerCase();
-    return lpic1Domains
+    return config.domains
       .filter((d) => examFilter === "all" || d.exam === examFilter)
       .map((d) => {
         const topics = d.topics.filter((t) => {
@@ -410,11 +571,19 @@ export default function LpicInfoPage() {
         return { ...d, visibleTopics: topics };
       })
       .filter((d) => d.visibleTopics.length > 0);
-  }, [examFilter, topicQuery, onlyIncompleteTopics, onlyWithNotesTopics, progress.completedTopics, progress.topicNotes]);
+  }, [
+    config.domains,
+    examFilter,
+    topicQuery,
+    onlyIncompleteTopics,
+    onlyWithNotesTopics,
+    progress.completedTopics,
+    progress.topicNotes,
+  ]);
 
   const filteredComparisons = useMemo(() => {
     const q = compQuery.trim().toLowerCase();
-    return lpic1Comparisons.filter((comp) => {
+    return config.comparisons.filter((comp) => {
       if (compCategory !== "すべて" && comp.category !== compCategory) return false;
       if (!q) return true;
       const haystack = [
@@ -428,7 +597,7 @@ export default function LpicInfoPage() {
         .toLowerCase();
       return haystack.includes(q);
     });
-  }, [compCategory, compQuery]);
+  }, [config.comparisons, compCategory, compQuery]);
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     {
@@ -442,13 +611,13 @@ export default function LpicInfoPage() {
       id: "flashcards",
       label: "暗記カード",
       icon: Layers2,
-      badge: `${masteredCardCount}/${lpic1QuickLookup.length}`,
+      badge: `${masteredCardCount}/${config.quickLookup.length}`,
     },
     {
       id: "quiz",
       label: "練習問題・模試",
       icon: HelpCircle,
-      badge: `${correctQuizCount}/${lpic1PracticeQuestions.length}`,
+      badge: `${correctQuizCount}/${config.practiceQuestions.length}`,
     },
     { id: "resources", label: "公式リソース", icon: Compass },
   ];
@@ -457,17 +626,46 @@ export default function LpicInfoPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="LPIC・Linux情報局"
-        subtitle="LPIC-1（101-500 / 102-500）合格学習ハブ"
+        subtitle="LPIC-1（101/102）・LPIC-2（201/202）合格学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
-          message="現在 LPIC-1（101-500 / 102-500）の公式試験範囲に基づく学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
+          message="現在 LPIC-1（101-500 / 102-500）および LPIC-2（201-450 / 202-450）の公式試験範囲に基づく学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
           statusType="construction"
         />
 
-        {/* LPIC-1 学習ステータス HUD バナー */}
+        {/* レベル切り替え（LPIC-1 / LPIC-2） */}
+        <section className="flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl border border-slate-200/80 p-3 shadow-xs">
+          <div className="flex items-center space-x-2 px-2">
+            <Terminal size={16} className="text-cyan-600" />
+            <span className="text-xs sm:text-sm font-black text-slate-800">学習レベル選択</span>
+          </div>
+          <div className="inline-flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
+            {(["lpic-1", "lpic-2"] as const).map((lvl) => {
+              const item = LEVEL_CONFIG[lvl];
+              const active = level === lvl;
+              return (
+                <button
+                  key={lvl}
+                  type="button"
+                  onClick={() => handleSwitchLevel(lvl)}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-black transition-all cursor-pointer whitespace-nowrap ${
+                    active
+                      ? "bg-slate-900 text-white shadow-sm"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* 学習ステータス HUD バナー */}
         <TiltCard maxTilt={2} glareOpacity={0.05} className="rounded-3xl">
           <div
             onMouseEnter={() => playCyberHover()}
@@ -479,18 +677,19 @@ export default function LpicInfoPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center space-x-1.5 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 tracking-wider">
                     <Terminal size={12} />
-                    <span>LPIC-1 (101 / 102) STUDY HUB</span>
+                    <span>{config.badgeText}</span>
                   </span>
                   <span className="text-xs text-slate-300">
-                    {allTopics.length} トピック ・ 比較表 {lpic1Comparisons.length} 種 ・ カード {lpic1QuickLookup.length} 枚 ・ 演習 {lpic1PracticeQuestions.length} 問
+                    {allTopics.length} トピック ・ 比較表 {config.comparisons.length} 種 ・ カード{" "}
+                    {config.quickLookup.length} 枚 ・ 演習 {config.practiceQuestions.length} 問
                   </span>
                 </div>
                 <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-keep">
-                  <span className="inline-block">LPIC-1（101-500 / 102-500）</span>
+                  <span className="inline-block">{config.headline}</span>
                   <span className="inline-block">合格対策学習ハブ</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                  LPI 公式試験範囲（Version 5.0）の Topic 101〜110 に沿って、コマンド比較表・フラッシュカード暗記・択一＆複数選択の実践問題をまとめた学習ページです。学習記録はブラウザに自動保存されます。
+                  {config.description}
                 </p>
               </div>
 
@@ -505,14 +704,14 @@ export default function LpicInfoPage() {
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">暗記カード</div>
                   <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
-                    {masteredCardCount} / {lpic1QuickLookup.length}
+                    {masteredCardCount} / {config.quickLookup.length}
                   </div>
                   <div className="text-[11px] text-slate-400">枚習得</div>
                 </div>
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">演習問題</div>
                   <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
-                    {correctQuizCount} / {lpic1PracticeQuestions.length}
+                    {correctQuizCount} / {config.practiceQuestions.length}
                   </div>
                   <div className="text-[11px] text-slate-400">問正解</div>
                 </div>
@@ -521,324 +720,282 @@ export default function LpicInfoPage() {
           </div>
         </TiltCard>
 
-      {/* 試験概要カード */}
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        {lpic1ExamFacts.map((fact) => (
-          <div
-            key={fact.label}
-            className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1"
-          >
-            <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
-            <div className="text-sm sm:text-base font-black text-slate-900 whitespace-nowrap">{fact.value}</div>
-            <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
-          </div>
-        ))}
-      </section>
-
-      {/* 総合進捗＆データ管理バー */}
-      <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5 flex-1">
-            <div className="flex items-center justify-between text-xs font-bold">
-              <span className="text-slate-700 flex items-center space-x-1.5">
-                <Award className="w-4 h-4 text-cyan-600" />
-                <span>総合学習進捗（トピック・暗記カード・練習問題）</span>
-              </span>
-              <span className="font-mono text-cyan-700">{overallPct}%</span>
-            </div>
-            <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-emerald-500 transition-all duration-500"
-                style={{ width: `${overallPct}%` }}
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={() => {
-                playCyberClick();
-                setShowBackupPanel((v) => !v);
-              }}
-              className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
+        {/* 試験概要カード */}
+        <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {config.examFacts.map((fact) => (
+            <div
+              key={fact.label}
+              className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1"
             >
-              <Download size={13} />
-              <span>バックアップ / 復元</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleResetAllClick}
-              className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
-                confirmReset
-                  ? "bg-rose-600 text-white border-rose-600"
-                  : "border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-rose-600"
-              }`}
-            >
-              <RotateCcw size={13} />
-              <span>{confirmReset ? "もう一度押すと全消去" : "進捗リセット"}</span>
-            </button>
-          </div>
-        </div>
-
-        {showBackupPanel && (
-          <div className="pt-4 border-t border-slate-100 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <p className="text-xs text-slate-600">
-                進捗やメモはブラウザの localStorage に保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
-              </p>
-              <button
-                type="button"
-                onClick={handleCopyBackup}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer shrink-0"
-              >
-                {copiedBackup ? <Check size={13} /> : <Copy size={13} />}
-                <span>{copiedBackup ? "コピーしました" : "現在のデータをコピー"}</span>
-              </button>
+              <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
+              <div className="text-sm sm:text-base font-black text-slate-900 whitespace-nowrap">
+                {fact.value}
+              </div>
+              <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <input
-                type="text"
-                value={backupInput}
-                onChange={(e) => setBackupInput(e.target.value)}
-                placeholder="復元したいバックアップJSONを貼り付け..."
-                className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              />
-              <button
-                type="button"
-                onClick={handleImportBackup}
-                disabled={!backupInput.trim()}
-                className="px-4 py-2 rounded-xl bg-cyan-600 text-white text-xs font-bold hover:bg-cyan-700 disabled:opacity-40 cursor-pointer"
-              >
-                復元する
-              </button>
-            </div>
-            {importMessage && <p className="text-xs font-bold text-cyan-700">{importMessage}</p>}
-          </div>
-        )}
-      </section>
+          ))}
+        </section>
 
-      {/* タブナビゲーション */}
-      <nav className="flex flex-wrap gap-2 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const active = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => {
-                playCyberClick();
-                setActiveTab(tab.id);
-              }}
-              onMouseEnter={() => playCyberHover()}
-              className={`flex-1 min-w-fit inline-flex items-center justify-center space-x-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
-                active
-                  ? "bg-white text-slate-900 shadow-sm border border-slate-200/70"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
-              }`}
-            >
-              <Icon size={15} className={`shrink-0 ${active ? "text-cyan-600" : "text-slate-400"}`} />
-              <span>{tab.label}</span>
-              {tab.badge && (
-                <span
-                  className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
-                    active ? "bg-cyan-50 text-cyan-700" : "bg-slate-200/80 text-slate-600"
-                  }`}
-                >
-                  {tab.badge}
+        {/* 総合進捗＆データ管理バー */}
+        <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-1.5 flex-1">
+              <div className="flex items-center justify-between text-xs font-bold">
+                <span className="text-slate-700 flex items-center space-x-1.5">
+                  <Award className="w-4 h-4 text-cyan-600" />
+                  <span>
+                    {config.label} 総合学習進捗（トピック・暗記カード・練習問題）
+                  </span>
                 </span>
-              )}
-            </button>
-          );
-        })}
-      </nav>
-
-      {/* TAB 1: トピック別学習 */}
-      {activeTab === "domains" && (
-        <div className="space-y-6">
-          {/* フィルター＆検索バー */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-1.5">
-                {(
-                  [
-                    { id: "all", label: "全トピック (101-110)" },
-                    { id: "101-500", label: "Exam 101-500 (101-104)" },
-                    { id: "102-500", label: "Exam 102-500 (105-110)" },
-                  ] as const
-                ).map((ef) => (
-                  <button
-                    key={ef.id}
-                    type="button"
-                    onClick={() => {
-                      playCyberClick();
-                      setExamFilter(ef.id);
-                    }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
-                      examFilter === ef.id
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
-                  >
-                    {ef.label}
-                  </button>
-                ))}
+                <span className="font-mono text-cyan-700">{overallPct}%</span>
               </div>
-
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="relative flex-1 sm:w-64">
-                  <Search
-                    size={14}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                  />
-                  <input
-                    type="text"
-                    value={topicQuery}
-                    onChange={(e) => setTopicQuery(e.target.value)}
-                    placeholder="コマンド・設定ファイル検索..."
-                    className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                  />
-                  {topicQuery && (
-                    <button
-                      type="button"
-                      onClick={() => setTopicQuery("")}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                    >
-                      <X size={13} />
-                    </button>
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    playCyberClick();
-                    setOnlyIncompleteTopics((v) => !v);
-                  }}
-                  className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
-                    onlyIncompleteTopics
-                      ? "bg-cyan-600 text-white border-cyan-600"
-                      : "bg-white text-slate-600 border-slate-200 hover:border-cyan-300"
-                  }`}
-                >
-                  <EyeOff size={13} />
-                  <span>未完了のみ</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    playCyberClick();
-                    setOnlyWithNotesTopics((v) => !v);
-                  }}
-                  className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
-                    onlyWithNotesTopics
-                      ? "bg-amber-600 text-white border-amber-600"
-                      : "bg-white text-slate-600 border-slate-200 hover:border-amber-300"
-                  }`}
-                >
-                  <StickyNote size={13} />
-                  <span>メモあり ({notedTopicCount})</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => handleExpandAllDomains(true)}
-                  className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
-                >
-                  <ChevronsUpDown size={13} />
-                  <span>全展開</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleExpandAllDomains(false)}
-                  className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
-                >
-                  <span>全折りたたみ</span>
-                </button>
+              <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-cyan-500 via-indigo-500 to-emerald-500 transition-all duration-500"
+                  style={{ width: `${overallPct}%` }}
+                />
               </div>
             </div>
-          </div>
 
-          {/* トピック一覧 */}
-          {filteredDomains.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-10 text-center space-y-2">
-              <Search className="w-8 h-8 text-slate-300 mx-auto" />
-              <div className="text-sm font-black text-slate-700">条件に一致するトピックがありません</div>
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
               <button
                 type="button"
                 onClick={() => {
-                  setExamFilter("all");
-                  setTopicQuery("");
-                  setOnlyIncompleteTopics(false);
-                  setOnlyWithNotesTopics(false);
+                  playCyberClick();
+                  setShowBackupPanel((v) => !v);
                 }}
-                className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold cursor-pointer"
+                className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
               >
-                フィルターを解除
+                <Download size={13} />
+                <span>バックアップ / 復元</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResetAllClick}
+                className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                  confirmReset
+                    ? "bg-rose-600 text-white border-rose-600"
+                    : "border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-rose-600"
+                }`}
+              >
+                <RotateCcw size={13} />
+                <span>{confirmReset ? "もう一度押すと全消去" : "進捗リセット"}</span>
               </button>
             </div>
-          ) : (
-            <div className="space-y-4">
-              {filteredDomains.map((domain) => {
-                const Icon = DOMAIN_ICONS[domain.id] ?? Terminal;
-                const style = ACCENT_STYLES[domain.accentColor];
-                const isExpanded = Boolean(expandedDomains[domain.id] || topicQuery.trim());
-                const domainDone = domain.topics.filter((t) =>
-                  progress.completedTopics.includes(t.id)
-                ).length;
-                const domainPct = Math.round((domainDone / domain.topics.length) * 100);
+          </div>
 
-                return (
-                  <div
-                    key={domain.id}
-                    className={`bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
+          {showBackupPanel && (
+            <div className="pt-4 border-t border-slate-100 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <p className="text-xs text-slate-600">
+                  {config.label} の進捗やメモはブラウザの localStorage に保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
+                </p>
+                <button
+                  type="button"
+                  onClick={handleCopyBackup}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer shrink-0"
+                >
+                  {copiedBackup ? <Check size={13} /> : <Copy size={13} />}
+                  <span>{copiedBackup ? "コピーしました" : "現在のデータをコピー"}</span>
+                </button>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="text"
+                  value={backupInput}
+                  onChange={(e) => setBackupInput(e.target.value)}
+                  placeholder="復元したいバックアップJSONを貼り付け..."
+                  className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                />
+                <button
+                  type="button"
+                  onClick={handleImportBackup}
+                  disabled={!backupInput.trim()}
+                  className="px-4 py-2 rounded-xl bg-cyan-600 text-white text-xs font-bold hover:bg-cyan-700 disabled:opacity-40 cursor-pointer"
+                >
+                  復元する
+                </button>
+              </div>
+              {importMessage && <p className="text-xs font-bold text-cyan-700">{importMessage}</p>}
+            </div>
+          )}
+        </section>
+
+        {/* タブナビゲーション */}
+        <nav className="flex flex-wrap gap-2 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => {
+                  playCyberClick();
+                  setActiveTab(tab.id);
+                }}
+                onMouseEnter={() => playCyberHover()}
+                className={`flex-1 min-w-fit inline-flex items-center justify-center space-x-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
+                  active
+                    ? "bg-white text-slate-900 shadow-sm border border-slate-200/70"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
+                }`}
+              >
+                <Icon size={15} className={`shrink-0 ${active ? "text-cyan-600" : "text-slate-400"}`} />
+                <span>{tab.label}</span>
+                {tab.badge && (
+                  <span
+                    className={`text-[10px] font-mono px-1.5 py-0.5 rounded-md ${
+                      active ? "bg-cyan-50 text-cyan-700" : "bg-slate-200/80 text-slate-600"
+                    }`}
                   >
-                    <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    {tab.badge}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </nav>
+
+        {/* TAB 1: トピック別学習 */}
+        {activeTab === "domains" && (
+          <div className="space-y-6">
+            {/* フィルター＆検索バー */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {config.examFilters.map((ef) => (
+                    <button
+                      key={ef.id}
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setExamFilter(ef.id);
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                        examFilter === ef.id
+                          ? "bg-slate-900 text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {ef.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="relative flex-1 sm:w-60">
+                    <Search
+                      size={14}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+                    <input
+                      type="text"
+                      value={topicQuery}
+                      onChange={(e) => setTopicQuery(e.target.value)}
+                      placeholder="コマンド・設定ファイルで検索..."
+                      className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    />
+                    {topicQuery && (
                       <button
                         type="button"
-                        onClick={() => {
-                          playCyberClick();
-                          setExpandedDomains((prev) => ({
-                            ...prev,
-                            [domain.id]: !prev[domain.id],
-                          }));
-                        }}
-                        className="flex items-start space-x-3.5 text-left flex-1 cursor-pointer"
+                        onClick={() => setTopicQuery("")}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                       >
-                        <div className={`p-2.5 rounded-xl border shrink-0 ${style.iconBg}`}>
-                          <Icon size={20} />
-                        </div>
-                        <div className="space-y-1 flex-1">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${style.badge}`}>
-                              {domain.exam} ・ Topic {domain.number}
-                            </span>
-                            <span className="text-xs font-mono text-slate-500">
-                              完了 {domainDone}/{domain.topics.length} ({domainPct}%)
-                            </span>
-                          </div>
-                          <h3 className="text-base sm:text-lg font-black text-slate-900">
-                            {domain.title}
-                            <span className="ml-2 text-xs font-normal text-slate-400">
-                              {domain.englishTitle}
-                            </span>
-                          </h3>
-                          <p className="text-xs text-slate-600 leading-relaxed">{domain.summary}</p>
-                        </div>
+                        <X size={13} />
                       </button>
+                    )}
+                  </div>
 
-                      <div className="flex items-center space-x-2 shrink-0">
-                        <button
-                          type="button"
-                          onClick={() => handleJumpToDomainQuiz(domain.id)}
-                          className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
-                        >
-                          <span>この分野の問題を解く</span>
-                          <ArrowRight size={13} />
-                        </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setOnlyIncompleteTopics((v) => !v);
+                    }}
+                    className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
+                      onlyIncompleteTopics
+                        ? "bg-cyan-600 text-white border-cyan-600"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-cyan-300"
+                    }`}
+                  >
+                    <EyeOff size={13} />
+                    <span>未完了のみ</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setOnlyWithNotesTopics((v) => !v);
+                    }}
+                    className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
+                      onlyWithNotesTopics
+                        ? "bg-amber-600 text-white border-amber-600"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-amber-300"
+                    }`}
+                  >
+                    <StickyNote size={13} />
+                    <span>メモあり ({notedTopicCount})</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleExpandAllDomains(true)}
+                    className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                  >
+                    <ChevronsUpDown size={13} />
+                    <span>全展開</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleExpandAllDomains(false)}
+                    className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                  >
+                    <span>全折りたたみ</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* トピック一覧 */}
+            {filteredDomains.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-10 text-center space-y-2">
+                <Search className="w-8 h-8 text-slate-300 mx-auto" />
+                <div className="text-sm font-black text-slate-700">
+                  条件に一致するトピックがありません
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setExamFilter("all");
+                    setTopicQuery("");
+                    setOnlyIncompleteTopics(false);
+                    setOnlyWithNotesTopics(false);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold cursor-pointer"
+                >
+                  フィルターを解除
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredDomains.map((domain) => {
+                  const Icon = DOMAIN_ICONS[domain.id] ?? Terminal;
+                  const style = ACCENT_STYLES[domain.accentColor];
+                  const isExpanded = Boolean(expandedDomains[domain.id] || topicQuery.trim());
+                  const domainDone = domain.topics.filter((t) =>
+                    progress.completedTopics.includes(t.id)
+                  ).length;
+                  const domainPct = Math.round((domainDone / domain.topics.length) * 100);
+
+                  return (
+                    <div
+                      key={domain.id}
+                      className={`bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
+                    >
+                      <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <button
                           type="button"
                           onClick={() => {
@@ -848,377 +1005,426 @@ export default function LpicInfoPage() {
                               [domain.id]: !prev[domain.id],
                             }));
                           }}
-                          className="p-2 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 cursor-pointer"
-                          aria-label="展開切り替え"
+                          className="flex items-start space-x-3.5 text-left flex-1 cursor-pointer"
                         >
-                          {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-                        </button>
-                      </div>
-                    </div>
-
-                    {isExpanded && (
-                      <div className="border-t border-slate-100 bg-slate-50/50 p-5 space-y-4">
-                        {domain.visibleTopics.map((topic) => {
-                          const isDone = progress.completedTopics.includes(topic.id);
-                          const noteText = progress.topicNotes[topic.id] ?? "";
-                          const isNoteOpen = Boolean(openNoteTopics[topic.id] || noteText.trim());
-
-                          return (
-                            <div
-                              key={topic.id}
-                              className={`bg-white rounded-xl border p-5 space-y-3 transition-all ${
-                                isDone ? "border-emerald-200 bg-emerald-50/20" : "border-slate-200/80"
-                              }`}
-                            >
-                              <div className="flex items-start justify-between gap-3">
-                                <button
-                                  type="button"
-                                  onClick={() => toggleTopic(topic.id)}
-                                  className="flex items-start space-x-2.5 text-left cursor-pointer group"
-                                >
-                                  {isDone ? (
-                                    <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                                  ) : (
-                                    <Circle className="w-5 h-5 text-slate-300 group-hover:text-cyan-500 shrink-0 mt-0.5" />
-                                  )}
-                                  <div>
-                                    <span className="text-[11px] font-mono font-bold text-slate-400">
-                                      Objective {topic.code}
-                                    </span>
-                                    <h4
-                                      className={`text-sm sm:text-base font-black ${
-                                        isDone ? "text-emerald-950" : "text-slate-900"
-                                      }`}
-                                    >
-                                      {topic.title}
-                                    </h4>
-                                  </div>
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    playCyberClick();
-                                    setOpenNoteTopics((prev) => ({
-                                      ...prev,
-                                      [topic.id]: !prev[topic.id],
-                                    }));
-                                  }}
-                                  className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg border text-[11px] font-bold cursor-pointer shrink-0 ${
-                                    noteText.trim()
-                                      ? "bg-amber-50 text-amber-800 border-amber-200"
-                                      : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
-                                  }`}
-                                >
-                                  <StickyNote size={12} />
-                                  <span>{noteText.trim() ? "メモ済" : "メモ"}</span>
-                                </button>
-                              </div>
-
-                              {/* 関連コマンド・パス */}
-                              <div className="flex flex-wrap gap-1.5">
-                                {topic.commands.map((cmd) => (
-                                  <button
-                                    key={cmd}
-                                    type="button"
-                                    onClick={() => handleJumpToCommandComparison(cmd)}
-                                    title="比較表で検索する"
-                                    className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-cyan-50 border border-slate-200 hover:border-cyan-300 font-mono text-[11px] font-bold text-slate-700 hover:text-cyan-800 transition-colors cursor-pointer"
-                                  >
-                                    {cmd}
-                                  </button>
-                                ))}
-                              </div>
-
-                              {/* 学習要点 */}
-                              <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700">
-                                {topic.keyPoints.map((pt) => (
-                                  <li key={pt} className="flex items-start space-x-2">
-                                    <span className="text-cyan-500 font-bold mt-0.5">•</span>
-                                    <span className="leading-relaxed">{pt}</span>
-                                  </li>
-                                ))}
-                              </ul>
-
-                              {/* 試験対策ヒント */}
-                              <div className="rounded-xl bg-amber-50/70 border border-amber-200/80 px-3.5 py-2.5 flex items-start space-x-2">
-                                <Lightbulb className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                                <p className="text-xs text-amber-950 leading-relaxed">
-                                  <span className="font-bold">試験のポイント: </span>
-                                  {topic.examTip}
-                                </p>
-                              </div>
-
-                              {/* 個人メモ欄 */}
-                              {isNoteOpen && (
-                                <div className="pt-2">
-                                  <textarea
-                                    rows={2}
-                                    value={noteText}
-                                    onChange={(e) => handleUpdateTopicNote(topic.id, e.target.value)}
-                                    placeholder="このトピックのメモ（実機で試したコマンドや覚えるべきオプションなど）..."
-                                    className="w-full px-3 py-2 rounded-xl border border-amber-200 bg-amber-50/30 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
-                                  />
-                                </div>
-                              )}
+                          <div className={`p-2.5 rounded-xl border shrink-0 ${style.iconBg}`}>
+                            <Icon size={20} />
+                          </div>
+                          <div className="space-y-1 flex-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span
+                                className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${style.badge}`}
+                              >
+                                {domain.exam} ・ Topic {domain.number}
+                              </span>
+                              <span className="text-xs font-mono text-slate-500">
+                                完了 {domainDone}/{domain.topics.length} ({domainPct}%)
+                              </span>
                             </div>
-                          );
-                        })}
+                            <h3 className="text-base sm:text-lg font-black text-slate-900">
+                              {domain.title}
+                              <span className="ml-2 text-xs font-normal text-slate-400">
+                                {domain.englishTitle}
+                              </span>
+                            </h3>
+                            <p className="text-xs text-slate-600 leading-relaxed">{domain.summary}</p>
+                          </div>
+                        </button>
+
+                        <div className="flex items-center space-x-2 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => handleJumpToDomainQuiz(domain.id)}
+                            className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
+                          >
+                            <span>この分野の問題を解く</span>
+                            <ArrowRight size={13} />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playCyberClick();
+                              setExpandedDomains((prev) => ({
+                                ...prev,
+                                [domain.id]: !prev[domain.id],
+                              }));
+                            }}
+                            className="p-2 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 cursor-pointer"
+                            aria-label="展開切り替え"
+                          >
+                            {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                          </button>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
 
-      {/* TAB 2: 比較表・運用パターン */}
-      {activeTab === "comparisons" && (
-        <div className="space-y-8">
-          {/* 比較表フィルター */}
-          <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-1.5">
-              {COMPARISON_CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  type="button"
-                  onClick={() => {
-                    playCyberClick();
-                    setCompCategory(cat);
-                  }}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                    compCategory === cat
-                      ? "bg-cyan-600 text-white"
-                      : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+                      {isExpanded && (
+                        <div className="border-t border-slate-100 bg-slate-50/50 p-5 space-y-4">
+                          {domain.visibleTopics.map((topic) => {
+                            const isDone = progress.completedTopics.includes(topic.id);
+                            const noteText = progress.topicNotes[topic.id] ?? "";
+                            const isNoteOpen = Boolean(openNoteTopics[topic.id] || noteText.trim());
 
-            <div className="relative sm:w-64">
-              <Search
-                size={14}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-              />
-              <input
-                type="text"
-                value={compQuery}
-                onChange={(e) => setCompQuery(e.target.value)}
-                placeholder="コマンド・キーワードで絞り込み..."
-                className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
-              />
-              {compQuery && (
-                <button
-                  type="button"
-                  onClick={() => setCompQuery("")}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  <X size={13} />
-                </button>
-              )}
-            </div>
+                            return (
+                              <div
+                                key={topic.id}
+                                className={`bg-white rounded-xl border p-5 space-y-3 transition-all ${
+                                  isDone ? "border-emerald-200 bg-emerald-50/20" : "border-slate-200/80"
+                                }`}
+                              >
+                                <div className="flex items-start justify-between gap-3">
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleTopic(topic.id)}
+                                    className="flex items-start space-x-2.5 text-left cursor-pointer group"
+                                  >
+                                    {isDone ? (
+                                      <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                                    ) : (
+                                      <Circle className="w-5 h-5 text-slate-300 group-hover:text-cyan-500 shrink-0 mt-0.5" />
+                                    )}
+                                    <div>
+                                      <span className="text-[11px] font-mono font-bold text-slate-400">
+                                        Objective {topic.code}
+                                      </span>
+                                      <h4
+                                        className={`text-sm sm:text-base font-black ${
+                                          isDone ? "text-emerald-950" : "text-slate-900"
+                                        }`}
+                                      >
+                                        {topic.title}
+                                      </h4>
+                                    </div>
+                                  </button>
+
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      playCyberClick();
+                                      setOpenNoteTopics((prev) => ({
+                                        ...prev,
+                                        [topic.id]: !prev[topic.id],
+                                      }));
+                                    }}
+                                    className={`inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg border text-[11px] font-bold cursor-pointer shrink-0 ${
+                                      noteText.trim()
+                                        ? "bg-amber-50 text-amber-800 border-amber-200"
+                                        : "bg-white text-slate-500 border-slate-200 hover:border-slate-300"
+                                    }`}
+                                  >
+                                    <StickyNote size={12} />
+                                    <span>{noteText.trim() ? "メモ済" : "メモ"}</span>
+                                  </button>
+                                </div>
+
+                                {/* 関連コマンド・パス */}
+                                <div className="flex flex-wrap gap-1.5">
+                                  {topic.commands.map((cmd) => (
+                                    <button
+                                      key={cmd}
+                                      type="button"
+                                      onClick={() => handleJumpToCommandComparison(cmd)}
+                                      title="比較表で検索する"
+                                      className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-cyan-50 border border-slate-200 hover:border-cyan-300 font-mono text-[11px] font-bold text-slate-700 hover:text-cyan-800 transition-colors cursor-pointer"
+                                    >
+                                      {cmd}
+                                    </button>
+                                  ))}
+                                </div>
+
+                                {/* 学習要点 */}
+                                <ul className="space-y-1.5 text-xs sm:text-sm text-slate-700">
+                                  {topic.keyPoints.map((pt) => (
+                                    <li key={pt} className="flex items-start space-x-2">
+                                      <span className="text-cyan-500 font-bold mt-0.5">•</span>
+                                      <span className="leading-relaxed">{pt}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+
+                                {/* 試験対策ヒント */}
+                                <div className="rounded-xl bg-amber-50/70 border border-amber-200/80 px-3.5 py-2.5 flex items-start space-x-2">
+                                  <Lightbulb className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                                  <p className="text-xs text-amber-950 leading-relaxed">
+                                    <span className="font-bold">試験のポイント: </span>
+                                    {topic.examTip}
+                                  </p>
+                                </div>
+
+                                {/* 個人メモ欄 */}
+                                {isNoteOpen && (
+                                  <div className="pt-2">
+                                    <textarea
+                                      rows={2}
+                                      value={noteText}
+                                      onChange={(e) => handleUpdateTopicNote(topic.id, e.target.value)}
+                                      placeholder="このトピックのメモ（実機で試したコマンドや覚えるべきオプションなど）..."
+                                      className="w-full px-3 py-2 rounded-xl border border-amber-200 bg-amber-50/30 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                    />
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
+        )}
 
-          {/* 比較表 */}
-          <div className="space-y-5">
-            {filteredComparisons.map((comp) => (
-              <div
-                key={comp.id}
-                className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4"
-              >
-                <div className="space-y-1">
-                  <span className="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
-                    {comp.category}
-                  </span>
-                  <h3 className="text-base sm:text-lg font-black text-slate-900">{comp.title}</h3>
-                  <p className="text-xs text-slate-500">{comp.subtitle}</p>
-                </div>
+        {/* TAB 2: 比較表・運用パターン */}
+        {activeTab === "comparisons" && (
+          <div className="space-y-8">
+            {/* 比較表フィルター */}
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-1.5">
+                {COMPARISON_CATEGORIES.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setCompCategory(cat);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                      compCategory === cat
+                        ? "bg-cyan-600 text-white"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse text-xs sm:text-sm">
-                    <thead>
-                      <tr className="border-b border-slate-200 bg-slate-50">
-                        {comp.columns.map((col) => (
-                          <th key={col} className="py-2.5 px-3 font-black text-slate-700">
-                            {col}
-                          </th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {comp.rows.map((row) => (
-                        <tr key={row.feature} className="hover:bg-slate-50/70">
-                          <td className="py-2.5 px-3 font-bold text-slate-800">{row.feature}</td>
-                          {row.values.map((val, idx) => (
-                            <td key={idx} className="py-2.5 px-3 text-slate-600 font-mono text-xs">
-                              {val}
-                            </td>
+              <div className="relative sm:w-64">
+                <Search
+                  size={14}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                />
+                <input
+                  type="text"
+                  value={compQuery}
+                  onChange={(e) => setCompQuery(e.target.value)}
+                  placeholder="コマンド・キーワードで絞り込み..."
+                  className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                />
+                {compQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setCompQuery("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    <X size={13} />
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* 比較表 */}
+            <div className="space-y-5">
+              {filteredComparisons.map((comp) => (
+                <div
+                  key={comp.id}
+                  className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4"
+                >
+                  <div className="space-y-1">
+                    <span className="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+                      {comp.category}
+                    </span>
+                    <h3 className="text-base sm:text-lg font-black text-slate-900">{comp.title}</h3>
+                    <p className="text-xs text-slate-500">{comp.subtitle}</p>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                      <thead>
+                        <tr className="border-b border-slate-200 bg-slate-50">
+                          {comp.columns.map((col) => (
+                            <th key={col} className="py-2.5 px-3 font-black text-slate-700">
+                              {col}
+                            </th>
                           ))}
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {comp.rows.map((row) => (
+                          <tr key={row.feature} className="hover:bg-slate-50/70">
+                            <td className="py-2.5 px-3 font-bold text-slate-800">{row.feature}</td>
+                            {row.values.map((val, idx) => (
+                              <td key={idx} className="py-2.5 px-3 text-slate-600 font-mono text-xs">
+                                {val}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
 
-                <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
-                  <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                  <span>
-                    <strong className="text-cyan-300">使い分けルール: </strong>
-                    {comp.decisionRule}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 頻出運用フローパターン */}
-          <section className="space-y-4">
-            <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-              <Terminal className="w-5 h-5 text-cyan-600" />
-              <span>頻出コマンド・運用フローパターン</span>
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {lpic1Patterns.map((pat) => (
-                <SpotlightCard key={pat.id} className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl">
-                  <div className="flex items-center justify-between gap-2">
-                    <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
-                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
-                      {pat.badge}
+                  <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
+                    <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                    <span>
+                      <strong className="text-cyan-300">使い分けルール: </strong>
+                      {comp.decisionRule}
                     </span>
                   </div>
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {pat.flow.map((step, idx) => (
-                      <div key={step} className="flex items-center gap-1.5">
-                        <span className="px-2 py-1 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-800">
-                          {step}
-                        </span>
-                        {idx < pat.flow.length - 1 && (
-                          <ArrowRight size={12} className="text-slate-400 shrink-0" />
-                        )}
-                      </div>
-                    ))}
+                </div>
+              ))}
+            </div>
+
+            {/* 頻出運用フローパターン */}
+            <section className="space-y-4">
+              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                <Terminal className="w-5 h-5 text-cyan-600" />
+                <span>頻出コマンド・運用フローパターン</span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {config.patterns.map((pat) => (
+                  <SpotlightCard
+                    key={pat.id}
+                    className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
+                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
+                        {pat.badge}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {pat.flow.map((step, idx) => (
+                        <div key={step} className="flex items-center gap-1.5">
+                          <span className="px-2 py-1 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-800">
+                            {step}
+                          </span>
+                          {idx < pat.flow.length - 1 && (
+                            <ArrowRight size={12} className="text-slate-400 shrink-0" />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-slate-600 leading-relaxed">{pat.summary}</p>
+                    <ul className="space-y-1 text-xs text-slate-700">
+                      {pat.keyDesignPoints.map((pt) => (
+                        <li key={pt} className="flex items-start space-x-1.5">
+                          <span className="text-cyan-600 font-bold">•</span>
+                          <span>{pt}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </SpotlightCard>
+                ))}
+              </div>
+            </section>
+
+            {/* 試験のひっかけ対策 */}
+            <section className="space-y-4">
+              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                <AlertTriangle className="w-5 h-5 text-amber-500" />
+                <span>よくあるひっかけ・誤答パターン</span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {config.pitfalls.map((pit) => (
+                  <div
+                    key={pit.id}
+                    className="bg-white rounded-2xl border border-amber-200/80 p-5 space-y-2.5 shadow-xs"
+                  >
+                    <div className="text-xs font-black text-rose-700">✕ {pit.trap}</div>
+                    <p className="text-xs text-slate-600 leading-relaxed">{pit.whyWrong}</p>
+                    <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 px-3 py-2 text-xs text-emerald-950">
+                      <span className="font-bold">○ 正しいアプローチ: </span>
+                      {pit.correctApproach}
+                    </div>
                   </div>
-                  <p className="text-xs text-slate-600 leading-relaxed">{pat.summary}</p>
-                  <ul className="space-y-1 text-xs text-slate-700">
-                    {pat.keyDesignPoints.map((pt) => (
-                      <li key={pt} className="flex items-start space-x-1.5">
-                        <span className="text-cyan-600 font-bold">•</span>
-                        <span>{pt}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </SpotlightCard>
-              ))}
-            </div>
-          </section>
+                ))}
+              </div>
+            </section>
 
-          {/* 試験のひっかけ対策 */}
-          <section className="space-y-4">
-            <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-              <AlertTriangle className="w-5 h-5 text-amber-500" />
-              <span>よくあるひっかけ・誤答パターン</span>
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {lpic1Pitfalls.map((pit) => (
-                <div
-                  key={pit.id}
-                  className="bg-white rounded-2xl border border-amber-200/80 p-5 space-y-2.5 shadow-xs"
-                >
-                  <div className="text-xs font-black text-rose-700">✕ {pit.trap}</div>
-                  <p className="text-xs text-slate-600 leading-relaxed">{pit.whyWrong}</p>
-                  <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 px-3 py-2 text-xs text-emerald-950">
-                    <span className="font-bold">○ 正しいアプローチ: </span>
-                    {pit.correctApproach}
+            {/* 重要設定ファイル・数値早見 */}
+            <section className="space-y-4">
+              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                <Gauge className="w-5 h-5 text-indigo-600" />
+                <span>重要設定ファイル・数値早見表</span>
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                {config.keyPaths.map((kp) => (
+                  <div
+                    key={kp.id}
+                    className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs"
+                  >
+                    <div className="font-mono text-xs font-black text-indigo-700">{kp.target}</div>
+                    <div className="text-sm font-black text-slate-900">{kp.value}</div>
+                    <p className="text-[11px] text-slate-500 leading-snug">{kp.detail}</p>
                   </div>
-                </div>
-              ))}
-            </div>
-          </section>
+                ))}
+              </div>
+            </section>
+          </div>
+        )}
 
-          {/* 重要設定ファイル・数値早見 */}
-          <section className="space-y-4">
-            <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-              <Gauge className="w-5 h-5 text-indigo-600" />
-              <span>重要設定ファイル・数値早見表</span>
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {lpic1KeyPaths.map((kp) => (
-                <div
-                  key={kp.id}
-                  className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs"
+        {/* TAB 3: フラッシュカード */}
+        {activeTab === "flashcards" && (
+          <CertificationFlashcards
+            key={level}
+            items={config.quickLookup}
+            masteredKeywords={progress.masteredCards}
+            onToggleMastered={handleToggleMasteredCard}
+            onResetMastered={handleResetMasteredCards}
+            badgeText={`${config.id.toUpperCase()} 直前暗記フラッシュカード`}
+            title={config.flashcardTitle}
+            promptLabel="次の要件に対応するコマンド・設定は？"
+            answerLabel="推奨コマンド・設定値"
+          />
+        )}
+
+        {/* TAB 4: 練習問題・模擬試験 */}
+        {activeTab === "quiz" && (
+          <CertificationPracticeQuiz
+            key={level}
+            questions={config.practiceQuestions}
+            domains={quizDomains}
+            examBadgeLabel={config.quizBadgeLabel}
+            passingConfig={config.passingConfig}
+            answers={progress.quizAnswers}
+            bookmarkedIds={progress.bookmarkedQuestions}
+            mockExamHistory={progress.mockExamHistory}
+            initialDomain={quizDomainTarget}
+            onSubmitAnswer={handleSubmitAnswer}
+            onToggleBookmark={handleToggleBookmark}
+            onRecordMockExam={handleRecordMockExam}
+            onResetQuiz={handleResetQuiz}
+          />
+        )}
+
+        {/* TAB 5: 公式リソース */}
+        {activeTab === "resources" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {config.officialResources.map((res) => (
+              <TiltCard key={res.url} className="h-full">
+                <a
+                  href={res.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playCyberClick()}
+                  className="block h-full bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs hover:border-cyan-300 transition-all space-y-3"
                 >
-                  <div className="font-mono text-xs font-black text-indigo-700">{kp.target}</div>
-                  <div className="text-sm font-black text-slate-900">{kp.value}</div>
-                  <p className="text-[11px] text-slate-500 leading-snug">{kp.detail}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      )}
-
-      {/* TAB 3: フラッシュカード */}
-      {activeTab === "flashcards" && (
-        <CertificationFlashcards
-          items={lpic1QuickLookup}
-          masteredKeywords={progress.masteredCards}
-          onToggleMastered={handleToggleMasteredCard}
-          onResetMastered={handleResetMasteredCards}
-          badgeText="LPIC-1 直前暗記フラッシュカード"
-          title="要件・用途 → コマンド / 設定ファイル 即答トレーニング"
-          promptLabel="次の要件に対応するコマンド・設定ファイルは？"
-          answerLabel="推奨コマンド・設定値"
-        />
-      )}
-
-      {/* TAB 4: 練習問題・模擬試験 */}
-      {activeTab === "quiz" && (
-        <CertificationPracticeQuiz
-          questions={lpic1PracticeQuestions}
-          domains={QUIZ_DOMAINS}
-          examBadgeLabel="LPIC-1 (101/102) 演習"
-          passingConfig={LPIC_PASSING_CONFIG}
-          answers={progress.quizAnswers}
-          bookmarkedIds={progress.bookmarkedQuestions}
-          mockExamHistory={progress.mockExamHistory}
-          initialDomain={quizDomainTarget}
-          onSubmitAnswer={handleSubmitAnswer}
-          onToggleBookmark={handleToggleBookmark}
-          onRecordMockExam={handleRecordMockExam}
-          onResetQuiz={handleResetQuiz}
-        />
-      )}
-
-      {/* TAB 5: 公式リソース */}
-      {activeTab === "resources" && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {lpic1OfficialResources.map((res) => (
-            <TiltCard key={res.url} className="h-full">
-              <a
-                href={res.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => playCyberClick()}
-                className="block h-full bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs hover:border-cyan-300 transition-all space-y-3"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
-                    {res.badge}
-                  </span>
-                  <ExternalLink size={15} className="text-slate-400" />
-                </div>
-                <h3 className="text-base font-black text-slate-900">{res.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{res.description}</p>
-                <div className="text-[11px] font-mono text-cyan-700 truncate">{res.url}</div>
-              </a>
-            </TiltCard>
-          ))}
-        </div>
-      )}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
+                      {res.badge}
+                    </span>
+                    <ExternalLink size={15} className="text-slate-400" />
+                  </div>
+                  <h3 className="text-base font-black text-slate-900">{res.title}</h3>
+                  <p className="text-xs text-slate-600 leading-relaxed">{res.description}</p>
+                  <div className="text-[11px] font-mono text-cyan-700 truncate">{res.url}</div>
+                </a>
+              </TiltCard>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
