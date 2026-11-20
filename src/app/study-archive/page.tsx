@@ -19,7 +19,7 @@ import {
   ExternalLink,
   CalendarDays,
   CheckCircle2,
-  FlaskConical,
+  ShieldCheck,
   ArrowRight,
   Clock,
   Copy,
@@ -32,6 +32,7 @@ export default function StudyArchivePage() {
   const [selectedId, setSelectedId] = useState<string>(studySessions[0]?.id ?? "");
   const [activeTab, setActiveTab] = useState<MediaTab>("video");
   const [copiedTasks, setCopiedTasks] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
 
   const currentSession =
     studySessions.find((s) => s.id === selectedId) ?? studySessions[0];
@@ -47,7 +48,7 @@ export default function StudyArchivePage() {
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* PoC中・社内限定公開の案内カード */}
+        {/* 社内限定公開・公開ポリシーの案内カード */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
           <TiltCard maxTilt={6} glareOpacity={0.12} className="h-full rounded-2xl">
             <SpotlightCard
@@ -77,7 +78,7 @@ export default function StudyArchivePage() {
             >
               <div onMouseEnter={() => playCyberHover()} className="p-5 flex gap-3.5 cursor-default">
                 <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center shrink-0 text-amber-600 shadow-2xs">
-                  <FlaskConical className="w-5 h-5" />
+                  <ShieldCheck className="w-5 h-5" />
                 </div>
                 <div className="space-y-1">
                   <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">
@@ -294,15 +295,33 @@ export default function StudyArchivePage() {
                   </span>
                 </div>
                 {videoPreviewUrl ? (
-                  <div className="aspect-video w-full bg-slate-950">
-                    <iframe
-                      src={videoPreviewUrl}
-                      title={`${currentSession.title} 録画動画`}
-                      className="w-full h-full border-0"
-                      allow="autoplay; fullscreen"
-                      allowFullScreen
-                    />
-                  </div>
+                  <>
+                    <div className="aspect-video w-full bg-slate-950">
+                      <iframe
+                        src={videoPreviewUrl}
+                        title={`${currentSession.title} 録画動画`}
+                        className="w-full h-full border-0"
+                        allow="autoplay; fullscreen"
+                        allowFullScreen
+                      />
+                    </div>
+                    {currentSession.videoDriveUrl && (
+                      <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600">
+                        <span>
+                          プレビューが表示されない場合は、会社の Google Workspace アカウントでログインした状態で別タブから開いてください。
+                        </span>
+                        <a
+                          href={currentSession.videoDriveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
+                        >
+                          <span>Google Drive で開く</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="p-10 text-center text-sm text-slate-500">
                     録画リンクはまだ登録されていません。
@@ -323,13 +342,31 @@ export default function StudyArchivePage() {
                   </span>
                 </div>
                 {minutesPreviewUrl ? (
-                  <div className="w-full h-[680px] bg-white">
-                    <iframe
-                      src={minutesPreviewUrl}
-                      title={`${currentSession.title} 議事メモ`}
-                      className="w-full h-full border-0"
-                    />
-                  </div>
+                  <>
+                    <div className="w-full h-[680px] bg-white">
+                      <iframe
+                        src={minutesPreviewUrl}
+                        title={`${currentSession.title} 議事メモ`}
+                        className="w-full h-full border-0"
+                      />
+                    </div>
+                    {currentSession.minutesDocUrl && (
+                      <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600">
+                        <span>
+                          プレビューが表示されない場合は、会社の Google Workspace アカウントでログインした状態で別タブから開いてください。
+                        </span>
+                        <a
+                          href={currentSession.minutesDocUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
+                        >
+                          <span>Google ドキュメントで開く</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="p-10 text-center space-y-2">
                     <div className="text-sm font-bold text-slate-700">
@@ -347,10 +384,12 @@ export default function StudyArchivePage() {
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2 bg-white rounded-2xl border border-slate-200 px-4 py-3 shadow-2xs">
                   <span className="text-xs font-bold text-slate-600">
-                    勉強会後のフォローや共有にそのまま使えます
+                    {copyFailed
+                      ? "クリップボードへのコピーに失敗しました。ブラウザの権限をご確認ください。"
+                      : "勉強会後のフォローや共有にそのまま使えます"}
                   </span>
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       playCyberClick();
                       const text = [
                         `【${currentSession.roundLabel}（${currentSession.date}）課題一覧】`,
@@ -358,9 +397,14 @@ export default function StudyArchivePage() {
                           (t) => `■ ${t.step}: ${t.title}\n  ${t.description}`
                         ),
                       ].join("\n\n");
-                      navigator.clipboard.writeText(text);
-                      setCopiedTasks(true);
-                      setTimeout(() => setCopiedTasks(false), 2000);
+                      try {
+                        await navigator.clipboard.writeText(text);
+                        setCopyFailed(false);
+                        setCopiedTasks(true);
+                        setTimeout(() => setCopiedTasks(false), 2000);
+                      } catch {
+                        setCopyFailed(true);
+                      }
                     }}
                     onMouseEnter={() => playCyberHover()}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all cursor-pointer"
