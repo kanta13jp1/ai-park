@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
@@ -24,6 +24,7 @@ import {
   Clock,
   Copy,
   Check,
+  Link2,
 } from "lucide-react";
 
 type MediaTab = "video" | "minutes" | "tasks";
@@ -33,6 +34,25 @@ export default function StudyArchivePage() {
   const [activeTab, setActiveTab] = useState<MediaTab>("video");
   const [copiedTasks, setCopiedTasks] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
+  const [copiedLink, setCopiedLink] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sessionParam = params.get("session");
+    if (sessionParam && studySessions.some((s) => s.id === sessionParam)) {
+      queueMicrotask(() => {
+        setSelectedId(sessionParam);
+      });
+    }
+  }, []);
+
+  const handleSelectSession = (id: string) => {
+    playCyberClick();
+    setSelectedId(id);
+    const url = new URL(window.location.href);
+    url.searchParams.set("session", id);
+    window.history.replaceState({}, "", url.toString());
+  };
 
   const currentSession =
     studySessions.find((s) => s.id === selectedId) ?? studySessions[0];
@@ -64,7 +84,7 @@ export default function StudyArchivePage() {
                     録画・議事メモは社内限定公開です
                   </h4>
                   <p className="text-slate-600 leading-relaxed font-normal">
-                    動画・ドキュメントは会社の Google Workspace アカウントでログインしている時だけ閲覧できます。埋め込み表示が出ない場合は「別タブで開く」をご利用ください。
+                    動画・ドキュメントは共有権限がある Google アカウントでログインしている時だけ閲覧できます。表示されない場合や権限が必要な場合は、「別タブで開く」からアクセス権をリクエストしてください。
                   </p>
                 </div>
               </div>
@@ -116,10 +136,7 @@ export default function StudyArchivePage() {
               return (
                 <button
                   key={session.id}
-                  onClick={() => {
-                    playCyberClick();
-                    setSelectedId(session.id);
-                  }}
+                  onClick={() => handleSelectSession(session.id)}
                   onMouseEnter={() => playCyberHover()}
                   className={`text-left p-4 rounded-xl border transition-all cursor-pointer ${
                     isSelected
@@ -168,19 +185,50 @@ export default function StudyArchivePage() {
                   </p>
                 </div>
 
-                {currentSession.nextSession && (
-                  <div className="shrink-0 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 text-xs space-y-1">
-                    <div className="font-extrabold text-slate-500 uppercase tracking-wider text-[10px]">
-                      次回予定
+                <div className="shrink-0 flex flex-col items-start md:items-end gap-2">
+                  <button
+                    onClick={async () => {
+                      playCyberClick();
+                      try {
+                        const shareUrl = new URL(window.location.href);
+                        shareUrl.searchParams.set("session", currentSession.id);
+                        await navigator.clipboard.writeText(shareUrl.toString());
+                        setCopiedLink(true);
+                        setTimeout(() => setCopiedLink(false), 2000);
+                      } catch {
+                        // クリップボード権限がない場合は無視
+                      }
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all cursor-pointer"
+                  >
+                    {copiedLink ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>URLをコピーしました</span>
+                      </>
+                    ) : (
+                      <>
+                        <Link2 className="w-3.5 h-3.5" />
+                        <span>この回のリンクをコピー</span>
+                      </>
+                    )}
+                  </button>
+
+                  {currentSession.nextSession && (
+                    <div className="rounded-xl bg-slate-50 border border-slate-200 px-4 py-3 text-xs space-y-1 w-full md:w-auto">
+                      <div className="font-extrabold text-slate-500 uppercase tracking-wider text-[10px]">
+                        次回予定
+                      </div>
+                      <div className="font-extrabold text-slate-900">
+                        {currentSession.nextSession.date} {currentSession.nextSession.timeRange}
+                      </div>
+                      <div className="text-[11px] text-slate-500">
+                        参加URLはカレンダーまたは Chat をご確認ください
+                      </div>
                     </div>
-                    <div className="font-extrabold text-slate-900">
-                      {currentSession.nextSession.date}
-                    </div>
-                    <div className="text-slate-600">
-                      {currentSession.nextSession.timeRange}
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
 
               {/* 扱ったトピック */}
