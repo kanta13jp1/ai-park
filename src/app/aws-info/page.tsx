@@ -492,8 +492,9 @@ export default function AwsInfoPage() {
                     {totalTopics} トピック ・ 比較表 {saaComparisons.length} 種 ・ カード {saaQuickLookup.length} 枚 ・ 演習 {saaPracticeQuestions.length} 問
                   </span>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                  AWS認定ソリューションアーキテクト - アソシエイト 合格対策
+                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-keep">
+                  <span className="inline-block">AWS認定ソリューションアーキテクト</span>{" "}
+                  <span className="inline-block">- アソシエイト 合格対策</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
                   試験ガイド（SAA-C03）の4つの出題ドメインに沿って、頻出サービスの選定基準・フラッシュカード暗記・択一＆複数選択の実践問題をまとめた学習サイトです。学習記録はブラウザに自動保存されます。
@@ -585,7 +586,7 @@ export default function AwsInfoPage() {
                     setActiveTab(tab.id);
                   }}
                   onMouseEnter={() => playCyberHover()}
-                  className={`inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
                     isActive
                       ? "bg-slate-900 text-white shadow-md"
                       : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-300 hover:text-indigo-700"
@@ -610,10 +611,10 @@ export default function AwsInfoPage() {
           <button
             type="button"
             onClick={handleResetAllClick}
-            className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-colors cursor-pointer ${
+            className={`shrink-0 inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-colors cursor-pointer whitespace-nowrap ${
               confirmReset
                 ? "bg-rose-600 text-white"
-                : "text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+                : "text-slate-500 hover:text-slate-700 hover:bg-slate-100"
             }`}
           >
             <RotateCcw size={12} />
