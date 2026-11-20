@@ -21,6 +21,11 @@ import {
   Lightbulb,
   Wrench,
   TableProperties,
+  Keyboard,
+  FileCode2,
+  HelpCircle,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
@@ -32,13 +37,16 @@ import {
   antigravityFeatures,
   modalityComparison,
   practicalExamples,
+  antigravityShortcuts,
+  antigravityConfigTemplates,
+  antigravityFaqs,
   officialDocLinks,
   type FeatureCategory,
   type ExampleCategory,
   type SurfaceId,
 } from "@/data/antigravity-info";
 
-type TabId = "overview" | "features" | "examples";
+type TabId = "overview" | "features" | "examples" | "reference";
 
 const FEATURE_CATEGORIES: FeatureCategory[] = [
   "すべて",
@@ -76,6 +84,7 @@ export default function AntigravityInfoPage() {
   const [exampleCategory, setExampleCategory] = useState<ExampleCategory>("すべて");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [openFaqId, setOpenFaqId] = useState<string | null>(antigravityFaqs[0]?.id ?? null);
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
 
@@ -196,6 +205,7 @@ export default function AntigravityInfoPage() {
                 { id: "overview", label: "全体像・使い分け", icon: Compass },
                 { id: "features", label: `機能解説 (${antigravityFeatures.length})`, icon: Wrench },
                 { id: "examples", label: `実務の実行例 (${practicalExamples.length})`, icon: Zap },
+                { id: "reference", label: "リファレンス・FAQ", icon: HelpCircle },
               ] as const
             ).map((tab) => {
               const Icon = tab.icon;
@@ -631,6 +641,159 @@ export default function AntigravityInfoPage() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {/* タブ 4: リファレンス・FAQ */}
+        {activeTab === "reference" && (
+          <div className="space-y-8">
+            {/* ショートカット・コマンド早見表 */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <Keyboard size={19} className="text-indigo-600" />
+                  <span>ショートカット・CLI コマンド早見表</span>
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                  IDE・Chat Canvas・Antigravity CLI（`agy`）でよく使う操作のまとめです。
+                </p>
+              </div>
+
+              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-slate-900 text-slate-200 text-xs">
+                        <th className="py-3 px-4 font-bold">環境</th>
+                        <th className="py-3 px-4 font-bold">キー / コマンド</th>
+                        <th className="py-3 px-4 font-bold">動作</th>
+                        <th className="py-3 px-4 font-bold">補足</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+                      {antigravityShortcuts.map((item) => (
+                        <tr key={`${item.surface}-${item.keysOrCommand}`} className="hover:bg-slate-50/80">
+                          <td className="py-3 px-4 font-bold text-slate-700 whitespace-nowrap">
+                            <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-[11px]">
+                              {item.surface}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 font-mono text-xs font-bold text-indigo-700 whitespace-nowrap">
+                            {item.keysOrCommand}
+                          </td>
+                          <td className="py-3 px-4 font-semibold text-slate-900">{item.action}</td>
+                          <td className="py-3 px-4 text-slate-600 text-xs">{item.notes}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </section>
+
+            {/* 設定テンプレート・構成例 */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <FileCode2 size={19} className="text-cyan-600" />
+                  <span>設定テンプレート・ディレクトリ構成例</span>
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                  `.agents/` 配下の Skill 定義や CLI 設定パス、セキュリティポリシー項目を確認できます。
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {antigravityConfigTemplates.map((tmpl) => (
+                  <div
+                    key={tmpl.id}
+                    className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-3"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div>
+                        <h4 className="text-sm sm:text-base font-black text-slate-900">{tmpl.title}</h4>
+                        <p className="text-xs font-mono text-indigo-600 mt-0.5">{tmpl.filePath}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyPrompt(tmpl.id, tmpl.code)}
+                        onMouseEnter={() => playCyberHover()}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white transition-all cursor-pointer self-start sm:self-auto"
+                      >
+                        {copiedId === tmpl.id ? (
+                          <>
+                            <Check size={13} className="text-emerald-400" />
+                            <span className="text-emerald-300">コピー済み</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={13} />
+                            <span>テンプレートをコピー</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-600">{tmpl.description}</p>
+                    <pre className="rounded-xl bg-slate-950 border border-slate-800 p-4 text-xs text-cyan-200 font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed">
+                      {tmpl.code}
+                    </pre>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* よくある質問（FAQ） */}
+            <section className="space-y-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                  <HelpCircle size={19} className="text-emerald-600" />
+                  <span>よくある質問（公式仕様ベース FAQ）</span>
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                  使い分け・設定の優先順位・`.agents/` の読み込み仕様など、よくある疑問をまとめています。
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                {antigravityFaqs.map((faq) => {
+                  const isOpen = openFaqId === faq.id;
+                  return (
+                    <div
+                      key={faq.id}
+                      className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs"
+                    >
+                      <button
+                        type="button"
+                        onClick={() => {
+                          playCyberClick();
+                          setOpenFaqId(isOpen ? null : faq.id);
+                        }}
+                        className="w-full px-5 py-4 flex items-center justify-between gap-4 text-left hover:bg-slate-50/80 transition-colors cursor-pointer"
+                      >
+                        <div className="flex flex-wrap items-center gap-2.5">
+                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+                            {faq.category}
+                          </span>
+                          <span className="text-xs sm:text-sm font-black text-slate-900">
+                            Q. {faq.question}
+                          </span>
+                        </div>
+                        {isOpen ? (
+                          <ChevronUp size={18} className="text-slate-400 shrink-0" />
+                        ) : (
+                          <ChevronDown size={18} className="text-slate-400 shrink-0" />
+                        )}
+                      </button>
+                      {isOpen && (
+                        <div className="px-5 pb-4 pt-1 border-t border-slate-100 text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50/40">
+                          {faq.answer}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
           </div>
         )}
 
