@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-19T20:08:32.196Z",
-  "lastSyncedAtFormatted": "2026/11/20 5:08:32",
+  "lastSyncedAt": "2026-11-20T06:12:56.980Z",
+  "lastSyncedAtFormatted": "2026/11/20 15:12:56",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 52,
@@ -38,6 +38,81 @@
         "ChatGPT",
         "Codex",
         "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-deploying-daybreak-red",
+      "title": "OpenAI: Deploying Daybreak Red",
+      "date": "2026/11/19",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Explore a reference architecture for supervised security investigations with Daybreak Red, including safety controls, setup, and monitoring.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Deploying Daybreak Red」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/learn/deploying-daybreak-red",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-pr-scans-demo",
+      "title": "OpenAI: See PR scans in action",
+      "date": "2026/11/19",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Watch a walkthrough of PR scans and see how the presenter reviews scan results in a pull request workflow.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「See PR scans in action」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/learn/pr-scans-demo",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-linear-scaling",
+      "title": "Latent Space: Scaling Linear’s GTM to $100M ARR — Cristina Cordova, COO",
+      "date": "2026/11/19",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": ">50% of tickets written by agents, the AI budgets behind $100M-in-months ARR, and selling without SDRs or FDEs",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「Scaling Linear’s GTM to $100M ARR — Cristina Cordova, COO」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/linear-scaling/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
       ],
       "isLiveSynced": true
     },
@@ -143,56 +218,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-the-silent-consensus",
-      "title": "OpenAI: The Silent Consensus",
-      "date": "2026/11/18",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Dean Ball, Head of Strategic Futures at OpenAI, examines how more capable AI could reshape society and how people can retain control of their institutions.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「The Silent Consensus」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/the-silent-consensus",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-sumitomo-life",
-      "title": "OpenAI: How Sumitomo Life’s leaders helped teams adopt ChatGPT Enterprise",
-      "date": "2026/11/18",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Sumitomo Life uses ChatGPT Enterprise to research insurers, prepare proposals, and draft code for investment analysis. Early use by executives helped drive adoption.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Sumitomo Life’s leaders helped teams adopt ChatGPT Enterprise」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/customer-stories/sumitomo-life",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-huggingface-daisyrose-27b-pushing-the-frontier-of-post-train",
       "title": "Hugging Face: DaisyRose-27B: Pushing the Frontier of Post-Training Efficiency",
       "date": "2026/11/18",
@@ -264,31 +289,6 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-ainews-gpt-6-2-astra-the-2-frontier-model-is-bet",
-      "title": "Latent Space: [AINews] GPT-6.2 Astra, the #2 Frontier Model is better and 20%-600% cheaper, but has mixed reviews; 6.2 Sol likely main workhorse",
-      "date": "2026/11/18",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 17, 2026 — GPT-6.2 Astra and Sol lower benchmark costs. Early testers disagree on what Astra is like to work with.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] GPT-6.2 Astra, the #2 Frontier Model is better and 20%-600% cheaper, but...」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-gpt-6-2-astra-the-2-frontier-model-is-better-and-20-600-cheaper-but-has-mixed-reviews-6-2-sol/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
       ],
       "isLiveSynced": true
     },
