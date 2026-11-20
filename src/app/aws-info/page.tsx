@@ -31,6 +31,7 @@ import {
   Check,
   Download,
   AlertTriangle,
+  Gauge,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -50,6 +51,7 @@ import {
   saaOfficialResources,
   saaArchitecturePatterns,
   saaPitfalls,
+  saaKeyLimits,
   type SaaDomain,
 } from "@/data/aws-saa";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
@@ -381,6 +383,13 @@ export default function AwsInfoPage() {
     if (!normalizedCompQuery) return saaPitfalls;
     return saaPitfalls.filter((p) =>
       `${p.trap} ${p.whyWrong} ${p.correctApproach}`.toLowerCase().includes(normalizedCompQuery)
+    );
+  }, [normalizedCompQuery]);
+
+  const filteredKeyLimits = useMemo(() => {
+    if (!normalizedCompQuery) return saaKeyLimits;
+    return saaKeyLimits.filter((l) =>
+      `${l.service} ${l.limitValue} ${l.detail}`.toLowerCase().includes(normalizedCompQuery)
     );
   }, [normalizedCompQuery]);
 
@@ -1090,7 +1099,8 @@ export default function AwsInfoPage() {
             {/* すべて0件時のエンプティステート */}
             {filteredQuickLookup.length === 0 &&
               filteredComparisons.length === 0 &&
-              filteredPitfalls.length === 0 && (
+              filteredPitfalls.length === 0 &&
+              filteredKeyLimits.length === 0 && (
                 <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3">
                   <Search className="w-8 h-8 text-slate-300 mx-auto" />
                   <div className="text-sm font-black text-slate-900">
@@ -1240,6 +1250,30 @@ export default function AwsInfoPage() {
               </div>
             </section>
             )}
+
+            {/* 試験に出る！AWS 重要数値・制限値マスター */}
+            {filteredKeyLimits.length > 0 && (
+              <section className="space-y-3 pt-2">
+                <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
+                  <Gauge size={17} className="text-indigo-600" />
+                  <span>試験に出る！AWS 重要数値・制限値マスター {filteredKeyLimits.length} 選</span>
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {filteredKeyLimits.map((lim) => (
+                    <div
+                      key={lim.id}
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1.5"
+                    >
+                      <div className="text-[11px] font-bold text-indigo-600">{lim.service}</div>
+                      <div className="text-xs sm:text-sm font-mono font-black text-slate-900">
+                        {lim.limitValue}
+                      </div>
+                      <p className="text-[11px] text-slate-600 leading-relaxed">{lim.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
 
@@ -1286,30 +1320,58 @@ export default function AwsInfoPage() {
                     step: "STEP 1",
                     title: "全体像とネットワーク基礎",
                     desc: "VPC（サブネット、ルートテーブル、IGW/NAT、SG/NACL）と IAM の仕組みを図解で理解する。",
+                    status: progress.completedTopics.includes("d1-iam") && progress.completedTopics.includes("d1-vpc-sec")
+                      ? "基礎完了"
+                      : "学習中",
+                    done: progress.completedTopics.includes("d1-iam") && progress.completedTopics.includes("d1-vpc-sec"),
                   },
                   {
                     step: "STEP 2",
                     title: "コアサービスの使い分け",
                     desc: "本ページの「4ドメイン攻略」と「頻出比較表」を使い、EBS/EFS/S3 や ALB/NLB、SQS/SNS の違いを整理する。",
+                    status: `${doneTopicsCount}/${totalTopics} トピック`,
+                    done: doneTopicsCount === totalTopics,
                   },
                   {
                     step: "STEP 3",
                     title: "カード暗記 & シナリオ演習",
                     desc: "フラッシュカードで即答力を鍛え、実践演習クイズや AWS Skill Builder で誤答理由を言語化する。",
+                    status: `カード ${progress.masteredCards.length}/${saaQuickLookup.length} ・ 演習 ${correctCount}/${saaPracticeQuestions.length}`,
+                    done: progress.masteredCards.length === saaQuickLookup.length && correctCount >= Math.ceil(saaPracticeQuestions.length * 0.72),
                   },
                   {
                     step: "STEP 4",
                     title: "模擬試験で時間配分確認",
                     desc: "130分で65問（1問約2分）のペース配分を確認し、苦手ドメインを重点復習して本番に臨む。",
+                    status:
+                      progress.mockExamHistory.length > 0
+                        ? `最高 ${Math.max(...progress.mockExamHistory.map((m) => m.scaledScore))}点`
+                        : "未受験",
+                    done: progress.mockExamHistory.some((m) => m.scaledScore >= 720),
                   },
                 ].map((item) => (
                   <div
                     key={item.step}
-                    className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 space-y-2"
+                    className={`rounded-xl border p-4 space-y-2 ${
+                      item.done
+                        ? "border-emerald-200 bg-emerald-50/40"
+                        : "border-slate-200 bg-slate-50/60"
+                    }`}
                   >
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-cyan-300">
-                      {item.step}
-                    </span>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-slate-900 text-cyan-300">
+                        {item.step}
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          item.done
+                            ? "bg-emerald-100 text-emerald-800"
+                            : "bg-slate-200/70 text-slate-600"
+                        }`}
+                      >
+                        {item.status}
+                      </span>
+                    </div>
                     <h4 className="text-sm font-black text-slate-900">{item.title}</h4>
                     <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
                   </div>

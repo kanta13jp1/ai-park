@@ -81,6 +81,13 @@ export interface SaaPitfall {
   correctApproach: string;
 }
 
+export interface SaaLimitFact {
+  id: string;
+  service: string;
+  limitValue: string;
+  detail: string;
+}
+
 // 出典: AWS Certified Solutions Architect - Associate (SAA-C03) 公式試験ガイド
 export const saaExamFacts: SaaExamFact[] = [
   { label: "試験コード", value: "SAA-C03", detail: "Associate レベル" },
@@ -1047,5 +1054,56 @@ export const saaPitfalls: SaaPitfall[] = [
     trap: "S3 クロスリージョンレプリケーション (CRR) を有効化したのに、既存の過去ファイルも自動で複製されると思う",
     whyWrong: "CRR は設定有効化「以降」に新規追加・更新されたオブジェクトのみを対象とし、既存オブジェクトは自動複製されません。",
     correctApproach: "送信元・送信先両方でバージョニングを有効化した上で、既存データには S3 Batch Replication を使う。",
+  },
+];
+
+export const saaKeyLimits: SaaLimitFact[] = [
+  {
+    id: "lim-lambda",
+    service: "AWS Lambda",
+    limitValue: "最大 15 分 / 10 GB",
+    detail: "1回の実行時間は最大15分。メモリは128MB〜10,240MB。15分超は Fargate / Batch を選択。",
+  },
+  {
+    id: "lim-sqs",
+    service: "Amazon SQS",
+    limitValue: "保持 4〜14 日 / 可視性 30秒〜12時間",
+    detail: "ロングポーリング最大20秒。最大メッセージサイズ 256KB（超える場合は S3 併用）。",
+  },
+  {
+    id: "lim-s3",
+    service: "Amazon S3",
+    limitValue: "単一オブジェクト最大 5 TB",
+    detail: "1回の PUT は最大 5GB。100MB以上はマルチパートアップロード推奨、5GB超は必須。",
+  },
+  {
+    id: "lim-vpc",
+    service: "VPC サブネット",
+    limitValue: "各サブネット 5 IP 予約済み",
+    detail: "先頭4個＋末尾1個が AWS 予約。最小 CIDR /28（16個）の場合、利用可能は 11 IP。",
+  },
+  {
+    id: "lim-ebs-gp3",
+    service: "EBS gp3",
+    limitValue: "3,000 IOPS / 125 MB/s 基準",
+    detail: "容量に関係なく無料で上記ベースラインを提供。IOPS とスループットを独立拡張可能。",
+  },
+  {
+    id: "lim-aurora",
+    service: "Amazon Aurora",
+    limitValue: "3 AZ に 6 コピー / レプリカ最大 15 個",
+    detail: "ストレージは自動拡張（最大128TB）。10GB単位で自動スケールしフェイルオーバーも高速。",
+  },
+  {
+    id: "lim-step",
+    service: "AWS Step Functions",
+    limitValue: "Standard 最大 1 年 / Express 最大 5 分",
+    detail: "長時間の人手承認や確実に1回実行は Standard、高頻度・短時間ストリーム処理は Express。",
+  },
+  {
+    id: "lim-glacier",
+    service: "S3 Glacier 取り出し時間",
+    limitValue: "Instant ミリ秒 / Flexible 数分〜12h / Deep 12〜48h",
+    detail: "最低保存期間は Instant・Flexible が 90日、Deep Archive が 180日。",
   },
 ];

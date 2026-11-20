@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import {
   CheckCircle2,
   XCircle,
@@ -92,6 +92,7 @@ export default function AwsSaaPracticeQuiz({
   const [examAnswers, setExamAnswers] = useState<Record<string, number[]>>({});
   const [examSubmitted, setExamSubmitted] = useState<boolean>(false);
   const [examRemainingSeconds, setExamRemainingSeconds] = useState<number>(EXAM_DURATION_SECONDS);
+  const recordedExamRef = useRef<boolean>(false);
 
   useEffect(() => {
     if (quizMode === "practice") {
@@ -148,6 +149,28 @@ export default function AwsSaaPracticeQuiz({
   const scaledScore = Math.round(100 + (correctCount / saaPracticeQuestions.length) * 900);
   const allCompleted = answeredCount === saaPracticeQuestions.length;
 
+  const onRecordMockExamRef = useRef(onRecordMockExam);
+  useEffect(() => {
+    onRecordMockExamRef.current = onRecordMockExam;
+  }, [onRecordMockExam]);
+
+  useEffect(() => {
+    if (quizMode === "exam" && examSubmitted && !recordedExamRef.current) {
+      recordedExamRef.current = true;
+      onRecordMockExamRef.current({
+        date: new Date().toLocaleString("ja-JP", {
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        correct: correctCount,
+        total: saaPracticeQuestions.length,
+        scaledScore,
+      });
+    }
+  }, [quizMode, examSubmitted, correctCount, scaledScore]);
+
   const handleSwitchMode = (mode: QuizMode) => {
     playCyberClick();
     setQuizMode(mode);
@@ -158,6 +181,7 @@ export default function AwsSaaPracticeQuiz({
       setExamAnswers({});
       setExamSubmitted(false);
       setExamRemainingSeconds(EXAM_DURATION_SECONDS);
+      recordedExamRef.current = false;
     }
   };
 
@@ -356,6 +380,7 @@ export default function AwsSaaPracticeQuiz({
                   setExamAnswers({});
                   setExamSubmitted(false);
                   setExamRemainingSeconds(EXAM_DURATION_SECONDS);
+                  recordedExamRef.current = false;
                 } else {
                   onResetQuiz();
                   setElapsedSeconds(0);
@@ -384,17 +409,6 @@ export default function AwsSaaPracticeQuiz({
                 playCyberClick();
                 setExamSubmitted(true);
                 setCurrentIndex(0);
-                onRecordMockExam({
-                  date: new Date().toLocaleString("ja-JP", {
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                  correct: correctCount,
-                  total: saaPracticeQuestions.length,
-                  scaledScore,
-                });
               }}
               className="shrink-0 px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-xs cursor-pointer"
             >
