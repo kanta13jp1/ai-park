@@ -186,6 +186,7 @@ export default function AwsInfoPage() {
   const [showBackupPanel, setShowBackupPanel] = useState<boolean>(false);
   const [backupInput, setBackupInput] = useState<string>("");
   const [copiedBackup, setCopiedBackup] = useState<boolean>(false);
+  const [copiedNotes, setCopiedNotes] = useState<boolean>(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -316,6 +317,35 @@ export default function AwsInfoPage() {
       setTimeout(() => setCopiedBackup(false), 2500);
     } catch {
       setImportMessage("クリップボードへのコピーに失敗しました。");
+    }
+  };
+
+  const hasAnyNotes = useMemo(
+    () => Object.values(progress.topicNotes).some((n) => n.trim().length > 0),
+    [progress.topicNotes]
+  );
+
+  const handleCopyNotesMarkdown = async () => {
+    playCyberClick();
+    const lines: string[] = ["# AWS SAA-C03 マイメモ", ""];
+    for (const d of saaDomains) {
+      const domainLines: string[] = [];
+      for (const t of d.topics) {
+        const note = progress.topicNotes[t.id]?.trim();
+        if (note) {
+          domainLines.push(`### ${t.title}`, note, "");
+        }
+      }
+      if (domainLines.length > 0) {
+        lines.push(`## Domain ${d.number}: ${d.title}`, "", ...domainLines);
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(lines.join("\n"));
+      setCopiedNotes(true);
+      setTimeout(() => setCopiedNotes(false), 2500);
+    } catch {
+      setImportMessage("マイメモのコピーに失敗しました。");
     }
   };
 
@@ -1381,6 +1411,46 @@ export default function AwsInfoPage() {
               </div>
             </section>
 
+            {/* 試験本番・直前チェックリスト */}
+            <section className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">
+                  試験本番・直前チェックリスト（時間配分＆受験のコツ）
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  SAA-C03 は長文シナリオが多いため、技術知識に加えて時間配分と迷ったときの戦略が合否を分けます。
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700">
+                {[
+                  {
+                    title: "1問2分ペース（65問で130分）",
+                    body: "30問経過時点で残り70分前後が目安。長考しそうな問題は「フラグ（見直しマーク）」を付けて仮選択し、最後まで走り切ってから戻るのが鉄則です。",
+                  },
+                  {
+                    title: "非採点問題（15問）に動揺しない",
+                    body: "65問のうち15問は採点対象外のパイロット問題です。見慣れない新サービスや難問が出ても「非採点問題かもしれない」と割り切ってリズムを崩さないことが大切です。",
+                  },
+                  {
+                    title: "要件のキーワードを先に拾う",
+                    body: "問題文末尾の「最もコスト効率が高い」「運用負荷を最小限に」「最もセキュアに」を先に読み、Well-Architected のどの柱が問われているかを特定します。",
+                  },
+                  {
+                    title: "ピアソンVUE 受験準備（オンライン/会場）",
+                    body: "オンライン受験（OnVUE）の場合は事前のシステムテストと静かな個室・本人確認書類が必須。英語試験から切り替える場合、AWS認定ポータルで事前申請すると試験時間+30分延長（ESL）が利用可能です。",
+                  },
+                ].map((tip) => (
+                  <div
+                    key={tip.title}
+                    className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 space-y-1.5"
+                  >
+                    <div className="font-black text-slate-900 text-xs sm:text-sm">{tip.title}</div>
+                    <p className="leading-relaxed text-slate-600">{tip.body}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
             {/* 定番アーキテクチャ設計パターン */}
             <section className="space-y-4">
               <div>
@@ -1516,7 +1586,27 @@ export default function AwsInfoPage() {
               </span>
             </div>
 
-            <div className="flex items-center space-x-2">
+            <div className="flex flex-wrap items-center gap-2">
+              {hasAnyNotes && (
+                <button
+                  type="button"
+                  onClick={handleCopyNotesMarkdown}
+                  className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-xs font-bold text-amber-800 transition-colors cursor-pointer"
+                >
+                  {copiedNotes ? (
+                    <>
+                      <Check size={13} className="text-emerald-600" />
+                      <span className="text-emerald-700">メモをコピーしました</span>
+                    </>
+                  ) : (
+                    <>
+                      <StickyNote size={13} />
+                      <span>マイメモをMDコピー</span>
+                    </>
+                  )}
+                </button>
+              )}
+
               <button
                 type="button"
                 onClick={handleCopyBackup}
