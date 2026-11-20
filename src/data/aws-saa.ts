@@ -928,6 +928,82 @@ export const saaPracticeQuestions: SaaQuestion[] = [
       "S3 ライフサイクルポリシーの「不完全なマルチパートアップロードの削除（AbortIncompleteMultipartUpload）」アクションを設定するだけで、指定日数後に未完了パーツが自動クリーンアップされ、追加の開発や運用コストなしでストレージ課金を削減できます。",
     keywords: ["S3ライフサイクル", "マルチパートアップロード削除", "不要コスト削減"],
   },
+  {
+    id: "q21",
+    domainId: "domain-1",
+    domainLabel: "Domain 1: セキュアなアーキテクチャ",
+    difficulty: "応用",
+    selectCount: 1,
+    question:
+      "アカウント A の Amazon S3 バケットに保存された暗号化オブジェクトを、別の AWS アカウント（アカウント B）の IAM ロールから安全に読み取れるようにする必要があります。現在 SSE-KMS（AWS マネージドキー `aws/s3`）で暗号化されていますが、アカウント B からアクセスできません。最も適切な解決策はどれですか？",
+    options: [
+      "AWS マネージドキー（aws/s3）のキーポリシーを編集し、アカウント B を許可する",
+      "カスタマーマネージドキー（CMK）を新規作成し、キーポリシーでアカウント B を許可したうえで S3 オブジェクトを再暗号化する",
+      "S3 バケットをパブリック読み取り可能に設定して暗号化を解除する",
+      "アカウント B 内にアカウント A と同じ名前の IAM ユーザーを作成する",
+    ],
+    correctIndices: [1],
+    explanation:
+      "AWS マネージドキー（`aws/s3`）はキーポリシーを変更できないため、クロスアカウントアクセスには利用できません。別の AWS アカウントと暗号化データを共有するには、カスタマーマネージドキー（CMK）を作成し、キーポリシー（およびアカウント B 側の IAM ポリシー）で権限を付与する必要があります。",
+    keywords: ["AWS KMS", "CMK", "クロスアカウント暗号化"],
+  },
+  {
+    id: "q22",
+    domainId: "domain-2",
+    domainLabel: "Domain 2: 弾力性に優れたアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "EC サイトの注文処理で、「決済処理」「在庫確保」「出荷手配」「人手による承認待ち（最大数日間）」のステップを順に実行し、途中で失敗した場合は前のステップを取り消す補償トランザクション（Saga パターン）を実装したいと考えています。サーバーレスで最も適したオーケストレーションサービスはどれですか？",
+    options: [
+      "Amazon SQS スタンダードキューのみで直接チェーンする",
+      "AWS Step Functions（Standard ワークフロー）を使用する",
+      "AWS Lambda 関数内から sleep() で数日間待機する",
+      "Amazon EventBridge のスケジュールルールのみで状態管理する",
+    ],
+    correctIndices: [1],
+    explanation:
+      "AWS Step Functions の Standard ワークフローは最大 1 年間状態を保持でき、人間による承認待ち（コールバックパターン）、リトライ、エラーハンドリング（Catch による補償トランザクション実行）を宣言的に実装できます。",
+    keywords: ["Step Functions", "人手承認・Saga", "ワークフロー制御"],
+  },
+  {
+    id: "q23",
+    domainId: "domain-3",
+    domainLabel: "Domain 3: 高パフォーマンスなアーキテクチャ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "オンラインゲームのリアルタイムランキング（リーダーボード）とセッション情報を、サブミリ秒の超低レイテンシで読み書きしたいと考えています。また、ノード障害時にも自動でフェイルオーバーし、データを永続化できるインメモリデータストアとして最適なのはどれですか？",
+    options: [
+      "Amazon ElastiCache for Memcached",
+      "Amazon ElastiCache for Redis / Valkey（マルチ AZ 有効）",
+      "Amazon RDS for MySQL（汎用 SSD gp3）",
+      "Amazon S3 Express One Zone",
+    ],
+    correctIndices: [1],
+    explanation:
+      "ElastiCache for Redis / Valkey は Sorted Sets（ランキング機能）、マルチ AZ 自動フェイルオーバー、レプリケーション、スナップショットによる永続化に対応しています。Memcached はシンプルなキャッシュ向けでマルチ AZ フェイルオーバーや永続化・Sorted Sets に非対応です。",
+    keywords: ["ElastiCache Redis/Valkey", "Sorted Sets", "マルチAZ"],
+  },
+  {
+    id: "q24",
+    domainId: "domain-4",
+    domainLabel: "Domain 4: コストを最適化したアーキテクチャ",
+    difficulty: "基礎",
+    selectCount: 1,
+    question:
+      "複数の AWS アカウントで数百台の Amazon EC2 インスタンスや EBS ボリューム、Lambda 関数を運用しています。過去の使用率メトリクスを機械学習で分析し、過剰プロビジョニング（スペック過多）となっているリソースを自動特定して最適なインスタンスタイプへのライトサイジング提案を受けたい場合、どのサービスを有効化すべきですか？",
+    options: [
+      "AWS Compute Optimizer",
+      "AWS CloudTrail",
+      "Amazon Inspector",
+      "AWS Budgets",
+    ],
+    correctIndices: [0],
+    explanation:
+      "AWS Compute Optimizer は CloudWatch の履歴メトリクスを分析し、EC2・Auto Scaling・EBS・Lambda・ECS on Fargate の過剰/過少プロビジョニングを検出して最適なサイズ変更（ライトサイジング）を推奨します。",
+    keywords: ["Compute Optimizer", "ライトサイジング", "過剰プロビジョニング削減"],
+  },
 ];
 
 export const saaOfficialResources: SaaOfficialResource[] = [

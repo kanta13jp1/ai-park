@@ -91,6 +91,7 @@ export default function CertificationPracticeQuiz({
   // 模擬試験モード用ステート
   const [examAnswers, setExamAnswers] = useState<Record<string, number[]>>({});
   const [examSubmitted, setExamSubmitted] = useState<boolean>(false);
+  const [confirmSubmitExam, setConfirmSubmitExam] = useState<boolean>(false);
   const [examRemainingSeconds, setExamRemainingSeconds] = useState<number>(examDurationSeconds);
   const recordedExamRef = useRef<boolean>(false);
 
@@ -430,12 +431,24 @@ export default function CertificationPracticeQuiz({
                 type="button"
                 onClick={() => {
                   playCyberClick();
+                  if (answeredCount < questions.length && !confirmSubmitExam) {
+                    setConfirmSubmitExam(true);
+                    setTimeout(() => setConfirmSubmitExam(false), 4000);
+                    return;
+                  }
+                  setConfirmSubmitExam(false);
                   setExamSubmitted(true);
                   setCurrentIndex(0);
                 }}
-                className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 shadow-xs cursor-pointer"
+                className={`px-4 py-2 rounded-xl text-white text-xs font-bold shadow-xs cursor-pointer transition-colors ${
+                  confirmSubmitExam
+                    ? "bg-amber-600 hover:bg-amber-700"
+                    : "bg-indigo-600 hover:bg-indigo-700"
+                }`}
               >
-                テストを提出して採点する ({answeredCount}/{questions.length})
+                {confirmSubmitExam
+                  ? `未回答あり・もう一度押すと採点 (${answeredCount}/${questions.length})`
+                  : `テストを提出して採点する (${answeredCount}/${questions.length})`}
               </button>
             </div>
           </div>

@@ -36,9 +36,15 @@ export default function CertificationFlashcards({
   answerLabel = "推奨サービス・コマンド",
 }: CertificationFlashcardsProps) {
   const [onlyUnmastered, setOnlyUnmastered] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("すべて");
   const [shuffledOrder, setShuffledOrder] = useState<string[] | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+
+  const categories = useMemo(() => {
+    const uniq = Array.from(new Set(items.map((c) => c.category)));
+    return ["すべて", ...uniq];
+  }, [items]);
 
   const orderedCards = useMemo<CertFlashcardItem[]>(() => {
     if (!shuffledOrder) return items;
@@ -47,9 +53,12 @@ export default function CertificationFlashcards({
   }, [items, shuffledOrder]);
 
   const cards = useMemo(() => {
-    if (!onlyUnmastered) return orderedCards;
-    return orderedCards.filter((c) => !masteredKeywords.includes(c.keyword));
-  }, [orderedCards, onlyUnmastered, masteredKeywords]);
+    return orderedCards.filter((c) => {
+      if (selectedCategory !== "すべて" && c.category !== selectedCategory) return false;
+      if (onlyUnmastered && masteredKeywords.includes(c.keyword)) return false;
+      return true;
+    });
+  }, [orderedCards, selectedCategory, onlyUnmastered, masteredKeywords]);
 
   const safeIndex = Math.min(currentIndex, Math.max(0, cards.length - 1));
   const currentCard = cards[safeIndex];
@@ -166,6 +175,34 @@ export default function CertificationFlashcards({
         </div>
       </div>
 
+      {/* カテゴリフィルター */}
+      {categories.length > 2 && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {categories.map((cat) => {
+            const active = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => {
+                  playCyberClick();
+                  setSelectedCategory(cat);
+                  setCurrentIndex(0);
+                  setIsFlipped(false);
+                }}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  active
+                    ? "bg-indigo-600 text-white shadow-xs"
+                    : "bg-white text-slate-600 border border-slate-200 hover:border-indigo-300 hover:text-indigo-700"
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* カード本体 */}
       {!currentCard ? (
         <div className="bg-white rounded-2xl border border-emerald-200 p-10 text-center space-y-3">
@@ -180,6 +217,7 @@ export default function CertificationFlashcards({
             type="button"
             onClick={() => {
               setOnlyUnmastered(false);
+              setSelectedCategory("すべて");
               setCurrentIndex(0);
             }}
             className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
