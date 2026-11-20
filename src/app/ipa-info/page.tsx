@@ -84,6 +84,9 @@ const DEFAULT_PROGRESS: IpaProgress = {
     sc: [],
     db: [],
     nw: [],
+    sa: [],
+    pm: [],
+    sm: [],
   },
 };
 
@@ -127,6 +130,7 @@ const COMPARISON_CATEGORIES = [
   "すべて",
   "ネットワーク・セキュリティ",
   "開発・データベース",
+  "マネジメント・戦略",
   "コンピュータ基礎",
 ] as const;
 
@@ -173,7 +177,7 @@ function normalizeExamHistoryArray(raw: unknown): CertMockExamRecord[] {
 
 function normalizeMockExamHistory(raw: unknown): Record<IpaExamId, CertMockExamRecord[]> {
   if (!raw || typeof raw !== "object") {
-    return { ip: [], fe: [], ap: [], sc: [], db: [], nw: [] };
+    return { ip: [], fe: [], ap: [], sc: [], db: [], nw: [], sa: [], pm: [], sm: [] };
   }
   const obj = raw as Record<string, unknown>;
   return {
@@ -183,6 +187,9 @@ function normalizeMockExamHistory(raw: unknown): Record<IpaExamId, CertMockExamR
     sc: normalizeExamHistoryArray(obj.sc),
     db: normalizeExamHistoryArray(obj.db),
     nw: normalizeExamHistoryArray(obj.nw),
+    sa: normalizeExamHistoryArray(obj.sa),
+    pm: normalizeExamHistoryArray(obj.pm),
+    sm: normalizeExamHistoryArray(obj.sm),
   };
 }
 
@@ -198,6 +205,9 @@ export default function IpaInfoPage() {
     "sc-sec": true,
     "db-design": true,
     "nw-arch": true,
+    "sa-req": true,
+    "pm-plan": true,
+    "sm-ops": true,
   });
   const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
   const [onlyWithNotesTopics, setOnlyWithNotesTopics] = useState<boolean>(false);
@@ -534,13 +544,13 @@ export default function IpaInfoPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="情報処理技術者試験 情報局"
-        subtitle="経産省（IPA）IP・FE・AP・高度試験（SC / DB / NW）統合学習ハブ"
+        subtitle="経産省（IPA）IP・FE・AP・高度試験（SC / DB / NW / SA / PM / SM）統合学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
-          message="現在 IPA 情報処理技術者試験（ITパスポート / 基本情報 / 応用情報 / 安全確保支援士 / データベース / ネットワーク）の公式シラバスに基づく統合学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
+          message="現在 IPA 情報処理技術者試験（全9区分：IP / FE / AP / SC / DB / NW / SA / PM / SM）の公式シラバスに基づく統合学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
           statusType="construction"
         />
 

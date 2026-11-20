@@ -100,13 +100,13 @@ export default function HowToPage() {
     {
       id: "ipa-info",
       title: "情報処理技術者試験情報局",
-      desc: "ITパスポート〜応用情報・高度試験（SC/DB/NW）の要点整理・模擬試験！",
+      desc: "ITパスポート〜応用情報・高度6区分（SC/DB/NW/SA/PM/SM）の要点整理・模擬試験！",
       icon: <ScrollText className="text-indigo-600" size={32} />,
       iconBg: "bg-indigo-50 border-indigo-100",
       href: "/ipa-info",
       badge: "🚧 工事中",
       badgeColor: "bg-indigo-100 text-indigo-700",
-      tags: ["IP/FE/AP", "SC/DB/NW", "高度試験"],
+      tags: ["IP/FE/AP", "SC/DB/NW", "SA/PM/SM"],
       highlights: "IPA 公式シラバスに基づく統合学習ハブ（社内受験補助ルール等は準備中）",
     },
     {
