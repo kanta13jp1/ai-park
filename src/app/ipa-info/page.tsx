@@ -81,6 +81,9 @@ const DEFAULT_PROGRESS: IpaProgress = {
     ip: [],
     fe: [],
     ap: [],
+    sc: [],
+    db: [],
+    nw: [],
   },
 };
 
@@ -170,13 +173,16 @@ function normalizeExamHistoryArray(raw: unknown): CertMockExamRecord[] {
 
 function normalizeMockExamHistory(raw: unknown): Record<IpaExamId, CertMockExamRecord[]> {
   if (!raw || typeof raw !== "object") {
-    return { ip: [], fe: [], ap: [] };
+    return { ip: [], fe: [], ap: [], sc: [], db: [], nw: [] };
   }
   const obj = raw as Record<string, unknown>;
   return {
     ip: normalizeExamHistoryArray(obj.ip),
     fe: normalizeExamHistoryArray(obj.fe),
     ap: normalizeExamHistoryArray(obj.ap),
+    sc: normalizeExamHistoryArray(obj.sc),
+    db: normalizeExamHistoryArray(obj.db),
+    nw: normalizeExamHistoryArray(obj.nw),
   };
 }
 
@@ -189,6 +195,9 @@ export default function IpaInfoPage() {
     "ip-strategy": true,
     "fe-cs": true,
     "ap-arch": true,
+    "sc-sec": true,
+    "db-design": true,
+    "nw-arch": true,
   });
   const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
   const [onlyWithNotesTopics, setOnlyWithNotesTopics] = useState<boolean>(false);
@@ -525,13 +534,13 @@ export default function IpaInfoPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="情報処理技術者試験 情報局"
-        subtitle="経産省（IPA）ITパスポート・基本情報・応用情報 統合学習ハブ"
+        subtitle="経産省（IPA）IP・FE・AP・高度試験（SC / DB / NW）統合学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
-          message="現在 IPA 情報処理技術者試験（ITパスポート / 基本情報技術者 / 応用情報技術者）の公式シラバスに基づく統合学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
+          message="現在 IPA 情報処理技術者試験（ITパスポート / 基本情報 / 応用情報 / 安全確保支援士 / データベース / ネットワーク）の公式シラバスに基づく統合学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
           statusType="construction"
         />
 
@@ -546,7 +555,7 @@ export default function IpaInfoPage() {
               各区分の進捗・模試履歴は個別に記録されます
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
             {ipaExamMetas.map((meta) => {
               const isSelected = meta.id === selectedExam;
               const examTopics = ipaDomains
