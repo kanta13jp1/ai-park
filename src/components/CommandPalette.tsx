@@ -158,18 +158,18 @@ const paletteItems: PaletteItem[] = [
   },
   {
     id: "mcp-hub",
-    title: "MCP外部ツール連携ガイド",
+    title: "MCP外部ツール連携ガイド (仕組み・mcp_config.json・安全確認)",
     category: "ツール & ガイド",
     href: "/mcp-hub",
-    description: "Antigravity と外部ツールをつなぐ MCP の設定（工事中：準備中）",
+    description: "MCP 仕組みガイド・mcp_config.json 設定テンプレート 3 種・安全利用チェックリスト（社内許可 MCP サーバー一覧は工事中）",
     icon: Terminal,
   },
   {
     id: "aws-info",
-    title: "AWS・クラウド情報局 (SAA-C03学習)",
+    title: "AWS・クラウド情報局 (CLF-C02/SAA-C03/SAP-C02)",
     category: "Academy & 学習",
     href: "/aws-info",
-    description: "SAA-C03 学習ハブ・フラッシュカード・模擬試験（社内AWSルール等は工事中）",
+    description: "CLF-C02 (Cloud Practitioner) / SAA-C03 / SAP-C02 (Professional) 統合学習ハブ・フラッシュカード・模擬試験（社内AWSルール等は工事中）",
     icon: Compass,
   },
   {
@@ -209,7 +209,7 @@ const paletteItems: PaletteItem[] = [
     title: "Antigravity情報局",
     category: "ツール & ガイド",
     href: "/antigravity-info",
-    description: "Antigravity 機能解説・Agent Swarms (/swarm)・実務実行例・ショートカット/FAQ（社内お知らせ等は工事中）",
+    description: "Antigravity 機能解説・Agent Swarms (/swarm) 並列/ワークスペース運用・実務実行例・FAQ（社内お知らせ等は工事中）",
     icon: Sparkles,
   },
   {

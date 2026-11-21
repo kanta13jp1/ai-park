@@ -14,6 +14,7 @@ import {
   Calendar,
   TrendingUp,
   Building2,
+  Plug,
 } from "lucide-react";
 
 export default function AgentToolsHubPage() {
@@ -47,6 +48,21 @@ export default function AgentToolsHubPage() {
       badgeColor: "bg-emerald-100 text-emerald-800 border-emerald-200",
       statusType: "active",
       tags: ["#アイデア起票", "#メンバー募集", "#AI推進担当へのフィードバック"],
+    },
+    {
+      id: "mcp-hub",
+      title: "MCP 外部ツール連携",
+      desc: "Antigravity と外部ツールをつなぐ MCP の仕組み・設定方法・安全確認はこちら！",
+      detail:
+        "Model Context Protocol（MCP）の仕組み＆構成ガイド、mcp_config.json 設定テンプレート 3 種、安全利用チェックリストを掲載しています（社内で許可する MCP サーバー一覧・申請フローは準備中です）。",
+      icon: Plug,
+      iconColor: "text-teal-600",
+      iconBg: "bg-teal-50 border-teal-200",
+      href: "/mcp-hub",
+      badge: "🚧 工事中",
+      badgeColor: "bg-amber-100 text-amber-800 border-amber-200",
+      statusType: "construction",
+      tags: ["#MCP仕組みガイド", "#mcp_config.json", "#安全チェックリスト", "#許可一覧準備中"],
     },
     {
       id: "agent-cases",
