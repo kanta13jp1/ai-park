@@ -32,6 +32,7 @@ import HeroBanner from "@/components/HeroBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
+import AgentSwarmsSection from "@/components/antigravity/AgentSwarmsSection";
 import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
 import {
   antigravitySurfaces,
@@ -41,6 +42,9 @@ import {
   antigravityShortcuts,
   antigravityConfigTemplates,
   antigravityFaqs,
+  swarmWorkspaceModes,
+  swarmRolePatterns,
+  swarmLifecycleSteps,
   officialDocLinks,
   type FeatureCategory,
   type ExampleCategory,
@@ -202,7 +206,7 @@ export default function AntigravityInfoPage() {
                   機能の使い分けを知り、日々の開発・調査・検証をエージェントと進める
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  Antigravity 2.0・IDE・CLI（<code className="text-cyan-300 font-mono">agy</code>）・SDK の全体像から、Skills・Rules・MCP・Subagents・Browser Automation などの実務での組み合わせ方までを整理しています。
+                  Antigravity 2.0・IDE・CLI（<code className="text-cyan-300 font-mono">agy</code>）・SDK の全体像から、Skills・Rules・MCP・Subagents・Agent Swarms（<code className="text-cyan-300 font-mono">/swarm</code>）・Browser Automation などの実務での組み合わせ方までを整理しています。
                 </p>
               </div>
 
@@ -412,6 +416,18 @@ export default function AntigravityInfoPage() {
                 </div>
               </div>
             </section>
+
+            {/* Agent Swarms (/swarm) 並列マルチエージェント運用ガイド */}
+            <AgentSwarmsSection
+              workspaceModes={swarmWorkspaceModes}
+              rolePatterns={swarmRolePatterns}
+              lifecycleSteps={swarmLifecycleSteps}
+              onJumpToSwarmExamples={() => {
+                setActiveTab("examples");
+                setExampleCategory("すべて");
+                setSearchQuery("Swarm");
+              }}
+            />
 
             {/* 次に見るアクション */}
             <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
