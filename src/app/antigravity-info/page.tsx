@@ -33,6 +33,8 @@ import UnderConstructionAlert from "@/components/UnderConstructionAlert";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
 import AgentSwarmsSection from "@/components/antigravity/AgentSwarmsSection";
+import WorkflowModeAdvisor from "@/components/antigravity/WorkflowModeAdvisor";
+import InlineCodeText from "@/components/antigravity/InlineCodeText";
 import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
 import {
   antigravitySurfaces,
@@ -45,6 +47,7 @@ import {
   swarmWorkspaceModes,
   swarmRolePatterns,
   swarmLifecycleSteps,
+  workflowAdvisorScenarios,
   officialDocLinks,
   type FeatureCategory,
   type ExampleCategory,
@@ -342,14 +345,16 @@ export default function AntigravityInfoPage() {
                         </div>
 
                         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                          {surface.description}
+                          <InlineCodeText text={surface.description} />
                         </p>
 
                         <ul className="space-y-1.5 pt-1">
                           {surface.highlights.map((hl) => (
                             <li key={hl} className="flex items-start gap-2 text-xs text-slate-700">
                               <CheckCircle2 size={14} className="text-emerald-500 shrink-0 mt-0.5" />
-                              <span>{hl}</span>
+                              <span>
+                                <InlineCodeText text={hl} />
+                              </span>
                             </li>
                           ))}
                         </ul>
@@ -374,6 +379,9 @@ export default function AntigravityInfoPage() {
                 })}
               </div>
             </section>
+
+            {/* 目的に合う実行モード診断（WorkflowModeAdvisor） */}
+            <WorkflowModeAdvisor scenarios={workflowAdvisorScenarios} />
 
             {/* 操作モダリティ使い分け早見表 */}
             <section className="space-y-4">
@@ -405,7 +413,10 @@ export default function AntigravityInfoPage() {
                             {row.modality}
                           </td>
                           <td className="py-3.5 px-4 font-mono text-xs text-indigo-700">
-                            {row.trigger}
+                            <InlineCodeText
+                              text={row.trigger}
+                              codeClassName="font-mono bg-indigo-50 text-indigo-800 px-1 py-0.5 rounded"
+                            />
                           </td>
                           <td className="py-3.5 px-4 text-slate-600">{row.scope}</td>
                           <td className="py-3.5 px-4 text-slate-700">{row.bestUseCase}</td>
@@ -586,7 +597,9 @@ export default function AntigravityInfoPage() {
                         {feat.details.map((detail) => (
                           <li key={detail} className="flex items-start gap-2 text-xs text-slate-700">
                             <CheckCircle2 size={14} className="text-indigo-500 shrink-0 mt-0.5" />
-                            <span>{detail}</span>
+                            <span>
+                              <InlineCodeText text={detail} />
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -723,7 +736,7 @@ export default function AntigravityInfoPage() {
                         <ol className="space-y-1.5 text-xs text-slate-700 list-decimal list-inside">
                           {ex.workflowSteps.map((step) => (
                             <li key={step} className="leading-relaxed">
-                              {step}
+                              <InlineCodeText text={step} />
                             </li>
                           ))}
                         </ol>
@@ -738,7 +751,9 @@ export default function AntigravityInfoPage() {
                           {ex.checkPoints.map((cp) => (
                             <li key={cp} className="flex items-start gap-1.5 leading-relaxed">
                               <CheckCircle2 size={13} className="text-emerald-600 shrink-0 mt-0.5" />
-                              <span>{cp}</span>
+                              <span>
+                                <InlineCodeText text={cp} />
+                              </span>
                             </li>
                           ))}
                         </ul>
@@ -926,7 +941,7 @@ export default function AntigravityInfoPage() {
                         </button>
                         {isOpen && (
                           <div className="px-5 pb-4 pt-1 border-t border-slate-100 text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50/40">
-                            {faq.answer}
+                            <InlineCodeText text={faq.answer} />
                           </div>
                         )}
                       </div>
@@ -961,6 +976,18 @@ export default function AntigravityInfoPage() {
                 className="text-xs font-bold text-cyan-700 hover:text-cyan-800 px-3 py-1.5 rounded-lg bg-cyan-50 border border-cyan-200"
               >
                 MCP 連携ハブ
+              </Link>
+              <Link
+                href="/agent-cases"
+                className="text-xs font-bold text-emerald-700 hover:text-emerald-800 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200"
+              >
+                エージェント・Swarm ガイド
+              </Link>
+              <Link
+                href="/troubleshooting"
+                className="text-xs font-bold text-slate-700 hover:text-slate-900 px-3 py-1.5 rounded-lg bg-slate-100 border border-slate-200"
+              >
+                Windows トラブルシューター
               </Link>
             </div>
           </div>

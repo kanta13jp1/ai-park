@@ -67,7 +67,7 @@ const siteSearchIndex: SearchIndexItem[] = [
     category: "サポート",
     href: "/antigravity-info",
     description: "Antigravity 機能解説・Agent Swarms (/swarm)・実務の実行例・ショートカット/設定テンプレート・FAQ を掲載中（社内向けお知らせ・社内FAQは工事中）",
-    keywords: ["情報局", "antigravity", "機能解説", "実行例", "ショートカット", "faq", "skills", "rules", "mcp", "agy", "cli", "subagents", "sandbox", "browser", "テンプレート", "相談", "office hour", "サポート", "swarm", "/swarm", "agent swarms", "並列", "ワークスペース", "共有ボード", "workspace", "share", "branch"],
+    keywords: ["情報局", "antigravity", "機能解説", "実行例", "ショートカット", "faq", "skills", "rules", "mcp", "agy", "cli", "subagents", "sandbox", "browser", "テンプレート", "相談", "office hour", "サポート", "swarm", "/swarm", "agent swarms", "並列", "ワークスペース", "共有ボード", "workspace", "share", "branch", "run_workflow", "ワークフロー診断"],
   },
   {
     title: "AWS・クラウド情報局 (CLF-C02/SAA-C03/SAP-C02)",
