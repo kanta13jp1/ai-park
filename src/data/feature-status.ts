@@ -260,6 +260,18 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     releaseCondition: "社内の AWS 利用ルール・相談窓口の決定",
   },
   {
+    id: "gcp-info",
+    name: "GCP・Google Cloud情報局",
+    href: "/gcp-info",
+    isVerified: false,
+    status: "in_development",
+    evidence: "",
+    currentBadge: "🚧 工事中",
+    disclaimer: "【一部工事中】Google Cloud 認定（CDL / ACE / PCA）学習ハブを掲載中。社内の GCP 利用ルールや資格取得支援制度は決まり次第掲載します。",
+    releaseDate: "未定",
+    releaseCondition: "社内の GCP 利用ルール・資格取得支援制度の確定",
+  },
+  {
     id: "lpic-info",
     name: "LPIC・Linux情報局",
     href: "/lpic-info",

@@ -173,6 +173,14 @@ const paletteItems: PaletteItem[] = [
     icon: Compass,
   },
   {
+    id: "gcp-info",
+    title: "GCP・Google Cloud情報局 (CDL/ACE/PCA)",
+    category: "Academy & 学習",
+    href: "/gcp-info",
+    description: "CDL / ACE / PCA 統合学習ハブ・練習クイズ（社内GCPルール等は工事中）",
+    icon: Compass,
+  },
+  {
     id: "lpic-info",
     title: "LPIC・Linux情報局 (LPIC-1学習)",
     category: "Academy & 学習",

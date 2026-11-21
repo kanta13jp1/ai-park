@@ -77,6 +77,13 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["aws", "saa", "saa-c03", "クラウド", "試験", "模擬試験", "クイズ", "flashcards", "well-architected"],
   },
   {
+    title: "GCP・Google Cloud情報局 (CDL/ACE/PCA)",
+    category: "資格・Google Cloud",
+    href: "/gcp-info",
+    description: "Google Cloud 認定資格（CDL / ACE / PCA）統合学習ハブ・練習クイズ・比較表を掲載中（社内GCP利用ルール等は工事中）",
+    keywords: ["gcp", "google cloud", "cdl", "ace", "pca", "cloud digital leader", "associate cloud engineer", "professional cloud architect", "試験", "クイズ", "flashcards"],
+  },
+  {
     title: "LPIC・Linux情報局 (LPIC-1学習ハブ)",
     category: "資格・Linux",
     href: "/lpic-info",

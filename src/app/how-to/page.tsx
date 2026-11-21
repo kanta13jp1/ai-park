@@ -86,6 +86,18 @@ export default function HowToPage() {
       highlights: "社内での AWS・クラウド活用の情報（準備中）",
     },
     {
+      id: "gcp-info",
+      title: "GCP・Google Cloud情報局",
+      desc: "CDL・ACE・PCA（Google Cloud 認定資格）の要点整理・比較表・模擬試験！",
+      icon: <Cloud className="text-cyan-600" size={32} />,
+      iconBg: "bg-cyan-50 border-cyan-100",
+      href: "/gcp-info",
+      badge: "🚧 工事中",
+      badgeColor: "bg-cyan-100 text-cyan-700",
+      tags: ["CDL", "ACE", "PCA"],
+      highlights: "Google Cloud 公式試験ガイドに基づく統合学習ハブ（社内利用ルール等は準備中）",
+    },
+    {
       id: "lpic-info",
       title: "LPIC・Linux情報局",
       desc: "LPIC-1（101/102）・LPIC-2（201/202）の要点整理・暗記カード・模擬試験！",
