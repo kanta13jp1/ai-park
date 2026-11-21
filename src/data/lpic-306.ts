@@ -407,6 +407,42 @@ export const lpic306QuickLookup: CertFlashcardItem[] = [
     recommended: "net.ipv4.ip_nonlocal_bind = 1",
     reason: "Keepalived と HAProxy を組み合わせる際の必須パラメータ。",
   },
+  {
+    keyword: "カーネル空間で動作する LVS (IPVS) の仮想サービスおよびリアルサーバの転送テーブルを管理・確認するコマンド",
+    category: "361: 負荷分散",
+    recommended: "ipvsadm",
+    reason: "`ipvsadm -Ln` で仮想 IP、バックエンド実サーバ、振り分け方式、アクティブ接続数を確認できる。",
+  },
+  {
+    keyword: "Linux イニシエータから iSCSI ターゲットのディスカバリ、ログイン、セッション確認を行うコマンド",
+    category: "362: iSCSI",
+    recommended: "iscsiadm (-m discovery / node / session)",
+    reason: "まず `-m discovery -t st -p <IP>` でターゲットを取得し、`-m node --login` でセッションを確立する。",
+  },
+  {
+    keyword: "/etc/drbd.d/*.res の設定に基づき DRBD メタデータ作成・リソース起動・役割切替を行う管理コマンド",
+    category: "362: DRBD",
+    recommended: "drbdadm",
+    reason: "`create-md` で初期化、`up` で起動、`primary` / `secondary` で昇格・降格、`status` で同期確認を行う。",
+  },
+  {
+    keyword: "GlusterFS でサーバ同士を信頼済みストレージプールへ追加し、共有ボリュームを作成する一連のコマンド",
+    category: "363: GlusterFS",
+    recommended: "gluster peer probe / gluster volume create",
+    reason: "ノード追加後に `replica` 等を指定してボリュームを作成し、`gluster volume start` で公開する。",
+  },
+  {
+    keyword: "Linux ソフトウェア RAID の構築・監視・障害ディスク交換と、同期状態を確認する /proc ファイル",
+    category: "364: 高度 RAID",
+    recommended: "mdadm / /proc/mdstat",
+    reason: "`/proc/mdstat` でアレイ状態やリビルド進捗を確認し、`mdadm --manage` で `--fail` / `--remove` / `--add` を行う。",
+  },
+  {
+    keyword: "HDD/SSD の S.M.A.R.T. 自己診断属性を取得し、ディスク故障の予兆監視を行うコマンドとデーモン",
+    category: "364: 単一ノード HA",
+    recommended: "smartctl / smartd",
+    reason: "`smartctl -a /dev/sda` で詳細属性を確認し、`smartd` で不良セクタ等の異常兆候を監視・通知する。",
+  },
 ];
 
 export const lpic306PracticeQuestions: CertQuestion[] = [
@@ -483,6 +519,24 @@ export const lpic306PracticeQuestions: CertQuestion[] = [
     keywords: ["LVS", "Direct Routing", "arp_ignore"],
   },
   {
+    id: "q-361-5",
+    domainId: "topic-361",
+    domainLabel: "361: HA クラスタ管理",
+    difficulty: "標準",
+    selectCount: 2,
+    question: "Pacemaker + Corosync クラスタの診断・検証および負荷分散制御に関して正しい記述を 2 つ選んでください。",
+    options: [
+      "`corosync-quorumtool` や `corosync-cfgtool` を用いて、クラスタのクォーラム状態（定足数・投票数）や通信リングの健全性を確認できる",
+      "`crm_simulate` を使用すると、ノード障害やメンテナンス移行時にクラスタリソースがどのように再配置されるかを事前検証できる",
+      "Pacemaker の `Location` 制約は、あるリソースを別のリソースと必ず同一ノードに配置することを強制する制約である",
+      "HAProxy はカーネル空間の Netfilter フックのみで動作するため、HTTP ヘッダや URL パスに基づく L7 ルーティングは行えない",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "`corosync-quorumtool` / `corosync-cfgtool` は Corosync のクォーラムと通信リング確認に、`crm_simulate` はリソース遷移のシミュレーションに使用されます。同一ノード配置の強制は `Colocation` 制約、HTTP ヘッダ検査等の L7 負荷分散は `HAProxy` の特徴です。",
+    keywords: ["corosync-quorumtool", "crm_simulate", "Pacemaker"],
+  },
+  {
     id: "q-362-1",
     domainId: "topic-362",
     domainLabel: "362: HA クラスタストレージ",
@@ -525,6 +579,42 @@ export const lpic306PracticeQuestions: CertQuestion[] = [
     explanation:
       "`multipath -ll` は現在のマルチパストポロジと各経路のリンク状態・優先度グループの詳細を表示します。",
     keywords: ["DM-Multipath", "multipath -ll", "SAN"],
+  },
+  {
+    id: "q-362-4",
+    domainId: "topic-362",
+    domainLabel: "362: HA クラスタストレージ",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Linux ノードを iSCSI イニシエータとして構成し、リモートストレージのターゲット（IQN）を検出（ディスカバリ）してセッションへログインする `iscsiadm` コマンドの手順として正しいものはどれですか？",
+    options: [
+      "`iscsiadm -m discovery -t st -p <ターゲットIP>` でターゲット一覧を検出し、`iscsiadm -m node -T <IQN> -p <ターゲットIP> --login` で接続する",
+      "`iscsiadm -m target --create <IQN>` を実行してから `mkfs.gfs2` で直接フォーマットする",
+      "`multipath -ll` で iSCSI ターゲットへ CHAP パスワードを設定してログインする",
+      "`drbdadm create-md` をイニシエータ側で実行すると自動的に iSCSI セッションが確立される",
+    ],
+    correctIndices: [0],
+    explanation:
+      "iSCSI イニシエータではまず `discovery` モード（`-m discovery -t st -p <IP>`）でターゲットを検出し、続いて `node` モード（`--login`）でセッションを確立します。接続済みセッションの確認には `iscsiadm -m session` を使用します。",
+    keywords: ["iscsiadm", "iSCSI", "SendTargets"],
+  },
+  {
+    id: "q-362-5",
+    domainId: "topic-362",
+    domainLabel: "362: HA クラスタストレージ",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "DRBD および DM-Multipath によるクラスタストレージの構築と運用に関して正しい記述を 2 つ選んでください。",
+    options: [
+      "DRBD リソースを初回構築する際は、`drbdadm create-md <リソース名>` でメタデータ領域を作成してから `drbdadm up` で有効化する",
+      "DM-Multipath で複数の物理パスが `/dev/mapper/mpatha` 等へ集約された後、その上のパーティション用デバイスマップを作成する際に `kpartx` が使われることがある",
+      "DRBD の `Protocol A` はローカルとリモート双方のディスク書き込み完了を待つため、最もデータ損失リスクが低い",
+      "`ext4` ファイルシステムを複数ノードから同時に読み書きマウントする場合でも、`multipathd` が稼働していればファイルロックが自動で整合される",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "DRBD は `drbdadm create-md` でメタデータ初期化後に `drbdadm up` で起動します。また `kpartx` はマルチパスデバイス上のパーティション用マッピング作成に使われます。`Protocol A` は非同期複製であり、`multipathd` は複数ノード間ロックではなく経路冗長化を担います。",
+    keywords: ["drbdadm", "kpartx", "DM-Multipath"],
   },
   {
     id: "q-363-1",
@@ -574,6 +664,42 @@ export const lpic306PracticeQuestions: CertQuestion[] = [
     explanation:
       "まず `gluster peer probe` で各ノードを信頼済みプール（Trusted Storage Pool）へ参加させ、その後に各ノードの Brick を指定して `gluster volume create` を実行します。",
     keywords: ["GlusterFS", "gluster peer probe", "Brick"],
+  },
+  {
+    id: "q-363-4",
+    domainId: "topic-363",
+    domainLabel: "363: HA 分散ストレージ",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "GlusterFS において、単一ノードの障害が発生してもデータアクセスを継続できるよう、同一ファイルを複数の異なるサーバ上の Brick へ自動的に複製して冗長性を確保するボリュームタイプはどれですか？",
+    options: [
+      "Replicated Volume（レプリケーションボリューム）",
+      "Distributed Volume（分散ボリューム、複製なし）",
+      "Striped Volume（ストライプボリューム、複製なし）",
+      "Local Loopback Volume",
+    ],
+    correctIndices: [0],
+    explanation:
+      "GlusterFS の標準 `Distributed` ボリュームはファイルを各 Brick へ分散配置するだけで冗長性がありません。耐障害性を持たせるには `replica <N>` を指定した `Replicated` ボリューム（またはイレイジャー符号化を用いる `Dispersed` ボリューム）を構成します。",
+    keywords: ["GlusterFS", "Replicated Volume", "Brick"],
+  },
+  {
+    id: "q-363-5",
+    domainId: "topic-363",
+    domainLabel: "363: HA 分散ストレージ",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "Ceph 分散ストレージのコンポーネントおよび管理コマンドに関して正しい記述を 2 つ選んでください。",
+    options: [
+      "`rbd` コマンドを使用して、Ceph クラスタ上のプール内に仮想マシン等からマウント可能な RADOS ブロックデバイスイメージを作成・マップできる",
+      "`ceph status`（または `ceph -s`）を実行すると、クラスタの全体健全性（`HEALTH_OK` 等）、MON のクォーラム状態、OSD の稼働数、PG の状態を確認できる",
+      "`RADOSGW (RGW)` は POSIX 準拠のカーネルファイルシステムをマウントするための専用プロトコルであり、S3 API には非対応である",
+      "`Ceph` では単一の `MDS` ノードがすべてのブロックデバイス（RBD）とオブジェクト（RGW）のデータ本体を仲介して転送する",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "`rbd` コマンドでブロックデバイスイメージの操作、`ceph status`（`ceph -s`）でクラスタ全体の健全性確認を行います。`RADOSGW` は S3/Swift 互換オブジェクトストレージゲートウェイであり、`MDS` は CephFS のメタデータのみを担当します（データ本体は CRUSH に従いクライアントと OSD 間で直接やり取りされます）。",
+    keywords: ["rbd", "ceph status", "RADOSGW", "CephFS"],
   },
   {
     id: "q-364-1",

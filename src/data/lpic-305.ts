@@ -396,6 +396,42 @@ export const lpic305QuickLookup: CertFlashcardItem[] = [
     recommended: "nsenter",
     reason: "コンテナ内にシェルツールがない場合でもホスト側からプロセス空間を指定してデバッグできる。",
   },
+  {
+    keyword: "物理マシンや他ハイパーバイザ上の仮想マシンを KVM/libvirt 等へ変換・移行するマイグレーションツール",
+    category: "351: フル仮想化",
+    recommended: "virt-p2v / virt-v2v",
+    reason: "P2V（物理→仮想）は `virt-p2v`、V2V（別仮想基盤→KVM 等）は `virt-v2v` を使用する。",
+  },
+  {
+    keyword: "停止中の VM ディスクイメージを起動せずにホストへマウントし、内部ファイルを検査・編集するツール",
+    category: "351: フル仮想化",
+    recommended: "guestmount / guestfish (libguestfs)",
+    reason: "稼働中イメージへ読み書きマウントすると破損するため、必ず停止中または `--ro` で操作する。",
+  },
+  {
+    keyword: "Linux ホスト上で Intel VT-x または AMD-V のハードウェア支援仮想化が有効か確認する /proc/cpuinfo フラグ",
+    category: "351: フル仮想化",
+    recommended: "vmx (Intel) / svm (AMD)",
+    reason: "`grep -E 'vmx|svm' /proc/cpuinfo` で確認でき、無効時は BIOS/UEFI の仮想化支援設定を見直す。",
+  },
+  {
+    keyword: "コンテナ内プロセスが実行可能な Linux システムコールを制限し、カーネル攻撃面を狭めるセキュリティ機構",
+    category: "352: コンテナカーネル",
+    recommended: "seccomp (Secure Computing Mode)",
+    reason: "Docker や containerd 等はデフォルトの seccomp プロファイルで危険なシステムコール呼び出しを遮断する。",
+  },
+  {
+    keyword: "複数の LXD コンテナに対して共通のネットワーク・ストレージ・制限設定を一括適用するテンプレート",
+    category: "352: LXC / LXD",
+    recommended: "lxc profile",
+    reason: "新規コンテナ作成時に `-p` オプションで指定でき、変更は紐づくコンテナへも反映される。",
+  },
+  {
+    keyword: "OSS のクラウド IaaS 基盤 OpenStack でコンピュート・ネットワーク・ブロックストレージを担う 3 つのコアサービス",
+    category: "353: クラウド管理",
+    recommended: "Nova / Neutron / Cinder",
+    reason: "併せてイメージ管理は `Glance`、認証基盤は `Keystone` が担当する。",
+  },
 ];
 
 export const lpic305PracticeQuestions: CertQuestion[] = [
@@ -485,6 +521,42 @@ export const lpic305PracticeQuestions: CertQuestion[] = [
     keywords: ["VirtIO", "virtlogd", "virtlockd"],
   },
   {
+    id: "q-351-6",
+    domainId: "topic-351",
+    domainLabel: "351: フル仮想化",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "停止中の KVM 仮想マシンのディスクイメージ（`qcow2` や `raw`）内部にある設定ファイル（`/etc/fstab` 等）を、仮想マシンを起動せずにホスト側へ直接マウントして確認・編集できる `libguestfs` 系のコマンドはどれですか？",
+    options: [
+      "guestmount -a vm01.qcow2 -i /mnt/vm",
+      "virsh attach-disk vm01 /mnt/vm vda",
+      "qemu-img check -r all vm01.qcow2",
+      "virt-v2v -i disk vm01.qcow2 -o /mnt/vm",
+    ],
+    correctIndices: [0],
+    explanation:
+      "`libguestfs` ツール群の `guestmount`（対話シェルは `guestfish`）を使うと、停止中の仮想ディスクイメージ内のパーティションをホストへマウントして検査・編集できます（稼働中イメージの読み書きマウントはデータ破損の原因となるため厳禁です）。",
+    keywords: ["guestmount", "libguestfs", "qcow2"],
+  },
+  {
+    id: "q-351-7",
+    domainId: "topic-351",
+    domainLabel: "351: フル仮想化",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "KVM フル仮想化および libvirt 仮想マシン管理について、正しい記述を 2 つ選んでください。",
+    options: [
+      "ホストの `/proc/cpuinfo` を確認し、Intel CPU なら `vmx`、AMD CPU なら `svm` フラグが表示されていればハードウェア支援仮想化に対応している",
+      "libvirt 管理下で稼働中および停止中のすべての定義済み仮想マシンを一覧表示するには `virsh list --all` を使用する",
+      "`virsh undefine <ドメイン名>` は仮想マシンを一時停止（サスペンド）してメモリ状態をディスクへ保存するコマンドである",
+      "`virt-p2v` はコンテナイメージから `Dockerfile` を自動生成するためのツールである",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "KVM に必要な CPU 仮想化支援フラグは `/proc/cpuinfo` の `vmx`（Intel VT-x）または `svm`（AMD-V）で確認でき、`virsh list --all` で停止中を含む全ドメインを確認できます。`virsh undefine` はドメイン定義の削除、`virt-p2v` は物理マシンから仮想マシンへの移行（P2V）ツールです。",
+    keywords: ["/proc/cpuinfo", "vmx", "svm", "virsh list"],
+  },
+  {
     id: "q-352-1",
     domainId: "topic-352",
     domainLabel: "352: コンテナ仮想化",
@@ -565,6 +637,42 @@ export const lpic305PracticeQuestions: CertQuestion[] = [
     keywords: ["runc", "OCI", "Helm", "Kubernetes"],
   },
   {
+    id: "q-352-6",
+    domainId: "topic-352",
+    domainLabel: "352: コンテナ仮想化",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Docker において、コンテナが出力した標準出力・標準エラーログを確認し、さらにコンテナの詳細なネットワーク構成やマウント情報・状態メタデータを JSON 形式で調査するコマンドの組み合わせとして正しいものはどれですか？",
+    options: [
+      "`docker logs` と `docker inspect`",
+      "`docker stats` と `docker top`",
+      "`docker history` と `docker tag`",
+      "`docker commit` と `docker save`",
+    ],
+    correctIndices: [0],
+    explanation:
+      "`docker logs` でコンテナの標準出力/標準エラーログを確認でき、`docker inspect` で IP アドレス・マウント・環境変数・ヘルスチェック等の詳細メタデータを JSON で取得できます。",
+    keywords: ["docker logs", "docker inspect", "トラブルシューティング"],
+  },
+  {
+    id: "q-352-7",
+    domainId: "topic-352",
+    domainLabel: "352: コンテナ仮想化",
+    difficulty: "標準",
+    selectCount: 2,
+    question: "コンテナのカーネルセキュリティ機能および LXD コンテナ管理に関して、正しい記述を 2 つ選んでください。",
+    options: [
+      "`seccomp` を用いることで、コンテナ内プロセスがカーネルに対して呼び出せるシステムコール（syscall）を制限し攻撃面を減らせる",
+      "`lxc profile` を利用すると、ネットワークやストレージなどの共通設定を複数の LXD コンテナへ一括適用・再利用できる",
+      "`cgroups` はプロセス番号（PID）やホスト名（UTS）空間を分離する機能であり、CPU やメモリの上限制限には関与しない",
+      "`docker run --privileged` を指定すると、コンテナ内のすべての Linux Capabilities が自動的に剥奪される",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "`seccomp` は許可するシステムコールをフィルタリングしてコンテナの安全性を高め、`lxc profile` は LXD コンテナ向けの再利用可能な設定テンプレートです。PID/UTS の空間分離は Namespaces、`--privileged` は特権（全 Capabilities 等）の付与です。",
+    keywords: ["seccomp", "lxc profile", "Capabilities", "cgroups"],
+  },
+  {
     id: "q-353-1",
     domainId: "topic-353",
     domainLabel: "353: VM デプロイ・プロビジョニング",
@@ -643,6 +751,24 @@ export const lpic305PracticeQuestions: CertQuestion[] = [
     explanation:
       "Terraform の `plan` / `apply` ワークフローと、OpenStack の主要コンポーネント（Nova/Neutron/Cinder 等）はクラウド管理の基礎知識です。",
     keywords: ["Terraform", "OpenStack", "IaaS"],
+  },
+  {
+    id: "q-353-6",
+    domainId: "topic-353",
+    domainLabel: "353: VM デプロイ・プロビジョニング",
+    difficulty: "応用",
+    selectCount: 1,
+    question: "パブリッククラウドのメタデータサービスに接続できないローカルの KVM/QEMU 環境で `cloud-init` の初期設定（`user-data` / `meta-data`）を検証するため、設定ファイル群を ISO イメージ等に格納して VM へ渡すローカルデータソースはどれですか？",
+    options: [
+      "`NoCloud`（ボリュームラベル `cidata`）または `Config Drive`",
+      "`Terraform State`（`terraform.tfstate`）",
+      "`Vagrant Atlas Box`（`Vagrantfile`）",
+      "`Packer HCL2 Builder`（`*.pkr.hcl`）",
+    ],
+    correctIndices: [0],
+    explanation:
+      "`cloud-init` は外部のメタデータサーバがないオフライン環境やローカルテストでも、`NoCloud`（ラベル `cidata` の ISO 等）や `Config Drive` データソースから `user-data` / `meta-data` を読み込んで初期化を実行できます。",
+    keywords: ["cloud-init", "NoCloud", "Config Drive", "cidata"],
   },
 ];
 
