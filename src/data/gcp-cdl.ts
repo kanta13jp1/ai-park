@@ -289,8 +289,9 @@ export const cdlComparisons: GcpComparisonTable[] = [
       { feature: "リレーショナル業務DB", values: ["Cloud SQL", "マネージド MySQL/PostgreSQL/SQL Server", "グローバル水平スケーリング"] },
       { feature: "グローバル規模強整合DB", values: ["Cloud Spanner", "99.999% SLA・水平スケール・SQL", "小規模検証アプリ（過剰スペック）"] },
       { feature: "ペタバイト級DWH分析", values: ["BigQuery", "サーバーレスSQL分析・BI連携", "高頻度な単一行トランザクション"] },
+      { feature: "ドキュメント NoSQL (モバイル/Web)", values: ["Firestore", "リアルタイム同期・オフライン対応・自動スケール", "大規模集計・列指向分析"] },
     ],
-    decisionRule: "画像・ファイル＝Cloud Storage、既存RDB＝Cloud SQL、分析DWH＝BigQuery、世界規模金融DB＝Spanner。",
+    decisionRule: "画像・ファイル＝Cloud Storage、既存RDB＝Cloud SQL、モバイル同期NoSQL＝Firestore、分析DWH＝BigQuery、世界規模金融DB＝Spanner。",
   },
   {
     id: "cdl-comp-ai",
@@ -331,8 +332,10 @@ export const cdlComparisons: GcpComparisonTable[] = [
       { feature: "Cloud Armor", values: ["Web / API エッジ防御", "DDoS 対策・L7 WAF（SQLi/XSS 遮断）", "外部 HTTP(S) LB の前面で不正通信を遮断"] },
       { feature: "Cloud KMS (CMEK)", values: ["暗号鍵の統制", "顧客管理の暗号鍵の作成・ローテーション・無効化", "鍵ライフサイクルを自社で制御したい規制要件向け"] },
       { feature: "Security Command Center", values: ["環境全体の可視化", "設定ミス・脆弱性・脅威の自動検知 (CSPM)", "全プロジェクトのセキュリティ状態を一元監視"] },
+      { feature: "Cloud Audit Logs", values: ["操作・アクセス監査証跡", "管理操作やデータアクセスの履歴を自動記録・保管", "コンプライアンス監査や変更履歴の追跡に必須"] },
+      { feature: "Assured Workloads", values: ["規制準拠ワークロード環境", "Data Residency（データ所在地）やサポート要員制約を自動適用", "公共・金融などデータ主権や業界規制への準拠向け"] },
     ],
-    decisionRule: "権限管理＝IAM、Web攻撃防御＝Cloud Armor、鍵の自社制御＝Cloud KMS、全体の脅威監視＝SCC。",
+    decisionRule: "権限管理＝IAM、Web攻撃防御＝Cloud Armor、鍵の自社制御＝Cloud KMS、全体の脅威監視＝SCC、監査証跡＝Cloud Audit Logs、規制環境構築＝Assured Workloads。",
   },
   {
     id: "cdl-comp-compute-modernize",
@@ -347,6 +350,38 @@ export const cdlComparisons: GcpComparisonTable[] = [
       { feature: "Cloud Run functions", values: ["イベント駆動関数 (FaaS)", "極低（単一コードのみ）", "ファイルアップロード契機の軽量処理"] },
     ],
     decisionRule: "まずサーバーレス（Cloud Run）で動くか検討し、既存OS依存なら Compute Engine、複雑な K8s 制御なら GKE。",
+  },
+  {
+    id: "cdl-comp-cloud-foundation",
+    category: "運用・移行・コスト",
+    title: "クラウド基盤・オープン戦略・API 公開オプション比較",
+    subtitle: "グローバルインフラ・マルチクラウド・API ゲートウェイの選び方",
+    columns: ["領域・サービス", "主な役割", "ビジネス上の利点", "適用シナリオ"],
+    rows: [
+      { feature: "リージョン / ゾーン", values: ["地理的な独立拠点（リージョン）と障害分離単位（ゾーン）", "低レイテンシ配置と単一障害点の回避", "利用者に近い拠点配置や高可用性構成の設計"] },
+      { feature: "Google Cloud ネットワーク", values: ["Google 独自のグローバルプライベート光ファイバー網", "インターネット経由を抑えた高速・安定通信", "世界規模の低遅延配信や拠点間の高信頼接続"] },
+      { feature: "Open Source", values: ["Kubernetes や TensorFlow 等のオープン技術採用", "ベンダーロックイン軽減とスキル・資産の高い移植性", "クラウド間移行を見据えた標準技術ベースの構築"] },
+      { feature: "Anthos / GKE Enterprise", values: ["オンプレミス・他社クラウド統合コンテナ管理基盤", "一貫したセキュリティポリシーと構成管理を横展開", "ハイブリッド・マルチクラウドの統合ガバナンス"] },
+      { feature: "BigQuery Omni", values: ["AWS S3 / Azure Blob 上のデータを移動せず SQL 分析", "データ転送エグレスコスト削減と分析環境の一元化", "他クラウドに保管したログをそのまま横断分析"] },
+      { feature: "API Gateway", values: ["サーバーレスバックエンド向けの軽量 API エントリ", "認証・ルーティングを低運用負荷かつ従量課金で提供", "小〜中規模 API 公開（収益化・開発者ポータルは Apigee）"] },
+    ],
+    decisionRule: "他クラウド上のデータ分析＝BigQuery Omni、ハイブリッド K8s 統合＝Anthos / GKE Enterprise、軽量 API 公開＝API Gateway。",
+  },
+  {
+    id: "cdl-comp-ops-governance",
+    category: "運用・移行・コスト",
+    title: "データ処理・運用可観測性・サステナビリティ比較",
+    subtitle: "パイプライン移行・監視・責任ある AI・サポート体制の整理",
+    columns: ["サービス / 概念", "領域", "主な目的・機能", "選定・活用のポイント"],
+    rows: [
+      { feature: "Dataproc", values: ["データ分析・移行", "マネージド Apache Spark / Hadoop クラスタ", "既存のオンプレミス Spark / Hadoop ジョブの最小改修移行"] },
+      { feature: "Cloud Monitoring", values: ["運用監視", "CPU・メモリ・SLO 等メトリクスの可視化とアラート", "SLA / SLO / SLI に基づく稼働監視としきい値通知"] },
+      { feature: "Cloud Logging", values: ["ログ管理", "システム・アプリ・監査ログの収集・検索・転送", "Log Sink による BigQuery / Cloud Storage 連携"] },
+      { feature: "Carbon Footprint", values: ["サステナビリティ", "クラウド利用に伴う炭素排出量の計測・レポート", "ESG 報告や低炭素リージョン選定の根拠として活用"] },
+      { feature: "Customer Care", values: ["サポート体制", "Basic / Standard / Enhanced / Premium の支援プラン", "ビジネス重要度に応じた応答 SLA と技術サポート確保"] },
+      { feature: "Vertex AI Explainable AI", values: ["責任ある AI", "機械学習モデルの予測に対する特徴量の寄与度を説明", "推論結果の透明性確保と意図しないバイアス検証"] },
+    ],
+    decisionRule: "既存 Spark 移行＝Dataproc、メトリクス＝Cloud Monitoring、ログ＝Cloud Logging、排出量計測＝Carbon Footprint。",
   },
 ];
 
@@ -469,6 +504,11 @@ export const cdlKeyFacts: GcpKeyFact[] = [
   { id: "cdl-kf-8", target: "IAM 原則", value: "最小権限の原則", detail: "必要な最小ロールのみ付与（Basicロール非推奨）" },
   { id: "cdl-kf-9", target: "SLA vs SLO", value: "契約保証 vs 社内目標", detail: "SLO は SLA 違反を防ぐためより厳格に設定" },
   { id: "cdl-kf-10", target: "Vertex AI エンタープライズ保護", value: "顧客データはモデル学習に不使用", detail: "プロンプトや社内知識が公開モデルへ流出しない" },
+  { id: "cdl-kf-11", target: "CapEx / OpEx と TCO", value: "初期投資から従量課金へシフト", detail: "CapEx（設備投資）を抑え OpEx（運用費）化し、電力・保守人件費を含む TCO（総所有コスト）を最適化" },
+  { id: "cdl-kf-12", target: "Shared Fate（共有運命モデル）", value: "安全な構築を積極支援", detail: "責任分界の提示にとどまらず、ブループリントやガードレールで顧客とリスク低減を共に担う" },
+  { id: "cdl-kf-13", target: "AI Principles（Google AI 原則）", value: "責任ある AI の行動指針", detail: "社会的有益性・不当なバイアス回避・安全性・説明責任・プライバシー設計を重視" },
+  { id: "cdl-kf-14", target: "SLA / SLO / SLI", value: "契約保証・社内目標・実測指標", detail: "SLI（測定値）で SLO（社内目標）を管理し、SLA（顧客契約上の保証）違反を未然防止" },
+  { id: "cdl-kf-15", target: "Data Residency（データ所在地）", value: "保存・処理リージョンの統制", detail: "規制要件に応じてデータの保存・処理リージョンを日本国内等へ限定可能" },
 ];
 
 export const cdlQuickLookup: CertFlashcardItem[] = [

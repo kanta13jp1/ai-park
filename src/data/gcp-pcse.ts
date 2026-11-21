@@ -262,8 +262,10 @@ export const pcseComparisons: GcpComparisonTable[] = [
       { feature: "Workforce Identity Federation", values: ["人間（社員・外部パートナー）", "外部 IdP 連携（事前同期不要）", "アカウント同期なしで Console / gcloud CLI へ SSO"] },
       { feature: "Workload Identity Federation", values: ["システム / アプリ / CI/CD", "STS による短寿命トークン交換", "AWS・Azure・GitHub Actions 等から鍵レスで GCP 接続"] },
       { feature: "SA Impersonation", values: ["開発者・パイプライン", "短寿命トークン発行（鍵ファイル不要）", "ローカル検証時や権限昇格の一時借用"] },
+      { feature: "Service Account Impersonation / Short-lived Credentials", values: ["開発者・ワークロード", "JSON 秘密鍵不要の一時的権限借用と短寿命トークン発行", "長期鍵の発行を禁止した安全な開発・検証アクセス"] },
+      { feature: "SSO (SAML / OIDC)", values: ["人間ユーザー（Cloud Identity / IdP）", "SAML 2.0 / OIDC によるフェデレーション認証", "外部 IdP と連携したシングルサインオン統合"] },
     ],
-    decisionRule: "人間の同期レス SSO＝Workforce Identity Federation、外部システム/CI の鍵レス認証＝Workload Identity Federation。",
+    decisionRule: "人間の同期レス SSO＝Workforce Identity Federation、外部システム/CI の鍵レス認証＝Workload Identity Federation、一時借用＝Service Account Impersonation。",
   },
   {
     id: "pcse-comp-access-governance",
@@ -292,8 +294,10 @@ export const pcseComparisons: GcpComparisonTable[] = [
       { feature: "Cloud IDS", values: ["VPC パス外（Out-of-path）・L7", "不可（検知とアラート生成のみ）", "既存通信遅延ゼロでマルウェア・C&C・脆弱性攻撃を詳細監視"] },
       { feature: "Packet Mirroring", values: ["VPC 基盤機能（通信コピー）", "不可（複製してコレクタへ転送）", "独自セキュリティアプライアンス解析やフォレンジック取得"] },
       { feature: "Identity-Aware Proxy (IAP)", values: ["アプリケーション前段・ゼロトラスト", "可能（ID と端末コンテキストで認可）", "VPN なしでの社内 Web アプリ公開や VM への SSH/RDP 接続"] },
+      { feature: "Private Service Connect / Shared VPC", values: ["VPC 境界・プライベート公開", "プライベート接続エンドポイントとホスト/サービス分離", "外部インターネット非経由の API 利用とネットワーク一元統制"] },
+      { feature: "HA VPN / Cloud Interconnect", values: ["オンプレ〜VPC ハイブリッド接続", "IPsec (HA VPN) / MACsec・VPN over Interconnect", "境界外通信の暗号化と VPC-SC 環境での閉域接続"] },
     ],
-    decisionRule: "公開 Web の WAF＝Cloud Armor、VPC 内インライン IPS＝Cloud NGFW Enterprise、遅延ゼロのパス外検知＝Cloud IDS。",
+    decisionRule: "公開 Web の WAF＝Cloud Armor、VPC 内インライン IPS＝Cloud NGFW Enterprise、遅延ゼロのパス外検知＝Cloud IDS、閉域公開＝Private Service Connect / Shared VPC。",
   },
   {
     id: "pcse-comp-encryption-secrets",
@@ -322,8 +326,9 @@ export const pcseComparisons: GcpComparisonTable[] = [
       { feature: "Confidential VM / GKE", values: ["処理中（In-use）メモリ空間", "AMD SEV / SEV-SNP / Intel TDX ハードウェア暗号化", "ホストハイパーバイザや物理アクセスからのメモリ覗き見"] },
       { feature: "Artifact Analysis", values: ["コンテナイメージ静的スキャン", "OS / 言語パッケージの CVE 脆弱性検出", "既知脆弱性を含むコンテナの蓄積・放置"] },
       { feature: "Binary Authorization", values: ["GKE / Cloud Run デプロイ時", "Attestor による署名検証とポリシー強制", "未検査・未承認・改ざん済みコンテナの本番起動"] },
+      { feature: "Shielded VMs / Confidential Computing", values: ["VM ブートおよび処理中メモリ層", "Secure Boot + vTPM + Integrity / ハードウェアメモリ暗号化", "起動改ざん（ルートキット）とハイパーバイザ覗き見防御"] },
     ],
-    decisionRule: "起動改ざん防止＝Shielded VM、処理中メモリ保護＝Confidential VM、未署名コンテナ阻止＝Binary Authorization。",
+    decisionRule: "起動改ざん防止＝Shielded VMs、処理中メモリ保護＝Confidential Computing、未署名コンテナ阻止＝Binary Authorization。",
   },
   {
     id: "pcse-comp-secops-compliance",
@@ -339,6 +344,39 @@ export const pcseComparisons: GcpComparisonTable[] = [
       { feature: "Assured Workloads", values: ["コンプライアンス準拠環境の自動構成", "データ所在地・サポート要員・暗号化制約を適用", "地域・業界規制に準拠した専用フォルダを迅速に構築"] },
     ],
     decisionRule: "GCP 内の脅威・設定不備検知＝SCC Premium、全社マルチソース SIEM/SOAR＝Google SecOps、事業者アクセス承認＝Access Approval。",
+  },
+  {
+    id: "pcse-comp-net-data-controls",
+    category: "ストレージ・DB",
+    title: "証明書・DNS・ストレージ / BigQuery データ保護比較",
+    subtitle: "通信暗号化・DNS 防御と Cloud Storage / BigQuery / DLP の保護統制",
+    columns: ["機能 / サービス", "保護レイヤ", "具体的な制御内容", "PCSE 設計のポイント"],
+    rows: [
+      { feature: "Certificate Authority Service", values: ["PKI / 証明書", "マネージドプライベート CA で mTLS 等証明書を自動発行・失効", "独自 CA サーバー運用不要で内部暗号通信を自動化"] },
+      { feature: "TLS ポリシー", values: ["Load Balancing", "古い TLS 1.0/1.1 や脆弱な暗号スイートを無効化し TLS 1.2/1.3 強制", "SSL ポリシーを外部 HTTPS / SSL プロキシ LB へ適用"] },
+      { feature: "Cloud DNS (DNSSEC)", values: ["名前解決", "DNS 応答への暗号署名検証により改ざんを検知", "DNS スプーフィングやキャッシュポイズニングを防止"] },
+      { feature: "Uniform Bucket-Level Access", values: ["Cloud Storage", "オブジェクト単位のレガシー ACL を無効化し IAM に統一", "権限管理の一貫性確保と設定ミス防止の基本設定"] },
+      { feature: "Public Access Prevention", values: ["Cloud Storage", "パブリックインターネット公開（allUsers 等）を確実にブロック", "Organization Policy 等と併用し誤公開リスクを根絶"] },
+      { feature: "BigQuery 列/行レベル制御", values: ["BigQuery", "ポリシータグによる列制限/動的マスクと行フィルタ（Row-level）", "単一テーブル内で部署・役職別の閲覧範囲を出し分け"] },
+      { feature: "仮名化 / FPE / k-map / δ-presence", values: ["Sensitive Data Protection", "形式保持暗号（FPE）トークン化と再識別リスク指標評価", "k-匿名性・l-多様性と合わせ構造化データ公開前を定量評価"] },
+    ],
+    decisionRule: "GCS 誤公開防止＝Uniform Bucket-Level Access + Public Access Prevention、BQ 細粒度制御＝BigQuery 列/行レベル制御、再識別評価＝k-map / δ-presence。",
+  },
+  {
+    id: "pcse-comp-policy-intelligence",
+    category: "運用・移行・コスト",
+    title: "Policy Intelligence・SCC Premium・共有運命モデル比較",
+    subtitle: "権限監査・影響シミュレーション・ランタイム脅威検知の使い分け",
+    columns: ["ツール / 概念", "主な用途", "分析・動作内容", "使い分けの判断軸"],
+    rows: [
+      { feature: "Policy Analyzer", values: ["権限の棚卸し監査", "誰がどのリソースにどの IAM 権限を持つかを一括検索", "定期的なアクセスレビューや過剰権限の洗い出し"] },
+      { feature: "Policy Troubleshooter", values: ["権限トラブル診断", "特定ユーザーが許可/拒否された理由を継承・条件含め解析", "『なぜアクセスできないか/できるか』の即時原因特定"] },
+      { feature: "IAM Recommender", values: ["最小権限の自動提案", "過去 90 日の実利用ログから不要権限を検出し削減案を提示", "Basic/過剰ロールを最小権限ロールへ継続的に絞り込み"] },
+      { feature: "Policy Simulator", values: ["変更影響の事前検証", "IAM / Org Policy 変更を本番適用前に過去ログでリプレイ検証", "本番運用を壊さずにポリシー厳格化を安全に適用"] },
+      { feature: "Security Command Center Premium", values: ["ランタイム脅威検知・CSPM", "Event / VM / Container Threat Detection と攻撃パス分析", "リアルタイムの不審通信・マイニング検知とリスク優先度付け"] },
+      { feature: "Shared Fate", values: ["共有運命モデル", "安全なブループリント（Assured Workloads 等）の積極提供と協働防御", "責任分界だけでなく顧客の安全構築を支援する考え方"] },
+    ],
+    decisionRule: "棚卸し＝Policy Analyzer、原因調査＝Policy Troubleshooter、削減提案＝IAM Recommender、変更前検証＝Policy Simulator。",
   },
 ];
 
@@ -461,6 +499,8 @@ export const pcseKeyFacts: GcpKeyFact[] = [
   { id: "pcse-kf-8", target: "Confidential VM 基盤", value: "AMD SEV / SEV-SNP / Intel TDX", detail: "処理中メモリをハードウェア暗号化しハイパーバイザからも保護" },
   { id: "pcse-kf-9", target: "DLP 再識別リスク指標", value: "k-匿名性・l-多様性・k-マップ・δ", detail: "構造化テーブル公開前のプライバシー特定リスクを定量評価" },
   { id: "pcse-kf-10", target: "SCC Standard vs Premium", value: "ETD・攻撃パス分析は Premium", detail: "Standard は基本姿勢検査、Premium でランタイム脅威検知を提供" },
+  { id: "pcse-kf-11", target: "Policy Intelligence 四兄弟", value: "Analyzer / Troubleshooter / Recommender / Simulator", detail: "棚卸し＝Policy Analyzer、診断＝Policy Troubleshooter、削減提案＝IAM Recommender、事前影響検証＝Policy Simulator" },
+  { id: "pcse-kf-12", target: "Cloud Storage 二大誤公開防止", value: "Uniform Bucket-Level Access + Public Access Prevention", detail: "レガシー ACL 無効化とパブリックアクセス完全抑止の併用が推奨標準" },
 ];
 
 export const pcseQuickLookup: CertFlashcardItem[] = [

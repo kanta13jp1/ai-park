@@ -289,8 +289,10 @@ export const pmleComparisons: GcpComparisonTable[] = [
       { feature: "グラウンディング / RAG", values: ["最新事実・社内ドキュメント参照・出典付与", "中（検索インデックス・RAG Engine）", "検索チャンク分割・リランキング品質に依存"] },
       { feature: "SFT / LoRA アダプタ", values: ["一貫した文体・特殊構造・特定タスク精度向上", "中高（高品質ラベルデータが必要）", "動的・最新知識の記憶には不向き（RAG 併用推奨）"] },
       { feature: "Context Caching", values: ["長大な固定コンテキストの繰り返し参照", "低〜中（トークン課金削減）", "頻繁に内容が変わる情報には向かない"] },
+      { feature: "Model Garden", values: ["Gemini・Llama・Gemma 等の基盤モデル探索・展開", "低（ワンクリック展開 / vLLM 等も選択可）", "用途・コスト・ライセンスに応じたモデル選定が重要"] },
+      { feature: "Supervised Fine-Tuning (SFT)", values: ["独自の出力形式・口調・専門ドメイン分類を定着", "中高（高品質な教師データ準備）", "最新知識の追加には RAG 併用が有効（LoRA で軽量適応可）"] },
     ],
-    decisionRule: "まずプロンプト設計→最新知識・根拠付与には RAG/グラウンディング→出力形式や専門ドメイン挙動の定着には SFT/LoRA。",
+    decisionRule: "まずプロンプト設計→最新知識・根拠付与には RAG/グラウンディング→出力形式や専門ドメイン挙動の定着には Supervised Fine-Tuning / LoRA（モデル選択は Model Garden）。",
   },
   {
     id: "pmle-comp-accelerators",
@@ -317,8 +319,9 @@ export const pmleComparisons: GcpComparisonTable[] = [
       { feature: "Vertex AI Batch Prediction", values: ["数分〜数時間 (非同期ジョブ)", "ジョブ実行中のみ課金（待機コスト 0）", "夜間一括スコアリング・数千万件の顧客 LTV 予測"] },
       { feature: "BigQuery ML (ML.PREDICT)", values: ["SQL クエリ実行時間", "BigQuery スロット / スキャン課金", "DWH 内テーブルへの直接推論・BI ダッシュボード連携"] },
       { feature: "エッジ / オンデバイス (TF Lite)", values: ["サブミリ秒・オフライン動作", "端末側計算（クラウド推論費ゼロ）", "工場カメラの即時異常検知・モバイルアプリ内推論"] },
+      { feature: "Vertex AI Endpoints (トラフィック分割 (Canary) / 量子化 / 蒸留)", values: ["オンライン推論・GPU コスト最適化", "トラフィック割合指定（例 95%/5%）＋モデル軽量化", "段階検証と低遅延化（vLLM 等の高効率サービング併用）"] },
     ],
-    decisionRule: "即時応答必須＝Online Prediction、待機可能で大量一括＝Batch Prediction、DWH 完結＝BQML ML.PREDICT。",
+    decisionRule: "即時応答必須＝Online Prediction (Vertex AI Endpoints)、待機可能で大量一括＝Batch Prediction、DWH 完結＝BQML ML.PREDICT。",
   },
   {
     id: "pmle-comp-storage",
@@ -347,6 +350,40 @@ export const pmleComparisons: GcpComparisonTable[] = [
       { feature: "Concept Drift", values: ["入力 X と正解ラベル Y の関係性変化", "外部環境変化（法改正・競合参入・パンデミック等）", "Ground Truth 収集後にモデルアーキテクチャや目標を再設計"] },
     ],
     decisionRule: "学習と本番の食い違い＝Skew（コード・パイプライン修正）、本番データの時間変化＝Feature Drift（再学習トリガー）。",
+  },
+  {
+    id: "pmle-comp-data-training-opt",
+    category: "AI・データ分析",
+    title: "データ前処理・実験管理・学習チューニング比較",
+    subtitle: "前処理パイプライン・I/O 最適化・過学習抑制と生成 AI 評価手法",
+    columns: ["ツール / 技術", "工程", "主な機能・メリット", "PMLE 試験での選定軸"],
+    rows: [
+      { feature: "Dataflow (Apache Beam)", values: ["前処理・変換", "tf.Transform と連携しバッチ/ストリーム前処理を統一", "学習・推論間の前処理スキュー根絶に最適"] },
+      { feature: "Dataproc Serverless", values: ["分散前処理", "クラスタ管理不要で PySpark / Spark ML 特徴量生成を実行", "既存 Spark 資産や大規模バッチ前処理の運用レス化"] },
+      { feature: "Sensitive Data Protection (DLP)", values: ["プライバシー保護", "学習・推論データの PII を自動検出しマスク・トークン化", "機密情報を含むデータセットの前処理パイプライン"] },
+      { feature: "Colab Enterprise / Vertex AI Experiments", values: ["開発・実験管理", "マネージド Notebook とパラメータ・指標・成果物の比較記録", "FeatureGroup / FeatureView 連携と再現性ある実験追跡"] },
+      { feature: "tf.data / TFRecord", values: ["学習 I/O 最適化", "小ファイルをまとめ prefetch / interleave で GPU 待機を削減", "アクセラレータ利用率低下のボトルネック解消"] },
+      { feature: "Bayesian Optimization / Early Stopping", values: ["ハイパラ探索", "Vertex AI Vizier による効率探索と見込み薄試行の途中打切", "有限予算・試行回数での最適化と学習時間削減"] },
+      { feature: "正則化", values: ["過学習対策", "Dropout・L1/L2 正則化等で訓練データへの過剰適合を抑制", "訓練精度が高く検証精度が低い（バリアンス高）場合に適用"] },
+      { feature: "Pairwise / Pointwise", values: ["生成 AI 評価", "Gen AI Evaluation Service の単体採点（Pointwise）と A/B 比較（Pairwise）", "モデルやプロンプト変更時の回答品質自動ベンチマーク"] },
+    ],
+    decisionRule: "前処理統一＝Dataflow (Apache Beam)、I/O 改善＝tf.data / TFRecord、ハイパラ探索＝Bayesian Optimization / Early Stopping。",
+  },
+  {
+    id: "pmle-comp-mlops-governance",
+    category: "運用・移行・コスト",
+    title: "MLOps パイプライン・ガバナンス・責任ある AI 機能比較",
+    subtitle: "CI/CD/CT 自動化基盤とセキュリティ・説明責任の実装",
+    columns: ["機能 / サービス", "役割", "仕組み・特徴", "運用上のポイント"],
+    rows: [
+      { feature: "Kubeflow Pipelines SDK / TFX", values: ["ML パイプライン定義", "Vertex AI Pipelines でサーバーレス DAG 実行（KFP v2 / TFX）", "enable_caching=True で再実行時間とコストを削減"] },
+      { feature: "Artifact Registry", values: ["成果物バージョン管理", "カスタム学習/推論コンテナや KFP テンプレートを一元保管", "Cloud Build による CI/CD と連携し不変イメージを配布"] },
+      { feature: "Cloud Scheduler / Pub/Sub", values: ["CT トリガー制御", "定期スケジュールや監視アラート契機でパイプラインを自動起動", "継続的トレーニング（CT）のイベント駆動アーキテクチャ"] },
+      { feature: "Safety Filters", values: ["生成 AI 出力安全性", "有害表現・危険カテゴリを閾値設定でフィルタリング", "Model Armor と併用しプロンプト・応答の双方を防御"] },
+      { feature: "Model Cards", values: ["透明性・ガバナンス文書", "モデルの用途・学習データ偏り・制限事項・指標を構造化記録", "ステークホルダーへの説明責任と監査対応を標準化"] },
+      { feature: "VPC Service Controls / CMEK", values: ["境界防御・鍵管理", "データ持ち出し境界の強制と顧客管理鍵による暗号化制御", "Vertex AI の学習データ・モデル成果物を厳格保護"] },
+    ],
+    decisionRule: "パイプライン定義＝Kubeflow Pipelines SDK / TFX、成果物管理＝Artifact Registry、自動再学習＝Cloud Scheduler / Pub/Sub。",
   },
 ];
 
@@ -469,6 +506,9 @@ export const pmleKeyFacts: GcpKeyFact[] = [
   { id: "pmle-kf-8", target: "Skew vs Drift", value: "Skew=学習と推論差 / Drift=時間変化", detail: "Model Monitoring で両者を継続監視しアラートや再学習へ繋ぐ" },
   { id: "pmle-kf-9", target: "BigQuery ML (BQML)", value: "SQL で学習〜推論完結", detail: "データ移動ゼロで高速プロトタイピング・Vertex AI 登録も可能" },
   { id: "pmle-kf-10", target: "MLOps Level 2", value: "パイプライン CI/CD ＋ CT", detail: "コード変更の自動テスト・再デプロイと継続的再学習を完全自動化" },
+  { id: "pmle-kf-11", target: "PR-AUC / ROC-AUC", value: "極端な不均衡データは PR-AUC", detail: "陰性過多で ROC-AUC が楽観的になりやすい不正検知等では適合率-再現率曲線下面積を重視" },
+  { id: "pmle-kf-12", target: "FeatureGroup / FeatureView", value: "Feature Store v2 の中核構造", detail: "BigQuery の特徴量ソースを FeatureGroup で定義し FeatureView でオンライン配信" },
+  { id: "pmle-kf-13", target: "Quantization / 量子化 / 蒸留", value: "推論高速化と GPU メモリ削減", detail: "INT8/FP16 量子化や知識蒸留で軽量化し、vLLM 等と組み合わせてサービング効率を最大化" },
 ];
 
 export const pmleQuickLookup: CertFlashcardItem[] = [

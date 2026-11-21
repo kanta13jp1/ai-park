@@ -50,7 +50,7 @@ const jumpSections: JumpSection[] = [
       { name: "AI活用インタビュー", href: "/interviews", desc: "社内のAI活用事例の取材記事（取材の立候補を受付中）", badge: "📋 準備中" },
       { name: "Antigravity情報局", href: "/antigravity-info", desc: "機能解説・Agent Swarms (/swarm) 並列運用・実務の実行例・FAQ", badge: "🚧 工事中" },
       { name: "AWS・クラウド情報局", href: "/aws-info", desc: "CLF-C02・SAA-C03・SAP-C02 統合学習ハブ・比較表・練習クイズ（社内利用ルール等は準備中）", badge: "🚧 工事中" },
-      { name: "GCP・Google Cloud情報局", href: "/gcp-info", desc: "CDL・ACE・PCA・PDE・PMLE・PCSE・PCDE（全7資格）統合学習ハブ", badge: "🚧 工事中" },
+      { name: "GCP・Google Cloud情報局", href: "/gcp-info", desc: "CDL・GAIL・ACE・ADP・PCA・PDE・PMLE・PCSE・PCDE・PCD・PCNE（全11資格）統合学習ハブ", badge: "🚧 工事中" },
       { name: "Azure・Microsoft Azure情報局", href: "/azure-info", desc: "AZ-900・AI-900・DP-900・SC-900・AZ-104・AI-103・AI-200・AZ-305（全8資格）統合学習ハブ", badge: "🚧 工事中" },
       { name: "LPIC・Linux情報局", href: "/lpic-info", desc: "LPIC-1・2・3（300/303/305/306）統合学習ハブ", badge: "🚧 工事中" },
       { name: "情報処理技術者試験情報局", href: "/ipa-info", desc: "IPA 全13区分（IP・SG・FE・AP・高度9区分）統合学習ハブ", badge: "🚧 工事中" },

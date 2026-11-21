@@ -279,8 +279,11 @@ export const pcaComparisons: GcpComparisonTable[] = [
       { feature: "Cloud IAM", values: ["誰が (Who) 何を (What) できるか", "権限を持たないユーザーによる操作", "組織 / フォルダ / プロジェクト / リソース"] },
       { feature: "Organization Policy", values: ["リソースの構成ルール", "外部IP付与・特定リージョン外作成等の設定ミス", "組織 / フォルダ / プロジェクト"] },
       { feature: "VPC Service Controls", values: ["データの移動境界", "認証情報漏洩時の境界外へのデータ持ち出し", "サービス境界（複数プロジェクト跨ぎ可）"] },
+      { feature: "Identity-Aware Proxy (IAP) + Access Context Manager", values: ["ゼロトラスト・アプリ接続", "ID と端末状態を検証して VPN 不要で安全にアクセス許可", "組織 / アプリ / VM SSH・RDP（BeyondCorp）"] },
+      { feature: "Assured Workloads", values: ["規制準拠コンプライアンス環境", "データ所在地・サポート担当者属性等の規制制約を自動強制", "フォルダ単位のコンプライアンス境界"] },
+      { feature: "Sensitive Data Protection (DLP)", values: ["機密データ (PII) の検出・変換", "クレジットカードやマイナンバー等の自動検出・マスク・トークン化", "Cloud Storage / BigQuery / ストリーム"] },
     ],
-    decisionRule: "権限付与＝IAM、禁止設定の強制＝Org Policy、データ流出防止＝VPC Service Controls。",
+    decisionRule: "権限付与＝IAM、禁止設定の強制＝Org Policy、データ流出防止＝VPC Service Controls、ゼロトラスト＝IAP + Access Context Manager、規制環境＝Assured Workloads。",
   },
   {
     id: "pca-comp-lb",
@@ -307,8 +310,9 @@ export const pcaComparisons: GcpComparisonTable[] = [
       { feature: "Transfer Appliance", values: ["オンプレ大容量データ", "物理アプライアンス郵送", "数十TB〜PBで回線が細く時間が足りない"] },
       { feature: "Database Migration Service", values: ["MySQL / PostgreSQL / Oracle", "CDC による最小停止移行", "稼働中 DB を無停止に近く Cloud SQL/AlloyDB へ移行"] },
       { feature: "Migrate to Virtual Machines", values: ["VMware / AWS EC2 / Azure VM", "ライブストリーミング移行", "既存 VM を Compute Engine へリフト＆シフト"] },
+      { feature: "Strangler Fig パターン / Pub/Sub", values: ["モノリスからマイクロサービスへの段階移行", "プロキシやイベント駆動で機能を切り出し（ロールバック計画併用）", "一括置換（Big Bang）リスクを抑えた段階的モダナイゼーション"] },
     ],
-    decisionRule: "まず回線速度 × 期間でオンライン転送が間に合うか計算し、無理なら Transfer Appliance を選びます。",
+    decisionRule: "まず回線速度 × 期間でオンライン転送が間に合うか計算し、無理なら Transfer Appliance を選びます。モノリス刷新は Strangler Fig パターンで段階移行します。",
   },
   {
     id: "pca-comp-encryption",
@@ -336,8 +340,41 @@ export const pcaComparisons: GcpComparisonTable[] = [
       { feature: "Cloud Bigtable", values: ["ワイドカラム NoSQL (HBase互換)", "ペタバイト級・サブ10ms レイテンシ", "IoT 時系列・パーソナライズ・金融ティック"] },
       { feature: "BigQuery", values: ["サーバーレス列指向 DWH", "ペタバイト級・BI Engine / ML 統合", "全社分析・データレイクハウス"] },
       { feature: "Firestore", values: ["サーバーレス ドキュメント DB", "自動スケール・リアルタイムリスナー", "モバイル/Web 同期・ユーザープロファイル"] },
+      { feature: "Cloud Memorystore", values: ["フルマネージド インメモリ キャッシュ (Redis / Valkey)", "サブミリ秒の超低レイテンシ", "セッション共有・DB 読み取り負荷軽減・ランキング"] },
     ],
-    decisionRule: "PG 互換高性能＝AlloyDB、世界規模強整合＝Spanner、超高速時系列＝Bigtable、BI/SQL分析＝BigQuery。",
+    decisionRule: "PG 互換高性能＝AlloyDB、世界規模強整合＝Spanner、超高速時系列＝Bigtable、BI/SQL分析＝BigQuery、低遅延キャッシュ＝Cloud Memorystore。",
+  },
+  {
+    id: "pca-comp-finops-perf",
+    category: "運用・移行・コスト",
+    title: "パフォーマンス最適化・FinOps・IaC 基盤比較",
+    subtitle: "キャッシュ・DWH 最適化・段階デプロイ・ランディングゾーン構築の選定",
+    columns: ["機能 / サービス", "領域", "設計・最適化効果", "適用シナリオ"],
+    rows: [
+      { feature: "Cloud CDN", values: ["エッジ配信・キャッシュ", "オリジン負荷とユーザー間レイテンシを削減", "外部 HTTP(S) LB 配下の静的・キャッシュ可能コンテンツ"] },
+      { feature: "BigQuery パーティション/クラスタリング", values: ["DWH クエリ最適化", "不要ブロックを除外しスキャン量と課金を圧縮", "日付分割＋頻出フィルタ列最大 4 列の指定"] },
+      { feature: "Cloud Run トラフィック分割", values: ["デプロイ戦略 (Canary / Blue-Green)", "リビジョン単位の割合制御で安全検証と即座の切り戻し", "本番トラフィック一部での段階リリース検証"] },
+      { feature: "CUD（確約利用割引）/ Active Assist (Recommender)", values: ["FinOps コスト最適化", "1/3 年コミット割引と遊休リソース削減提案の併用", "定常基盤の単価削減と過剰サイジングの継続是正"] },
+      { feature: "BigQuery Billing Export", values: ["課金可視化・配賦", "プロジェクト・ラベル別の明細を BigQuery へ出力", "部門別チャージバックと Looker Studio ダッシュボード"] },
+      { feature: "Terraform / Cloud Foundation Toolkit", values: ["ランディングゾーン IaC", "組織階層・Shared VPC・IAM を標準モジュールで再現構築", "マルチプロジェクト基盤の一貫した自動払い出し"] },
+    ],
+    decisionRule: "Web 配信高速化＝Cloud CDN、DWH コスト圧縮＝BigQuery パーティション/クラスタリング、組織標準構築＝Terraform / Cloud Foundation Toolkit。",
+  },
+  {
+    id: "pca-comp-sre-reliability",
+    category: "運用・移行・コスト",
+    title: "高可用性・移行計画・SRE 運用プラクティス比較",
+    subtitle: "設計原則・DR 訓練・可観測性・ポストモーテムの整理",
+    columns: ["要素 / プラクティス", "フェーズ", "目的・メカニズム", "PCA 設計判断の要点"],
+    rows: [
+      { feature: "Multi-Region / Cloud DNS", values: ["可用性・ルーティング設計", "地理的冗長配置とヘルスチェック付き名前解決", "リージョン障害耐性とグローバルユーザーへの低遅延応答"] },
+      { feature: "Architecture Framework / 移行計画", values: ["設計・要件マッピング", "信頼性・セキュリティ・コスト等の柱に基づく評価", "ケーススタディの SLA / コンプライアンス・体制に合う構成選定"] },
+      { feature: "Cloud Monitoring SLO", values: ["SRE 目標管理", "SLI とエラーバジェットでリリース速度と信頼性を制御", "SLA より厳格な社内目標設定で契約違反を未然防止"] },
+      { feature: "Error Reporting", values: ["障害検知・トリアージ", "スタックトレースから例外を自動グルーピングして通知", "Cloud Trace / Profiler と併用し原因箇所を迅速特定"] },
+      { feature: "Disaster Recovery Test / Runbook 自動化", values: ["DR 訓練・復旧自動化", "定期演習で RTO/RPO を検証し手順コード化で MTTR 短縮", "計画策定で終わりにせず本番同等条件でフェイルオーバー検証"] },
+      { feature: "Blameless Postmortem", values: ["事後振り返り文化", "個人を責めずシステム・プロセス面の根本原因と対策を共有", "担当者の罰則ではなく自動テストや仕組みで再発防止"] },
+    ],
+    decisionRule: "目標設定＝Cloud Monitoring SLO、定期復旧検証＝Disaster Recovery Test、障害後の学び＝Blameless Postmortem。",
   },
 ];
 
@@ -460,6 +497,9 @@ export const pcaKeyFacts: GcpKeyFact[] = [
   { id: "pca-kf-8", target: "転送時間計算式", value: "データ量(bit) ÷ 実効帯域(bps)", detail: "回線速度で間に合わなければ Transfer Appliance" },
   { id: "pca-kf-9", target: "Dedicated Interconnect 99.99%", value: "2 メトロ × 4 接続構成", detail: "単一メトロでは 99.9% SLA 止まり" },
   { id: "pca-kf-10", target: "AlloyDB for PostgreSQL", value: "高負荷 OLTP / HTAP 向け", detail: "完全 PG 互換で高速な分析・トランザクション処理" },
+  { id: "pca-kf-11", target: "Database Migration Service (DMS)", value: "CDC による最小停止 DB 移行", detail: "オンプレミスや他クラウドの MySQL / PostgreSQL / Oracle を Cloud SQL / AlloyDB へ移行" },
+  { id: "pca-kf-12", target: "SLA / コンプライアンス", value: "非機能要件から構成を決定", detail: "可用性目標（SLA）と規制・データ所在地要件を整理し過剰/過小設計を回避" },
+  { id: "pca-kf-13", target: "Strangler Fig パターン", value: "モノリスの段階的切り出し", detail: "一括置換（Big Bang）を避け機能単位で新サービスへ順次移行しリスクを局所化" },
 ];
 
 export const pcaQuickLookup: CertFlashcardItem[] = [

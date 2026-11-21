@@ -88,14 +88,14 @@ export default function HowToPage() {
     {
       id: "gcp-info",
       title: "GCP・Google Cloud情報局",
-      desc: "CDL・ACE・PCA・PDE・PMLE・PCSE・PCDE（Google Cloud 全7資格）の要点整理・比較表・模擬試験！",
+      desc: "CDL・GAIL・ACE・ADP・PCA・PDE・PMLE・PCSE・PCDE・PCD・PCNE（Google Cloud 全11資格）の要点整理・比較表・模擬試験！",
       icon: <Cloud className="text-cyan-600" size={32} />,
       iconBg: "bg-cyan-50 border-cyan-100",
       href: "/gcp-info",
       badge: "🚧 工事中",
       badgeColor: "bg-cyan-100 text-cyan-700",
-      tags: ["CDL/ACE/PCA", "PDE/PMLE", "PCSE/PCDE"],
-      highlights: "Google Cloud 公式試験ガイドに基づく全7資格統合学習ハブ（社内利用ルール等は準備中）",
+      tags: ["CDL/GAIL", "ACE/ADP", "Professional 7種"],
+      highlights: "Google Cloud 公式試験ガイドに基づく全11資格統合学習ハブ（社内利用ルール等は準備中）",
     },
     {
       id: "azure-info",

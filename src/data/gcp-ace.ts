@@ -257,8 +257,10 @@ export const aceComparisons: GcpComparisonTable[] = [
       { feature: "GKE Autopilot", values: ["コンテナ (Pod)", "低（Googleがノード管理）", "K8s API活用しつつ運用負荷を下げたい"] },
       { feature: "Cloud Run", values: ["ステートレスコンテナ", "極低（完全サーバーレス）", "Web API・イベント駆動・ゼロスケール"] },
       { feature: "Cloud Run functions", values: ["単一関数コード", "極低（コードのみ）", "Pub/Sub や GCS イベントの軽量処理"] },
+      { feature: "Spot VM", values: ["中断可能な仮想マシン (VM)", "高（チェックポイント対応）", "最大 60〜91% 割引・中断許容のバッチ処理"] },
+      { feature: "GKE Autopilot / Standard", values: ["コンテナ (Pod) 運用モード比較", "Autopilot: 低 / Standard: 中", "運用自動化重視＝Autopilot、特殊ノード制御＝Standard"] },
     ],
-    decisionRule: "Webコンテナを最小手間で動かす＝Cloud Run、K8sエコシステムが必要＝GKE Autopilot、OS制御が必要＝Compute Engine。",
+    decisionRule: "Webコンテナを最小手間で動かす＝Cloud Run、K8sエコシステムが必要＝GKE Autopilot、OS制御が必要＝Compute Engine、中断可能バッチ＝Spot VM。",
   },
   {
     id: "ace-comp-db",
@@ -313,8 +315,11 @@ export const aceComparisons: GcpComparisonTable[] = [
       { feature: "Private Google Access", values: ["プライベートVMから Google API/GCS へ通信", "Google 内部バックボーン", "サブネット単位で有効化"] },
       { feature: "Identity-Aware Proxy (IAP)", values: ["外部IPなしで SSH / RDP トンネル接続", "インバウンド（認証付き）", "踏み台サーバー不要で安全にSSH"] },
       { feature: "VPC ピアリング", values: ["異なる VPC 間をプライベート IP で接続", "双方向（非推移的）", "IPアドレス範囲の重複不可"] },
+      { feature: "VPC Peering", values: ["異なるプロジェクト・VPC 間を内部接続", "双方向（非推移的）", "オンプレや他 VPC と CIDR 重複しない設計が必須"] },
+      { feature: "Cloud Load Balancing", values: ["L7 (HTTP/S) / L4 (TCP/UDP) の負荷分散", "インバウンド（グローバル / リージョン）", "MIG や GKE・Cloud Run への自動ヘルスチェック振分"] },
+      { feature: "Cloud DNS / Static IP", values: ["権威 DNS 管理と静的外部・内部 IP 予約", "名前解決・固定アドレス保持", "再起動でも変わらない IP 確保とドメイン紐付け"] },
     ],
-    decisionRule: "外部IPなしVMへのSSH＝IAP、外部IPなしVMからapt update＝Cloud NAT、GCSへの内部通信＝Private Google Access。",
+    decisionRule: "外部IPなしVMへのSSH＝IAP、外部IPなしVMからapt update＝Cloud NAT、GCSへの内部通信＝Private Google Access、負荷分散＝Cloud Load Balancing。",
   },
   {
     id: "ace-comp-observability",
@@ -329,6 +334,37 @@ export const aceComparisons: GcpComparisonTable[] = [
       { feature: "Cloud Trace", values: ["分散リクエストの遅延スパン", "マイクロサービス間のボトルネック特定", "どの API 呼び出しが遅いか可視化"] },
     ],
     decisionRule: "しきい値アラート＝Cloud Monitoring、監査ログ長期保存＝Logging Sink、例外集約＝Error Reporting。",
+  },
+  {
+    id: "ace-comp-hierarchy-iac",
+    category: "運用・移行・コスト",
+    title: "リソース階層・ガバナンス・IaC ツール比較",
+    subtitle: "Organization / Folder / Project 設計と CLI・課金出力・IaC 基盤",
+    columns: ["要素 / ツール", "役割・スコープ", "主な操作・管理内容", "ACE 実務のポイント"],
+    rows: [
+      { feature: "Organization / Folder / Project", values: ["4 階層リソース構造の最上位〜作業単位", "IAM ポリシーの継承と環境（dev / stg / prod）分離", "上位の権限は下位リソースへ加算的に継承"] },
+      { feature: "Organization Policy", values: ["組織・フォルダ・プロジェクト単位の制約", "外部 IP 禁止や作成リージョン制限等を強制", "IAM（誰が）ではなく構成ルール（何ができるか）を制限"] },
+      { feature: "Billing Export", values: ["Cloud Billing 課金明細の BigQuery 出力", "プロジェクト・SKU・ラベル別の詳細なコスト分析", "予算アラートは通知のみで自動停止は行わない"] },
+      { feature: "Terraform", values: ["マルチクラウド対応の宣言的 IaC ツール", "HCL コードで VPC / GKE / IAM 等を再現性高く展開", "State ファイルを GCS バケット等で共有・ロック管理"] },
+      { feature: "Infrastructure Manager", values: ["Google Cloud マネージドの Terraform 実行基盤", "GCP 側で State・デプロイ履歴・IAM 統制を一元管理", "CI 実行サーバー自体の運用負荷を排除"] },
+      { feature: "Cloud Shell", values: ["ブラウザ上の無料 Linux シェル環境", "5GB 永続ホームディレクトリ・gcloud / kubectl 等導入済み", "ブラウザから即座に CLI 作業を開始可能"] },
+    ],
+    decisionRule: "環境分離＝Folder / Project、設定制約＝Organization Policy、課金分析＝Billing Export、マネージド Terraform 実行＝Infrastructure Manager。",
+  },
+  {
+    id: "ace-comp-backup-firewall",
+    category: "ネットワーク・セキュリティ",
+    title: "バックアップ復元手段と VPC ファイアウォール制御比較",
+    subtitle: "VM・DB バックアップの単位とファイアウォールターゲット選定",
+    columns: ["機能・ターゲット", "対象範囲", "特徴・挙動", "推奨される使い分け"],
+    rows: [
+      { feature: "Persistent Disk Snapshot", values: ["単一ディスク単位の増分バックアップ", "初回フルコピー・以降増分・グローバルリソース", "別ゾーンや別リージョンへのディスク復元・移行"] },
+      { feature: "Machine Image", values: ["VM インスタンス全体の構成と全接続ディスク", "メタデータ・ネットワーク設定・複数ディスクを一括保存", "VM 丸ごとのバックアップや構成複製"] },
+      { feature: "Cloud SQL Backup", values: ["マネージド RDB インスタンスの自動/手動バックアップ", "バイナリ/トランザクションログ併用で PITR 対応", "障害時の任意時点へのロールバック復旧"] },
+      { feature: "VPC Firewall（ネットワークタグ）", values: ["VM に付与したタグ文字列によるルール適用", "柔軟だがインスタンス編集権限でタグ変更が可能", "開発環境やタグベースのシンプルな通信制御"] },
+      { feature: "VPC Firewall（Service Account ターゲット）", values: ["VM にアタッチされた IAM サービスアカウント単位", "IAM 権限で保護されネットワークタグより改ざん耐性が高い", "本番環境で推奨されるセキュアな対象指定"] },
+    ],
+    decisionRule: "単体ディスク移行＝Persistent Disk Snapshot、VM 丸ごと保存＝Machine Image、本番 FW 対象指定＝Service Account ターゲット。",
   },
 ];
 
@@ -451,6 +487,10 @@ export const aceKeyFacts: GcpKeyFact[] = [
   { id: "ace-kf-8", target: "メタデータサーバー", value: "169.254.169.254", detail: "VM 内部からトークンやプロジェクト情報を取得" },
   { id: "ace-kf-9", target: "ファイアウォール優先度", value: "0〜65535（小さいほど優先）", detail: "同じ優先度なら Deny が Allow に勝つ" },
   { id: "ace-kf-10", target: "Cloud Logging 既定保持", value: "管理監査 400日 / 一般 30日", detail: "長期保管は Log Sink で GCS 等へ出力" },
+  { id: "ace-kf-11", target: "gcloud compute", value: "VM・MIG・ディスク CLI 操作", detail: "インスタンス作成・テンプレート・MIG ローリング更新・スナップショットを実行" },
+  { id: "ace-kf-12", target: "kubectl apply", value: "K8s マニフェストの宣言的適用", detail: "Deployment や Service の YAML を GKE クラスタへ反映（事前に get-credentials 実行）" },
+  { id: "ace-kf-13", target: "gcloud iam", value: "IAM ポリシー・SA・ロール管理", detail: "プロジェクトへのロールバインディング確認・付与やサービスアカウント作成を実行" },
+  { id: "ace-kf-14", target: "GKE Autopilot / Standard", value: "Pod 単位課金 vs ノード単位課金", detail: "Autopilot はノード運用を Google に委譲、Standard はマシンタイプや GPU・DaemonSet を詳細制御" },
 ];
 
 export const aceQuickLookup: CertFlashcardItem[] = [

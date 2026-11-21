@@ -279,8 +279,9 @@ export const pdeComparisons: GcpComparisonTable[] = [
       { feature: "Cloud Spanner", values: ["グローバル分散 RDB", "低レイテンシ ACID / 水平無制限", "グローバル強整合トランザクション・99.999% SLA"] },
       { feature: "Cloud SQL / AlloyDB", values: ["マネージド RDB (PG/MySQL)", "数ms / TB 級", "一般的な業務 OLTP・既存 PostgreSQL の HTAP 高速化"] },
       { feature: "Cloud Storage", values: ["オブジェクトストレージ", "高スループット / 容量無制限", "データレイク（Parquet/Avro）・未加工ファイル保管"] },
+      { feature: "Firestore", values: ["サーバーレス ドキュメント DB", "自動水平スケール・リアルタイム同期", "モバイル/Web アプリ状態管理・オフライン対応"] },
     ],
-    decisionRule: "大規模分析＝BigQuery、IoT超高速Key-Value＝Bigtable、世界規模強整合SQL＝Spanner、標準RDB＝Cloud SQL/AlloyDB。",
+    decisionRule: "大規模分析＝BigQuery、IoT超高速Key-Value＝Bigtable、世界規模強整合SQL＝Spanner、標準RDB＝Cloud SQL/AlloyDB、アプリ同期＝Firestore。",
   },
   {
     id: "pde-comp-windowing",
@@ -307,8 +308,9 @@ export const pdeComparisons: GcpComparisonTable[] = [
       { feature: "BigQuery ML", values: ["標準 SQL（CREATE MODEL）", "BigQuery 内の構造化テーブル/テキスト", "SQL だけで離反予測・ARIMA_PLUS 需要予測・Gemini 呼出"] },
       { feature: "Vertex AI AutoML", values: ["GUI / ノーコード自動探索", "表形式・画像・動画・テキスト", "高精度モデルを少量データ・最小手間で構築"] },
       { feature: "Vertex AI Custom + Feature Store", values: ["Python（PyTorch / TensorFlow 等）", "独自アーキテクチャ・オンライン特徴量", "高度な独自アルゴリズムと学習/推論の特徴量整合"] },
+      { feature: "Pre-trained AI APIs / Vector Search", values: ["REST/SDK・埋め込みベクトル近傍探索 (ANN)", "非構造化データ・高次元ベクトル", "文書 OCR・音声認識や RAG 意味検索基盤との連携"] },
     ],
-    decisionRule: "まず事前学習済み API で解決できるか検討→SQL で表形式予測なら BigQuery ML→独自モデルやオンライン特徴量なら Vertex AI。",
+    decisionRule: "まず Pre-trained AI APIs で解決できるか検討→SQL で表形式予測なら BigQuery ML→独自モデルやオンライン特徴量・Vector Search なら Vertex AI。",
   },
   {
     id: "pde-comp-governance",
@@ -322,8 +324,10 @@ export const pdeComparisons: GcpComparisonTable[] = [
       { feature: "Cloud KMS (CMEK / Cloud EKM)", values: ["保存時暗号化の鍵管理", "鍵ローテーション・即時無効化・外部保管", "規制要件で鍵のライフサイクルを顧客側制御したい場合"] },
       { feature: "VPC Service Controls", values: ["サービス API 境界", "境界外へのデータコピー・流出遮断", "正規認証情報漏洩時のデータ持ち出し防止"] },
       { feature: "Dataplex", values: ["分散レイク全体のガバナンス", "Raw/Curated 管理・品質検証・タグ・リネージ", "GCS と BigQuery を跨いだ統一ガバナンス基盤"] },
+      { feature: "Cloud IAM", values: ["プロジェクト・データセット・テーブル権限", "事前定義ロール・承認済みビューによる最小権限制御", "誰がどのデータ資産へアクセスできるかの基本統制"] },
+      { feature: "Data Catalog / Data Lineage", values: ["メタデータ・データ系統グラフ", "タグテンプレート検索・用語集・テーブル生成元追跡", "全社データ資産の発見性と変更影響範囲の把握"] },
     ],
-    decisionRule: "PII 匿名化＝DLP、列/行単位の閲覧制限＝BigQuery 行列制御、外部持ち出し防止＝VPC-SC、レイク横断管理＝Dataplex。",
+    decisionRule: "PII 匿名化＝DLP、列/行単位の閲覧制限＝BigQuery 行列制御、外部持ち出し防止＝VPC-SC、レイク横断管理＝Dataplex / Data Catalog / Data Lineage。",
   },
   {
     id: "pde-comp-orchestration",
@@ -336,8 +340,43 @@ export const pdeComparisons: GcpComparisonTable[] = [
       { feature: "Cloud Workflows", values: ["YAML / JSON ステートマシン", "サーバーレス・軽量・長時間 API 待ちや条件分岐", "Cloud Run や REST API 連携中心のオーケストレーション"] },
       { feature: "BigQuery スケジュールクエリ", values: ["SQL + 実行間隔設定", "追加基盤不要・BigQuery コンソールで完結", "単純な日次集計テーブル作成の定期実行"] },
       { feature: "Eventarc + Cloud Run functions", values: ["イベントルール + 関数コード", "リアルタイムなイベント駆動・極低コスト", "GCS ファイル作成を契機とした即時の軽量ロード/通知"] },
+      { feature: "Cloud Scheduler / BigQuery Scheduled Queries", values: ["Cron スケジュール設定", "サーバーレスで軽量・Pub/Sub や HTTP・単一 SQL を定期起動", "依存関係の少ない定期ジョブや定時集計クエリ実行"] },
     ],
-    decisionRule: "複雑な ETL 依存やバックフィル＝Cloud Composer、単発定期 SQL＝BigQuery スケジュールクエリ、GCS 到着トリガー＝Eventarc。",
+    decisionRule: "複雑な ETL 依存やバックフィル＝Cloud Composer、単発定期 SQL＝BigQuery Scheduled Queries、GCS 到着トリガー＝Eventarc。",
+  },
+  {
+    id: "pde-comp-streaming-pubsub-beam",
+    category: "AI・データ分析",
+    title: "ストリーミング制御（Pub/Sub・Dataflow）詳細比較",
+    subtitle: "配信方式・順序・リトライ制御とイベント時刻処理の設計軸",
+    columns: ["機能 / 概念", "対象サービス", "制御メカニズム", "設計・トラブルシュート要点"],
+    rows: [
+      { feature: "Push / Pull", values: ["Pub/Sub", "HTTPS 押出配信 (Push) vs コンシューマ取得 (Pull)", "高スループット・Dataflow 連携＝Pull、Cloud Run 即時通知＝Push"] },
+      { feature: "Ordering Keys", values: ["Pub/Sub", "同一キー単位でのメッセージ順序保証", "パブリッシャー側で単一リージョンエンドポイント発行が必須"] },
+      { feature: "Dead-Letter Topics", values: ["Pub/Sub", "最大配信試行回数（5〜100回）超過メッセージの退避先", "処理失敗の繰り返し（Poison Pill）によるサブスクリプション詰まり防止"] },
+      { feature: "Windowing", values: ["Dataflow (Apache Beam)", "Fixed / Sliding / Session / Global による区間分割", "無操作ギャップで区切るユーザー行動分析には Session"] },
+      { feature: "Watermarks", values: ["Dataflow (Apache Beam)", "イベント時刻（Event Time）の進捗推定値", "遅延データは withAllowedLateness と Side Output で救済"] },
+      { feature: "Triggers", values: ["Dataflow (Apache Beam)", "AfterWatermark / AfterProcessingTime / AfterCount", "確定前の早期発火（Speculative）や遅延データ到着時の再出力制御"] },
+      { feature: "Cloud Monitoring / Dataflow Metrics", values: ["パイプライン監視", "System Lag・Data Watermark Age・oldest_unacked_message_age", "遅延増加や未確認メッセージ滞留を検知しスケール・ホットキー調査"] },
+    ],
+    decisionRule: "順序保証＝Ordering Keys（単一リージョン）、詰まり防止＝Dead-Letter Topics、遅延救済＝Watermarks + Triggers + withAllowedLateness。",
+  },
+  {
+    id: "pde-comp-bq-bigtable-opt",
+    category: "ストレージ・DB",
+    title: "BigQuery・Cloud Bigtable 性能設計と可用性・DR 比較",
+    subtitle: "物理レイアウト・スロット予約・読み出し高速化・BCP 基準",
+    columns: ["設計要素 / API", "対象基盤", "主な効果・仕組み", "試験・実務の判断基準"],
+    rows: [
+      { feature: "Partitioning / Clustering", values: ["BigQuery", "日付・範囲分割（最大 10,000）＋最大 4 列ソート配置", "WHERE / JOIN 時のスキャンバイト数と料金を最小化"] },
+      { feature: "Slots / Editions", values: ["BigQuery", "Standard / Enterprise / Enterprise Plus 予約と自動伸縮", "予測可能な容量管理と高並列クエリの性能確保"] },
+      { feature: "BigQuery BI Engine / Materialized Views", values: ["BigQuery", "インメモリキャッシュ＋事前集計の自動増分更新・スマートチューニング", "Looker / Looker Studio 等の BI 応答をサブ秒化・低コスト化"] },
+      { feature: "INFORMATION_SCHEMA / Storage Read API", values: ["BigQuery", "JOBS メタデータビューによるジョブ分析と gRPC 並列読取", "高コストクエリ特定と Spark 等からの GCS 経由なし高速読込"] },
+      { feature: "Row Key Design", values: ["Cloud Bigtable", "辞書順ソートに基づくキー設計（ドメイン反転・ソルト・逆順時刻）", "単調増加キーによる単一ノード集中（ホットスポット）を回避"] },
+      { feature: "SSD vs HDD / Replication", values: ["Cloud Bigtable", "ストレージ種別選択とマルチクラスタレプリケーション", "低遅延ランダム読取＝SSD、バッチスキャン＝HDD、HA・分析分離＝Replication"] },
+      { feature: "RTO / RPO", values: ["可用性・DR 設計", "目標復旧時間（RTO）と目標復旧時点（RPO）の要件定義", "マルチリージョン配置・クロスリージョン複製・べき等再処理で要件達成"] },
+    ],
+    decisionRule: "BigQuery 最適化＝Partitioning / Clustering + BI Engine、Bigtable 偏り防止＝Row Key Design、障害許容度＝RTO / RPO で判断。",
   },
 ];
 
@@ -460,6 +499,9 @@ export const pdeKeyFacts: GcpKeyFact[] = [
   { id: "pde-kf-8", target: "Cloud Composer 基盤", value: "Apache Airflow (Python DAG)", detail: "Sensor・Operator による複雑パイプライン制御と Backfill" },
   { id: "pde-kf-9", target: "BigQuery Storage Write API", value: "Exactly-once 取り込み", detail: "従来の legacy streaming insert に代わる高速・低コスト手法" },
   { id: "pde-kf-10", target: "Dataplex ゾーン階層", value: "Lake → Zone (Raw / Curated) → Asset", detail: "GCS と BigQuery に統一ガバナンス・データ品質を適用" },
+  { id: "pde-kf-11", target: "Cloud KMS (CMEK)", value: "顧客管理の暗号鍵", detail: "BigQuery / Cloud Storage / Pub/Sub 等の暗号鍵ローテーション・即時無効化を顧客側で統制" },
+  { id: "pde-kf-12", target: "BigQuery BI Engine", value: "インメモリ高速 BI 分析", detail: "SQL や BI ツール側を変更せず Looker / Looker Studio のダッシュボードをサブ秒応答へ高速化" },
+  { id: "pde-kf-13", target: "Storage Read API", value: "gRPC 並列ストリーム読取", detail: "Spark や Dataflow から BigQuery テーブルを GCS エクスポートなしで直接高速読み出し" },
 ];
 
 export const pdeQuickLookup: CertFlashcardItem[] = [

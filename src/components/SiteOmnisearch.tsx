@@ -116,11 +116,11 @@ const siteSearchIndex: SearchIndexItem[] = [
     ],
   },
   {
-    title: "GCP・Google Cloud情報局 (CDL/ACE/PCA/PDE/PMLE/PCSE/PCDE)",
+    title: "GCP・Google Cloud情報局 (全11資格: CDL/GAIL/ACE/ADP/PCA/PDE/PMLE/PCSE/PCDE/PCD/PCNE)",
     category: "資格・Google Cloud",
     href: "/gcp-info",
-    description: "Google Cloud 認定資格（CDL / ACE / PCA / PDE / PMLE / PCSE / PCDE 全7資格）統合学習ハブ・練習クイズ・比較表を掲載中（社内GCP利用ルール等は工事中）",
-    keywords: ["gcp", "google cloud", "cdl", "ace", "pca", "pde", "pmle", "pcse", "pcde", "cloud digital leader", "associate cloud engineer", "professional cloud architect", "data engineer", "machine learning", "security", "devops", "試験", "クイズ", "flashcards"],
+    description: "Google Cloud 認定資格（CDL / GAIL / ACE / ADP / PCA / PDE / PMLE / PCSE / PCDE / PCD / PCNE 全11資格）統合学習ハブ・練習クイズ・比較表を掲載中（社内GCP利用ルール等は工事中）",
+    keywords: ["gcp", "google cloud", "cdl", "gail", "ace", "adp", "pca", "pde", "pmle", "pcse", "pcde", "pcd", "pcne", "cloud digital leader", "generative ai leader", "associate cloud engineer", "data practitioner", "professional cloud architect", "data engineer", "machine learning", "security", "devops", "cloud developer", "network engineer", "試験", "クイズ", "flashcards"],
   },
   {
     title: "Azure・Microsoft Azure情報局 (全8資格: AZ-900/AI-900/DP-900/SC-900/AZ-104/AI-103/AI-200/AZ-305)",

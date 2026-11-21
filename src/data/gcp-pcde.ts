@@ -267,6 +267,7 @@ export const pcdeComparisons: GcpComparisonTable[] = [
       { feature: "VPA (Vertical Pod Autoscaler)", values: ["Pod の CPU / メモリ要求量（垂直）", "過去の実際のリソース消費実績", "同じ CPU/メモリ指標での HPA との同時 Auto 併用は避ける"] },
       { feature: "Cluster Autoscaler (CA)", values: ["既存ノードプールのノード数", "リソース不足で Pending 状態になった Pod の発生", "事前定義されたノードプール範囲内で増減する"] },
       { feature: "Node Auto-Provisioning (NAP)", values: ["最適な新規ノードプールの自動作成・削除", "既存ノードプールに収まらない Pod 要求（GPU 等含む）", "ワークロード要件に合うマシンタイプを動的に選定"] },
+      { feature: "HPA / VPA / Cluster Autoscaler", values: ["Pod 水平・垂直 ＋ ノード水平の多層スケール", "リソース要求量・実消費量・Pending Pod 発生", "同一 CPU/メモリ指標での HPA と VPA(Auto) の同時競合を回避"] },
     ],
     decisionRule: "Pod 数増減＝HPA、Pod サイズ適正化＝VPA、ノード増減＝Cluster Autoscaler / NAP。CPU 基準の HPA＋VPA 同時有効化は競合に注意。",
   },
@@ -280,8 +281,9 @@ export const pcdeComparisons: GcpComparisonTable[] = [
       { feature: "Rolling Update", values: ["新旧 Pod を少数ずつ順次入れ替え", "中程度（旧バージョンの再展開が必要）", "追加インフラほぼ不要だが、一時的に新旧が混在"] },
       { feature: "Blue-Green デプロイ", values: ["別環境（Green）で検証後に一括で全トラフィック切替", "極めて高速（ルーティングを Blue に戻すだけ）", "切替期間中は 2 環境分のリソースコストが必要"] },
       { feature: "Canary リリース", values: ["ごく一部の実トラフィック（例 5〜10%）から段階拡大", "高速（Canary 比率を 0% へ戻す）", "本番ユーザーへの影響範囲を最小化しつつ実環境検証が可能"] },
+      { feature: "Canary デプロイ (Cloud Deploy Targets / Automation Rules)", values: ["ターゲット進行と比率段階拡大（例 10%→50%→100%）", "Rollout Verification 異常時に自動復旧（repairRolloutRule）", "Ephemeral 環境や Integration Test と組合せ安全性向上"] },
     ],
-    decisionRule: "実トラフィック少数で安全検証＝Canary、事前全量テスト後の瞬間切替＆即戻し＝Blue-Green、標準コスト重視＝Rolling Update。",
+    decisionRule: "実トラフィック少数で安全検証＝Canary デプロイ、事前全量テスト後の瞬間切替＆即戻し＝Blue-Green、標準コスト重視＝Rolling Update。",
   },
   {
     id: "pcde-comp-observability",
@@ -295,8 +297,10 @@ export const pcdeComparisons: GcpComparisonTable[] = [
       { feature: "Cloud Trace", values: ["リクエスト単位の分散トレース（Span）", "ウォーターフォール表示・レイテンシ分布", "マイクロサービス間の呼び出し遅延ボトルネック特定"] },
       { feature: "Cloud Profiler", values: ["本番 CPU・ヒープ・メモリプロファイル", "低オーバーヘッド常時サンプリング・フレームグラフ", "アプリコード内の CPU / メモリ消費ホットスポット特定"] },
       { feature: "Error Reporting", values: ["スタックトレース・例外ログ", "自動グルーピング・新規エラー検知通知", "本番アプリで発生中の未認識クラッシュ・例外の把握"] },
+      { feature: "Managed Service for Prometheus / Synthetic Monitoring", values: ["K8s Prometheus 指標・合成外形テスト", "PromQL クエリ・実ユーザー導線の定期監視", "OSS 互換監視と多拠点レイテンシ・障害検知"] },
+      { feature: "Log Router / Log-based Metrics", values: ["ログ振り分け・ログ件数/数値指標化", "フィルタで BigQuery / GCS / Pub/Sub 出力・除外・指標生成", "長期監査アーカイブと特定エラーパターンのアラート化"] },
     ],
-    decisionRule: "遅いサービス区間＝Cloud Trace、遅い関数・CPU食いのコード＝Cloud Profiler、例外集約＝Error Reporting、SLO/指標＝Cloud Monitoring。",
+    decisionRule: "遅いサービス区間＝Cloud Trace、遅い関数・CPU食いのコード＝Cloud Profiler、例外集約＝Error Reporting、SLO/指標＝Cloud Monitoring / Managed Service for Prometheus。",
   },
   {
     id: "pcde-comp-iac-gitops",
@@ -309,8 +313,9 @@ export const pcdeComparisons: GcpComparisonTable[] = [
       { feature: "Infrastructure Manager", values: ["Google Cloud リソース（Terraform 基盤）", "マネージド実行 / GCP 側で State・履歴統制", "Terraform 実行基盤の運用排除・IAM 統合ガバナンス"] },
       { feature: "Config Sync", values: ["GKE / Kubernetes マニフェスト（YAML/Helm）", "GitOps Pull 型 / クラスタ内から自動同期", "複数クラスタの構成ドリフト防止・Policy Controller 併用"] },
       { feature: "Config Connector", values: ["Google Cloud リソースを K8s CRD で管理", "Kubernetes コントローラによる継続調停", "アプリ開発者が K8s API 統一手順で DB や GCS も同時管理"] },
+      { feature: "Cloud Foundation Toolkit", values: ["組織階層・Shared VPC・ログ基盤", "検証済み Terraform モジュール群", "ランディングゾーンの標準化と迅速な初期構築"] },
     ],
-    decisionRule: "マネージド Terraform 実行＝Infrastructure Manager、K8s マニフェストの GitOps 同期＝Config Sync、K8s から GCP 作成＝Config Connector。",
+    decisionRule: "マネージド Terraform 実行＝Infrastructure Manager、K8s マニフェストの GitOps 同期＝Config Sync、標準基盤展開＝Cloud Foundation Toolkit。",
   },
   {
     id: "pcde-comp-supplychain-sec",
@@ -324,6 +329,40 @@ export const pcdeComparisons: GcpComparisonTable[] = [
       { feature: "Binary Authorization", values: ["デプロイ（Admission）時", "信頼された Attestor の暗号署名を検証し未署名を拒否", "CI パイプラインを経由しない不正・改ざんイメージの起動"] },
     ],
     decisionRule: "機密隔離＝Secret Manager、脆弱性検査＝Artifact Analysis、未署名イメージの起動ブロック＝Binary Authorization。",
+  },
+  {
+    id: "pcde-comp-sre-automation",
+    category: "運用・移行・コスト",
+    title: "SRE 運用自動化・信頼性実践・ガバナンス基盤比較",
+    subtitle: "エラーバジェット・トイル削減・インシデント文化・組織統制の整理",
+    columns: ["要素 / サービス", "領域", "仕組み・目的", "PCDE 試験での判断基準"],
+    rows: [
+      { feature: "Error Budget / Burn Rate Alert", values: ["SLO・アラート", "許容障害枠の消費速度を複数ウィンドウで監視", "バジェット余裕時は機能リリース、枯渇時は信頼性改善を優先"] },
+      { feature: "Toil Reduction / Runbook 自動化", values: ["トイル削減", "手動・反復的作業をコード化し自己修復へ移行", "SRE の運用負荷を 50% 未満に維持"] },
+      { feature: "Cloud Workflows / Cloud Scheduler", values: ["運用オーケストレーション", "サーバーレスの定期実行と API 連携手順の自動化", "定型復旧 Runbook やバッチトリガーの自動化基盤"] },
+      { feature: "Incident Management / Blameless Postmortem", values: ["インシデント文化", "役割分担で影響緩和を優先し、非難なき事後分析で再発防止", "個人の注意喚起ではなく仕組みや自動テストで対策"] },
+      { feature: "Chaos Engineering / GameDay", values: ["障害検証訓練", "計画的な障害注入と実践演習でアラート・Runbook を検証", "本番同等条件でフェイルオーバー実効性を確認"] },
+      { feature: "Organization Policy / Private Service Connect", values: ["組織ガバナンス・閉域網", "リソース構成制約（外部 IP 禁止等）の強制と VPC 間閉域公開", "マルチチーム環境でのガードレールと安全なサービス接続"] },
+      { feature: "Monitoring Metrics Scope", values: ["マルチプロジェクト監視", "複数プロジェクトのメトリクスを単一スコープに集約", "組織横断の統一ダッシュボード・SLO アラート運用"] },
+    ],
+    decisionRule: "アラート設計＝Burn Rate Alert、運用負荷低減＝Toil Reduction / Cloud Workflows、横断監視＝Monitoring Metrics Scope。",
+  },
+  {
+    id: "pcde-comp-finops-cost",
+    category: "運用・移行・コスト",
+    title: "FinOps・コンピューティング・ネットワークコスト最適化比較",
+    subtitle: "CUD 選定・Spot 活用・Cloud Run・課金分析と CDN 最適化",
+    columns: ["手法 / サービス", "最適化対象", "割引・削減メカニズム", "選定・運用のポイント"],
+    rows: [
+      { feature: "Resource-based CUD", values: ["Compute Engine 定常利用", "特定リージョン・マシンファミリーの 1/3 年コミットで高割引", "構成が固定された 24 時間稼働ベースライン向け"] },
+      { feature: "Compute Flexible CUD", values: ["CE / GKE / Cloud Run", "リージョンやサービスを跨ぐ時間単位支出額コミットで柔軟割引", "ワークロード構成や移行先が変化する環境向け"] },
+      { feature: "Spot VMs / Spot Pods", values: ["バッチ・耐障害処理", "余剰キャパシティ利用による大幅割引（最大 30 秒猶予で停止あり）", "チェックポイント保存や再試行可能なステートレス処理向け"] },
+      { feature: "Cloud Run Concurrency", values: ["サーバーレスコンテナ", "1 インスタンスあたりの同時処理数（既定 80 / 最大 1,000）調整", "I/O 待ちが多いアプリで引き上げ、起動数とコストを削減"] },
+      { feature: "BigQuery Billing Export", values: ["課金可視化・配賦", "詳細請求データを BigQuery へ出力しプロジェクト・ラベル別集計", "部署別コスト可視化や異常支出調査の標準基盤"] },
+      { feature: "Active Assist (Recommender) / Budget Alerts", values: ["無駄削減・支出監視", "遊休リソース削減提案と閾値通知（Pub/Sub 連携で自動制御可）", "予算アラート単体ではリソース自動停止しない点に注意"] },
+      { feature: "Cloud CDN", values: ["Egress・オリジン負荷", "エッジキャッシュによりオリジン応答負荷と下り転送料を削減", "外部 HTTP(S) LB 配下の配信コストと応答遅延を同時改善"] },
+    ],
+    decisionRule: "柔軟な割引＝Compute Flexible CUD、固定構成＝Resource-based CUD、課金分析＝BigQuery Billing Export、無駄検知＝Active Assist (Recommender)。",
   },
 ];
 
@@ -446,6 +485,10 @@ export const pcdeKeyFacts: GcpKeyFact[] = [
   { id: "pcde-kf-8", target: "GKE Probes 役割分担", value: "Startup / Readiness / Liveness", detail: "起動待機＝Startup、LB 振分＝Readiness、ハング再起動＝Liveness" },
   { id: "pcde-kf-9", target: "Spot VM プリエンプション", value: "最大 30 秒のシャットダウン猶予", detail: "事前通知（--preemption-notice-duration）は既定 0 秒、構成により最大 120 秒設定可" },
   { id: "pcde-kf-10", target: "Cloud Run 同時実行数", value: "既定 80 / 最大 1,000", detail: "I/O 待ちが多いアプリは concurrency 引き上げでコスト・起動遅延を改善" },
+  { id: "pcde-kf-11", target: "Resource-based CUD vs Compute Flexible CUD", value: "固定高割引 vs サービス跨ぎ柔軟性", detail: "定常 VM 構成＝Resource-based CUD、CE / GKE / Cloud Run 間やリージョン移動あり＝Compute Flexible CUD" },
+  { id: "pcde-kf-12", target: "Shared VPC と Private Service Connect", value: "ネットワーク集約と閉域サービス公開", detail: "Shared VPC でホスト/サービス分離し、PSC で IP 重複なく API を閉域公開" },
+  { id: "pcde-kf-13", target: "Error Budget と Burn Rate Alert", value: "複数ウィンドウで誤検知を抑制", detail: "高消耗（短期）＋中消耗（長期）の併用で瞬時スパイクを無視しつつ重大障害を即時検知" },
+  { id: "pcde-kf-14", target: "Cloud Deploy Targets / Rollout Verification", value: "不変イメージの段階昇格と自動検証", detail: "Dev→Stg→Prod へ SHA256 ダイジェストを昇格し、Ephemeral 環境や Integration Test・Automation Rules と連携" },
 ];
 
 export const pcdeQuickLookup: CertFlashcardItem[] = [
