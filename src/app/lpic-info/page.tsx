@@ -28,6 +28,7 @@ import {
   EyeOff,
   ChevronsUpDown,
   Sparkles,
+  Zap,
   Layers2,
   ArrowRight,
   X,
@@ -220,7 +221,7 @@ const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
     },
     quizBadgeLabel: "LPIC-1 (101/102) 演習",
     flashcardTitle: "要件・用途 → コマンド / 設定ファイル 即答トレーニング",
-    quickSearchChips: ["systemctl", "dpkg", "rpm", "chmod", "umask", "ss", "cron"],
+    quickSearchChips: ["lsmod", "systemctl", "dpkg", "rpm", "chmod", "umask", "ss", "cron"],
     examDayChecklist: {
       subtitle:
         "LPIC-1（101-500 / 102-500）は各90分・60問の試験です。記述問題での正確なコマンド・パス入力と時間配分が合格（500点）の鍵になります。",
@@ -665,6 +666,10 @@ function loadProgressFromStorage(storageKey: string): LpicProgress {
   }
 }
 
+function normalizeCommandSearchQuery(cmdName: string): string {
+  return cmdName.split(" ")[0].replace(/^\//, "").replace(/\*$/, "").trim();
+}
+
 export default function LpicInfoPage() {
   const [level, setLevel] = useState<LpicLevel>("lpic-1");
   const [activeTab, setActiveTab] = useState<TabId>("domains");
@@ -807,7 +812,7 @@ export default function LpicInfoPage() {
 
   const handleJumpToCommandComparison = (cmdName: string) => {
     playCyberClick();
-    const cleanQuery = cmdName.split(" ")[0].replace(/^\//, "").trim();
+    const cleanQuery = normalizeCommandSearchQuery(cmdName);
     setCompCategory("すべて");
     setCompQuery(cleanQuery);
     setActiveTab("comparisons");
@@ -968,6 +973,15 @@ export default function LpicInfoPage() {
       return haystack.includes(normalizedCompQuery);
     });
   }, [config.comparisons, compCategory, normalizedCompQuery]);
+
+  const filteredQuickLookup = useMemo(() => {
+    if (!normalizedCompQuery) return config.quickLookup;
+    return config.quickLookup.filter((item) =>
+      `${item.keyword} ${item.category} ${item.recommended} ${item.reason}`
+        .toLowerCase()
+        .includes(normalizedCompQuery)
+    );
+  }, [config.quickLookup, normalizedCompQuery]);
 
   const filteredPatterns = useMemo(() => {
     if (!normalizedCompQuery) return config.patterns;
@@ -1587,7 +1601,7 @@ export default function LpicInfoPage() {
                                       key={cmd}
                                       type="button"
                                       onClick={() => handleJumpToCommandComparison(cmd)}
-                                      title="比較表で検索する"
+                                      title="比較表・逆引きで検索する"
                                       className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-cyan-50 border border-slate-200 hover:border-cyan-300 font-mono text-[11px] font-bold text-slate-700 hover:text-cyan-800 transition-colors cursor-pointer"
                                     >
                                       {cmd}
@@ -1674,7 +1688,7 @@ export default function LpicInfoPage() {
                     type="text"
                     value={compQuery}
                     onChange={(e) => setCompQuery(e.target.value)}
-                    placeholder="コマンド・キーワード検索..."
+                    placeholder="比較表・逆引き・コマンド検索..."
                     className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
                   />
                   {compQuery && (
@@ -1717,10 +1731,73 @@ export default function LpicInfoPage() {
                   );
                 })}
               </div>
+
+              {/* 検索ヒット件数サマリ */}
+              {compQuery.trim() && (
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-100 text-[11px] text-slate-600">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
+                    <span className="font-bold text-slate-700 break-words">
+                      「{compQuery.trim()}」のヒット件数:
+                    </span>
+                    <span className="inline-flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono">
+                      <span
+                        className={
+                          filteredComparisons.length > 0
+                            ? "text-cyan-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        比較表 {filteredComparisons.length} 件
+                      </span>
+                      <span className="text-slate-300">/</span>
+                      <span
+                        className={
+                          filteredQuickLookup.length > 0
+                            ? "text-amber-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        逆引き {filteredQuickLookup.length} 件
+                      </span>
+                      <span className="text-slate-300">/</span>
+                      <span
+                        className={
+                          filteredPatterns.length > 0
+                            ? "text-indigo-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        運用フロー {filteredPatterns.length} 件
+                      </span>
+                      <span className="text-slate-300">/</span>
+                      <span
+                        className={
+                          filteredPitfalls.length > 0
+                            ? "text-rose-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        ひっかけ {filteredPitfalls.length} 件
+                      </span>
+                      <span className="text-slate-300">/</span>
+                      <span
+                        className={
+                          filteredKeyPaths.length > 0
+                            ? "text-emerald-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        主要パス {filteredKeyPaths.length} 件
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* すべて0件時のエンプティステート */}
             {filteredComparisons.length === 0 &&
+              filteredQuickLookup.length === 0 &&
               filteredPatterns.length === 0 &&
               filteredPitfalls.length === 0 &&
               filteredKeyPaths.length === 0 && (
@@ -1799,6 +1876,44 @@ export default function LpicInfoPage() {
                   </div>
                 ))}
               </div>
+            )}
+
+            {/* 要件・用途 → コマンド逆引き早見表 */}
+            {filteredQuickLookup.length > 0 && (
+              <section className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                    <Zap className="w-5 h-5 text-amber-500 shrink-0" />
+                    <span>要件・用途 → コマンド逆引き早見表</span>
+                  </h3>
+                  <span className="text-xs font-mono font-bold text-slate-500">
+                    {filteredQuickLookup.length} 件
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {filteredQuickLookup.map((item) => (
+                    <div
+                      key={item.keyword}
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col justify-between gap-2 min-w-0"
+                    >
+                      <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-2">
+                        <span className="text-xs font-bold text-slate-900 leading-snug break-words min-w-0">
+                          「{item.keyword}」
+                        </span>
+                        <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 max-w-full truncate">
+                          {item.category}
+                        </span>
+                      </div>
+                      <div className="text-xs font-mono font-black text-cyan-800 bg-cyan-50/70 border border-cyan-100 px-3 py-1.5 rounded-lg break-words">
+                        → {item.recommended}
+                      </div>
+                      <p className="text-[11px] text-slate-600 leading-relaxed break-words">
+                        {item.reason}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
             )}
 
             {/* 頻出運用フローパターン */}
