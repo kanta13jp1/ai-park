@@ -1,6 +1,7 @@
 // Antigravity情報局のコンテンツデータ
-// 出どころ: Google Antigravity 公式ドキュメント（https://antigravity.google/docs）および
-// Antigravity 組み込みガイド（antigravity-guide スキル: cli.md / ide.md / app.md）に基づく。
+// 出どころ: Google Antigravity 公式ドキュメント（https://antigravity.google/docs）、
+// Antigravity 組み込みガイド（antigravity-guide スキル: cli.md / ide.md / app.md）、
+// および Agent Swarms（/swarm・swarm_monitor スキル）公式仕様に基づく。
 // ※ 架空の社内制度・数値・事例は記載せず、公式仕様に基づく機能解説と汎用的な実務実行例のみを掲載しています。
 
 export type SurfaceId = "app" | "ide" | "cli" | "sdk";
@@ -57,6 +58,27 @@ export interface ModalityComparisonRow {
   trigger: string;
   scope: string;
   bestUseCase: string;
+}
+
+export interface SwarmWorkspaceMode {
+  mode: "inherit" | "share" | "branch";
+  label: string;
+  mechanism: string;
+  bestFor: string;
+  caution: string;
+}
+
+export interface SwarmRolePattern {
+  role: string;
+  workspace: string;
+  responsibility: string;
+  handoffTip: string;
+}
+
+export interface SwarmLifecycleStep {
+  step: string;
+  title: string;
+  detail: string;
 }
 
 export const officialDocLinks = [
@@ -279,6 +301,22 @@ export const antigravityFeatures: AntigravityFeature[] = [
     docUrl: "https://antigravity.google/docs",
   },
   {
+    id: "agent-swarms",
+    category: "自律実行・テスト",
+    name: "Agent Swarms（/swarm）— 共有ボード並列マルチエージェント",
+    shortcutOrSyntax: '/swarm / workspace: "inherit" | "share" | "branch"',
+    summary:
+      "役割別の複数エージェントを並列起動し、共有メッセージボード上の @メンション 協調とワークスペース分離を組み合わせて並列開発・反復検証を行う機能です。",
+    details: [
+      "共有メッセージボード協調：read_board / post_message / swarm_wait を使い、必要な相手だけを @<worker-name> で起床・ハンドオフ",
+      'workspace 分離：共有作業コピーの "inherit"、作業コピー分離の "share"、完全独立クローンの "branch" を役割に応じて選択可能',
+      "kill 前の必須手順：kill は不可逆で share / branch の作業コピーも削除されるため、終了前にコミット＆coordinator 作業コピーへの統合が必須",
+    ],
+    practicalTip:
+      '同時編集する複数の Author には workspace: "share" を割り当ててファイル所有権を分離し、編集しない Verifier は workspace: "inherit" で差分監査に専念させると競合を防げます。',
+    docUrl: "https://antigravity.google/docs",
+  },
+  {
     id: "browser-automation",
     category: "自律実行・テスト",
     name: "Browser Automation & Testing",
@@ -336,6 +374,91 @@ export const modalityComparison: ModalityComparisonRow[] = [
     trigger: "ターミナルで `agy` 実行",
     scope: "カレントディレクトリ・CLI 作業全般",
     bestUseCase: "コマンド操作、ログ解析、スクリプト連携、軽量な対話",
+  },
+  {
+    modality: "Agent Swarms (/swarm)",
+    trigger: "/swarm（共有ボード起動）",
+    scope: "複数ロール・分離ワークスペース横断",
+    bestUseCase: "独立した複数機能の並列実装＋専用 Verifier による反復検品",
+  },
+];
+
+// 出どころ: Google Antigravity Agent Swarms（/swarm）および swarm_monitor スキルの公式仕様に基づく
+export const swarmWorkspaceModes: SwarmWorkspaceMode[] = [
+  {
+    mode: "inherit",
+    label: "共有ワークスペース",
+    mechanism: "coordinator と同一の作業コピーを共有（デフォルト設定）",
+    bestFor: "調査・差分監査・verifier・単一担当での編集作業",
+    caution: "複数 author で併用する場合はファイル単位の排他分担が必須",
+  },
+  {
+    mode: "share",
+    label: "作業コピー分離・共有リポジトリ",
+    mechanism: "リポジトリ実体を共有しつつ独立した作業コピーを作成",
+    bestFor: "複数 author による同時ファイル編集・独立ビルド",
+    caution: "kill と同時に作業コピーが削除されるため事前のコミット＆統合が必須",
+  },
+  {
+    mode: "branch",
+    label: "完全独立クローン",
+    mechanism: "リポジトリごと独立したクローンを作成",
+    bestFor: "完全に分離した実験・検証",
+    caution: "大容量 .git 環境では複製・ディスクコストが大きくなる点に注意",
+  },
+];
+
+export const swarmRolePatterns: SwarmRolePattern[] = [
+  {
+    role: "Coordinator",
+    workspace: "inherit",
+    responsibility: "全体設計・ワーカー起動・ブリーフ作成・成果物統合",
+    handoffTip: "役割と所有ファイル・完了条件をブリーフに明記",
+  },
+  {
+    role: "Author",
+    workspace: "share",
+    responsibility: "担当スコープのコード実装・ドキュメント作成",
+    handoffTip: "完了時にコミットハッシュを添えて次担当ピア（@verifier 等）のみをメンション",
+  },
+  {
+    role: "Verifier",
+    workspace: "inherit",
+    responsibility: "差分監査・仕様準拠確認・テスト結果チェック",
+    handoffTip: "自身では編集せず、修正点があれば該当 @author のみをメンション",
+  },
+  {
+    role: "Monitor",
+    workspace: "inherit",
+    responsibility: "タイマーによる停滞検知と進行フォロー",
+    handoffTip: "停滞したメンバーのみを呼び出し、完了投稿でタイマーを停止して鎮静化",
+  },
+];
+
+export const swarmLifecycleSteps: SwarmLifecycleStep[] = [
+  {
+    step: "01",
+    title: "起動とブリーフ配布",
+    detail:
+      "/swarm で役割別にワーカーを追加し、所有ファイル・禁止事項・完了条件を共有ボードに公開します。",
+  },
+  {
+    step: "02",
+    title: "並列作業と @メンション 協調",
+    detail:
+      'workspace: "share" で同時編集しつつ、必要な相手だけ @name で起床させてハンドオフします。',
+  },
+  {
+    step: "03",
+    title: "成果物のコミット＆統合",
+    detail:
+      "share / branch 上の変更をコミットし、coordinator の作業コピーへマージまたは cherry-pick で統合・検証します。",
+  },
+  {
+    step: "04",
+    title: "鎮静化とクリーンアップ",
+    detail:
+      "完了報告後に役目を終えたワーカーを kill で終了します。kill により作業コピーは削除され、killed 名は再利用できません。",
   },
 ];
 
@@ -500,6 +623,67 @@ $ agy
       "Project-Level Settings の権限範囲（allow / ask / deny）がタスク目的に合っているか",
     ],
   },
+  {
+    id: "ex-swarm-parallel-feature",
+    category: "実装・リファクタ",
+    title: 'Agent Swarms（/swarm）と workspace: "share" による並列実装＋検証',
+    scene:
+      "データ定義・UI コンポーネント・検索導線など互いに独立した複数ファイルを並列で編集し、編集禁止の専用 Verifier に差分監査させてから安全に統合したいとき。",
+    usedFeatures: [
+      "Agent Swarms (/swarm)",
+      'workspace: "share"',
+      "共有メッセージボード",
+      "Verifier パターン",
+    ],
+    prompt: `/swarm で以下の編成を起動し、並列実装と差分監査を進めてください。
+
+- Author A（workspace: "share"）: データ定義ファイルのみ所有（他ファイル編集禁止）。完了後にコミットして @verifier のみメンション。
+- Author B（workspace: "share"）: UI コンポーネントファイルのみ所有（他ファイル編集禁止）。完了後にコミットして @verifier のみメンション。
+- Verifier（workspace: "inherit"・編集禁止）: 各コミットハッシュを git show で監査し、型契約と要件の一致を確認。不備があれば該当 @author のみへ差し戻し、全件合格後に @coordinator へ完了報告。
+
+最後に Coordinator が各コミットを統合・検証したうえでワーカーを kill してください。`,
+    workflowSteps: [
+      "Coordinator がブリーフで各 Author の所有ファイル・禁止事項・完了条件を共有ボードに明記する",
+      '各 Author が workspace: "share" 上で担当ファイルのみ編集・コミットし、コミットハッシュを添えて @verifier のみをメンションする',
+      "Verifier が差分・型互換性・規約準拠を監査し、合格後に @coordinator へ最終報告する",
+      "Coordinator が成果物をマージまたは cherry-pick で作業コピーへ統合・検証してから、役目を終えたワーカーを kill する",
+    ],
+    checkPoints: [
+      "複数の Author 間で同一ファイルを編集対象にしていないか（ファイル所有権の排他分割）",
+      "share / branch のワーカーを kill する前に、必ずコミット＆coordinator 作業コピーへの統合が完了しているか",
+      "中間ハンドオフで不要な @coordinator メンションや挨拶投稿を行わず、最小限の起床にとどめているか",
+    ],
+  },
+  {
+    id: "ex-swarm-multi-audit",
+    category: "調査・設計",
+    title: 'Agent Swarms（workspace: "inherit"）による並列調査・横断監査',
+    scene:
+      "コードを変更せず、仕様調査・セキュリティ確認・型/設計チェックなど複数観点の読み取り専用タスクを分担し、共有ボードで結果を統合したいとき。",
+    usedFeatures: [
+      "Agent Swarms (/swarm)",
+      'workspace: "inherit"',
+      "共有メッセージボード",
+      "読み取り専用監査",
+    ],
+    prompt: `/swarm で以下の調査ワーカーをすべて workspace: "inherit"（読み取り専用・ファイル編集禁止）で起動してください。
+
+- Spec Auditor: 公式仕様・設定ファイルと実装の整合性を調査
+- Security Auditor: 認証情報・権限チェック・入出力境界の安全性を調査
+- Design Auditor: 既存パターンとの一貫性・レスポンシブ・アクセシビリティを調査
+
+各ワーカーはファイルパスと根拠を簡潔にまとめて @coordinator へ報告し、挨拶のみの投稿は行わないでください。`,
+    workflowSteps: [
+      'ファイルを変更しない調査・監査役割として、各ワーカーをデフォルトの workspace: "inherit" で起動する',
+      "各ワーカーが共有ボードの既存投稿（#seq 参照）を踏まえて重複作業を避けつつ調査結果を報告する",
+      "Coordinator が全報告を統合して優先度・対応方針を整理し、完了後に各ワーカーを kill する",
+    ],
+    checkPoints: [
+      "読み取り専用タスクに share / branch を使って不要な複製コストを増やしていないか",
+      "ボードへの報告に「完了」だけでなく、確認したファイルパス・根拠・結論が含まれているか",
+      "inherit でやむを得ず編集を行う場合は、ワーカー間で編集対象ファイルを完全に分離しているか",
+    ],
+  },
 ];
 
 export interface ShortcutItem {
@@ -562,6 +746,18 @@ export const antigravityShortcuts: ShortcutItem[] = [
     notes: "ファイル・フォルダ・会話履歴・ターミナル・Rules・MCP ツールを添付",
   },
   {
+    surface: "Chat Canvas",
+    keysOrCommand: "/swarm",
+    action: "Agent Swarms で複数ワーカーを並列起動",
+    notes: "役割別ワーカーを追加し共有ボード上で協調作業を開始",
+  },
+  {
+    surface: "Chat Canvas",
+    keysOrCommand: "@<worker-name>",
+    action: "共有ボード上で特定ワーカーを起床・ハンドオフ",
+    notes: "メンションは対象ワーカーを起床させる合図のため必要な担当のみ指定",
+  },
+  {
     surface: "CLI (agy)",
     keysOrCommand: "agy",
     action: "Antigravity CLI（TUI）を起動",
@@ -614,7 +810,7 @@ description: この Skill をいつ使うべきか（トリガー条件と目的
     title: "ワークスペース設定ディレクトリ構成（.agents/）",
     filePath: "<project-root>/.agents/",
     description:
-      "Antigravity IDE / 2.0 はプロジェクトルート配下の `.agents/` フォルダを自動検出し、プロジェクト固有の Rules・Skills・Plugins を読み込みます。",
+      "Antigravity IDE / 2.0 はプロジェクトルート配下の .agents/ フォルダを自動検出し、プロジェクト固有の Rules・Skills・Plugins を読み込みます。",
     code: `.agents/
 ├── rules/           # プロジェクト全体で常時守る規約・禁止事項
 ├── skills/          # 特定タスク時のみ読み込まれる手順パッケージ
@@ -640,6 +836,30 @@ description: この Skill をいつ使うべきか（トリガー条件と目的
 - Non-Workspace File Access : allow | ask | deny
 - Internet Access Policy    : allow | ask | deny
 - Allowlist / Denylist      : Command Allowlist/Denylist, Browser Allowlist`,
+  },
+  {
+    id: "tmpl-swarm-brief",
+    title: "Agent Swarms ワーカーブリーフ＆ワークスペース設計テンプレート",
+    filePath: "Chat Canvas: /swarm（共有ボード ブリーフ構成）",
+    description:
+      "Agent Swarms で各ワーカーに渡すブリーフの基本構成テンプレートです。ワーカーはデフォルトで親会話の履歴を見ないため、所有ファイル・workspace モード・完了条件・ハンドオフ先を明示します。",
+    code: `# Author 向けブリーフ構成（例: workspace: "share"）
+@<worker-name>
+所有ファイル: <担当ファイルパスのみ>（他ファイルは編集禁止）
+ワークスペース: workspace: "share"（複数 Author 同時編集時）
+
+## 実装・作業内容
+1. <担当スコープの要件・型契約を明記>
+2. <厳守ルール・禁止事項を明記>
+
+## 完了条件とハンドオフ
+- 作業後に担当ファイルを git add / git commit してコミットハッシュを取得する
+- コミットハッシュと変更概要を添えて @verifier のみをメンションする
+- 中間工程で @coordinator への CC や挨拶投稿を行わない
+
+# Verifier 向けブリーフ要点（workspace: "inherit"・編集禁止）
+- 自身ではファイルを編集・コミットせず、git show <commit-hash> 等で差分を監査する
+- 指摘時は該当 @<author> のみをメンションし、全件合格後に @coordinator [done] を投稿する`,
   },
 ];
 
@@ -699,5 +919,19 @@ export const antigravityFaqs: FaqItem[] = [
     question: "Auxiliary Pane と Scheduled Tasks はどのような場面で使いますか？",
     answer:
       "Antigravity 2.0 の Auxiliary Pane では、実行中の Subagents、Background Tasks、生成された Artifacts、Files Changed（変更ファイル一覧）、Terminals を一覧で確認できます。また左サイドバーの Scheduled Tasks を使うと、cron 式による定期実行やワンショットタイマーでバックグラウンドタスクを予約・監視できます。",
+  },
+  {
+    id: "faq-swarm-vs-subagent",
+    category: "操作・カスタマイズ",
+    question: "Subagents と Agent Swarms（/swarm）はどのように使い分ければよいですか？",
+    answer:
+      'Subagents は親エージェントが単発または並列の調査・レビュー・補助タスクを委譲し、親へ結果を返して完結させる用途に適しています。一方、Agent Swarms（/swarm）は Coordinator・複数の Author・Verifier・Monitor といった役割別ワーカーを起動し、共有メッセージボード（read_board / post_message / swarm_wait）と @メンション を使ってピア同士で直接ハンドオフや差し戻し・再検証を行う多段階の並列開発に向いています。さらに workspace: "share" や "branch" による作業コピー分離も使えるため、複数ファイルを同時に編集・ビルドする場面で強みを発揮します。',
+  },
+  {
+    id: "faq-swarm-workspace-modes",
+    category: "セキュリティ・設定",
+    question: "Agent Swarms の workspace（inherit / share / branch）の違いと、kill 前の注意点は何ですか？",
+    answer:
+      "inherit（デフォルト）は Coordinator と同一の作業コピーを共有するため、調査・差分監査・Verifier や単独編集に適しています（複数 Author で併用する場合はファイル単位の排他分担が必須です）。share はリポジトリ実体を共有しつつワーカー専用の独立した作業コピーを作成するため、複数 Author の同時編集や独立ビルドに向いています。branch はリポジトリごと独立したクローンを作成するため完全分離された実験・検証に適しますが、大容量 .git 環境では複製コストが大きくなります。なお、kill を実行するとワーカーは永久終了して killed 名は再利用できなくなり、share / branch の作業コピーも同時に削除されるため、kill 前に必ず変更をコミットし Coordinator の作業コピーへ統合を完了してください。",
   },
 ];
