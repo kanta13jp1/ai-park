@@ -227,20 +227,16 @@ export default function IpaInfoPage() {
   const [activeTab, setActiveTab] = useState<TabId>("domains");
   const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
   const [progress, setProgress] = useState<IpaProgress>(DEFAULT_PROGRESS);
-  const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>({
-    "ip-strategy": true,
-    "sg-mgmt": true,
-    "fe-cs": true,
-    "ap-arch": true,
-    "sc-sec": true,
-    "db-design": true,
-    "nw-arch": true,
-    "es-hw": true,
-    "st-biz": true,
-    "sa-req": true,
-    "pm-plan": true,
-    "sm-ops": true,
-    "au-std": true,
+  const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    const seenExams = new Set<IpaExamId>();
+    for (const d of ipaDomains) {
+      if (!seenExams.has(d.examId)) {
+        seenExams.add(d.examId);
+        initial[d.id] = true;
+      }
+    }
+    return initial;
   });
   const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
   const [onlyWithNotesTopics, setOnlyWithNotesTopics] = useState<boolean>(false);
@@ -325,6 +321,12 @@ export default function IpaInfoPage() {
     setQuizDomainTarget("all");
     setTopicQuery("");
     setCompQuery("");
+    const firstDomainId = ipaDomains.find((d) => d.examId === examId)?.id;
+    if (firstDomainId) {
+      setExpandedDomains((prev) =>
+        prev[firstDomainId] === undefined ? { ...prev, [firstDomainId]: true } : prev
+      );
+    }
   };
 
   const toggleTopic = (topicId: string) => {
@@ -402,12 +404,35 @@ export default function IpaInfoPage() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const handleFocusDomain = (domainId: string) => {
+    playCyberClick();
+    setTopicQuery("");
+    setOnlyIncompleteTopics(false);
+    setOnlyWithNotesTopics(false);
+    setExpandedDomains((prev) => ({ ...prev, [domainId]: true }));
+    setTimeout(() => {
+      document
+        .getElementById(`ipa-domain-${domainId}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 60);
+  };
+
   const handleJumpToKeywordComparison = (kw: string) => {
     playCyberClick();
-    const cleanQuery = kw.split("（")[0].split("/")[0].trim();
+    const cleanQuery = kw.split("（")[0].split("(")[0].split("/")[0].trim();
     setCompCategory("すべて");
     setCompQuery(cleanQuery);
     setActiveTab("comparisons");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSearchTopicsFromComparison = () => {
+    playCyberClick();
+    const nextQuery = compQuery.trim();
+    setOnlyIncompleteTopics(false);
+    setOnlyWithNotesTopics(false);
+    setTopicQuery(nextQuery);
+    setActiveTab("domains");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -486,6 +511,127 @@ export default function IpaInfoPage() {
     currentTopics.length + currentQuestions.length + currentFlashcards.length;
   const doneActions = completedTopicCount + answeredQuizCount + masteredCardCount;
   const overallPct = totalActions > 0 ? Math.round((doneActions / totalActions) * 100) : 0;
+
+  const { examStatsById, crossExamSummary } = useMemo(() => {
+    const completedTopicSet = new Set(progress.completedTopics);
+    const masteredCardSet = new Set(progress.masteredCards);
+
+    const byId = {} as Record<
+      IpaExamId,
+      {
+        totalTopics: number;
+        doneTopics: number;
+        totalQuestions: number;
+        answeredQuestions: number;
+        correctQuestions: number;
+        totalFlashcards: number;
+        masteredCards: number;
+        started: boolean;
+      }
+    >;
+
+    let startedExams = 0;
+    let totalTopics = 0;
+    let doneTopics = 0;
+    let totalQuestions = 0;
+    let correctQuestions = 0;
+    let totalFlashcards = 0;
+    let masteredCards = 0;
+
+    for (const meta of ipaExamMetas) {
+      const topics = ipaDomains
+        .filter((d) => d.examId === meta.id)
+        .flatMap((d) => d.topics);
+      const doneT = topics.filter((t) => completedTopicSet.has(t.id)).length;
+
+      const qs = ipaPracticeQuestions.filter((q) => q.examId === meta.id);
+      const answeredQ = qs.filter((q) => Boolean(progress.quizAnswers[q.id]?.length)).length;
+      const correctQ = qs.filter((q) => isQuestionCorrect(q, progress.quizAnswers[q.id])).length;
+
+      const cards = ipaFlashcards.filter((c) => c.examId === meta.id);
+      const masteredC = cards.filter((c) => masteredCardSet.has(c.keyword)).length;
+
+      const hasNotes = topics.some((t) => (progress.topicNotes[t.id] ?? "").trim().length > 0);
+      const hasMock = (progress.mockExamHistory[meta.id] ?? []).length > 0;
+      const started = doneT > 0 || answeredQ > 0 || masteredC > 0 || hasMock || hasNotes;
+
+      byId[meta.id] = {
+        totalTopics: topics.length,
+        doneTopics: doneT,
+        totalQuestions: qs.length,
+        answeredQuestions: answeredQ,
+        correctQuestions: correctQ,
+        totalFlashcards: cards.length,
+        masteredCards: masteredC,
+        started,
+      };
+
+      if (started) startedExams += 1;
+      totalTopics += topics.length;
+      doneTopics += doneT;
+      totalQuestions += qs.length;
+      correctQuestions += correctQ;
+      totalFlashcards += cards.length;
+      masteredCards += masteredC;
+    }
+
+    const totalItems = totalTopics + totalQuestions + totalFlashcards;
+    const doneItems = doneTopics + correctQuestions + masteredCards;
+    const crossOverallPct = totalItems > 0 ? Math.round((doneItems / totalItems) * 100) : 0;
+
+    return {
+      examStatsById: byId,
+      crossExamSummary: {
+        totalExams: ipaExamMetas.length,
+        startedExams,
+        totalTopics,
+        doneTopics,
+        totalQuestions,
+        correctQuestions,
+        totalFlashcards,
+        masteredCards,
+        overallPct: crossOverallPct,
+      },
+    };
+  }, [progress]);
+
+  const topicQuickChips = useMemo(() => {
+    const seen = new Set<string>();
+    const chips: string[] = [];
+    for (const topic of currentTopics) {
+      for (const kw of topic.keywords) {
+        const trimmed = kw.trim();
+        if (!trimmed) continue;
+        const normalized = trimmed.toLowerCase();
+        if (seen.has(normalized)) continue;
+        seen.add(normalized);
+        chips.push(trimmed);
+        if (chips.length >= 6) return chips;
+      }
+    }
+    return chips;
+  }, [currentTopics]);
+
+  const domainQuizStats = useMemo(() => {
+    const stats: Record<string, { total: number; correct: number }> = {};
+    for (const d of currentDomains) {
+      const qs = currentQuestions.filter((q) => q.domainId === d.id);
+      const correct = qs.filter((q) => isQuestionCorrect(q, progress.quizAnswers[q.id])).length;
+      stats[d.id] = { total: qs.length, correct };
+    }
+    return stats;
+  }, [currentDomains, currentQuestions, progress.quizAnswers]);
+
+  const domainGridClass =
+    currentDomains.length <= 1
+      ? "grid-cols-1"
+      : currentDomains.length === 2
+        ? "grid-cols-1 sm:grid-cols-2"
+        : currentDomains.length === 3
+          ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+          : currentDomains.length === 4
+            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+            : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
 
   const filteredDomains = useMemo(() => {
     const q = topicQuery.trim().toLowerCase();
@@ -591,12 +737,71 @@ export default function IpaInfoPage() {
         <section className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
             <span className="text-xs font-black text-slate-700 flex items-center space-x-1.5">
-              <ShieldCheck className="w-4 h-4 text-indigo-600" />
-              <span>学習する試験区分を選択（全13区分・1ページ内で切り替え）</span>
+              <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
+              <span>学習する試験区分を選択（全{crossExamSummary.totalExams}区分・1ページ内で切り替え）</span>
             </span>
             <span className="text-[11px] text-slate-500">
               各区分の進捗・模試履歴は個別に記録されます
             </span>
+          </div>
+
+          {/* 全13区分横断 総合進捗サマリバー */}
+          <div className="rounded-xl bg-slate-900 text-white p-3.5 sm:p-4 border border-slate-800 space-y-2.5">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center space-x-1.5 text-xs font-black text-indigo-200">
+                <Award className="w-4 h-4 text-cyan-300 shrink-0" />
+                <span>全{crossExamSummary.totalExams}区分 横断 総合進捗サマリ</span>
+              </div>
+              <span className="text-[11px] font-mono font-bold text-cyan-300">
+                通算達成率 {crossExamSummary.overallPct}%
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+              <div className="rounded-lg bg-white/5 border border-white/10 px-3 py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-2">
+                <span className="text-[10px] sm:text-[11px] text-slate-300 font-semibold">
+                  着手済み区分
+                </span>
+                <span className="text-xs sm:text-sm font-mono font-black text-white whitespace-nowrap">
+                  {crossExamSummary.startedExams}
+                  <span className="text-slate-400 font-normal">/{crossExamSummary.totalExams}</span>
+                </span>
+              </div>
+              <div className="rounded-lg bg-white/5 border border-white/10 px-3 py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-2">
+                <span className="text-[10px] sm:text-[11px] text-slate-300 font-semibold">
+                  通算トピック習得
+                </span>
+                <span className="text-xs sm:text-sm font-mono font-black text-cyan-300 whitespace-nowrap">
+                  {crossExamSummary.doneTopics}
+                  <span className="text-slate-400 font-normal">/{crossExamSummary.totalTopics}</span>
+                </span>
+              </div>
+              <div className="rounded-lg bg-white/5 border border-white/10 px-3 py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-2">
+                <span className="text-[10px] sm:text-[11px] text-slate-300 font-semibold">
+                  通算演習正答
+                </span>
+                <span className="text-xs sm:text-sm font-mono font-black text-emerald-300 whitespace-nowrap">
+                  {crossExamSummary.correctQuestions}
+                  <span className="text-slate-400 font-normal">/{crossExamSummary.totalQuestions}</span>
+                </span>
+              </div>
+              <div className="rounded-lg bg-white/5 border border-white/10 px-3 py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-0.5 sm:gap-2">
+                <span className="text-[10px] sm:text-[11px] text-slate-300 font-semibold">
+                  通算カード習得
+                </span>
+                <span className="text-xs sm:text-sm font-mono font-black text-amber-300 whitespace-nowrap">
+                  {crossExamSummary.masteredCards}
+                  <span className="text-slate-400 font-normal">/{crossExamSummary.totalFlashcards}</span>
+                </span>
+              </div>
+            </div>
+
+            <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-indigo-400 via-cyan-400 to-emerald-400 transition-all duration-500"
+                style={{ width: `${crossExamSummary.overallPct}%` }}
+              />
+            </div>
           </div>
 
           <div className="space-y-3.5">
@@ -610,16 +815,7 @@ export default function IpaInfoPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5">
                     {groupMetas.map((meta) => {
                       const isSelected = meta.id === selectedExam;
-                      const examTopics = ipaDomains
-                        .filter((d) => d.examId === meta.id)
-                        .flatMap((d) => d.topics);
-                      const examDoneTopics = examTopics.filter((t) =>
-                        progress.completedTopics.includes(t.id)
-                      ).length;
-                      const examQs = ipaPracticeQuestions.filter((q) => q.examId === meta.id);
-                      const examCorrectQs = examQs.filter((q) =>
-                        isQuestionCorrect(q, progress.quizAnswers[q.id])
-                      ).length;
+                      const stat = examStatsById[meta.id];
 
                       return (
                         <button
@@ -633,8 +829,16 @@ export default function IpaInfoPage() {
                           }`}
                         >
                           <div className="flex items-start justify-between gap-2">
-                            <span className="text-xs sm:text-sm font-black leading-snug">
-                              {meta.shortLabel}
+                            <span className="text-xs sm:text-sm font-black leading-snug flex items-center gap-1.5 min-w-0">
+                              {stat.started && (
+                                <span
+                                  aria-label="着手済み"
+                                  className={`w-2 h-2 rounded-full shrink-0 ${
+                                    isSelected ? "bg-emerald-400" : "bg-emerald-500"
+                                  }`}
+                                />
+                              )}
+                              <span className="truncate">{meta.shortLabel}</span>
                             </span>
                             <span
                               className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
@@ -647,16 +851,20 @@ export default function IpaInfoPage() {
                             </span>
                           </div>
                           <div
-                            className={`mt-1 flex items-center gap-2 text-[11px] font-mono ${
+                            className={`mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] font-mono ${
                               isSelected ? "text-slate-300" : "text-slate-500"
                             }`}
                           >
                             <span>
-                              トピック {examDoneTopics}/{examTopics.length}
+                              トピック {stat.doneTopics}/{stat.totalTopics}
                             </span>
                             <span>•</span>
                             <span>
-                              演習 {examCorrectQs}/{examQs.length}
+                              演習 {stat.correctQuestions}/{stat.totalQuestions}
+                            </span>
+                            <span>•</span>
+                            <span>
+                              カード {stat.masteredCards}/{stat.totalFlashcards}
                             </span>
                           </div>
                         </button>
@@ -673,11 +881,11 @@ export default function IpaInfoPage() {
         <TiltCard maxTilt={2} glareOpacity={0.05} className="rounded-3xl">
           <div
             onMouseEnter={() => playCyberHover()}
-            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border border-indigo-700/50 p-6 sm:p-8 text-white shadow-xl"
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border border-indigo-700/50 p-5 sm:p-8 text-white shadow-xl"
           >
             <div className="absolute -top-10 right-0 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="space-y-2.5 max-w-2xl">
+              <div className="space-y-2.5 max-w-2xl min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center space-x-1.5 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-indigo-400/20 text-indigo-200 border border-indigo-400/30 tracking-wider">
                     <ScrollText size={12} />
@@ -688,7 +896,7 @@ export default function IpaInfoPage() {
                     {currentFlashcards.length} 枚 ・ 演習 {currentQuestions.length} 問
                   </span>
                 </div>
-                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-keep">
+                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-words">
                   {currentExamMeta.title} 合格対策ハブ
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
@@ -728,10 +936,10 @@ export default function IpaInfoPage() {
           {currentExamMeta.examFacts.map((fact) => (
             <div
               key={fact.label}
-              className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1"
+              className="bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 shadow-xs space-y-1 min-w-0"
             >
               <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
-              <div className="text-sm sm:text-base font-black text-slate-900 whitespace-nowrap">
+              <div className="text-sm sm:text-base font-black text-slate-900 break-words">
                 {fact.value}
               </div>
               <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
@@ -814,7 +1022,8 @@ export default function IpaInfoPage() {
                 <button
                   type="button"
                   onClick={handleImportBackup}
-                  className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 cursor-pointer shrink-0"
+                  disabled={!backupInput.trim()}
+                  className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 disabled:opacity-40 cursor-pointer shrink-0"
                 >
                   復元を実行
                 </button>
@@ -839,13 +1048,13 @@ export default function IpaInfoPage() {
                   playCyberClick();
                   setActiveTab(tab.id);
                 }}
-                className={`inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border ${
+                className={`inline-flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border whitespace-nowrap ${
                   active
                     ? "bg-slate-900 text-white border-slate-900 shadow-sm"
                     : "bg-white text-slate-600 border-slate-200/80 hover:border-indigo-300 hover:text-slate-900"
                 }`}
               >
-                <Icon size={15} />
+                <Icon size={15} className="shrink-0" />
                 <span>{tab.label}</span>
                 {tab.badge && (
                   <span
@@ -864,10 +1073,97 @@ export default function IpaInfoPage() {
         {/* TAB 1: トピック別学習 */}
         {activeTab === "domains" && (
           <div className="space-y-6">
-            {/* フィルター＆検索バー */}
+            {/* クリック可能な分野別進捗バー */}
+            <section className="space-y-2.5">
+              <div className="flex flex-wrap items-center justify-between gap-2 px-1">
+                <span className="text-xs font-black text-slate-700 flex items-center space-x-1.5">
+                  <Layers className="w-4 h-4 text-indigo-600 shrink-0" />
+                  <span>分野別進捗（クリックで該当分野へジャンプ）</span>
+                </span>
+                <span className="text-[11px] text-slate-500">
+                  {currentExamMeta.shortLabel} 全{currentDomains.length}分野
+                </span>
+              </div>
+
+              <div className={`grid ${domainGridClass} gap-3`}>
+                {currentDomains.map((domain) => {
+                  const style = ACCENT_STYLES[domain.accentColor];
+                  const domainDone = domain.topics.filter((t) =>
+                    progress.completedTopics.includes(t.id)
+                  ).length;
+                  const domainPct =
+                    domain.topics.length > 0
+                      ? Math.round((domainDone / domain.topics.length) * 100)
+                      : 0;
+                  const qStat = domainQuizStats[domain.id] ?? { total: 0, correct: 0 };
+
+                  return (
+                    <div
+                      key={domain.id}
+                      className={`bg-white rounded-xl border ${style.border} hover:border-indigo-300 shadow-xs transition-all flex flex-col justify-between overflow-hidden`}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => handleFocusDomain(domain.id)}
+                        onMouseEnter={() => playCyberHover()}
+                        className="w-full p-3.5 text-left space-y-2 cursor-pointer group hover:bg-slate-50/70 transition-colors flex-1"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span
+                            className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md border ${style.badge} truncate`}
+                          >
+                            {domain.number} ・ {domain.category}
+                          </span>
+                          <span className="text-[11px] font-mono font-black text-slate-700 shrink-0">
+                            {domainPct}%
+                            <span className="ml-1 text-[10px] font-normal text-slate-400">
+                              ({domainDone}/{domain.topics.length})
+                            </span>
+                          </span>
+                        </div>
+                        <div className="text-xs sm:text-sm font-black text-slate-900 group-hover:text-indigo-700 line-clamp-2 leading-snug transition-colors">
+                          {domain.title}
+                        </div>
+                        <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
+                          <div
+                            className={`h-full ${style.bar} transition-all duration-300`}
+                            style={{ width: `${domainPct}%` }}
+                          />
+                        </div>
+                      </button>
+
+                      <div className="px-3.5 py-2 border-t border-slate-100 bg-slate-50/60 flex flex-wrap items-center justify-between gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleFocusDomain(domain.id)}
+                          className="text-[11px] font-bold text-slate-600 hover:text-indigo-700 inline-flex items-center space-x-1 cursor-pointer"
+                        >
+                          <span>トピックへ</span>
+                          <ChevronDown size={12} />
+                        </button>
+                        {qStat.total > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => handleJumpToDomainQuiz(domain.id)}
+                            className="text-[11px] font-bold text-indigo-700 hover:text-indigo-900 inline-flex items-center space-x-1 cursor-pointer"
+                          >
+                            <span>
+                              演習 ({qStat.correct}/{qStat.total})
+                            </span>
+                            <ArrowRight size={12} />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* フィルター＆検索バー + クイック検索チップ */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                <div className="relative flex-1 lg:max-w-xs">
+              <div className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center lg:justify-between gap-3">
+                <div className="relative w-full lg:w-72 order-1">
                   <Search
                     size={14}
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -883,14 +1179,44 @@ export default function IpaInfoPage() {
                     <button
                       type="button"
                       onClick={() => setTopicQuery("")}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      aria-label="検索をクリア"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                     >
                       <X size={13} />
                     </button>
                   )}
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2">
+                {topicQuickChips.length > 0 && (
+                  <div className="w-full flex flex-wrap items-center gap-1.5 order-2 lg:order-3 lg:pt-2.5 lg:border-t lg:border-slate-100">
+                    <span className="text-[11px] font-bold text-slate-400 mr-0.5 shrink-0">
+                      クイック検索:
+                    </span>
+                    {topicQuickChips.map((kw) => {
+                      const isChipActive =
+                        topicQuery.trim().toLowerCase() === kw.toLowerCase();
+                      return (
+                        <button
+                          key={kw}
+                          type="button"
+                          onClick={() => {
+                            playCyberClick();
+                            setTopicQuery(isChipActive ? "" : kw);
+                          }}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold border transition-colors cursor-pointer ${
+                            isChipActive
+                              ? "bg-slate-900 text-cyan-300 border-slate-900"
+                              : "bg-slate-50 text-slate-700 border-slate-200 hover:border-indigo-300 hover:bg-indigo-50 hover:text-indigo-800"
+                          }`}
+                        >
+                          {kw}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <div className="flex flex-wrap items-center gap-2 order-3 lg:order-2">
                   <button
                     type="button"
                     onClick={() => {
@@ -944,7 +1270,7 @@ export default function IpaInfoPage() {
 
             {/* ドメイン・トピック一覧 */}
             {filteredDomains.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-slate-200/80 p-10 text-center space-y-2">
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-8 sm:p-10 text-center space-y-2">
                 <Search className="w-8 h-8 text-slate-300 mx-auto" />
                 <div className="text-sm font-black text-slate-700">条件に一致するトピックがありません</div>
                 <button
@@ -964,7 +1290,9 @@ export default function IpaInfoPage() {
                 {filteredDomains.map((domain) => {
                   const Icon = CATEGORY_ICONS[domain.category] ?? Cpu;
                   const style = ACCENT_STYLES[domain.accentColor];
-                  const isExpanded = Boolean(expandedDomains[domain.id] || topicQuery.trim());
+                  const isExpanded = Boolean(
+                    expandedDomains[domain.id] || topicQuery.trim() || onlyWithNotesTopics
+                  );
                   const domainDone = domain.topics.filter((t) =>
                     progress.completedTopics.includes(t.id)
                   ).length;
@@ -973,9 +1301,10 @@ export default function IpaInfoPage() {
                   return (
                     <div
                       key={domain.id}
-                      className={`bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
+                      id={`ipa-domain-${domain.id}`}
+                      className={`scroll-mt-6 bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
                     >
-                      <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <button
                           type="button"
                           onClick={() => {
@@ -985,12 +1314,12 @@ export default function IpaInfoPage() {
                               [domain.id]: !prev[domain.id],
                             }));
                           }}
-                          className="flex items-start space-x-3.5 text-left flex-1 cursor-pointer"
+                          className="flex items-start space-x-3.5 text-left flex-1 min-w-0 cursor-pointer"
                         >
                           <div className={`p-2.5 rounded-xl border shrink-0 ${style.iconBg}`}>
                             <Icon size={20} />
                           </div>
-                          <div className="space-y-1 flex-1">
+                          <div className="space-y-1 flex-1 min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <span
                                 className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${style.badge}`}
@@ -1001,14 +1330,14 @@ export default function IpaInfoPage() {
                                 完了 {domainDone}/{domain.topics.length} ({domainPct}%)
                               </span>
                             </div>
-                            <h3 className="text-base sm:text-lg font-black text-slate-900">
+                            <h3 className="text-base sm:text-lg font-black text-slate-900 break-words">
                               {domain.title}
                             </h3>
                             <p className="text-xs text-slate-600 leading-relaxed">{domain.summary}</p>
                           </div>
                         </button>
 
-                        <div className="flex items-center space-x-2 shrink-0">
+                        <div className="flex items-center justify-end space-x-2 shrink-0">
                           <button
                             type="button"
                             onClick={() => handleJumpToDomainQuiz(domain.id)}
@@ -1035,7 +1364,7 @@ export default function IpaInfoPage() {
                       </div>
 
                       {isExpanded && (
-                        <div className="border-t border-slate-100 bg-slate-50/50 p-5 space-y-4">
+                        <div className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-5 space-y-4">
                           {domain.visibleTopics.map((topic) => {
                             const isDone = progress.completedTopics.includes(topic.id);
                             const noteText = progress.topicNotes[topic.id] ?? "";
@@ -1044,27 +1373,27 @@ export default function IpaInfoPage() {
                             return (
                               <div
                                 key={topic.id}
-                                className={`bg-white rounded-xl border p-5 space-y-3 transition-all ${
+                                className={`bg-white rounded-xl border p-4 sm:p-5 space-y-3 transition-all ${
                                   isDone ? "border-emerald-200 bg-emerald-50/20" : "border-slate-200/80"
                                 }`}
                               >
-                                <div className="flex items-start justify-between gap-3">
+                                <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-2.5 sm:gap-3">
                                   <button
                                     type="button"
                                     onClick={() => toggleTopic(topic.id)}
-                                    className="flex items-start space-x-2.5 text-left cursor-pointer group"
+                                    className="flex items-start space-x-2.5 text-left cursor-pointer group min-w-0 flex-1"
                                   >
                                     {isDone ? (
                                       <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                                     ) : (
                                       <Circle className="w-5 h-5 text-slate-300 group-hover:text-indigo-500 shrink-0 mt-0.5" />
                                     )}
-                                    <div>
+                                    <div className="min-w-0">
                                       <span className="text-[11px] font-mono font-bold text-slate-400">
                                         {topic.code}
                                       </span>
                                       <h4
-                                        className={`text-sm sm:text-base font-black ${
+                                        className={`text-sm sm:text-base font-black break-words ${
                                           isDone ? "text-emerald-950" : "text-slate-900"
                                         }`}
                                       >
@@ -1194,61 +1523,101 @@ export default function IpaInfoPage() {
             </div>
 
             {/* 比較表カード */}
-            <div className="space-y-5">
-              {filteredComparisons.map((comp) => (
-                <div
-                  key={comp.id}
-                  className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4"
-                >
-                  <div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-                      {comp.category}
-                    </span>
-                    <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1.5">
-                      {comp.title}
-                    </h3>
-                    <p className="text-xs text-slate-500">{comp.subtitle}</p>
-                  </div>
+            {filteredComparisons.length === 0 ? (
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-10 text-center space-y-3 shadow-xs">
+                <Search className="w-8 h-8 text-slate-300 mx-auto" />
+                <div className="text-sm sm:text-base font-black text-slate-900">
+                  該当する比較表が見つかりませんでした
+                </div>
+                <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+                  {compQuery.trim()
+                    ? `「${compQuery.trim()}」${
+                        compCategory !== "すべて" ? `（カテゴリ: ${compCategory}）` : ""
+                      }に一致する比較表は ${currentExamMeta.shortLabel} には登録されていません。`
+                    : `カテゴリ「${compCategory}」に該当する比較表は ${currentExamMeta.shortLabel} には登録されていません。`}
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setCompCategory("すべて");
+                      setCompQuery("");
+                    }}
+                    className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer transition-colors"
+                  >
+                    <RotateCcw size={13} />
+                    <span>フィルタ解除</span>
+                  </button>
+                  {compQuery.trim() && (
+                    <button
+                      type="button"
+                      onClick={handleSearchTopicsFromComparison}
+                      className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold cursor-pointer transition-colors"
+                    >
+                      <BookOpen size={13} />
+                      <span>このキーワードでトピック別学習を検索する</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                {filteredComparisons.map((comp) => (
+                  <div
+                    key={comp.id}
+                    className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4"
+                  >
+                    <div>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                        {comp.category}
+                      </span>
+                      <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1.5 break-words">
+                        {comp.title}
+                      </h3>
+                      <p className="text-xs text-slate-500">{comp.subtitle}</p>
+                    </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs sm:text-sm">
-                      <thead>
-                        <tr className="border-b border-slate-200 bg-slate-50/70">
-                          <th className="py-2.5 px-3 font-black text-slate-700 whitespace-nowrap">
-                            比較項目
-                          </th>
-                          {comp.columns.map((col) => (
-                            <th key={col} className="py-2.5 px-3 font-black text-indigo-800 whitespace-nowrap">
-                              {col}
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                          <tr className="border-b border-slate-200 bg-slate-50/70">
+                            <th className="py-2.5 px-3 font-black text-slate-700 whitespace-nowrap">
+                              比較項目
                             </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {comp.rows.map((row) => (
-                          <tr key={row.feature} className="hover:bg-slate-50/70">
-                            <td className="py-2.5 px-3 font-bold text-slate-800">{row.feature}</td>
-                            {row.values.map((val, idx) => (
-                              <td key={idx} className="py-2.5 px-3 text-slate-600 text-xs">
-                                {val}
-                              </td>
+                            {comp.columns.map((col) => (
+                              <th key={col} className="py-2.5 px-3 font-black text-indigo-800 whitespace-nowrap">
+                                {col}
+                              </th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {comp.rows.map((row) => (
+                            <tr key={row.feature} className="hover:bg-slate-50/70">
+                              <td className="py-2.5 px-3 font-bold text-slate-800">{row.feature}</td>
+                              {row.values.map((val, idx) => (
+                                <td key={idx} className="py-2.5 px-3 text-slate-600 text-xs">
+                                  {val}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
 
-                  <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
-                    <Sparkles className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
-                    <span>
-                      <strong className="text-indigo-300">使い分けルール: </strong>
-                      {comp.decisionRule}
-                    </span>
+                    <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
+                      <Sparkles className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="text-indigo-300">使い分けルール: </strong>
+                        {comp.decisionRule}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             {/* 頻出公式・計算パターン */}
             <section className="space-y-4">
@@ -1262,7 +1631,7 @@ export default function IpaInfoPage() {
                     key={pat.id}
                     className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
                   >
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
                       <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
                         {pat.badge}
@@ -1357,7 +1726,7 @@ export default function IpaInfoPage() {
         {/* TAB 4: 練習問題・模試 */}
         {activeTab === "quiz" && (
           <CertificationPracticeQuiz
-            key={`quiz-${selectedExam}`}
+            key={`quiz-${selectedExam}-${quizDomainTarget}`}
             questions={currentQuestions}
             domains={currentQuizDomains}
             examBadgeLabel={`${currentExamMeta.shortLabel} 演習`}
