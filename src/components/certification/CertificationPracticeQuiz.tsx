@@ -188,6 +188,8 @@ export default function CertificationPracticeQuiz({
     playCyberClick();
     setQuizMode(mode);
     setStatusFilter("all");
+    setDifficultyFilter("all");
+    setConfirmSubmitExam(false);
     setDraftMulti({});
     setCurrentIndex(0);
     if (mode === "exam") {
@@ -261,6 +263,21 @@ export default function CertificationPracticeQuiz({
     [quizMode, examSubmitted, commitAnswer, draftMulti, activeAnswers]
   );
 
+  const handleConfirmMulti = useCallback(
+    (q: CertQuestion) => {
+      const selected = draftMulti[q.id] ?? [];
+      if (selected.length !== q.selectCount) return;
+      playCyberClick();
+      commitAnswer(q.id, selected);
+      setDraftMulti((prev) => {
+        const copy = { ...prev };
+        delete copy[q.id];
+        return copy;
+      });
+    },
+    [draftMulti, commitAnswer]
+  );
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
@@ -280,18 +297,29 @@ export default function CertificationPracticeQuiz({
           e.preventDefault();
           handleOptionClick(currentQuestion, idx);
         }
+      } else if (
+        e.key === "Enter" &&
+        currentQuestion &&
+        currentQuestion.selectCount > 1 &&
+        !(quizMode === "exam" && examSubmitted) &&
+        (draftMulti[currentQuestion.id]?.length ?? 0) === currentQuestion.selectCount
+      ) {
+        e.preventDefault();
+        handleConfirmMulti(currentQuestion);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [safeIndex, filteredQuestions.length, currentQuestion, handleOptionClick]);
-
-  const handleConfirmMulti = (q: CertQuestion) => {
-    const selected = draftMulti[q.id] ?? [];
-    if (selected.length !== q.selectCount) return;
-    playCyberClick();
-    commitAnswer(q.id, selected);
-  };
+  }, [
+    safeIndex,
+    filteredQuestions.length,
+    currentQuestion,
+    handleOptionClick,
+    handleConfirmMulti,
+    quizMode,
+    examSubmitted,
+    draftMulti,
+  ]);
 
   return (
     <div className="space-y-6">
@@ -398,6 +426,7 @@ export default function CertificationPracticeQuiz({
                   onResetQuiz();
                   setElapsedSeconds(0);
                 }
+                setConfirmSubmitExam(false);
                 setDraftMulti({});
                 setCurrentIndex(0);
               }}
@@ -851,14 +880,7 @@ export default function CertificationPracticeQuiz({
                     <button
                       type="button"
                       disabled={activeSelection.length !== currentQuestion.selectCount}
-                      onClick={() => {
-                        handleConfirmMulti(currentQuestion);
-                        setDraftMulti((prev) => {
-                          const copy = { ...prev };
-                          delete copy[currentQuestion.id];
-                          return copy;
-                        });
-                      }}
+                      onClick={() => handleConfirmMulti(currentQuestion)}
                       className="px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs"
                     >
                       回答を確定する
@@ -948,7 +970,17 @@ export default function CertificationPracticeQuiz({
                     <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-slate-600">
                       5
                     </kbd>{" "}
-                    で選択 /{" "}
+                    で選択
+                    {currentQuestion.selectCount > 1 && (
+                      <>
+                        {" / "}
+                        <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-slate-600">
+                          Enter
+                        </kbd>{" "}
+                        で確定
+                      </>
+                    )}
+                    {" / "}
                     <kbd className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 font-mono text-slate-600">
                       ←
                     </kbd>{" "}

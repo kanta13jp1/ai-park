@@ -30,7 +30,14 @@ export interface SaaComparisonRow {
 
 export interface SaaComparisonTable {
   id: string;
-  category: "ネットワーク" | "ストレージ" | "データベース" | "非同期・連携" | "セキュリティ";
+  category:
+    | "ネットワーク"
+    | "ストレージ"
+    | "データベース"
+    | "非同期・連携"
+    | "セキュリティ"
+    | "コンピュート"
+    | "コスト最適化";
   title: string;
   subtitle: string;
   columns: string[];
@@ -371,6 +378,7 @@ export const saaComparisons: SaaComparisonTable[] = [
       { feature: "VPC Peering", values: ["1対1（非推移的）", "少数VPCの低コスト直結。10個以上増えるとフルメッシュ管理が煩雑"] },
       { feature: "AWS Transit Gateway", values: ["ハブ＆スポーク", "数十〜数千のVPCとSite-to-Site VPN/Direct Connectを一元接続"] },
       { feature: "AWS PrivateLink", values: ["サービス公開（単方向）", "CIDR重複があっても安全に特定サービスのみ公開・接続可能"] },
+      { feature: "VPC Endpoint (Gateway / Interface)", values: ["VPC → AWSサービス直結", "S3/DynamoDBは無料のGateway型、その他はInterface型（PrivateLink）"] },
     ],
     decisionRule: "「多数のVPCを一元ハブで接続」＝ Transit Gateway。「CIDR重複環境でサービスだけ公開」＝ PrivateLink。",
   },
@@ -412,6 +420,7 @@ export const saaComparisons: SaaComparisonTable[] = [
       { feature: "Amazon EFS", values: ["NFS共有ファイル (Linux)", "複数AZの多数EC2/ECS/Lambda", "CMS共有ファイル、コンテナ永続共有ストレージ"] },
       { feature: "Amazon FSx", values: ["マネージド専用ファイル", "Windows(SMB) / Lustre(HPC)", "AD連携Windowsファイル共有、機械学習/HPC高速演算"] },
       { feature: "Amazon S3", values: ["オブジェクトストレージ", "HTTPS API (どこからでも)", "静的資産、データレイク、バックアップ、静的Webホスティング"] },
+      { feature: "AWS Storage Gateway", values: ["ハイブリッドストレージ", "オンプレミス → AWS S3/EBS", "S3 File / Volume / Tape Gateway によるローカルキャッシュ＆クラウド連携"] },
     ],
     decisionRule: "「複数AZのLinuxでマウント共有」＝ EFS。「Windows/SMB/AD」＝ FSx for Windows。「11個の9の耐久性」＝ S3。",
   },
@@ -441,8 +450,101 @@ export const saaComparisons: SaaComparisonTable[] = [
       { feature: "RDS Multi-AZ", values: ["同期（同一リージョン別AZ）", "高可用性（HA）", "自動フェイルオーバー（スタンバイは通常読み取り不可）"] },
       { feature: "RDS Read Replica", values: ["非同期（同リージョン/別リージョン）", "読み取り負荷分散・DR準備", "手動昇格が必要"] },
       { feature: "Amazon Aurora", values: ["3AZに6コピーを自動分散", "高性能・高可用性（MySQL/PostgreSQL互換）", "高速フェイルオーバー・最大15個のリードレプリカ"] },
+      { feature: "Amazon ElastiCache (Redis / Valkey / Memcached)", values: ["インメモリキャッシュ", "サブミリ秒読み取り・セッション・ランキング", "Redis/Valkey は Multi-AZ 自動フェイルオーバー対応"] },
+      { feature: "Amazon OpenSearch Service", values: ["分散検索エンジン", "全文検索・ログ分析・可視化", "複数ノード分散・AZ認識配置で高可用性を確保"] },
     ],
     decisionRule: "「読み取りクエリの負荷を下げたい」なら Read Replica、「DB障害時に無停止に近く自動復旧したい」なら Multi-AZ。",
+  },
+  {
+    id: "comp-iam",
+    category: "セキュリティ",
+    title: "IAM / AWS STS / IAM Identity Center / Organizations (SCP)",
+    subtitle: "認証・認可とマルチアカウント統制の使い分け",
+    columns: ["サービス / 機能", "主な役割", "典型的なユースケース"],
+    rows: [
+      { feature: "IAM (ロール / ポリシー)", values: ["単一アカウント内の最小権限アクセス制御", "EC2/Lambda へ IAM ロールを割り当ててアクセスキー埋め込みを排除"] },
+      { feature: "AWS STS", values: ["一時的なセキュリティ認証情報の発行", "AssumeRole によるクロスアカウントアクセスや外部フェデレーション連携"] },
+      { feature: "IAM Identity Center", values: ["複数アカウント・アプリの SSO 一元管理", "SAML 2.0 IdP 連携で従業員の AWS アカウント横断ログインを統合"] },
+      { feature: "AWS Organizations / SCP", values: ["マルチアカウントの最大権限ガードレール", "OU 単位で特定リージョン制限や CloudTrail 無効化禁止を強制"] },
+    ],
+    decisionRule: "「EC2に鍵を置かない」＝ IAMロール（STS）、「全アカウントへの統一SSO」＝ IAM Identity Center、「管理者にも適用する上限制限」＝ SCP。",
+  },
+  {
+    id: "comp-audit-detect",
+    category: "セキュリティ",
+    title: "監査・構成管理・脅威検知（CloudTrail / Config / GuardDuty / Macie / Inspector / Security Hub）",
+    subtitle: "「誰が何をしたか」「設定準拠」「脅威・脆弱性・個人情報」の住み分け",
+    columns: ["サービス", "監視・検知対象", "試験での見抜きキーワード"],
+    rows: [
+      { feature: "AWS CloudTrail", values: ["API コール履歴（誰が・いつ・何を操作したか）", "不正なリソース削除や IAM 変更の追跡・監査証跡"] },
+      { feature: "AWS Config", values: ["リソースの設定変更履歴とコンプライアンス評価", "「ルール違反を検知して自動修復（SSM連携）」"] },
+      { feature: "Amazon GuardDuty", values: ["CloudTrail / VPC フローログ / DNS ログの脅威検知", "暗号資産マイニングや異常な API 呼び出しの機械学習検知"] },
+      { feature: "Amazon Macie", values: ["S3 バケット内の個人情報 (PII)・機密データ", "S3 内のクレジットカード番号や個人データの自動検出"] },
+      { feature: "Amazon Inspector", values: ["EC2 / ECR コンテナ / Lambda の脆弱性スキャン", "OS パッケージやソフトウェアの CVE 脆弱性診断"] },
+      { feature: "AWS Security Hub", values: ["複数セキュリティサービスの検出結果を一元集約", "GuardDuty / Inspector / Config 等を単一ダッシュボードで統合評価"] },
+    ],
+    decisionRule: "「API操作履歴」＝ CloudTrail、「設定準拠」＝ Config、「脅威検知」＝ GuardDuty、「S3のPII」＝ Macie、「脆弱性」＝ Inspector。",
+  },
+  {
+    id: "comp-crypto-shield",
+    category: "セキュリティ",
+    title: "暗号化・証明書・DDoS 防御（KMS / Secrets Manager / ACM / S3 Encryption / WAF / Shield）",
+    subtitle: "鍵管理・シークレット保護・証明書・L7/DDoS 防御の選定",
+    columns: ["サービス / 機能", "対象・レイヤー", "選定ポイント"],
+    rows: [
+      { feature: "AWS KMS", values: ["暗号化キー (CMK) 管理", "クロスアカウント共有やローテーション制御が必要な場合はカスタマーマネージドキー (CMK)"] },
+      { feature: "Secrets Manager vs Parameter Store", values: ["DBパスワード・APIキー管理", "自動ローテーションが必要なら Secrets Manager、安価な設定値保存は Parameter Store"] },
+      { feature: "ACM (Certificate Manager)", values: ["SSL/TLS 証明書", "ALB / CloudFront / API Gateway 向けのパブリック証明書を無料発行・自動更新"] },
+      { feature: "S3 Encryption (SSE-S3 / SSE-KMS)", values: ["S3 保管時暗号化", "デフォルトで SSE-S3 有効。監査証跡や独自の鍵アクセス制御が必要なら SSE-KMS"] },
+      { feature: "AWS WAF", values: ["L7 Web アプリケーション防御", "SQLi / XSS / レート制限 / Geoブロックを ALB・CloudFront・API Gateway に適用"] },
+      { feature: "AWS Shield (Standard / Advanced)", values: ["L3/L4/L7 DDoS 防御", "Standard は全顧客無料。24/7 DRT 支援や大規模攻撃コスト保護が必要なら Advanced"] },
+    ],
+    decisionRule: "「DB認証情報の自動ローテーション」＝ Secrets Manager、「Web攻撃(SQLi/XSS)」＝ WAF、「DDoS保護＋DRT」＝ Shield Advanced。",
+  },
+  {
+    id: "comp-route53-asg",
+    category: "ネットワーク",
+    title: "Route 53 ルーティング・Health Check・Alias Record・EC2 Auto Scaling",
+    subtitle: "DNS トラフィック制御とスケーリング自動化",
+    columns: ["機能 / ポリシー", "動作・特徴", "主な用途"],
+    rows: [
+      { feature: "Route 53 フェイルオーバー & Route 53 Health Check", values: ["エンドポイント監視と異常時の自動切り替え", "プライマリ障害時に別リージョンや S3 静的ページへ自動誘導"] },
+      { feature: "レイテンシ vs 位置情報 (Geolocation)", values: ["最短遅延リージョン vs 国・地域固定", "性能重視はレイテンシ、データ保護規制による国固定は Geolocation"] },
+      { feature: "加重 (Weighted) vs 複数値回答", values: ["比率指定分散 vs ヘルスチェック付き複数IP返却", "カナリアリリース/Blue-Green は加重ルーティング"] },
+      { feature: "Alias Record", values: ["AWS リソースへの無料 DNS マッピング", "Zone Apex（例: example.com）で ALB / CloudFront / S3 を指定可能（CNAME不可の代替）"] },
+      { feature: "EC2 Auto Scaling", values: ["ターゲット追跡 / ステップ / 予測スケーリング", "CPU/ALBリクエスト数に応じた自動増減。事前予測でスパイク前起動も可"] },
+    ],
+    decisionRule: "「ネイキッドドメイン(Zone Apex)にALBを紐付け」＝ Alias Record、「国単位のアクセス制限」＝ Geolocation。",
+  },
+  {
+    id: "comp-dr-compute",
+    category: "コンピュート",
+    title: "コンテナ・サーバーレス・DR 4戦略（Lambda / ECS Fargate / EKS / API Gateway / Placement Groups / Backup / DR）",
+    subtitle: "実行基盤・配置最適化・ディザスタリカバリ選定",
+    columns: ["サービス / 戦略", "特徴・制約", "選定の決め手"],
+    rows: [
+      { feature: "AWS Lambda vs ECS / Fargate vs EKS", values: ["サーバーレス関数 (最大15分) / マネージドコンテナ / Kubernetes", "15分以内のイベント処理は Lambda、長時間や既存コンテナは Fargate、K8s 標準化は EKS"] },
+      { feature: "Amazon API Gateway", values: ["REST / HTTP / WebSocket API フロントエンド", "認証（Cognito/Lambda Authorizer）、スロットリング、リクエスト変換を一元化"] },
+      { feature: "Placement Groups (Cluster / Spread / Partition)", values: ["EC2 の物理ホスト配置制御", "HPC低遅延はクラスター、単一障害分離(最大7台/AZ)はスプレッド、大規模分散DBはパーティション"] },
+      { feature: "AWS Backup & S3 CRR", values: ["AWS リソース統合バックアップ & S3 リージョン間複製", "S3 CRR には両バケットのバージョニング有効化が必須。AWS Backup で EFS/RDS/EBS を一元保護"] },
+      { feature: "DR 4戦略 (Backup & Restore / Pilot Light / Warm Standby / Active-Active)", values: ["RTO/RPO と平時コストのトレードオフ", "最小コアDBのみ同期維持してRPO数秒・コスト抑制なら Pilot Light"] },
+    ],
+    decisionRule: "「15分超のサーバーレスコンテナ」＝ ECS on Fargate、「最小構成のコアDBのみ稼働しDR」＝ Pilot Light。",
+  },
+  {
+    id: "comp-cost-all",
+    category: "コスト最適化",
+    title: "EC2 購入オプション・転送コスト・コスト最適化ツール",
+    subtitle: "コンピューティング割引・データ転送最適化・ガバナンス",
+    columns: ["オプション / ツール", "特徴・割引率・用途", "選定ポイント"],
+    rows: [
+      { feature: "Savings Plans vs Reserved Instances", values: ["柔軟な利用額コミット(最大66〜72%) vs インスタンス属性固定割引", "Compute Savings Plans は EC2・Fargate・Lambda を横断しリージョン/ファミリー変更も柔軟"] },
+      { feature: "Spot Instances", values: ["未使用キャパシティ活用で最大90%割引（2分前中断通知）", "ステートレス・バッチ・再開可能な耐障害ワークロードに最適"] },
+      { feature: "Same-AZ Placement & S3 Lifecycle", values: ["同一 AZ 内プライベートIP通信無料 & オブジェクト自動階層移動", "AZ 間転送課金の回避や、不完全マルチパートアップロードの自動削除に活用"] },
+      { feature: "AWS Budgets vs Cost Explorer vs Cost Anomaly Detection", values: ["予算しきい値アラート / 利用傾向分析 / ML 異常急増検知", "予算超過前の通知・自動制限は Budgets、予期せぬスパイク検知は Cost Anomaly Detection"] },
+      { feature: "Compute Optimizer vs Trusted Advisor", values: ["ML によるライトサイジング推奨 vs ベストプラクティス総合診断", "過剰スペックEC2/EBS/Lambdaの適正化は Compute Optimizer、アイドルリソースやセキュリティ点検は Trusted Advisor"] },
+    ],
+    decisionRule: "「中断OKバッチで最安」＝ Spot Instances、「Fargate/Lambda含む柔軟割引」＝ Compute Savings Plans、「過剰スペック検出」＝ Compute Optimizer。",
   },
 ];
 
@@ -1236,3 +1338,17 @@ export const saaWellArchitectedPillars: SaaWellArchitectedPillar[] = [
     focus: "Graviton プロセッサの活用、サーバーレス/オートスケールによる遊休リソース削減、S3 ライフサイクル。",
   },
 ];
+
+const SERVICE_QUERY_ALIASES: Record<string, string> = {
+  "ECS / Fargate": "Fargate",
+  "Gateway VPC Endpoint": "VPC Endpoint",
+  "Same-AZ Placement": "Same-AZ",
+  "Route 53 Health Check": "Route 53 Health Check",
+};
+
+/** 4ドメイン内のサービスバッジ名を、比較表・逆引き検索にヒットする正規化クエリへ変換する */
+export function resolveAwsServiceQuery(serviceName: string): string {
+  const mapped = SERVICE_QUERY_ALIASES[serviceName];
+  if (mapped) return mapped;
+  return serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
+}

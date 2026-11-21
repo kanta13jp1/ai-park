@@ -53,6 +53,7 @@ import {
   saaPitfalls,
   saaKeyLimits,
   saaWellArchitectedPillars,
+  resolveAwsServiceQuery,
   type SaaDomain,
 } from "@/data/aws-saa";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
@@ -120,9 +121,11 @@ const COMPARISON_CATEGORIES = [
   "すべて",
   "セキュリティ",
   "ネットワーク",
+  "コンピュート",
   "非同期・連携",
   "ストレージ",
   "データベース",
+  "コスト最適化",
 ] as const;
 
 function normalizeQuizAnswers(raw: unknown): Record<string, number[]> {
@@ -287,10 +290,8 @@ export default function AwsInfoPage() {
 
   const handleJumpToServiceComparison = (serviceName: string) => {
     playCyberClick();
-    // "Amazon S3" -> "S3", "EC2 Auto Scaling" -> "EC2" のように比較表にヒットしやすい語を抽出
-    const cleanQuery = serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
     setCompCategory("すべて");
-    setCompQuery(cleanQuery);
+    setCompQuery(resolveAwsServiceQuery(serviceName));
     setActiveTab("comparisons");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -465,7 +466,7 @@ export default function AwsInfoPage() {
       };
     }
     return {
-      label: "全カリキュラム完了！模擬試験モード（40分制限）や不正解の復習で仕上げましょう。",
+      label: `全カリキュラム完了！模擬試験モード（${saaPracticeQuestions.length * 2}分制限）や不正解の復習で仕上げましょう。`,
       actionLabel: "模擬試験に挑戦",
       onClick: () => {
         playCyberClick();
