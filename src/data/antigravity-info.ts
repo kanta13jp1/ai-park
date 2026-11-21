@@ -461,6 +461,45 @@ $ agy
       "Skill の説明（description）が明確で、必要な場面でエージェントが発見しやすいか",
     ],
   },
+  {
+    id: "ex-diagnostic-tests",
+    category: "テスト・UI検証",
+    title: "Diagnostic Auto-Fix と Inline Code Lenses によるエラー解消・テスト整備",
+    scene: "ビルドエラーや Lint 警告を素早く修正し、変更箇所のユニットテストを漏れなく追加したいとき。",
+    usedFeatures: ["Diagnostic Auto-Fix", "Inline Code Lenses", "Visual Diff Overlays"],
+    prompt: `対象関数の正常系・境界値（空文字・null・上限値）・異常系を網羅するユニットテストを追加してください。
+既存のテストランナー設定に合わせ、実行コマンドで全件パスするところまで確認してください。`,
+    workflowSteps: [
+      "エディタ上のエラー箇所や Problems パネルから Diagnostic Auto-Fix を起動して型・Lint エラーを解消する",
+      "関数上部に表示される Inline Code Lenses（Write Tests / Refactor）またはチャットからテスト追加を依頼する",
+      "Visual Diff Overlays で差分を確認・承認し、テスト実行結果で全件通過を確かめる",
+    ],
+    checkPoints: [
+      "エラー回避のためだけに型を any に緩めたり警告を無根拠に抑止していないか",
+      "モックに頼りすぎず、実際の入出力仕様を検証できているか",
+    ],
+  },
+  {
+    id: "ex-scheduled-mcp-safe",
+    category: "自動化・標準化",
+    title: "Scheduled Tasks と Project-Level Settings を組み合わせた安全な定期確認",
+    scene: "依存チェックや定期レポートの下書き作成など、繰り返すバックグラウンド確認を安全に自動化したいとき。",
+    usedFeatures: ["Scheduled Tasks", "Project-Level Settings", "Terminal Sandbox"],
+    prompt: `このプロジェクトの Project-Level Settings で Sandbox Mode を有効にしたうえで、
+毎週決まったタイミングで以下を確認し、結果を Markdown でまとめる定期タスクを設計してください：
+1. 未解決の Lint 警告やビルドエラーの有無
+2. ドキュメント内のリンク切れや古い表記の候補
+※ ファイルの自動書き換えや外部送信は行わず、レポート出力のみに限定してください。`,
+    workflowSteps: [
+      "Antigravity 2.0 の Settings から対象プロジェクトの Project-Level Settings（Sandbox Mode / File Access / Internet Access）を確認・上書きする",
+      "左サイドバーの Scheduled Tasks から cron 式またはワンショットタイマーで定期タスクを作成する",
+      "実行後は Auxiliary Pane（Background Tasks / Artifacts）で出力結果とログを確認する",
+    ],
+    checkPoints: [
+      "定期実行タスクに破壊的なコマンドや意図しない自動コミット/外部送信が含まれていないか",
+      "Project-Level Settings の権限範囲（allow / ask / deny）がタスク目的に合っているか",
+    ],
+  },
 ];
 
 export interface ShortcutItem {
@@ -646,5 +685,19 @@ export const antigravityFaqs: FaqItem[] = [
     question: "外部ツール（Google Drive や GitHub など）と連携する際の注意点はありますか？",
     answer:
       "外部サービス連携には MCP（Model Context Protocol）を使用します。Chat Canvas の `@` メンションやエージェントのツール呼び出しから利用できますが、業務利用時は接続許可された MCP サーバーのみを使用し、認証情報（API キー・OAuth トークン等）をリポジトリ内に直接記述しないようご注意ください。",
+  },
+  {
+    id: "faq-execution-policy",
+    category: "セキュリティ・設定",
+    question: "Tool Execution Policy の 4 つのモードはどう使い分けますか？",
+    answer:
+      "Antigravity 2.0 の Tool Execution Policy では、always-proceed（自動実行）、request-review（実行前にレビュー確認）、strict（厳格な承認）、proceed-in-sandbox（制限されたサンドボックス内で実行）の 4 つから選択できます。通常開発や初めて扱うリポジトリでは request-review や strict、または Terminal Sandbox と組み合わせた proceed-in-sandbox を選ぶと安全です。",
+  },
+  {
+    id: "faq-auxiliary-scheduled",
+    category: "基本・環境",
+    question: "Auxiliary Pane と Scheduled Tasks はどのような場面で使いますか？",
+    answer:
+      "Antigravity 2.0 の Auxiliary Pane では、実行中の Subagents、Background Tasks、生成された Artifacts、Files Changed（変更ファイル一覧）、Terminals を一覧で確認できます。また左サイドバーの Scheduled Tasks を使うと、cron 式による定期実行やワンショットタイマーでバックグラウンドタスクを予約・監視できます。",
   },
 ];

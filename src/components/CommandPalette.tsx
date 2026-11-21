@@ -201,7 +201,7 @@ const paletteItems: PaletteItem[] = [
     title: "Antigravity情報局",
     category: "ツール & ガイド",
     href: "/antigravity-info",
-    description: "Antigravity 機能解説と実務活用の実行例（社内Q&A等は工事中）",
+    description: "Antigravity 機能解説・実務実行例・ショートカット/FAQ（社内お知らせ等は工事中）",
     icon: Sparkles,
   },
   {

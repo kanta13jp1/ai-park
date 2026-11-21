@@ -26,6 +26,7 @@ import {
   HelpCircle,
   ChevronDown,
   ChevronUp,
+  X,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
@@ -124,6 +125,36 @@ export default function AntigravityInfoPage() {
       return target.includes(normalizedQuery);
     });
   }, [exampleCategory, normalizedQuery]);
+
+  const filteredShortcuts = useMemo(() => {
+    if (!normalizedQuery) return antigravityShortcuts;
+    return antigravityShortcuts.filter((item) =>
+      [item.surface, item.keysOrCommand, item.action, item.notes]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedQuery)
+    );
+  }, [normalizedQuery]);
+
+  const filteredConfigTemplates = useMemo(() => {
+    if (!normalizedQuery) return antigravityConfigTemplates;
+    return antigravityConfigTemplates.filter((item) =>
+      [item.title, item.filePath, item.description, item.code]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedQuery)
+    );
+  }, [normalizedQuery]);
+
+  const filteredFaqs = useMemo(() => {
+    if (!normalizedQuery) return antigravityFaqs;
+    return antigravityFaqs.filter((item) =>
+      [item.category, item.question, item.answer]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedQuery)
+    );
+  }, [normalizedQuery]);
 
   const handleCopyPrompt = (id: string, text: string) => {
     navigator.clipboard?.writeText(text).then(() => {
@@ -243,8 +274,18 @@ export default function AntigravityInfoPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="キーワードで絞り込み..."
-                className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400"
+                className="w-full pl-9 pr-8 py-2 text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-400"
               />
+              {searchQuery && (
+                <button
+                  type="button"
+                  aria-label="検索をクリア"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  <X size={14} />
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -370,7 +411,7 @@ export default function AntigravityInfoPage() {
             </section>
 
             {/* 次に見るアクション */}
-            <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <button
                 type="button"
                 onClick={() => {
@@ -416,6 +457,29 @@ export default function AntigravityInfoPage() {
                   className="text-slate-400 group-hover:text-cyan-600 group-hover:translate-x-1 transition-all shrink-0"
                 />
               </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  playCyberClick();
+                  setActiveTab("reference");
+                }}
+                className="text-left p-5 rounded-2xl bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-md transition-all flex items-center justify-between gap-4 cursor-pointer group"
+              >
+                <div className="space-y-1">
+                  <span className="text-[11px] font-bold text-emerald-600">NEXT STEP 3</span>
+                  <h4 className="text-base font-black text-slate-900">
+                    リファレンス・FAQ を見る
+                  </h4>
+                  <p className="text-xs text-slate-600">
+                    ショートカット早見表・設定テンプレート・よくある質問（{antigravityFaqs.length} 問）
+                  </p>
+                </div>
+                <ArrowRight
+                  size={18}
+                  className="text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-1 transition-all shrink-0"
+                />
+              </button>
             </section>
           </div>
         )}
@@ -447,8 +511,20 @@ export default function AntigravityInfoPage() {
             </div>
 
             {filteredFeatures.length === 0 ? (
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center text-sm text-slate-500">
-                条件に一致する機能解説が見つかりませんでした。検索条件をリセットしてお試しください。
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-3">
+                <p className="text-sm text-slate-500">
+                  条件に一致する機能解説が見つかりませんでした。検索条件をリセットしてお試しください。
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setFeatureCategory("すべて");
+                    setSearchQuery("");
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white transition-colors cursor-pointer"
+                >
+                  条件をリセット
+                </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -538,8 +614,20 @@ export default function AntigravityInfoPage() {
             </div>
 
             {filteredExamples.length === 0 ? (
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center text-sm text-slate-500">
-                条件に一致する実行例が見つかりませんでした。検索条件をリセットしてお試しください。
+              <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-3">
+                <p className="text-sm text-slate-500">
+                  条件に一致する実行例が見つかりませんでした。検索条件をリセットしてお試しください。
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setExampleCategory("すべて");
+                    setSearchQuery("");
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white transition-colors cursor-pointer"
+                >
+                  条件をリセット
+                </button>
               </div>
             ) : (
               <div className="space-y-6">
@@ -552,7 +640,7 @@ export default function AntigravityInfoPage() {
                       <div className="space-y-1.5">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-900 text-cyan-300">
-                            CASE 0{idx + 1}
+                            CASE {String(idx + 1).padStart(2, "0")}
                           </span>
                           <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
                             {ex.category}
@@ -647,153 +735,187 @@ export default function AntigravityInfoPage() {
         {/* タブ 4: リファレンス・FAQ */}
         {activeTab === "reference" && (
           <div className="space-y-8">
-            {/* ショートカット・コマンド早見表 */}
-            <section className="space-y-4">
-              <div>
-                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                  <Keyboard size={19} className="text-indigo-600" />
-                  <span>ショートカット・CLI コマンド早見表</span>
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                  IDE・Chat Canvas・Antigravity CLI（`agy`）でよく使う操作のまとめです。
-                </p>
-              </div>
-
-              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-slate-900 text-slate-200 text-xs">
-                        <th className="py-3 px-4 font-bold">環境</th>
-                        <th className="py-3 px-4 font-bold">キー / コマンド</th>
-                        <th className="py-3 px-4 font-bold">動作</th>
-                        <th className="py-3 px-4 font-bold">補足</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
-                      {antigravityShortcuts.map((item) => (
-                        <tr key={`${item.surface}-${item.keysOrCommand}`} className="hover:bg-slate-50/80">
-                          <td className="py-3 px-4 font-bold text-slate-700 whitespace-nowrap">
-                            <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-[11px]">
-                              {item.surface}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 font-mono text-xs font-bold text-indigo-700 whitespace-nowrap">
-                            {item.keysOrCommand}
-                          </td>
-                          <td className="py-3 px-4 font-semibold text-slate-900">{item.action}</td>
-                          <td className="py-3 px-4 text-slate-600 text-xs">{item.notes}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+            {filteredShortcuts.length === 0 &&
+              filteredConfigTemplates.length === 0 &&
+              filteredFaqs.length === 0 && (
+                <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-3">
+                  <p className="text-sm text-slate-500">
+                    条件に一致するリファレンス・FAQ が見つかりませんでした。検索条件をリセットしてお試しください。
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white transition-colors cursor-pointer"
+                  >
+                    検索をリセット
+                  </button>
                 </div>
-              </div>
-            </section>
+              )}
+
+            {/* ショートカット・コマンド早見表 */}
+            {filteredShortcuts.length > 0 && (
+              <section className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                    <Keyboard size={19} className="text-indigo-600" />
+                    <span>ショートカット・CLI コマンド早見表</span>
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                    IDE・Chat Canvas・Antigravity CLI（
+                    <code className="font-mono text-xs bg-slate-100 text-indigo-700 px-1.5 py-0.5 rounded">
+                      agy
+                    </code>
+                    ）でよく使う操作のまとめです。
+                  </p>
+                </div>
+
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-900 text-slate-200 text-xs">
+                          <th className="py-3 px-4 font-bold">環境</th>
+                          <th className="py-3 px-4 font-bold">キー / コマンド</th>
+                          <th className="py-3 px-4 font-bold">動作</th>
+                          <th className="py-3 px-4 font-bold">補足</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
+                        {filteredShortcuts.map((item) => (
+                          <tr key={`${item.surface}-${item.keysOrCommand}`} className="hover:bg-slate-50/80">
+                            <td className="py-3 px-4 font-bold text-slate-700 whitespace-nowrap">
+                              <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-[11px]">
+                                {item.surface}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4 font-mono text-xs font-bold text-indigo-700 whitespace-nowrap">
+                              {item.keysOrCommand}
+                            </td>
+                            <td className="py-3 px-4 font-semibold text-slate-900">{item.action}</td>
+                            <td className="py-3 px-4 text-slate-600 text-xs">{item.notes}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </section>
+            )}
 
             {/* 設定テンプレート・構成例 */}
-            <section className="space-y-4">
-              <div>
-                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                  <FileCode2 size={19} className="text-cyan-600" />
-                  <span>設定テンプレート・ディレクトリ構成例</span>
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                  `.agents/` 配下の Skill 定義や CLI 設定パス、セキュリティポリシー項目を確認できます。
-                </p>
-              </div>
+            {filteredConfigTemplates.length > 0 && (
+              <section className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                    <FileCode2 size={19} className="text-cyan-600" />
+                    <span>設定テンプレート・ディレクトリ構成例</span>
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                    <code className="font-mono text-xs bg-slate-100 text-indigo-700 px-1.5 py-0.5 rounded">
+                      .agents/
+                    </code>{" "}
+                    配下の Skill 定義や CLI 設定パス、セキュリティポリシー項目を確認できます。
+                  </p>
+                </div>
 
-              <div className="space-y-4">
-                {antigravityConfigTemplates.map((tmpl) => (
-                  <div
-                    key={tmpl.id}
-                    className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-3"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-sm sm:text-base font-black text-slate-900">{tmpl.title}</h4>
-                        <p className="text-xs font-mono text-indigo-600 mt-0.5">{tmpl.filePath}</p>
+                <div className="space-y-4">
+                  {filteredConfigTemplates.map((tmpl) => (
+                    <div
+                      key={tmpl.id}
+                      className="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-xs space-y-3"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                          <h4 className="text-sm sm:text-base font-black text-slate-900">{tmpl.title}</h4>
+                          <p className="text-xs font-mono text-indigo-600 mt-0.5">{tmpl.filePath}</p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleCopyPrompt(tmpl.id, tmpl.code)}
+                          onMouseEnter={() => playCyberHover()}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white transition-all cursor-pointer self-start sm:self-auto"
+                        >
+                          {copiedId === tmpl.id ? (
+                            <>
+                              <Check size={13} className="text-emerald-400" />
+                              <span className="text-emerald-300">コピー済み</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy size={13} />
+                              <span>テンプレートをコピー</span>
+                            </>
+                          )}
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleCopyPrompt(tmpl.id, tmpl.code)}
-                        onMouseEnter={() => playCyberHover()}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-xs font-bold text-white transition-all cursor-pointer self-start sm:self-auto"
-                      >
-                        {copiedId === tmpl.id ? (
-                          <>
-                            <Check size={13} className="text-emerald-400" />
-                            <span className="text-emerald-300">コピー済み</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy size={13} />
-                            <span>テンプレートをコピー</span>
-                          </>
-                        )}
-                      </button>
+                      <p className="text-xs sm:text-sm text-slate-600">{tmpl.description}</p>
+                      <pre className="rounded-xl bg-slate-950 border border-slate-800 p-4 text-xs text-cyan-200 font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed">
+                        {tmpl.code}
+                      </pre>
                     </div>
-                    <p className="text-xs sm:text-sm text-slate-600">{tmpl.description}</p>
-                    <pre className="rounded-xl bg-slate-950 border border-slate-800 p-4 text-xs text-cyan-200 font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed">
-                      {tmpl.code}
-                    </pre>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* よくある質問（FAQ） */}
-            <section className="space-y-4">
-              <div>
-                <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                  <HelpCircle size={19} className="text-emerald-600" />
-                  <span>よくある質問（公式仕様ベース FAQ）</span>
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                  使い分け・設定の優先順位・`.agents/` の読み込み仕様など、よくある疑問をまとめています。
-                </p>
-              </div>
+            {filteredFaqs.length > 0 && (
+              <section className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                    <HelpCircle size={19} className="text-emerald-600" />
+                    <span>よくある質問（公式仕様ベース FAQ）</span>
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                    使い分け・設定の優先順位・
+                    <code className="font-mono text-xs bg-slate-100 text-indigo-700 px-1.5 py-0.5 rounded">
+                      .agents/
+                    </code>{" "}
+                    の読み込み仕様など、よくある疑問をまとめています。
+                  </p>
+                </div>
 
-              <div className="space-y-3">
-                {antigravityFaqs.map((faq) => {
-                  const isOpen = openFaqId === faq.id;
-                  return (
-                    <div
-                      key={faq.id}
-                      className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => {
-                          playCyberClick();
-                          setOpenFaqId(isOpen ? null : faq.id);
-                        }}
-                        className="w-full px-5 py-4 flex items-center justify-between gap-4 text-left hover:bg-slate-50/80 transition-colors cursor-pointer"
+                <div className="space-y-3">
+                  {filteredFaqs.map((faq) => {
+                    const isOpen = openFaqId === faq.id;
+                    return (
+                      <div
+                        key={faq.id}
+                        className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-xs"
                       >
-                        <div className="flex flex-wrap items-center gap-2.5">
-                          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
-                            {faq.category}
-                          </span>
-                          <span className="text-xs sm:text-sm font-black text-slate-900">
-                            Q. {faq.question}
-                          </span>
-                        </div>
-                        {isOpen ? (
-                          <ChevronUp size={18} className="text-slate-400 shrink-0" />
-                        ) : (
-                          <ChevronDown size={18} className="text-slate-400 shrink-0" />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            playCyberClick();
+                            setOpenFaqId(isOpen ? null : faq.id);
+                          }}
+                          className="w-full px-5 py-4 flex items-center justify-between gap-4 text-left hover:bg-slate-50/80 transition-colors cursor-pointer"
+                        >
+                          <div className="flex flex-wrap items-center gap-2.5">
+                            <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">
+                              {faq.category}
+                            </span>
+                            <span className="text-xs sm:text-sm font-black text-slate-900">
+                              Q. {faq.question}
+                            </span>
+                          </div>
+                          {isOpen ? (
+                            <ChevronUp size={18} className="text-slate-400 shrink-0" />
+                          ) : (
+                            <ChevronDown size={18} className="text-slate-400 shrink-0" />
+                          )}
+                        </button>
+                        {isOpen && (
+                          <div className="px-5 pb-4 pt-1 border-t border-slate-100 text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50/40">
+                            {faq.answer}
+                          </div>
                         )}
-                      </button>
-                      {isOpen && (
-                        <div className="px-5 pb-4 pt-1 border-t border-slate-100 text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50/40">
-                          {faq.answer}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
           </div>
         )}
 
