@@ -179,6 +179,11 @@ interface LpicLevelConfig {
   passingConfig: CertPassingConfig;
   quizBadgeLabel: string;
   flashcardTitle: string;
+  quickSearchChips: string[];
+  examDayChecklist: {
+    subtitle: string;
+    tips: { title: string; body: string }[];
+  };
 }
 
 const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
@@ -215,6 +220,29 @@ const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
     },
     quizBadgeLabel: "LPIC-1 (101/102) 演習",
     flashcardTitle: "要件・用途 → コマンド / 設定ファイル 即答トレーニング",
+    quickSearchChips: ["systemctl", "dpkg", "rpm", "chmod", "umask", "ss", "cron"],
+    examDayChecklist: {
+      subtitle:
+        "LPIC-1（101-500 / 102-500）は各90分・60問の試験です。記述問題での正確なコマンド・パス入力と時間配分が合格（500点）の鍵になります。",
+      tips: [
+        {
+          title: "時間配分：1問約90秒ペース（90分・60問）",
+          body: "30問経過時点で残り45分前後が目安です。長考しそうな設問は仮選択・見直しフラグを活用し、まず60問すべてに目を通して解答し切るのが確実です。",
+        },
+        {
+          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
+          body: "選択問題に加えて記述（穴埋め）問題が出題されます。コマンド名・オプション・設定ファイルパス（例: /etc/fstab 等）は大文字・小文字を含め、タブ補完なしで正確に入力できるよう整理しておきます。",
+        },
+        {
+          title: "合格条件・認定要件：500/800点（2科目合格）",
+          body: "200〜800点スケールで 500 点以上が合格ラインです。LPIC-1 に前提資格はありませんが、認定取得には 101-500 と 102-500 の2科目両方に合格する必要があります（認定の有効期間は5年間）。",
+        },
+        {
+          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
+          body: "予約前に LPI ID（LPI アカウント）との紐付けを確認し、当日は規定の有効な本人確認書類を準備します。OnVUE オンライン受験では事前のシステムテストと受験環境（静かな個室・机上整理）の確認が必須です。",
+        },
+      ],
+    },
   },
   "lpic-2": {
     id: "lpic-2",
@@ -249,6 +277,29 @@ const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
     },
     quizBadgeLabel: "LPIC-2 (201/202) 演習",
     flashcardTitle: "LPIC-2 要件・運用課題 → コマンド / 設定 即答トレーニング",
+    quickSearchChips: ["vmstat", "mdadm", "lvextend", "BIND", "Nginx", "NFS", "PAM"],
+    examDayChecklist: {
+      subtitle:
+        "LPIC-2（201-450 / 202-450）は各90分・60問の試験です。サービス設定ディレクティブの正確な綴りと前提資格の確認が重要になります。",
+      tips: [
+        {
+          title: "時間配分：1問約90秒ペース（90分・60問）",
+          body: "201・202 それぞれ 90 分で 60 問（1問約90秒）です。設定ファイルや出力結果の読み取りに時間を使いすぎないよう、迷う問題は見直しフラグを付けてテンポ良く進めます。",
+        },
+        {
+          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
+          body: "選択問題に加え、コマンド・オプション・設定ファイルパス・設定パラメータ名を入力する記述問題が出題されます。LVM/RAID・BIND・Apache/Nginx・PAM などの主要パスと綴りを正確に押さえておきます。",
+        },
+        {
+          title: "合格条件・前提資格：500/800点・有効な LPIC-1",
+          body: "各科目とも 200〜800 点スケールで 500 点以上が合格ラインです。LPIC-2 の認定取得には 201-450 と 202-450 の合格に加え、有効（ACTIVE）な LPIC-1 認定の保持が必要です。",
+        },
+        {
+          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
+          body: "LPI ID の紐付けと有効な本人確認書類を事前に確認します。OnVUE オンライン受験を利用する場合は、本番と同じ PC・ネットワーク環境で事前のシステムテストを必ず完了させてください。",
+        },
+      ],
+    },
   },
   "lpic-300": {
     id: "lpic-300",
@@ -279,6 +330,29 @@ const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
     },
     quizBadgeLabel: "LPIC-3 300-300 演習",
     flashcardTitle: "LPIC-3 300 混在環境・Samba/FreeIPA 即答トレーニング",
+    quickSearchChips: ["smbd", "SSSD", "Winbind", "acl_xattr", "FreeIPA", "krb5p"],
+    examDayChecklist: {
+      subtitle:
+        "LPIC-3 300（300-300）は90分・60問の上級専門試験です。Samba / AD / FreeIPA の設定項目と前提資格の確認が合格（500点）の鍵になります。",
+      tips: [
+        {
+          title: "時間配分：1問約90秒ペース（90分・60問）",
+          body: "60問を90分で解答するため 1 問約 90 秒が目安です。smb.conf や SSSD の設定断片を読み解く設問は時間を要しやすいため、見直しフラグを活用して全問解答を優先します。",
+        },
+        {
+          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
+          body: "選択問題と記述（穴埋め）問題が混在します。Samba デーモン名（smbd / winbindd 等）、samba-tool サブコマンド、smb.conf のパラメータや /etc/sssd/sssd.conf 等のパスを正確な綴りで整理しておきます。",
+        },
+        {
+          title: "合格条件・前提資格：500/800点・有効な LPIC-2",
+          body: "200〜800 点スケールで 500 点以上が合格ラインです。300-300 は 1 科目合格で LPIC-3 Mixed Environments 認定となりますが、認定には有効（ACTIVE）な LPIC-2 認定の保持が必要です。",
+        },
+        {
+          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
+          body: "受験予約時の LPI ID 一致と有効な本人確認書類を確認しておきます。OnVUE オンライン受験の場合は、事前のシステムテストと試験規定に沿った個室環境の準備が必須です。",
+        },
+      ],
+    },
   },
   "lpic-303": {
     id: "lpic-303",
@@ -309,6 +383,29 @@ const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
     },
     quizBadgeLabel: "LPIC-3 303-300 演習",
     flashcardTitle: "LPIC-3 303 暗号・MAC・監査・VPN 即答トレーニング",
+    quickSearchChips: ["SELinux", "AppArmor", "LUKS", "WireGuard", "nftables", "AIDE"],
+    examDayChecklist: {
+      subtitle:
+        "LPIC-3 303（303-300）は90分・60問のセキュリティ専門試験です。暗号・MAC・監査・VPN の正確なコマンド構文とパス知識が求められます。",
+      tips: [
+        {
+          title: "時間配分：1問約90秒ペース（90分・60問）",
+          body: "90分で60問（1問約90秒）の構成です。SELinux ポリシーや nftables ルール・OpenSSL オプションの読み取りで迷ったら仮選択＋見直しフラグで進め、記述問題に時間を残します。",
+        },
+        {
+          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
+          body: "選択問題に加え記述（穴埋め）問題が出題されます。semanage / restorecon / cryptsetup / wg / auditctl 等のコマンドや、/etc/audit/auditd.conf・/etc/aide.conf などの設定パス・オプションを正確に綴れるようにします。",
+        },
+        {
+          title: "合格条件・前提資格：500/800点・有効な LPIC-2",
+          body: "200〜800 点スケールで 500 点以上が合格ラインです。303-300 は 1 科目合格で LPIC-3 Security 認定となりますが、認定には有効（ACTIVE）な LPIC-2 認定の保持が必要です。",
+        },
+        {
+          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
+          body: "LPI ID の確認と規定の有効な本人確認書類の準備を済ませておきます。OnVUE オンライン受験を利用する際は、事前にシステムテストを実施し、通信やカメラ要件を確認してください。",
+        },
+      ],
+    },
   },
   "lpic-305": {
     id: "lpic-305",
@@ -339,6 +436,29 @@ const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
     },
     quizBadgeLabel: "LPIC-3 305-300 演習",
     flashcardTitle: "LPIC-3 305 仮想化・コンテナ・自動化 即答トレーニング",
+    quickSearchChips: ["KVM", "qcow2", "virsh", "Docker", "LXC", "Packer", "cloud-init"],
+    examDayChecklist: {
+      subtitle:
+        "LPIC-3 305（305-300）は90分・60問の仮想化・コンテナ専門試験です。KVM / libvirt / コンテナ / プロビジョニングツールの正確なコマンド整理が鍵です。",
+      tips: [
+        {
+          title: "時間配分：1問約90秒ペース（90分・60問）",
+          body: "90分で60問（1問約90秒）のペース配分を意識し、30問時点で残り45分前後を目安に進めます。XML 定義や cloud-init の設定読み取りで立ち止まりすぎないようフラグ機能を活用します。",
+        },
+        {
+          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
+          body: "選択問題に加えて記述（穴埋め）問題が含まれます。virsh・qemu-img・xl・docker・lxc 系のサブコマンドや、/etc/libvirt/qemu/ などの関連パス・オプションの正確な綴りを整理しておきます。",
+        },
+        {
+          title: "合格条件・前提資格：500/800点・有効な LPIC-2",
+          body: "200〜800 点スケールで 500 点以上が合格ラインです。305-300 は 1 科目合格で LPIC-3 Virtualization and Containerization 認定となりますが、認定には有効（ACTIVE）な LPIC-2 認定の保持が必要です。",
+        },
+        {
+          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
+          body: "ピアソンVUE 予約時の LPI ID と有効な本人確認書類を確認します。OnVUE オンライン受験では、事前システムテストの完了と静かな個室環境の確保が必要です。",
+        },
+      ],
+    },
   },
   "lpic-306": {
     id: "lpic-306",
@@ -369,6 +489,29 @@ const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
     },
     quizBadgeLabel: "LPIC-3 306-300 演習",
     flashcardTitle: "LPIC-3 306 クラスタ・分散ストレージ・冗長化 即答トレーニング",
+    quickSearchChips: ["Pacemaker", "Keepalived", "HAProxy", "DRBD", "Ceph", "Bonding"],
+    examDayChecklist: {
+      subtitle:
+        "LPIC-3 306（306-300）は90分・60問の高可用性・ストレージ専門試験です。Pacemaker / HAProxy / DRBD / Ceph のコマンドと構成知識を正確に押さえます。",
+      tips: [
+        {
+          title: "時間配分：1問約90秒ペース（90分・60問）",
+          body: "90分で60問（1問あたり約90秒）です。クラスタ構成やフェンシング・スプリットブレイン対策のシナリオ設問に時間をかけすぎないよう、見直しフラグを使ってペースを保ちます。",
+        },
+        {
+          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
+          body: "選択問題と記述（穴埋め）問題が出題されます。crm / pcs・corosync・drbdadm・ceph・keepalived・haproxy に関連するコマンド、設定ファイルパス、重要ディレクティブの正確な綴りを定着させます。",
+        },
+        {
+          title: "合格条件・前提資格：500/800点・有効な LPIC-2",
+          body: "200〜800 点スケールで 500 点以上が合格ラインです。306-300 は 1 科目合格で LPIC-3 High Availability and Storage Clusters 認定となりますが、認定には有効（ACTIVE）な LPIC-2 認定の保持が必要です。",
+        },
+        {
+          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
+          body: "受験前に LPI ID とピアソンVUE アカウントの紐付け、および有効な本人確認書類を確認します。OnVUE オンライン受験では事前のシステムテストと周囲環境の準備が必須です。",
+        },
+      ],
+    },
   },
 };
 
@@ -553,6 +696,7 @@ export default function LpicInfoPage() {
   const [showBackupPanel, setShowBackupPanel] = useState<boolean>(false);
   const [backupInput, setBackupInput] = useState<string>("");
   const [copiedBackup, setCopiedBackup] = useState<boolean>(false);
+  const [copiedNotes, setCopiedNotes] = useState<boolean>(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -589,6 +733,8 @@ export default function LpicInfoPage() {
     setCompQuery("");
     setTopicQuery("");
     setConfirmReset(false);
+    setCopiedBackup(false);
+    setCopiedNotes(false);
     setImportMessage(null);
   };
 
@@ -693,6 +839,30 @@ export default function LpicInfoPage() {
     }
   };
 
+  const handleCopyNotesMarkdown = async () => {
+    playCyberClick();
+    const lines: string[] = [`# ${config.label} マイメモ`, ""];
+    for (const d of config.domains) {
+      const domainLines: string[] = [];
+      for (const t of d.topics) {
+        const note = progress.topicNotes[t.id]?.trim();
+        if (note) {
+          domainLines.push(`### ${t.code} ${t.title}`, note, "");
+        }
+      }
+      if (domainLines.length > 0) {
+        lines.push(`## Topic ${d.number}: ${d.title}`, "", ...domainLines);
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(lines.join("\n"));
+      setCopiedNotes(true);
+      setTimeout(() => setCopiedNotes(false), 2500);
+    } catch {
+      setImportMessage("マイメモのコピーに失敗しました。");
+    }
+  };
+
   const handleImportBackup = () => {
     playCyberClick();
     try {
@@ -780,11 +950,12 @@ export default function LpicInfoPage() {
     [config.comparisons]
   );
 
+  const normalizedCompQuery = compQuery.trim().toLowerCase();
+
   const filteredComparisons = useMemo(() => {
-    const q = compQuery.trim().toLowerCase();
     return config.comparisons.filter((comp) => {
       if (compCategory !== "すべて" && comp.category !== compCategory) return false;
-      if (!q) return true;
+      if (!normalizedCompQuery) return true;
       const haystack = [
         comp.title,
         comp.subtitle,
@@ -794,9 +965,37 @@ export default function LpicInfoPage() {
       ]
         .join(" ")
         .toLowerCase();
-      return haystack.includes(q);
+      return haystack.includes(normalizedCompQuery);
     });
-  }, [config.comparisons, compCategory, compQuery]);
+  }, [config.comparisons, compCategory, normalizedCompQuery]);
+
+  const filteredPatterns = useMemo(() => {
+    if (!normalizedCompQuery) return config.patterns;
+    return config.patterns.filter((pat) =>
+      [pat.title, pat.badge, pat.summary, ...pat.flow, ...pat.keyDesignPoints]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedCompQuery)
+    );
+  }, [config.patterns, normalizedCompQuery]);
+
+  const filteredPitfalls = useMemo(() => {
+    if (!normalizedCompQuery) return config.pitfalls;
+    return config.pitfalls.filter((pit) =>
+      `${pit.trap} ${pit.whyWrong} ${pit.correctApproach}`
+        .toLowerCase()
+        .includes(normalizedCompQuery)
+    );
+  }, [config.pitfalls, normalizedCompQuery]);
+
+  const filteredKeyPaths = useMemo(() => {
+    if (!normalizedCompQuery) return config.keyPaths;
+    return config.keyPaths.filter((kp) =>
+      `${kp.target} ${kp.value} ${kp.detail}`
+        .toLowerCase()
+        .includes(normalizedCompQuery)
+    );
+  }, [config.keyPaths, normalizedCompQuery]);
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     {
@@ -993,6 +1192,25 @@ export default function LpicInfoPage() {
             <div className="flex flex-wrap items-center gap-2 shrink-0">
               <button
                 type="button"
+                onClick={handleCopyNotesMarkdown}
+                disabled={notedTopicCount === 0}
+                className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-xs font-bold text-amber-800 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-amber-50"
+              >
+                {copiedNotes ? (
+                  <>
+                    <Check size={13} className="text-emerald-600" />
+                    <span className="text-emerald-700">メモをコピーしました</span>
+                  </>
+                ) : (
+                  <>
+                    <StickyNote size={13} />
+                    <span>メモをMarkdownコピー</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
                 onClick={() => {
                   playCyberClick();
                   setShowBackupPanel((v) => !v);
@@ -1017,6 +1235,10 @@ export default function LpicInfoPage() {
               </button>
             </div>
           </div>
+
+          {!showBackupPanel && importMessage && (
+            <p className="text-xs font-bold text-cyan-700">{importMessage}</p>
+          )}
 
           {showBackupPanel && (
             <div className="pt-4 border-t border-slate-100 space-y-3">
@@ -1421,190 +1643,256 @@ export default function LpicInfoPage() {
         {activeTab === "comparisons" && (
           <div className="space-y-8">
             {/* 比較表フィルター */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-1.5">
-                {comparisonCategories.map((cat) => (
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {comparisonCategories.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setCompCategory(cat);
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                        compCategory === cat
+                          ? "bg-cyan-600 text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="relative w-full lg:w-64 shrink-0">
+                  <Search
+                    size={14}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <input
+                    type="text"
+                    value={compQuery}
+                    onChange={(e) => setCompQuery(e.target.value)}
+                    placeholder="コマンド・キーワード検索..."
+                    className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  />
+                  {compQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setCompQuery("")}
+                      aria-label="検索をクリア"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    >
+                      <X size={13} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* 頻出コマンド・キーワード クイック検索チップ */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-slate-100">
+                <span className="text-[11px] font-bold text-slate-400 mr-1">
+                  よく調べるコマンド・キーワード:
+                </span>
+                {config.quickSearchChips.map((kw) => {
+                  const isSelected = compQuery.trim().toLowerCase() === kw.toLowerCase();
+                  return (
+                    <button
+                      key={kw}
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setCompCategory("すべて");
+                        setCompQuery(isSelected ? "" : kw);
+                      }}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold border transition-colors cursor-pointer ${
+                        isSelected
+                          ? "bg-slate-900 text-cyan-300 border-slate-900"
+                          : "bg-white text-slate-600 border-slate-200 hover:border-cyan-300 hover:text-cyan-700"
+                      }`}
+                    >
+                      {kw}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* すべて0件時のエンプティステート */}
+            {filteredComparisons.length === 0 &&
+              filteredPatterns.length === 0 &&
+              filteredPitfalls.length === 0 &&
+              filteredKeyPaths.length === 0 && (
+                <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3">
+                  <Search className="w-8 h-8 text-slate-300 mx-auto" />
+                  <div className="text-sm font-black text-slate-900 break-words">
+                    「{compQuery}」に一致する項目が見つかりませんでした
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    別のキーワード（例：{config.quickSearchChips.slice(0, 4).join("、")}
+                    ）で検索するか、条件をリセットしてください。
+                  </p>
                   <button
-                    key={cat}
                     type="button"
                     onClick={() => {
                       playCyberClick();
-                      setCompCategory(cat);
+                      setCompCategory("すべて");
+                      setCompQuery("");
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                      compCategory === cat
-                        ? "bg-cyan-600 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
+                    className="px-4 py-2 rounded-xl bg-cyan-600 text-white text-xs font-bold hover:bg-cyan-700 cursor-pointer"
                   >
-                    {cat}
+                    検索・カテゴリをリセット
                   </button>
-                ))}
-              </div>
-
-              <div className="relative w-full lg:w-64 shrink-0">
-                <Search
-                  size={14}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-                <input
-                  type="text"
-                  value={compQuery}
-                  onChange={(e) => setCompQuery(e.target.value)}
-                  placeholder="コマンド・キーワード検索..."
-                  className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                />
-                {compQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setCompQuery("")}
-                    aria-label="検索をクリア"
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-                  >
-                    <X size={13} />
-                  </button>
-                )}
-              </div>
-            </div>
+                </div>
+              )}
 
             {/* 比較表 */}
-            <div className="space-y-5">
-              {filteredComparisons.map((comp) => (
-                <div
-                  key={comp.id}
-                  className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4"
-                >
-                  <div className="space-y-1">
-                    <span className="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
-                      {comp.category}
-                    </span>
-                    <h3 className="text-base sm:text-lg font-black text-slate-900">{comp.title}</h3>
-                    <p className="text-xs text-slate-500">{comp.subtitle}</p>
-                  </div>
+            {filteredComparisons.length > 0 && (
+              <div className="space-y-5">
+                {filteredComparisons.map((comp) => (
+                  <div
+                    key={comp.id}
+                    className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4"
+                  >
+                    <div className="space-y-1">
+                      <span className="inline-block text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-700 border border-cyan-200">
+                        {comp.category}
+                      </span>
+                      <h3 className="text-base sm:text-lg font-black text-slate-900">{comp.title}</h3>
+                      <p className="text-xs text-slate-500">{comp.subtitle}</p>
+                    </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[600px] text-left border-collapse text-xs sm:text-sm">
-                      <thead>
-                        <tr className="border-b border-slate-200 bg-slate-50">
-                          {comp.columns.map((col) => (
-                            <th key={col} className="py-2.5 px-3 font-black text-slate-700 whitespace-nowrap">
-                              {col}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {comp.rows.map((row) => (
-                          <tr key={row.feature} className="hover:bg-slate-50/70">
-                            <td className="py-2.5 px-3 font-bold text-slate-800">{row.feature}</td>
-                            {row.values.map((val, idx) => (
-                              <td key={idx} className="py-2.5 px-3 text-slate-600 font-mono text-xs">
-                                {val}
-                              </td>
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[600px] text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                          <tr className="border-b border-slate-200 bg-slate-50">
+                            {comp.columns.map((col) => (
+                              <th key={col} className="py-2.5 px-3 font-black text-slate-700 whitespace-nowrap">
+                                {col}
+                              </th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {comp.rows.map((row) => (
+                            <tr key={row.feature} className="hover:bg-slate-50/70">
+                              <td className="py-2.5 px-3 font-bold text-slate-800">{row.feature}</td>
+                              {row.values.map((val, idx) => (
+                                <td key={idx} className="py-2.5 px-3 text-slate-600 font-mono text-xs">
+                                  {val}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
 
-                  <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
-                    <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                    <span>
-                      <strong className="text-cyan-300">使い分けルール: </strong>
-                      {comp.decisionRule}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* 頻出運用フローパターン */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <Terminal className="w-5 h-5 text-cyan-600" />
-                <span>頻出コマンド・運用フローパターン</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {config.patterns.map((pat) => (
-                  <SpotlightCard
-                    key={pat.id}
-                    className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
-                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
-                        {pat.badge}
+                    <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
+                      <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="text-cyan-300">使い分けルール: </strong>
+                        {comp.decisionRule}
                       </span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {pat.flow.map((step, idx) => (
-                        <div key={step} className="flex items-center gap-1.5">
-                          <span className="px-2 py-1 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-800">
-                            {step}
-                          </span>
-                          {idx < pat.flow.length - 1 && (
-                            <ArrowRight size={12} className="text-slate-400 shrink-0" />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">{pat.summary}</p>
-                    <ul className="space-y-1 text-xs text-slate-700">
-                      {pat.keyDesignPoints.map((pt) => (
-                        <li key={pt} className="flex items-start space-x-1.5">
-                          <span className="text-cyan-600 font-bold">•</span>
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </SpotlightCard>
+                  </div>
                 ))}
               </div>
-            </section>
+            )}
+
+            {/* 頻出運用フローパターン */}
+            {filteredPatterns.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <Terminal className="w-5 h-5 text-cyan-600" />
+                  <span>頻出コマンド・運用フローパターン</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredPatterns.map((pat) => (
+                    <SpotlightCard
+                      key={pat.id}
+                      className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
+                        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
+                          {pat.badge}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {pat.flow.map((step, idx) => (
+                          <div key={step} className="flex items-center gap-1.5">
+                            <span className="px-2 py-1 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-800">
+                              {step}
+                            </span>
+                            {idx < pat.flow.length - 1 && (
+                              <ArrowRight size={12} className="text-slate-400 shrink-0" />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">{pat.summary}</p>
+                      <ul className="space-y-1 text-xs text-slate-700">
+                        {pat.keyDesignPoints.map((pt) => (
+                          <li key={pt} className="flex items-start space-x-1.5">
+                            <span className="text-cyan-600 font-bold">•</span>
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </SpotlightCard>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* 試験のひっかけ対策 */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <AlertTriangle className="w-5 h-5 text-amber-500" />
-                <span>よくあるひっかけ・誤答パターン</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {config.pitfalls.map((pit) => (
-                  <div
-                    key={pit.id}
-                    className="bg-white rounded-2xl border border-amber-200/80 p-5 space-y-2.5 shadow-xs"
-                  >
-                    <div className="text-xs font-black text-rose-700">✕ {pit.trap}</div>
-                    <p className="text-xs text-slate-600 leading-relaxed">{pit.whyWrong}</p>
-                    <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 px-3 py-2 text-xs text-emerald-950">
-                      <span className="font-bold">○ 正しいアプローチ: </span>
-                      {pit.correctApproach}
+            {filteredPitfalls.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-500" />
+                  <span>よくあるひっかけ・誤答パターン</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredPitfalls.map((pit) => (
+                    <div
+                      key={pit.id}
+                      className="bg-white rounded-2xl border border-amber-200/80 p-5 space-y-2.5 shadow-xs"
+                    >
+                      <div className="text-xs font-black text-rose-700">✕ {pit.trap}</div>
+                      <p className="text-xs text-slate-600 leading-relaxed">{pit.whyWrong}</p>
+                      <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 px-3 py-2 text-xs text-emerald-950">
+                        <span className="font-bold">○ 正しいアプローチ: </span>
+                        {pit.correctApproach}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* 重要設定ファイル・数値早見 */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <Gauge className="w-5 h-5 text-indigo-600" />
-                <span>重要設定ファイル・数値早見表</span>
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {config.keyPaths.map((kp) => (
-                  <div
-                    key={kp.id}
-                    className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs min-w-0"
-                  >
-                    <div className="font-mono text-xs font-black text-indigo-700 break-words">{kp.target}</div>
-                    <div className="text-sm font-black text-slate-900 break-words">{kp.value}</div>
-                    <p className="text-[11px] text-slate-500 leading-snug">{kp.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {filteredKeyPaths.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <Gauge className="w-5 h-5 text-indigo-600" />
+                  <span>重要設定ファイル・数値早見表</span>
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {filteredKeyPaths.map((kp) => (
+                    <div
+                      key={kp.id}
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs min-w-0"
+                    >
+                      <div className="font-mono text-xs font-black text-indigo-700 break-words">{kp.target}</div>
+                      <div className="text-sm font-black text-slate-900 break-words">{kp.value}</div>
+                      <p className="text-[11px] text-slate-500 leading-snug">{kp.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
 
@@ -1644,28 +1932,61 @@ export default function LpicInfoPage() {
 
         {/* TAB 5: 公式リソース */}
         {activeTab === "resources" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {config.officialResources.map((res) => (
-              <TiltCard key={res.url} className="h-full">
-                <a
-                  href={res.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => playCyberClick()}
-                  className="block h-full bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs hover:border-cyan-300 transition-all space-y-3"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
-                      {res.badge}
-                    </span>
-                    <ExternalLink size={15} className="text-slate-400" />
+          <div className="space-y-8">
+            {/* 試験本番・直前チェックリスト */}
+            <section className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900 break-words">
+                  {config.label} 試験本番・直前チェックリスト（時間配分＆受験のコツ）
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  {config.examDayChecklist.subtitle}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700">
+                {config.examDayChecklist.tips.map((tip) => (
+                  <div
+                    key={tip.title}
+                    className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 space-y-1.5 min-w-0"
+                  >
+                    <div className="font-black text-slate-900 text-xs sm:text-sm break-words">
+                      {tip.title}
+                    </div>
+                    <p className="leading-relaxed text-slate-600">{tip.body}</p>
                   </div>
-                  <h3 className="text-base font-black text-slate-900">{res.title}</h3>
-                  <p className="text-xs text-slate-600 leading-relaxed">{res.description}</p>
-                  <div className="text-[11px] font-mono text-cyan-700 truncate">{res.url}</div>
-                </a>
-              </TiltCard>
-            ))}
+                ))}
+              </div>
+            </section>
+
+            {/* 公式学習リソース */}
+            <section className="space-y-3">
+              <h3 className="text-lg font-black text-slate-900">
+                LPI 公式学習リソース（{config.label}）
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {config.officialResources.map((res) => (
+                  <TiltCard key={res.url} className="h-full">
+                    <a
+                      href={res.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => playCyberClick()}
+                      className="block h-full bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs hover:border-cyan-300 transition-all space-y-3"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-cyan-50 text-cyan-700 border border-cyan-200">
+                          {res.badge}
+                        </span>
+                        <ExternalLink size={15} className="text-slate-400" />
+                      </div>
+                      <h4 className="text-base font-black text-slate-900">{res.title}</h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">{res.description}</p>
+                      <div className="text-[11px] font-mono text-cyan-700 truncate">{res.url}</div>
+                    </a>
+                  </TiltCard>
+                ))}
+              </div>
+            </section>
           </div>
         )}
       </div>
