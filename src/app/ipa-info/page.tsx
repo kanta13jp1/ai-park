@@ -607,7 +607,7 @@ export default function IpaInfoPage() {
                   <div className="text-[11px] font-bold text-slate-500 px-1">
                     {group.label}
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2.5">
                     {groupMetas.map((meta) => {
                       const isSelected = meta.id === selectedExam;
                       const examTopics = ipaDomains
@@ -632,8 +632,8 @@ export default function IpaInfoPage() {
                               : "bg-slate-50/70 text-slate-700 border-slate-200 hover:bg-white hover:border-indigo-300"
                           }`}
                         >
-                          <div className="flex items-center justify-between gap-1.5">
-                            <span className="text-xs sm:text-sm font-black truncate">
+                          <div className="flex items-start justify-between gap-2">
+                            <span className="text-xs sm:text-sm font-black leading-snug">
                               {meta.shortLabel}
                             </span>
                             <span
@@ -741,16 +741,16 @@ export default function IpaInfoPage() {
 
         {/* 総合進捗＆データ管理バー */}
         <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1.5 flex-1">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-700 flex items-center space-x-1.5">
-                  <Award className="w-4 h-4 text-indigo-600" />
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="space-y-1.5 flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-2 text-xs font-bold">
+                <span className="text-slate-700 flex items-start space-x-1.5">
+                  <Award className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
                   <span>
                     {currentExamMeta.shortLabel} 総合進捗（トピック・暗記カード・練習問題）
                   </span>
                 </span>
-                <span className="font-mono text-indigo-700">{overallPct}%</span>
+                <span className="font-mono text-indigo-700 shrink-0">{overallPct}%</span>
               </div>
               <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
                 <div
@@ -867,7 +867,7 @@ export default function IpaInfoPage() {
             {/* フィルター＆検索バー */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                <div className="relative flex-1 sm:max-w-xs">
+                <div className="relative flex-1 lg:max-w-xs">
                   <Search
                     size={14}
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -1152,7 +1152,7 @@ export default function IpaInfoPage() {
         {activeTab === "comparisons" && (
           <div className="space-y-8">
             {/* 比較表フィルタ */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-1.5">
                 {COMPARISON_CATEGORIES.map((cat) => (
                   <button
@@ -1172,7 +1172,7 @@ export default function IpaInfoPage() {
                   </button>
                 ))}
               </div>
-              <div className="relative sm:w-64">
+              <div className="relative w-full lg:w-64 shrink-0">
                 <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"

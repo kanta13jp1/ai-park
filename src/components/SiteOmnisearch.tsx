@@ -32,7 +32,7 @@ const siteSearchIndex: SearchIndexItem[] = [
     category: "フィードバック",
     href: "/feedback-todo",
     description: "社員からのご意見・改善要望の蓄積、進捗管理、タスク起票、CSVエクスポート",
-    keywords: ["ご意見", "改善", "todo", "フィードバック", "要望", "バックログ", "チャット", "杉村", "タスク", "起票"],
+    keywords: ["ご意見", "改善", "todo", "フィードバック", "要望", "バックログ", "チャット", "タスク", "起票"],
   },
   {
     title: "使い方・学び 総合ハブ",
@@ -84,18 +84,18 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["gcp", "google cloud", "cdl", "ace", "pca", "cloud digital leader", "associate cloud engineer", "professional cloud architect", "試験", "クイズ", "flashcards"],
   },
   {
-    title: "LPIC・Linux情報局 (LPIC-1学習ハブ)",
+    title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2学習ハブ)",
     category: "資格・Linux",
     href: "/lpic-info",
-    description: "LPIC-1（101-500 / 102-500）学習ハブ・練習クイズ・コマンド早見表を掲載中（社内資格支援ルール等は工事中）",
-    keywords: ["lpic", "lpic-1", "101-500", "102-500", "linux", "コマンド", "試験", "クイズ", "flashcards"],
+    description: "LPIC-1（101-500 / 102-500）・LPIC-2（201-450 / 202-450）学習ハブ・練習クイズ・コマンド早見表を掲載中（社内資格支援ルール等は工事中）",
+    keywords: ["lpic", "lpic-1", "lpic-2", "101-500", "102-500", "201-450", "202-450", "linux", "コマンド", "試験", "クイズ", "flashcards"],
   },
   {
-    title: "情報処理技術者試験情報局 (IP/FE/AP/高度)",
+    title: "情報処理技術者試験情報局 (IPA全13区分)",
     category: "資格・IPA",
     href: "/ipa-info",
-    description: "ITパスポート・基本情報・応用情報・高度試験（SC/DB/NW）統合学習ハブを掲載中（社内資格支援ルール等は工事中）",
-    keywords: ["ipa", "情報処理技術者試験", "itパスポート", "ip", "基本情報", "fe", "応用情報", "ap", "sc", "db", "nw", "セキュリティ"],
+    description: "ITパスポート・情報セキュリティマネジメント・基本情報・応用情報・高度9区分の全13区分統合学習ハブを掲載中（社内資格支援ルール等は工事中）",
+    keywords: ["ipa", "情報処理技術者試験", "itパスポート", "ip", "sg", "基本情報", "fe", "応用情報", "ap", "sc", "db", "nw", "es", "st", "sa", "pm", "sm", "au", "全13区分", "高度", "セキュリティ"],
   },
   {
     title: "アイデア宣言ボード",

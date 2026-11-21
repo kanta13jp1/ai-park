@@ -76,14 +76,14 @@ export default function HowToPage() {
     {
       id: "aws-info",
       title: "AWS・クラウド情報局",
-      desc: "クラウド・生成AI基盤の最新技術情報や活用Tipsはこちらから！",
+      desc: "AWS認定ソリューションアーキテクト(SAA-C03)の要点整理・比較表・模擬試験！",
       icon: <Cloud className="text-cyan-600" size={32} />,
       iconBg: "bg-cyan-50 border-cyan-100",
       href: "/aws-info",
       badge: "🚧 工事中",
       badgeColor: "bg-cyan-100 text-cyan-700",
-      tags: ["準備中"],
-      highlights: "社内での AWS・クラウド活用の情報（準備中）",
+      tags: ["SAA-C03", "比較表", "模擬試験"],
+      highlights: "AWS SAA-C03 公式試験ガイドに基づく学習ハブ（社内利用ルール・相談窓口は準備中）",
     },
     {
       id: "gcp-info",
@@ -124,14 +124,14 @@ export default function HowToPage() {
     {
       id: "skills-hub",
       title: "社内Skillsカタログ",
-      desc: "社内で共有する Antigravity の Skills（準備中）",
+      desc: "AI Park 実運用 Skills（4件）と仕組みガイド・SKILL.md テンプレートを掲載中（全社カタログ準備中）",
       icon: <Wrench className="text-purple-600" size={32} />,
       iconBg: "bg-purple-50 border-purple-100",
       href: "/skills-hub",
       badge: "🚧 工事中",
       badgeColor: "bg-amber-100 text-amber-800 font-bold",
-      tags: ["準備中"],
-      highlights: "社内で作成・確認した Skills を掲載予定（現在は工事中・新規提案フォームのみ公開）",
+      tags: ["実運用Skills", "作り方ガイド", "SKILL.md"],
+      highlights: ".agents/skills/ の実在スキル 4 件・仕組み解説・テンプレート掲載（全社審査カタログは準備中）",
     },
     {
       id: "troubleshooting",
@@ -373,7 +373,7 @@ export default function HowToPage() {
                   日々の開発・業務を加速するリソース集
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                  導入ガイド・社内Skillsカタログ（準備中）・Antigravity情報局（準備中）へのショートカットです。
+                  導入ガイド・社内Skillsカタログ・Antigravity情報局へのショートカットです。
                 </p>
               </div>
 
@@ -425,7 +425,7 @@ export default function HowToPage() {
                 >
                   <span className="flex items-center gap-2">
                     <Cloud size={16} className="text-cyan-300" />
-                    Antigravity社内情報局
+                    Antigravity情報局
                   </span>
                   <ChevronRight size={14} className="text-slate-400 group-hover/q:text-white group-hover/q:translate-x-0.5 transition-transform" />
                 </Link>

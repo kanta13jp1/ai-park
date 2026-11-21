@@ -46,11 +46,21 @@ const DEFAULT_GCP_INFO = {
   totalSpentUsd: 103.07,
   grossCostUsd: 152.67,
   trialDaysTotal: 90,
-  trialDaysLeft: 87, // 2026/10/05 Cloud Billing 実画面確定 (残り87日 / 2026-12-31終了)
+  trialDaysLeft: 87, // 初期スナップショット確定値（画面上は現在時刻から自動再計算）
+  trialEndDate: "2026-12-31",
   monthlyBudgetUsd: 50,
   bigQueryExportDataset: "mighty-link-ai-connect-xxxxxx:gcp_billing_export",
   bigQueryConnected: true,
 };
+
+function calcRemainingDaysJst(endDateStr: string, nowMs: number): number {
+  const [y, m, d] = endDateStr.split("-").map(Number);
+  if (!y || !m || !d) return 0;
+  const endUtc = Date.UTC(y, m - 1, d);
+  const jstNow = new Date(nowMs + 9 * 60 * 60 * 1000);
+  const todayJstUtc = Date.UTC(jstNow.getUTCFullYear(), jstNow.getUTCMonth(), jstNow.getUTCDate());
+  return Math.max(0, Math.round((endUtc - todayJstUtc) / 86_400_000));
+}
 
 // 初期ユーザーデータ（実機確定値）
 const DEFAULT_USERS: UserUsage[] = [
@@ -137,6 +147,7 @@ export default function GeminiStatsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isGcpDocOpen, setIsGcpDocOpen] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
+  const [clientNowMs, setClientNowMs] = useState<number | null>(null);
 
   // 為替レート（概算 1ドル=150円）
   const USD_JPY = 150;
@@ -254,10 +265,18 @@ export default function GeminiStatsPage() {
     };
 
     initFetch();
+    queueMicrotask(() => {
+      if (!ignore) setClientNowMs(Date.now());
+    });
     return () => {
       ignore = true;
     };
   }, [fetchLatestGcpUsagePayload]);
+
+  const effectiveTrialDaysLeft = useMemo(() => {
+    if (clientNowMs === null) return gcpInfo.trialDaysLeft;
+    return calcRemainingDaysJst(gcpInfo.trialEndDate || "2026-12-31", clientNowMs);
+  }, [clientNowMs, gcpInfo.trialDaysLeft, gcpInfo.trialEndDate]);
 
   // 集計計算
   const totalCostUsd = useMemo(
@@ -277,6 +296,19 @@ export default function GeminiStatsPage() {
   const totalTokens = useMemo(
     () => users.reduce((acc, u) => acc + u.totalTokens, 0),
     [users]
+  );
+  const avgCostPerRequestUsd = useMemo(
+    () => (totalRequests > 0 ? totalCostUsd / totalRequests : 0),
+    [totalRequests, totalCostUsd]
+  );
+  const filteredDailyData = useMemo(() => {
+    if (period === "all") return dailyData;
+    const limit = period === "7d" ? 7 : period === "14d" ? 14 : 30;
+    return dailyData.slice(-limit);
+  }, [dailyData, period]);
+  const maxDailyRequests = useMemo(
+    () => Math.max(100, ...filteredDailyData.map((d) => d.requests)),
+    [filteredDailyData]
   );
   const activeUserCount = users.filter((u) => u.status === "active").length;
 
@@ -532,7 +564,7 @@ function doGet() {
                   </span>
                 </div>
                 <p className="text-xs text-slate-300 font-mono">
-                  無料トライアルのステータス: ¥{gcpInfo.remainingCreditJpy.toLocaleString()} クレジット、残り {gcpInfo.trialDaysLeft} 日（2026/12/31 終了）
+                  無料トライアルのステータス: ¥{gcpInfo.remainingCreditJpy.toLocaleString()} クレジット、残り {effectiveTrialDaysLeft} 日（2026/12/31 終了）
                 </p>
               </div>
             </div>
@@ -614,7 +646,7 @@ function doGet() {
                   <span className="text-xs text-slate-500 font-medium">残り有効日数</span>
                   <div className="mt-1">
                     <span className="text-2xl sm:text-3xl font-black font-mono text-indigo-900 tracking-tight">
-                      {gcpInfo.trialDaysLeft} <span className="text-sm font-normal text-indigo-700">日</span>
+                      {effectiveTrialDaysLeft} <span className="text-sm font-normal text-indigo-700">日</span>
                     </span>
                     <span className="text-[11px] text-slate-400 block font-mono">
                       （総期間: {gcpInfo.trialDaysTotal} 日中）
@@ -648,7 +680,7 @@ function doGet() {
                     無料トライアルクレジット
                   </span>
                   <span className="text-emerald-700 font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-200/60 text-[11px]">
-                    残り {gcpInfo.trialDaysLeft} 日
+                    残り {effectiveTrialDaysLeft} 日
                   </span>
                 </div>
                 <div>
@@ -803,7 +835,7 @@ function doGet() {
                 <div className="pt-2 text-xs text-slate-600 flex items-center justify-between">
                   <span>平均単価</span>
                   <span className="font-mono font-bold text-slate-800">
-                    約 0.014 ドル / 回 (約2円)
+                    約 {avgCostPerRequestUsd.toFixed(3)} ドル / 回 (約{Math.round(avgCostPerRequestUsd * USD_JPY)}円)
                   </span>
                 </div>
               </div>
@@ -869,9 +901,11 @@ function doGet() {
           {/* バーチャート可視化 */}
           <div className="space-y-2">
             <div className="h-48 w-full flex items-end gap-2 sm:gap-3 pt-6 pb-2 px-2 border-b border-slate-200">
-              {dailyData.map((item) => {
-                const maxReq = 150;
-                const heightPercent = Math.min(100, (item.requests / maxReq) * 100);
+              {filteredDailyData.map((item) => {
+                const heightPercent =
+                  item.requests === 0
+                    ? 4
+                    : Math.max(8, Math.round((item.requests / maxDailyRequests) * 100));
                 return (
                   <div
                     key={item.date}
@@ -893,8 +927,12 @@ function doGet() {
                     {/* バー */}
                     <div
                       onMouseEnter={() => playCyberHover()}
-                      className="w-full bg-gradient-to-t from-indigo-600 to-cyan-400 rounded-t-sm group-hover:brightness-110 transition-all cursor-pointer"
-                      style={{ height: `${Math.max(8, heightPercent)}%` }}
+                      className={`w-full rounded-t-sm transition-all cursor-pointer ${
+                        item.requests === 0
+                          ? "bg-slate-200 hover:bg-slate-300"
+                          : "bg-gradient-to-t from-indigo-600 to-cyan-400 group-hover:brightness-110"
+                      }`}
+                      style={{ height: `${heightPercent}%` }}
                     />
                     <span className="text-[10px] text-slate-400 font-mono transform -rotate-45 sm:rotate-0 mt-1">
                       {item.date}
@@ -904,8 +942,8 @@ function doGet() {
               })}
             </div>
             <div className="flex justify-between items-center text-xs text-slate-400 px-2 pt-1 font-mono">
-              <span>0回</span>
-              <span>目安最大: 150回/日</span>
+              <span>表示中: 直近 {filteredDailyData.length} 日分</span>
+              <span>期間最大: {maxDailyRequests.toLocaleString()}回/日</span>
             </div>
           </div>
         </div>
@@ -921,7 +959,7 @@ function doGet() {
                 </h3>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Vertex AI (Gemini 3.8 Flash / 3.1 Pro) および Agent Platform の SKU 別支出比率
+                Vertex AI (Gemini 3.8 Flash / 3.1 Pro) および Agent Platform の SKU 別支出比率（2026/10 初期計測 計 ¥7,105 時点の内訳スナップショット）
               </p>
             </div>
             <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full self-start sm:self-auto">

@@ -182,18 +182,18 @@ const paletteItems: PaletteItem[] = [
   },
   {
     id: "lpic-info",
-    title: "LPIC・Linux情報局 (LPIC-1学習)",
+    title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2学習)",
     category: "Academy & 学習",
     href: "/lpic-info",
-    description: "LPIC-1 (101-500 / 102-500) 学習ハブ・練習クイズ（社内支援ルール等は工事中）",
+    description: "LPIC-1 (101/102)・LPIC-2 (201/202) 学習ハブ・練習クイズ（社内支援ルール等は工事中）",
     icon: Terminal,
   },
   {
     id: "ipa-info",
-    title: "情報処理技術者試験情報局 (IP/FE/AP/高度)",
+    title: "情報処理技術者試験情報局 (IPA全13区分)",
     category: "Academy & 学習",
     href: "/ipa-info",
-    description: "IP・FE・AP・高度試験(SC/DB/NW) 統合学習ハブ（社内支援ルール等は工事中）",
+    description: "IP・SG・FE・AP・高度9区分 統合学習ハブ（社内支援ルール等は工事中）",
     icon: BookOpen,
   },
   {
@@ -230,10 +230,10 @@ const paletteItems: PaletteItem[] = [
   },
   {
     id: "gemini-stats",
-    title: "Gemini利用統計ダッシュボード & FAQ",
+    title: "Antigravity利用監視（Gemini利用統計）",
     category: "ツール & ガイド",
     href: "/gemini-stats",
-    description: "全社・部署別の利用回数集計、日次推移（7d/14d/30d）、SKU立体カード",
+    description: "社内アカウント別の利用回数集計、日次推移（7d/14d/30d）、90日無料トライアル残高",
     icon: Layers,
   },
   {

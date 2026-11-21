@@ -376,10 +376,11 @@ const tasksData: TaskItem[] = [
     releaseCondition: "社内の実際の事例と Skills がそろうこと",
     category: "community",
     icon: "🟣",
-    description: "社内で実際に使っているエージェントの事例と、共有できる Skills を集めて掲載します。",
+    description: "AI Park 実運用 Skills（4件）・仕組みガイド・SKILL.md テンプレートを /skills-hub に先行掲載しました。全社共有の Subagents 活用事例と社内認定 Skills を今後拡充します。",
     items: [
+      { text: "/skills-hub に AI Park 実運用 Skills（4件）・仕組みガイド・SKILL.md テンプレートを先行掲載", done: true },
       { text: "実際の活用事例の収集（効果は実測値）", done: false },
-      { text: "社内で共有する Skills の作成・確認", done: false },
+      { text: "全社で共有する認定 Skills の作成・確認", done: false },
     ],
   },
   {
@@ -412,7 +413,7 @@ const tasksData: TaskItem[] = [
     releaseCondition: "社内ルール・相談窓口・使ってよいツールの決定",
     category: "system",
     icon: "☁️",
-    description: "AWS SAA-C03 / GCP (CDL・ACE・PCA) / LPIC-1・2 / IPA 全9区分 学習ハブや Antigravity 機能解説・FAQは先行掲載中。社内の利用ルール・資格支援ルール、使ってよい MCP サーバー、社内向けお知らせを準備します。",
+    description: "AWS SAA-C03 / GCP (CDL・ACE・PCA) / LPIC-1・2 / IPA 全13区分 学習ハブや Antigravity 機能解説・実務実行例・リファレンス/FAQは先行掲載中。社内の利用ルール・資格支援ルール、使ってよい MCP サーバー、社内向けお知らせを準備します。",
     items: [
       { text: "AWS（/aws-info）・GCP（/gcp-info）・LPIC（/lpic-info）・IPA（/ipa-info）学習ハブの先行公開", done: true },
       { text: "Antigravity 機能解説・実務活用の実行例・FAQ（/antigravity-info）の先行公開", done: true },
@@ -477,7 +478,7 @@ export default function RoadmapPage() {
                   <span className="px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200/60 text-xs font-bold font-mono tracking-wider uppercase">
                     Project Schedule
                   </span>
-                  <span className="text-xs text-slate-400 font-mono">最終更新: 2026年11月12日</span>
+                  <span className="text-xs text-slate-400 font-mono">最終更新: 2026年11月21日</span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1.5 tracking-tight">
                   AI Park 機能実装マイルストーン

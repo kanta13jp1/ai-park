@@ -157,11 +157,14 @@ export default function AntigravityInfoPage() {
   }, [normalizedQuery]);
 
   const handleCopyPrompt = (id: string, text: string) => {
-    navigator.clipboard?.writeText(text).then(() => {
-      playCyberSuccess();
-      setCopiedId(id);
-      setTimeout(() => setCopiedId((prev) => (prev === id ? null : prev)), 2000);
-    });
+    navigator.clipboard
+      ?.writeText(text)
+      .then(() => {
+        playCyberSuccess();
+        setCopiedId(id);
+        setTimeout(() => setCopiedId((prev) => (prev === id ? null : prev)), 2000);
+      })
+      .catch(() => {});
   };
 
   return (
@@ -382,13 +385,13 @@ export default function AntigravityInfoPage() {
 
               <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
+                  <table className="w-full min-w-[640px] text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-900 text-slate-200 text-xs">
-                        <th className="py-3 px-4 font-bold">モダリティ</th>
-                        <th className="py-3 px-4 font-bold">呼び出し方</th>
-                        <th className="py-3 px-4 font-bold">対象スコープ</th>
-                        <th className="py-3 px-4 font-bold">最適なユースケース</th>
+                        <th className="py-3 px-4 font-bold whitespace-nowrap">モダリティ</th>
+                        <th className="py-3 px-4 font-bold whitespace-nowrap">呼び出し方</th>
+                        <th className="py-3 px-4 font-bold whitespace-nowrap">対象スコープ</th>
+                        <th className="py-3 px-4 font-bold whitespace-nowrap">最適なユースケース</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">

@@ -16,7 +16,6 @@ import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import CommandPalette from "@/components/CommandPalette";
 import ScrollProgress from "@/components/ScrollProgress";
-import AudioToggle from "@/components/AudioToggle";
 import CursorGlow from "@/components/CursorGlow";
 import KeyboardShortcutsModal from "@/components/KeyboardShortcutsModal";
 import RouteProgress from "@/components/RouteProgress";
@@ -47,7 +46,6 @@ export default function RootLayout({
           <main className="flex-1 flex flex-col">{children}</main>
           <Footer />
         </div>
-        <AudioToggle />
       </body>
     </html>
   );

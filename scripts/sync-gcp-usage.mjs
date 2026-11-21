@@ -319,6 +319,16 @@ async function syncUsageData() {
     currentData.syncModeLabel = "実機コンソール確定検証同期（保護中）";
   }
 
+  // トライアル残日数を JST 基準で自動再計算
+  const trialEndStr = currentData.gcpInfo?.trialEndDate || '2026-12-31';
+  const [endY, endM, endD] = trialEndStr.split('-').map(Number);
+  if (endY && endM && endD && currentData.gcpInfo) {
+    const endUtc = Date.UTC(endY, endM - 1, endD);
+    const todayJstUtc = Date.UTC(jstNow.getUTCFullYear(), jstNow.getUTCMonth(), jstNow.getUTCDate());
+    currentData.gcpInfo.trialEndDate = trialEndStr;
+    currentData.gcpInfo.trialDaysLeft = Math.max(0, Math.round((endUtc - todayJstUtc) / 86400000));
+  }
+
   // 最新タイムスタンプの更新
   currentData.updatedAt = now.toISOString();
   currentData.syncedAt = formattedDate;

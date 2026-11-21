@@ -8,6 +8,7 @@ import { ExternalLink, Menu, X, Search, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { basePath } from "@/lib/basePath";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
+import AudioToggle from "@/components/AudioToggle";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -209,7 +210,8 @@ export default function Sidebar() {
         </nav>
 
         {/* フッター情報 */}
-        <div className="p-3.5 border-t border-slate-800/70 bg-slate-950/40 text-[11px] text-slate-400 flex flex-col items-center justify-center space-y-1 text-center z-10">
+        <div className="p-3.5 border-t border-slate-800/70 bg-slate-950/40 text-[11px] text-slate-400 flex flex-col items-center justify-center space-y-2 text-center z-10">
+          <AudioToggle />
           <div className="flex items-center space-x-1.5 text-slate-300 font-medium">
             <span>© MightyLINK AI推進窓口</span>
           </div>

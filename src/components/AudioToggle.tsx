@@ -26,13 +26,13 @@ export default function AudioToggle() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 hidden sm:flex items-center space-x-2">
+    <div className="flex items-center justify-center gap-2 w-full">
       <button
         onClick={() => {
           window.dispatchEvent(new KeyboardEvent("keydown", { key: "?" }));
         }}
         onMouseEnter={() => playCyberHover()}
-        className="px-2.5 py-1.5 rounded-full border border-white/10 bg-slate-900/60 hover:bg-slate-900/90 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/40 text-xs font-mono font-bold flex items-center space-x-1 backdrop-blur-md shadow-lg transition-all duration-200 cursor-pointer active:scale-95"
+        className="px-2.5 py-1.5 rounded-full border border-slate-700/70 bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-cyan-300 hover:border-cyan-500/40 text-xs font-mono font-bold flex items-center space-x-1 whitespace-nowrap shadow-sm transition-all duration-200 cursor-pointer active:scale-95"
         title="キーボードショートカット一覧 (?)"
       >
         <span className="text-[10px] text-cyan-400">?</span>
@@ -42,10 +42,10 @@ export default function AudioToggle() {
       <button
         onClick={toggle}
         onMouseEnter={() => playCyberHover()}
-        className={`px-3 py-1.5 rounded-full border text-xs font-mono font-bold flex items-center space-x-2 backdrop-blur-md shadow-lg transition-all duration-300 cursor-pointer active:scale-95 ${
+        className={`px-3 py-1.5 rounded-full border text-xs font-mono font-bold flex items-center space-x-2 whitespace-nowrap shadow-sm transition-all duration-300 cursor-pointer active:scale-95 ${
           enabled
             ? "bg-slate-900/90 text-cyan-300 border-cyan-500/50 shadow-cyan-500/20"
-            : "bg-slate-900/60 text-slate-400 border-white/10 hover:text-white hover:border-white/30"
+            : "bg-slate-900/90 text-slate-300 border-slate-700/70 hover:text-white hover:border-slate-500"
         }`}
         title={enabled ? "サイバー触感サウンドを消音 (M)" : "サイバー触感サウンドを有効化 (M)"}
       >
