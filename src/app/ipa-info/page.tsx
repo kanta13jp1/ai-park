@@ -17,6 +17,7 @@ import {
   EyeOff,
   ChevronsUpDown,
   Sparkles,
+  Zap,
   Layers2,
   ArrowRight,
   X,
@@ -222,6 +223,10 @@ function normalizeMockExamHistory(raw: unknown): Record<IpaExamId, CertMockExamR
   };
 }
 
+function normalizeIpaSearchQuery(kw: string): string {
+  return kw.split(/[（(/]/)[0].trim();
+}
+
 export default function IpaInfoPage() {
   const [selectedExam, setSelectedExam] = useState<IpaExamId>("fe");
   const [activeTab, setActiveTab] = useState<TabId>("domains");
@@ -320,6 +325,7 @@ export default function IpaInfoPage() {
     setSelectedExam(examId);
     setQuizDomainTarget("all");
     setTopicQuery("");
+    setCompCategory("すべて");
     setCompQuery("");
     const firstDomainId = ipaDomains.find((d) => d.examId === examId)?.id;
     if (firstDomainId) {
@@ -419,7 +425,7 @@ export default function IpaInfoPage() {
 
   const handleJumpToKeywordComparison = (kw: string) => {
     playCyberClick();
-    const cleanQuery = kw.split("（")[0].split("(")[0].split("/")[0].trim();
+    const cleanQuery = normalizeIpaSearchQuery(kw);
     setCompCategory("すべて");
     setCompQuery(cleanQuery);
     setActiveTab("comparisons");
@@ -662,12 +668,27 @@ export default function IpaInfoPage() {
     progress.topicNotes,
   ]);
 
+  const currentComparisons = useMemo(
+    () => ipaComparisons.filter((comp) => comp.examIds.includes(selectedExam)),
+    [selectedExam]
+  );
+
+  const comparisonCategories = useMemo(
+    () => [
+      "すべて",
+      ...COMPARISON_CATEGORIES.slice(1).filter((cat) =>
+        currentComparisons.some((comp) => comp.category === cat)
+      ),
+    ],
+    [currentComparisons]
+  );
+
+  const normalizedCompQuery = compQuery.trim().toLowerCase();
+
   const filteredComparisons = useMemo(() => {
-    const q = compQuery.trim().toLowerCase();
-    return ipaComparisons.filter((comp) => {
-      if (!comp.examIds.includes(selectedExam)) return false;
+    return currentComparisons.filter((comp) => {
       if (compCategory !== "すべて" && comp.category !== compCategory) return false;
-      if (!q) return true;
+      if (!normalizedCompQuery) return true;
       const haystack = [
         comp.title,
         comp.subtitle,
@@ -677,24 +698,49 @@ export default function IpaInfoPage() {
       ]
         .join(" ")
         .toLowerCase();
-      return haystack.includes(q);
+      return haystack.includes(normalizedCompQuery);
     });
-  }, [selectedExam, compCategory, compQuery]);
+  }, [currentComparisons, compCategory, normalizedCompQuery]);
 
-  const filteredFormulas = useMemo(
-    () => ipaFormulaPatterns.filter((p) => p.examIds.includes(selectedExam)),
-    [selectedExam]
-  );
+  const filteredQuickLookup = useMemo(() => {
+    if (!normalizedCompQuery) return currentFlashcards;
+    return currentFlashcards.filter((item) =>
+      `${item.keyword} ${item.category} ${item.recommended} ${item.reason}`
+        .toLowerCase()
+        .includes(normalizedCompQuery)
+    );
+  }, [currentFlashcards, normalizedCompQuery]);
 
-  const filteredPitfalls = useMemo(
-    () => ipaPitfalls.filter((p) => p.examIds.includes(selectedExam)),
-    [selectedExam]
-  );
+  const filteredFormulas = useMemo(() => {
+    return ipaFormulaPatterns.filter((pat) => {
+      if (!pat.examIds.includes(selectedExam)) return false;
+      if (!normalizedCompQuery) return true;
+      return [pat.title, pat.badge, pat.summary, ...pat.flow, ...pat.keyDesignPoints]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedCompQuery);
+    });
+  }, [selectedExam, normalizedCompQuery]);
 
-  const filteredKeyFacts = useMemo(
-    () => ipaKeyFacts.filter((k) => k.examIds.includes(selectedExam)),
-    [selectedExam]
-  );
+  const filteredPitfalls = useMemo(() => {
+    return ipaPitfalls.filter((pit) => {
+      if (!pit.examIds.includes(selectedExam)) return false;
+      if (!normalizedCompQuery) return true;
+      return `${pit.trap} ${pit.whyWrong} ${pit.correctApproach}`
+        .toLowerCase()
+        .includes(normalizedCompQuery);
+    });
+  }, [selectedExam, normalizedCompQuery]);
+
+  const filteredKeyFacts = useMemo(() => {
+    return ipaKeyFacts.filter((kf) => {
+      if (!kf.examIds.includes(selectedExam)) return false;
+      if (!normalizedCompQuery) return true;
+      return `${kf.target} ${kf.value} ${kf.detail}`
+        .toLowerCase()
+        .includes(normalizedCompQuery);
+    });
+  }, [selectedExam, normalizedCompQuery]);
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     {
@@ -892,7 +938,7 @@ export default function IpaInfoPage() {
                     <span>IPA {currentExamMeta.id.toUpperCase()} STUDY HUB</span>
                   </span>
                   <span className="text-xs text-slate-300">
-                    {currentTopics.length} トピック ・ 比較表 {filteredComparisons.length} 種 ・ カード{" "}
+                    {currentTopics.length} トピック ・ 比較表 {currentComparisons.length} 種 ・ カード{" "}
                     {currentFlashcards.length} 枚 ・ 演習 {currentQuestions.length} 問
                   </span>
                 </div>
@@ -1428,7 +1474,7 @@ export default function IpaInfoPage() {
                                       key={kw}
                                       type="button"
                                       onClick={() => handleJumpToKeywordComparison(kw)}
-                                      title="比較表で検索する"
+                                      title="比較表・逆引きで検索する"
                                       className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 font-mono text-[11px] font-bold text-slate-700 hover:text-indigo-800 transition-colors cursor-pointer"
                                     >
                                       {kw}
@@ -1481,101 +1527,184 @@ export default function IpaInfoPage() {
         {activeTab === "comparisons" && (
           <div className="space-y-8">
             {/* 比較表フィルタ */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-1.5">
-                {COMPARISON_CATEGORIES.map((cat) => (
-                  <button
-                    key={cat}
-                    type="button"
-                    onClick={() => {
-                      playCyberClick();
-                      setCompCategory(cat);
-                    }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer ${
-                      compCategory === cat
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-              <div className="relative w-full lg:w-64 shrink-0">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  type="text"
-                  value={compQuery}
-                  onChange={(e) => setCompQuery(e.target.value)}
-                  placeholder="比較表内を検索..."
-                  className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-                {compQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setCompQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  >
-                    <X size={13} />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* 比較表カード */}
-            {filteredComparisons.length === 0 ? (
-              <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-10 text-center space-y-3 shadow-xs">
-                <Search className="w-8 h-8 text-slate-300 mx-auto" />
-                <div className="text-sm sm:text-base font-black text-slate-900">
-                  該当する比較表が見つかりませんでした
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {comparisonCategories.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setCompCategory(cat);
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold cursor-pointer ${
+                        compCategory === cat
+                          ? "bg-slate-900 text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
                 </div>
-                <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-                  {compQuery.trim()
-                    ? `「${compQuery.trim()}」${
-                        compCategory !== "すべて" ? `（カテゴリ: ${compCategory}）` : ""
-                      }に一致する比較表は ${currentExamMeta.shortLabel} には登録されていません。`
-                    : `カテゴリ「${compCategory}」に該当する比較表は ${currentExamMeta.shortLabel} には登録されていません。`}
-                </p>
-                <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playCyberClick();
-                      setCompCategory("すべて");
-                      setCompQuery("");
-                    }}
-                    className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer transition-colors"
-                  >
-                    <RotateCcw size={13} />
-                    <span>フィルタ解除</span>
-                  </button>
-                  {compQuery.trim() && (
+                <div className="relative w-full lg:w-72 shrink-0">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={compQuery}
+                    onChange={(e) => setCompQuery(e.target.value)}
+                    placeholder="比較表・逆引き・公式を検索..."
+                    className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  />
+                  {compQuery && (
                     <button
                       type="button"
-                      onClick={handleSearchTopicsFromComparison}
-                      className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold cursor-pointer transition-colors"
+                      onClick={() => setCompQuery("")}
+                      aria-label="検索をクリア"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                     >
-                      <BookOpen size={13} />
-                      <span>このキーワードでトピック別学習を検索する</span>
+                      <X size={13} />
                     </button>
                   )}
                 </div>
               </div>
-            ) : (
+
+              {/* 検索ヒット件数サマリバー */}
+              {compQuery.trim() && (
+                <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-100 text-[11px] text-slate-600">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
+                    <span className="font-bold text-slate-700 break-words">
+                      「{compQuery.trim()}」のヒット件数:
+                    </span>
+                    <span className="inline-flex flex-wrap items-center gap-x-1.5 gap-y-0.5 font-mono">
+                      <span
+                        className={
+                          filteredComparisons.length > 0
+                            ? "text-indigo-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        比較表 {filteredComparisons.length} 件
+                      </span>
+                      <span className="text-slate-300">/</span>
+                      <span
+                        className={
+                          filteredQuickLookup.length > 0
+                            ? "text-amber-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        逆引き {filteredQuickLookup.length} 件
+                      </span>
+                      <span className="text-slate-300">/</span>
+                      <span
+                        className={
+                          filteredFormulas.length > 0
+                            ? "text-cyan-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        公式 {filteredFormulas.length} 件
+                      </span>
+                      <span className="text-slate-300">/</span>
+                      <span
+                        className={
+                          filteredPitfalls.length > 0
+                            ? "text-rose-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        ひっかけ {filteredPitfalls.length} 件
+                      </span>
+                      <span className="text-slate-300">/</span>
+                      <span
+                        className={
+                          filteredKeyFacts.length > 0
+                            ? "text-emerald-700 font-bold"
+                            : "text-slate-400"
+                        }
+                      >
+                        早見 {filteredKeyFacts.length} 件
+                      </span>
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setCompQuery("");
+                    }}
+                    className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 font-bold cursor-pointer shrink-0 transition-colors"
+                  >
+                    <X size={12} className="shrink-0" />
+                    <span>検索クリア</span>
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* 全5セクション0件時の空状態カード */}
+            {filteredComparisons.length === 0 &&
+              filteredQuickLookup.length === 0 &&
+              filteredFormulas.length === 0 &&
+              filteredPitfalls.length === 0 &&
+              filteredKeyFacts.length === 0 && (
+                <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-10 text-center space-y-3 shadow-xs">
+                  <Search className="w-8 h-8 text-slate-300 mx-auto" />
+                  <div className="text-sm sm:text-base font-black text-slate-900 break-words">
+                    該当する比較表・逆引きが見つかりませんでした
+                  </div>
+                  <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed break-words">
+                    {compQuery.trim()
+                      ? `「${compQuery.trim()}」${
+                          compCategory !== "すべて" ? `（カテゴリ: ${compCategory}）` : ""
+                        }に一致する比較表・逆引き・公式パターンは ${currentExamMeta.shortLabel} には登録されていません。`
+                      : `カテゴリ「${compCategory}」に該当する比較表・逆引き・公式パターンは ${currentExamMeta.shortLabel} には登録されていません。`}
+                  </p>
+                  <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setCompCategory("すべて");
+                        setCompQuery("");
+                      }}
+                      className="inline-flex items-center justify-center space-x-1.5 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold cursor-pointer transition-colors max-w-full"
+                    >
+                      <RotateCcw size={13} className="shrink-0" />
+                      <span>フィルタ解除</span>
+                    </button>
+                    {compQuery.trim() && (
+                      <button
+                        type="button"
+                        onClick={handleSearchTopicsFromComparison}
+                        className="inline-flex items-center justify-center space-x-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold cursor-pointer transition-colors max-w-full text-center"
+                      >
+                        <BookOpen size={13} className="shrink-0" />
+                        <span>このキーワードでトピック別学習を検索する</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+
+            {/* 比較表カード */}
+            {filteredComparisons.length > 0 && (
               <div className="space-y-5">
                 {filteredComparisons.map((comp) => (
                   <div
                     key={comp.id}
-                    className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4"
+                    className="bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-6 shadow-xs space-y-4 min-w-0"
                   >
-                    <div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+                    <div className="min-w-0">
+                      <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
                         {comp.category}
                       </span>
                       <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1.5 break-words">
                         {comp.title}
                       </h3>
-                      <p className="text-xs text-slate-500">{comp.subtitle}</p>
+                      <p className="text-xs text-slate-500 break-words">{comp.subtitle}</p>
                     </div>
 
                     <div className="overflow-x-auto">
@@ -1609,7 +1738,7 @@ export default function IpaInfoPage() {
 
                     <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
                       <Sparkles className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
-                      <span>
+                      <span className="min-w-0 break-words">
                         <strong className="text-indigo-300">使い分けルール: </strong>
                         {comp.decisionRule}
                       </span>
@@ -1619,92 +1748,140 @@ export default function IpaInfoPage() {
               </div>
             )}
 
+            {/* 逆引き早見インデックス */}
+            {filteredQuickLookup.length > 0 && (
+              <section className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center space-x-2 min-w-0">
+                    <Zap className="w-5 h-5 text-amber-500 shrink-0" />
+                    <span className="break-words">要件・出題キーワード → 推奨用語・対策・理由</span>
+                  </h3>
+                  <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
+                    {filteredQuickLookup.length} 件
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {filteredQuickLookup.map((item) => (
+                    <div
+                      key={item.keyword}
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col justify-between gap-2 min-w-0"
+                    >
+                      <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-2">
+                        <span className="text-xs font-bold text-slate-900 leading-snug break-words min-w-0">
+                          {item.keyword}
+                        </span>
+                        <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 max-w-full truncate">
+                          {item.category}
+                        </span>
+                      </div>
+                      <div className="text-xs font-mono font-black text-indigo-800 bg-indigo-50/70 border border-indigo-100 px-3 py-1.5 rounded-lg break-words">
+                        → {item.recommended}
+                      </div>
+                      <p className="text-[11px] text-slate-600 leading-relaxed break-words">
+                        {item.reason}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
             {/* 頻出公式・計算パターン */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <Calculator className="w-5 h-5 text-indigo-600" />
-                <span>頻出公式・計算パターン</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredFormulas.map((pat) => (
-                  <SpotlightCard
-                    key={pat.id}
-                    className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
-                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
-                        {pat.badge}
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {pat.flow.map((step, idx) => (
-                        <div key={step} className="flex items-center gap-1.5">
-                          <span className="px-2 py-1 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-800">
-                            {step}
-                          </span>
-                          {idx < pat.flow.length - 1 && (
-                            <ArrowRight size={12} className="text-slate-400 shrink-0" />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">{pat.summary}</p>
-                    <ul className="space-y-1 text-xs text-slate-700">
-                      {pat.keyDesignPoints.map((pt) => (
-                        <li key={pt} className="flex items-start space-x-1.5">
-                          <span className="text-indigo-600 font-bold">•</span>
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </SpotlightCard>
-                ))}
-              </div>
-            </section>
+            {filteredFormulas.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <Calculator className="w-5 h-5 text-indigo-600 shrink-0" />
+                  <span>頻出公式・計算パターン</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredFormulas.map((pat) => (
+                    <SpotlightCard
+                      key={pat.id}
+                      className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl min-w-0"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <h4 className="text-sm sm:text-base font-black text-slate-900 break-words min-w-0">
+                          {pat.title}
+                        </h4>
+                        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 max-w-full break-words">
+                          {pat.badge}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {pat.flow.map((step, idx) => (
+                          <div key={step} className="flex items-center gap-1.5 max-w-full">
+                            <span className="px-2 py-1 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-800 break-words">
+                              {step}
+                            </span>
+                            {idx < pat.flow.length - 1 && (
+                              <ArrowRight size={12} className="text-slate-400 shrink-0" />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed break-words">{pat.summary}</p>
+                      <ul className="space-y-1 text-xs text-slate-700">
+                        {pat.keyDesignPoints.map((pt) => (
+                          <li key={pt} className="flex items-start space-x-1.5">
+                            <span className="text-indigo-600 font-bold shrink-0">•</span>
+                            <span className="break-words min-w-0">{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </SpotlightCard>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* よくあるひっかけ対策 */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <AlertTriangle className="w-5 h-5 text-amber-500" />
-                <span>よくあるひっかけ・誤答パターン</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredPitfalls.map((pit) => (
-                  <div
-                    key={pit.id}
-                    className="bg-white rounded-2xl border border-amber-200/80 p-5 space-y-2.5 shadow-xs"
-                  >
-                    <div className="text-xs font-black text-rose-700">✕ {pit.trap}</div>
-                    <p className="text-xs text-slate-600 leading-relaxed">{pit.whyWrong}</p>
-                    <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 px-3 py-2 text-xs text-emerald-950">
-                      <span className="font-bold">○ 正しいアプローチ: </span>
-                      {pit.correctApproach}
+            {filteredPitfalls.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0" />
+                  <span>よくあるひっかけ・誤答パターン</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredPitfalls.map((pit) => (
+                    <div
+                      key={pit.id}
+                      className="bg-white rounded-2xl border border-amber-200/80 p-5 space-y-2.5 shadow-xs min-w-0"
+                    >
+                      <div className="text-xs font-black text-rose-700 break-words">✕ {pit.trap}</div>
+                      <p className="text-xs text-slate-600 leading-relaxed break-words">{pit.whyWrong}</p>
+                      <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 px-3 py-2 text-xs text-emerald-950 break-words">
+                        <span className="font-bold">○ 正しいアプローチ: </span>
+                        {pit.correctApproach}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* 重要数値・用語早見 */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <Gauge className="w-5 h-5 text-indigo-600" />
-                <span>重要数値・用語早見表</span>
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {filteredKeyFacts.map((kf) => (
-                  <div
-                    key={kf.id}
-                    className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs"
-                  >
-                    <div className="font-mono text-xs font-black text-indigo-700">{kf.target}</div>
-                    <div className="text-sm font-black text-slate-900">{kf.value}</div>
-                    <p className="text-[11px] text-slate-500 leading-snug">{kf.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {filteredKeyFacts.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-base sm:text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <Gauge className="w-5 h-5 text-indigo-600 shrink-0" />
+                  <span>重要数値・用語早見表</span>
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {filteredKeyFacts.map((kf) => (
+                    <div
+                      key={kf.id}
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs min-w-0"
+                    >
+                      <div className="font-mono text-xs font-black text-indigo-700 break-words">
+                        {kf.target}
+                      </div>
+                      <div className="text-sm font-black text-slate-900 break-words">{kf.value}</div>
+                      <p className="text-[11px] text-slate-500 leading-snug break-words">{kf.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
 
