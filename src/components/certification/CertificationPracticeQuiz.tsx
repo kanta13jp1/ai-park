@@ -80,6 +80,7 @@ export default function CertificationPracticeQuiz({
   const [quizMode, setQuizMode] = useState<QuizMode>("practice");
   const [selectedDomain, setSelectedDomain] = useState<string>(initialDomain);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [difficultyFilter, setDifficultyFilter] = useState<"all" | "基礎" | "標準" | "応用">("all");
   const [shuffledOrder, setShuffledOrder] = useState<string[] | null>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [draftMulti, setDraftMulti] = useState<Record<string, number[]>>({});
@@ -134,8 +135,9 @@ export default function CertificationPracticeQuiz({
 
   const filteredQuestions = useMemo<CertQuestion[]>(() => {
     return orderedQuestions.filter((q) => {
-      if (quizMode === "practice" && selectedDomain !== "all" && q.domainId !== selectedDomain) {
-        return false;
+      if (quizMode === "practice") {
+        if (selectedDomain !== "all" && q.domainId !== selectedDomain) return false;
+        if (difficultyFilter !== "all" && q.difficulty !== difficultyFilter) return false;
       }
       const ans = activeAnswers[q.id];
       if (statusFilter === "unanswered") return ans === undefined;
@@ -145,7 +147,7 @@ export default function CertificationPracticeQuiz({
       if (statusFilter === "bookmarked") return bookmarkedIds.includes(q.id);
       return true;
     });
-  }, [orderedQuestions, quizMode, selectedDomain, statusFilter, activeAnswers, showFeedback, bookmarkedIds]);
+  }, [orderedQuestions, quizMode, selectedDomain, difficultyFilter, statusFilter, activeAnswers, showFeedback, bookmarkedIds]);
 
   const safeIndex = Math.min(currentIndex, Math.max(0, filteredQuestions.length - 1));
   const currentQuestion = filteredQuestions[safeIndex];
@@ -489,10 +491,20 @@ export default function CertificationPracticeQuiz({
               ).length;
               const pct =
                 domainQs.length > 0 ? Math.round((domainCorrect / domainQs.length) * 100) : 0;
+              const isDomainSelected = quizMode === "practice" && selectedDomain === d.id;
               return (
-                <div
+                <button
                   key={d.id}
-                  className="rounded-xl bg-slate-50 border border-slate-200/70 px-3 py-2 space-y-1"
+                  type="button"
+                  disabled={quizMode !== "practice"}
+                  onClick={() => handleDomainChange(isDomainSelected ? "all" : d.id)}
+                  className={`rounded-xl border px-3 py-2 space-y-1 text-left transition-all ${
+                    quizMode === "practice" ? "cursor-pointer hover:border-indigo-300" : "cursor-default"
+                  } ${
+                    isDomainSelected
+                      ? "bg-indigo-50/70 border-indigo-400 ring-1 ring-indigo-300"
+                      : "bg-slate-50 border-slate-200/70"
+                  }`}
                 >
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="font-bold text-slate-700 truncate">{d.shortLabel}</span>
@@ -512,7 +524,7 @@ export default function CertificationPracticeQuiz({
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -621,6 +633,30 @@ export default function CertificationPracticeQuiz({
               {st.label}
             </button>
           ))}
+
+          {quizMode === "practice" && (
+            <>
+              <span className="text-slate-300 mx-1">|</span>
+              {(["all", "基礎", "標準", "応用"] as const).map((diff) => (
+                <button
+                  key={diff}
+                  type="button"
+                  onClick={() => {
+                    playCyberClick();
+                    setDifficultyFilter(diff);
+                    setCurrentIndex(0);
+                  }}
+                  className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                    difficultyFilter === diff
+                      ? "bg-amber-600 text-white"
+                      : "bg-white text-slate-600 border border-slate-200 hover:border-amber-300"
+                  }`}
+                >
+                  {diff === "all" ? "全難易度" : diff}
+                </button>
+              ))}
+            </>
+          )}
         </div>
       </div>
 
@@ -637,6 +673,7 @@ export default function CertificationPracticeQuiz({
             onClick={() => {
               setSelectedDomain("all");
               setStatusFilter("all");
+              setDifficultyFilter("all");
               setCurrentIndex(0);
             }}
             className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 cursor-pointer"

@@ -1128,6 +1128,32 @@ export default function AwsInfoPage() {
               </div>
             </div>
 
+            {/* 人気サービス クイック検索チップ */}
+            <div className="flex flex-wrap items-center gap-1.5 -mt-4">
+              <span className="text-[11px] font-bold text-slate-400 mr-1">よく調べるサービス:</span>
+              {["S3", "VPC", "RDS", "Lambda", "IAM", "SQS", "CloudFront"].map((kw) => {
+                const isSelected = compQuery.toLowerCase() === kw.toLowerCase();
+                return (
+                  <button
+                    key={kw}
+                    type="button"
+                    onClick={() => {
+                      playCyberClick();
+                      setCompCategory("すべて");
+                      setCompQuery(isSelected ? "" : kw);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold border transition-colors cursor-pointer ${
+                      isSelected
+                        ? "bg-slate-900 text-cyan-300 border-slate-900"
+                        : "bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-700"
+                    }`}
+                  >
+                    {kw}
+                  </button>
+                );
+              })}
+            </div>
+
             {/* すべて0件時のエンプティステート */}
             {filteredQuickLookup.length === 0 &&
               filteredComparisons.length === 0 &&
