@@ -115,8 +115,8 @@ const siteSearchIndex: SearchIndexItem[] = [
     title: "Subagents活用事例",
     category: "実装事例",
     href: "/agent-cases",
-    description: "社内でのエージェント活用事例（工事中）",
-    keywords: ["subagents", "agent", "事例", "アーキテクチャ", "ログ解析", "障害", "見積書", "レビュー", "プロンプト"],
+    description: "AI Park実在カスタムエージェント6件・Subagents/Agent Swarms使い分け・定義テンプレート（部署事例工事中）",
+    keywords: ["subagents", "swarm", "/swarm", "agent", "カスタムエージェント", "並列", "オーケストレーション", "テンプレート"],
   },
   {
     title: "社内AI活用状況",

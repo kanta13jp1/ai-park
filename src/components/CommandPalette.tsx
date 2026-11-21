@@ -165,6 +165,14 @@ const paletteItems: PaletteItem[] = [
     icon: Terminal,
   },
   {
+    id: "agent-cases",
+    title: "Subagents & Agent Swarms 活用ガイド",
+    category: "ツール & ガイド",
+    href: "/agent-cases",
+    description: "AI Park実在カスタムエージェント6件・Subagents/Swarm使い分け（部署事例工事中）",
+    icon: Sparkles,
+  },
+  {
     id: "aws-info",
     title: "AWS・クラウド情報局 (CLF-C02/SAA-C03/SAP-C02)",
     category: "Academy & 学習",
