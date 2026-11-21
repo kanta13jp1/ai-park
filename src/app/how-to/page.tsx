@@ -100,14 +100,14 @@ export default function HowToPage() {
     {
       id: "lpic-info",
       title: "LPIC・Linux情報局",
-      desc: "LPIC-1（101/102）・LPIC-2（201/202）の要点整理・暗記カード・模擬試験！",
+      desc: "LPIC-1（101/102）・LPIC-2（201/202）・LPIC-3（300/303/305/306）の要点整理・暗記カード・模擬試験！",
       icon: <Terminal className="text-indigo-600" size={32} />,
       iconBg: "bg-indigo-50 border-indigo-100",
       href: "/lpic-info",
       badge: "🚧 工事中",
       badgeColor: "bg-indigo-100 text-indigo-700",
-      tags: ["LPIC-1", "LPIC-2", "Linux"],
-      highlights: "LPIC-1 / LPIC-2 公式試験範囲に基づく学習ハブ（社内受験補助ルール等は準備中）",
+      tags: ["LPIC-1", "LPIC-2", "LPIC-3", "Linux"],
+      highlights: "LPIC-1 / LPIC-2 / LPIC-3 公式試験範囲に基づく学習ハブ（社内受験補助ルール等は準備中）",
     },
     {
       id: "ipa-info",

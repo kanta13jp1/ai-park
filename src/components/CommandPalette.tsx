@@ -182,10 +182,10 @@ const paletteItems: PaletteItem[] = [
   },
   {
     id: "lpic-info",
-    title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2学習)",
+    title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2 / LPIC-3)",
     category: "Academy & 学習",
     href: "/lpic-info",
-    description: "LPIC-1 (101/102)・LPIC-2 (201/202) 学習ハブ・練習クイズ（社内支援ルール等は工事中）",
+    description: "LPIC-1 (101/102)・LPIC-2 (201/202)・LPIC-3 (300/303/305/306) 学習ハブ・練習クイズ（社内支援ルール等は工事中）",
     icon: Terminal,
   },
   {

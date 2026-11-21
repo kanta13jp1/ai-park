@@ -279,7 +279,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "🚧 工事中",
-    disclaimer: "【一部工事中】LPIC-1（101-500 / 102-500）・LPIC-2（201-450 / 202-450）学習ハブを掲載中。社内の資格取得支援ルール等は決まり次第掲載します。",
+    disclaimer: "【一部工事中】LPIC-1（101/102）・LPIC-2（201/202）・LPIC-3（300/303/305/306）学習ハブを掲載中。社内の資格取得支援ルール等は決まり次第掲載します。",
     releaseDate: "未定",
     releaseCondition: "社内の資格取得支援・受験補助ルール等の確定",
   },

@@ -413,7 +413,7 @@ const tasksData: TaskItem[] = [
     releaseCondition: "社内ルール・相談窓口・使ってよいツールの決定",
     category: "system",
     icon: "☁️",
-    description: "AWS SAA-C03 / GCP (CDL・ACE・PCA) / LPIC-1・2 / IPA 全13区分 学習ハブや Antigravity 機能解説・実務実行例・リファレンス/FAQは先行掲載中。社内の利用ルール・資格支援ルール、使ってよい MCP サーバー、社内向けお知らせを準備します。",
+    description: "AWS SAA-C03 / GCP (CDL・ACE・PCA) / LPIC-1・2・3 / IPA 全13区分 学習ハブや Antigravity 機能解説・実務実行例・リファレンス/FAQは先行掲載中。社内の利用ルール・資格支援ルール、使ってよい MCP サーバー、社内向けお知らせを準備します。",
     items: [
       { text: "AWS（/aws-info）・GCP（/gcp-info）・LPIC（/lpic-info）・IPA（/ipa-info）学習ハブの先行公開", done: true },
       { text: "Antigravity 機能解説・実務活用の実行例・FAQ（/antigravity-info）の先行公開", done: true },

@@ -44,6 +44,15 @@ import {
   Server,
   Share2,
   Wrench,
+  Lock,
+  KeyRound,
+  ShieldAlert,
+  Box,
+  Boxes,
+  CloudCog,
+  Layers,
+  GitMerge,
+  Workflow,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -88,9 +97,53 @@ import {
   lpic2Pitfalls,
   lpic2KeyPaths,
 } from "@/data/lpic-2";
+import {
+  lpic300ExamFacts,
+  lpic300Domains,
+  lpic300Comparisons,
+  lpic300QuickLookup,
+  lpic300PracticeQuestions,
+  lpic300OfficialResources,
+  lpic300Patterns,
+  lpic300Pitfalls,
+  lpic300KeyPaths,
+} from "@/data/lpic-300";
+import {
+  lpic303ExamFacts,
+  lpic303Domains,
+  lpic303Comparisons,
+  lpic303QuickLookup,
+  lpic303PracticeQuestions,
+  lpic303OfficialResources,
+  lpic303Patterns,
+  lpic303Pitfalls,
+  lpic303KeyPaths,
+} from "@/data/lpic-303";
+import {
+  lpic305ExamFacts,
+  lpic305Domains,
+  lpic305Comparisons,
+  lpic305QuickLookup,
+  lpic305PracticeQuestions,
+  lpic305OfficialResources,
+  lpic305Patterns,
+  lpic305Pitfalls,
+  lpic305KeyPaths,
+} from "@/data/lpic-305";
+import {
+  lpic306ExamFacts,
+  lpic306Domains,
+  lpic306Comparisons,
+  lpic306QuickLookup,
+  lpic306PracticeQuestions,
+  lpic306OfficialResources,
+  lpic306Patterns,
+  lpic306Pitfalls,
+  lpic306KeyPaths,
+} from "@/data/lpic-306";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
-type LpicLevel = "lpic-1" | "lpic-2";
+type LpicLevel = "lpic-1" | "lpic-2" | "lpic-300" | "lpic-303" | "lpic-305" | "lpic-306";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
 interface UnifiedLpicDomain {
@@ -197,6 +250,126 @@ const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
     quizBadgeLabel: "LPIC-2 (201/202) 演習",
     flashcardTitle: "LPIC-2 要件・運用課題 → コマンド / 設定 即答トレーニング",
   },
+  "lpic-300": {
+    id: "lpic-300",
+    label: "LPIC-3 300 混在環境",
+    badgeText: "LPIC-3 300 MIXED ENVIRONMENTS",
+    shortExamCode: "300-300",
+    headline: "LPIC-3 Mixed Environments（300-300）",
+    description:
+      "LPI 公式試験範囲（Version 3.0）の Topic 301〜305 に沿って、Samba AD DC・Windows ACL/DFS・SSSD/Winbind 統合・FreeIPA・NFSv4+Kerberos をまとめた学習ページです。",
+    storageKey: "ai-park-lpic-300-progress-v1",
+    examFacts: lpic300ExamFacts,
+    domains: lpic300Domains,
+    comparisons: lpic300Comparisons,
+    patterns: lpic300Patterns,
+    pitfalls: lpic300Pitfalls,
+    keyPaths: lpic300KeyPaths,
+    quickLookup: lpic300QuickLookup,
+    practiceQuestions: lpic300PracticeQuestions,
+    officialResources: lpic300OfficialResources,
+    examFilters: [{ id: "all", label: "全トピック (301-305)" }],
+    defaultExpanded: { "topic-301": true },
+    passingConfig: {
+      minScore: 200,
+      maxScore: 800,
+      passingScore: 500,
+      passingPct: 63,
+      officialExamLabel: "LPIC-3 300 本試験（300-300）",
+    },
+    quizBadgeLabel: "LPIC-3 300-300 演習",
+    flashcardTitle: "LPIC-3 300 混在環境・Samba/FreeIPA 即答トレーニング",
+  },
+  "lpic-303": {
+    id: "lpic-303",
+    label: "LPIC-3 303 セキュリティ",
+    badgeText: "LPIC-3 303 SECURITY",
+    shortExamCode: "303-300",
+    headline: "LPIC-3 Security（303-300）",
+    description:
+      "LPI 公式試験範囲（Version 3.0）の Topic 331〜335 に沿って、X.509/PKI・DNSSEC・AIDE/auditd・SELinux/AppArmor・nftables/WireGuard・脆弱性評価をまとめた学習ページです。",
+    storageKey: "ai-park-lpic-303-progress-v1",
+    examFacts: lpic303ExamFacts,
+    domains: lpic303Domains,
+    comparisons: lpic303Comparisons,
+    patterns: lpic303Patterns,
+    pitfalls: lpic303Pitfalls,
+    keyPaths: lpic303KeyPaths,
+    quickLookup: lpic303QuickLookup,
+    practiceQuestions: lpic303PracticeQuestions,
+    officialResources: lpic303OfficialResources,
+    examFilters: [{ id: "all", label: "全トピック (331-335)" }],
+    defaultExpanded: { "topic-331": true },
+    passingConfig: {
+      minScore: 200,
+      maxScore: 800,
+      passingScore: 500,
+      passingPct: 63,
+      officialExamLabel: "LPIC-3 303 本試験（303-300）",
+    },
+    quizBadgeLabel: "LPIC-3 303-300 演習",
+    flashcardTitle: "LPIC-3 303 暗号・MAC・監査・VPN 即答トレーニング",
+  },
+  "lpic-305": {
+    id: "lpic-305",
+    label: "LPIC-3 305 仮想化・コンテナ",
+    badgeText: "LPIC-3 305 VIRTUALIZATION & CONTAINERS",
+    shortExamCode: "305-300",
+    headline: "LPIC-3 Virtualization & Containerization（305-300）",
+    description:
+      "LPI 公式試験範囲（Version 3.0）の Topic 351〜353 に沿って、KVM/QEMU/Xen/libvirt・Namespaces/cgroups/OCI・Docker/LXC・Packer/cloud-init/Vagrant をまとめた学習ページです。",
+    storageKey: "ai-park-lpic-305-progress-v1",
+    examFacts: lpic305ExamFacts,
+    domains: lpic305Domains,
+    comparisons: lpic305Comparisons,
+    patterns: lpic305Patterns,
+    pitfalls: lpic305Pitfalls,
+    keyPaths: lpic305KeyPaths,
+    quickLookup: lpic305QuickLookup,
+    practiceQuestions: lpic305PracticeQuestions,
+    officialResources: lpic305OfficialResources,
+    examFilters: [{ id: "all", label: "全トピック (351-353)" }],
+    defaultExpanded: { "topic-351": true },
+    passingConfig: {
+      minScore: 200,
+      maxScore: 800,
+      passingScore: 500,
+      passingPct: 63,
+      officialExamLabel: "LPIC-3 305 本試験（305-300）",
+    },
+    quizBadgeLabel: "LPIC-3 305-300 演習",
+    flashcardTitle: "LPIC-3 305 仮想化・コンテナ・自動化 即答トレーニング",
+  },
+  "lpic-306": {
+    id: "lpic-306",
+    label: "LPIC-3 306 高可用性",
+    badgeText: "LPIC-3 306 HIGH AVAILABILITY & STORAGE",
+    shortExamCode: "306-300",
+    headline: "LPIC-3 High Availability & Storage Clusters（306-300）",
+    description:
+      "LPI 公式試験範囲（Version 3.0）の Topic 361〜364 に沿って、Pacemaker/Corosync/STONITH・Keepalived/HAProxy・DRBD/GFS2・GlusterFS/Ceph・Bonding をまとめた学習ページです。",
+    storageKey: "ai-park-lpic-306-progress-v1",
+    examFacts: lpic306ExamFacts,
+    domains: lpic306Domains,
+    comparisons: lpic306Comparisons,
+    patterns: lpic306Patterns,
+    pitfalls: lpic306Pitfalls,
+    keyPaths: lpic306KeyPaths,
+    quickLookup: lpic306QuickLookup,
+    practiceQuestions: lpic306PracticeQuestions,
+    officialResources: lpic306OfficialResources,
+    examFilters: [{ id: "all", label: "全トピック (361-364)" }],
+    defaultExpanded: { "topic-361": true },
+    passingConfig: {
+      minScore: 200,
+      maxScore: 800,
+      passingScore: 500,
+      passingPct: 63,
+      officialExamLabel: "LPIC-3 306 本試験（306-300）",
+    },
+    quizBadgeLabel: "LPIC-3 306-300 演習",
+    flashcardTitle: "LPIC-3 306 クラスタ・分散ストレージ・冗長化 即答トレーニング",
+  },
 };
 
 interface LpicProgress {
@@ -241,6 +414,23 @@ const DOMAIN_ICONS: Record<string, typeof Cpu> = {
   "topic-210": Users,
   "topic-211": Mail,
   "topic-212": Shield,
+  "topic-301": Server,
+  "topic-302": Globe,
+  "topic-303": Share2,
+  "topic-304": Users,
+  "topic-305": KeyRound,
+  "topic-331": Lock,
+  "topic-332": ShieldAlert,
+  "topic-333": KeyRound,
+  "topic-334": Network,
+  "topic-335": Shield,
+  "topic-351": Box,
+  "topic-352": Boxes,
+  "topic-353": CloudCog,
+  "topic-361": Layers,
+  "topic-362": GitMerge,
+  "topic-363": Database,
+  "topic-364": Workflow,
 };
 
 const ACCENT_STYLES: Record<
@@ -272,14 +462,6 @@ const ACCENT_STYLES: Record<
     iconBg: "bg-cyan-50 text-cyan-600 border-cyan-100",
   },
 };
-
-const COMPARISON_CATEGORIES = [
-  "すべて",
-  "パッケージ・起動",
-  "ファイル・権限",
-  "プロセス・ログ",
-  "ネットワーク",
-] as const;
 
 function normalizeQuizAnswers(raw: unknown): Record<string, number[]> {
   if (!raw || typeof raw !== "object") return {};
@@ -348,10 +530,18 @@ export default function LpicInfoPage() {
   const [progressMap, setProgressMap] = useState<Record<LpicLevel, LpicProgress>>({
     "lpic-1": DEFAULT_PROGRESS,
     "lpic-2": DEFAULT_PROGRESS,
+    "lpic-300": DEFAULT_PROGRESS,
+    "lpic-303": DEFAULT_PROGRESS,
+    "lpic-305": DEFAULT_PROGRESS,
+    "lpic-306": DEFAULT_PROGRESS,
   });
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>({
     "topic-101": true,
     "topic-200": true,
+    "topic-301": true,
+    "topic-331": true,
+    "topic-351": true,
+    "topic-361": true,
   });
   const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
   const [onlyWithNotesTopics, setOnlyWithNotesTopics] = useState<boolean>(false);
@@ -370,6 +560,10 @@ export default function LpicInfoPage() {
     setProgressMap({
       "lpic-1": loadProgressFromStorage(LEVEL_CONFIG["lpic-1"].storageKey),
       "lpic-2": loadProgressFromStorage(LEVEL_CONFIG["lpic-2"].storageKey),
+      "lpic-300": loadProgressFromStorage(LEVEL_CONFIG["lpic-300"].storageKey),
+      "lpic-303": loadProgressFromStorage(LEVEL_CONFIG["lpic-303"].storageKey),
+      "lpic-305": loadProgressFromStorage(LEVEL_CONFIG["lpic-305"].storageKey),
+      "lpic-306": loadProgressFromStorage(LEVEL_CONFIG["lpic-306"].storageKey),
     });
   }, []);
 
@@ -581,6 +775,11 @@ export default function LpicInfoPage() {
     progress.topicNotes,
   ]);
 
+  const comparisonCategories = useMemo(
+    () => ["すべて", ...Array.from(new Set(config.comparisons.map((c) => c.category)))],
+    [config.comparisons]
+  );
+
   const filteredComparisons = useMemo(() => {
     const q = compQuery.trim().toLowerCase();
     return config.comparisons.filter((comp) => {
@@ -626,42 +825,76 @@ export default function LpicInfoPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="LPIC・Linux情報局"
-        subtitle="LPIC-1（101/102）・LPIC-2（201/202）合格学習ハブ"
+        subtitle="LPIC-1（101/102）・LPIC-2（201/202）・LPIC-3（300/303/305/306）合格学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
-          message="現在 LPIC-1（101-500 / 102-500）および LPIC-2（201-450 / 202-450）の公式試験範囲に基づく学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
+          message="現在 LPIC-1（101-500 / 102-500）、LPIC-2（201-450 / 202-450）、および LPIC-3（300 / 303 / 305 / 306）の公式試験範囲に基づく学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
           statusType="construction"
         />
 
-        {/* レベル切り替え（LPIC-1 / LPIC-2） */}
-        <section className="flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl border border-slate-200/80 p-3 shadow-xs">
-          <div className="flex items-center space-x-2 px-2">
-            <Terminal size={16} className="text-cyan-600" />
-            <span className="text-xs sm:text-sm font-black text-slate-800">学習レベル選択</span>
-          </div>
-          <div className="inline-flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
-            {(["lpic-1", "lpic-2"] as const).map((lvl) => {
-              const item = LEVEL_CONFIG[lvl];
-              const active = level === lvl;
-              return (
-                <button
-                  key={lvl}
-                  type="button"
-                  onClick={() => handleSwitchLevel(lvl)}
-                  onMouseEnter={() => playCyberHover()}
-                  className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-black transition-all cursor-pointer whitespace-nowrap ${
-                    active
-                      ? "bg-slate-900 text-white shadow-sm"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              );
-            })}
+        {/* レベル切り替え（基盤 LPIC-1/2 と 専門 LPIC-3） */}
+        <section className="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs space-y-2.5">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+            <div className="flex items-center space-x-2 px-1">
+              <Terminal size={16} className="text-cyan-600 shrink-0" />
+              <span className="text-xs sm:text-sm font-black text-slate-800 whitespace-nowrap">
+                学習レベル・専門トラック選択
+              </span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <div className="inline-flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
+                <span className="text-[10px] font-bold text-slate-500 px-2 whitespace-nowrap">
+                  基盤
+                </span>
+                {(["lpic-1", "lpic-2"] as const).map((lvl) => {
+                  const item = LEVEL_CONFIG[lvl];
+                  const active = level === lvl;
+                  return (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => handleSwitchLevel(lvl)}
+                      onMouseEnter={() => playCyberHover()}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
+                        active
+                          ? "bg-slate-900 text-white shadow-sm"
+                          : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="inline-flex flex-wrap items-center gap-1 bg-cyan-50/70 p-1 rounded-xl border border-cyan-200/70">
+                <span className="text-[10px] font-bold text-cyan-800 px-2 whitespace-nowrap">
+                  LPIC-3 専門
+                </span>
+                {(["lpic-300", "lpic-303", "lpic-305", "lpic-306"] as const).map((lvl) => {
+                  const item = LEVEL_CONFIG[lvl];
+                  const active = level === lvl;
+                  return (
+                    <button
+                      key={lvl}
+                      type="button"
+                      onClick={() => handleSwitchLevel(lvl)}
+                      onMouseEnter={() => playCyberHover()}
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
+                        active
+                          ? "bg-cyan-700 text-white shadow-sm"
+                          : "text-slate-700 hover:text-cyan-900 hover:bg-white/80"
+                      }`}
+                    >
+                      {item.label.replace("LPIC-3 ", "")}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -864,25 +1097,31 @@ export default function LpicInfoPage() {
             {/* フィルター＆検索バー */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-1.5">
-                  {config.examFilters.map((ef) => (
-                    <button
-                      key={ef.id}
-                      type="button"
-                      onClick={() => {
-                        playCyberClick();
-                        setExamFilter(ef.id);
-                      }}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                        examFilter === ef.id
-                          ? "bg-slate-900 text-white"
-                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                      }`}
-                    >
-                      {ef.label}
-                    </button>
-                  ))}
-                </div>
+                {config.examFilters.length > 1 ? (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {config.examFilters.map((ef) => (
+                      <button
+                        key={ef.id}
+                        type="button"
+                        onClick={() => {
+                          playCyberClick();
+                          setExamFilter(ef.id);
+                        }}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                          examFilter === ef.id
+                            ? "bg-slate-900 text-white"
+                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                        }`}
+                      >
+                        {ef.label}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-xs font-bold text-slate-500 px-1">
+                    {config.examFilters[0]?.label}
+                  </div>
+                )}
 
                 <div className="flex flex-wrap items-center gap-2">
                   <div className="relative flex-1 sm:w-60">
@@ -1181,7 +1420,7 @@ export default function LpicInfoPage() {
             {/* 比較表フィルター */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-1.5">
-                {COMPARISON_CATEGORIES.map((cat) => (
+                {comparisonCategories.map((cat) => (
                   <button
                     key={cat}
                     type="button"

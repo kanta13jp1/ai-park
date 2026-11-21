@@ -84,11 +84,11 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["gcp", "google cloud", "cdl", "ace", "pca", "cloud digital leader", "associate cloud engineer", "professional cloud architect", "試験", "クイズ", "flashcards"],
   },
   {
-    title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2学習ハブ)",
+    title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2 / LPIC-3学習ハブ)",
     category: "資格・Linux",
     href: "/lpic-info",
-    description: "LPIC-1（101-500 / 102-500）・LPIC-2（201-450 / 202-450）学習ハブ・練習クイズ・コマンド早見表を掲載中（社内資格支援ルール等は工事中）",
-    keywords: ["lpic", "lpic-1", "lpic-2", "101-500", "102-500", "201-450", "202-450", "linux", "コマンド", "試験", "クイズ", "flashcards"],
+    description: "LPIC-1（101/102）・LPIC-2（201/202）・LPIC-3（300/303/305/306）学習ハブ・練習クイズ・コマンド早見表を掲載中（社内資格支援ルール等は工事中）",
+    keywords: ["lpic", "lpic-1", "lpic-2", "lpic-3", "101-500", "102-500", "201-450", "202-450", "300-300", "303-300", "305-300", "306-300", "linux", "samba", "selinux", "kvm", "docker", "pacemaker", "ceph", "コマンド", "試験", "クイズ", "flashcards"],
   },
   {
     title: "情報処理技術者試験情報局 (IPA全13区分)",

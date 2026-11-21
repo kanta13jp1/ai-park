@@ -31,7 +31,7 @@ export interface LpicComparisonRow {
 
 export interface LpicComparisonTable {
   id: string;
-  category: "パッケージ・起動" | "ファイル・権限" | "プロセス・ログ" | "ネットワーク" | "セキュリティ";
+  category: string;
   title: string;
   subtitle: string;
   columns: string[];
