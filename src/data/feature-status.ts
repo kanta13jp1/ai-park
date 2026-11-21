@@ -279,7 +279,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "🚧 工事中",
-    disclaimer: "【一部工事中】Microsoft Azure 認定（AZ-900 / AI-900 / AZ-104 / AZ-305）学習ハブを掲載中。社内の Azure 利用ルールや資格取得支援制度は決まり次第掲載します。",
+    disclaimer: "【一部工事中】Microsoft Azure 認定（AZ-900 / AI-900 / DP-900 / SC-900 / AZ-104 / AI-103 / AI-200 / AZ-305 全8資格 ※AI-103/AI-200 は旧 AI-102/AZ-204 後継）学習ハブを掲載中。社内の Azure 利用ルールや資格取得支援制度は決まり次第掲載します。",
     releaseDate: "未定",
     releaseCondition: "社内の Azure 利用ルール・資格取得支援制度の確定",
   },

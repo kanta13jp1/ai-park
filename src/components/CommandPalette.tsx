@@ -190,10 +190,10 @@ const paletteItems: PaletteItem[] = [
   },
   {
     id: "azure-info",
-    title: "Azure・Microsoft Azure情報局 (AZ-900/AI-900/AZ-104/AZ-305)",
+    title: "Azure・Microsoft Azure情報局 (全8資格: AZ-900/AI-900/DP-900/SC-900/AZ-104/AI-103/AI-200/AZ-305)",
     category: "Academy & 学習",
     href: "/azure-info",
-    description: "AZ-900 / AI-900 / AZ-104 / AZ-305 統合学習ハブ・練習クイズ（社内Azureルール等は工事中）",
+    description: "AZ-900 / AI-900 / DP-900 / SC-900 / AZ-104 / AI-103 / AI-200 / AZ-305（AI-103/AI-200 は旧 AI-102/AZ-204 後継）統合学習ハブ・練習クイズ（社内Azureルール等は工事中）",
     icon: Compass,
   },
   {

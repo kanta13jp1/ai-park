@@ -38,6 +38,14 @@ import {
   MessageSquare,
   Bot,
   Activity,
+  BarChart3,
+  Lock,
+  KeyRound,
+  FileText,
+  Workflow,
+  Container,
+  FileCheck2,
+  HardDrive,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -85,6 +93,28 @@ import {
   ai900OfficialResources,
 } from "@/data/azure-ai900";
 import {
+  dp900ExamFacts,
+  dp900Domains,
+  dp900Comparisons,
+  dp900Patterns,
+  dp900Pitfalls,
+  dp900KeyFacts,
+  dp900QuickLookup,
+  dp900PracticeQuestions,
+  dp900OfficialResources,
+} from "@/data/azure-dp900";
+import {
+  sc900ExamFacts,
+  sc900Domains,
+  sc900Comparisons,
+  sc900Patterns,
+  sc900Pitfalls,
+  sc900KeyFacts,
+  sc900QuickLookup,
+  sc900PracticeQuestions,
+  sc900OfficialResources,
+} from "@/data/azure-sc900";
+import {
   az104ExamFacts,
   az104Domains,
   az104Comparisons,
@@ -95,6 +125,28 @@ import {
   az104PracticeQuestions,
   az104OfficialResources,
 } from "@/data/azure-az104";
+import {
+  ai103ExamFacts,
+  ai103Domains,
+  ai103Comparisons,
+  ai103Patterns,
+  ai103Pitfalls,
+  ai103KeyFacts,
+  ai103QuickLookup,
+  ai103PracticeQuestions,
+  ai103OfficialResources,
+} from "@/data/azure-ai103";
+import {
+  ai200ExamFacts,
+  ai200Domains,
+  ai200Comparisons,
+  ai200Patterns,
+  ai200Pitfalls,
+  ai200KeyFacts,
+  ai200QuickLookup,
+  ai200PracticeQuestions,
+  ai200OfficialResources,
+} from "@/data/azure-ai200";
 import {
   az305ExamFacts,
   az305Domains,
@@ -108,7 +160,7 @@ import {
 } from "@/data/azure-az305";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
-type AzureCertId = "az900" | "ai900" | "az104" | "az305";
+type AzureCertId = "az900" | "ai900" | "dp900" | "sc900" | "az104" | "ai103" | "ai200" | "az305";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
 interface AzureCertConfig {
@@ -211,6 +263,80 @@ const CERT_CONFIG: Record<AzureCertId, AzureCertConfig> = {
       "RAG",
     ],
   },
+  dp900: {
+    id: "dp900",
+    label: "Azure Data Fundamentals (DP-900)",
+    shortLabel: "DP-900",
+    badgeText: "MICROSOFT AZURE DATA FUNDAMENTALS STUDY HUB",
+    headline: "Azure Data Fundamentals（DP-900）",
+    description:
+      "コアデータ概念（構造化/半構造化/非構造化・OLTP/OLAP）・Azure SQL / PostgreSQL・Blob / ADLS Gen2 / Cosmos DB・Azure Data Factory / Synapse / Microsoft Fabric / Power BI を網羅したデータ基礎認定試験の学習ハブです。",
+    storageKey: "ai-park-azure-dp900-progress-v1",
+    examFacts: dp900ExamFacts,
+    domains: dp900Domains,
+    comparisons: dp900Comparisons,
+    patterns: dp900Patterns,
+    pitfalls: dp900Pitfalls,
+    keyFacts: dp900KeyFacts,
+    quickLookup: dp900QuickLookup,
+    practiceQuestions: dp900PracticeQuestions,
+    officialResources: dp900OfficialResources,
+    defaultExpanded: { "dp900-domain-1": true },
+    passingConfig: {
+      minScore: 0,
+      maxScore: 1000,
+      passingScore: 700,
+      passingPct: 70,
+      officialExamLabel: "Exam DP-900 本試験（合格基準 700 / 1000 点）",
+    },
+    quizBadgeLabel: "Azure DP-900 演習",
+    flashcardTitle: "DP-900 データ要件・ユースケース → Microsoft Azure データサービス即答トレーニング",
+    quickSearchChips: [
+      "Azure SQL",
+      "Cosmos DB",
+      "ADLS Gen2",
+      "Microsoft Fabric",
+      "Synapse",
+      "Power BI",
+    ],
+  },
+  sc900: {
+    id: "sc900",
+    label: "Security Fundamentals (SC-900)",
+    shortLabel: "SC-900",
+    badgeText: "MICROSOFT SECURITY, COMPLIANCE & IDENTITY STUDY HUB",
+    headline: "Security, Compliance, and Identity Fundamentals（SC-900）",
+    description:
+      "ゼロトラスト原則・Microsoft Entra ID（MFA / 条件付きアクセス / PIM）・Microsoft Defender for Cloud / Sentinel / Defender XDR・Microsoft Purview による情報保護とコンプライアンスを学ぶ基礎学習ハブです。",
+    storageKey: "ai-park-azure-sc900-progress-v1",
+    examFacts: sc900ExamFacts,
+    domains: sc900Domains,
+    comparisons: sc900Comparisons,
+    patterns: sc900Patterns,
+    pitfalls: sc900Pitfalls,
+    keyFacts: sc900KeyFacts,
+    quickLookup: sc900QuickLookup,
+    practiceQuestions: sc900PracticeQuestions,
+    officialResources: sc900OfficialResources,
+    defaultExpanded: { "sc900-domain-1": true },
+    passingConfig: {
+      minScore: 0,
+      maxScore: 1000,
+      passingScore: 700,
+      passingPct: 70,
+      officialExamLabel: "Exam SC-900 本試験（合格基準 700 / 1000 点）",
+    },
+    quizBadgeLabel: "Azure SC-900 演習",
+    flashcardTitle: "SC-900 セキュリティ・ID・コンプライアンス要件 → Microsoft ソリューション即答トレーニング",
+    quickSearchChips: [
+      "Entra ID",
+      "Conditional Access",
+      "Defender for Cloud",
+      "Microsoft Sentinel",
+      "Microsoft Purview",
+      "Zero Trust",
+    ],
+  },
   az104: {
     id: "az104",
     label: "Azure Administrator (AZ-104)",
@@ -247,6 +373,81 @@ const CERT_CONFIG: Record<AzureCertId, AzureCertConfig> = {
       "NSG",
       "AzCopy",
       "Azure Backup",
+    ],
+  },
+  ai103: {
+    id: "ai103",
+    label: "AI Apps & Agents (AI-103)",
+    shortLabel: "AI-103",
+    badgeText: "MICROSOFT AZURE AI APPS & AGENTS STUDY HUB",
+    headline: "Azure AI Apps & Agents Developer（AI-103）",
+    description:
+      "旧 Exam AI-102（2026年6月廃止）の後継試験として刷新された AI アプリケーション＆エージェント開発認定の学習ハブです。Microsoft Foundry・Agent Service・Azure AI Search (RAG)・Vision / Language / Speech・Document Intelligence・Content Safety の設計と実装を網羅します。",
+    storageKey: "ai-park-azure-ai103-progress-v1",
+    examFacts: ai103ExamFacts,
+    domains: ai103Domains,
+    comparisons: ai103Comparisons,
+    patterns: ai103Patterns,
+    pitfalls: ai103Pitfalls,
+    keyFacts: ai103KeyFacts,
+    quickLookup: ai103QuickLookup,
+    practiceQuestions: ai103PracticeQuestions,
+    officialResources: ai103OfficialResources,
+    defaultExpanded: { "ai103-domain-1": true },
+    passingConfig: {
+      minScore: 0,
+      maxScore: 1000,
+      passingScore: 700,
+      passingPct: 70,
+      officialExamLabel: "Exam AI-103 本試験（合格基準 700 / 1000 点）",
+    },
+    quizBadgeLabel: "Azure AI-103 演習",
+    flashcardTitle: "AI-103 生成AI・エージェント・情報抽出要件 → Microsoft Foundry / Azure AI 即答トレーニング",
+    quickSearchChips: [
+      "Microsoft Foundry",
+      "Agent Service",
+      "Azure AI Search",
+      "Document Intelligence",
+      "Content Safety",
+      "RAG",
+    ],
+  },
+  ai200: {
+    id: "ai200",
+    label: "AI Cloud Developer (AI-200)",
+    shortLabel: "AI-200",
+    badgeText: "MICROSOFT AZURE AI CLOUD DEVELOPER STUDY HUB",
+    headline: "Azure AI Cloud Developer（AI-200）",
+    description:
+      "旧 Exam AZ-204（2026年7月廃止）の後継試験として刷新されたクラウドネイティブ＆AI 基盤開発認定の学習ハブです。Container Apps / AKS・Cosmos DB / PostgreSQL (pgvector) / Managed Redis・Service Bus / Event Grid / Functions・Key Vault / OpenTelemetry 観測性を体系的に学びます。",
+    storageKey: "ai-park-azure-ai200-progress-v1",
+    examFacts: ai200ExamFacts,
+    domains: ai200Domains,
+    comparisons: ai200Comparisons,
+    patterns: ai200Patterns,
+    pitfalls: ai200Pitfalls,
+    keyFacts: ai200KeyFacts,
+    quickLookup: ai200QuickLookup,
+    practiceQuestions: ai200PracticeQuestions,
+    officialResources: ai200OfficialResources,
+    defaultExpanded: { "ai200-domain-1": true },
+    passingConfig: {
+      minScore: 0,
+      maxScore: 1000,
+      passingScore: 700,
+      passingPct: 70,
+      officialExamLabel: "Exam AI-200 本試験（合格基準 700 / 1000 点）",
+    },
+    quizBadgeLabel: "Azure AI-200 演習",
+    flashcardTitle: "AI-200 コンテナ・ベクターDB・イベント・観測性要件 → Azure 開発サービス即答トレーニング",
+    quickSearchChips: [
+      "Container Apps",
+      "Cosmos DB",
+      "pgvector",
+      "Service Bus",
+      "Event Grid",
+      "Key Vault",
+      "OpenTelemetry",
     ],
   },
   az305: {
@@ -316,11 +517,28 @@ const DOMAIN_ICONS: Record<string, typeof Cloud> = {
   "ai900-domain-3": Eye,
   "ai900-domain-4": MessageSquare,
   "ai900-domain-5": Bot,
+  "dp900-domain-1": Layers,
+  "dp900-domain-2": Database,
+  "dp900-domain-3": HardDrive,
+  "dp900-domain-4": BarChart3,
+  "sc900-domain-1": ShieldCheck,
+  "sc900-domain-2": KeyRound,
+  "sc900-domain-3": Lock,
+  "sc900-domain-4": FileCheck2,
   "az104-domain-1": ShieldCheck,
   "az104-domain-2": Database,
   "az104-domain-3": Cpu,
   "az104-domain-4": Network,
   "az104-domain-5": Gauge,
+  "ai103-domain-1": Compass,
+  "ai103-domain-2": Bot,
+  "ai103-domain-3": Eye,
+  "ai103-domain-4": MessageSquare,
+  "ai103-domain-5": FileText,
+  "ai200-domain-1": Container,
+  "ai200-domain-2": Database,
+  "ai200-domain-3": Workflow,
+  "ai200-domain-4": Activity,
   "az305-domain-1": ShieldCheck,
   "az305-domain-2": Database,
   "az305-domain-3": Activity,
@@ -432,7 +650,11 @@ export default function AzureInfoPage() {
   const [progressByCert, setProgressByCert] = useState<Record<AzureCertId, AzureProgress>>({
     az900: DEFAULT_PROGRESS,
     ai900: DEFAULT_PROGRESS,
+    dp900: DEFAULT_PROGRESS,
+    sc900: DEFAULT_PROGRESS,
     az104: DEFAULT_PROGRESS,
+    ai103: DEFAULT_PROGRESS,
+    ai200: DEFAULT_PROGRESS,
     az305: DEFAULT_PROGRESS,
   });
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(
@@ -464,7 +686,11 @@ export default function AzureInfoPage() {
       setProgressByCert({
         az900: loadAzureProgress(CERT_CONFIG.az900.storageKey),
         ai900: loadAzureProgress(CERT_CONFIG.ai900.storageKey),
+        dp900: loadAzureProgress(CERT_CONFIG.dp900.storageKey),
+        sc900: loadAzureProgress(CERT_CONFIG.sc900.storageKey),
         az104: loadAzureProgress(CERT_CONFIG.az104.storageKey),
+        ai103: loadAzureProgress(CERT_CONFIG.ai103.storageKey),
+        ai200: loadAzureProgress(CERT_CONFIG.ai200.storageKey),
         az305: loadAzureProgress(CERT_CONFIG.az305.storageKey),
       });
     });
@@ -762,24 +988,24 @@ export default function AzureInfoPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="Azure・Microsoft Azure情報局"
-        subtitle="AZ-900 / AI-900 / AZ-104 / AZ-305（Microsoft Azure 認定資格）統合学習ハブ"
+        subtitle="AZ-900 / AI-900 / DP-900 / SC-900 / AZ-104 / AI-103 / AI-200 / AZ-305（全8資格）統合学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
-          message="現在 Microsoft Azure 認定資格（AZ-900 / AI-900 / AZ-104 / AZ-305）の公式試験ガイドに基づく学習ハブを掲載しています。社内の Azure 利用ルールや資格取得支援制度等は準備中（確定次第掲載）です。"
+          message="現在 Microsoft Azure 認定資格（AZ-900 / AI-900 / DP-900 / SC-900 / AZ-104 / AI-103 / AI-200 / AZ-305 全8資格）の公式試験ガイドに基づく学習ハブを掲載しています（AI-103 / AI-200 は旧 AI-102 / AZ-204 の後継試験）。社内の Azure 利用ルールや資格取得支援制度等は準備中（確定次第掲載）です。"
           statusType="construction"
         />
 
-        {/* 資格レベル切り替え（AZ-900 / AI-900 / AZ-104 / AZ-305） */}
-        <section className="flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl border border-slate-200/80 p-3 shadow-xs">
-          <div className="flex items-center space-x-2 px-2">
+        {/* 資格レベル切り替え（全8資格） */}
+        <section className="flex flex-col gap-3 bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs">
+          <div className="flex items-center space-x-2 px-1">
             <Cloud size={16} className="text-sky-600" />
-            <span className="text-xs sm:text-sm font-black text-slate-800">学習資格選択</span>
+            <span className="text-xs sm:text-sm font-black text-slate-800">学習資格選択（全8資格）</span>
           </div>
-          <div className="inline-flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
-            {(["az900", "ai900", "az104", "az305"] as const).map((id) => {
+          <div className="flex flex-wrap gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/70">
+            {(["az900", "ai900", "dp900", "sc900", "az104", "ai103", "ai200", "az305"] as const).map((id) => {
               const item = CERT_CONFIG[id];
               const active = certId === id;
               return (
@@ -788,7 +1014,7 @@ export default function AzureInfoPage() {
                   type="button"
                   onClick={() => handleSwitchCert(id)}
                   onMouseEnter={() => playCyberHover()}
-                  className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition-all cursor-pointer sm:whitespace-nowrap text-left ${
+                  className={`px-3 py-2 rounded-lg text-xs font-black transition-all cursor-pointer sm:whitespace-nowrap text-left ${
                     active
                       ? "bg-slate-900 text-white shadow-sm"
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60"

@@ -84,11 +84,11 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["gcp", "google cloud", "cdl", "ace", "pca", "pde", "pmle", "pcse", "pcde", "cloud digital leader", "associate cloud engineer", "professional cloud architect", "data engineer", "machine learning", "security", "devops", "試験", "クイズ", "flashcards"],
   },
   {
-    title: "Azure・Microsoft Azure情報局 (AZ-900/AI-900/AZ-104/AZ-305)",
+    title: "Azure・Microsoft Azure情報局 (全8資格: AZ-900/AI-900/DP-900/SC-900/AZ-104/AI-103/AI-200/AZ-305)",
     category: "資格・Azure",
     href: "/azure-info",
-    description: "Microsoft Azure 認定資格（AZ-900 / AI-900 / AZ-104 / AZ-305）統合学習ハブ・練習クイズ・比較表を掲載中（社内Azure利用ルール等は工事中）",
-    keywords: ["azure", "microsoft azure", "az-900", "ai-900", "az-104", "az-305", "azure fundamentals", "azure ai", "azure openai", "entra id", "aks", "app service", "cosmos db", "bicep", "試験", "クイズ", "flashcards"],
+    description: "Microsoft Azure 認定資格（AZ-900 / AI-900 / DP-900 / SC-900 / AZ-104 / AI-103 / AI-200 / AZ-305 全8資格・AI-103/AI-200 は旧 AI-102/AZ-204 後継）統合学習ハブ・練習クイズ・比較表を掲載中（社内Azure利用ルール等は工事中）",
+    keywords: ["azure", "microsoft azure", "az-900", "ai-900", "dp-900", "sc-900", "az-104", "ai-103", "ai-200", "az-305", "ai-102", "az-204", "azure fundamentals", "azure ai", "azure openai", "microsoft foundry", "microsoft purview", "microsoft sentinel", "fabric", "pgvector", "container apps", "service bus", "opentelemetry", "zero trust", "entra id", "aks", "app service", "cosmos db", "bicep", "試験", "クイズ", "flashcards"],
   },
   {
     title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2 / LPIC-3学習ハブ)",

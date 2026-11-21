@@ -100,14 +100,14 @@ export default function HowToPage() {
     {
       id: "azure-info",
       title: "Azure・Microsoft Azure情報局",
-      desc: "AZ-900・AI-900・AZ-104・AZ-305（Microsoft Azure 認定資格）の要点整理・比較表・模擬試験！",
+      desc: "AZ-900・AI-900・DP-900・SC-900・AZ-104・AI-103・AI-200・AZ-305（全8資格）の要点整理・比較表・模擬試験！",
       icon: <Cloud className="text-sky-600" size={32} />,
       iconBg: "bg-sky-50 border-sky-100",
       href: "/azure-info",
       badge: "🚧 工事中",
       badgeColor: "bg-sky-100 text-sky-700",
-      tags: ["AZ-900", "AI-900", "AZ-104", "AZ-305"],
-      highlights: "Microsoft Azure 公式試験ガイドに基づく統合学習ハブ（社内利用ルール等は準備中）",
+      tags: ["AZ-900/AI-900", "DP-900/SC-900", "AZ-104/AZ-305", "AI-103/AI-200"],
+      highlights: "Microsoft Azure 公式試験ガイドに基づく全8資格統合学習ハブ（AI-103/AI-200は旧AI-102/AZ-204後継・社内利用ルール等は準備中）",
     },
     {
       id: "lpic-info",
