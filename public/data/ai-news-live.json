@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-20T19:44:10.408Z",
-  "lastSyncedAtFormatted": "2026/11/21 4:44:10",
+  "lastSyncedAt": "2026-11-21T06:02:37.197Z",
+  "lastSyncedAtFormatted": "2026/11/21 15:02:37",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 52,
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-latentspace-ainews-riemann-hypothesis-proved-twice-independe",
+      "title": "Latent Space: [AINews] Riemann Hypothesis proved...twice independently",
+      "date": "2026/11/21",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 20 2026 —",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Riemann Hypothesis proved...twice independently」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-riemann-hypothesis-proved-twice-independently/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-openai-combatting-adversarial-distillation",
       "title": "OpenAI: Combatting adversarial distillation",
@@ -33,6 +58,31 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/index/combatting-adversarial-distillation",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-hebbia",
+      "title": "OpenAI: Hebbia sees improvements in financial research with GPT-6 Astra",
+      "date": "2026/11/20",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Hebbia tested GPT-6 Astra for financial research. Its prerelease evaluations found gains in source coverage, citation relevance, and presentation quality.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Hebbia sees improvements in financial research with GPT-6 Astra」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/customer-stories/hebbia",
       "tags": [
         "OpenAI",
         "ChatGPT",
@@ -67,6 +117,31 @@
       "isLiveSynced": true
     },
     {
+      "id": "live-huggingface-inkling2mini",
+      "title": "Hugging Face: Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
+      "date": "2026/11/20",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/inkling2mini",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
       "id": "live-huggingface-harness-adapters-at-scale",
       "title": "Hugging Face: Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
       "date": "2026/11/20",
@@ -92,72 +167,47 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-latentspace-ainews-anthropic-successfully-completes-largest-",
-      "title": "Latent Space: [AINews] Anthropic successfully completes largest IPO in history, valued at $1.5T",
+      "id": "live-figma-workflow-lab-specs-and-the-figma-agent",
+      "title": "Figma Blog: Workflow lab: Turning context into a plan with Specs and the Figma agent",
       "date": "2026/11/20",
       "category": "industry",
       "categoryLabel": "業界・最新技術",
       "importance": "tech",
       "importanceLabel": "技術解説",
-      "summary": "November 19, 2026 — ANT went from $83 at pricing to $111.50 at the open and $97.17 at the close. Plus, Google opens Genie 4 to developers.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Anthropic successfully completes largest IPO in history, valued at $1.5T」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "summary": "Bringing scattered context onto the canvas helps teams connect the diagrams, designs, and technical decisions they need to build, all in one place. This workflow shows how Specs and the Figma agent provide a container for that context so implementation is...",
+      "impactForStaff": "Figma公式ブログ「Workflow lab: Turning context into a plan with Specs and the Figma agent」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
       "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
+        "デザイナー",
+        "フロントエンド開発者",
+        "プロダクトマネージャー"
       ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-anthropic-successfully-completes-largest-ipo-in-history-valued-at-1-5t/",
+      "sourceName": "Figma Blog Official Feed",
+      "sourceUrl": "https://www.figma.com/blog/workflow-lab-specs-and-the-figma-agent/",
       "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
+        "Figma",
+        "UI/UX",
+        "Design System",
+        "デザイン連携"
       ],
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-how-openai-performance-factory-keeps-chatgpt-fas",
-      "title": "OpenAI: How OpenAI’s Performance Factory keeps ChatGPT fast",
-      "date": "2026/11/19",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Learn how OpenAI built the Performance Factory, a system of Codex-powered workflows that finds and fixes performance issues to help keep ChatGPT fast.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How OpenAI’s Performance Factory keeps ChatGPT fast」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-linear-scaling",
-      "title": "Latent Space: Scaling Linear’s GTM to $100M ARR — Cristina Cordova, COO",
-      "date": "2026/11/19",
+      "id": "live-latentspace-formal-verification",
+      "title": "Latent Space: The War Against Slop and an Emerging Weapon to Fight it: Formal Verification",
+      "date": "2026/11/20",
       "category": "industry",
       "categoryLabel": "業界・最新技術",
       "importance": "tech",
       "importanceLabel": "技術解説",
-      "summary": ">50% of tickets written by agents, the AI budgets behind $100M-in-months ARR, and selling without SDRs or FDEs",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「Scaling Linear’s GTM to $100M ARR — Cristina Cordova, COO」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "summary": "Proving software correct with math has traditionally required specialist work. Now AI and Lean are helping automate the process.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「The War Against Slop and an Emerging Weapon to Fight it: Formal Verification」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
       "recommendedFor": [
         "エンジニア",
         "アーキテクト",
         "AI推進担当"
       ],
       "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/linear-scaling/",
+      "sourceUrl": "https://latent.space/p/formal-verification/",
       "tags": [
         "Latent Space",
         "AI Engineering",
@@ -243,31 +293,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-huggingface-daisyrose-27b-pushing-the-frontier-of-post-train",
-      "title": "Hugging Face: DaisyRose-27B: Pushing the Frontier of Post-Training Efficiency",
-      "date": "2026/11/18",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「DaisyRose-27B: Pushing the Frontier of Post-Training Efficiency」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/RadixArk/daisyrose-27b-pushing-the-frontier-of-post-trainin",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-figma-source-material-chase-rutherford",
       "title": "Figma Blog: Source material: Creative Director Chase Rutherford on what makes something iconic",
       "date": "2026/11/18",
@@ -284,31 +309,6 @@
       ],
       "sourceName": "Figma Blog Official Feed",
       "sourceUrl": "https://www.figma.com/blog/source-material-chase-rutherford/",
-      "tags": [
-        "Figma",
-        "UI/UX",
-        "Design System",
-        "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-figma-1password-figma-make",
-      "title": "Figma Blog: How 1Password uses Figma Make to design for trust and certainty",
-      "date": "2026/11/16",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "From autofill to AI agent approvals, every 1Password interaction counts. Here's how the design team uses Figma Make to design moments users trust.",
-      "impactForStaff": "Figma公式ブログ「How 1Password uses Figma Make to design for trust and certainty」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
-      "recommendedFor": [
-        "デザイナー",
-        "フロントエンド開発者",
-        "プロダクトマネージャー"
-      ],
-      "sourceName": "Figma Blog Official Feed",
-      "sourceUrl": "https://www.figma.com/blog/1password-figma-make/",
       "tags": [
         "Figma",
         "UI/UX",
