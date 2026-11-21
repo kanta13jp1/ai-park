@@ -1,6 +1,7 @@
 // Antigravity情報局のコンテンツデータ
 // 出どころ: Google Antigravity 公式ドキュメント（https://antigravity.google/docs）、
 // Antigravity 組み込みガイド（antigravity-guide スキル: cli.md / ide.md / app.md）、
+// Dynamic Workflows（run-workflow スキル: run_workflow）、
 // および Agent Swarms（/swarm・swarm_monitor スキル）公式仕様に基づく。
 // ※ 架空の社内制度・数値・事例は記載せず、公式仕様に基づく機能解説と汎用的な実務実行例のみを掲載しています。
 
@@ -317,6 +318,23 @@ export const antigravityFeatures: AntigravityFeature[] = [
     docUrl: "https://antigravity.google/docs",
   },
   {
+    id: "run-workflow",
+    category: "自律実行・テスト",
+    name: "Dynamic Workflows（run_workflow）— Python オーケストレーション",
+    shortcutOrSyntax: "run_workflow(Script / ScriptPath) + agent / parallel / pipeline / phase",
+    summary:
+      "Python 3.8+ スクリプトから `agent`、`parallel`、`pipeline`、`phase` を用いて、多数のファイル・モジュール・レビュー観点への並列ファンアウト実行・段階パイプライン・結果集約を行える公式機能です。",
+    details: [
+      "`Script`（インライン）または `ScriptPath`（ファイルパス）で Python 3.8+ スクリプトを実行し、`Args` で JSON 入力を `args` 辞書として渡せます",
+      "`phase(name)` で工程を区切り、`parallel(items, fn)` で並列ファンアウト、`pipeline(items, fn)` で順次段階処理を実行可能",
+      "`agent()` ごとに `schema`（`finish` ツールの JSON Schema 検証）、`model`（`\"inherit\"` / `\"flash_lite\"` / `\"flash\"` / `\"pro\"`）、`workspace`（`\"inherit\"` / `\"share\"` / `\"branch\"`）を指定可能",
+      "`call_tool()` によるツール直接呼び出しや、`await trajectory()` による先行ステップ出力の参照、`log()` / `print()` での集約出力に対応",
+    ],
+    practicalTip:
+      "単発の補助委譲は Subagents を使い、リストへのループ処理や段階パイプラインを組む場面で `run_workflow` を選びます。大量ファンアウトでは `ScriptPath` 保存が再実行しやすく、単純チェックには `model: \"flash_lite\"` や `\"flash\"` が適しています。",
+    docUrl: "https://antigravity.google/docs",
+  },
+  {
     id: "browser-automation",
     category: "自律実行・テスト",
     name: "Browser Automation & Testing",
@@ -380,6 +398,12 @@ export const modalityComparison: ModalityComparisonRow[] = [
     trigger: "/swarm（共有ボード起動）",
     scope: "複数ロール・分離ワークスペース横断",
     bestUseCase: "独立した複数機能の並列実装＋専用 Verifier による反復検品",
+  },
+  {
+    modality: "Dynamic Workflows (run_workflow)",
+    trigger: "Python スクリプト実行（Script / ScriptPath）",
+    scope: "多数ファイル・モジュールの一括ファンアウト",
+    bestUseCase: "ループ処理や段階パイプライン、大量ファイル横断チェックの定型集約",
   },
 ];
 
@@ -684,6 +708,31 @@ $ agy
       "inherit でやむを得ず編集を行う場合は、ワーカー間で編集対象ファイルを完全に分離しているか",
     ],
   },
+  {
+    id: "ex-run-workflow-fanout",
+    category: "自動化・標準化",
+    title: "run_workflow による多数ファイルの一括ファンアウト調査と集約",
+    scene:
+      "対象ファイルやモジュールが多数あり、同一観点の横断チェック・レビュー・段階処理を Python スクリプトのループと並列ファンアウトで一括集約したいとき。",
+    usedFeatures: ["run_workflow", "parallel", "pipeline"],
+    prompt: `run_workflow を使い、指定ディレクトリのファイルを対象に一括ファンアウト調査と集約を実行してください。
+
+1. phase("Discover"): 対象ファイルのパス一覧を JSON 配列（schema: {"type": "array", "items": {"type": "string"}}）で抽出する
+2. phase("Review"): parallel(files, ...) で各ファイルごとに agent を並列起動し、観点別の確認結果を構造化出力（schema 指定）で取得する（単純チェックには model: "flash_lite" または "flash" を検討）
+3. phase("Aggregate"): 必要に応じて pipeline で段階整理し、log() で全体の集約レポートを出力する
+
+※ 読み取り専用調査ではデフォルトの workspace: "inherit" を使い、並列でファイル変更を行う場合のみ workspace: "share" または "branch" を指定してください。`,
+    workflowSteps: [
+      "工程を `phase()` で区切り、ファイル保存した `ScriptPath`（またはインライン `Script`）で `run_workflow` を起動する",
+      "各 `agent()` に必要な前提コンテキスト・出力 `schema`・`role`・`model`・`workspace` を渡し、`parallel()` / `pipeline()` で処理する",
+      "完了通知後にツール結果の `Logs:`（`log()` 出力）と `Output:`（`print()` 出力）、および各エージェントの会話リンクを確認する",
+    ],
+    checkPoints: [
+      "各 `agent()` はスクリプトや他エージェントの履歴を参照しないため、必要な情報と出力 `schema` をプロンプトに明記しているか",
+      "`parallel()` 内の 1 件が失敗（`finish` 未呼び出しを含む）すると全体がキャンセルされるため、対象リストと出力形式が過不足なく定義されているか",
+      "単発の補助委譲に過剰なワークフローを組んでいないか（単発は Subagents、ロール間協調は `/swarm` を選択）",
+    ],
+  },
 ];
 
 export interface ShortcutItem {
@@ -933,5 +982,108 @@ export const antigravityFaqs: FaqItem[] = [
     question: "Agent Swarms の workspace（inherit / share / branch）の違いと、kill 前の注意点は何ですか？",
     answer:
       "inherit（デフォルト）は Coordinator と同一の作業コピーを共有するため、調査・差分監査・Verifier や単独編集に適しています（複数 Author で併用する場合はファイル単位の排他分担が必須です）。share はリポジトリ実体を共有しつつワーカー専用の独立した作業コピーを作成するため、複数 Author の同時編集や独立ビルドに向いています。branch はリポジトリごと独立したクローンを作成するため完全分離された実験・検証に適しますが、大容量 .git 環境では複製コストが大きくなります。なお、kill を実行するとワーカーは永久終了して killed 名は再利用できなくなり、share / branch の作業コピーも同時に削除されるため、kill 前に必ず変更をコミットし Coordinator の作業コピーへ統合を完了してください。",
+  },
+  {
+    id: "faq-subagent-workflow-swarm",
+    category: "操作・カスタマイズ",
+    question: "Subagents・run_workflow・Agent Swarms（/swarm）の 3 つはどう使い分ければよいですか？",
+    answer:
+      "単発の調査や観点別レビューなど、親エージェントが作業を委譲して結果を受け取るだけで完結する場合は「Subagents」を使います。対象リストへのループ処理・多数ファイルへの一括ファンアウト（`parallel`）・段階パイプライン（`pipeline` / `phase`）・JSON Schema による定型集約を Python 3.8+ スクリプトとしてコードで組みたい場合は「Dynamic Workflows（`run_workflow`）」が適しています。そして、Coordinator・複数 Author・Verifier のように異なる役割を持たせ、共有メッセージボード上の `@メンション` で直接ハンドオフや差し戻し・再検品を行いながら `workspace` 分離で並列開発を進めたい場合は「Agent Swarms（`/swarm`）」を選択します。",
+  },
+];
+
+export interface WorkflowAdvisorScenario {
+  id: string;
+  label: string;
+  taskType: string;
+  recommendedSurface: string;
+  recommendedMode: string;
+  recommendedWorkspace?: "inherit" | "share" | "branch";
+  reason: string;
+  starterPrompt: string;
+}
+
+export const workflowAdvisorScenarios: WorkflowAdvisorScenario[] = [
+  {
+    id: "quick-edit",
+    label: "局所リファクタ・Docstring 追加",
+    taskType: "選択範囲のピンポイント編集",
+    recommendedSurface: "Antigravity IDE",
+    recommendedMode: "Inline Command（Ctrl+I / ⌘+I）",
+    reason:
+      "エディタで選択した関数やブロックだけを対象に編集でき、選択範囲外を壊さず Visual Diff Overlays で即座に差分を確認・承認できます。",
+    starterPrompt: `選択中の関数について、外部の振る舞いと戻り値の型は変えずに重複処理を整理し、エッジケースの早期リターンと簡潔な JSDoc / Docstring を追加してください。選択範囲外のコードや既存コメントは変更しないでください。`,
+  },
+  {
+    id: "single-feature",
+    label: "単一機能の設計〜実装〜テスト",
+    taskType: "複数ファイルにまたがる単一機能開発",
+    recommendedSurface: "Antigravity IDE または Antigravity 2.0",
+    recommendedMode: "Planning Mode + Agent Mode",
+    reason:
+      "最初に Planning Mode で変更対象ファイルと手順の合意を取ってから Agent Mode へ進むことで、複数ファイル間の整合性を保ちながらビルド・テスト検証まで一貫して完了できます。",
+    starterPrompt: `以下の要件で新機能を追加したいです：
+- （対象画面・データ仕様や要件を記載）
+
+まず Planning Mode で変更対象ファイルと実装計画を提示してください。計画の承認後に Agent Mode で実装を進め、最後に lint・型チェック・ビルドの検証コマンドを実行して結果を確認してください。`,
+  },
+  {
+    id: "parallel-audit",
+    label: "複数観点での並列調査・横断監査",
+    taskType: "読み取り専用の並列レビュー・仕様確認",
+    recommendedSurface: "Antigravity 2.0",
+    recommendedMode: "Agent Swarms（/swarm）",
+    recommendedWorkspace: "inherit",
+    reason:
+      "ファイルを編集しない調査・監査タスクはデフォルトの `workspace: \"inherit\"` で作業コピー複製コストを抑えつつ、観点別の専門ワーカーを並列起動して共有ボードへ知見を集約できます。",
+    starterPrompt: `/swarm で以下の調査ワーカーをすべて workspace: "inherit"（読み取り専用・ファイル編集禁止）で起動してください。
+
+- Spec Auditor: 公式仕様・設定ファイルと実装の整合性を調査
+- Quality Auditor: 型安全性・エラーハンドリング・重複ロジックを調査
+- UI Auditor: レスポンシブ表示やアクセシビリティ上の懸念点を調査
+
+各ワーカーは確認したファイルパスと根拠を簡潔にまとめ、挨拶のみの投稿は行わず @coordinator へ報告してください。`,
+  },
+  {
+    id: "parallel-build",
+    label: "独立した複数ファイルの同時実装＋検証",
+    taskType: "複数 Author 並列実装＋専用 Verifier 監査",
+    recommendedSurface: "Antigravity 2.0",
+    recommendedMode: "Agent Swarms（/swarm）",
+    recommendedWorkspace: "share",
+    reason:
+      "データ定義と UI コンポーネントなど互いに独立したファイルを複数 Author が同時編集・コミットする場合、`workspace: \"share\"` で作業コピーを分離し、編集禁止の Verifier（`inherit`）が差分監査する構成が衝突を防げます。",
+    starterPrompt: `/swarm で以下の編成を起動し、並列実装と差分監査を進めてください。
+
+- Author A（workspace: "share"）: データ定義ファイルのみ所有（他ファイル編集禁止）。完了後にコミットして @verifier のみメンション。
+- Author B（workspace: "share"）: UI コンポーネントのみ所有（他ファイル編集禁止）。完了後にコミットして @verifier のみメンション。
+- Verifier（workspace: "inherit"・編集禁止）: 各コミットを git show で監査し、型契約と要件の一致を確認。全件合格後に @coordinator へ完了報告。
+
+※ 未追跡のネスト .git や大量の未追跡ファイルがある場合は、安全のため workspace: "inherit" とファイル単位の排他分担へ切り替えてください。`,
+  },
+  {
+    id: "batch-fanout",
+    label: "多数ファイル・モジュールの定型一括処理",
+    taskType: "コード制御による大量ファンアウト・集約",
+    recommendedSurface: "Antigravity 2.0",
+    recommendedMode: "Dynamic Workflows（run_workflow）",
+    reason:
+      "対象リストに対するループ実行や `parallel` / `pipeline` / `phase` による段階オーケストレーションを Python 3.8+ スクリプトで記述でき、`schema` 指定の構造化出力を `log()` で確実に集約できます。",
+    starterPrompt: `run_workflow を使い、指定ディレクトリの全ファイルを対象に一括ファンアウト調査と集約を実行してください。
+
+1. phase("Discover"): 対象ファイルのパス一覧を schema（{"type": "array", "items": {"type": "string"}}）で抽出
+2. phase("Check"): parallel(files, ...) で各ファイルへ agent を並列実行し、構造化 schema で確認結果を収集（軽量チェックには model: "flash_lite" / "flash" を活用）
+3. phase("Summary"): log() で全体の集約レポートを出力`,
+  },
+  {
+    id: "terminal-ops",
+    label: "ターミナル中心のログ調査・軽量操作",
+    taskType: "CLI・SSH 環境での即応調査",
+    recommendedSurface: "Antigravity CLI (agy)",
+    recommendedMode: "CLI 対話モード（agy / TUI）",
+    reason:
+      "ターミナル上で `agy` を起動するだけで、エディタやデスクトップ画面を開かずにビルドログ調査やコマンド生成を軽量・高速に実行できます（`/help`・`agy --help` で操作確認可能）。",
+    starterPrompt: `$ agy
+> 直近のコマンド実行エラーやビルドログを確認し、原因となっているファイルパス・行番号と最小限の修正案を提示してください。まだファイルは編集せず、確認用コマンドと調査結果のみ回答してください。`,
   },
 ];
