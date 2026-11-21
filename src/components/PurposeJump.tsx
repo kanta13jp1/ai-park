@@ -51,7 +51,7 @@ const jumpSections: JumpSection[] = [
       { name: "AWS・クラウド情報局", href: "/aws-info", desc: "社内での AWS・クラウド活用の情報", badge: "🚧 工事中" },
       { name: "GCP・Google Cloud情報局", href: "/gcp-info", desc: "CDL・ACE・PCA 統合学習ハブ（資格対策・比較表）", badge: "🚧 工事中" },
       { name: "LPIC・Linux情報局", href: "/lpic-info", desc: "LPIC-1（101/102）・LPIC-2（201/202）学習ハブ", badge: "🚧 工事中" },
-      { name: "情報処理技術者試験情報局", href: "/ipa-info", desc: "IP・FE・AP・高度6区分（SC/DB/NW/SA/PM/SM）統合学習ハブ", badge: "🚧 工事中" },
+      { name: "情報処理技術者試験情報局", href: "/ipa-info", desc: "IPA 全13区分（IP・SG・FE・AP・高度9区分）統合学習ハブ", badge: "🚧 工事中" },
       { name: "Antigravity導入ガイド", href: "/guide", desc: "IDE / CLI セットアップとスラッシュコマンド" },
     ],
   },

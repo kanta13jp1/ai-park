@@ -5,10 +5,26 @@ import type {
   CertQuestion,
 } from "@/components/certification/types";
 
-export type IpaExamId = "ip" | "fe" | "ap" | "sc" | "db" | "nw" | "sa" | "pm" | "sm";
+export type IpaExamId =
+  | "ip"
+  | "sg"
+  | "fe"
+  | "ap"
+  | "sc"
+  | "db"
+  | "nw"
+  | "es"
+  | "st"
+  | "sa"
+  | "pm"
+  | "sm"
+  | "au";
+
+export type IpaExamTier = "foundation" | "specialist" | "management";
 
 export interface IpaExamMeta {
   id: IpaExamId;
+  tier: IpaExamTier;
   shortLabel: string;
   title: string;
   subtitle: string;
@@ -101,6 +117,7 @@ export interface IpaQuestion extends CertQuestion {
 export const ipaExamMetas: IpaExamMeta[] = [
   {
     id: "ip",
+    tier: "foundation",
     shortLabel: "ITパスポート (IP)",
     title: "ITパスポート試験（iパス）",
     subtitle: "スキルレベル 1 ・ 全社会人/IT基礎",
@@ -126,7 +143,35 @@ export const ipaExamMetas: IpaExamMeta[] = [
     secondsPerQuestion: 72,
   },
   {
+    id: "sg",
+    tier: "foundation",
+    shortLabel: "セキュリティ管理 (SG)",
+    title: "情報セキュリティマネジメント試験（SG）",
+    subtitle: "スキルレベル 2 ・ 情報セキュリティ運用推進",
+    skillLevel: "レベル 2",
+    accentColor: "emerald",
+    description:
+      "部門の業務で情報セキュリティを確保し、脅威から組織を守るための情報セキュリティ管理（ISMS・リスク評価・規程整備）、インシデント対応、関連法規の運用力を学びます。",
+    examFacts: [
+      { label: "試験形式", value: "CBT 方式", detail: "通年受験可能（テストセンター）" },
+      { label: "試験時間", value: "120 分", detail: "科目A・科目B を一括実施" },
+      { label: "問題数", value: "全 60 問", detail: "科目A: 48問（四肢択一）/ 科目B: 12問" },
+      { label: "合格基準", value: "総合 600 点以上", detail: "1,000 点満点中（IRT 方式）" },
+      { label: "対象領域", value: "セキュリティ管理", detail: "運用・規程・インシデント対応・法規" },
+      { label: "有効期限", value: "無期限", detail: "国家試験として生涯有効" },
+    ],
+    passingConfig: {
+      minScore: 0,
+      maxScore: 1000,
+      passingScore: 600,
+      passingPct: 60,
+      officialExamLabel: "情報セキュリティマネジメント試験（1,000点満点）",
+    },
+    secondsPerQuestion: 90,
+  },
+  {
     id: "fe",
+    tier: "foundation",
     shortLabel: "基本情報技術者 (FE)",
     title: "基本情報技術者試験（FE）",
     subtitle: "スキルレベル 2 ・ エンジニア登竜門",
@@ -153,6 +198,7 @@ export const ipaExamMetas: IpaExamMeta[] = [
   },
   {
     id: "ap",
+    tier: "foundation",
     shortLabel: "応用情報技術者 (AP)",
     title: "応用情報技術者試験（AP）",
     subtitle: "スキルレベル 3 ・ 設計/推進リーダー",
@@ -179,6 +225,7 @@ export const ipaExamMetas: IpaExamMeta[] = [
   },
   {
     id: "sc",
+    tier: "specialist",
     shortLabel: "安全確保支援士 (SC)",
     title: "情報処理安全確保支援士試験（SC）",
     subtitle: "スキルレベル 4 ・ サイバーセキュリティ専門",
@@ -205,6 +252,7 @@ export const ipaExamMetas: IpaExamMeta[] = [
   },
   {
     id: "db",
+    tier: "specialist",
     shortLabel: "データベース (DB)",
     title: "データベーススペシャリスト試験（DB）",
     subtitle: "スキルレベル 4 ・ データ基盤・DB設計専門",
@@ -231,6 +279,7 @@ export const ipaExamMetas: IpaExamMeta[] = [
   },
   {
     id: "nw",
+    tier: "specialist",
     shortLabel: "ネットワーク (NW)",
     title: "ネットワークスペシャリスト試験（NW）",
     subtitle: "スキルレベル 4 ・ NW設計・運用専門",
@@ -256,7 +305,62 @@ export const ipaExamMetas: IpaExamMeta[] = [
     secondsPerQuestion: 90,
   },
   {
+    id: "es",
+    tier: "specialist",
+    shortLabel: "エンベデッド (ES)",
+    title: "エンベデッドシステムスペシャリスト試験（ES）",
+    subtitle: "スキルレベル 4 ・ 組込み/IoTシステム専門",
+    skillLevel: "レベル 4",
+    accentColor: "cyan",
+    description:
+      "マイコン・ハードウェア制御、割込み処理・シリアル通信、RTOS（リアルタイム OS）によるタスク設計・スケジューリング、IoT/組込みシステムの省電力・安全性設計を学びます。",
+    examFacts: [
+      { label: "試験形式", value: "午前Ⅰ/Ⅱ・午後Ⅰ/Ⅱ", detail: "午後Ⅱは論述式（論文）" },
+      { label: "試験時間", value: "50/40/90/120分", detail: "午後Ⅰ:90分 / 午後Ⅱ:120分" },
+      { label: "問題数", value: "30/25/2/1問", detail: "午後Ⅰ:3問中2 / 午後Ⅱ:2問中1問選択" },
+      { label: "合格基準", value: "60点以上 & ランクA", detail: "午前Ⅰ〜午後Ⅰ:60点以上 / 午後Ⅱ:評価A" },
+      { label: "免除制度", value: "午前Ⅰ免除可", detail: "AP合格等により2年間免除申請可能" },
+      { label: "有効期限", value: "無期限", detail: "国家試験として生涯有効" },
+    ],
+    passingConfig: {
+      minScore: 0,
+      maxScore: 100,
+      passingScore: 60,
+      passingPct: 60,
+      officialExamLabel: "エンベデッドシステムスペシャリスト試験（午前・午後Ⅰ: 60点 / 午後Ⅱ: ランクA）",
+    },
+    secondsPerQuestion: 90,
+  },
+  {
+    id: "st",
+    tier: "management",
+    shortLabel: "ITストラテジスト (ST)",
+    title: "ITストラテジスト試験（ST）",
+    subtitle: "スキルレベル 4 ・ 経営/DX・IT戦略専門",
+    skillLevel: "レベル 4",
+    accentColor: "amber",
+    description:
+      "経営戦略と整合した IT 戦略・DX 構想の策定、新事業モデル創出、全体システム化計画・投資対効果（NPV/ROI）評価と経営層への提言力を学びます。",
+    examFacts: [
+      { label: "試験形式", value: "A-1/A-2/B-1/B-2", detail: "B-2（午後Ⅱ）は論述式（論文）" },
+      { label: "試験時間", value: "50/40/90/120分", detail: "B-1:90分 / B-2:120分" },
+      { label: "問題数", value: "30/25/2/1問", detail: "B-1:3問中2 / B-2:2問中1問選択" },
+      { label: "合格基準", value: "60点以上 & ランクA", detail: "A-1〜B-1:60点以上 / B-2:評価A" },
+      { label: "免除制度", value: "科目A-1免除可", detail: "AP合格等により2年間免除申請可能" },
+      { label: "有効期限", value: "無期限", detail: "国家試験として生涯有効" },
+    ],
+    passingConfig: {
+      minScore: 0,
+      maxScore: 100,
+      passingScore: 60,
+      passingPct: 60,
+      officialExamLabel: "ITストラテジスト試験（科目A・B-1: 60点 / B-2: ランクA）",
+    },
+    secondsPerQuestion: 90,
+  },
+  {
     id: "sa",
+    tier: "management",
     shortLabel: "システムアーキテクト (SA)",
     title: "システムアーキテクト試験（SA）",
     subtitle: "スキルレベル 4 ・ 要件定義/全体設計専門",
@@ -283,6 +387,7 @@ export const ipaExamMetas: IpaExamMeta[] = [
   },
   {
     id: "pm",
+    tier: "management",
     shortLabel: "プロジェクトマネージャ (PM)",
     title: "プロジェクトマネージャ試験（PM）",
     subtitle: "スキルレベル 4 ・ プロジェクト統括専門",
@@ -309,6 +414,7 @@ export const ipaExamMetas: IpaExamMeta[] = [
   },
   {
     id: "sm",
+    tier: "management",
     shortLabel: "ITサービスマネージャ (SM)",
     title: "ITサービスマネージャ試験（SM）",
     subtitle: "スキルレベル 4 ・ 安定稼働/サービス運用専門",
@@ -333,9 +439,36 @@ export const ipaExamMetas: IpaExamMeta[] = [
     },
     secondsPerQuestion: 90,
   },
+  {
+    id: "au",
+    tier: "management",
+    shortLabel: "システム監査 (AU)",
+    title: "システム監査技術者試験（AU）",
+    subtitle: "スキルレベル 4 ・ 独立監査・内部統制専門",
+    skillLevel: "レベル 4",
+    accentColor: "indigo",
+    description:
+      "情報システムのリスクと内部統制（IT全社統制・ITGC・ITAC）を独立かつ客観的な立場で評価・検証し、監査報告とフォローアップを行う専門知識と論述力を学びます。",
+    examFacts: [
+      { label: "試験形式", value: "午前Ⅰ/Ⅱ・午後Ⅰ/Ⅱ", detail: "午後Ⅱは論述式（論文）" },
+      { label: "試験時間", value: "50/40/90/120分", detail: "午後Ⅰ:90分 / 午後Ⅱ:120分" },
+      { label: "問題数", value: "30/25/2/1問", detail: "午後Ⅰ:3問中2 / 午後Ⅱ:2問中1問選択" },
+      { label: "合格基準", value: "60点以上 & ランクA", detail: "午前Ⅰ〜午後Ⅰ:60点以上 / 午後Ⅱ:評価A" },
+      { label: "免除制度", value: "午前Ⅰ免除可", detail: "AP合格等により2年間免除申請可能" },
+      { label: "有効期限", value: "無期限", detail: "国家試験として生涯有効" },
+    ],
+    passingConfig: {
+      minScore: 0,
+      maxScore: 100,
+      passingScore: 60,
+      passingPct: 60,
+      officialExamLabel: "システム監査技術者試験（午前・午後Ⅰ: 60点 / 午後Ⅱ: ランクA）",
+    },
+    secondsPerQuestion: 90,
+  },
 ];
 
-// 出典: IPA 情報処理技術者試験 シラバス（IP / FE / AP）
+// 出典: IPA 情報処理技術者試験・情報処理安全確保支援士試験 シラバス（全13区分）
 export const ipaDomains: IpaDomain[] = [
   // --- ITパスポート (IP) ---
   {
@@ -983,13 +1116,205 @@ export const ipaDomains: IpaDomain[] = [
       },
     ],
   },
+
+  // --- 情報セキュリティマネジメント (SG) ---
+  {
+    id: "sg-mgmt",
+    examId: "sg",
+    number: "SG-1",
+    category: "マネジメント系",
+    title: "情報セキュリティ管理・ISMS・関連法規",
+    accentColor: "emerald",
+    summary: "情報セキュリティポリシー（基本方針・対策基準・実施手順）、ISMS（ISO/IEC 27001）によるリスクマネジメントと PDCA、関連法規と委託先管理を学びます。",
+    topics: [
+      {
+        id: "sg-mg-1",
+        code: "SG 1.1",
+        title: "ISMS・リスクアセスメント・セキュリティポリシー",
+        keywords: ["ISMS (ISO/IEC 27001)", "情報セキュリティポリシー", "リスク特定/分析/評価", "情報資産台帳", "委託先管理"],
+        keyPoints: [
+          "情報セキュリティポリシーは「基本方針（トップの宣言）」「対策基準（全社ルール）」「実施手順（具体的手順書）」の3層で構成される",
+          "リスクアセスメントは「リスク特定 → リスク分析 → リスク評価」の順に行い、その後にリスク対応（低減・回避・共有・保有）を選択する",
+          "外部委託時は再委託の事前承認制、秘密保持契約（NDA）、SLA や定期的なセキュリティ監査権の確保が不可欠",
+        ],
+        examTip: "基本方針は経営層が承認し対外公開することも多い一方、実施手順はシステム構成に依存するため非公開・現場管理が原則です。",
+      },
+    ],
+  },
+  {
+    id: "sg-ops",
+    examId: "sg",
+    number: "SG-2",
+    category: "テクノロジ系",
+    title: "情報セキュリティ対策・インシデント対応実践",
+    accentColor: "cyan",
+    summary: "標的型攻撃・BEC（ビジネスメール詐欺）・ソーシャルエンジニアリング対策、アクセス管理と持ち出し制御、初動対応（CSIRT連携）の実践力を学びます。",
+    topics: [
+      {
+        id: "sg-op-1",
+        code: "SG 2.1",
+        title: "日常運用・シャドーIT対策・インシデント初動",
+        keywords: ["シャドーIT", "BEC（ビジネスメール詐欺）", "最小権限の原則", "アクセスログ監査", "インシデント初動"],
+        keyPoints: [
+          "シャドーIT（組織の許可なく個人端末やクラウドサービスを業務利用すること）は情報漏えいや統制不全の温床になる",
+          "振込先変更を装う BEC（ビジネスメール詐欺）に対しては、メール文面だけでなく別経路（電話等）での確認ルールを徹底する",
+          "ウイルス感染疑い時は、電源断ではなくネットワークからの物理/論理的切り離し（LAN ケーブル抜線・Wi-Fi オフ）と連絡窓口への即時報告が鉄則",
+        ],
+        examTip: "科目B（ケーススタディ）では「現場のルール運用でなぜセキュリティ穴が生じたか」を業務フローから読み取る力が問われます。",
+      },
+    ],
+  },
+
+  // --- ITストラテジスト (ST) ---
+  {
+    id: "st-biz",
+    examId: "st",
+    number: "ST-1",
+    category: "ストラテジ系",
+    title: "経営戦略・DX推進・事業モデル設計",
+    accentColor: "amber",
+    summary: "外部環境/内部環境分析（PEST/5フォース/バリューチェーン）、DX（デジタルトランスフォーメーション）戦略、新規ビジネスモデルとデータ活用を学びます。",
+    topics: [
+      {
+        id: "st-bz-1",
+        code: "ST 1.1",
+        title: "競争戦略・バランススコアカード・DX 構想",
+        keywords: ["バランススコアカード (BSC)", "ファイブフォース分析", "バリューチェーン", "DX推進", "プラットフォームビジネス"],
+        keyPoints: [
+          "BSC（バランススコアカード）は「財務・顧客・業務プロセス・学習と成長」の 4 つの視点から戦略目標を CSF/KPI へ落とし込む",
+          "DX 推進では既存業務の単なる電子化（デジタイゼーション）に留めず、ビジネスモデルや企業文化の変革による競争優位確立を目指す",
+          "イノベーションのジレンマや破壊的技術に対して、PoC（概念実証）やオープンイノベーションによる迅速な仮説検証を行う",
+        ],
+        examTip: "論文（科目B-2）では「経営課題・事業目標と IT 施策の明確な因果関係」と「経営層との合意形成プロセス」の記述が最重要です。",
+      },
+    ],
+  },
+  {
+    id: "st-plan",
+    examId: "st",
+    number: "ST-2",
+    category: "ストラテジ系",
+    title: "システム化構想・全体計画・IT投資評価",
+    accentColor: "indigo",
+    summary: "エンタープライズアーキテクチャ（EA）による全体最適化、システム化基本計画、IT投資ポートフォリオと定量/定性評価（NPV・IRR・ROI）を学びます。",
+    topics: [
+      {
+        id: "st-pl-1",
+        code: "ST 2.1",
+        title: "EA 全体最適化と IT 投資ポートフォリオ評価",
+        keywords: ["EA (BA/DA/AA/TA)", "IT投資ポートフォリオ", "NPV / IRR / 回収期間法", "CSF (重要成功要因)", "TCO"],
+        keyPoints: [
+          "EA（エンタープライズアーキテクチャ）の 4 階層：BA（業務）・DA（データ）・AA（アプリケーション）・TA（テクノロジ）で As-Is と To-Be を整理",
+          "IT 投資は戦略目的別（維持更新・業務効率化・戦略的競争優位）のポートフォリオでリスクとリターンのバランスを配分する",
+          "投資評価指標：NPV（＞0 で採択）、IRR（内部収益率＞ハードルレートで採択）、回収期間法（早期回収重視だが時間価値・回収後収益を無視する点に留意）",
+        ],
+        examTip: "午後Ⅰ・午後Ⅱでは「投資効果の試算根拠」や「全体最適と部分最適の対立をどう調整したか」がよく問われます。",
+      },
+    ],
+  },
+
+  // --- エンベデッドシステムスペシャリスト (ES) ---
+  {
+    id: "es-hw",
+    examId: "es",
+    number: "ES-1",
+    category: "テクノロジ系",
+    title: "ハードウェア制御・割込み・通信インタフェース",
+    accentColor: "cyan",
+    summary: "マイコン周辺回路（GPIO/PWM/ADC/DAC）、割込み・DMA 転送、組込みシリアル通信（UART/SPI/I2C/CAN）、メモリマップド I/O を学びます。",
+    topics: [
+      {
+        id: "es-hw-1",
+        code: "ES 1.1",
+        title: "DMA・割込み制御・シリアル通信インタフェース",
+        keywords: ["DMA（ダイレクトメモリアクセス）", "UART / SPI / I2C / CAN", "PWM制御", "ウォッチドッグタイマ (WDT)", "チャタリング防止"],
+        keyPoints: [
+          "DMA 転送は CPU を介さずにペリフェラルとメモリ間で直接データ転送を行い、CPU 負荷と割込み回数を大幅に削減する",
+          "SPI は全二重・高速・チップセレクト（SS/CS）線が必要、I2C は 2 線式（SDA/SCL）・アドレス指定で複数スレーブ接続可、CAN は車載/FA 向けの差動通信で調停機能を持つ",
+          "ウォッチドッグタイマ（WDT）は定期的なクリア（キック）が途絶えるとシステム暴走と判断し、マイコンを強制リセットする",
+        ],
+        examTip: "午後問題では通信速度・バス占有率・割込み応答時間（レイテンシ）の計算と、ISR（割込みサービスルーチン）を短く保つ設計が定番です。",
+      },
+    ],
+  },
+  {
+    id: "es-rtos",
+    examId: "es",
+    number: "ES-2",
+    category: "テクノロジ系",
+    title: "RTOS・リアルタイム設計・省電力/安全性",
+    accentColor: "indigo",
+    summary: "タスク状態遷移、プリエンプティブスケジューリング、セマフォ/ミューテックスと優先度逆転対策、IoT 省電力設計とエッジセキュリティを学びます。",
+    topics: [
+      {
+        id: "es-rt-1",
+        code: "ES 2.1",
+        title: "RTOS タスクスケジューリングと優先度逆転対策",
+        keywords: ["レートモノトニックスケジューリング (RMS)", "優先度逆転", "優先度継承プロトコル", "セマフォ / ミューテックス", "スリープモード"],
+        keyPoints: [
+          "優先度逆転：低優先度タスクが資源ロック中に中優先度タスクが割り込み、結果として高優先度タスクの実行が阻害される現象",
+          "対策として、資源を保持している低優先度タスクの優先度を一時的に待ち側高優先度タスクと同等まで引き上げる「優先度継承プロトコル」を用いる",
+          "レートモノトニックスケジューリング（RMS）では、周期が短いタスクほど高い静的優先度を割り当てる",
+        ],
+        examTip: "リアルタイム性の保証（デッドライン遵守）のため、各周期タスクの CPU 利用率合計 Σ(Ci/Ti) の検証と排他制御の最小化が問われます。",
+      },
+    ],
+  },
+
+  // --- システム監査技術者 (AU) ---
+  {
+    id: "au-std",
+    examId: "au",
+    number: "AU-1",
+    category: "マネジメント系",
+    title: "システム監査基準・独立性・監査計画",
+    accentColor: "indigo",
+    summary: "経済産業省「システム監査基準」に基づく監査人の独立性（外観上・精神上）・職業倫理、リスクアプローチによる監査計画策定を学びます。",
+    topics: [
+      {
+        id: "au-st-1",
+        code: "AU 1.1",
+        title: "監査人の独立性とリスクアプローチ監査計画",
+        keywords: ["外観上の独立性", "精神上の独立性", "リスクアプローチ", "IT全社統制 / ITGC / ITAC", "監査範囲の限定"],
+        keyPoints: [
+          "システム監査人は「外観上の独立性（監査対象と身分・利害関係がない）」と「精神上の独立性（公正不偏の態度）」の両方を備える必要がある",
+          "リスクアプローチにより、影響度（インパクト）と発生可能性が高い重要リスク領域へ監査資源（工数）を重点配分する",
+          "内部統制の3層：IT全社統制（方針・体制）、IT全般統制（ITGC：開発/変更/アクセス/運用管理）、IT業務処理統制（ITAC：入力チェック・自動計算等）",
+        ],
+        examTip: "システム監査人は被監査部門へ「改善指示・命令」はできず、客観的な証拠に基づく「指摘と改善勧告（助言）」を行う立場である点に注意してください。",
+      },
+    ],
+  },
+  {
+    id: "au-exec",
+    examId: "au",
+    number: "AU-2",
+    category: "マネジメント系",
+    title: "監査証拠・監査手続・報告とフォローアップ",
+    accentColor: "amber",
+    summary: "監査証拠の十分性・適切性、質問・閲覧・観察・CAAT（コンピュータ利用監査技法）・ウォークスルー、監査調書と是正フォローアップを学びます。",
+    topics: [
+      {
+        id: "au-ex-1",
+        code: "AU 2.1",
+        title: "監査技法（試査・CAAT）とフォローアップ",
+        keywords: ["監査証拠", "ウォークスルー", "CAAT（コンピュータ利用監査技法）", "試査と精査", "監査調書 / フォローアップ"],
+        keyPoints: [
+          "監査手続の技法：質問（ヒアリング）だけでなく、文書閲覧・実地観察・再実施・CAAT 等を組み合わせて客観的な裏付け（十分かつ適切な証拠）を得る",
+          "ウォークスルーは業務の最初から最後まで 1 件の取引を追跡し、統制のデザイン（整備状況）を確認する手法",
+          "監査報告書で指摘・勧告を出して終わりではなく、被監査部門の「改善計画」の妥当性と実施状況をフォローアップ（追跡確認）する責務がある",
+        ],
+        examTip: "論文（科目B-2）では「チェックポイント（規準）」「実施した監査手続と入手した監査証拠」「見出した不備と改善勧告」を一貫して記述します。",
+      },
+    ],
+  },
 ];
 
 // 区分横断・比較表データ
 export const ipaComparisons: IpaComparisonTable[] = [
   {
     id: "comp-crypto",
-    examIds: ["ip", "fe", "ap", "sc", "nw"],
+    examIds: ["ip", "sg", "fe", "ap", "sc", "nw"],
     category: "ネットワーク・セキュリティ",
     title: "暗号化方式とデジタル署名の比較",
     subtitle: "鍵の種類・処理速度・用途の違い（IP〜高度共通重要テーマ）",
@@ -1004,7 +1329,7 @@ export const ipaComparisons: IpaComparisonTable[] = [
   },
   {
     id: "comp-auth",
-    examIds: ["fe", "ap", "sc"],
+    examIds: ["sg", "fe", "ap", "sc"],
     category: "ネットワーク・セキュリティ",
     title: "Webセキュリティ攻撃と根本対策",
     subtitle: "脆弱性の原理と試験で問われる正しい対策",
@@ -1018,7 +1343,7 @@ export const ipaComparisons: IpaComparisonTable[] = [
   },
   {
     id: "comp-dev-model",
-    examIds: ["ip", "fe", "ap"],
+    examIds: ["ip", "fe", "ap", "sa"],
     category: "開発・データベース",
     title: "ソフトウェア開発モデルの使い分け",
     subtitle: "ウォーターフォール・アジャイル・プロトタイピング比較",
@@ -1047,7 +1372,7 @@ export const ipaComparisons: IpaComparisonTable[] = [
   },
   {
     id: "comp-test",
-    examIds: ["fe", "ap"],
+    examIds: ["fe", "ap", "sa"],
     category: "開発・データベース",
     title: "ブラックボックステスト vs ホワイトボックステスト",
     subtitle: "テスト設計技法と網羅基準",
@@ -1129,13 +1454,55 @@ export const ipaComparisons: IpaComparisonTable[] = [
     ],
     decisionRule: "SLA を守るには、裏側の OLA と外部ベンダーとの UC の目標値が SLA より厳しく（短く）設定されている必要がある。",
   },
+  {
+    id: "comp-es-comm",
+    examIds: ["es"],
+    category: "コンピュータ基礎",
+    title: "組込みシリアル通信インタフェース比較（UART / SPI / I2C / CAN）",
+    subtitle: "信号線数・通信方式・適用用途の違い",
+    columns: ["UART", "SPI", "I2C", "CAN"],
+    rows: [
+      { feature: "同期方式", values: ["調歩同期式（クロック線なし）", "クロック同期式", "クロック同期式", "非同期（差動信号・自己同期）"] },
+      { feature: "主な信号線", values: ["2本（TX, RX）", "4本＋SS（MOSI, MISO, SCLK, SS）", "2本（SDA, SCL）", "2本（CAN_H, CAN_L）"] },
+      { feature: "通信方式", values: ["全二重（1対1）", "全二重（1対多・SSで選択）", "半二重（アドレス指定・多対多）", "半二重（ブロードキャスト・CSMA/CR調停）"] },
+      { feature: "特徴・用途", values: ["デバッグ出力・低速周辺接続", "高速通信（Flash, LCD, センサ）", "省配線で多数センサ接続", "高耐ノイズ・車載/FA制御"] },
+    ],
+    decisionRule: "高速デバイス制御は SPI、省配線マルチスレーブは I2C、耐ノイズ・優先度調停が要る車載/産業制御は CAN。",
+  },
+  {
+    id: "comp-st-framework",
+    examIds: ["ip", "ap", "st"],
+    category: "マネジメント・戦略",
+    title: "経営・事業戦略フレームワーク比較",
+    subtitle: "環境分析・競争要因・戦略実行管理の使い分け",
+    columns: ["SWOT分析", "ファイブフォース分析", "バリューチェーン", "バランススコアカード (BSC)"],
+    rows: [
+      { feature: "分析対象", values: ["内部（強み/弱み）× 外部（機会/脅威）", "業界構造の 5 つの競争要因", "主活動と支援活動ごとの付加価値", "4つの視点（財務/顧客/業務/学習と成長）"] },
+      { feature: "主な用途", values: ["事業方針の棚卸し（クロスSWOT）", "業界の魅力度・収益性評価", "強みの源泉・コスト構造の特定", "ビジョンから KGI/KPI への落とし込み"] },
+    ],
+    decisionRule: "業界の収益構造はファイブフォース、自社の事業活動分解はバリューチェーン、戦略の実行管理は BSC。",
+  },
+  {
+    id: "comp-au-controls",
+    examIds: ["sg", "ap", "au"],
+    category: "マネジメント・戦略",
+    title: "IT統制の3層構造（全社統制 / ITGC / ITAC）",
+    subtitle: "システム監査および J-SOX における統制評価の枠組み",
+    columns: ["IT全社統制", "IT全般統制（ITGC）", "IT業務処理統制（ITAC）"],
+    rows: [
+      { feature: "対象範囲", values: ["全社的な IT ガバナンス・規程・組織体制", "個別のシステム開発・変更・アクセス・運用管理", "個別業務アプリ内の自動チェック・承認処理"] },
+      { feature: "具体例", values: ["情報セキュリティ方針、IT 委員会", "権限付与承認、本番移行承認、バックアップ管理", "マスタ照合、桁数・範囲チェック、自動仕訳"] },
+      { feature: "監査上の影響", values: ["ITGC/ITAC 全体の前提基盤", "不備があると ITAC の信頼性（継続動作）が崩れる", "業務データ・財務報告の正確性に直結"] },
+    ],
+    decisionRule: "ITGC（環境・運用・変更の統制）が機能していなければ、アプリ内の自動制御（ITAC）も継続的に信頼できない。",
+  },
 ];
 
 // 頻出公式・思考パターン
 export const ipaFormulaPatterns: IpaFormulaPattern[] = [
   {
     id: "pat-availability",
-    examIds: ["ip", "fe", "ap", "nw", "sa", "sm"],
+    examIds: ["ip", "fe", "ap", "nw", "es", "sa", "sm"],
     title: "直列・並列システムの稼働率計算",
     badge: "頻出計算",
     flow: ["直列: A × B", "並列: 1 - (1-A)(1-B)", "複合系は部分ごとに分解"],
@@ -1147,7 +1514,7 @@ export const ipaFormulaPatterns: IpaFormulaPattern[] = [
   },
   {
     id: "pat-breakeven",
-    examIds: ["ip", "fe", "ap"],
+    examIds: ["ip", "fe", "ap", "st"],
     title: "損益分岐点売上高の算出",
     badge: "ストラテジ定番",
     flow: ["変動費率 = 変動費 ÷ 売上高", "限界利益率 = 1 - 変動費率", "損益分岐点 = 固定費 ÷ 限界利益率"],
@@ -1217,13 +1584,49 @@ export const ipaFormulaPatterns: IpaFormulaPattern[] = [
       "今後の一時的な差異であれば EAC = AC + (BAC - EV) で算出する",
     ],
   },
+  {
+    id: "pat-es-sched",
+    examIds: ["es"],
+    title: "周期タスクの CPU 利用率とスケジューリング判定",
+    badge: "ES リアルタイム設計",
+    flow: ["各タスク利用率 Ui = 実行時間 Ci ÷ 周期 Ti", "総利用率 U = Σ(Ci ÷ Ti)", "U ≦ 1（RMS 十分条件等）を確認"],
+    summary: "複数の周期タスクを 1 つの CPU で実行するとき、処理時間と周期の比率の合計が 1（100%）を超えるとデッドラインミスが必然的に発生します。",
+    keyDesignPoints: [
+      "例：タスクA(C=2ms, T=10ms → 0.2)、タスクB(C=6ms, T=20ms → 0.3) の合計 U = 0.5（50%）",
+      "静的優先度割当て（RMS）では、周期が短いタスクに高優先度を付与し、タスク切替え時間（コンテキストスイッチ）も考慮する",
+    ],
+  },
+  {
+    id: "pat-st-roi",
+    examIds: ["st"],
+    title: "IT 投資評価（NPV・回収期間・ROI）",
+    badge: "ST 投資対効果",
+    flow: ["年間キャッシュフロー見積", "割引率で現在価値化 → NPV 算出", "回収期間・ROI と併せて総合判断"],
+    summary: "システム投資の妥当性を経営層へ説明するため、貨幣の時間価値を考慮した NPV（正味現在価値）や回収期間を組み合わせて評価します。",
+    keyDesignPoints: [
+      "NPV = Σ { CFt ÷ (1 + r)^t } - 初期投資額（＞ 0 なら投資価値あり）",
+      "回収期間法は計算が容易だが、回収後のキャッシュフローや割引率を無視する弱点がある",
+    ],
+  },
+  {
+    id: "pat-sg-risk",
+    examIds: ["sg", "sc", "au"],
+    title: "情報セキュリティリスク評価と対応選定フロー",
+    badge: "SG/SC リスク管理",
+    flow: ["資産価値 × 脅威 × 脆弱性（または発生可能性 × 影響度）", "リスク受容基準と比較", "低減・回避・共有・保有を選択"],
+    summary: "すべての脅威にコストをかけるのではなく、リスク値が許容基準を超える資産から優先して管理策（低減策等）を講じます。",
+    keyDesignPoints: [
+      "リスク対応後も残る「残留リスク」について経営層（リスク所有者）の承認を得る",
+      "外部委託やクラウド利用で対策の一部を委ねる場合も、最終責任は委託元（自社）に残る",
+    ],
+  },
 ];
 
 // ひっかけ・誤答パターン
 export const ipaPitfalls: IpaPitfall[] = [
   {
     id: "pit-mfa",
-    examIds: ["ip", "fe", "ap"],
+    examIds: ["ip", "sg", "fe", "ap"],
     trap: "「パスワード」＋「秘密の質問」の2段階認証を多要素認証（MFA）だと選んでしまう",
     whyWrong: "パスワードも秘密の質問もどちらも「知識情報」であり、要素が1種類しか使われていません。",
     correctApproach: "多要素認証は「知識」「所有」「生体」の異なる2種類以上の要素を組み合わせる必要があります。",
@@ -1265,16 +1668,37 @@ export const ipaPitfalls: IpaPitfall[] = [
   },
   {
     id: "pit-essay-generic",
-    examIds: ["sa", "pm", "sm"],
+    examIds: ["st", "sa", "pm", "sm", "es", "au"],
     trap: "午後Ⅱ（論述式）で一般論や教科書的な理想論だけを書いてしまい、評価ランク B 以下になる",
     whyWrong: "IPA の論述式では、自身が参画したプロジェクト・システムの「具体的な背景・数値・制約条件・工夫・評価」が問われます。",
     correctApproach: "対象システムの規模・体制・制約・採用した理由（比較検討）・定量的な効果や改善点を具体的に記述します。",
+  },
+  {
+    id: "pit-sg-shadow",
+    examIds: ["sg"],
+    trap: "利便性や緊急対応を理由に、無許可クラウドや個人 USB メモリを使った業務（シャドーIT）や外部委託先への丸投げを容認してしまう",
+    whyWrong: "組織のアクセス制御・ログ監査が及ばなくなり、情報漏えいや法的責任を問われるリスクが大幅に高まります。",
+    correctApproach: "シャドーIT は禁止・技術的抑止しつつ安全な代替手段を提供し、委託先についても委託元に最終管理責任がある前提で監査・SLA を徹底します。",
+  },
+  {
+    id: "pit-es-priority",
+    examIds: ["es"],
+    trap: "RTOS で最高優先度を付けたタスクは、いかなる状況でも他タスクに待たされないと思ってしまう",
+    whyWrong: "低優先度タスクが保持するセマフォ/資源を高優先度タスクが待つ際、中優先度タスクに割り込まれると「優先度逆転」が起き、長時間ブロックされます。",
+    correctApproach: "共有資源の排他制御には「優先度継承プロトコル」や「優先度上限プロトコル」を採用し、クリティカルセクションを最小化します。",
+  },
+  {
+    id: "pit-au-independence",
+    examIds: ["au"],
+    trap: "システム監査人が監査中に重大な不備を発見した際、その場で被監査部門のシステム設定や業務手順を直接修正・命令できると思ってしまう",
+    whyWrong: "監査人が実務や意思決定に直接関与すると「独立性」が損なわれ、次回以降の客観的な監査ができなくなります。",
+    correctApproach: "システム監査人の役割は客観的証拠に基づく「不備の指摘と改善勧告（助言）」であり、実際の改善実施責任は被監査部門（または経営者）にあります。",
   },
 ];
 
 // 重要数値・用語早見
 export const ipaKeyFacts: IpaKeyFact[] = [
-  { id: "kf-cia", examIds: ["ip", "fe", "ap"], target: "情報セキュリティ3要素", value: "機密性・完全性・可用性", detail: "CIA。真正性・責任追跡性等を加える場合もある" },
+  { id: "kf-cia", examIds: ["ip", "sg", "fe", "ap"], target: "情報セキュリティ3要素", value: "機密性・完全性・可用性", detail: "CIA。真正性・責任追跡性等を加える場合もある" },
   { id: "kf-http", examIds: ["ip", "fe", "ap"], target: "主要ウェルノウンポート", value: "HTTP:80 / HTTPS:443 / SSH:22", detail: "DNS:53、SMTP:25、POP3:110、IMAP:143" },
   { id: "kf-acid", examIds: ["fe", "ap"], target: "トランザクション特性", value: "ACID（原子・一貫・独立・永続）", detail: "すべて完了するか、すべて取り消す（All or Nothing）" },
   { id: "kf-sla", examIds: ["ip", "fe", "ap"], target: "SLA 99.9% の年間停止目安", value: "約 8.76 時間 / 年", detail: "365日 × 24時間 × 0.001 ≒ 8.76時間" },
@@ -1288,6 +1712,10 @@ export const ipaKeyFacts: IpaKeyFact[] = [
   { id: "kf-sa-nfr", examIds: ["sa"], target: "非機能要求グレード 6大項目", value: "可用性・性能・運用・移行・セキュリティ・環境", detail: "IPA 公開の非機能要件定義標準フレームワーク" },
   { id: "kf-pm-res", examIds: ["pm"], target: "コンティンジェンシー vs マネジメント予備", value: "既知の未知(PM) / 未知の未知(スポンサー)", detail: "前者はコストベースラインに含まれ、後者は含まれない" },
   { id: "kf-sm-mtbsi", examIds: ["sm"], target: "MTBSI（平均サービス中断間隔）", value: "MTBF ＋ MTTR", detail: "故障発生から次の故障発生までの平均時間間隔" },
+  { id: "kf-sg-isms", examIds: ["sg"], target: "ISMS 国際規格 / 3層ポリシー", value: "ISO/IEC 27001・基本方針/対策基準/実施手順", detail: "PDCA サイクルで情報セキュリティリスクを継続的改善" },
+  { id: "kf-st-ea", examIds: ["st"], target: "EA（全体最適）4階層", value: "BA（業務）/ DA / AA / TA", detail: "Business / Data / Application / Technology Architecture" },
+  { id: "kf-es-rtos", examIds: ["es"], target: "リアルタイム制御の要点", value: "優先度継承・WDT・DMA", detail: "優先度逆転防止・暴走監視リセット・CPU 負荷軽減" },
+  { id: "kf-au-three", examIds: ["au"], target: "監査人の独立性・監査手続", value: "外観上/精神上の独立性・試査", detail: "サンプリングによる試査と CAAT を組み合わせ証拠を収集" },
 ];
 
 // フラッシュカード（区分別）
@@ -1644,6 +2072,126 @@ export const ipaFlashcards: IpaFlashcardItem[] = [
     category: "SM リリース",
     recommended: "Blue-Green デプロイメント",
     reason: "問題発生時は旧環境へ即座に切り戻しできるためダウンタイムとリスクを最小化できます。",
+  },
+
+  // SG (情報セキュリティマネジメント)
+  {
+    examId: "sg",
+    keyword: "ISO/IEC 27001 に基づき、組織の情報資産の機密性・完全性・可用性をバランスよく維持・改善する管理の枠組み",
+    category: "SG セキュリティ管理",
+    recommended: "ISMS（情報セキュリティマネジメントシステム）",
+    reason: "組織全体で PDCA を回し、継続的なリスク管理と改善を行います。",
+  },
+  {
+    examId: "sg",
+    keyword: "情報セキュリティポリシーの3層のうち、経営層の宣言を示す「基本方針」と全社共通の「対策基準」に続く、現場向けの具体的作業手順",
+    category: "SG 規程・方針",
+    recommended: "実施手順（実施手順書）",
+    reason: "システム構成や具体的操作を含むため、原則として社外非公開とし該当部門で管理します。",
+  },
+  {
+    examId: "sg",
+    keyword: "取引先や経営者を装った巧妙なメールにより、偽の口座への送金や機密情報の送信を行わせる詐欺攻撃",
+    category: "SG 脅威対策",
+    recommended: "BEC（ビジネスメール詐欺）",
+    reason: "メール文面だけで判断せず、既知の電話番号への電話確認など別経路（帯域外）検証が有効です。",
+  },
+  {
+    examId: "sg",
+    keyword: "情報システム部門の許可を得ずに、従業員が個人端末や無認可のクラウドサービスを業務へ利用する状態",
+    category: "SG 運用統制",
+    recommended: "シャドーIT",
+    reason: "アクセス制御やログ監視が効かないため情報漏えい・コンプライアンス違反の重大リスクになります。",
+  },
+
+  // ST (ITストラテジスト)
+  {
+    examId: "st",
+    keyword: "組織の業務とシステムを BA（業務）・DA（データ）・AA（アプリ）・TA（技術）の4階層で整理し全体最適を図る手法",
+    category: "ST 全体計画",
+    recommended: "EA（エンタープライズアーキテクチャ）",
+    reason: "As-Is（現状）と To-Be（理想）のギャップから全体システム化計画を策定します。",
+  },
+  {
+    examId: "st",
+    keyword: "財務・顧客・業務プロセス・学習と成長の4つの視点から、経営ビジョンと戦略を KPI へ落とし込む業績評価手法",
+    category: "ST 経営戦略",
+    recommended: "バランススコアカード（BSC）",
+    reason: "財務指標だけでなく非財務指標の因果関係（戦略マップ）を可視化して実行管理します。",
+  },
+  {
+    examId: "st",
+    keyword: "新規事業や DX 施策の本格投資前に、小規模な試作・実験を通じて技術的実現性や顧客価値を早期検証するプロセス",
+    category: "ST DX推進",
+    recommended: "PoC（概念実証：Proof of Concept）",
+    reason: "仮説検証サイクルを短く回し、「PoC 疲れ」を防ぐため事前に成功基準（撤退基準）を定めます。",
+  },
+  {
+    examId: "st",
+    keyword: "自社の技術やアイデアだけでなく、社外のスタートアップ・大学・異業種と連携して新たな価値を創出する革新手法",
+    category: "ST イノベーション",
+    recommended: "オープンイノベーション",
+    reason: "市場変化の速い領域で自社単独開発の限界を超え、事業スピードを高める際に活用します。",
+  },
+
+  // ES (エンベデッドシステムスペシャリスト)
+  {
+    examId: "es",
+    keyword: "RTOS で共有資源を保持する低優先度タスクの優先度を一時的に待ち側高優先度タスクと同じまで引き上げ、優先度逆転を防ぐ方式",
+    category: "ES RTOS",
+    recommended: "優先度継承プロトコル",
+    reason: "中優先度タスクによる割り込み阻害を回避し、高優先度タスクのデッドライン遵守を助けます。",
+  },
+  {
+    examId: "es",
+    keyword: "プログラムから一定時間内にクリア信号が来ない場合に異常暴走とみなし、マイコンを強制リセットする監視タイマ回路",
+    category: "ES 安全性設計",
+    recommended: "ウォッチドッグタイマ（WDT）",
+    reason: "無限ループやハングアップから自律復旧させる組込みシステム定番の安全機構です。",
+  },
+  {
+    examId: "es",
+    keyword: "CPU を介さずに周辺ペリフェラルとメモリ間で直接ブロックデータ転送を行い、CPU 負荷を大幅に下げる転送方式",
+    category: "ES ハードウェア",
+    recommended: "DMA（ダイレクトメモリアクセス）",
+    reason: "高速な ADC サンプリングや通信データ受信時の割込み頻度削減に不可欠です。",
+  },
+  {
+    examId: "es",
+    keyword: "2本の差動信号線を用い、ノイズ耐性とメッセージ ID による非破壊衝突調停機能を備えた車載・産業向け通信規格",
+    category: "ES 通信",
+    recommended: "CAN（Controller Area Network）",
+    reason: "優先度の高い ID のフレームが調停に勝って遅延なく送信を継続できます。",
+  },
+
+  // AU (システム監査技術者)
+  {
+    examId: "au",
+    keyword: "システム監査人が監査対象と身分上・利害関係上の結びつきを持たない「外観」と、公正不偏を保つ「精神」の両面の要件",
+    category: "AU 監査基準",
+    recommended: "外観上の独立性と精神上の独立性",
+    reason: "たとえば自らが構築・運用に直前まで携わったシステムの監査は独立性欠如とみなされます。",
+  },
+  {
+    examId: "au",
+    keyword: "業務プロセスの開始から終了まで 1 件の取引を紙面やシステム上で追跡し、内部統制の仕組み（整備状況）を確認する監査技法",
+    category: "AU 監査手続",
+    recommended: "ウォークスルー（Walkthrough）",
+    reason: "規程通りの流れになっているかを把握した上で、運用状況テスト（サンプリング試査）へ進みます。",
+  },
+  {
+    examId: "au",
+    keyword: "アクセス権管理・プログラム変更管理・システム運用管理など、業務アプリの基盤となる全般的環境の信頼性を支える統制",
+    category: "AU 内部統制",
+    recommended: "IT全般統制（ITGC）",
+    reason: "ITGC が不備だと、アプリ内の自動チェック（ITAC）も継続的に信頼できないと判断されます。",
+  },
+  {
+    examId: "au",
+    keyword: "監査対象のデータ全件や母集団を、監査人自身が専用ソフトウェアやスクリプトで自動抽出・突合・分析する監査技法",
+    category: "AU 監査技法",
+    recommended: "CAAT（コンピュータ利用監査技法）",
+    reason: "手作業の試査では見落としがちな大量データの例外取引・権限逸脱を網羅的に検証できます。",
   },
 ];
 
@@ -2614,6 +3162,354 @@ export const ipaPracticeQuestions: IpaQuestion[] = [
     correctIndices: [1],
     explanation: "SPOF（Single Point of Failure）とは、その1箇所が故障するとシステム全体が停止する箇所を指します。構成要素全体を冗長化して SPOF をなくすことが重要です。",
     keywords: ["SPOF", "冗長化", "可用性"],
+  },
+
+  // --- SG (情報セキュリティマネジメント) ---
+  {
+    examId: "sg",
+    id: "sg-q1",
+    domainId: "sg-mgmt",
+    domainLabel: "SG-1: 情報セキュリティ管理・ISMS",
+    difficulty: "基礎",
+    selectCount: 1,
+    question: "情報セキュリティポリシーを構成する「基本方針」「対策基準」「実施手順」のうち、システムごとの具体的な操作方法や設定手順を定めており、原則として社外非公開として現場で維持・更新するものはどれか。",
+    options: ["基本方針", "対策基準", "実施手順", "プライバシーポリシー"],
+    correctIndices: [2],
+    explanation: "実施手順（実施手順書）は特定システムの具体的な設定値や操作手順を含むため、機密保持の観点から対外非公開とし現場責任で適宜更新します。",
+    keywords: ["情報セキュリティポリシー", "実施手順"],
+  },
+  {
+    examId: "sg",
+    id: "sg-q2",
+    domainId: "sg-mgmt",
+    domainLabel: "SG-1: 情報セキュリティ管理・ISMS",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "ISO/IEC 27001（ISMS）に基づくリスクアセスメントの正しい実施順序はどれか。",
+    options: [
+      "リスク対応 → リスク評価 → リスク分析 → リスク特定",
+      "リスク特定 → リスク分析 → リスク評価（その後リスク対応へ）",
+      "リスク評価 → リスク特定 → リスク対応 → リスク分析",
+      "リスク分析 → リスク受容 → リスク特定 → リスク監視",
+    ],
+    correctIndices: [1],
+    explanation: "リスクアセスメントは「リスク特定 → リスク分析 → リスク評価」の3プロセスで構成され、その結果に基づきリスク対応（低減・回避・共有・保有）を行います。",
+    keywords: ["ISMS", "リスクアセスメント"],
+  },
+  {
+    examId: "sg",
+    id: "sg-q3",
+    domainId: "sg-mgmt",
+    domainLabel: "SG-1: 情報セキュリティ管理・ISMS",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "情報システムや機密データの取扱いを外部業者へ委託する際のセキュリティ管理として、最も適切なものはどれか。",
+    options: [
+      "委託先へ業務を移管した時点で自社のセキュリティ管理責任はなくなる",
+      "委託先による再委託の禁止（または事前の書面承認制）や、定期的な監査権を契約に明記する",
+      "契約締結前の委託先セキュリティ体制の確認は不要である",
+      "委託先の担当者に共用アカウントを 1 つ発行して複数名で使い回してもらう",
+    ],
+    correctIndices: [1],
+    explanation: "業務を外部委託しても情報管理の最終責任は委託元にあり、再委託制限・秘密保持・定期監査・個別 ID 管理などの統制が必須です。",
+    keywords: ["委託先管理", "再委託"],
+  },
+  {
+    examId: "sg",
+    id: "sg-q4",
+    domainId: "sg-ops",
+    domainLabel: "SG-2: セキュリティ対策・初動対応",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "経理担当者宛てに取引先の代表者を名乗るメールが届き、「急ぎのため本日中に指定の新口座へ振り込んでほしい」と指示があった。BEC（ビジネスメール詐欺）による被害を防ぐための運用ルールとして最も適切なものはどれか。",
+    options: [
+      "送信元メールアドレスの表示名を確認して問題なければ即座に振り込む",
+      "メールに記載された電話番号へ連絡して本人に確認する",
+      "メール以外の既知の連絡手段（事前に登録された公式電話番号への架電や対面・別チャネル）で真偽を確認する",
+      "メール本文に誤字脱字がなければ正当な依頼と判断する",
+    ],
+    correctIndices: [2],
+    explanation: "メール記載の返信先や電話番号は攻撃者が偽装している可能性があるため、事前に登録済みの別経路（帯域外）で確認する運用が有効です。",
+    keywords: ["BEC", "ビジネスメール詐欺", "帯域外確認"],
+  },
+  {
+    examId: "sg",
+    id: "sg-q5",
+    domainId: "sg-ops",
+    domainLabel: "SG-2: セキュリティ対策・初動対応",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "情報セキュリティマネジメント試験（CBT 方式）の試験構成と合格基準に関する正しい記述はどれか。",
+    options: [
+      "試験時間は 120 分で科目A（48問）と科目B（12問）の計 60 問を一括実施し、総合評価点 600 点以上（1,000点満点）で合格となる",
+      "科目A と科目B は別々の日に受験しなければならない",
+      "総合評価点 500 点以上で合格となる",
+      "科目B はすべて記述式（自由論述）で出題される",
+    ],
+    correctIndices: [0],
+    explanation: "情報セキュリティマネジメント試験は 120 分で科目A（48問）＋科目B（12問）の計 60 問を連続実施（選択式）し、1,000 点満点中 600 点以上で合格です。",
+    keywords: ["情報セキュリティマネジメント", "CBT", "合格基準"],
+  },
+
+  // --- ST (ITストラテジスト) ---
+  {
+    examId: "st",
+    id: "st-q1",
+    domainId: "st-plan",
+    domainLabel: "ST-2: システム化構想・投資評価",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "エンタープライズアーキテクチャ（EA）を構成する 4 つの体系（階層）の組合せとして正しいものはどれか。",
+    options: [
+      "ビジネスアーキテクチャ（BA）・データアーキテクチャ（DA）・アプリケーションアーキテクチャ（AA）・テクノロジアーキテクチャ（TA）",
+      "戦略・戦術・実行・評価",
+      "企画・設計・開発・運用",
+      "機密性・完全性・可用性・真正性",
+    ],
+    correctIndices: [0],
+    explanation: "EA は BA（業務）・DA（データ）・AA（アプリケーション）・TA（テクノロジ）の 4 層で現状（As-Is）と目標（To-Be）を体系化します。",
+    keywords: ["EA", "エンタープライズアーキテクチャ"],
+  },
+  {
+    examId: "st",
+    id: "st-q2",
+    domainId: "st-biz",
+    domainLabel: "ST-1: 経営戦略・DX推進",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "バランススコアカード（BSC）で戦略目標と業績評価指標を設定する際に用いる「4 つの視点」として正しい組合せはどれか。",
+    options: [
+      "財務・顧客・業務プロセス・学習と成長",
+      "製品・価格・流通・プロモーション",
+      "強み・弱み・機会・脅威",
+      "人・モノ・金・情報",
+    ],
+    correctIndices: [0],
+    explanation: "BSC は「財務の視点」「顧客の視点」「業務プロセスの視点」「学習と成長の視点」の 4 視点の因果関係を整理して戦略を実行します。",
+    keywords: ["BSC", "バランススコアカード"],
+  },
+  {
+    examId: "st",
+    id: "st-q3",
+    domainId: "st-plan",
+    domainLabel: "ST-2: システム化構想・投資評価",
+    difficulty: "応用",
+    selectCount: 1,
+    question: "IT 投資評価手法のうち、将来キャッシュフローを割引率で現在価値に換算し、初期投資額を差し引いて評価する手法と、その欠点を補う回収期間法の比較として適切なものはどれか。",
+    options: [
+      "NPV 法は貨幣の時間価値を考慮しないが、回収期間法は時間価値を厳密に考慮する",
+      "NPV 法は貨幣の時間価値とプロジェクト期間全体の収益を考慮できるのに対し、単純回収期間法は回収後のキャッシュフローや時間価値を無視する",
+      "回収期間法では回収期間が長い案件ほど優先して採用する",
+      "IRR（内部収益率）が資本コスト（ハードルレート）より小さい場合に投資を採用する",
+    ],
+    correctIndices: [1],
+    explanation: "NPV 法は時間価値と全期間のキャッシュフローを考慮する優れた指標です。単純回収期間法は資金回収の早さを測るには便利ですが、回収後の収益と時間価値を考慮しません。",
+    keywords: ["NPV", "回収期間法", "IT投資評価"],
+  },
+  {
+    examId: "st",
+    id: "st-q4",
+    domainId: "st-biz",
+    domainLabel: "ST-1: 経営戦略・DX推進",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "マイケル・ポーターの「ファイブフォース分析」において、業界の競争環境と収益性を決定づける 5 つの要因に含まれないものはどれか。",
+    options: [
+      "新規参入者の脅威",
+      "代替品・代替サービスの脅威",
+      "買い手および売り手の交渉力",
+      "社内の情報システム部門の開発工数",
+    ],
+    correctIndices: [3],
+    explanation: "5つの競争要因は「既存競合の敵対関係」「新規参入の脅威」「代替品の脅威」「買い手の交渉力」「売り手の交渉力」の 5 つです。",
+    keywords: ["ファイブフォース分析", "競争戦略"],
+  },
+  {
+    examId: "st",
+    id: "st-q5",
+    domainId: "st-biz",
+    domainLabel: "ST-1: 経営戦略・DX推進",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "デジタルトランスフォーメーション（DX）の推進において、単なる業務の電子化・ペーパーレス化（デジタイゼーション）と区別される DX 本来の目的として最も適切なものはどれか。",
+    options: [
+      "紙帳票を PDF 化してファイルサーバに保存することだけで完了する",
+      "データとデジタル技術を活用してビジネスモデルや業務・組織・企業文化を変革し、競争上の優位性を確立すること",
+      "既存業務プロセスを一切変えずに最新のサーバへ入れ替えること",
+      "情報システム部門だけで完結し、事業部門の関与を排除すること",
+    ],
+    correctIndices: [1],
+    explanation: "DX はデジタル技術を用いて顧客価値・ビジネスモデル・業務プロセス・企業風土を変革し、競争優位を確立することを目的とします。",
+    keywords: ["DX", "ビジネスモデル変革"],
+  },
+
+  // --- ES (エンベデッドシステムスペシャリスト) ---
+  {
+    examId: "es",
+    id: "es-q1",
+    domainId: "es-hw",
+    domainLabel: "ES-1: ハードウェア制御・通信",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "組込み機器内の通信に用いられる I2C バスと SPI バスの比較として、正しいものはどれか。",
+    options: [
+      "I2C は通信に必ず 4 本以上の信号線を必要とし、スレーブ選択にチップセレクト線を使う",
+      "I2C は SDA と SCL の 2 本の信号線でアドレス指定により複数デバイスを接続でき、SPI は一般に MISO/MOSI/SCLK/SS の信号線を用いて高速全二重通信を行う",
+      "SPI は調歩同期式であるためクロック信号線を持たない",
+      "UART は 1 本の信号線で双方向同時通信を行う",
+    ],
+    correctIndices: [1],
+    explanation: "I2C は 2 線式（SDA/SCL）の半二重・アドレス指定通信で省配線に優れ、SPI は全二重・クロック同期・SS 線指定で高速通信に適しています。",
+    keywords: ["I2C", "SPI", "シリアル通信"],
+  },
+  {
+    examId: "es",
+    id: "es-q2",
+    domainId: "es-rtos",
+    domainLabel: "ES-2: RTOS・リアルタイム設計",
+    difficulty: "応用",
+    selectCount: 1,
+    question: "リアルタイム OS（RTOS）において「優先度逆転（Priority Inversion）」が発生する原因と、その代表的な対策の組合せとして適切なものはどれか。",
+    options: [
+      "原因：高優先度タスクが資源を独占する ／ 対策：ラウンドロビンへの切替え",
+      "原因：低優先度タスクが共有資源をロック中に中優先度タスクが CPU を奪い、資源待ちの高優先度タスクが進めなくなる ／ 対策：優先度継承プロトコル",
+      "原因：割込み処理が短すぎる ／ 対策：割込み処理内での長時間スリープ",
+      "原因：DMA 転送の同時実行 ／ 対策：DMA の全面禁止",
+    ],
+    correctIndices: [1],
+    explanation: "共有資源を保持する低優先度タスクの優先度を、待ち状態の高優先度タスクと同じレベルまで一時的に引き上げる「優先度継承プロトコル」等で優先度逆転を防止します。",
+    keywords: ["優先度逆転", "優先度継承プロトコル", "RTOS"],
+  },
+  {
+    examId: "es",
+    id: "es-q3",
+    domainId: "es-hw",
+    domainLabel: "ES-1: ハードウェア制御・通信",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "組込みシステムにおいて、ソフトウェアの無限ループや暴走を検知し、システムを自動的にリセット・初期状態へ復帰させるためのハードウェア機構はどれか。",
+    options: [
+      "DMA コントローラ",
+      "ウォッチドッグタイマ（WDT）",
+      "PWM モジュレータ",
+      "A/D コンバータ",
+    ],
+    correctIndices: [1],
+    explanation: "WDT は正常動作中に周期的にカウントクリア（キック）されるタイマであり、クリアが途絶えてタイムアウトするとシステム異常と判断しリセット信号を出力します。",
+    keywords: ["WDT", "ウォッチドッグタイマ"],
+  },
+  {
+    examId: "es",
+    id: "es-q4",
+    domainId: "es-rtos",
+    domainLabel: "ES-2: RTOS・リアルタイム設計",
+    difficulty: "応用",
+    selectCount: 1,
+    question: "1 つの CPU で 3 つの周期タスクを動作させる。タスク A（実行時間 3 ms, 周期 15 ms）、タスク B（実行時間 4 ms, 周期 20 ms）、タスク C（実行時間 10 ms, 周期 50 ms）の合計 CPU 利用率は何 % か。",
+    options: ["40 %", "50 %", "60 %", "75 %"],
+    correctIndices: [2],
+    explanation: "各タスクの利用率は A: 3/15 = 0.20（20%）、B: 4/20 = 0.20（20%）、C: 10/50 = 0.20（20%）。合計 CPU 利用率は 20% + 20% + 20% = 60% です。",
+    keywords: ["CPU利用率", "リアルタイム設計", "周期タスク"],
+  },
+  {
+    examId: "es",
+    id: "es-q5",
+    domainId: "es-hw",
+    domainLabel: "ES-1: ハードウェア制御・通信",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "ペリフェラル（周辺機器）からメインメモリへ大量のセンサデータを転送する際、CPU が 1 バイトごとに転送処理を行わずにバス制御を委ねて CPU 負荷を軽減する機能はどれか。",
+    options: ["ポーリング", "DMA（ダイレクトメモリアクセス）", "チャタリング", "パイプラインハザード"],
+    correctIndices: [1],
+    explanation: "DMA コントローラが CPU に代わって周辺機器とメモリ間の転送を実行し、転送完了時のみ CPU へ割込み通知することで CPU 負荷を大幅に削減できます。",
+    keywords: ["DMA", "ペリフェラル転送"],
+  },
+
+  // --- AU (システム監査技術者) ---
+  {
+    examId: "au",
+    id: "au-q1",
+    domainId: "au-std",
+    domainLabel: "AU-1: システム監査基準・独立性",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "システム監査における「外観上の独立性」を損なう状況として該当するものはどれか。",
+    options: [
+      "システム監査人が、監査対象部門から独立した監査室に所属している",
+      "システム監査人が、前月まで自身が開発リーダーを務めていた業務システムの本番運用監査を担当する",
+      "システム監査人が、被監査部門の責任者へヒアリングのアポイントを取る",
+      "システム監査人が、監査報告書に改善勧告を記載する",
+    ],
+    correctIndices: [1],
+    explanation: "自身が構築・運用に関与していた対象を直後に監査することは利害・自己点検にあたり、第三者から見て客観性を疑われる「外観上の独立性」の欠如に該当します。",
+    keywords: ["外観上の独立性", "システム監査基準"],
+  },
+  {
+    examId: "au",
+    id: "au-q2",
+    domainId: "au-exec",
+    domainLabel: "AU-2: 監査証拠・監査手続",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "システム監査人が監査実施中に内部統制の重大な不備を発見した場合の行動として、システム監査基準に照らして最も適切なものはどれか。",
+    options: [
+      "被監査部門のシステムへ直接ログインし、権限設定をその場で書き換える",
+      "被監査部門の担当者に対し、直接的な業務命令・懲戒処分を発令する",
+      "客観的な監査証拠を保全・整理した上で、監査報告書等で問題点を指摘し改善勧告（助言）を行う",
+      "被監査部門の負荷を考慮し、報告書には記載せず口頭での注意に留める",
+    ],
+    correctIndices: [2],
+    explanation: "システム監査人は独立性を保つため業務執行権や直接の命令権を持たず、証拠に基づいた客観的な指摘と改善勧告、およびその後のフォローアップを行います。",
+    keywords: ["改善勧告", "独立性", "監査報告"],
+  },
+  {
+    examId: "au",
+    id: "au-q3",
+    domainId: "au-std",
+    domainLabel: "AU-1: システム監査基準・独立性",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "内部統制における IT 全般統制（ITGC）と IT 業務処理統制（ITAC）の関係として正しいものはどれか。",
+    options: [
+      "IT 全般統制は個別業務アプリの画面入力チェックなどを指し、IT 業務処理統制はサーバ室の入退室管理を指す",
+      "プログラム変更管理やアクセス権限管理などの IT 全般統制（ITGC）が有効に機能していない場合、IT 業務処理統制（ITAC）の継続的な信頼性も損なわれる",
+      "IT 業務処理統制が有効であれば IT 全般統制は監査対象から除外してよい",
+      "IT 全般統制は外部監査人のみが評価し、内部監査人は評価できない",
+    ],
+    correctIndices: [1],
+    explanation: "ITGC（開発・変更・アクセス・運用統制）は ITAC（アプリ内の自動統制）が改ざんされず継続的に正しく動くための土台であり、両者を連携して評価します。",
+    keywords: ["ITGC", "ITAC", "内部統制"],
+  },
+  {
+    examId: "au",
+    id: "au-q4",
+    domainId: "au-exec",
+    domainLabel: "AU-2: 監査証拠・監査手続",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "業務プロセスの最初から最後まで 1 件の取引を追跡し、内部統制の仕組み（整備状況）や処理の流れを理解・検証するために用いられる監査技法はどれか。",
+    options: ["ウォークスルー", "ペネトレーションテスト", "負荷テスト", "ブレーンストーミング"],
+    correctIndices: [0],
+    explanation: "ウォークスルーは一連の業務・システム処理の起点から終点までを証跡とともに辿り、統制のデザインが適切に整備されているかを確認する監査技法です。",
+    keywords: ["ウォークスルー", "監査技法"],
+  },
+  {
+    examId: "au",
+    id: "au-q5",
+    domainId: "au-exec",
+    domainLabel: "AU-2: 監査証拠・監査手続",
+    difficulty: "応用",
+    selectCount: 1,
+    question: "システム監査の「フォローアップ」段階における監査人の責務として最も適切なものはどれか。",
+    options: [
+      "監査報告書を提出した時点で監査業務はすべて完了し、その後の確認は行わない",
+      "被監査部門が作成した改善計画の内容の妥当性および改善措置の実施状況を確認・評価する",
+      "監査人自身が被監査部門に代わってシステムの改修プログラムを作成する",
+      "指摘事項が改善されない場合でも、経営者への報告は行わない",
+    ],
+    correctIndices: [1],
+    explanation: "システム監査人は報告・勧告を出して終わりではなく、是正計画の妥当性と改善実施状況をフォローアップ（追跡確認）する責務を負います。",
+    keywords: ["フォローアップ", "是正措置"],
   },
 ];
 

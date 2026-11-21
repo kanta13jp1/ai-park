@@ -291,7 +291,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "🚧 工事中",
-    disclaimer: "【一部工事中】IPA 情報処理技術者試験（IP / FE / AP / SC / DB / NW）統合学習ハブを掲載中。社内の資格取得支援ルール等は決まり次第掲載します。",
+    disclaimer: "【一部工事中】IPA 情報処理技術者試験・情報処理安全確保支援士試験の全13区分統合学習ハブを掲載中。社内の資格取得支援ルール等は決まり次第掲載します。",
     releaseDate: "未定",
     releaseCondition: "社内の資格取得支援・受験補助ルール等の確定",
   },

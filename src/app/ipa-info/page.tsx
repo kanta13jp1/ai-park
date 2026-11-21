@@ -54,6 +54,7 @@ import {
   ipaPracticeQuestions,
   ipaOfficialResources,
   type IpaExamId,
+  type IpaExamTier,
   type IpaDomain,
 } from "@/data/ipa-exam";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
@@ -79,16 +80,26 @@ const DEFAULT_PROGRESS: IpaProgress = {
   topicNotes: {},
   mockExamHistory: {
     ip: [],
+    sg: [],
     fe: [],
     ap: [],
     sc: [],
     db: [],
     nw: [],
+    es: [],
+    st: [],
     sa: [],
     pm: [],
     sm: [],
+    au: [],
   },
 };
+
+const EXAM_TIER_GROUPS: { tier: IpaExamTier; label: string }[] = [
+  { tier: "foundation", label: "基礎・応用（Lv.1〜3）" },
+  { tier: "specialist", label: "高度・専門技術（Lv.4）" },
+  { tier: "management", label: "高度・戦略・設計・管理（Lv.4）" },
+];
 
 const CATEGORY_ICONS: Record<IpaDomain["category"], typeof Cpu> = {
   ストラテジ系: Briefcase,
@@ -177,19 +188,37 @@ function normalizeExamHistoryArray(raw: unknown): CertMockExamRecord[] {
 
 function normalizeMockExamHistory(raw: unknown): Record<IpaExamId, CertMockExamRecord[]> {
   if (!raw || typeof raw !== "object") {
-    return { ip: [], fe: [], ap: [], sc: [], db: [], nw: [], sa: [], pm: [], sm: [] };
+    return {
+      ip: [],
+      sg: [],
+      fe: [],
+      ap: [],
+      sc: [],
+      db: [],
+      nw: [],
+      es: [],
+      st: [],
+      sa: [],
+      pm: [],
+      sm: [],
+      au: [],
+    };
   }
   const obj = raw as Record<string, unknown>;
   return {
     ip: normalizeExamHistoryArray(obj.ip),
+    sg: normalizeExamHistoryArray(obj.sg),
     fe: normalizeExamHistoryArray(obj.fe),
     ap: normalizeExamHistoryArray(obj.ap),
     sc: normalizeExamHistoryArray(obj.sc),
     db: normalizeExamHistoryArray(obj.db),
     nw: normalizeExamHistoryArray(obj.nw),
+    es: normalizeExamHistoryArray(obj.es),
+    st: normalizeExamHistoryArray(obj.st),
     sa: normalizeExamHistoryArray(obj.sa),
     pm: normalizeExamHistoryArray(obj.pm),
     sm: normalizeExamHistoryArray(obj.sm),
+    au: normalizeExamHistoryArray(obj.au),
   };
 }
 
@@ -200,14 +229,18 @@ export default function IpaInfoPage() {
   const [progress, setProgress] = useState<IpaProgress>(DEFAULT_PROGRESS);
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>({
     "ip-strategy": true,
+    "sg-mgmt": true,
     "fe-cs": true,
     "ap-arch": true,
     "sc-sec": true,
     "db-design": true,
     "nw-arch": true,
+    "es-hw": true,
+    "st-biz": true,
     "sa-req": true,
     "pm-plan": true,
     "sm-ops": true,
+    "au-std": true,
   });
   const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
   const [onlyWithNotesTopics, setOnlyWithNotesTopics] = useState<boolean>(false);
@@ -544,78 +577,93 @@ export default function IpaInfoPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="情報処理技術者試験 情報局"
-        subtitle="経産省（IPA）IP・FE・AP・高度試験（SC / DB / NW / SA / PM / SM）統合学習ハブ"
+        subtitle="経産省（IPA）全13区分（IP・SG・FE・AP・高度9区分）統合学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
-          message="現在 IPA 情報処理技術者試験（全9区分：IP / FE / AP / SC / DB / NW / SA / PM / SM）の公式シラバスに基づく統合学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
+          message="現在 IPA 情報処理技術者試験・情報処理安全確保支援士試験の全13区分（IP / SG / FE / AP / SC / DB / NW / ES / ST / SA / PM / SM / AU）の公式シラバスに基づく統合学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
           statusType="construction"
         />
 
-        {/* 試験区分セレクター（統合型スイッチャー） */}
-        <section className="bg-white rounded-2xl border border-slate-200/80 p-3 shadow-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2 px-1">
+        {/* 試験区分セレクター（統合型スイッチャー：3グループ整理） */}
+        <section className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
             <span className="text-xs font-black text-slate-700 flex items-center space-x-1.5">
               <ShieldCheck className="w-4 h-4 text-indigo-600" />
-              <span>学習する試験区分を選択（1ページ内で切り替え）</span>
+              <span>学習する試験区分を選択（全13区分・1ページ内で切り替え）</span>
             </span>
             <span className="text-[11px] text-slate-500">
               各区分の進捗・模試履歴は個別に記録されます
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-            {ipaExamMetas.map((meta) => {
-              const isSelected = meta.id === selectedExam;
-              const examTopics = ipaDomains
-                .filter((d) => d.examId === meta.id)
-                .flatMap((d) => d.topics);
-              const examDoneTopics = examTopics.filter((t) =>
-                progress.completedTopics.includes(t.id)
-              ).length;
-              const examQs = ipaPracticeQuestions.filter((q) => q.examId === meta.id);
-              const examCorrectQs = examQs.filter((q) =>
-                isQuestionCorrect(q, progress.quizAnswers[q.id])
-              ).length;
 
+          <div className="space-y-3.5">
+            {EXAM_TIER_GROUPS.map((group) => {
+              const groupMetas = ipaExamMetas.filter((m) => m.tier === group.tier);
               return (
-                <button
-                  key={meta.id}
-                  type="button"
-                  onClick={() => handleSelectExam(meta.id)}
-                  className={`text-left p-3.5 rounded-xl border transition-all cursor-pointer ${
-                    isSelected
-                      ? "bg-slate-900 text-white border-slate-900 shadow-md"
-                      : "bg-slate-50/70 text-slate-700 border-slate-200 hover:bg-white hover:border-indigo-300"
-                  }`}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-sm font-black">{meta.shortLabel}</span>
-                    <span
-                      className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
-                        isSelected
-                          ? "bg-indigo-500/30 text-indigo-200 border border-indigo-400/40"
-                          : "bg-white text-slate-500 border border-slate-200"
-                      }`}
-                    >
-                      {meta.skillLevel}
-                    </span>
+                <div key={group.tier} className="space-y-1.5">
+                  <div className="text-[11px] font-bold text-slate-500 px-1">
+                    {group.label}
                   </div>
-                  <div
-                    className={`mt-1.5 flex items-center gap-3 text-[11px] font-mono ${
-                      isSelected ? "text-slate-300" : "text-slate-500"
-                    }`}
-                  >
-                    <span>
-                      トピック {examDoneTopics}/{examTopics.length}
-                    </span>
-                    <span>•</span>
-                    <span>
-                      演習 {examCorrectQs}/{examQs.length}
-                    </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+                    {groupMetas.map((meta) => {
+                      const isSelected = meta.id === selectedExam;
+                      const examTopics = ipaDomains
+                        .filter((d) => d.examId === meta.id)
+                        .flatMap((d) => d.topics);
+                      const examDoneTopics = examTopics.filter((t) =>
+                        progress.completedTopics.includes(t.id)
+                      ).length;
+                      const examQs = ipaPracticeQuestions.filter((q) => q.examId === meta.id);
+                      const examCorrectQs = examQs.filter((q) =>
+                        isQuestionCorrect(q, progress.quizAnswers[q.id])
+                      ).length;
+
+                      return (
+                        <button
+                          key={meta.id}
+                          type="button"
+                          onClick={() => handleSelectExam(meta.id)}
+                          className={`text-left p-3 rounded-xl border transition-all cursor-pointer ${
+                            isSelected
+                              ? "bg-slate-900 text-white border-slate-900 shadow-md"
+                              : "bg-slate-50/70 text-slate-700 border-slate-200 hover:bg-white hover:border-indigo-300"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-1.5">
+                            <span className="text-xs sm:text-sm font-black truncate">
+                              {meta.shortLabel}
+                            </span>
+                            <span
+                              className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-full shrink-0 ${
+                                isSelected
+                                  ? "bg-indigo-500/30 text-indigo-200 border border-indigo-400/40"
+                                  : "bg-white text-slate-500 border border-slate-200"
+                              }`}
+                            >
+                              {meta.skillLevel}
+                            </span>
+                          </div>
+                          <div
+                            className={`mt-1 flex items-center gap-2 text-[11px] font-mono ${
+                              isSelected ? "text-slate-300" : "text-slate-500"
+                            }`}
+                          >
+                            <span>
+                              トピック {examDoneTopics}/{examTopics.length}
+                            </span>
+                            <span>•</span>
+                            <span>
+                              演習 {examCorrectQs}/{examQs.length}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
-                </button>
+                </div>
               );
             })}
           </div>
