@@ -7,6 +7,8 @@ import {
   Layers,
   Zap,
   Coins,
+  Cpu,
+  Network,
   CheckCircle2,
   Circle,
   BookOpen,
@@ -37,11 +39,15 @@ import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
 import SpotlightCard from "@/components/SpotlightCard";
 import UnderConstructionAlert from "@/components/UnderConstructionAlert";
-import AwsSaaPracticeQuiz, {
+import CertificationFlashcards from "@/components/certification/CertificationFlashcards";
+import CertificationPracticeQuiz, {
   isQuestionCorrect,
-  type MockExamRecord,
-} from "@/components/aws/AwsSaaPracticeQuiz";
-import AwsSaaFlashcards from "@/components/aws/AwsSaaFlashcards";
+} from "@/components/certification/CertificationPracticeQuiz";
+import type {
+  CertMockExamRecord,
+  CertPassingConfig,
+  CertQuizDomain,
+} from "@/components/certification/types";
 import {
   saaExamFacts,
   saaDomains,
@@ -55,23 +61,92 @@ import {
   saaWellArchitectedPillars,
   resolveAwsServiceQuery,
   type SaaDomain,
+  type SaaExamFact,
+  type SaaComparisonTable,
+  type SaaQuickLookupItem,
+  type SaaQuestion,
+  type SaaOfficialResource,
+  type SaaArchitecturePattern,
+  type SaaPitfall,
+  type SaaLimitFact,
 } from "@/data/aws-saa";
+import {
+  clfExamFacts,
+  clfDomains,
+  clfComparisons,
+  clfQuickLookup,
+  clfPracticeQuestions,
+  clfOfficialResources,
+  clfArchitecturePatterns,
+  clfPitfalls,
+  clfKeyLimits,
+  resolveClfServiceQuery,
+} from "@/data/aws-clf";
+import {
+  sapExamFacts,
+  sapDomains,
+  sapComparisons,
+  sapQuickLookup,
+  sapPracticeQuestions,
+  sapOfficialResources,
+  sapArchitecturePatterns,
+  sapPitfalls,
+  sapKeyLimits,
+  resolveSapServiceQuery,
+} from "@/data/aws-sap";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
+type AwsCertId = "clf" | "saa" | "sap";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
-interface AwsSaaProgress {
+interface AwsCertProgress {
   completedTopics: string[];
   quizAnswers: Record<string, number[]>;
   bookmarkedQuestions: string[];
   masteredCards: string[];
   topicNotes: Record<string, string>;
-  mockExamHistory: MockExamRecord[];
+  mockExamHistory: CertMockExamRecord[];
 }
 
-const STORAGE_KEY = "ai-park-aws-saa-progress-v1";
+interface AwsCertConfig {
+  id: AwsCertId;
+  shortCode: string;
+  switchLabel: string;
+  hudBadgeText: string;
+  headlineLead: string;
+  headlineSuffix: string;
+  description: string;
+  storageKey: string;
+  passingConfig: CertPassingConfig;
+  secondsPerQuestion: number;
+  defaultExpanded: Record<string, boolean>;
+  quizBadgeLabel: string;
+  quickSearchChips: string[];
+  domainShortLabels: Record<string, string>;
+  roadmapSteps: {
+    step1Title: string;
+    step1Desc: string;
+    step2Title: string;
+    step2Desc: string;
+    step4Desc: string;
+  };
+  examDayChecklist: {
+    subtitle: string;
+    tips: { title: string; body: string }[];
+  };
+  examFacts: SaaExamFact[];
+  domains: SaaDomain[];
+  comparisons: SaaComparisonTable[];
+  quickLookup: SaaQuickLookupItem[];
+  practiceQuestions: SaaQuestion[];
+  officialResources: SaaOfficialResource[];
+  architecturePatterns: SaaArchitecturePattern[];
+  pitfalls: SaaPitfall[];
+  keyLimits: SaaLimitFact[];
+  resolveServiceQuery: (serviceName: string) => string;
+}
 
-const DEFAULT_PROGRESS: AwsSaaProgress = {
+const DEFAULT_PROGRESS: AwsCertProgress = {
   completedTopics: [],
   quizAnswers: {},
   bookmarkedQuestions: [],
@@ -80,11 +155,245 @@ const DEFAULT_PROGRESS: AwsSaaProgress = {
   mockExamHistory: [],
 };
 
+const AWS_CERT_CONFIG: Record<AwsCertId, AwsCertConfig> = {
+  clf: {
+    id: "clf",
+    shortCode: "CLF-C02",
+    switchLabel: "Cloud Practitioner (CLF-C02)",
+    hudBadgeText: "AWS CLF-C02 STUDY HUB",
+    headlineLead: "AWS認定クラウドプラクティショナー",
+    headlineSuffix: "- 基礎 合格対策",
+    description:
+      "試験ガイド（CLF-C02）の4つの出題ドメインに沿って、クラウドの基礎概念・責任共有モデル・主要サービスの役割・料金とサポートプランをまとめた入門〜基礎学習ハブです。学習記録はブラウザに自動保存されます。",
+    storageKey: "ai-park-aws-clf-progress-v1",
+    passingConfig: {
+      minScore: 100,
+      maxScore: 1000,
+      passingScore: 700,
+      passingPct: 70,
+      officialExamLabel: "AWS公式模擬試験 (CLF-C02)",
+    },
+    secondsPerQuestion: 90,
+    defaultExpanded: { "clf-domain-1": true },
+    quizBadgeLabel: "CLF-C02 本番形式演習",
+    quickSearchChips: ["EC2", "S3", "IAM", "責任共有モデル", "サポートプラン", "Budgets"],
+    domainShortLabels: {
+      "clf-domain-1": "D1: クラウドコンセプト",
+      "clf-domain-2": "D2: セキュリティ",
+      "clf-domain-3": "D3: テクノロジー・サービス",
+      "clf-domain-4": "D4: 請求・料金・サポート",
+    },
+    roadmapSteps: {
+      step1Title: "クラウド概念と責任共有モデル",
+      step1Desc:
+        "AWS クラウド採用のメリット、グローバルインフラ（リージョン / AZ）、AWS と顧客の責任境界を整理する。",
+      step2Title: "主要サービスと料金体系の整理",
+      step2Desc:
+        "本ページの「4ドメイン攻略」と「頻出比較表」を使い、EC2 / Lambda / S3 / RDS やサポートプラン4種の違いを押さえる。",
+      step4Desc:
+        "90分で65問（1問約1.4分）のペース配分を確認し、苦手ドメインを重点復習して本番（合格ライン 700点）に臨む。",
+    },
+    examDayChecklist: {
+      subtitle:
+        "CLF-C02 は90分で65問を出題します。基礎用語の正確な区別と責任共有モデル・料金管理の整理が合格（700点）の鍵です。",
+      tips: [
+        {
+          title: "1問約1.4分ペース（65問で90分）",
+          body: "30問経過時点で残り45分前後が目安。迷う問題はフラグ（見直しマーク）を付けて仮選択し、一通り解き終えてから見直すのが確実です。",
+        },
+        {
+          title: "非採点問題（15問）に動揺しない",
+          body: "65問のうち15問は採点対象外の試験的設問です。見慣れないサービス名や設問が出ても動揺せず、基本問題で着実に得点（700点以上）を狙います。",
+        },
+        {
+          title: "責任共有モデルとサポートプランを即答",
+          body: "「AWS の責任か顧客の責任か」「どのサポートプランから TAM や全項目 Trusted Advisor が付くか」は頻出のため、瞬時に判断できるように整理しておきます。",
+        },
+        {
+          title: "ピアソンVUE 受験準備（オンライン/会場）",
+          body: "オンライン受験（OnVUE）の場合は事前のシステムテストと静かな個室・本人確認書類が必須。英語試験から切り替える場合、AWS認定ポータルで事前申請すると試験時間+30分延長（ESL）が利用可能です。",
+        },
+      ],
+    },
+    examFacts: clfExamFacts,
+    domains: clfDomains,
+    comparisons: clfComparisons,
+    quickLookup: clfQuickLookup,
+    practiceQuestions: clfPracticeQuestions,
+    officialResources: clfOfficialResources,
+    architecturePatterns: clfArchitecturePatterns,
+    pitfalls: clfPitfalls,
+    keyLimits: clfKeyLimits,
+    resolveServiceQuery: resolveClfServiceQuery,
+  },
+  saa: {
+    id: "saa",
+    shortCode: "SAA-C03",
+    switchLabel: "Solutions Architect Associate (SAA-C03)",
+    hudBadgeText: "AWS SAA-C03 STUDY HUB",
+    headlineLead: "AWS認定ソリューションアーキテクト",
+    headlineSuffix: "- アソシエイト 合格対策",
+    description:
+      "試験ガイド（SAA-C03）の4つの出題ドメインに沿って、頻出サービスの選定基準・フラッシュカード暗記・択一＆複数選択の実践問題をまとめた学習サイトです。学習記録はブラウザに自動保存されます。",
+    storageKey: "ai-park-aws-saa-progress-v1",
+    passingConfig: {
+      minScore: 100,
+      maxScore: 1000,
+      passingScore: 720,
+      passingPct: 72,
+      officialExamLabel: "AWS公式模擬試験 (SAA-C03)",
+    },
+    secondsPerQuestion: 120,
+    defaultExpanded: {
+      "domain-1": true,
+      "domain-2": true,
+      "domain-3": false,
+      "domain-4": false,
+    },
+    quizBadgeLabel: "SAA-C03 本番形式演習",
+    quickSearchChips: ["S3", "VPC", "RDS", "Lambda", "IAM", "SQS", "CloudFront"],
+    domainShortLabels: {
+      "domain-1": "D1: セキュリティ",
+      "domain-2": "D2: 弾力性",
+      "domain-3": "D3: 高パフォーマンス",
+      "domain-4": "D4: コスト最適化",
+    },
+    roadmapSteps: {
+      step1Title: "全体像とネットワーク基礎",
+      step1Desc:
+        "VPC（サブネット、ルートテーブル、IGW/NAT、SG/NACL）と IAM の仕組みを図解で理解する。",
+      step2Title: "コアサービスの使い分け",
+      step2Desc:
+        "本ページの「4ドメイン攻略」と「頻出比較表」を使い、EBS/EFS/S3 や ALB/NLB、SQS/SNS の違いを整理する。",
+      step4Desc:
+        "130分で65問（1問約2分）のペース配分を確認し、苦手ドメインを重点復習して本番に臨む。",
+    },
+    examDayChecklist: {
+      subtitle:
+        "SAA-C03 は長文シナリオが多いため、技術知識に加えて時間配分と迷ったときの戦略が合否を分けます。",
+      tips: [
+        {
+          title: "1問2分ペース（65問で130分）",
+          body: "30問経過時点で残り70分前後が目安。長考しそうな問題は「フラグ（見直しマーク）」を付けて仮選択し、最後まで走り切ってから戻るのが鉄則です。",
+        },
+        {
+          title: "非採点問題（15問）に動揺しない",
+          body: "65問のうち15問は採点対象外のパイロット問題です。見慣れない新サービスや難問が出ても「非採点問題かもしれない」と割り切ってリズムを崩さないことが大切です。",
+        },
+        {
+          title: "要件のキーワードを先に拾う",
+          body: "問題文末尾の「最もコスト効率が高い」「運用負荷を最小限に」「最もセキュアに」を先に読み、Well-Architected のどの柱が問われているかを特定します。",
+        },
+        {
+          title: "ピアソンVUE 受験準備（オンライン/会場）",
+          body: "オンライン受験（OnVUE）の場合は事前のシステムテストと静かな個室・本人確認書類が必須。英語試験から切り替える場合、AWS認定ポータルで事前申請すると試験時間+30分延長（ESL）が利用可能です。",
+        },
+      ],
+    },
+    examFacts: saaExamFacts,
+    domains: saaDomains,
+    comparisons: saaComparisons,
+    quickLookup: saaQuickLookup,
+    practiceQuestions: saaPracticeQuestions,
+    officialResources: saaOfficialResources,
+    architecturePatterns: saaArchitecturePatterns,
+    pitfalls: saaPitfalls,
+    keyLimits: saaKeyLimits,
+    resolveServiceQuery: resolveAwsServiceQuery,
+  },
+  sap: {
+    id: "sap",
+    shortCode: "SAP-C02",
+    switchLabel: "Solutions Architect Professional (SAP-C02)",
+    hudBadgeText: "AWS SAP-C02 STUDY HUB",
+    headlineLead: "AWS認定ソリューションアーキテクト",
+    headlineSuffix: "- プロフェッショナル 合格対策",
+    description:
+      "試験ガイド（SAP-C02）の4つの出題ドメインに沿って、マルチアカウント統制・ハイブリッドネットワーク・大規模移行・モダナイゼーションの実践設計力を鍛える上級学習ハブです。学習記録はブラウザに自動保存されます。",
+    storageKey: "ai-park-aws-sap-progress-v1",
+    passingConfig: {
+      minScore: 100,
+      maxScore: 1000,
+      passingScore: 750,
+      passingPct: 75,
+      officialExamLabel: "AWS公式模擬試験 (SAP-C02)",
+    },
+    secondsPerQuestion: 140,
+    defaultExpanded: { "sap-domain-1": true },
+    quizBadgeLabel: "SAP-C02 本番形式演習",
+    quickSearchChips: [
+      "Organizations",
+      "Transit Gateway",
+      "Direct Connect",
+      "Control Tower",
+      "DMS",
+      "MGN",
+      "CodeDeploy",
+    ],
+    domainShortLabels: {
+      "sap-domain-1": "D1: 複雑な組織",
+      "sap-domain-2": "D2: 新規設計",
+      "sap-domain-3": "D3: 継続的改善",
+      "sap-domain-4": "D4: 移行・モダナイズ",
+    },
+    roadmapSteps: {
+      step1Title: "マルチアカウント統制と接続設計",
+      step1Desc:
+        "AWS Organizations / Control Tower / SCP と Transit Gateway・Direct Connect を軸にしたエンタープライズ基盤を理解する。",
+      step2Title: "複合要件の設計トレードオフ",
+      step2Desc:
+        "本ページの「4ドメイン攻略」と「頻出比較表」を使い、大規模移行（MGN / DMS）やマルチリージョン構成を比較整理する。",
+      step4Desc:
+        "180分で75問（1問約2.4分）の長文読解ペースを確認し、苦手ドメインを重点復習して本番（合格ライン 750点）に臨む。",
+    },
+    examDayChecklist: {
+      subtitle:
+        "SAP-C02 は長文の複合シナリオが75問・180分続く上級試験です。要件と制約を素早く構造化する読解戦略が合格（750点）の鍵になります。",
+      tips: [
+        {
+          title: "1問約2.4分ペース（75問で180分）",
+          body: "25問あたり60分（1時間）が基準ペース。長文に時間を奪われすぎないよう、フラグ機能を使って2分半を超えそうな問題は仮回答で次へ進みます。",
+        },
+        {
+          title: "非採点問題（10問）に動揺しない",
+          body: "75問のうち10問は採点対象外の試験的設問です。高度なニッチ機能が出ても焦らず、65問の採点問題で750点ラインの達成を目指します。",
+        },
+        {
+          title: "要件と制約の「除外条件」から絞る",
+          body: "SAP-C02 の選択肢はどれも技術的に実現可能なものが並びます。「ダウンタイム最小」「コード変更不可」「運用負荷最小」などの制約条件に反する選択肢を消去法で落とすのが効果的です。",
+        },
+        {
+          title: "ピアソンVUE 受験準備と ESL +30分申請",
+          body: "3時間の長丁場となるため集中力の維持が重要です。英語以外の母語受験者は AWS認定ポータルで事前申請することで試験時間 +30分延長（ESL）を利用できます（予約前申請推奨）。",
+        },
+      ],
+    },
+    examFacts: sapExamFacts,
+    domains: sapDomains,
+    comparisons: sapComparisons,
+    quickLookup: sapQuickLookup,
+    practiceQuestions: sapPracticeQuestions,
+    officialResources: sapOfficialResources,
+    architecturePatterns: sapArchitecturePatterns,
+    pitfalls: sapPitfalls,
+    keyLimits: sapKeyLimits,
+    resolveServiceQuery: resolveSapServiceQuery,
+  },
+};
+
 const DOMAIN_ICONS: Record<string, typeof ShieldCheck> = {
+  "clf-domain-1": Cloud,
+  "clf-domain-2": ShieldCheck,
+  "clf-domain-3": Cpu,
+  "clf-domain-4": Coins,
   "domain-1": ShieldCheck,
   "domain-2": Layers,
   "domain-3": Zap,
   "domain-4": Coins,
+  "sap-domain-1": Network,
+  "sap-domain-2": Layers,
+  "sap-domain-3": Gauge,
+  "sap-domain-4": Zap,
 };
 
 const ACCENT_STYLES: Record<
@@ -117,17 +426,6 @@ const ACCENT_STYLES: Record<
   },
 };
 
-const COMPARISON_CATEGORIES = [
-  "すべて",
-  "セキュリティ",
-  "ネットワーク",
-  "コンピュート",
-  "非同期・連携",
-  "ストレージ",
-  "データベース",
-  "コスト最適化",
-] as const;
-
 function normalizeQuizAnswers(raw: unknown): Record<string, number[]> {
   if (!raw || typeof raw !== "object") return {};
   const result: Record<string, number[]> = {};
@@ -154,31 +452,54 @@ function normalizeStringRecord(raw: unknown): Record<string, string> {
   return result;
 }
 
-function normalizeMockExamHistory(raw: unknown): MockExamRecord[] {
+function normalizeMockExamHistory(raw: unknown): CertMockExamRecord[] {
   if (!Array.isArray(raw)) return [];
   return raw
     .filter(
-      (item): item is MockExamRecord =>
+      (item): item is CertMockExamRecord =>
         Boolean(item) &&
         typeof item === "object" &&
-        typeof (item as MockExamRecord).date === "string" &&
-        typeof (item as MockExamRecord).correct === "number" &&
-        typeof (item as MockExamRecord).total === "number" &&
-        typeof (item as MockExamRecord).scaledScore === "number"
+        typeof (item as CertMockExamRecord).date === "string" &&
+        typeof (item as CertMockExamRecord).correct === "number" &&
+        typeof (item as CertMockExamRecord).total === "number" &&
+        typeof (item as CertMockExamRecord).scaledScore === "number"
     )
     .slice(0, 5);
 }
 
+function loadAwsProgress(storageKey: string): AwsCertProgress {
+  if (typeof window === "undefined") return DEFAULT_PROGRESS;
+  try {
+    const raw = window.localStorage.getItem(storageKey);
+    if (!raw) return DEFAULT_PROGRESS;
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    return {
+      completedTopics: normalizeStringArray(parsed.completedTopics),
+      quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
+      bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
+      masteredCards: normalizeStringArray(parsed.masteredCards),
+      topicNotes: normalizeStringRecord(parsed.topicNotes),
+      mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
+    };
+  } catch {
+    return DEFAULT_PROGRESS;
+  }
+}
+
 export default function AwsInfoPage() {
+  const [activeCertId, setActiveCertId] = useState<AwsCertId>("saa");
+  const activeCert = AWS_CERT_CONFIG[activeCertId];
+
   const [activeTab, setActiveTab] = useState<TabId>("domains");
   const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
-  const [progress, setProgress] = useState<AwsSaaProgress>(DEFAULT_PROGRESS);
-  const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>({
-    "domain-1": true,
-    "domain-2": true,
-    "domain-3": false,
-    "domain-4": false,
+  const [progressByCert, setProgressByCert] = useState<Record<AwsCertId, AwsCertProgress>>({
+    clf: DEFAULT_PROGRESS,
+    saa: DEFAULT_PROGRESS,
+    sap: DEFAULT_PROGRESS,
   });
+  const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(
+    AWS_CERT_CONFIG.saa.defaultExpanded
+  );
   const [onlyIncompleteTopics, setOnlyIncompleteTopics] = useState<boolean>(false);
   const [onlyWithNotesTopics, setOnlyWithNotesTopics] = useState<boolean>(false);
   const [topicQuery, setTopicQuery] = useState<string>("");
@@ -193,32 +514,44 @@ export default function AwsInfoPage() {
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Record<string, unknown>;
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setProgress({
-          completedTopics: normalizeStringArray(parsed.completedTopics),
-          quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
-          bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
-          masteredCards: normalizeStringArray(parsed.masteredCards),
-          topicNotes: normalizeStringRecord(parsed.topicNotes),
-          mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
-        });
-      }
-    } catch {
-      // localStorage 読み取り失敗時は初期状態のまま
-    }
+    queueMicrotask(() => {
+      setProgressByCert({
+        clf: loadAwsProgress(AWS_CERT_CONFIG.clf.storageKey),
+        saa: loadAwsProgress(AWS_CERT_CONFIG.saa.storageKey),
+        sap: loadAwsProgress(AWS_CERT_CONFIG.sap.storageKey),
+      });
+    });
   }, []);
 
-  const saveProgress = (next: AwsSaaProgress) => {
-    setProgress(next);
+  const progress = progressByCert[activeCertId];
+
+  const saveProgress = (next: AwsCertProgress) => {
+    setProgressByCert((prev) => ({ ...prev, [activeCertId]: next }));
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      window.localStorage.setItem(activeCert.storageKey, JSON.stringify(next));
     } catch {
       // ignore storage quota errors
     }
+  };
+
+  const handleSwitchCert = (nextCert: AwsCertId) => {
+    if (nextCert === activeCertId) return;
+    playCyberClick();
+    setActiveCertId(nextCert);
+    setExpandedDomains(AWS_CERT_CONFIG[nextCert].defaultExpanded);
+    setOnlyIncompleteTopics(false);
+    setOnlyWithNotesTopics(false);
+    setTopicQuery("");
+    setOpenNoteTopics({});
+    setCompCategory("すべて");
+    setCompQuery("");
+    setQuizDomainTarget("all");
+    setConfirmReset(false);
+    setShowBackupPanel(false);
+    setBackupInput("");
+    setCopiedBackup(false);
+    setCopiedNotes(false);
+    setImportMessage(null);
   };
 
   const toggleTopic = (topicId: string) => {
@@ -275,7 +608,7 @@ export default function AwsInfoPage() {
   const handleExpandAllDomains = (expand: boolean) => {
     playCyberClick();
     const next: Record<string, boolean> = {};
-    for (const d of saaDomains) {
+    for (const d of activeCert.domains) {
       next[d.id] = expand;
     }
     setExpandedDomains(next);
@@ -291,7 +624,7 @@ export default function AwsInfoPage() {
   const handleJumpToServiceComparison = (serviceName: string) => {
     playCyberClick();
     setCompCategory("すべて");
-    setCompQuery(resolveAwsServiceQuery(serviceName));
+    setCompQuery(activeCert.resolveServiceQuery(serviceName));
     setActiveTab("comparisons");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -303,7 +636,7 @@ export default function AwsInfoPage() {
     });
   };
 
-  const handleRecordMockExam = (record: MockExamRecord) => {
+  const handleRecordMockExam = (record: CertMockExamRecord) => {
     saveProgress({
       ...progress,
       mockExamHistory: [record, ...progress.mockExamHistory].slice(0, 5),
@@ -328,8 +661,8 @@ export default function AwsInfoPage() {
 
   const handleCopyNotesMarkdown = async () => {
     playCyberClick();
-    const lines: string[] = ["# AWS SAA-C03 マイメモ", ""];
-    for (const d of saaDomains) {
+    const lines: string[] = [`# AWS ${activeCert.shortCode} マイメモ`, ""];
+    for (const d of activeCert.domains) {
       const domainLines: string[] = [];
       for (const t of d.topics) {
         const note = progress.topicNotes[t.id]?.trim();
@@ -363,31 +696,62 @@ export default function AwsInfoPage() {
         mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
       });
       setBackupInput("");
-      setImportMessage("学習進捗を復元しました。");
+      setImportMessage(`${activeCert.shortCode} の学習進捗を復元しました。`);
       setTimeout(() => setImportMessage(null), 3000);
     } catch {
-      setImportMessage("JSON の形式が正しくありません。コピーした文字列をそのまま貼り付けてください。");
+      setImportMessage("JSON の形式が正しくありません。コピーしたバックアップ文字列をそのまま貼り付けてください。");
     }
   };
 
   const totalTopics = useMemo(
-    () => saaDomains.reduce((sum, d) => sum + d.topics.length, 0),
-    []
+    () => activeCert.domains.reduce((sum, d) => sum + d.topics.length, 0),
+    [activeCert.domains]
   );
-  const doneTopicsCount = progress.completedTopics.length;
+  const doneTopicsCount = useMemo(
+    () =>
+      activeCert.domains.reduce(
+        (sum, d) =>
+          sum + d.topics.filter((t) => progress.completedTopics.includes(t.id)).length,
+        0
+      ),
+    [activeCert.domains, progress.completedTopics]
+  );
   const topicPct = totalTopics > 0 ? Math.round((doneTopicsCount / totalTopics) * 100) : 0;
 
+  const cardPct =
+    activeCert.quickLookup.length > 0
+      ? Math.round((progress.masteredCards.length / activeCert.quickLookup.length) * 100)
+      : 0;
+
   const answeredCount = Object.keys(progress.quizAnswers).length;
-  const correctCount = saaPracticeQuestions.filter((q) =>
+  const correctCount = activeCert.practiceQuestions.filter((q) =>
     isQuestionCorrect(q, progress.quizAnswers[q.id])
   ).length;
   const quizPct =
-    answeredCount > 0 ? Math.round((correctCount / saaPracticeQuestions.length) * 100) : 0;
+    answeredCount > 0 && activeCert.practiceQuestions.length > 0
+      ? Math.round((correctCount / activeCert.practiceQuestions.length) * 100)
+      : 0;
+
+  const quizDomains = useMemo<CertQuizDomain[]>(
+    () =>
+      activeCert.domains.map((d) => ({
+        id: d.id,
+        number: d.number,
+        shortLabel: `Domain ${d.number}`,
+        filterLabel: activeCert.domainShortLabels[d.id] ?? `D${d.number}: ${d.title}`,
+      })),
+    [activeCert]
+  );
+
+  const comparisonCategories = useMemo(
+    () => ["すべて", ...Array.from(new Set(activeCert.comparisons.map((c) => c.category)))],
+    [activeCert.comparisons]
+  );
 
   const normalizedCompQuery = compQuery.trim().toLowerCase();
 
   const filteredComparisons = useMemo(() => {
-    return saaComparisons.filter((c) => {
+    return activeCert.comparisons.filter((c) => {
       if (compCategory !== "すべて" && c.category !== compCategory) return false;
       if (!normalizedCompQuery) return true;
       const haystack = [
@@ -400,34 +764,43 @@ export default function AwsInfoPage() {
         .toLowerCase();
       return haystack.includes(normalizedCompQuery);
     });
-  }, [compCategory, normalizedCompQuery]);
+  }, [activeCert.comparisons, compCategory, normalizedCompQuery]);
 
   const filteredQuickLookup = useMemo(() => {
-    if (!normalizedCompQuery) return saaQuickLookup;
-    return saaQuickLookup.filter((item) =>
+    if (!normalizedCompQuery) return activeCert.quickLookup;
+    return activeCert.quickLookup.filter((item) =>
       `${item.keyword} ${item.category} ${item.recommended} ${item.reason}`
         .toLowerCase()
         .includes(normalizedCompQuery)
     );
-  }, [normalizedCompQuery]);
+  }, [activeCert.quickLookup, normalizedCompQuery]);
 
   const filteredPitfalls = useMemo(() => {
-    if (!normalizedCompQuery) return saaPitfalls;
-    return saaPitfalls.filter((p) =>
+    if (!normalizedCompQuery) return activeCert.pitfalls;
+    return activeCert.pitfalls.filter((p) =>
       `${p.trap} ${p.whyWrong} ${p.correctApproach}`.toLowerCase().includes(normalizedCompQuery)
     );
-  }, [normalizedCompQuery]);
+  }, [activeCert.pitfalls, normalizedCompQuery]);
 
   const filteredKeyLimits = useMemo(() => {
-    if (!normalizedCompQuery) return saaKeyLimits;
-    return saaKeyLimits.filter((l) =>
+    if (!normalizedCompQuery) return activeCert.keyLimits;
+    return activeCert.keyLimits.filter((l) =>
       `${l.service} ${l.limitValue} ${l.detail}`.toLowerCase().includes(normalizedCompQuery)
     );
-  }, [normalizedCompQuery]);
+  }, [activeCert.keyLimits, normalizedCompQuery]);
+
+  const topTwoDomainsSummary = useMemo(() => {
+    const sorted = [...activeCert.domains].sort((a, b) => b.weight - a.weight);
+    if (sorted.length < 2) return "";
+    const [first, second] = sorted;
+    return `Domain ${first.number}（${first.weight}%）と Domain ${second.number}（${second.weight}%）で合計 ${
+      first.weight + second.weight
+    }% を占めます`;
+  }, [activeCert.domains]);
 
   // 進捗に応じた次のおすすめアクション
   const nextRecommendation = useMemo(() => {
-    const nextDomain = saaDomains.find((d) =>
+    const nextDomain = activeCert.domains.find((d) =>
       d.topics.some((t) => !progress.completedTopics.includes(t.id))
     );
     if (doneTopicsCount < totalTopics && nextDomain) {
@@ -441,10 +814,10 @@ export default function AwsInfoPage() {
         },
       };
     }
-    if (progress.masteredCards.length < saaQuickLookup.length) {
+    if (progress.masteredCards.length < activeCert.quickLookup.length) {
       return {
         label: `全トピック完了！次はフラッシュカードで即答力を鍛えましょう（残り ${
-          saaQuickLookup.length - progress.masteredCards.length
+          activeCert.quickLookup.length - progress.masteredCards.length
         } 枚）`,
         actionLabel: "フラッシュカードへ",
         onClick: () => {
@@ -453,10 +826,10 @@ export default function AwsInfoPage() {
         },
       };
     }
-    if (answeredCount < saaPracticeQuestions.length) {
+    if (answeredCount < activeCert.practiceQuestions.length) {
       return {
         label: `演習クイズ・模擬試験モードで実力を試しましょう（残り ${
-          saaPracticeQuestions.length - answeredCount
+          activeCert.practiceQuestions.length - answeredCount
         } 問）`,
         actionLabel: "実践演習へ",
         onClick: () => {
@@ -465,47 +838,103 @@ export default function AwsInfoPage() {
         },
       };
     }
+    const mockExamMinutes = Math.round(
+      (activeCert.practiceQuestions.length * activeCert.secondsPerQuestion) / 60
+    );
     return {
-      label: `全カリキュラム完了！模擬試験モード（${saaPracticeQuestions.length * 2}分制限）や不正解の復習で仕上げましょう。`,
+      label: `全カリキュラム完了！模擬試験モード（${mockExamMinutes}分制限）や不正解の復習で仕上げましょう。`,
       actionLabel: "模擬試験に挑戦",
       onClick: () => {
         playCyberClick();
         setActiveTab("quiz");
       },
     };
-  }, [doneTopicsCount, totalTopics, progress.completedTopics, progress.masteredCards.length, answeredCount]);
+  }, [
+    activeCert.domains,
+    activeCert.quickLookup.length,
+    activeCert.practiceQuestions.length,
+    activeCert.secondsPerQuestion,
+    doneTopicsCount,
+    totalTopics,
+    progress.completedTopics,
+    progress.masteredCards.length,
+    answeredCount,
+  ]);
 
   const normalizedTopicQuery = topicQuery.trim().toLowerCase();
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
-    { id: "domains", label: "4ドメイン攻略", icon: BookOpen, badge: `${doneTopicsCount}/${totalTopics}` },
-    { id: "comparisons", label: "頻出比較 & 逆引き", icon: TableProperties, badge: `${saaComparisons.length}` },
+    {
+      id: "domains",
+      label: `${activeCert.domains.length}ドメイン攻略`,
+      icon: BookOpen,
+      badge: `${doneTopicsCount}/${totalTopics}`,
+    },
+    {
+      id: "comparisons",
+      label: "頻出比較 & 逆引き",
+      icon: TableProperties,
+      badge: `${activeCert.comparisons.length}`,
+    },
     {
       id: "flashcards",
       label: "フラッシュカード",
       icon: Layers2,
-      badge: `${progress.masteredCards.length}/${saaQuickLookup.length}`,
+      badge: `${progress.masteredCards.length}/${activeCert.quickLookup.length}`,
     },
     {
       id: "quiz",
       label: "実践演習クイズ",
       icon: HelpCircle,
-      badge: `${correctCount}/${saaPracticeQuestions.length}`,
+      badge: `${correctCount}/${activeCert.practiceQuestions.length}`,
     },
     { id: "resources", label: "学習ロードマップ", icon: Compass },
   ];
 
-  const allExpanded = saaDomains.every((d) => expandedDomains[d.id]);
+  const allExpanded = activeCert.domains.every((d) => expandedDomains[d.id]);
+  const firstDomainTopics = activeCert.domains[0]?.topics.slice(0, 2) ?? [];
+  const step1Done =
+    firstDomainTopics.length > 0 &&
+    firstDomainTopics.every((t) => progress.completedTopics.includes(t.id));
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="AWS・クラウド情報局"
-        subtitle="AWS認定ソリューションアーキテクト [アソシエイト] (SAA-C03) 合格学習ハブ"
+        subtitle="AWS認定 CLF-C02 / SAA-C03 / SAP-C02 統合学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* SAA-C03 学習ステータス HUD バナー */}
+        {/* 資格レベル切り替え（CLF-C02 / SAA-C03 / SAP-C02） */}
+        <section className="flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl border border-slate-200/80 p-3 shadow-xs">
+          <div className="flex items-center space-x-2 px-2">
+            <Cloud size={16} className="text-indigo-600" />
+            <span className="text-xs sm:text-sm font-black text-slate-800">学習資格選択</span>
+          </div>
+          <div className="inline-flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
+            {(["clf", "saa", "sap"] as const).map((id) => {
+              const item = AWS_CERT_CONFIG[id];
+              const active = activeCertId === id;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => handleSwitchCert(id)}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition-all cursor-pointer whitespace-nowrap ${
+                    active
+                      ? "bg-slate-900 text-white shadow-sm"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
+                  }`}
+                >
+                  {item.switchLabel}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* 学習ステータス HUD バナー */}
         <TiltCard maxTilt={2} glareOpacity={0.05} className="rounded-3xl">
           <div
             onMouseEnter={() => playCyberHover()}
@@ -517,18 +946,20 @@ export default function AwsInfoPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center space-x-1.5 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 tracking-wider">
                     <Cloud size={12} />
-                    <span>AWS SAA-C03 STUDY HUB</span>
+                    <span>{activeCert.hudBadgeText}</span>
                   </span>
                   <span className="text-xs text-slate-300">
-                    {totalTopics} トピック ・ 比較表 {saaComparisons.length} 種 ・ カード {saaQuickLookup.length} 枚 ・ 演習 {saaPracticeQuestions.length} 問
+                    {totalTopics} トピック ・ 比較表 {activeCert.comparisons.length} 種 ・ カード{" "}
+                    {activeCert.quickLookup.length} 枚 ・ 演習 {activeCert.practiceQuestions.length}{" "}
+                    問
                   </span>
                 </div>
                 <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-keep">
-                  <span className="inline-block">AWS認定ソリューションアーキテクト</span>{" "}
-                  <span className="inline-block">- アソシエイト 合格対策</span>
+                  <span className="inline-block">{activeCert.headlineLead}</span>{" "}
+                  <span className="inline-block">{activeCert.headlineSuffix}</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                  試験ガイド（SAA-C03）の4つの出題ドメインに沿って、頻出サービスの選定基準・フラッシュカード暗記・択一＆複数選択の実践問題をまとめた学習サイトです。学習記録はブラウザに自動保存されます。
+                  {activeCert.description}
                 </p>
               </div>
 
@@ -536,7 +967,9 @@ export default function AwsInfoPage() {
               <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:min-w-[360px]">
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
-                  <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
+                  <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">
+                    {topicPct}%
+                  </div>
                   <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
                     <div
                       className="h-full bg-cyan-400 transition-all duration-500"
@@ -551,24 +984,24 @@ export default function AwsInfoPage() {
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">カード暗記</div>
                   <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
-                    {Math.round((progress.masteredCards.length / saaQuickLookup.length) * 100)}%
+                    {cardPct}%
                   </div>
                   <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
                     <div
                       className="h-full bg-amber-400 transition-all duration-500"
-                      style={{
-                        width: `${Math.round((progress.masteredCards.length / saaQuickLookup.length) * 100)}%`,
-                      }}
+                      style={{ width: `${cardPct}%` }}
                     />
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    {progress.masteredCards.length} / {saaQuickLookup.length} 枚
+                    {progress.masteredCards.length} / {activeCert.quickLookup.length} 枚
                   </div>
                 </div>
 
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
                   <div className="text-[11px] text-slate-400 font-semibold">演習正答率</div>
-                  <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">{quizPct}%</div>
+                  <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
+                    {quizPct}%
+                  </div>
                   <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden">
                     <div
                       className="h-full bg-emerald-400 transition-all duration-500"
@@ -576,7 +1009,7 @@ export default function AwsInfoPage() {
                     />
                   </div>
                   <div className="text-[10px] text-slate-400">
-                    {correctCount} / {saaPracticeQuestions.length} 問正解
+                    {correctCount} / {activeCert.practiceQuestions.length} 問正解
                   </div>
                 </div>
               </div>
@@ -649,7 +1082,11 @@ export default function AwsInfoPage() {
             }`}
           >
             <RotateCcw size={12} />
-            <span>{confirmReset ? "もう一度押すと全進捗をリセット" : "全進捗リセット"}</span>
+            <span>
+              {confirmReset
+                ? `もう一度押すと ${activeCert.shortCode} 進捗をリセット`
+                : "全進捗リセット"}
+            </span>
           </button>
         </div>
 
@@ -661,11 +1098,11 @@ export default function AwsInfoPage() {
               <div className="flex items-center justify-between">
                 <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
                   <Award size={18} className="text-indigo-600" />
-                  <span>SAA-C03 試験スペック（AWS公式ガイド準拠）</span>
+                  <span>{activeCert.shortCode} 試験スペック（AWS公式ガイド準拠）</span>
                 </h3>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                {saaExamFacts.map((fact) => (
+                {activeCert.examFacts.map((fact) => (
                   <div
                     key={fact.label}
                     className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1"
@@ -680,34 +1117,34 @@ export default function AwsInfoPage() {
               {/* 出題ドメイン配分バランスバー */}
               <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-2.5">
                 <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                  <span className="font-bold text-slate-700">出題ドメイン配分ウェイト（合計 100%）</span>
-                  <span className="text-[11px] text-slate-400">
-                    Domain 1（30%）と Domain 2（26%）で過半数を占めます
+                  <span className="font-bold text-slate-700">
+                    出題ドメイン配分ウェイト（合計 100%）
                   </span>
+                  {topTwoDomainsSummary && (
+                    <span className="text-[11px] text-slate-400">{topTwoDomainsSummary}</span>
+                  )}
                 </div>
                 <div className="w-full h-3 rounded-full overflow-hidden flex bg-slate-100">
-                  <div className="bg-indigo-500 h-full" style={{ width: "30%" }} title="Domain 1: 30%" />
-                  <div className="bg-emerald-500 h-full" style={{ width: "26%" }} title="Domain 2: 26%" />
-                  <div className="bg-amber-500 h-full" style={{ width: "24%" }} title="Domain 3: 24%" />
-                  <div className="bg-cyan-500 h-full" style={{ width: "20%" }} title="Domain 4: 20%" />
+                  {activeCert.domains.map((d) => (
+                    <div
+                      key={d.id}
+                      className={`${ACCENT_STYLES[d.accentColor].bar} h-full`}
+                      style={{ width: `${d.weight}%` }}
+                      title={`Domain ${d.number}: ${d.weight}%`}
+                    />
+                  ))}
                 </div>
                 <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-slate-600">
-                  <span className="inline-flex items-center space-x-1.5">
-                    <span className="w-2.5 h-2.5 rounded-xs bg-indigo-500" />
-                    <span>D1 セキュア (30%)</span>
-                  </span>
-                  <span className="inline-flex items-center space-x-1.5">
-                    <span className="w-2.5 h-2.5 rounded-xs bg-emerald-500" />
-                    <span>D2 弾力性 (26%)</span>
-                  </span>
-                  <span className="inline-flex items-center space-x-1.5">
-                    <span className="w-2.5 h-2.5 rounded-xs bg-amber-500" />
-                    <span>D3 高パフォーマンス (24%)</span>
-                  </span>
-                  <span className="inline-flex items-center space-x-1.5">
-                    <span className="w-2.5 h-2.5 rounded-xs bg-cyan-500" />
-                    <span>D4 コスト最適化 (20%)</span>
-                  </span>
+                  {activeCert.domains.map((d) => (
+                    <span key={d.id} className="inline-flex items-center space-x-1.5">
+                      <span
+                        className={`w-2.5 h-2.5 rounded-xs ${ACCENT_STYLES[d.accentColor].bar}`}
+                      />
+                      <span>
+                        D{d.number} {d.title} ({d.weight}%)
+                      </span>
+                    </span>
+                  ))}
                 </div>
               </div>
             </section>
@@ -717,7 +1154,7 @@ export default function AwsInfoPage() {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-black text-slate-900">
-                    4つの出題ドメイン別 攻略チェックリスト
+                    {activeCert.domains.length}つの出題ドメイン別 攻略チェックリスト
                   </h3>
                   <p className="text-xs text-slate-500">
                     各トピックを確認したらチェックを入れて進捗を管理できます。
@@ -794,9 +1231,11 @@ export default function AwsInfoPage() {
               </div>
 
               <div className="space-y-4">
-                {saaDomains.every((domain) => {
+                {activeCert.domains.every((domain) => {
                   const hasVisible = domain.topics.some((t) => {
-                    if (onlyIncompleteTopics && progress.completedTopics.includes(t.id)) return false;
+                    if (onlyIncompleteTopics && progress.completedTopics.includes(t.id)) {
+                      return false;
+                    }
                     if (
                       onlyWithNotesTopics &&
                       !(progress.topicNotes[t.id] && progress.topicNotes[t.id].trim().length > 0)
@@ -834,7 +1273,7 @@ export default function AwsInfoPage() {
                   </div>
                 )}
 
-                {saaDomains.map((domain) => {
+                {activeCert.domains.map((domain) => {
                   const Icon = DOMAIN_ICONS[domain.id] ?? Cloud;
                   const style = ACCENT_STYLES[domain.accentColor];
                   const isExpanded =
@@ -844,7 +1283,8 @@ export default function AwsInfoPage() {
                   const doneInDomain = domain.topics.filter((t) =>
                     progress.completedTopics.includes(t.id)
                   ).length;
-                  const isDomainComplete = doneInDomain === domain.topics.length;
+                  const isDomainComplete =
+                    domain.topics.length > 0 && doneInDomain === domain.topics.length;
 
                   const visibleTopics = domain.topics.filter((t) => {
                     if (onlyIncompleteTopics && progress.completedTopics.includes(t.id)) {
@@ -922,7 +1362,11 @@ export default function AwsInfoPage() {
                             <div
                               className={`h-full ${style.bar} transition-all duration-300`}
                               style={{
-                                width: `${Math.round((doneInDomain / domain.topics.length) * 100)}%`,
+                                width: `${
+                                  domain.topics.length > 0
+                                    ? Math.round((doneInDomain / domain.topics.length) * 100)
+                                    : 0
+                                }%`,
                               }}
                             />
                           </div>
@@ -1082,7 +1526,7 @@ export default function AwsInfoPage() {
           <div className="space-y-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-2">
-                {COMPARISON_CATEGORIES.map((cat) => {
+                {comparisonCategories.map((cat) => {
                   const active = compCategory === cat;
                   return (
                     <button
@@ -1132,7 +1576,7 @@ export default function AwsInfoPage() {
             {/* 人気サービス クイック検索チップ */}
             <div className="flex flex-wrap items-center gap-1.5 -mt-4">
               <span className="text-[11px] font-bold text-slate-400 mr-1">よく調べるサービス:</span>
-              {["S3", "VPC", "RDS", "Lambda", "IAM", "SQS", "CloudFront"].map((kw) => {
+              {activeCert.quickSearchChips.map((kw) => {
                 const isSelected = compQuery.toLowerCase() === kw.toLowerCase();
                 return (
                   <button
@@ -1166,7 +1610,8 @@ export default function AwsInfoPage() {
                     「{compQuery}」に一致する項目が見つかりませんでした
                   </div>
                   <p className="text-xs text-slate-500">
-                    別のキーワード（例：S3、RDS、ALB、IAM）で検索するか、条件をリセットしてください。
+                    別のキーワード（例：{activeCert.quickSearchChips.slice(0, 4).join("、")}
+                    ）で検索するか、条件をリセットしてください。
                   </p>
                   <button
                     type="button"
@@ -1184,130 +1629,135 @@ export default function AwsInfoPage() {
 
             {/* 要件→サービス即断逆引きチートシート */}
             {filteredQuickLookup.length > 0 && (
-            <section className="space-y-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
-                  <Zap size={17} className="text-amber-500" />
-                  <span>本番直前：要件キーワード → 推奨サービス即断チートシート</span>
-                </h3>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {filteredQuickLookup.map((item) => (
-                  <div
-                    key={item.keyword}
-                    className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col justify-between gap-2"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <span className="text-xs font-bold text-slate-900 leading-snug">
-                        「{item.keyword}」
-                      </span>
-                      <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
-                        {item.category}
-                      </span>
+              <section className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
+                    <Zap size={17} className="text-amber-500" />
+                    <span>
+                      {activeCert.shortCode} 本番直前：要件キーワード → 推奨サービス即断チートシート
+                    </span>
+                  </h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {filteredQuickLookup.map((item) => (
+                    <div
+                      key={item.keyword}
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col justify-between gap-2"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <span className="text-xs font-bold text-slate-900 leading-snug">
+                          「{item.keyword}」
+                        </span>
+                        <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                          {item.category}
+                        </span>
+                      </div>
+                      <div className="text-xs font-mono font-black text-indigo-700 bg-indigo-50/70 border border-indigo-100 px-3 py-1.5 rounded-lg">
+                        → {item.recommended}
+                      </div>
+                      <p className="text-[11px] text-slate-600 leading-relaxed">{item.reason}</p>
                     </div>
-                    <div className="text-xs font-mono font-black text-indigo-700 bg-indigo-50/70 border border-indigo-100 px-3 py-1.5 rounded-lg">
-                      → {item.recommended}
-                    </div>
-                    <p className="text-[11px] text-slate-600 leading-relaxed">{item.reason}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
             )}
 
             {/* 比較テーブル一覧 */}
             {filteredComparisons.length > 0 && (
-            <div className="space-y-6">
-              {filteredComparisons.map((table) => (
-                <div
-                  key={table.id}
-                  className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden"
-                >
-                  <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                    <div>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
-                        {table.category}
-                      </span>
-                      <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1">
-                        {table.title}
-                      </h3>
-                      <p className="text-xs text-slate-500">{table.subtitle}</p>
+              <div className="space-y-6">
+                {filteredComparisons.map((table) => (
+                  <div
+                    key={table.id}
+                    className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden"
+                  >
+                    <div className="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                          {table.category}
+                        </span>
+                        <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1">
+                          {table.title}
+                        </h3>
+                        <p className="text-xs text-slate-500">{table.subtitle}</p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs sm:text-sm">
-                      <thead>
-                        <tr className="bg-slate-50 border-b border-slate-200 text-slate-700">
-                          {table.columns.map((col, idx) => (
-                            <th key={idx} className="py-3 px-4 font-bold whitespace-nowrap">
-                              {col}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {table.rows.map((row, rIdx) => (
-                          <tr key={rIdx} className="hover:bg-slate-50/70">
-                            <td className="py-3 px-4 font-bold text-slate-900 whitespace-nowrap bg-slate-50/30">
-                              {row.feature}
-                            </td>
-                            {row.values.map((val, vIdx) => (
-                              <td key={vIdx} className="py-3 px-4 text-slate-700 leading-relaxed">
-                                {val}
-                              </td>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                          <tr className="bg-slate-50 border-b border-slate-200 text-slate-700">
+                            {table.columns.map((col, idx) => (
+                              <th key={idx} className="py-3 px-4 font-bold whitespace-nowrap">
+                                {col}
+                              </th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {table.rows.map((row, rIdx) => (
+                            <tr key={rIdx} className="hover:bg-slate-50/70">
+                              <td className="py-3 px-4 font-bold text-slate-900 whitespace-nowrap bg-slate-50/30">
+                                {row.feature}
+                              </td>
+                              {row.values.map((val, vIdx) => (
+                                <td key={vIdx} className="py-3 px-4 text-slate-700 leading-relaxed">
+                                  {val}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
 
-                  <div className="bg-indigo-50/60 border-t border-indigo-100 px-5 py-3 text-xs text-indigo-950 flex items-start space-x-2">
-                    <Lightbulb size={15} className="text-indigo-600 shrink-0 mt-0.5" />
-                    <span>
-                      <strong className="font-bold">判断ルール：</strong>
-                      {table.decisionRule}
-                    </span>
+                    <div className="bg-indigo-50/60 border-t border-indigo-100 px-5 py-3 text-xs text-indigo-950 flex items-start space-x-2">
+                      <Lightbulb size={15} className="text-indigo-600 shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="font-bold">判断ルール：</strong>
+                        {table.decisionRule}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
             )}
 
             {/* 試験のひっかけ回避：典型的な誤答パターン */}
             {filteredPitfalls.length > 0 && (
-            <section className="space-y-3 pt-2">
-              <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
-                <AlertTriangle size={17} className="text-rose-500" />
-                <span>試験のひっかけ回避：典型的な誤答パターン {filteredPitfalls.length} 選</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredPitfalls.map((pit) => (
-                  <div
-                    key={pit.id}
-                    className="bg-white rounded-2xl border border-rose-200/70 p-4 shadow-xs space-y-2.5"
-                  >
-                    <div className="flex items-start space-x-2">
-                      <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 mt-0.5">
-                        ✕ ひっかけ
-                      </span>
-                      <span className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
-                        {pit.trap}
-                      </span>
+              <section className="space-y-3 pt-2">
+                <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
+                  <AlertTriangle size={17} className="text-rose-500" />
+                  <span>
+                    {activeCert.shortCode} 試験のひっかけ回避：典型的な誤答パターン{" "}
+                    {filteredPitfalls.length} 選
+                  </span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredPitfalls.map((pit) => (
+                    <div
+                      key={pit.id}
+                      className="bg-white rounded-2xl border border-rose-200/70 p-4 shadow-xs space-y-2.5"
+                    >
+                      <div className="flex items-start space-x-2">
+                        <span className="shrink-0 text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 mt-0.5">
+                          ✕ ひっかけ
+                        </span>
+                        <span className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                          {pit.trap}
+                        </span>
+                      </div>
+                      <p className="text-xs text-rose-900/80 bg-rose-50/60 rounded-lg px-3 py-2 leading-relaxed">
+                        <strong>なぜ誤りか：</strong>
+                        {pit.whyWrong}
+                      </p>
+                      <p className="text-xs text-emerald-950 bg-emerald-50/70 rounded-lg px-3 py-2 leading-relaxed">
+                        <strong>正解の考え方：</strong>
+                        {pit.correctApproach}
+                      </p>
                     </div>
-                    <p className="text-xs text-rose-900/80 bg-rose-50/60 rounded-lg px-3 py-2 leading-relaxed">
-                      <strong>なぜ誤りか：</strong>
-                      {pit.whyWrong}
-                    </p>
-                    <p className="text-xs text-emerald-950 bg-emerald-50/70 rounded-lg px-3 py-2 leading-relaxed">
-                      <strong>正解の考え方：</strong>
-                      {pit.correctApproach}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
             )}
 
             {/* 試験に出る！AWS 重要数値・制限値マスター */}
@@ -1315,7 +1765,10 @@ export default function AwsInfoPage() {
               <section className="space-y-3 pt-2">
                 <h3 className="text-base font-black text-slate-900 flex items-center space-x-2">
                   <Gauge size={17} className="text-indigo-600" />
-                  <span>試験に出る！AWS 重要数値・制限値マスター {filteredKeyLimits.length} 選</span>
+                  <span>
+                    {activeCert.shortCode} 試験に出る！AWS 重要数値・制限値マスター{" "}
+                    {filteredKeyLimits.length} 選
+                  </span>
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                   {filteredKeyLimits.map((lim) => (
@@ -1338,21 +1791,32 @@ export default function AwsInfoPage() {
 
         {/* Tab 3: フラッシュカード暗記 */}
         {activeTab === "flashcards" && (
-          <AwsSaaFlashcards
+          <CertificationFlashcards
+            key={activeCertId}
+            items={activeCert.quickLookup}
             masteredKeywords={progress.masteredCards}
             onToggleMastered={handleToggleMasteredCard}
             onResetMastered={handleResetMasteredCards}
+            badgeText={`${activeCert.shortCode} 直前暗記フラッシュカード`}
+            title={`${activeCert.shortCode} 要件キーワード → 推奨サービス 即答トレーニング`}
+            promptLabel="次の要件に最適な AWS サービス・機能は？"
+            answerLabel="推奨サービス・設計"
           />
         )}
 
         {/* Tab 4: 実践演習クイズ */}
         {activeTab === "quiz" && (
-          <AwsSaaPracticeQuiz
-            key={quizDomainTarget}
+          <CertificationPracticeQuiz
+            key={`${activeCertId}-${quizDomainTarget}`}
+            questions={activeCert.practiceQuestions}
+            domains={quizDomains}
+            examBadgeLabel={activeCert.quizBadgeLabel}
+            passingConfig={activeCert.passingConfig}
             answers={progress.quizAnswers}
             bookmarkedIds={progress.bookmarkedQuestions}
             mockExamHistory={progress.mockExamHistory}
             initialDomain={quizDomainTarget}
+            secondsPerQuestion={activeCert.secondsPerQuestion}
             onSubmitAnswer={handleSubmitAnswer}
             onToggleBookmark={handleToggleBookmark}
             onRecordMockExam={handleRecordMockExam}
@@ -1366,7 +1830,7 @@ export default function AwsInfoPage() {
             <section className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-5">
               <div>
                 <h3 className="text-lg font-black text-slate-900">
-                  SAA-C03 合格までの標準学習ステップ
+                  {activeCert.shortCode} 合格までの標準学習ステップ
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
                   丸暗記ではなく「要件（セキュリティ・可用性・性能・コスト）から最適サービスを選ぶ力」を養う手順です。
@@ -1377,36 +1841,43 @@ export default function AwsInfoPage() {
                 {[
                   {
                     step: "STEP 1",
-                    title: "全体像とネットワーク基礎",
-                    desc: "VPC（サブネット、ルートテーブル、IGW/NAT、SG/NACL）と IAM の仕組みを図解で理解する。",
-                    status: progress.completedTopics.includes("d1-iam") && progress.completedTopics.includes("d1-vpc-sec")
-                      ? "基礎完了"
-                      : "学習中",
-                    done: progress.completedTopics.includes("d1-iam") && progress.completedTopics.includes("d1-vpc-sec"),
+                    title: activeCert.roadmapSteps.step1Title,
+                    desc: activeCert.roadmapSteps.step1Desc,
+                    status: step1Done ? "基礎完了" : "学習中",
+                    done: step1Done,
                   },
                   {
                     step: "STEP 2",
-                    title: "コアサービスの使い分け",
-                    desc: "本ページの「4ドメイン攻略」と「頻出比較表」を使い、EBS/EFS/S3 や ALB/NLB、SQS/SNS の違いを整理する。",
+                    title: activeCert.roadmapSteps.step2Title,
+                    desc: activeCert.roadmapSteps.step2Desc,
                     status: `${doneTopicsCount}/${totalTopics} トピック`,
-                    done: doneTopicsCount === totalTopics,
+                    done: totalTopics > 0 && doneTopicsCount === totalTopics,
                   },
                   {
                     step: "STEP 3",
                     title: "カード暗記 & シナリオ演習",
                     desc: "フラッシュカードで即答力を鍛え、実践演習クイズや AWS Skill Builder で誤答理由を言語化する。",
-                    status: `カード ${progress.masteredCards.length}/${saaQuickLookup.length} ・ 演習 ${correctCount}/${saaPracticeQuestions.length}`,
-                    done: progress.masteredCards.length === saaQuickLookup.length && correctCount >= Math.ceil(saaPracticeQuestions.length * 0.72),
+                    status: `カード ${progress.masteredCards.length}/${activeCert.quickLookup.length} ・ 演習 ${correctCount}/${activeCert.practiceQuestions.length}`,
+                    done:
+                      activeCert.quickLookup.length > 0 &&
+                      progress.masteredCards.length === activeCert.quickLookup.length &&
+                      correctCount >=
+                        Math.ceil(
+                          activeCert.practiceQuestions.length *
+                            (activeCert.passingConfig.passingPct / 100)
+                        ),
                   },
                   {
                     step: "STEP 4",
                     title: "模擬試験で時間配分確認",
-                    desc: "130分で65問（1問約2分）のペース配分を確認し、苦手ドメインを重点復習して本番に臨む。",
+                    desc: activeCert.roadmapSteps.step4Desc,
                     status:
                       progress.mockExamHistory.length > 0
                         ? `最高 ${Math.max(...progress.mockExamHistory.map((m) => m.scaledScore))}点`
                         : "未受験",
-                    done: progress.mockExamHistory.some((m) => m.scaledScore >= 720),
+                    done: progress.mockExamHistory.some(
+                      (m) => m.scaledScore >= activeCert.passingConfig.passingScore
+                    ),
                   },
                 ].map((item) => (
                   <div
@@ -1442,31 +1913,14 @@ export default function AwsInfoPage() {
             <section className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
               <div>
                 <h3 className="text-lg font-black text-slate-900">
-                  試験本番・直前チェックリスト（時間配分＆受験のコツ）
+                  {activeCert.shortCode} 試験本番・直前チェックリスト（時間配分＆受験のコツ）
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  SAA-C03 は長文シナリオが多いため、技術知識に加えて時間配分と迷ったときの戦略が合否を分けます。
+                  {activeCert.examDayChecklist.subtitle}
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700">
-                {[
-                  {
-                    title: "1問2分ペース（65問で130分）",
-                    body: "30問経過時点で残り70分前後が目安。長考しそうな問題は「フラグ（見直しマーク）」を付けて仮選択し、最後まで走り切ってから戻るのが鉄則です。",
-                  },
-                  {
-                    title: "非採点問題（15問）に動揺しない",
-                    body: "65問のうち15問は採点対象外のパイロット問題です。見慣れない新サービスや難問が出ても「非採点問題かもしれない」と割り切ってリズムを崩さないことが大切です。",
-                  },
-                  {
-                    title: "要件のキーワードを先に拾う",
-                    body: "問題文末尾の「最もコスト効率が高い」「運用負荷を最小限に」「最もセキュアに」を先に読み、Well-Architected のどの柱が問われているかを特定します。",
-                  },
-                  {
-                    title: "ピアソンVUE 受験準備（オンライン/会場）",
-                    body: "オンライン受験（OnVUE）の場合は事前のシステムテストと静かな個室・本人確認書類が必須。英語試験から切り替える場合、AWS認定ポータルで事前申請すると試験時間+30分延長（ESL）が利用可能です。",
-                  },
-                ].map((tip) => (
+                {activeCert.examDayChecklist.tips.map((tip) => (
                   <div
                     key={tip.title}
                     className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 space-y-1.5"
@@ -1482,14 +1936,15 @@ export default function AwsInfoPage() {
             <section className="space-y-4">
               <div>
                 <h3 className="text-lg font-black text-slate-900">
-                  SAA-C03 定番アーキテクチャ設計パターン {saaArchitecturePatterns.length}選
+                  {activeCert.shortCode} 定番アーキテクチャ設計パターン{" "}
+                  {activeCert.architecturePatterns.length}選
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
                   試験で頻出する標準構成のつながり（フロー）と設計上の勘所を押さえましょう。
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {saaArchitecturePatterns.map((pat) => (
+                {activeCert.architecturePatterns.map((pat) => (
                   <div
                     key={pat.id}
                     className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-3"
@@ -1504,7 +1959,7 @@ export default function AwsInfoPage() {
                     {/* フロー図チェーン */}
                     <div className="flex flex-wrap items-center gap-1.5 bg-slate-50 border border-slate-200/70 rounded-xl p-3">
                       {pat.flow.map((node, idx) => (
-                        <div key={node} className="flex items-center gap-1.5">
+                        <div key={`${node}-${idx}`} className="flex items-center gap-1.5">
                           <span className="text-[11px] font-mono font-bold px-2 py-1 rounded-lg bg-white border border-slate-200 text-slate-800 shadow-2xs">
                             {node}
                           </span>
@@ -1568,9 +2023,11 @@ export default function AwsInfoPage() {
             </section>
 
             <section className="space-y-3">
-              <h3 className="text-lg font-black text-slate-900">AWS 公式学習リソース</h3>
+              <h3 className="text-lg font-black text-slate-900">
+                AWS 公式学習リソース（{activeCert.shortCode}）
+              </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {saaOfficialResources.map((res) => (
+                {activeCert.officialResources.map((res) => (
                   <a
                     key={res.url}
                     href={res.url}
@@ -1607,7 +2064,9 @@ export default function AwsInfoPage() {
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center space-x-2 text-xs text-slate-600">
               <Download size={14} className="text-indigo-600" />
-              <span className="font-bold text-slate-800">学習データの引き継ぎ・バックアップ</span>
+              <span className="font-bold text-slate-800">
+                学習データの引き継ぎ・バックアップ（{activeCert.shortCode}）
+              </span>
               <span className="text-slate-400 hidden sm:inline">
                 （別PCや別ブラウザへ学習記録・マイメモを移行できます）
               </span>
@@ -1671,7 +2130,7 @@ export default function AwsInfoPage() {
                 value={backupInput}
                 onChange={(e) => setBackupInput(e.target.value)}
                 rows={2}
-                placeholder="コピーした学習進捗 JSON をここに貼り付けて「復元を実行」を押してください..."
+                placeholder={`コピーした ${activeCert.shortCode} の学習進捗 JSON をここに貼り付けて「復元を実行」を押してください...`}
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-mono text-slate-800 focus:outline-none focus:border-indigo-400"
               />
               <div className="flex items-center justify-between gap-2">
@@ -1693,7 +2152,7 @@ export default function AwsInfoPage() {
         <UnderConstructionAlert
           statusType="construction"
           title="🚧 一部工事中：社内の AWS 利用ルール・受験補助制度は準備中です"
-          message="このページでは AWS認定ソリューションアーキテクト [アソシエイト] (SAA-C03) の学習コンテンツを公開しています。なお、社内の AWS アカウント申請ルール・資格受験補助・相談窓口についてはまだ決まっていないため、決まり次第ここに掲載します。"
+          message="このページでは AWS認定（CLF-C02 / SAA-C03 / SAP-C02）の学習コンテンツを公開しています。なお、社内の AWS アカウント申請ルール・資格受験補助・相談窓口についてはまだ決まっていないため、決まり次第ここに掲載します。"
         />
       </div>
     </div>
