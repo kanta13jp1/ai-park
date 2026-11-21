@@ -52,8 +52,8 @@ const siteSearchIndex: SearchIndexItem[] = [
     title: "社内Skillsカタログ",
     category: "開発支援",
     href: "/skills-hub",
-    description: "社内で共有する Antigravity の Skills（工事中）",
-    keywords: ["skills", "skill.md", "スキル", "配布", "申請", "テスト自動化", "playwright", "bigquery", "データ損失防止"],
+    description: "AI Park実運用Skills（4件）・仕組みガイド・SKILL.mdテンプレート（全社カタログ工事中）",
+    keywords: ["skills", "skill.md", "スキル", "テンプレート", "作り方", "rules", "hooks", "mcp", "提案", "申請"],
   },
   {
     title: "MCP外部ツール連携ガイド",

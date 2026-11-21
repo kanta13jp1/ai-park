@@ -14,11 +14,12 @@ export default function SkillApplicationModal({ isOpen, onClose }: SkillApplicat
   const [category, setCategory] = useState<string>("コード・品質");
   const [description, setDescription] = useState("");
   const [triggerPhrase, setTriggerPhrase] = useState("");
-  const [timeSavings, setTimeSavings] = useState("週1〜2時間");
+  const [timeSavings, setTimeSavings] = useState("未計測（これから検証）");
   const [applicantDept, setApplicantDept] = useState("");
   const [applicantName, setApplicantName] = useState("");
   const [securityChecked, setSecurityChecked] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState(false);
 
   if (!isOpen) return null;
 
@@ -37,18 +38,24 @@ ${description || "（未入力）"}
 ■ セキュリティ・規約遵守チェック:
   [${securityChecked ? "x" : " "}] APIキー・顧客情報・機密トークンをコード内に含有していない
   [${securityChecked ? "x" : " "}] 破壊的コマンド（DROP/TRUNCATE/rm -rf等）の実行抑止を確認済
-  [${securityChecked ? "x" : " "}] 社内ガイドライン準拠（Antigravity 2.0 stdio安全実行設計）
+  [${securityChecked ? "x" : " "}] SKILL.md のフロントマター（name / description）と明確な手順を記述済
 --------------------------------------------------
 上記スキルの社内Skillsカタログへの掲載・セキュリティ審査をお願いいたします。`;
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     playCyberClick();
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(generatedDraft).then(() => {
-        playCyberSuccess();
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2500);
-      });
+    if (typeof navigator === "undefined" || !navigator.clipboard) {
+      setCopyError(true);
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(generatedDraft);
+      playCyberSuccess();
+      setCopyError(false);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      setCopyError(true);
     }
   };
 
@@ -69,7 +76,7 @@ ${description || "（未入力）"}
             </div>
             <div>
               <h3 className="font-extrabold text-base sm:text-lg">新規社内Skill 登録・提案申請</h3>
-              <p className="text-xs text-slate-300 font-mono mt-0.5">Antigravity Certified Skill Submission</p>
+              <p className="text-xs text-slate-300 font-mono mt-0.5">Antigravity Skill Proposal Draft</p>
             </div>
           </div>
           <button
@@ -148,6 +155,7 @@ ${description || "（未入力）"}
                 onChange={(e) => setTimeSavings(e.target.value)}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium bg-white"
               >
+                <option value="未計測（これから検証）">未計測（これから検証）</option>
                 <option value="週1〜2時間">週 1〜2 時間</option>
                 <option value="週2〜3時間">週 2〜3 時間</option>
                 <option value="週5時間以上">週 5 時間以上（大幅効率化）</option>
@@ -157,7 +165,7 @@ ${description || "（未入力）"}
               <label className="block text-xs font-bold text-slate-800 mb-1">申請者 部署</label>
               <input
                 type="text"
-                placeholder="例: 開発基盤アーキテクチャ室"
+                placeholder="例: 所属チーム・担当（任意）"
                 value={applicantDept}
                 onChange={(e) => setApplicantDept(e.target.value)}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs"
@@ -167,7 +175,7 @@ ${description || "（未入力）"}
               <label className="block text-xs font-bold text-slate-800 mb-1">申請者 氏名</label>
               <input
                 type="text"
-                placeholder="例: 山田 太郎"
+                placeholder="例: 氏名（任意）"
                 value={applicantName}
                 onChange={(e) => setApplicantName(e.target.value)}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs"
@@ -206,7 +214,11 @@ ${description || "（未入力）"}
         <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[11px] text-slate-500 flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-            <span>コピーした文面を社内Google Chat（AI推進窓口）へご提出ください。</span>
+            <span>
+              {copyError
+                ? "コピーに失敗しました。上のプレビュー枠から手動でコピーしてください。"
+                : "コピーした文面を Google Chat の「AI勉強会」スペースまたは AI推進担当（梅澤）へご共有ください。"}
+            </span>
           </p>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button

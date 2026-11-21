@@ -153,7 +153,7 @@ const paletteItems: PaletteItem[] = [
     title: "社内Skillsカタログ",
     category: "ツール & ガイド",
     href: "/skills-hub",
-    description: "社内で共有する Antigravity の Skills カタログ（工事中：準備中）",
+    description: "AI Park実運用Skills（4件）・作り方ガイド・SKILL.mdテンプレート（全社カタログ工事中）",
     icon: Bot,
   },
   {
