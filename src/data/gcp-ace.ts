@@ -58,6 +58,18 @@ export const aceDomains: GcpDomain[] = [
         ],
         examTip: "複数環境（dev/stg/prod）を頻繁に切り替えるコマンドは `gcloud config configurations`。",
       },
+      {
+        id: "ace-1-3",
+        code: "1.3",
+        title: "API の有効化・組織ポリシーとプロジェクト分離",
+        services: ["gcloud services enable", "Organization Policy", "Billing Export"],
+        keyPoints: [
+          "新規プロジェクトでは各サービスの API（例：`compute.googleapis.com`, `container.googleapis.com`）を有効化して利用開始する",
+          "`gcloud services list --available` / `--enabled` で API の状態を確認可能",
+          "環境別（dev / stg / prod）や部署別にプロジェクトを分離することで、IAM 権限境界・クォータ・課金集計を明確に分離できる",
+        ],
+        examTip: "コマンド実行時に `API has not been used in project ...` が出たら、IAM 不足ではなく `gcloud services enable` が未実行。",
+      },
     ],
   },
   {
@@ -94,6 +106,18 @@ export const aceDomains: GcpDomain[] = [
           "Cloud Bigtable は IoT 時系列データやアドテク等の超低レイテンシ・高スループットなワイドカラム NoSQL",
         ],
         examTip: "『IoT センサーから毎秒数百万件の時系列データ書き込み』＝ Cloud Bigtable。",
+      },
+      {
+        id: "ace-2-3",
+        code: "2.3",
+        title: "ネットワーク設計・IP 計画とロードバランサ選定",
+        services: ["VPC サブネット", "Cloud Load Balancing", "Cloud DNS", "Static IP"],
+        keyPoints: [
+          "カスタムモード VPC を使い、オンプレミスやピアリング先 VPC と重複しない CIDR 範囲を設計する（自動モードは IP 重複の原因になりやすい）",
+          "HTTPS のグローバル分散には外部アプリケーション ロードバランサ、TCP/UDP 非 HTTP の L4 分散にはネットワーク ロードバランサを選択",
+          "サブネットのプライマリ CIDR は作成後に拡張のみ可能で縮小は不可。セカンダリ IP 範囲は GKE Pod/Service 用（VPC ネイティブクラスタ）に使用",
+        ],
+        examTip: "『GKE の VPC ネイティブクラスタや将来のピアリングを見据えた新規 VPC 作成』＝ 自動モードではなくカスタムモード VPC。",
       },
     ],
   },
@@ -132,6 +156,18 @@ export const aceDomains: GcpDomain[] = [
         ],
         examTip: "『VPC はグローバル、サブネットはリージョン』は Google Cloud ネットワークの最重要基礎。",
       },
+      {
+        id: "ace-3-3",
+        code: "3.3",
+        title: "IaC（Terraform / Infrastructure Manager）と Cloud Build CI/CD",
+        services: ["Terraform", "Infrastructure Manager", "Cloud Build", "Artifact Registry"],
+        keyPoints: [
+          "Terraform（およびマネージド実行基盤の Infrastructure Manager）で VPC・GKE・IAM 等を宣言的にコード管理し再現性を確保",
+          "Cloud Build は Git リポジトリへのプッシュをトリガーに、コンテナビルド・テスト・Artifact Registry へのプッシュ・Cloud Run/GKE デプロイを自動化",
+          "Artifact Registry は Docker コンテナイメージや npm/Python/Maven パッケージを一元管理する後継サービス（旧 Container Registry 非推奨）",
+        ],
+        examTip: "新規でコンテナイメージのプライベートレジストリを構築する設問は Container Registry ではなく Artifact Registry。",
+      },
     ],
   },
   {
@@ -156,6 +192,18 @@ export const aceDomains: GcpDomain[] = [
         ],
         examTip: "『CPU 使用率はデフォルトで見えるが、メモリ使用率の監視には Ops Agent が必要』は超頻出。",
       },
+      {
+        id: "ace-4-2",
+        code: "4.2",
+        title: "スナップショット・バックアップとリソース診断",
+        services: ["Persistent Disk Snapshot", "Machine Image", "Cloud SQL Backup", "Error Reporting"],
+        keyPoints: [
+          "Persistent Disk のスナップショットは初回のみフルコピー・以降は増分バックアップとなり、異なるゾーンやリージョンへのディスク復元・移行にも利用可能",
+          "Cloud SQL のポイントインタイム リカバリ（PITR）には自動バックアップとバイナリログ（またはトランザクションログ）の有効化が必要",
+          "Error Reporting はアプリログから例外スタックトレースを自動集約し、新規エラー発生時に通知する",
+        ],
+        examTip: "ゾーン障害や別リージョンへの VM 移動では、スナップショットから新ゾーンにディスクを作成して VM を起動できる。",
+      },
     ],
   },
   {
@@ -179,6 +227,18 @@ export const aceDomains: GcpDomain[] = [
           "Cloud Audit Logs は管理アクティビティ（デフォルト有効）・データアクセス（デフォルト無効/BigQuery除く）・システムイベント・ポリシー拒否の 4 種類",
         ],
         examTip: "『サービスアカウントの JSON キーをコードや VM に置く』はアンチパターン。Compute Engine は SA アタッチ、GKE は Workload Identity。",
+      },
+      {
+        id: "ace-5-2",
+        code: "5.2",
+        title: "Secret Manager と VPC ファイアウォール制御",
+        services: ["Secret Manager", "VPC Firewall", "ネットワークタグ", "Service Account ターゲット"],
+        keyPoints: [
+          "DB パスワードや API キーは環境変数やソースコードに直書きせず Secret Manager に保存し、IAM でアクセス権を制御（バージョン管理・自動ローテーション対応）",
+          "VPC ファイアウォール ルールは優先度（0〜65535）の数値が小さいほど優先され、上り（Ingress）は既定拒否・下り（Egress）は既定許可",
+          "ファイアウォールの適用対象には「ネットワークタグ」または「ターゲット サービスアカウント（よりセキュア）」を指定できる",
+        ],
+        examTip: "ファイアウォールの優先度は『数値が小さい方が優先』。さらにネットワークタグより『サービスアカウント指定』の方が改ざん耐性が高い。",
       },
     ],
   },
@@ -256,6 +316,20 @@ export const aceComparisons: GcpComparisonTable[] = [
     ],
     decisionRule: "外部IPなしVMへのSSH＝IAP、外部IPなしVMからapt update＝Cloud NAT、GCSへの内部通信＝Private Google Access。",
   },
+  {
+    id: "ace-comp-observability",
+    category: "運用・移行・コスト",
+    title: "Google Cloud 可観測性ツール使い分け",
+    subtitle: "メトリクス・ログ・トレース・エラー集約",
+    columns: ["ツール / 機能", "収集対象", "主な用途", "ポイント"],
+    rows: [
+      { feature: "Cloud Monitoring", values: ["CPU・メモリ・カスタム指標", "ダッシュボード可視化・アラート通知", "VM 内のメモリ等は Ops Agent が必要"] },
+      { feature: "Cloud Logging", values: ["システム・アプリ・監査ログ", "ログ検索・Log Sink による外部エクスポート", "BigQuery / GCS / Pub/Sub へ転送可"] },
+      { feature: "Error Reporting", values: ["例外スタックトレース", "アプリエラーの自動グループ化・通知", "Logging の構造化エラーを自動解析"] },
+      { feature: "Cloud Trace", values: ["分散リクエストの遅延スパン", "マイクロサービス間のボトルネック特定", "どの API 呼び出しが遅いか可視化"] },
+    ],
+    decisionRule: "しきい値アラート＝Cloud Monitoring、監査ログ長期保存＝Logging Sink、例外集約＝Error Reporting。",
+  },
 ];
 
 export const acePatterns: GcpArchitecturePattern[] = [
@@ -303,6 +377,28 @@ export const acePatterns: GcpArchitecturePattern[] = [
       "シンク先が別プロジェクトでも出力先サービスアカウントに書き込み権限を付与すれば連携可能",
     ],
   },
+  {
+    id: "ace-pat-5",
+    title: "Git プッシュ契機のサーバーレス CI/CD パイプライン",
+    badge: "Cloud Build → Cloud Run",
+    flow: ["Git Push", "Cloud Build", "Artifact Registry", "gcloud run deploy"],
+    summary: "ソースコード変更を検知し、コンテナビルド・イメージ保存・Cloud Run への無停止デプロイを自動実行するパターン。",
+    keyDesignPoints: [
+      "Cloud Build サービスアカウントへ `roles/run.admin` と `roles/iam.serviceAccountUser` を付与",
+      "`--no-traffic` で新リビジョンをデプロイし、比率指定でカナリア切り替えも可能",
+    ],
+  },
+  {
+    id: "ace-pat-6",
+    title: "シークレット情報を分離したセキュア実行構成",
+    badge: "Secret Manager",
+    flow: ["Secret Manager (DB Password)", "IAM (secretAccessor)", "Cloud Run / GKE / GCE (SA利用)"],
+    summary: "アプリケーションのソースコードやコンテナイメージに秘密情報を一切含めず、実行時サービスアカウント経由で安全に取得。",
+    keyDesignPoints: [
+      "バージョン管理により鍵のローテーションや緊急時の旧バージョン無効化が容易",
+      "Cloud Run ではシークレットを環境変数またはボリュームとして直接マウント可能",
+    ],
+  },
 ];
 
 export const acePitfalls: GcpPitfall[] = [
@@ -330,6 +426,18 @@ export const acePitfalls: GcpPitfall[] = [
     whyWrong: "Google Cloud の VPC サブネットは作成後にプライマリ IP 範囲を「拡張」することはできますが、「縮小」はできません。",
     correctApproach: "サブネットの CIDR は将来の拡張も見越しつつ、重複しないように適切に設計する。",
   },
+  {
+    id: "ace-pit-5",
+    trap: "新規プロジェクトで gcloud 実行時に「API has not been used...」が出たのに IAM 権限を何度も付け直す",
+    whyWrong: "プロジェクト作成直後は多くのサービス API が無効状態のため、Owner 権限を持っていても API 自体が有効化されていないと失敗します。",
+    correctApproach: "`gcloud services enable <service>.googleapis.com` で対象 API を有効化する。",
+  },
+  {
+    id: "ace-pit-6",
+    trap: "VPC ファイアウォールで優先度 1000 のルールが優先度 500 のルールより強いと勘違いする",
+    whyWrong: "Google Cloud のファイアウォールルール優先度（0〜65535）は数値が「小さい」ほど優先度が高くなります。",
+    correctApproach: "例外的な拒否（Deny）や許可（Allow）を優先適用したい場合は、既存ルール（デフォルト 1000 等）より小さい数値を設定する。",
+  },
 ];
 
 export const aceKeyFacts: GcpKeyFact[] = [
@@ -341,6 +449,8 @@ export const aceKeyFacts: GcpKeyFact[] = [
   { id: "ace-kf-6", target: "GCS コピー高速化", value: "gcloud storage cp / -m", detail: "並列マルチスレッドで大容量ファイルを高速転送" },
   { id: "ace-kf-7", target: "VPC サブネット変更", value: "拡張のみ可能（縮小不可）", detail: "プライマリ CIDR は拡大のみサポート" },
   { id: "ace-kf-8", target: "メタデータサーバー", value: "169.254.169.254", detail: "VM 内部からトークンやプロジェクト情報を取得" },
+  { id: "ace-kf-9", target: "ファイアウォール優先度", value: "0〜65535（小さいほど優先）", detail: "同じ優先度なら Deny が Allow に勝つ" },
+  { id: "ace-kf-10", target: "Cloud Logging 既定保持", value: "管理監査 400日 / 一般 30日", detail: "長期保管は Log Sink で GCS 等へ出力" },
 ];
 
 export const aceQuickLookup: CertFlashcardItem[] = [
@@ -362,6 +472,12 @@ export const aceQuickLookup: CertFlashcardItem[] = [
   { keyword: "IAM でプロジェクト全体に強い権限を与えるため本番では避けるべきロール群", category: "IAM", recommended: "Basic ロール（Owner / Editor / Viewer）", reason: "最小権限の原則に反するため、事前定義ロールやカスタムロールを使います。" },
   { keyword: "新しいコンテナイメージのビルドと Artifact Registry へのプッシュを自動化するサービス", category: "CI/CD", recommended: "Cloud Build", reason: "cloudbuild.yaml に基づきサーバーレスでビルド・テスト・デプロイを実行します。" },
   { keyword: "gcloud コマンドの実行前にヘルプやインタラクティブなコマンド探索を行うツール", category: "CLI / 設定", recommended: "gcloud interactive / --help", reason: "コマンド構文やフラグをターミナル上で補完・確認できます。" },
+  { keyword: "DB パスワードや API キーをソースコードから分離して安全に保管・バージョン管理するサービス", category: "セキュリティ", recommended: "Secret Manager", reason: "IAM でアクセス制御でき、バージョン管理とローテーションに対応します。" },
+  { keyword: "新規プロジェクトで Compute Engine 等の API を有効化する gcloud コマンド", category: "CLI / 設定", recommended: "gcloud services enable <api>", reason: "API が未有効だと権限があってもリソース作成がエラーになります。" },
+  { keyword: "VPC ファイアウォールで「優先度 100」と「優先度 1000」が競合したときの勝者", category: "ネットワーク", recommended: "優先度 100（数値が小さい方が優先）", reason: "0〜65535 の範囲で数値が小さいほど高優先度として評価されます。" },
+  { keyword: "Cloud SQL でゾーン障害時の自動フェイルオーバーを有効にする機能", category: "データベース", recommended: "高可用性（HA）構成（Regional）", reason: "プライマリと別ゾーンのスタンバイへ同期レプリケーションし自動切替します。" },
+  { keyword: "Persistent Disk のバックアップを取得して別リージョンへディスクを複製する手法", category: "Compute Engine", recommended: "ディスク スナップショット", reason: "スナップショットはグローバルリソースのため別リージョンでの復元にも使えます。" },
+  { keyword: "Google Cloud 上で Terraform の状態管理や実行をマネージドに行う IaC サービス", category: "IaC / CI/CD", recommended: "Infrastructure Manager", reason: "Terraform 設定を用いて GCP リソースを安全かつ再現可能に展開できます。" },
 ];
 
 export const acePracticeQuestions: CertQuestion[] = [
@@ -568,6 +684,142 @@ export const acePracticeQuestions: CertQuestion[] = [
     correctIndices: [0],
     explanation: "Cloud NAT を Cloud Router 上に構成することで、外部 IP を持たないプライベート VM からのアウトバウンド（外向き）インターネット通信のみを許可できます。",
     keywords: ["Cloud NAT", "アウトバウンド"],
+  },
+  {
+    id: "ace-q13",
+    domainId: "ace-domain-1",
+    domainLabel: "01: 環境セットアップ",
+    difficulty: "基礎",
+    selectCount: 1,
+    question: "新しく作成した Google Cloud プロジェクトで初めて GKE クラスタを作成しようと `gcloud container clusters create` を実行したところ、「API [container.googleapis.com] not enabled on project」というエラーが発生しました。実施すべき対応はどれですか？",
+    options: [
+      "課金アカウントを無効化して再作成する",
+      "`gcloud services enable container.googleapis.com` を実行して Kubernetes Engine API を有効化する",
+      "プロジェクトの Basic ロールである Viewer を自分に再付与する",
+      "Cloud Shell を再起動する",
+    ],
+    correctIndices: [1],
+    explanation: "新規プロジェクトでは多くの API が初期状態で無効になっています。`gcloud services enable` コマンド等で対象サービスの API を有効化する必要があります。",
+    keywords: ["gcloud services enable", "API有効化"],
+  },
+  {
+    id: "ace-q14",
+    domainId: "ace-domain-2",
+    domainLabel: "02: 計画と構成",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Cloud SQL（PostgreSQL）で構築している業務データベースについて、単一ゾーンの障害が発生しても自動でスタンバイへフェイルオーバーして数分以内に復旧するようにしたいです。さらに参照系クエリの負荷を分散するレプリカも必要です。適切な設定はどれですか？",
+    options: [
+      "高可用性（HA）構成を有効にし、別途リードレプリカを追加する",
+      "単一ゾーンインスタンスに手動でスナップショットだけ設定する",
+      "Cloud Storage Archive へ DB ファイルを直接置く",
+      "Spot VM 上に PostgreSQL をインストールする",
+    ],
+    correctIndices: [0],
+    explanation: "Cloud SQL の高可用性（HA）構成は別ゾーンのスタンバイへ同期レプリケーションを行い障害時に自動フェイルオーバーします。参照負荷分散には別途リードレプリカを使用します。",
+    keywords: ["Cloud SQL", "高可用性 (HA)", "リードレプリカ"],
+  },
+  {
+    id: "ace-q15",
+    domainId: "ace-domain-3",
+    domainLabel: "03: デプロイと実装",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Cloud Run で新バージョンの API コンテナ（リビジョン `v2`）をデプロイしました。いきなり全ユーザーへ公開せず、本番トラフィックの 10% だけを `v2` に、残り 90% を安定した `v1` に振り分けて様子を見たいです。どのように実現しますか？",
+    options: [
+      "別の Google Cloud プロジェクトを 2 つ作り DNS ラウンドロビンを設定する",
+      "`gcloud run services update-traffic` を使用し、リビジョンごとのトラフィック分割（v1=90, v2=10）を設定する",
+      "Compute Engine 上に Nginx を手動構築してプロキシする",
+      "Cloud Run では 1 つのリビジョンしか同時にトラフィックを受けられないため不可能",
+    ],
+    correctIndices: [1],
+    explanation: "Cloud Run はリビジョン単位でトラフィック比率（例: `--to-revisions=v2=10,v1=90`）を指定でき、サーバーレスで簡単にカナリアリリースが可能です。",
+    keywords: ["Cloud Run", "トラフィック分割", "カナリア"],
+  },
+  {
+    id: "ace-q16",
+    domainId: "ace-domain-3",
+    domainLabel: "03: デプロイと実装",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "CI/CD パイプラインでコンテナイメージをビルドしてデプロイする構成について、現在の Google Cloud ベストプラクティスとして正しいものを 2 つ選択してください。",
+    options: [
+      "コンテナイメージの保管には従来の Container Registry ではなく Artifact Registry を使用する",
+      "Cloud Build の `cloudbuild.yaml` でビルド・テスト・Artifact Registry へのプッシュ・Cloud Run/GKE デプロイを自動化する",
+      "Docker イメージ内に本番データベースのパスワードを平文で ENV 記載する",
+      "本番デプロイは開発者のローカル PC から手動で `docker push` することを必須とする",
+    ],
+    correctIndices: [0, 1],
+    explanation: "Artifact Registry が標準のパッケージ・コンテナレジストリであり、Cloud Build と連携してビルド〜デプロイを自動化する構成が推奨されます。",
+    keywords: ["Artifact Registry", "Cloud Build", "CI/CD"],
+  },
+  {
+    id: "ace-q17",
+    domainId: "ace-domain-4",
+    domainLabel: "04: 正常な運用の確保",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "`asia-northeast1-a` ゾーンで稼働している Compute Engine VM のデータ用 Persistent Disk を、`us-central1-a` ゾーン（別リージョン）の新規 VM へデータを保持したまま複製・移行したいと考えています。最も標準的な手順はどれですか？",
+    options: [
+      "対象ディスクのスナップショットを作成し、そのスナップショットをソースとして `us-central1-a` に新規ディスクを作成する",
+      "既存のゾーン永続ディスクをそのまま別リージョンの VM へアタッチする",
+      "VM のメタデータサーバー（169.254.169.254）へファイルをアップロードする",
+      "Local SSD をフォーマットして別リージョンへ移動する",
+    ],
+    correctIndices: [0],
+    explanation: "Persistent Disk 自体はゾーンまたはリージョンに紐づくため別リージョンに直接アタッチできませんが、スナップショットはグローバルにアクセス可能なため別リージョンでのディスク復元に利用できます。",
+    keywords: ["Persistent Disk", "スナップショット", "リージョン間移動"],
+  },
+  {
+    id: "ace-q18",
+    domainId: "ace-domain-4",
+    domainLabel: "04: 正常な運用の確保",
+    difficulty: "応用",
+    selectCount: 1,
+    question: "開発環境と検証環境の 2 つの自動モード VPC（両方とも `10.128.0.0/9` 等の同一デフォルト CIDR 範囲を含む）を VPC ネットワーク ピアリングで接続しようとしましたが、接続が拒否されました。原因と対策として正しいものはどれですか？",
+    options: [
+      "VPC ピアリングは同一サブネット IP 範囲の重複を許容しないため、自動モードではなく重複しない CIDR のカスタムモード VPC を作成する",
+      "VPC ピアリングは異なるプロジェクト間では利用できないため同じプロジェクトへ統合する",
+      "Cloud NAT を両方の VPC に追加すれば IP が重複していてもピアリングできる",
+      "ファイアウォール優先度を 65535 に変更すれば解決する",
+    ],
+    correctIndices: [0],
+    explanation: "自動モード VPC は各リージョンに固定の同一 CIDR（10.128.0.0/9 範囲）を使うため、2 つの自動モード VPC 同士は IP 重複によりピアリングできません。カスタムモード VPC で重複しない CIDR を設計する必要があります。",
+    keywords: ["VPC ピアリング", "カスタムモード VPC", "CIDR重複"],
+  },
+  {
+    id: "ace-q19",
+    domainId: "ace-domain-5",
+    domainLabel: "05: アクセスとセキュリティ",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Cloud Run で動作するバックエンドサービスから外部決済 API のシークレットキーを参照する必要があります。ソースコードや環境変数の平文管理を避け、バージョン管理やアクセス監査も行いたい場合の最適なサービスはどれですか？",
+    options: [
+      "Cloud Storage のパブリックバケット",
+      "Secret Manager",
+      "Cloud DNS",
+      "Cloud Trace",
+    ],
+    correctIndices: [1],
+    explanation: "Secret Manager は API キーや DB パスワード等の機密データを暗号化保管・バージョン管理し、IAM ロール（`roles/secretmanager.secretAccessor`）でアクセス制御・監査できます。",
+    keywords: ["Secret Manager", "機密情報管理"],
+  },
+  {
+    id: "ace-q20",
+    domainId: "ace-domain-5",
+    domainLabel: "05: アクセスとセキュリティ",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "Google Cloud の VPC ファイアウォールルールに関する正しい説明を 2 つ選択してください。",
+    options: [
+      "優先度は 0〜65535 の整数で指定し、数値が小さいルールほど優先的に評価される",
+      "ネットワークタグによる対象指定よりも、ターゲット サービスアカウントによる対象指定のほうが IAM で編集権限を制御でき安全である",
+      "上り（Ingress）トラフィックはデフォルトで全インターネットからすべて許可（Allow）されている",
+      "VPC ファイアウォールはステートレスであり、許可した TCP 通信の戻りパケットに対しても毎回別ルールが必要である",
+    ],
+    correctIndices: [0, 1],
+    explanation: "Google Cloud VPC ファイアウォールはステートフルであり、優先度は数値が小さいほど優先されます。またデフォルトでは暗黙の Ingress 全拒否・Egress 全許可です。ターゲットにはネットワークタグより改ざんされにくいサービスアカウント指定が推奨されます。",
+    keywords: ["VPC ファイアウォール", "優先度", "サービスアカウント"],
   },
 ];
 

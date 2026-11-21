@@ -118,6 +118,7 @@ interface GcpCertConfig {
   passingConfig: CertPassingConfig;
   quizBadgeLabel: string;
   flashcardTitle: string;
+  quickSearchChips: string[];
 }
 
 const CERT_CONFIG: Record<GcpCertId, GcpCertConfig> = {
@@ -149,6 +150,7 @@ const CERT_CONFIG: Record<GcpCertId, GcpCertConfig> = {
     },
     quizBadgeLabel: "GCP CDL 演習",
     flashcardTitle: "CDL 要件・ビジネス課題 → Google Cloud サービス即答トレーニング",
+    quickSearchChips: ["BigQuery", "Cloud Storage", "Vertex AI", "Cloud Run", "Cloud Armor", "CUD"],
   },
   ace: {
     id: "ace",
@@ -178,6 +180,7 @@ const CERT_CONFIG: Record<GcpCertId, GcpCertConfig> = {
     },
     quizBadgeLabel: "GCP ACE 演習",
     flashcardTitle: "ACE 運用要件 → gcloud コマンド / 推奨サービス即答トレーニング",
+    quickSearchChips: ["gcloud", "GKE", "Cloud Run", "IAM", "Cloud NAT", "Ops Agent", "VPC"],
   },
   pca: {
     id: "pca",
@@ -207,6 +210,7 @@ const CERT_CONFIG: Record<GcpCertId, GcpCertConfig> = {
     },
     quizBadgeLabel: "GCP PCA 演習",
     flashcardTitle: "PCA 設計要件・制約 → アーキテクチャ選択即答トレーニング",
+    quickSearchChips: ["Cloud Spanner", "Shared VPC", "VPC Service Controls", "Interconnect", "BigQuery", "SRE", "Cloud EKM"],
   },
 };
 
@@ -502,6 +506,14 @@ export default function GcpInfoPage() {
     setActiveTab("comparisons");
   };
 
+  const handleFocusDomain = (domainId: string) => {
+    playCyberClick();
+    setExpandedDomains((prev) => ({ ...prev, [domainId]: true }));
+    setTimeout(() => {
+      document.getElementById(domainId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 40);
+  };
+
   const handleCopyBackup = async () => {
     playCyberClick();
     try {
@@ -593,6 +605,14 @@ export default function GcpInfoPage() {
     progress.topicNotes,
   ]);
 
+  const availableComparisonCategories = useMemo(
+    () =>
+      COMPARISON_CATEGORIES.filter(
+        (cat) => cat === "すべて" || config.comparisons.some((c) => c.category === cat)
+      ),
+    [config.comparisons]
+  );
+
   const filteredComparisons = useMemo(() => {
     const q = compQuery.trim().toLowerCase();
     return config.comparisons.filter((comp) => {
@@ -610,6 +630,33 @@ export default function GcpInfoPage() {
       return haystack.includes(q);
     });
   }, [config.comparisons, compCategory, compQuery]);
+
+  const filteredPatterns = useMemo(() => {
+    const q = compQuery.trim().toLowerCase();
+    if (!q) return config.patterns;
+    return config.patterns.filter((pat) =>
+      [pat.title, pat.badge, pat.summary, ...pat.flow, ...pat.keyDesignPoints]
+        .join(" ")
+        .toLowerCase()
+        .includes(q)
+    );
+  }, [config.patterns, compQuery]);
+
+  const filteredPitfalls = useMemo(() => {
+    const q = compQuery.trim().toLowerCase();
+    if (!q) return config.pitfalls;
+    return config.pitfalls.filter((pit) =>
+      [pit.trap, pit.whyWrong, pit.correctApproach].join(" ").toLowerCase().includes(q)
+    );
+  }, [config.pitfalls, compQuery]);
+
+  const filteredKeyFacts = useMemo(() => {
+    const q = compQuery.trim().toLowerCase();
+    if (!q) return config.keyFacts;
+    return config.keyFacts.filter((kf) =>
+      [kf.target, kf.value, kf.detail].join(" ").toLowerCase().includes(q)
+    );
+  }, [config.keyFacts, compQuery]);
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     {
@@ -950,6 +997,49 @@ export default function GcpInfoPage() {
               </div>
             </div>
 
+            {/* ドメイン別クイックジャンプ＆進捗ミニバー */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+              {config.domains.map((domain) => {
+                const style = ACCENT_STYLES[domain.accentColor];
+                const done = domain.topics.filter((t) =>
+                  progress.completedTopics.includes(t.id)
+                ).length;
+                const pct = domain.topics.length > 0 ? Math.round((done / domain.topics.length) * 100) : 0;
+                return (
+                  <button
+                    key={domain.id}
+                    type="button"
+                    onClick={() => {
+                      setTopicQuery("");
+                      setOnlyIncompleteTopics(false);
+                      setOnlyWithNotesTopics(false);
+                      handleFocusDomain(domain.id);
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className="bg-white rounded-xl border border-slate-200/80 hover:border-cyan-300 p-3 text-left transition-all shadow-xs space-y-1.5 cursor-pointer group"
+                  >
+                    <div className="flex items-center justify-between gap-1">
+                      <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${style.badge}`}>
+                        D{domain.number}
+                      </span>
+                      <span className="text-[10px] font-mono font-bold text-slate-500">
+                        {done}/{domain.topics.length}
+                      </span>
+                    </div>
+                    <div className="text-[11px] font-bold text-slate-800 group-hover:text-cyan-700 line-clamp-2 leading-snug min-h-[2rem]">
+                      {domain.title}
+                    </div>
+                    <div className="w-full h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                      <div
+                        className={`h-full ${style.bar} transition-all duration-300`}
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
             {filteredDomains.length === 0 ? (
               <div className="bg-white rounded-2xl border border-slate-200/80 p-10 text-center space-y-2">
                 <Search className="w-8 h-8 text-slate-300 mx-auto" />
@@ -982,7 +1072,8 @@ export default function GcpInfoPage() {
                   return (
                     <div
                       key={domain.id}
-                      className={`bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
+                      id={domain.id}
+                      className={`scroll-mt-6 bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
                     >
                       <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <button
@@ -1167,191 +1258,257 @@ export default function GcpInfoPage() {
         {/* TAB 2: 比較表・設計パターン */}
         {activeTab === "comparisons" && (
           <div className="space-y-8">
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div className="flex flex-wrap gap-1.5">
-                {COMPARISON_CATEGORIES.map((cat) => (
+            <div className="space-y-3">
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex flex-wrap gap-1.5">
+                  {availableComparisonCategories.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setCompCategory(cat);
+                      }}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                        compCategory === cat
+                          ? "bg-slate-900 text-white"
+                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+                <div className="relative w-full sm:w-64">
+                  <Search
+                    size={14}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                  <input
+                    type="text"
+                    value={compQuery}
+                    onChange={(e) => setCompQuery(e.target.value)}
+                    placeholder="サービス・特徴で絞り込み..."
+                    className="w-full pl-9 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-cyan-400"
+                  />
+                  {compQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setCompQuery("")}
+                      aria-label="検索をクリア"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                    >
+                      <X size={13} />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* 人気サービス クイック検索チップ */}
+              <div className="flex flex-wrap items-center gap-1.5 px-1">
+                <span className="text-[11px] font-bold text-slate-400 mr-1">
+                  よく調べるサービス:
+                </span>
+                {config.quickSearchChips.map((kw) => {
+                  const isSelected = compQuery.toLowerCase() === kw.toLowerCase();
+                  return (
+                    <button
+                      key={kw}
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setCompCategory("すべて");
+                        setCompQuery(isSelected ? "" : kw);
+                      }}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold border transition-colors cursor-pointer ${
+                        isSelected
+                          ? "bg-slate-900 text-cyan-300 border-slate-900"
+                          : "bg-white text-slate-600 border-slate-200 hover:border-cyan-300 hover:text-cyan-700"
+                      }`}
+                    >
+                      {kw}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* すべて0件時のエンプティステート */}
+            {filteredComparisons.length === 0 &&
+              filteredPatterns.length === 0 &&
+              filteredPitfalls.length === 0 &&
+              filteredKeyFacts.length === 0 && (
+                <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3 shadow-xs">
+                  <Search className="w-8 h-8 text-slate-300 mx-auto" />
+                  <div className="text-sm font-black text-slate-900">
+                    「{compQuery}」に一致する項目が見つかりませんでした
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    別のキーワード（例：{config.quickSearchChips.slice(0, 4).join("、")}）で検索するか、条件をリセットしてください。
+                  </p>
                   <button
-                    key={cat}
                     type="button"
                     onClick={() => {
                       playCyberClick();
-                      setCompCategory(cat);
+                      setCompCategory("すべて");
+                      setCompQuery("");
                     }}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                      compCategory === cat
-                        ? "bg-slate-900 text-white"
-                        : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                    }`}
+                    className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
                   >
-                    {cat}
+                    検索・カテゴリをリセット
                   </button>
-                ))}
-              </div>
-              <div className="relative w-full sm:w-64">
-                <Search
-                  size={14}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                />
-                <input
-                  type="text"
-                  value={compQuery}
-                  onChange={(e) => setCompQuery(e.target.value)}
-                  placeholder="サービス・特徴で絞り込み..."
-                  className="w-full pl-9 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-cyan-400"
-                />
-                {compQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setCompQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                  >
-                    <X size={13} />
-                  </button>
-                )}
-              </div>
-            </div>
+                </div>
+              )}
 
-            <div className="space-y-5">
-              {filteredComparisons.map((comp) => (
-                <div
-                  key={comp.id}
-                  className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4"
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <div>
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-cyan-50 text-cyan-700 border border-cyan-200">
-                        {comp.category}
-                      </span>
-                      <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1">
-                        {comp.title}
-                      </h3>
-                      <p className="text-xs text-slate-500">{comp.subtitle}</p>
+            {filteredComparisons.length > 0 && (
+              <div className="space-y-5">
+                {filteredComparisons.map((comp) => (
+                  <div
+                    key={comp.id}
+                    className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-xs space-y-4"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-cyan-50 text-cyan-700 border border-cyan-200">
+                          {comp.category}
+                        </span>
+                        <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1">
+                          {comp.title}
+                        </h3>
+                        <p className="text-xs text-slate-500">{comp.subtitle}</p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs sm:text-sm">
-                      <thead>
-                        <tr className="border-b border-slate-200 bg-slate-50">
-                          {comp.columns.map((col) => (
-                            <th key={col} className="py-2.5 px-3 font-black text-slate-700">
-                              {col}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100">
-                        {comp.rows.map((row) => (
-                          <tr key={row.feature} className="hover:bg-slate-50/70">
-                            <td className="py-2.5 px-3 font-bold text-slate-800">{row.feature}</td>
-                            {row.values.map((val, idx) => (
-                              <td key={idx} className="py-2.5 px-3 text-slate-600 text-xs">
-                                {val}
-                              </td>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                          <tr className="border-b border-slate-200 bg-slate-50">
+                            {comp.columns.map((col) => (
+                              <th key={col} className="py-2.5 px-3 font-black text-slate-700">
+                                {col}
+                              </th>
                             ))}
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {comp.rows.map((row) => (
+                            <tr key={row.feature} className="hover:bg-slate-50/70">
+                              <td className="py-2.5 px-3 font-bold text-slate-800">{row.feature}</td>
+                              {row.values.map((val, idx) => (
+                                <td key={idx} className="py-2.5 px-3 text-slate-600 text-xs">
+                                  {val}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
 
-                  <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
-                    <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                    <span>
-                      <strong className="text-cyan-300">使い分けルール: </strong>
-                      {comp.decisionRule}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* 頻出アーキテクチャ・運用パターン */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <Layers className="w-5 h-5 text-cyan-600" />
-                <span>頻出アーキテクチャ・運用パターン</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {config.patterns.map((pat) => (
-                  <SpotlightCard
-                    key={pat.id}
-                    className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
-                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
-                        {pat.badge}
+                    <div className="rounded-xl bg-slate-900 text-slate-100 px-4 py-3 text-xs flex items-start space-x-2">
+                      <Sparkles className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                      <span>
+                        <strong className="text-cyan-300">使い分けルール: </strong>
+                        {comp.decisionRule}
                       </span>
                     </div>
-                    <div className="flex flex-wrap items-center gap-1.5">
-                      {pat.flow.map((step, idx) => (
-                        <div key={step} className="flex items-center gap-1.5">
-                          <span className="px-2 py-1 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-800">
-                            {step}
-                          </span>
-                          {idx < pat.flow.length - 1 && (
-                            <ArrowRight size={12} className="text-slate-400 shrink-0" />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                    <p className="text-xs text-slate-600 leading-relaxed">{pat.summary}</p>
-                    <ul className="space-y-1 text-xs text-slate-700">
-                      {pat.keyDesignPoints.map((pt) => (
-                        <li key={pt} className="flex items-start space-x-1.5">
-                          <span className="text-cyan-600 font-bold">•</span>
-                          <span>{pt}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </SpotlightCard>
+                  </div>
                 ))}
               </div>
-            </section>
+            )}
+
+            {/* 頻出アーキテクチャ・運用パターン */}
+            {filteredPatterns.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <Layers className="w-5 h-5 text-cyan-600" />
+                  <span>頻出アーキテクチャ・運用パターン</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredPatterns.map((pat) => (
+                    <SpotlightCard
+                      key={pat.id}
+                      className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
+                        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
+                          {pat.badge}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {pat.flow.map((step, idx) => (
+                          <div key={step} className="flex items-center gap-1.5">
+                            <span className="px-2 py-1 rounded-lg bg-slate-100 font-mono text-[11px] font-bold text-slate-800">
+                              {step}
+                            </span>
+                            {idx < pat.flow.length - 1 && (
+                              <ArrowRight size={12} className="text-slate-400 shrink-0" />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">{pat.summary}</p>
+                      <ul className="space-y-1 text-xs text-slate-700">
+                        {pat.keyDesignPoints.map((pt) => (
+                          <li key={pt} className="flex items-start space-x-1.5">
+                            <span className="text-cyan-600 font-bold">•</span>
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </SpotlightCard>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* 試験のひっかけ対策 */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <AlertTriangle className="w-5 h-5 text-amber-500" />
-                <span>よくあるひっかけ・誤答パターン</span>
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {config.pitfalls.map((pit) => (
-                  <div
-                    key={pit.id}
-                    className="bg-white rounded-2xl border border-amber-200/80 p-5 space-y-2.5 shadow-xs"
-                  >
-                    <div className="text-xs font-black text-rose-700">✕ {pit.trap}</div>
-                    <p className="text-xs text-slate-600 leading-relaxed">{pit.whyWrong}</p>
-                    <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 px-3 py-2 text-xs text-emerald-950">
-                      <span className="font-bold">○ 正しいアプローチ: </span>
-                      {pit.correctApproach}
+            {filteredPitfalls.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-500" />
+                  <span>よくあるひっかけ・誤答パターン</span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredPitfalls.map((pit) => (
+                    <div
+                      key={pit.id}
+                      className="bg-white rounded-2xl border border-amber-200/80 p-5 space-y-2.5 shadow-xs"
+                    >
+                      <div className="text-xs font-black text-rose-700">✕ {pit.trap}</div>
+                      <p className="text-xs text-slate-600 leading-relaxed">{pit.whyWrong}</p>
+                      <div className="rounded-xl bg-emerald-50/70 border border-emerald-200 px-3 py-2 text-xs text-emerald-950">
+                        <span className="font-bold">○ 正しいアプローチ: </span>
+                        {pit.correctApproach}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* 重要仕様・数値早見 */}
-            <section className="space-y-4">
-              <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
-                <Gauge className="w-5 h-5 text-indigo-600" />
-                <span>重要仕様・制限値早見表</span>
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {config.keyFacts.map((kf) => (
-                  <div
-                    key={kf.id}
-                    className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs"
-                  >
-                    <div className="font-mono text-xs font-black text-indigo-700">{kf.target}</div>
-                    <div className="text-sm font-black text-slate-900">{kf.value}</div>
-                    <p className="text-[11px] text-slate-500 leading-snug">{kf.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
+            {filteredKeyFacts.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <Gauge className="w-5 h-5 text-indigo-600" />
+                  <span>重要仕様・制限値早見表</span>
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  {filteredKeyFacts.map((kf) => (
+                    <div
+                      key={kf.id}
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs"
+                    >
+                      <div className="font-mono text-xs font-black text-indigo-700">{kf.target}</div>
+                      <div className="text-sm font-black text-slate-900">{kf.value}</div>
+                      <p className="text-[11px] text-slate-500 leading-snug">{kf.detail}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
 
