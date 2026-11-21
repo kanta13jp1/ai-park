@@ -921,7 +921,7 @@ export default function AwsInfoPage() {
                   type="button"
                   onClick={() => handleSwitchCert(id)}
                   onMouseEnter={() => playCyberHover()}
-                  className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition-all cursor-pointer whitespace-nowrap ${
+                  className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition-all cursor-pointer sm:whitespace-nowrap text-left ${
                     active
                       ? "bg-slate-900 text-white shadow-sm"
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
@@ -938,11 +938,11 @@ export default function AwsInfoPage() {
         <TiltCard maxTilt={2} glareOpacity={0.05} className="rounded-3xl">
           <div
             onMouseEnter={() => playCyberHover()}
-            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border border-indigo-700/50 p-6 sm:p-8 text-white shadow-xl"
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border border-indigo-700/50 p-5 sm:p-8 text-white shadow-xl"
           >
             <div className="absolute -top-10 right-0 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="space-y-2.5 max-w-2xl">
+              <div className="space-y-2.5 max-w-2xl min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center space-x-1.5 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 tracking-wider">
                     <Cloud size={12} />
@@ -954,7 +954,7 @@ export default function AwsInfoPage() {
                     問
                   </span>
                 </div>
-                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-keep">
+                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-words">
                   <span className="inline-block">{activeCert.headlineLead}</span>{" "}
                   <span className="inline-block">{activeCert.headlineSuffix}</span>
                 </h2>
@@ -1018,8 +1018,8 @@ export default function AwsInfoPage() {
         </TiltCard>
 
         {/* スマート学習ガイドバー */}
-        <div className="bg-white rounded-2xl border border-indigo-200/80 px-4 py-3 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center space-x-2 text-xs text-slate-700">
+        <div className="bg-white rounded-2xl border border-indigo-200/80 px-4 py-3 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-2">
+          <div className="flex items-start sm:items-center space-x-2 text-xs text-slate-700 min-w-0">
             <span className="px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200 font-bold text-[10px] shrink-0">
               NEXT STEP
             </span>
@@ -1028,7 +1028,7 @@ export default function AwsInfoPage() {
           <button
             type="button"
             onClick={nextRecommendation.onClick}
-            className="self-start sm:self-auto shrink-0 inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
+            className="self-start lg:self-auto shrink-0 inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
           >
             <span>{nextRecommendation.actionLabel}</span>
             <ArrowRight size={13} />
@@ -1101,14 +1101,14 @@ export default function AwsInfoPage() {
                   <span>{activeCert.shortCode} 試験スペック（AWS公式ガイド準拠）</span>
                 </h3>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
                 {activeCert.examFacts.map((fact) => (
                   <div
                     key={fact.label}
-                    className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1"
+                    className="bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 shadow-xs space-y-1 min-w-0"
                   >
                     <div className="text-[11px] font-bold text-slate-500">{fact.label}</div>
-                    <div className="text-lg font-black text-slate-900 font-mono">{fact.value}</div>
+                    <div className="text-base sm:text-lg font-black text-slate-900 font-mono break-words">{fact.value}</div>
                     <div className="text-[10px] text-slate-400">{fact.detail}</div>
                   </div>
                 ))}
@@ -1151,7 +1151,7 @@ export default function AwsInfoPage() {
 
             {/* 4つの出題ドメイン */}
             <section className="space-y-4">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
                 <div>
                   <h3 className="text-lg font-black text-slate-900">
                     {activeCert.domains.length}つの出題ドメイン別 攻略チェックリスト
@@ -1163,7 +1163,7 @@ export default function AwsInfoPage() {
 
                 {/* 検索 & コントロール */}
                 <div className="flex flex-wrap items-center gap-2">
-                  <div className="relative">
+                  <div className="relative w-full lg:w-64 shrink-0">
                     <Search
                       size={14}
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -1173,7 +1173,7 @@ export default function AwsInfoPage() {
                       value={topicQuery}
                       onChange={(e) => setTopicQuery(e.target.value)}
                       placeholder="サービス名・キーワード検索..."
-                      className="pl-8 pr-7 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-52"
+                      className="w-full pl-8 pr-7 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400"
                     />
                     {topicQuery && (
                       <button
@@ -1323,15 +1323,15 @@ export default function AwsInfoPage() {
                             [domain.id]: !prev[domain.id],
                           }));
                         }}
-                        className="w-full p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left hover:bg-slate-50/60 transition-colors cursor-pointer"
+                        className="w-full p-5 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4 text-left hover:bg-slate-50/60 transition-colors cursor-pointer"
                       >
-                        <div className="flex items-start space-x-4">
+                        <div className="flex items-start space-x-4 min-w-0">
                           <div
                             className={`w-11 h-11 rounded-xl border flex items-center justify-center shrink-0 ${style.iconBg}`}
                           >
                             <Icon size={22} />
                           </div>
-                          <div className="space-y-1">
+                          <div className="space-y-1 min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <span
                                 className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${style.badge}`}
@@ -1348,7 +1348,7 @@ export default function AwsInfoPage() {
                                 </span>
                               )}
                             </div>
-                            <h4 className="text-base sm:text-lg font-black text-slate-900">
+                            <h4 className="text-base sm:text-lg font-black text-slate-900 break-words">
                               {domain.title}
                             </h4>
                             <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
@@ -1357,7 +1357,7 @@ export default function AwsInfoPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center space-x-3 self-end sm:self-center shrink-0">
+                        <div className="flex items-center space-x-3 self-end lg:self-center shrink-0">
                           <div className="w-24 h-2 rounded-full bg-slate-100 overflow-hidden">
                             <div
                               className={`h-full ${style.bar} transition-all duration-300`}
@@ -1524,7 +1524,7 @@ export default function AwsInfoPage() {
         {/* Tab 2: 頻出サービス比較表 & 要件逆引き */}
         {activeTab === "comparisons" && (
           <div className="space-y-8">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 {comparisonCategories.map((cat) => {
                   const active = compCategory === cat;
@@ -1548,7 +1548,7 @@ export default function AwsInfoPage() {
                 })}
               </div>
 
-              <div className="relative">
+              <div className="relative w-full lg:w-64 shrink-0">
                 <Search
                   size={14}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -1558,7 +1558,7 @@ export default function AwsInfoPage() {
                   value={compQuery}
                   onChange={(e) => setCompQuery(e.target.value)}
                   placeholder="比較表・逆引きを検索..."
-                  className="pl-8 pr-7 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-full sm:w-56"
+                  className="w-full pl-8 pr-7 py-1.5 rounded-xl border border-slate-200 bg-white text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-400"
                 />
                 {compQuery && (
                   <button
@@ -1683,7 +1683,7 @@ export default function AwsInfoPage() {
                     </div>
 
                     <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                      <table className="w-full min-w-[600px] text-left border-collapse text-xs sm:text-sm">
                         <thead>
                           <tr className="bg-slate-50 border-b border-slate-200 text-slate-700">
                             {table.columns.map((col, idx) => (
@@ -1774,10 +1774,10 @@ export default function AwsInfoPage() {
                   {filteredKeyLimits.map((lim) => (
                     <div
                       key={lim.id}
-                      className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1.5"
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1.5 min-w-0"
                     >
                       <div className="text-[11px] font-bold text-indigo-600">{lim.service}</div>
-                      <div className="text-xs sm:text-sm font-mono font-black text-slate-900">
+                      <div className="text-xs sm:text-sm font-mono font-black text-slate-900 break-words">
                         {lim.limitValue}
                       </div>
                       <p className="text-[11px] text-slate-600 leading-relaxed">{lim.detail}</p>
@@ -1949,7 +1949,7 @@ export default function AwsInfoPage() {
                     key={pat.id}
                     className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-3"
                   >
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
                       <span className="shrink-0 text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
                         {pat.badge}
@@ -2063,7 +2063,7 @@ export default function AwsInfoPage() {
         <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center space-x-2 text-xs text-slate-600">
-              <Download size={14} className="text-indigo-600" />
+              <Download size={14} className="text-indigo-600 shrink-0" />
               <span className="font-bold text-slate-800">
                 学習データの引き継ぎ・バックアップ（{activeCert.shortCode}）
               </span>
@@ -2139,7 +2139,7 @@ export default function AwsInfoPage() {
                   type="button"
                   disabled={!backupInput.trim()}
                   onClick={handleRestoreBackup}
-                  className="px-4 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 disabled:opacity-40 cursor-pointer"
+                  className="px-4 py-1.5 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 disabled:opacity-40 cursor-pointer shrink-0"
                 >
                   復元を実行
                 </button>

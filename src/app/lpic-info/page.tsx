@@ -844,7 +844,7 @@ export default function LpicInfoPage() {
                 学習レベル・専門トラック選択
               </span>
             </div>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            <div className="flex flex-col xl:flex-row xl:items-center gap-2">
               <div className="inline-flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
                 <span className="text-[10px] font-bold text-slate-500 px-2 whitespace-nowrap">
                   基盤
@@ -902,11 +902,11 @@ export default function LpicInfoPage() {
         <TiltCard maxTilt={2} glareOpacity={0.05} className="rounded-3xl">
           <div
             onMouseEnter={() => playCyberHover()}
-            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-cyan-950 border border-cyan-700/50 p-6 sm:p-8 text-white shadow-xl"
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-cyan-950 border border-cyan-700/50 p-5 sm:p-8 text-white shadow-xl"
           >
             <div className="absolute -top-10 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="space-y-2.5 max-w-2xl">
+              <div className="space-y-2.5 max-w-2xl min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center space-x-1.5 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 tracking-wider">
                     <Terminal size={12} />
@@ -917,7 +917,7 @@ export default function LpicInfoPage() {
                     {config.quickLookup.length} 枚 ・ 演習 {config.practiceQuestions.length} 問
                   </span>
                 </div>
-                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-keep">
+                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-words">
                   <span className="inline-block">{config.headline}</span>
                   <span className="inline-block">合格対策学習ハブ</span>
                 </h2>
@@ -954,14 +954,14 @@ export default function LpicInfoPage() {
         </TiltCard>
 
         {/* 試験概要カード */}
-        <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <section className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
           {config.examFacts.map((fact) => (
             <div
               key={fact.label}
-              className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1"
+              className="bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 shadow-xs space-y-1 min-w-0"
             >
               <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
-              <div className="text-sm sm:text-base font-black text-slate-900 whitespace-nowrap">
+              <div className="text-sm sm:text-base font-black text-slate-900 break-words">
                 {fact.value}
               </div>
               <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
@@ -971,16 +971,16 @@ export default function LpicInfoPage() {
 
         {/* 総合進捗＆データ管理バー */}
         <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1.5 flex-1">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-700 flex items-center space-x-1.5">
-                  <Award className="w-4 h-4 text-cyan-600" />
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="space-y-1.5 flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-2 text-xs font-bold">
+                <span className="text-slate-700 flex items-start space-x-1.5">
+                  <Award className="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" />
                   <span>
                     {config.label} 総合学習進捗（トピック・暗記カード・練習問題）
                   </span>
                 </span>
-                <span className="font-mono text-cyan-700">{overallPct}%</span>
+                <span className="font-mono text-cyan-700 shrink-0">{overallPct}%</span>
               </div>
               <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
                 <div
@@ -1045,7 +1045,7 @@ export default function LpicInfoPage() {
                   type="button"
                   onClick={handleImportBackup}
                   disabled={!backupInput.trim()}
-                  className="px-4 py-2 rounded-xl bg-cyan-600 text-white text-xs font-bold hover:bg-cyan-700 disabled:opacity-40 cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-cyan-600 text-white text-xs font-bold hover:bg-cyan-700 disabled:opacity-40 cursor-pointer shrink-0"
                 >
                   復元する
                 </button>
@@ -1096,7 +1096,7 @@ export default function LpicInfoPage() {
           <div className="space-y-6">
             {/* フィルター＆検索バー */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+              <div className="flex flex-col gap-3">
                 {config.examFilters.length > 1 ? (
                   <div className="flex flex-wrap items-center gap-1.5">
                     {config.examFilters.map((ef) => (
@@ -1123,8 +1123,8 @@ export default function LpicInfoPage() {
                   </div>
                 )}
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <div className="relative flex-1 sm:w-60">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                  <div className="relative w-full lg:w-64 shrink-0">
                     <Search
                       size={14}
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -1140,60 +1140,63 @@ export default function LpicInfoPage() {
                       <button
                         type="button"
                         onClick={() => setTopicQuery("")}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                        aria-label="検索をクリア"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                       >
                         <X size={13} />
                       </button>
                     )}
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playCyberClick();
-                      setOnlyIncompleteTopics((v) => !v);
-                    }}
-                    className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
-                      onlyIncompleteTopics
-                        ? "bg-cyan-600 text-white border-cyan-600"
-                        : "bg-white text-slate-600 border-slate-200 hover:border-cyan-300"
-                    }`}
-                  >
-                    <EyeOff size={13} />
-                    <span>未完了のみ</span>
-                  </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setOnlyIncompleteTopics((v) => !v);
+                      }}
+                      className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
+                        onlyIncompleteTopics
+                          ? "bg-cyan-600 text-white border-cyan-600"
+                          : "bg-white text-slate-600 border-slate-200 hover:border-cyan-300"
+                      }`}
+                    >
+                      <EyeOff size={13} />
+                      <span>未完了のみ</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playCyberClick();
-                      setOnlyWithNotesTopics((v) => !v);
-                    }}
-                    className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
-                      onlyWithNotesTopics
-                        ? "bg-amber-600 text-white border-amber-600"
-                        : "bg-white text-slate-600 border-slate-200 hover:border-amber-300"
-                    }`}
-                  >
-                    <StickyNote size={13} />
-                    <span>メモあり ({notedTopicCount})</span>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playCyberClick();
+                        setOnlyWithNotesTopics((v) => !v);
+                      }}
+                      className={`inline-flex items-center space-x-1 px-3 py-1.5 rounded-xl border text-xs font-bold cursor-pointer ${
+                        onlyWithNotesTopics
+                          ? "bg-amber-600 text-white border-amber-600"
+                          : "bg-white text-slate-600 border-slate-200 hover:border-amber-300"
+                      }`}
+                    >
+                      <StickyNote size={13} />
+                      <span>メモあり ({notedTopicCount})</span>
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => handleExpandAllDomains(true)}
-                    className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
-                  >
-                    <ChevronsUpDown size={13} />
-                    <span>全展開</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleExpandAllDomains(false)}
-                    className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
-                  >
-                    <span>全折りたたみ</span>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => handleExpandAllDomains(true)}
+                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <ChevronsUpDown size={13} />
+                      <span>全展開</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleExpandAllDomains(false)}
+                      className="inline-flex items-center space-x-1 px-2.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
+                    >
+                      <span>全折りたたみ</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1234,7 +1237,7 @@ export default function LpicInfoPage() {
                       key={domain.id}
                       className={`bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
                     >
-                      <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <button
                           type="button"
                           onClick={() => {
@@ -1244,12 +1247,12 @@ export default function LpicInfoPage() {
                               [domain.id]: !prev[domain.id],
                             }));
                           }}
-                          className="flex items-start space-x-3.5 text-left flex-1 cursor-pointer"
+                          className="flex items-start space-x-3.5 text-left flex-1 min-w-0 cursor-pointer"
                         >
                           <div className={`p-2.5 rounded-xl border shrink-0 ${style.iconBg}`}>
                             <Icon size={20} />
                           </div>
-                          <div className="space-y-1 flex-1">
+                          <div className="space-y-1 flex-1 min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <span
                                 className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${style.badge}`}
@@ -1260,7 +1263,7 @@ export default function LpicInfoPage() {
                                 完了 {domainDone}/{domain.topics.length} ({domainPct}%)
                               </span>
                             </div>
-                            <h3 className="text-base sm:text-lg font-black text-slate-900">
+                            <h3 className="text-base sm:text-lg font-black text-slate-900 break-words">
                               {domain.title}
                               <span className="ml-2 text-xs font-normal text-slate-400">
                                 {domain.englishTitle}
@@ -1270,7 +1273,7 @@ export default function LpicInfoPage() {
                           </div>
                         </button>
 
-                        <div className="flex items-center space-x-2 shrink-0">
+                        <div className="flex items-center justify-end space-x-2 shrink-0">
                           <button
                             type="button"
                             onClick={() => handleJumpToDomainQuiz(domain.id)}
@@ -1310,23 +1313,23 @@ export default function LpicInfoPage() {
                                   isDone ? "border-emerald-200 bg-emerald-50/20" : "border-slate-200/80"
                                 }`}
                               >
-                                <div className="flex items-start justify-between gap-3">
+                                <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-2.5 sm:gap-3">
                                   <button
                                     type="button"
                                     onClick={() => toggleTopic(topic.id)}
-                                    className="flex items-start space-x-2.5 text-left cursor-pointer group"
+                                    className="flex items-start space-x-2.5 text-left cursor-pointer group min-w-0 flex-1"
                                   >
                                     {isDone ? (
                                       <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                                     ) : (
                                       <Circle className="w-5 h-5 text-slate-300 group-hover:text-cyan-500 shrink-0 mt-0.5" />
                                     )}
-                                    <div>
+                                    <div className="min-w-0">
                                       <span className="text-[11px] font-mono font-bold text-slate-400">
                                         Objective {topic.code}
                                       </span>
                                       <h4
-                                        className={`text-sm sm:text-base font-black ${
+                                        className={`text-sm sm:text-base font-black break-words ${
                                           isDone ? "text-emerald-950" : "text-slate-900"
                                         }`}
                                       >
@@ -1418,7 +1421,7 @@ export default function LpicInfoPage() {
         {activeTab === "comparisons" && (
           <div className="space-y-8">
             {/* 比較表フィルター */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-1.5">
                 {comparisonCategories.map((cat) => (
                   <button
@@ -1439,7 +1442,7 @@ export default function LpicInfoPage() {
                 ))}
               </div>
 
-              <div className="relative sm:w-64">
+              <div className="relative w-full lg:w-64 shrink-0">
                 <Search
                   size={14}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -1448,14 +1451,15 @@ export default function LpicInfoPage() {
                   type="text"
                   value={compQuery}
                   onChange={(e) => setCompQuery(e.target.value)}
-                  placeholder="コマンド・キーワードで絞り込み..."
+                  placeholder="コマンド・キーワード検索..."
                   className="w-full pl-8 pr-8 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
                 {compQuery && (
                   <button
                     type="button"
                     onClick={() => setCompQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    aria-label="検索をクリア"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                   >
                     <X size={13} />
                   </button>
@@ -1479,11 +1483,11 @@ export default function LpicInfoPage() {
                   </div>
 
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                    <table className="w-full min-w-[600px] text-left border-collapse text-xs sm:text-sm">
                       <thead>
                         <tr className="border-b border-slate-200 bg-slate-50">
                           {comp.columns.map((col) => (
-                            <th key={col} className="py-2.5 px-3 font-black text-slate-700">
+                            <th key={col} className="py-2.5 px-3 font-black text-slate-700 whitespace-nowrap">
                               {col}
                             </th>
                           ))}
@@ -1527,7 +1531,7 @@ export default function LpicInfoPage() {
                     key={pat.id}
                     className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
                   >
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
                       <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
                         {pat.badge}
@@ -1592,10 +1596,10 @@ export default function LpicInfoPage() {
                 {config.keyPaths.map((kp) => (
                   <div
                     key={kp.id}
-                    className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs"
+                    className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs min-w-0"
                   >
-                    <div className="font-mono text-xs font-black text-indigo-700">{kp.target}</div>
-                    <div className="text-sm font-black text-slate-900">{kp.value}</div>
+                    <div className="font-mono text-xs font-black text-indigo-700 break-words">{kp.target}</div>
+                    <div className="text-sm font-black text-slate-900 break-words">{kp.value}</div>
                     <p className="text-[11px] text-slate-500 leading-snug">{kp.detail}</p>
                   </div>
                 ))}

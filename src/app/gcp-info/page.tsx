@@ -908,7 +908,7 @@ export default function GcpInfoPage() {
                   type="button"
                   onClick={() => handleSwitchCert(id)}
                   onMouseEnter={() => playCyberHover()}
-                  className={`px-3 py-2 rounded-lg text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
+                  className={`px-3 py-2 rounded-lg text-xs font-black transition-all cursor-pointer sm:whitespace-nowrap text-left ${
                     active
                       ? "bg-slate-900 text-white shadow-sm"
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
@@ -925,11 +925,11 @@ export default function GcpInfoPage() {
         <TiltCard maxTilt={2} glareOpacity={0.05} className="rounded-3xl">
           <div
             onMouseEnter={() => playCyberHover()}
-            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-cyan-950 border border-cyan-700/50 p-6 sm:p-8 text-white shadow-xl"
+            className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-slate-900 to-cyan-950 border border-cyan-700/50 p-5 sm:p-8 text-white shadow-xl"
           >
             <div className="absolute -top-10 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="space-y-2.5 max-w-2xl">
+              <div className="space-y-2.5 max-w-2xl min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center space-x-1.5 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 tracking-wider">
                     <Cloud size={12} />
@@ -940,7 +940,7 @@ export default function GcpInfoPage() {
                     {config.quickLookup.length} 枚 ・ 演習 {config.practiceQuestions.length} 問
                   </span>
                 </div>
-                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-keep">
+                <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-words">
                   <span className="inline-block">{config.headline}</span>
                   <span className="inline-block ml-1">合格対策学習ハブ</span>
                 </h2>
@@ -977,14 +977,14 @@ export default function GcpInfoPage() {
         </TiltCard>
 
         {/* 試験概要カード */}
-        <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <section className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
           {config.examFacts.map((fact) => (
             <div
               key={fact.label}
-              className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-1"
+              className="bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 shadow-xs space-y-1 min-w-0"
             >
               <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
-              <div className="text-sm sm:text-base font-black text-slate-900 whitespace-nowrap">
+              <div className="text-sm sm:text-base font-black text-slate-900 break-words">
                 {fact.value}
               </div>
               <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
@@ -994,16 +994,16 @@ export default function GcpInfoPage() {
 
         {/* 総合進捗＆データ管理バー */}
         <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="space-y-1.5 flex-1">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-700 flex items-center space-x-1.5">
-                  <Award className="w-4 h-4 text-cyan-600" />
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="space-y-1.5 flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-2 text-xs font-bold">
+                <span className="text-slate-700 flex items-start space-x-1.5">
+                  <Award className="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" />
                   <span>
                     {config.shortLabel} 総合学習進捗（トピック・暗記カード・練習問題）
                   </span>
                 </span>
-                <span className="font-mono text-cyan-700">{overallPct}%</span>
+                <span className="font-mono text-cyan-700 shrink-0">{overallPct}%</span>
               </div>
               <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
                 <div
@@ -1094,13 +1094,13 @@ export default function GcpInfoPage() {
                   setActiveTab(tab.id);
                 }}
                 onMouseEnter={() => playCyberHover()}
-                className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
                   active
                     ? "bg-slate-900 text-white shadow-sm"
                     : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
                 }`}
               >
-                <Icon size={15} />
+                <Icon size={15} className="shrink-0" />
                 <span>{tab.label}</span>
                 {tab.badge && (
                   <span
@@ -1120,7 +1120,7 @@ export default function GcpInfoPage() {
         {activeTab === "domains" && (
           <div className="space-y-5">
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-              <div className="relative flex-1 max-w-md">
+              <div className="relative w-full lg:flex-1 lg:max-w-xs">
                 <Search
                   size={14}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -1129,14 +1129,15 @@ export default function GcpInfoPage() {
                   type="text"
                   value={topicQuery}
                   onChange={(e) => setTopicQuery(e.target.value)}
-                  placeholder="キーワード・サービス・gcloud コマンド検索..."
+                  placeholder="GCP サービス・gcloud 検索..."
                   className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-cyan-400"
                 />
                 {topicQuery && (
                   <button
                     type="button"
                     onClick={() => setTopicQuery("")}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    aria-label="検索をクリア"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                   >
                     <X size={13} />
                   </button>
@@ -1276,7 +1277,7 @@ export default function GcpInfoPage() {
                       id={domain.id}
                       className={`scroll-mt-6 bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
                     >
-                      <div className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <button
                           type="button"
                           onClick={() => {
@@ -1286,12 +1287,12 @@ export default function GcpInfoPage() {
                               [domain.id]: !prev[domain.id],
                             }));
                           }}
-                          className="flex items-start space-x-3.5 text-left flex-1 cursor-pointer"
+                          className="flex items-start space-x-3.5 text-left flex-1 min-w-0 cursor-pointer"
                         >
                           <div className={`p-2.5 rounded-xl border shrink-0 ${style.iconBg}`}>
                             <Icon size={20} />
                           </div>
-                          <div className="space-y-1 flex-1">
+                          <div className="space-y-1 flex-1 min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <span
                                 className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${style.badge}`}
@@ -1302,7 +1303,7 @@ export default function GcpInfoPage() {
                                 完了 {domainDone}/{domain.topics.length} ({domainPct}%)
                               </span>
                             </div>
-                            <h3 className="text-base sm:text-lg font-black text-slate-900">
+                            <h3 className="text-base sm:text-lg font-black text-slate-900 break-words">
                               {domain.title}
                               <span className="ml-2 text-xs font-normal text-slate-400">
                                 {domain.englishTitle}
@@ -1312,7 +1313,7 @@ export default function GcpInfoPage() {
                           </div>
                         </button>
 
-                        <div className="flex items-center space-x-2 shrink-0">
+                        <div className="flex items-center justify-end space-x-2 shrink-0">
                           <button
                             type="button"
                             onClick={() => handleJumpToDomainQuiz(domain.id)}
@@ -1352,23 +1353,23 @@ export default function GcpInfoPage() {
                                   isDone ? "border-emerald-200 bg-emerald-50/20" : "border-slate-200/80"
                                 }`}
                               >
-                                <div className="flex items-start justify-between gap-3">
+                                <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-2.5 sm:gap-3">
                                   <button
                                     type="button"
                                     onClick={() => toggleTopic(topic.id)}
-                                    className="flex items-start space-x-2.5 text-left cursor-pointer group"
+                                    className="flex items-start space-x-2.5 text-left cursor-pointer group min-w-0 flex-1"
                                   >
                                     {isDone ? (
                                       <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                                     ) : (
                                       <Circle className="w-5 h-5 text-slate-300 group-hover:text-cyan-500 shrink-0 mt-0.5" />
                                     )}
-                                    <div>
+                                    <div className="min-w-0">
                                       <span className="text-[11px] font-mono font-bold text-slate-400">
                                         Topic {topic.code}
                                       </span>
                                       <h4
-                                        className={`text-sm sm:text-base font-black ${
+                                        className={`text-sm sm:text-base font-black break-words ${
                                           isDone ? "text-emerald-950" : "text-slate-900"
                                         }`}
                                       >
@@ -1460,7 +1461,7 @@ export default function GcpInfoPage() {
         {activeTab === "comparisons" && (
           <div className="space-y-8">
             <div className="space-y-3">
-              <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 <div className="flex flex-wrap gap-1.5">
                   {availableComparisonCategories.map((cat) => (
                     <button
@@ -1480,7 +1481,7 @@ export default function GcpInfoPage() {
                     </button>
                   ))}
                 </div>
-                <div className="relative w-full sm:w-64">
+                <div className="relative w-full lg:w-64 shrink-0">
                   <Search
                     size={14}
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -1581,11 +1582,11 @@ export default function GcpInfoPage() {
                     </div>
 
                     <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                      <table className="w-full min-w-[600px] text-left border-collapse text-xs sm:text-sm">
                         <thead>
                           <tr className="border-b border-slate-200 bg-slate-50">
                             {comp.columns.map((col) => (
-                              <th key={col} className="py-2.5 px-3 font-black text-slate-700">
+                              <th key={col} className="py-2.5 px-3 font-black text-slate-700 whitespace-nowrap">
                                 {col}
                               </th>
                             ))}
@@ -1631,7 +1632,7 @@ export default function GcpInfoPage() {
                       key={pat.id}
                       className="p-5 space-y-3 bg-white border border-slate-200/80 rounded-2xl"
                     >
-                      <div className="flex items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
                         <h4 className="text-sm sm:text-base font-black text-slate-900">{pat.title}</h4>
                         <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
                           {pat.badge}
@@ -1700,10 +1701,10 @@ export default function GcpInfoPage() {
                   {filteredKeyFacts.map((kf) => (
                     <div
                       key={kf.id}
-                      className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs"
+                      className="bg-white rounded-2xl border border-slate-200/80 p-4 space-y-1 shadow-xs min-w-0"
                     >
-                      <div className="font-mono text-xs font-black text-indigo-700">{kf.target}</div>
-                      <div className="text-sm font-black text-slate-900">{kf.value}</div>
+                      <div className="font-mono text-xs font-black text-indigo-700 break-words">{kf.target}</div>
+                      <div className="text-sm font-black text-slate-900 break-words">{kf.value}</div>
                       <p className="text-[11px] text-slate-500 leading-snug">{kf.detail}</p>
                     </div>
                   ))}
