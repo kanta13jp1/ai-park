@@ -35,6 +35,10 @@ import {
   Gauge,
   Terminal,
   Wrench,
+  Brain,
+  Activity,
+  Lock,
+  GitBranch,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -92,9 +96,53 @@ import {
   pcaPracticeQuestions,
   pcaOfficialResources,
 } from "@/data/gcp-pca";
+import {
+  pdeExamFacts,
+  pdeDomains,
+  pdeComparisons,
+  pdePatterns,
+  pdePitfalls,
+  pdeKeyFacts,
+  pdeQuickLookup,
+  pdePracticeQuestions,
+  pdeOfficialResources,
+} from "@/data/gcp-pde";
+import {
+  pmleExamFacts,
+  pmleDomains,
+  pmleComparisons,
+  pmlePatterns,
+  pmlePitfalls,
+  pmleKeyFacts,
+  pmleQuickLookup,
+  pmlePracticeQuestions,
+  pmleOfficialResources,
+} from "@/data/gcp-pmle";
+import {
+  pcseExamFacts,
+  pcseDomains,
+  pcseComparisons,
+  pcsePatterns,
+  pcsePitfalls,
+  pcseKeyFacts,
+  pcseQuickLookup,
+  pcsePracticeQuestions,
+  pcseOfficialResources,
+} from "@/data/gcp-pcse";
+import {
+  pcdeExamFacts,
+  pcdeDomains,
+  pcdeComparisons,
+  pcdePatterns,
+  pcdePitfalls,
+  pcdeKeyFacts,
+  pcdeQuickLookup,
+  pcdePracticeQuestions,
+  pcdeOfficialResources,
+} from "@/data/gcp-pcde";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
-type GcpCertId = "cdl" | "ace" | "pca";
+type GcpCertId = "cdl" | "ace" | "pca" | "pde" | "pmle" | "pcse" | "pcde";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
 interface GcpCertConfig {
@@ -212,6 +260,126 @@ const CERT_CONFIG: Record<GcpCertId, GcpCertConfig> = {
     flashcardTitle: "PCA 設計要件・制約 → アーキテクチャ選択即答トレーニング",
     quickSearchChips: ["Cloud Spanner", "Shared VPC", "VPC Service Controls", "Interconnect", "BigQuery", "SRE", "Cloud EKM"],
   },
+  pde: {
+    id: "pde",
+    label: "Professional Data Engineer (PDE)",
+    shortLabel: "PDE",
+    badgeText: "GOOGLE CLOUD PROFESSIONAL DATA ENGINEER STUDY HUB",
+    headline: "Professional Data Engineer（PDE）",
+    description:
+      "BigQuery・Dataflow・Pub/Sub・Dataproc・Cloud Composer・Dataplex・Bigtable・DLP を軸に、スケーラブルで安全なデータ基盤の設計と運用を学ぶデータエンジニア向け学習ハブです。",
+    storageKey: "ai-park-gcp-pde-progress-v1",
+    examFacts: pdeExamFacts,
+    domains: pdeDomains,
+    comparisons: pdeComparisons,
+    patterns: pdePatterns,
+    pitfalls: pdePitfalls,
+    keyFacts: pdeKeyFacts,
+    quickLookup: pdeQuickLookup,
+    practiceQuestions: pdePracticeQuestions,
+    officialResources: pdeOfficialResources,
+    defaultExpanded: { "pde-domain-1": true },
+    passingConfig: {
+      minScore: 0,
+      maxScore: 100,
+      passingScore: 70,
+      passingPct: 70,
+      officialExamLabel: "Professional Data Engineer 本試験（目安70%前後）",
+    },
+    quizBadgeLabel: "GCP PDE 演習",
+    flashcardTitle: "PDE データ基盤要件 → 最適サービス・パイプライン設計即答トレーニング",
+    quickSearchChips: ["BigQuery", "Dataflow", "Pub/Sub", "Dataproc", "Cloud Composer", "Bigtable", "Dataplex"],
+  },
+  pmle: {
+    id: "pmle",
+    label: "Professional ML Engineer (PMLE)",
+    shortLabel: "PMLE",
+    badgeText: "GOOGLE CLOUD PROFESSIONAL ML ENGINEER STUDY HUB",
+    headline: "Professional Machine Learning Engineer（PMLE）",
+    description:
+      "Vertex AI（Pipelines / Feature Store / Model Monitoring）・生成 AI（Gemini / RAG）・BigQuery ML・分散学習（GPU/TPU）・MLOps の設計と自動化を学ぶ機械学習エンジニア向け学習ハブです。",
+    storageKey: "ai-park-gcp-pmle-progress-v1",
+    examFacts: pmleExamFacts,
+    domains: pmleDomains,
+    comparisons: pmleComparisons,
+    patterns: pmlePatterns,
+    pitfalls: pmlePitfalls,
+    keyFacts: pmleKeyFacts,
+    quickLookup: pmleQuickLookup,
+    practiceQuestions: pmlePracticeQuestions,
+    officialResources: pmleOfficialResources,
+    defaultExpanded: { "pmle-domain-1": true },
+    passingConfig: {
+      minScore: 0,
+      maxScore: 100,
+      passingScore: 70,
+      passingPct: 70,
+      officialExamLabel: "Professional ML Engineer 本試験（目安70%前後）",
+    },
+    quizBadgeLabel: "GCP PMLE 演習",
+    flashcardTitle: "PMLE 機械学習・MLOps 要件 → Vertex AI / 手法即答トレーニング",
+    quickSearchChips: ["Vertex AI", "Gemini", "Feature Store", "BigQuery ML", "AutoML", "Pipelines", "Model Monitoring"],
+  },
+  pcse: {
+    id: "pcse",
+    label: "Professional Cloud Security Engineer (PCSE)",
+    shortLabel: "PCSE",
+    badgeText: "GOOGLE CLOUD PROFESSIONAL SECURITY ENGINEER STUDY HUB",
+    headline: "Professional Cloud Security Engineer（PCSE）",
+    description:
+      "IAM / Workload Identity Federation・VPC Service Controls・Cloud Armor / NGFW・Cloud KMS / EKM・DLP・Security Command Center / SecOps を体系的に学ぶセキュリティエンジニア向け学習ハブです。",
+    storageKey: "ai-park-gcp-pcse-progress-v1",
+    examFacts: pcseExamFacts,
+    domains: pcseDomains,
+    comparisons: pcseComparisons,
+    patterns: pcsePatterns,
+    pitfalls: pcsePitfalls,
+    keyFacts: pcseKeyFacts,
+    quickLookup: pcseQuickLookup,
+    practiceQuestions: pcsePracticeQuestions,
+    officialResources: pcseOfficialResources,
+    defaultExpanded: { "pcse-domain-1": true },
+    passingConfig: {
+      minScore: 0,
+      maxScore: 100,
+      passingScore: 70,
+      passingPct: 70,
+      officialExamLabel: "Professional Cloud Security Engineer 本試験（目安70%前後）",
+    },
+    quizBadgeLabel: "GCP PCSE 演習",
+    flashcardTitle: "PCSE セキュリティ脅威・要件 → 防御・境界・暗号制御即答トレーニング",
+    quickSearchChips: ["IAM", "VPC Service Controls", "Cloud KMS", "Cloud Armor", "Security Command Center", "Cloud DLP", "Binary Authorization"],
+  },
+  pcde: {
+    id: "pcde",
+    label: "Professional Cloud DevOps Engineer (PCDE)",
+    shortLabel: "PCDE",
+    badgeText: "GOOGLE CLOUD PROFESSIONAL DEVOPS ENGINEER STUDY HUB",
+    headline: "Professional Cloud DevOps Engineer（PCDE）",
+    description:
+      "SRE（SLI/SLO/エラーバジェット）・Cloud Build / Cloud Deploy CI/CD・GKE 運用・Cloud Monitoring / Logging / Trace / Profiler・インシデント対応を学ぶ DevOps/SRE 向け学習ハブです。",
+    storageKey: "ai-park-gcp-pcde-progress-v1",
+    examFacts: pcdeExamFacts,
+    domains: pcdeDomains,
+    comparisons: pcdeComparisons,
+    patterns: pcdePatterns,
+    pitfalls: pcdePitfalls,
+    keyFacts: pcdeKeyFacts,
+    quickLookup: pcdeQuickLookup,
+    practiceQuestions: pcdePracticeQuestions,
+    officialResources: pcdeOfficialResources,
+    defaultExpanded: { "pcde-domain-1": true },
+    passingConfig: {
+      minScore: 0,
+      maxScore: 100,
+      passingScore: 70,
+      passingPct: 70,
+      officialExamLabel: "Professional Cloud DevOps Engineer 本試験（目安70%前後）",
+    },
+    quizBadgeLabel: "GCP PCDE 演習",
+    flashcardTitle: "PCDE SRE・CI/CD・可観測性要件 → 運用手法・サービス即答トレーニング",
+    quickSearchChips: ["SLI / SLO", "Cloud Build", "Cloud Deploy", "GKE", "Cloud Monitoring", "Cloud Trace", "Artifact Registry"],
+  },
 };
 
 interface GcpProgress {
@@ -250,6 +418,27 @@ const DOMAIN_ICONS: Record<string, typeof Cloud> = {
   "pca-domain-4": Cpu,
   "pca-domain-5": Database,
   "pca-domain-6": Gauge,
+  "pde-domain-1": Layers,
+  "pde-domain-2": Database,
+  "pde-domain-3": Cpu,
+  "pde-domain-4": Wrench,
+  "pde-domain-5": ShieldCheck,
+  "pmle-domain-1": Brain,
+  "pmle-domain-2": Database,
+  "pmle-domain-3": Cpu,
+  "pmle-domain-4": Sparkles,
+  "pmle-domain-5": GitBranch,
+  "pmle-domain-6": Activity,
+  "pcse-domain-1": Lock,
+  "pcse-domain-2": Network,
+  "pcse-domain-3": ShieldCheck,
+  "pcse-domain-4": Activity,
+  "pcse-domain-5": Wrench,
+  "pcde-domain-1": Layers,
+  "pcde-domain-2": GitBranch,
+  "pcde-domain-3": Activity,
+  "pcde-domain-4": Gauge,
+  "pcde-domain-5": Cpu,
 };
 
 const ACCENT_STYLES: Record<
@@ -358,6 +547,10 @@ export default function GcpInfoPage() {
     cdl: DEFAULT_PROGRESS,
     ace: DEFAULT_PROGRESS,
     pca: DEFAULT_PROGRESS,
+    pde: DEFAULT_PROGRESS,
+    pmle: DEFAULT_PROGRESS,
+    pcse: DEFAULT_PROGRESS,
+    pcde: DEFAULT_PROGRESS,
   });
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(
     CERT_CONFIG.cdl.defaultExpanded
@@ -389,6 +582,10 @@ export default function GcpInfoPage() {
         cdl: loadGcpProgress(CERT_CONFIG.cdl.storageKey),
         ace: loadGcpProgress(CERT_CONFIG.ace.storageKey),
         pca: loadGcpProgress(CERT_CONFIG.pca.storageKey),
+        pde: loadGcpProgress(CERT_CONFIG.pde.storageKey),
+        pmle: loadGcpProgress(CERT_CONFIG.pmle.storageKey),
+        pcse: loadGcpProgress(CERT_CONFIG.pcse.storageKey),
+        pcde: loadGcpProgress(CERT_CONFIG.pcde.storageKey),
       });
     });
   }, []);
@@ -685,24 +882,24 @@ export default function GcpInfoPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="GCP・Google Cloud情報局"
-        subtitle="Cloud Digital Leader / Associate Cloud Engineer / Professional Cloud Architect 統合学習ハブ"
+        subtitle="CDL / ACE / PCA / PDE / PMLE / PCSE / PCDE（Google Cloud 全7資格）統合学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
-          message="現在 Google Cloud 認定資格（CDL / ACE / PCA）の公式試験ガイドに基づく学習ハブを掲載しています。社内の GCP 利用ルールや資格取得支援制度等は準備中（確定次第掲載）です。"
+          message="現在 Google Cloud 認定資格（CDL / ACE / PCA / PDE / PMLE / PCSE / PCDE 全7資格）の公式試験ガイドに基づく学習ハブを掲載しています。社内の GCP 利用ルールや資格取得支援制度等は準備中（確定次第掲載）です。"
           statusType="construction"
         />
 
-        {/* 資格レベル切り替え（CDL / ACE / PCA） */}
-        <section className="flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl border border-slate-200/80 p-3 shadow-xs">
-          <div className="flex items-center space-x-2 px-2">
+        {/* 資格レベル切り替え（全7資格） */}
+        <section className="flex flex-col gap-3 bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs">
+          <div className="flex items-center space-x-2 px-1">
             <Cloud size={16} className="text-cyan-600" />
-            <span className="text-xs sm:text-sm font-black text-slate-800">学習資格選択</span>
+            <span className="text-xs sm:text-sm font-black text-slate-800">学習資格選択（全7資格）</span>
           </div>
-          <div className="inline-flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
-            {(["cdl", "ace", "pca"] as const).map((id) => {
+          <div className="flex flex-wrap gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/70">
+            {(["cdl", "ace", "pca", "pde", "pmle", "pcse", "pcde"] as const).map((id) => {
               const item = CERT_CONFIG[id];
               const active = certId === id;
               return (
@@ -711,7 +908,7 @@ export default function GcpInfoPage() {
                   type="button"
                   onClick={() => handleSwitchCert(id)}
                   onMouseEnter={() => playCyberHover()}
-                  className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition-all cursor-pointer whitespace-nowrap ${
+                  className={`px-3 py-2 rounded-lg text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
                     active
                       ? "bg-slate-900 text-white shadow-sm"
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
@@ -998,7 +1195,11 @@ export default function GcpInfoPage() {
             </div>
 
             {/* ドメイン別クイックジャンプ＆進捗ミニバー */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+            <div
+              className={`grid grid-cols-2 sm:grid-cols-3 gap-2.5 ${
+                config.domains.length === 5 ? "lg:grid-cols-5" : "lg:grid-cols-6"
+              }`}
+            >
               {config.domains.map((domain) => {
                 const style = ACCENT_STYLES[domain.accentColor];
                 const done = domain.topics.filter((t) =>

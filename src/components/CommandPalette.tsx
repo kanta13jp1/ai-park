@@ -174,10 +174,10 @@ const paletteItems: PaletteItem[] = [
   },
   {
     id: "gcp-info",
-    title: "GCP・Google Cloud情報局 (CDL/ACE/PCA)",
+    title: "GCP・Google Cloud情報局 (全7資格: CDL/ACE/PCA/PDE/PMLE/PCSE/PCDE)",
     category: "Academy & 学習",
     href: "/gcp-info",
-    description: "CDL / ACE / PCA 統合学習ハブ・練習クイズ（社内GCPルール等は工事中）",
+    description: "CDL / ACE / PCA / PDE / PMLE / PCSE / PCDE 統合学習ハブ・練習クイズ（社内GCPルール等は工事中）",
     icon: Compass,
   },
   {

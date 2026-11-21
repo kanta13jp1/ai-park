@@ -77,11 +77,11 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["aws", "saa", "saa-c03", "クラウド", "試験", "模擬試験", "クイズ", "flashcards", "well-architected"],
   },
   {
-    title: "GCP・Google Cloud情報局 (CDL/ACE/PCA)",
+    title: "GCP・Google Cloud情報局 (CDL/ACE/PCA/PDE/PMLE/PCSE/PCDE)",
     category: "資格・Google Cloud",
     href: "/gcp-info",
-    description: "Google Cloud 認定資格（CDL / ACE / PCA）統合学習ハブ・練習クイズ・比較表を掲載中（社内GCP利用ルール等は工事中）",
-    keywords: ["gcp", "google cloud", "cdl", "ace", "pca", "cloud digital leader", "associate cloud engineer", "professional cloud architect", "試験", "クイズ", "flashcards"],
+    description: "Google Cloud 認定資格（CDL / ACE / PCA / PDE / PMLE / PCSE / PCDE 全7資格）統合学習ハブ・練習クイズ・比較表を掲載中（社内GCP利用ルール等は工事中）",
+    keywords: ["gcp", "google cloud", "cdl", "ace", "pca", "pde", "pmle", "pcse", "pcde", "cloud digital leader", "associate cloud engineer", "professional cloud architect", "data engineer", "machine learning", "security", "devops", "試験", "クイズ", "flashcards"],
   },
   {
     title: "Azure・Microsoft Azure情報局 (AZ-900/AI-900/AZ-104/AZ-305)",

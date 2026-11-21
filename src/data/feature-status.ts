@@ -267,7 +267,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "🚧 工事中",
-    disclaimer: "【一部工事中】Google Cloud 認定（CDL / ACE / PCA）学習ハブを掲載中。社内の GCP 利用ルールや資格取得支援制度は決まり次第掲載します。",
+    disclaimer: "【一部工事中】Google Cloud 認定（CDL / ACE / PCA / PDE / PMLE / PCSE / PCDE 全7資格）学習ハブを掲載中。社内の GCP 利用ルールや資格取得支援制度は決まり次第掲載します。",
     releaseDate: "未定",
     releaseCondition: "社内の GCP 利用ルール・資格取得支援制度の確定",
   },
