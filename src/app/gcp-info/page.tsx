@@ -380,10 +380,12 @@ export default function GcpInfoPage() {
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    setProgressByCert({
-      cdl: loadGcpProgress(CERT_CONFIG.cdl.storageKey),
-      ace: loadGcpProgress(CERT_CONFIG.ace.storageKey),
-      pca: loadGcpProgress(CERT_CONFIG.pca.storageKey),
+    queueMicrotask(() => {
+      setProgressByCert({
+        cdl: loadGcpProgress(CERT_CONFIG.cdl.storageKey),
+        ace: loadGcpProgress(CERT_CONFIG.ace.storageKey),
+        pca: loadGcpProgress(CERT_CONFIG.pca.storageKey),
+      });
     });
   }, []);
 

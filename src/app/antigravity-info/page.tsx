@@ -198,7 +198,7 @@ export default function AntigravityInfoPage() {
         </TiltCard>
 
         {/* タブ切り替え + 検索バー */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-slate-200/90 rounded-2xl p-3 shadow-xs">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white border border-slate-200/90 rounded-2xl p-3 shadow-xs">
           <div className="flex flex-wrap gap-2">
             {(
               [
@@ -219,13 +219,13 @@ export default function AntigravityInfoPage() {
                     setActiveTab(tab.id);
                   }}
                   onMouseEnter={() => playCyberHover()}
-                  className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
                     isActive
                       ? "bg-slate-900 text-white shadow-sm"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900"
                   }`}
                 >
-                  <Icon size={15} className={isActive ? "text-cyan-300" : "text-slate-500"} />
+                  <Icon size={15} className={`shrink-0 ${isActive ? "text-cyan-300" : "text-slate-500"}`} />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -233,7 +233,7 @@ export default function AntigravityInfoPage() {
           </div>
 
           {activeTab !== "overview" && (
-            <div className="relative w-full md:w-72">
+            <div className="relative w-full lg:w-64 shrink-0">
               <Search
                 size={15}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
@@ -266,7 +266,7 @@ export default function AntigravityInfoPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {antigravitySurfaces.map((surface) => {
                   const Icon = SURFACE_ICONS[surface.id];
                   return (
@@ -276,7 +276,7 @@ export default function AntigravityInfoPage() {
                       className="bg-white border-slate-200/90 rounded-2xl p-5 flex flex-col justify-between space-y-4"
                     >
                       <div className="space-y-3">
-                        <div className="flex items-start justify-between gap-3">
+                        <div className="flex flex-wrap items-start justify-between gap-2">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-slate-900 text-cyan-300 flex items-center justify-center shrink-0">
                               <Icon size={20} />
@@ -548,7 +548,7 @@ export default function AntigravityInfoPage() {
                     key={ex.id}
                     className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                    <div className="flex flex-col xl:flex-row xl:items-start justify-between gap-3">
                       <div className="space-y-1.5">
                         <div className="flex flex-wrap items-center gap-2">
                           <span className="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-slate-900 text-cyan-300">
