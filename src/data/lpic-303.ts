@@ -431,6 +431,42 @@ export const lpic303QuickLookup: CertFlashcardItem[] = [
     recommended: "Lynis (lynis audit system)",
     reason: "カーネル設定・権限・サービス構成を検査しハードニングの提案を行う。",
   },
+  {
+    keyword: "特定ドメインに対して SSL/TLS 証明書の発行を許可する認証局（CA）を制限・明示する DNS レコード",
+    category: "331: 暗号化・PKI",
+    recommended: "CAA レコード",
+    reason: "Certificate Authority Authorization により、意図しない CA からの不正証明書発行リスクを低減できる。",
+  },
+  {
+    keyword: "BIND 等の DNS サーバ間でゾーン転送や動的更新（DDNS）を行う際、共有鍵と HMAC で通信を認証する仕組み",
+    category: "331: 暗号化・PKI",
+    recommended: "TSIG (Transaction Signature)",
+    reason: "DNSSEC がクライアント向け応答署名であるのに対し、TSIG はサーバ間のゾーン転送や更新の認証に使う。",
+  },
+  {
+    keyword: "systemd のスライスやサービスユニット単位で CPU・メモリ・I/O 消費量をリアルタイム監視するコマンド",
+    category: "332: ホストセキュリティ",
+    recommended: "systemd-cgtop",
+    reason: "cgroup ツリーの階層構造を確認する `systemd-cgls` と併せて、リソース制限（MemoryMax 等）の効果検証に使う。",
+  },
+  {
+    keyword: "Linux カーネルのアドレス空間配置ランダム化（ASLR）をスタック・ライブラリ・ヒープまで最大有効化する sysctl 設定",
+    category: "332: ホストセキュリティ",
+    recommended: "kernel.randomize_va_space = 2",
+    reason: "0 は無効、1 は保守的（ヒープ除外）、2 は完全有効化であり、メモリ破壊攻撃への耐性を高める。",
+  },
+  {
+    keyword: "Linux ファイルシステムの拡張属性（Extended Attributes: user.*, security.* 等）を設定・確認するコマンド",
+    category: "333: アクセス制御",
+    recommended: "setfattr / getfattr",
+    reason: "`setfattr -n user.key -v val file` で属性を設定し、`getfattr -d file` で値を参照できる。",
+  },
+  {
+    keyword: "多数の IP アドレスやネットワークをハッシュ等で高速管理し、iptables の単一ルールから一括照合する拡張",
+    category: "334: ネットワーク",
+    recommended: "ipset (-m set --match-set)",
+    reason: "数千件のブロック対象 IP を個別の iptables ルールに展開せず、O(1) に近い高速照合で管理できる。",
+  },
 ];
 
 export const lpic303PracticeQuestions: CertQuestion[] = [
@@ -482,6 +518,24 @@ export const lpic303PracticeQuestions: CertQuestion[] = [
     explanation:
       "LUKS（Linux Unified Key Setup）は `cryptsetup` で管理するブロックデバイスレベルの標準暗号化仕様です。eCryptfs はディレクトリ・ファイル単位のスタック型暗号化です。",
     keywords: ["LUKS", "cryptsetup", "ブロック暗号化"],
+  },
+  {
+    id: "q-331-4",
+    domainId: "topic-331",
+    domainLabel: "331: 暗号化",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "DNS のセキュリティ拡張や暗号認証（LPIC-3 331.4）に関する記述として正しいものを 2 つ選んでください。",
+    options: [
+      "`CAA` レコードは、そのドメインに対して TLS 証明書を発行できる認証局（CA）をドメイン管理者が制限するために用いられる",
+      "`TSIG`（Transaction Signature）は、DNS のゾーン転送や動的更新において共有鍵と HMAC を用いて通信を認証する",
+      "`NSEC3` レコードは DNS クエリと応答のペイロード全体を TLS 暗号化して盗聴を防ぐためのレコードである",
+      "`Clevis` と `Tang` は BIND ゾーンファイルの自動再署名のみを行う専用スクリプト群である",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "`CAA` レコードで証明書発行を許可する CA を指定でき、`TSIG` でプライマリ／セカンダリ間のゾーン転送（AXFR/IXFR）や動的更新を保護できます。なお `NSEC3` は DNSSEC においてゾーン列挙（Zone Walking）を防ぐためのハッシュ化不在証明レコードであり、通信暗号化ではありません。また `Clevis` / `Tang` は LUKS 暗号化ボリュームのネットワーク結合ディスク暗号化（NBDE）技術です。",
+    keywords: ["CAA", "TSIG", "DNSSEC"],
   },
   {
     id: "q-332-1",
@@ -538,6 +592,24 @@ export const lpic303PracticeQuestions: CertQuestion[] = [
     keywords: ["systemd サンドボックス", "ProtectSystem", "MemoryMax"],
   },
   {
+    id: "q-332-4",
+    domainId: "topic-332",
+    domainLabel: "332: ホストセキュリティ",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Linux カーネルの `sysctl` 設定によって ASLR（アドレス空間配置のランダム化）をスタック・共有ライブラリ・ヒープ領域まで含めて最大限に有効化するパラメータ設定はどれですか？",
+    options: [
+      "kernel.randomize_va_space = 2",
+      "kernel.randomize_va_space = 0",
+      "kernel.kptr_restrict = 2",
+      "fs.protected_symlinks = 1",
+    ],
+    correctIndices: [0],
+    explanation:
+      "`kernel.randomize_va_space` は ASLR を制御し、`0` が無効、`1` が保守的有効化、`2` がヒープ（brk）を含む完全ランダム化です。`kernel.kptr_restrict` は `/proc` 等でのカーネルアドレス表示制限、`fs.protected_symlinks` はシンボリックリンク悪用対策です。",
+    keywords: ["ASLR", "sysctl", "randomize_va_space"],
+  },
+  {
     id: "q-333-1",
     domainId: "topic-333",
     domainLabel: "333: アクセス制御",
@@ -592,6 +664,24 @@ export const lpic303PracticeQuestions: CertQuestion[] = [
     keywords: ["AppArmor", "aa-complain", "MAC"],
   },
   {
+    id: "q-333-4",
+    domainId: "topic-333",
+    domainLabel: "333: アクセス制御",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Linux ファイルシステム上の一般ユーザーが独自に定義・操作できる拡張属性（Extended Attributes）の名前空間（Namespace）および設定・取得コマンドの正しい組み合わせはどれですか？",
+    options: [
+      "`setfattr -n user.tag -v \"prod\" file` と `getfattr -d file`",
+      "`setfacl -n attr.tag -v \"prod\" file` と `getfacl -d file`",
+      "`chattr -n sys.tag=prod file` と `lsattr -d file`",
+      "`setcap -n cap.tag=prod file` と `getcap -d file`",
+    ],
+    correctIndices: [0],
+    explanation:
+      "拡張属性には `user.*`、`trusted.*`、`security.*`、`system.*` の名前空間があり、一般ユーザーが任意メタデータを付与できるのは `user.*` です。操作には `setfattr` と `getfattr` を使用します。",
+    keywords: ["setfattr", "getfattr", "拡張属性"],
+  },
+  {
     id: "q-334-1",
     domainId: "topic-334",
     domainLabel: "334: ネットワークセキュリティ",
@@ -636,6 +726,24 @@ export const lpic303PracticeQuestions: CertQuestion[] = [
     keywords: ["FreeRADIUS", "radtest", "802.1X"],
   },
   {
+    id: "q-334-4",
+    domainId: "topic-334",
+    domainLabel: "334: ネットワークセキュリティ",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "Netfilter（`iptables` / `ipset`）によるパケットフィルタリングおよび OpenVPN の動作モードに関する記述として正しいものを 2 つ選んでください。",
+    options: [
+      "`ipset` で多数の IP アドレスをハッシュセットとして管理すると、`iptables` の `-m set --match-set` で単一ルールから高速に照合・遮断できる",
+      "OpenVPN で `dev tun` を指定すると L3 IP パケットを扱うルーティング型 VPN となり、`dev tap` を指定すると L2 フレームを扱うブリッジ型 VPN となる",
+      "`iptables` でステートフルフィルタリングを構成する際、`--ctstate NEW` だけを許可しておけば戻り通信（`ESTABLISHED`）も自動的にすべて許可される",
+      "Snort や Suricata のルールでは `alert` アクションのみが定義されており、パケット破棄（`drop`）は設定できない",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "`ipset` は大量 IP リストの高速照合に有効です。また OpenVPN は `tun`（L3 ルーティング）と `tap`（L2 イーサネットブリッジ）を選択できます。なお `iptables` のステートフル制御では `ESTABLISHED,RELATED` の許可ルールが必要であり、IPS モードの Snort/Suricata では `drop` / `reject` アクションで遮断できます。",
+    keywords: ["ipset", "OpenVPN", "tun / tap"],
+  },
+  {
     id: "q-335-1",
     domainId: "topic-335",
     domainLabel: "335: 脅威と脆弱性評価",
@@ -678,6 +786,24 @@ export const lpic303PracticeQuestions: CertQuestion[] = [
     explanation:
       "CVE（脆弱性ID）と CVSS（深刻度スコア）の役割、およびスキャナ出力に対する誤検知の検証は脆弱性評価の基本です。なお侵入テストは必ず事前の書面許諾とスコープ合意の上で実施し、SYN スキャンも IDS で検知されます。",
     keywords: ["CVE", "CVSS", "脆弱性評価"],
+  },
+  {
+    id: "q-335-4",
+    domainId: "topic-335",
+    domainLabel: "335: 脅威と脆弱性評価",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Nmap を用いて対象ホスト上で稼働しているサービスのバージョン情報を特定しつつ、NSE（Nmap Scripting Engine）の脆弱性検査用カテゴリのスクリプトを同時に実行するコマンドはどれですか？",
+    options: [
+      "nmap -sV --script vuln <target>",
+      "nmap -sL --no-script <target>",
+      "nmap -sn --ping-scan <target>",
+      "nmap -sP --version-disable <target>",
+    ],
+    correctIndices: [0],
+    explanation:
+      "`-sV` は開いているポート上のサービス／バージョン検出を行い、`--script vuln` は NSE の `vuln` カテゴリに分類された既知脆弱性チェック用スクリプトを実行します（事前に所有者の書面許可を得た上で実施します）。",
+    keywords: ["nmap", "NSE", "-sV"],
   },
 ];
 

@@ -432,6 +432,42 @@ export const lpic300QuickLookup: CertFlashcardItem[] = [
     recommended: "smbcontrol",
     reason: "例: `smbcontrol all reload-config` や `smbcontrol smbd debug 3`。",
   },
+  {
+    keyword: "Samba AD ドメインコントローラのディレクトリデータベース（sam.ldb）の整合性を検査・修復するコマンド",
+    category: "301: Samba 基礎",
+    recommended: "samba-tool dbcheck (--fix)",
+    reason: "AD オブジェクト間のリンク不整合などを検出し、--cross-ncs オプションで全名前空間を検査できる。",
+  },
+  {
+    keyword: "Samba AD DC が保持する LDB（LDAP互換）データベースをコマンドラインから検索・照会するコマンド",
+    category: "301: Samba 基礎",
+    recommended: "ldbsearch -H /var/lib/samba/private/sam.ldb",
+    reason: "tdbdump/tdbtool が .tdb 用であるのに対し、AD オブジェクトを格納する LDB の参照には ldbsearch/ldbedit を使用する。",
+  },
+  {
+    keyword: "ローカルの Samba パスワードデータベース（tdbsam）に登録されたユーザーを一覧・詳細管理するコマンド",
+    category: "302: Samba と AD",
+    recommended: "pdbedit (-L / -v / -a)",
+    reason: "smbpasswd でもパスワード設定やユーザー追加は可能だが、pdbedit はフラグや SID・プロファイルパス等の詳細管理を行える。",
+  },
+  {
+    keyword: "Winbind で Windows SID と Linux UID/GID を対応付ける主な 2 つのバックエンド（AD属性利用 vs 決定論的算出）",
+    category: "302: Samba と AD",
+    recommended: "ad (idmap_ad) / rid (idmap_rid)",
+    reason: "AD 側の RFC 2307 属性（uidNumber/gidNumber）を使う場合は ad、AD に属性を入れず RID から一意計算する場合は rid を選ぶ。",
+  },
+  {
+    keyword: "Samba プリント共有で Windows クライアント用ドライバを配布する特殊共有と、スプール処理を効率化するデーモン",
+    category: "303: Samba 共有",
+    recommended: "[print$] / spoolssd",
+    reason: "[print$] に各アーキテクチャ向けドライバを配置し、spoolssd（rpc_daemon:spoolssd = fork）で大量の印刷リクエストを処理する。",
+  },
+  {
+    keyword: "NFSv4 で擬似ファイルシステムのルートを指定するエクスポート設定と、名前ベース ID マッピングの設定ファイル",
+    category: "305: FreeIPA / NFS",
+    recommended: "fsid=0 (/etc/exports) / /etc/idmapd.conf",
+    reason: "NFSv4 は fsid=0 を起点とした単一ツリーで公開し、idmapd.conf の Domain をサーバ・クライアント間で一致させて UID/GID を解決する。",
+  },
 ];
 
 export const lpic300PracticeQuestions: CertQuestion[] = [
@@ -473,6 +509,24 @@ export const lpic300PracticeQuestions: CertQuestion[] = [
     explanation:
       "`tdbbackup` は TDB ファイルの内部ロックを取得して安全なバックアップを作成します。`-v` オプションで既存 TDB の整合性検証・自動復旧にも使えます。",
     keywords: ["tdbbackup", "TDB"],
+  },
+  {
+    id: "q-301-4",
+    domainId: "topic-301",
+    domainLabel: "301: Samba の基礎",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "Samba Active Directory ドメインコントローラや内部データベースのトラブルシューティング（LPIC-3 301.4）に関する記述として正しいものを 2 つ選んでください。",
+    options: [
+      "`samba-tool dbcheck` を用いると、AD ディレクトリデータベースの整合性検査および `--fix` による修復を行える",
+      "`ldbsearch` を用いると、Samba AD の LDB データベース（`sam.ldb` 等）から LDAP クエリ形式でオブジェクトを検索できる",
+      "`smb.conf` の `log level` では全体一律の数値しか指定できず、認証（auth）などサブシステム別のログレベル設定は行えない",
+      "`tdbdump` は Linux カーネルの SELinux AVC 拒否ログを解析してポリシーを自動生成するコマンドである",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "Samba AD DC の整合性確認には `samba-tool dbcheck`、LDB データベース参照には `ldbsearch` を使用します。なお `log level = 1 auth:5 winbind:3` のようにデバッグクラス別レベル指定が可能で、`tdbdump` は TDB ファイルの内容出力コマンドです。",
+    keywords: ["samba-tool dbcheck", "ldbsearch", "トラブルシューティング"],
   },
   {
     id: "q-302-1",
@@ -529,6 +583,24 @@ export const lpic300PracticeQuestions: CertQuestion[] = [
     keywords: ["NTP", "DNS SRV", "Kerberos"],
   },
   {
+    id: "q-302-4",
+    domainId: "topic-302",
+    domainLabel: "302: Samba と AD ドメイン",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Samba ドメインメンバーの Winbind ID マッピング（`idmap config`）において、Active Directory 側のユーザー／グループオブジェクトに設定された RFC 2307 属性（`uidNumber` / `gidNumber`）をそのまま Linux の UID/GID として使用するバックエンドはどれですか？",
+    options: [
+      "ad (idmap_ad)",
+      "rid (idmap_rid)",
+      "tdb (idmap_tdb)",
+      "autorid (idmap_autorid)",
+    ],
+    correctIndices: [0],
+    explanation:
+      "`idmap_ad`（`backend = ad`）は AD 内の RFC 2307 POSIX 属性（`uidNumber`, `gidNumber` 等）を参照して UID/GID を決定します。AD にそれらの属性を持たせず SID の RID から決定論的に算出する場合は `rid`（または複数ドメイン向けの `autorid`）、ローカル割り当てには `tdb` を使用します。",
+    keywords: ["idmap_ad", "idmap_rid", "Winbind"],
+  },
+  {
     id: "q-303-1",
     domainId: "topic-303",
     domainLabel: "303: Samba 共有の設定",
@@ -581,6 +653,24 @@ export const lpic300PracticeQuestions: CertQuestion[] = [
     explanation:
       "Samba は共有設定（`valid users`, `read only` 等）のチェックを通過した後に、実際の OS（Linux ファイルシステム）の権限でアクセスするため、両方で許可されている必要があります。",
     keywords: ["valid users", "POSIX 権限", "アクセス制御"],
+  },
+  {
+    id: "q-303-4",
+    domainId: "topic-303",
+    domainLabel: "303: Samba 共有の設定",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "Samba で CUPS 連携プリント共有（`printing = cups`）を構成し、Windows クライアントへプリンタドライバを自動配布する仕組みにおいて、ドライバファイルを格納する共有セクション名と、プリントスプール処理を効率化するために起動する専用デーモンの組み合わせはどれですか？",
+    options: [
+      "`[print$]` と `spoolssd`",
+      "`[drivers$]` と `nmbd`",
+      "`[cups$]` と `winbindd`",
+      "`[printers]` と `tdbbackup`",
+    ],
+    correctIndices: [0],
+    explanation:
+      "Windows 向けプリンタドライバの格納・自動ダウンロード（Point and Print）には特殊共有 `[print$]` を使用します。また大量の印刷ジョブ・RPC 要求を高速に処理するために専用のプリフォークデーモン `spoolssd`（`rpc_daemon:spoolssd = fork`）を利用できます。",
+    keywords: ["[print$]", "spoolssd", "CUPS プリント共有"],
   },
   {
     id: "q-304-1",
@@ -637,6 +727,24 @@ export const lpic300PracticeQuestions: CertQuestion[] = [
     keywords: ["pam_mkhomedir.so", "PAM", "ホームディレクトリ"],
   },
   {
+    id: "q-304-4",
+    domainId: "topic-304",
+    domainLabel: "304: Samba クライアントの設定",
+    difficulty: "応用",
+    selectCount: 2,
+    question: "Linux における CIFS/SMB クライアントマウント（`mount.cifs`）および混在環境の Windows クライアント運用に関する記述として正しいものを 2 つ選んでください。",
+    options: [
+      "`mount.cifs` で `vers=3.0` 以上を指定して `seal` オプションを付与すると、SMB レベルでの通信データ暗号化が有効になる",
+      "`mount.cifs` で `multiuser` オプションを指定すると、マウント後に各ローカルユーザーが自身の Kerberos 等の資格情報で共有へアクセスできる",
+      "Windows クライアントが Samba AD ドメインからグループポリシー（GPO）を取得・適用するには、Windows 側へ `sssd` サービスを導入する必要がある",
+      "セキュリティ向上のため、Linux クライアントの `mount.cifs` ではデフォルトでレガシーな `vers=1.0` を固定指定することが推奨されている",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "`seal` は SMB3 以降の通信暗号化を要求するマウントオプションであり、`multiuser` は複数ユーザーが各自の資格情報（`sec=krb5` 等）で同一マウントを利用できるようにします。Windows クライアントの GPO 適用は OS 標準機能で SYSVOL 共有から取得するため Linux 用 `sssd` は不要です。また `vers=1.0`（SMB1）は脆弱性のため非推奨です。",
+    keywords: ["mount.cifs", "seal", "multiuser"],
+  },
+  {
     id: "q-305-1",
     domainId: "topic-305",
     domainLabel: "305: Linux ID 管理と共有",
@@ -689,6 +797,24 @@ export const lpic300PracticeQuestions: CertQuestion[] = [
     explanation:
       "`sec=krb5` は認証のみ、`sec=krb5i`（Integrity）は認証＋改ざんチェック、`sec=krb5p`（Privacy）は認証＋通信全体の暗号化を行います。`sec=sys` は従来の UID/GID ベースの認証です。",
     keywords: ["NFSv4", "krb5p", "krb5i"],
+  },
+  {
+    id: "q-305-4",
+    domainId: "topic-305",
+    domainLabel: "305: Linux ID 管理と共有",
+    difficulty: "標準",
+    selectCount: 1,
+    question: "NFSv4 サーバを `/etc/exports` で構成する際、すべての公開ディレクトリを束ねる仮想的な擬似ファイルシステム（Pseudo File System）のルートとして指定するオプションはどれですか？",
+    options: [
+      "fsid=0",
+      "all_squash",
+      "no_root_squash",
+      "sec=sys",
+    ],
+    correctIndices: [0],
+    explanation:
+      "NFSv4 では `/etc/exports` でルートとなるディレクトリに `fsid=0`（または `fsid=root`）を指定し、配下の公開ディレクトリを単一の仮想ツリーとしてクライアントへ見せます。またクライアントとサーバ間のユーザー名／グループ名マッピングは `/etc/idmapd.conf` の `Domain` 設定で行います。",
+    keywords: ["NFSv4", "fsid=0", "擬似ファイルシステム"],
   },
 ];
 
