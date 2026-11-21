@@ -403,7 +403,7 @@ const tasksData: TaskItem[] = [
   },
   {
     id: "info-pages",
-    title: "AWS・GCP・LPIC・IPA・MCP・Antigravity情報局の内容準備",
+    title: "AWS・GCP・Azure・LPIC・IPA・MCP・Antigravity情報局の内容準備",
     pageName: "資格・クラウド情報局 ほか",
     href: "/aws-info",
     phase: "Phase 4",
@@ -413,11 +413,11 @@ const tasksData: TaskItem[] = [
     releaseCondition: "社内ルール・相談窓口・使ってよいツールの決定",
     category: "system",
     icon: "☁️",
-    description: "AWS SAA-C03 / GCP (CDL・ACE・PCA) / LPIC-1・2・3 / IPA 全13区分 学習ハブや Antigravity 機能解説・実務実行例・リファレンス/FAQは先行掲載中。社内の利用ルール・資格支援ルール、使ってよい MCP サーバー、社内向けお知らせを準備します。",
+    description: "AWS SAA-C03 / GCP (CDL・ACE・PCA) / Azure (AZ-900・AI-900・AZ-104・AZ-305) / LPIC-1・2・3 / IPA 全13区分 学習ハブや Antigravity 機能解説・実務実行例・リファレンス/FAQは先行掲載中。社内の利用ルール・資格支援ルール、使ってよい MCP サーバー、社内向けお知らせを準備します。",
     items: [
-      { text: "AWS（/aws-info）・GCP（/gcp-info）・LPIC（/lpic-info）・IPA（/ipa-info）学習ハブの先行公開", done: true },
+      { text: "AWS（/aws-info）・GCP（/gcp-info）・Azure（/azure-info）・LPIC（/lpic-info）・IPA（/ipa-info）学習ハブの先行公開", done: true },
       { text: "Antigravity 機能解説・実務活用の実行例・FAQ（/antigravity-info）の先行公開", done: true },
-      { text: "社内の AWS / GCP 利用ルール・資格取得支援ルールと相談窓口", done: false },
+      { text: "社内の AWS / GCP / Azure 利用ルール・資格取得支援ルールと相談窓口", done: false },
       { text: "使ってよい MCP サーバーと設定方法", done: false },
       { text: "Antigravity の社内向けお知らせ", done: false },
     ],

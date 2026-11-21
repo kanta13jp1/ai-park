@@ -98,6 +98,18 @@ export default function HowToPage() {
       highlights: "Google Cloud 公式試験ガイドに基づく統合学習ハブ（社内利用ルール等は準備中）",
     },
     {
+      id: "azure-info",
+      title: "Azure・Microsoft Azure情報局",
+      desc: "AZ-900・AI-900・AZ-104・AZ-305（Microsoft Azure 認定資格）の要点整理・比較表・模擬試験！",
+      icon: <Cloud className="text-sky-600" size={32} />,
+      iconBg: "bg-sky-50 border-sky-100",
+      href: "/azure-info",
+      badge: "🚧 工事中",
+      badgeColor: "bg-sky-100 text-sky-700",
+      tags: ["AZ-900", "AI-900", "AZ-104", "AZ-305"],
+      highlights: "Microsoft Azure 公式試験ガイドに基づく統合学習ハブ（社内利用ルール等は準備中）",
+    },
+    {
       id: "lpic-info",
       title: "LPIC・Linux情報局",
       desc: "LPIC-1（101/102）・LPIC-2（201/202）・LPIC-3（300/303/305/306）の要点整理・暗記カード・模擬試験！",

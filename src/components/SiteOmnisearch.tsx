@@ -84,6 +84,13 @@ const siteSearchIndex: SearchIndexItem[] = [
     keywords: ["gcp", "google cloud", "cdl", "ace", "pca", "cloud digital leader", "associate cloud engineer", "professional cloud architect", "試験", "クイズ", "flashcards"],
   },
   {
+    title: "Azure・Microsoft Azure情報局 (AZ-900/AI-900/AZ-104/AZ-305)",
+    category: "資格・Azure",
+    href: "/azure-info",
+    description: "Microsoft Azure 認定資格（AZ-900 / AI-900 / AZ-104 / AZ-305）統合学習ハブ・練習クイズ・比較表を掲載中（社内Azure利用ルール等は工事中）",
+    keywords: ["azure", "microsoft azure", "az-900", "ai-900", "az-104", "az-305", "azure fundamentals", "azure ai", "azure openai", "entra id", "aks", "app service", "cosmos db", "bicep", "試験", "クイズ", "flashcards"],
+  },
+  {
     title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2 / LPIC-3学習ハブ)",
     category: "資格・Linux",
     href: "/lpic-info",

@@ -32,6 +32,7 @@ export const navigationSections: NavSection[] = [
       { name: "Antigravity情報局", href: "/antigravity-info", icon: "💡", badge: "🚧 工事中" },
       { name: "AWS・クラウド情報局", href: "/aws-info", icon: "☁️", badge: "🚧 工事中" },
       { name: "GCP情報局", href: "/gcp-info", icon: "🌐", badge: "🚧 工事中" },
+      { name: "Azure情報局", href: "/azure-info", icon: "🔷", badge: "🚧 工事中" },
       { name: "LPIC・Linux情報局", href: "/lpic-info", icon: "🐧", badge: "🚧 工事中" },
       { name: "情報処理試験 (IPA)", href: "/ipa-info", icon: "📜", badge: "🚧 工事中" },
       { name: "社内Skillsカタログ", href: "/skills-hub", icon: "🛠️", badge: "🚧 工事中" },

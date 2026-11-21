@@ -181,6 +181,14 @@ const paletteItems: PaletteItem[] = [
     icon: Compass,
   },
   {
+    id: "azure-info",
+    title: "Azure・Microsoft Azure情報局 (AZ-900/AI-900/AZ-104/AZ-305)",
+    category: "Academy & 学習",
+    href: "/azure-info",
+    description: "AZ-900 / AI-900 / AZ-104 / AZ-305 統合学習ハブ・練習クイズ（社内Azureルール等は工事中）",
+    icon: Compass,
+  },
+  {
     id: "lpic-info",
     title: "LPIC・Linux情報局 (LPIC-1 / LPIC-2 / LPIC-3)",
     category: "Academy & 学習",
