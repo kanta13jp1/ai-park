@@ -413,9 +413,9 @@ const tasksData: TaskItem[] = [
     releaseCondition: "社内ルール・相談窓口・使ってよいツールの決定",
     category: "system",
     icon: "☁️",
-    description: "AWS (CLF-C02・SAA-C03・SAP-C02) / GCP (全7資格) / Azure (全8資格) [AZ-900・AI-900・DP-900・SC-900・AZ-104・AI-103・AI-200・AZ-305] / LPIC-1・2・3 / IPA 全13区分 学習ハブ、MCP 仕組みガイド・mcp_config.json 設定テンプレート・安全チェックリスト（/mcp-hub）、Antigravity 機能解説・Agent Swarms (/swarm)・実務実行例・リファレンス/FAQ は先行掲載中。社内の利用ルール・資格支援ルール、社内許可 MCP サーバー一覧・申請フロー、社内向けお知らせを準備します。",
+    description: "AWS (全6資格: CLF-C02・AIF-C01・SAA-C03・DVA-C02・SOA-C03・SAP-C02) / GCP (全7資格) / Azure (全8資格) [AZ-900・AI-900・DP-900・SC-900・AZ-104・AI-103・AI-200・AZ-305] / LPIC-1・2・3 / IPA 全13区分 学習ハブ、MCP 仕組みガイド・mcp_config.json 設定テンプレート・安全チェックリスト（/mcp-hub）、Antigravity 機能解説・Agent Swarms (/swarm)・実務実行例・リファレンス/FAQ は先行掲載中。社内の利用ルール・資格支援ルール、社内許可 MCP サーバー一覧・申請フロー、社内向けお知らせを準備します。",
     items: [
-      { text: "AWS（CLF-C02/SAA-C03/SAP-C02）・GCP（全7資格）・Azure (全8資格)（/azure-info）・LPIC（/lpic-info）・IPA（/ipa-info）学習ハブの先行公開", done: true },
+      { text: "AWS（全6資格: CLF-C02/AIF-C01/SAA-C03/DVA-C02/SOA-C03/SAP-C02）・GCP（全7資格）・Azure (全8資格)（/azure-info）・LPIC（/lpic-info）・IPA（/ipa-info）学習ハブの先行公開", done: true },
       { text: "MCP 仕組みガイド・mcp_config.json 設定テンプレート・安全チェックリスト（/mcp-hub）の先行公開", done: true },
       { text: "Antigravity 機能解説・Agent Swarms（/swarm）・実務活用の実行例・FAQ（/antigravity-info）の先行公開", done: true },
       { text: "社内の AWS / GCP / Azure 利用ルール・資格取得支援ルールと相談窓口", done: false },

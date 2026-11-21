@@ -34,6 +34,13 @@ import {
   Download,
   AlertTriangle,
   Gauge,
+  Brain,
+  Bot,
+  Lock,
+  Terminal,
+  GitBranch,
+  Activity,
+  Workflow,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -83,6 +90,42 @@ import {
   resolveClfServiceQuery,
 } from "@/data/aws-clf";
 import {
+  aifExamFacts,
+  aifDomains,
+  aifComparisons,
+  aifQuickLookup,
+  aifPracticeQuestions,
+  aifOfficialResources,
+  aifArchitecturePatterns,
+  aifPitfalls,
+  aifKeyLimits,
+  resolveAifServiceQuery,
+} from "@/data/aws-aif";
+import {
+  dvaExamFacts,
+  dvaDomains,
+  dvaComparisons,
+  dvaQuickLookup,
+  dvaPracticeQuestions,
+  dvaOfficialResources,
+  dvaArchitecturePatterns,
+  dvaPitfalls,
+  dvaKeyLimits,
+  resolveDvaServiceQuery,
+} from "@/data/aws-dva";
+import {
+  soaExamFacts,
+  soaDomains,
+  soaComparisons,
+  soaQuickLookup,
+  soaPracticeQuestions,
+  soaOfficialResources,
+  soaArchitecturePatterns,
+  soaPitfalls,
+  soaKeyLimits,
+  resolveSoaServiceQuery,
+} from "@/data/aws-soa";
+import {
   sapExamFacts,
   sapDomains,
   sapComparisons,
@@ -96,7 +139,8 @@ import {
 } from "@/data/aws-sap";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 
-type AwsCertId = "clf" | "saa" | "sap";
+type AwsCertId = "clf" | "aif" | "saa" | "dva" | "soa" | "sap";
+type AwsCertLevel = "Foundational" | "Associate" | "Professional";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
 interface AwsCertProgress {
@@ -111,6 +155,7 @@ interface AwsCertProgress {
 interface AwsCertConfig {
   id: AwsCertId;
   shortCode: string;
+  level: AwsCertLevel;
   switchLabel: string;
   hudBadgeText: string;
   headlineLead: string;
@@ -159,6 +204,7 @@ const AWS_CERT_CONFIG: Record<AwsCertId, AwsCertConfig> = {
   clf: {
     id: "clf",
     shortCode: "CLF-C02",
+    level: "Foundational",
     switchLabel: "Cloud Practitioner (CLF-C02)",
     hudBadgeText: "AWS CLF-C02 STUDY HUB",
     headlineLead: "AWS認定クラウドプラクティショナー",
@@ -226,9 +272,82 @@ const AWS_CERT_CONFIG: Record<AwsCertId, AwsCertConfig> = {
     keyLimits: clfKeyLimits,
     resolveServiceQuery: resolveClfServiceQuery,
   },
+  aif: {
+    id: "aif",
+    shortCode: "AIF-C01",
+    level: "Foundational",
+    switchLabel: "AI Practitioner (AIF-C01)",
+    hudBadgeText: "AWS AIF-C01 STUDY HUB",
+    headlineLead: "AWS認定 AI プラクティショナー",
+    headlineSuffix: "- 基礎 合格対策",
+    description:
+      "試験ガイド（AIF-C01）の5つの出題ドメインに沿って、AI/ML基礎・生成AI・Amazon Bedrock / Knowledge Bases (RAG) / Guardrails / Amazon Q の選定基準・責任あるAI・ガバナンスをまとめた学習ハブです。学習記録はブラウザに自動保存されます。",
+    storageKey: "ai-park-aws-aif-progress-v1",
+    passingConfig: {
+      minScore: 100,
+      maxScore: 1000,
+      passingScore: 700,
+      passingPct: 70,
+      officialExamLabel: "AWS公式模擬試験 (AIF-C01)",
+    },
+    secondsPerQuestion: 90,
+    defaultExpanded: { "aif-domain-1": true },
+    quizBadgeLabel: "AIF-C01 本番形式演習",
+    quickSearchChips: ["Bedrock", "RAG", "SageMaker", "Guardrails", "Amazon Q", "責任あるAI"],
+    domainShortLabels: {
+      "aif-domain-1": "D1: AI・ML基礎",
+      "aif-domain-2": "D2: 生成AI基礎",
+      "aif-domain-3": "D3: 基盤モデル活用",
+      "aif-domain-4": "D4: 責任あるAI",
+      "aif-domain-5": "D5: セキュリティ・ガバナンス",
+    },
+    roadmapSteps: {
+      step1Title: "AI/ML と生成 AI の基礎概念",
+      step1Desc:
+        "教師あり/教師なし/強化学習の使い分けや、基盤モデル（FM）・トークン・埋め込み・コンテキストウィンドウの仕組みを理解する。",
+      step2Title: "Bedrock・RAG・カスタマイズ手法の選定",
+      step2Desc:
+        "本ページの「5ドメイン攻略」と「頻出比較表」を使い、プロンプトエンジニアリング・RAG（Knowledge Bases）・Fine-Tuning の違いを押さえる。",
+      step4Desc:
+        "90分で65問（1問約1.4分）のペース配分を確認し、苦手ドメインを重点復習して本番（合格ライン 700点）に臨む。",
+    },
+    examDayChecklist: {
+      subtitle:
+        "AIF-C01 は90分で65問を出題します。AI ユースケースに適した AWS サービスの選定と責任ある AI・セキュリティ原則の区別が合格（700点）の鍵です。",
+      tips: [
+        {
+          title: "1問約1.4分ペース（65問で90分）",
+          body: "30問経過時点で残り45分前後が目安。用語比較や短いユースケース判断が多いため、迷う問題はフラグ（見直しマーク）を付けて一通り解き終えてから見直します。",
+        },
+        {
+          title: "非採点問題（15問）に動揺しない",
+          body: "65問のうち15問は採点対象外の試験的設問です。見慣れない生成 AI 機能や細かなモデル名が出ても動揺せず、基本の選定軸で着実に得点（700点以上）を狙います。",
+        },
+        {
+          title: "Customization 手法（Prompt / RAG / Fine-Tuning）を見極める",
+          body: "「最新の社内ドキュメントを参照」＝ RAG（Bedrock Knowledge Bases）、「特定ドメインの出力形式・口調調整」＝ Fine-Tuning、「追加学習なしで試す」＝ プロンプトエンジニアリング、を軸に絞ります。",
+        },
+        {
+          title: "ピアソンVUE 受験準備（オンライン/会場）",
+          body: "オンライン受験（OnVUE）の場合は事前のシステムテストと静かな個室・本人確認書類が必須。英語試験から切り替える場合、AWS認定ポータルで事前申請すると試験時間+30分延長（ESL）が利用可能です。",
+        },
+      ],
+    },
+    examFacts: aifExamFacts,
+    domains: aifDomains,
+    comparisons: aifComparisons,
+    quickLookup: aifQuickLookup,
+    practiceQuestions: aifPracticeQuestions,
+    officialResources: aifOfficialResources,
+    architecturePatterns: aifArchitecturePatterns,
+    pitfalls: aifPitfalls,
+    keyLimits: aifKeyLimits,
+    resolveServiceQuery: resolveAifServiceQuery,
+  },
   saa: {
     id: "saa",
     shortCode: "SAA-C03",
+    level: "Associate",
     switchLabel: "Solutions Architect Associate (SAA-C03)",
     hudBadgeText: "AWS SAA-C03 STUDY HUB",
     headlineLead: "AWS認定ソリューションアーキテクト",
@@ -301,9 +420,153 @@ const AWS_CERT_CONFIG: Record<AwsCertId, AwsCertConfig> = {
     keyLimits: saaKeyLimits,
     resolveServiceQuery: resolveAwsServiceQuery,
   },
+  dva: {
+    id: "dva",
+    shortCode: "DVA-C02",
+    level: "Associate",
+    switchLabel: "Developer Associate (DVA-C02)",
+    hudBadgeText: "AWS DVA-C02 STUDY HUB",
+    headlineLead: "AWS認定デベロッパー",
+    headlineSuffix: "- アソシエイト 合格対策",
+    description:
+      "試験ガイド（DVA-C02）の4つの出題ドメインに沿って、Lambda / API Gateway / DynamoDB の実装・Cognito / KMS によるセキュリティ・SAM / CodeDeploy 等のデプロイ・X-Ray / CloudWatch による最適化をまとめた学習ハブです。学習記録はブラウザに自動保存されます。",
+    storageKey: "ai-park-aws-dva-progress-v1",
+    passingConfig: {
+      minScore: 100,
+      maxScore: 1000,
+      passingScore: 720,
+      passingPct: 72,
+      officialExamLabel: "AWS公式模擬試験 (DVA-C02)",
+    },
+    secondsPerQuestion: 120,
+    defaultExpanded: { "dva-domain-1": true },
+    quizBadgeLabel: "DVA-C02 本番形式演習",
+    quickSearchChips: ["Lambda", "DynamoDB", "API Gateway", "Cognito", "CodeDeploy", "X-Ray"],
+    domainShortLabels: {
+      "dva-domain-1": "D1: サービス開発",
+      "dva-domain-2": "D2: セキュリティ",
+      "dva-domain-3": "D3: デプロイ",
+      "dva-domain-4": "D4: トラブルシュート・最適化",
+    },
+    roadmapSteps: {
+      step1Title: "サーバーレス開発と認証・暗号化の基礎",
+      step1Desc:
+        "Lambda 呼び出しモデル・API Gateway 統合・DynamoDB パーティションキー設計と、IAM ロール / STS / KMS エンベロープ暗号化の仕組みを理解する。",
+      step2Title: "API・DB・CI/CD・監視ツールの使い分け",
+      step2Desc:
+        "本ページの「4ドメイン攻略」と「頻出比較表」を使い、DynamoDB GSI/LSI・Cognito User/Identity Pool・SAM / CodeDeploy の違いを整理する。",
+      step4Desc:
+        "130分で65問（1問約2分）のペース配分を確認し、苦手ドメインを重点復習して本番（合格ライン 720点）に臨む。",
+    },
+    examDayChecklist: {
+      subtitle:
+        "DVA-C02 は130分で65問を出題します。サーバーレス設計・IAM/KMS・CI/CD・X-Ray による原因切り分けなど実装視点の的確な判断が合格（720点）の鍵です。",
+      tips: [
+        {
+          title: "1問2分ペース（65問で130分）",
+          body: "30問経過時点で残り70分前後が目安。IAM ポリシーや YAML 定義・DynamoDB キャパシティ計算に時間を掛けすぎず、迷う問題はフラグを付けて先へ進みます。",
+        },
+        {
+          title: "非採点問題（15問）に動揺しない",
+          body: "65問のうち15問は採点対象外のパイロット設問です。細かな SDK パラメータや見慣れない設定オプションが出てもペースを崩さず、720点以上を目指します。",
+        },
+        {
+          title: "DynamoDB・Lambda・KMS の制約値を即断",
+          body: "DynamoDB アイテム上限 400KB や RCU/WCU 計算、Lambda のペイロード/同時実行数制御（Reserved vs Provisioned）、KMS 4KB 制限とエンベロープ暗号化（GenerateDataKey）を整理しておきます。",
+        },
+        {
+          title: "ピアソンVUE 受験準備（オンライン/会場）",
+          body: "オンライン受験（OnVUE）の場合は事前のシステムテストと静かな個室・本人確認書類が必須。英語試験から切り替える場合、AWS認定ポータルで事前申請すると試験時間+30分延長（ESL）が利用可能です。",
+        },
+      ],
+    },
+    examFacts: dvaExamFacts,
+    domains: dvaDomains,
+    comparisons: dvaComparisons,
+    quickLookup: dvaQuickLookup,
+    practiceQuestions: dvaPracticeQuestions,
+    officialResources: dvaOfficialResources,
+    architecturePatterns: dvaArchitecturePatterns,
+    pitfalls: dvaPitfalls,
+    keyLimits: dvaKeyLimits,
+    resolveServiceQuery: resolveDvaServiceQuery,
+  },
+  soa: {
+    id: "soa",
+    shortCode: "SOA-C03",
+    level: "Associate",
+    switchLabel: "CloudOps Engineer (SOA-C03)",
+    hudBadgeText: "AWS SOA-C03 STUDY HUB",
+    headlineLead: "AWS認定 CloudOps エンジニア",
+    headlineSuffix: "- アソシエイト 合格対策",
+    description:
+      "試験ガイド（SOA-C03 / 旧 SysOps 改定）の5つの出題ドメインに沿って、CloudWatch / Systems Manager を軸とした監視・自動修復・バックアップ/DR・IaC プロビジョニング・運用セキュリティ・ネットワーク障害切り分けをまとめた学習ハブです。学習記録はブラウザに自動保存されます。",
+    storageKey: "ai-park-aws-soa-progress-v1",
+    passingConfig: {
+      minScore: 100,
+      maxScore: 1000,
+      passingScore: 720,
+      passingPct: 72,
+      officialExamLabel: "AWS公式模擬試験 (SOA-C03)",
+    },
+    secondsPerQuestion: 120,
+    defaultExpanded: { "soa-domain-1": true },
+    quizBadgeLabel: "SOA-C03 本番形式演習",
+    quickSearchChips: ["CloudWatch", "SSM", "Config", "Backup", "CloudFormation", "VPC"],
+    domainShortLabels: {
+      "soa-domain-1": "D1: 監視・ロギング・修復",
+      "soa-domain-2": "D2: 信頼性・BCP",
+      "soa-domain-3": "D3: デプロイ・自動化",
+      "soa-domain-4": "D4: セキュリティ・準拠",
+      "soa-domain-5": "D5: ネットワーク・配信",
+    },
+    roadmapSteps: {
+      step1Title: "監視基盤と Systems Manager 運用の基礎",
+      step1Desc:
+        "CloudWatch メトリクス/ログ/複合アラーム、CloudTrail、EventBridge＋SSM Automation による自動修復やパッチ管理の仕組みを理解する。",
+      step2Title: "可用性・IaC・ネットワーク切り分けの整理",
+      step2Desc:
+        "本ページの「5ドメイン攻略」と「頻出比較表」を使い、AWS Backup / CloudFormation ドリフト検出 / VPC Flow Logs・Reachability Analyzer の使い分けを押さえる。",
+      step4Desc:
+        "130分で65問（1問約2分）のペース配分を確認し、苦手ドメインを重点復習して本番（合格ライン 720点）に臨む。",
+    },
+    examDayChecklist: {
+      subtitle:
+        "SOA-C03 は130分で65問を出題します。監視・障害切り分け・自動修復・IaC 運用とパッチ/バックアップ管理の的確な運用手順選択が合格（720点）の鍵です。",
+      tips: [
+        {
+          title: "1問2分ペース（65問で130分）",
+          body: "30問経過時点で残り70分前後が目安。ネットワーク接続障害の切り分けや CloudFormation テンプレート設問で詰まりすぎないよう、フラグ機能を活用します。",
+        },
+        {
+          title: "非採点問題（15問）に動揺しない",
+          body: "65問のうち15問は採点対象外の試験的設問です。見慣れない運用シナリオが出ても焦らず、基本の監視・セキュリティ・自動化パターンで720点以上を狙います。",
+        },
+        {
+          title: "「自動修復」「接続障害切り分け」の定番パターンを押さえる",
+          body: "設定違反の自動修復＝ AWS Config ＋ SSM Automation、イベント駆動＝ EventBridge、SSH 不要アクセス＝ SSM Session Manager、到達性調査＝ VPC Reachability Analyzer を即答できるようにします。",
+        },
+        {
+          title: "ピアソンVUE 受験準備（オンライン/会場）",
+          body: "オンライン受験（OnVUE）の場合は事前のシステムテストと静かな個室・本人確認書類が必須。英語試験から切り替える場合、AWS認定ポータルで事前申請すると試験時間+30分延長（ESL）が利用可能です。",
+        },
+      ],
+    },
+    examFacts: soaExamFacts,
+    domains: soaDomains,
+    comparisons: soaComparisons,
+    quickLookup: soaQuickLookup,
+    practiceQuestions: soaPracticeQuestions,
+    officialResources: soaOfficialResources,
+    architecturePatterns: soaArchitecturePatterns,
+    pitfalls: soaPitfalls,
+    keyLimits: soaKeyLimits,
+    resolveServiceQuery: resolveSoaServiceQuery,
+  },
   sap: {
     id: "sap",
     shortCode: "SAP-C02",
+    level: "Professional",
     switchLabel: "Solutions Architect Professional (SAP-C02)",
     hudBadgeText: "AWS SAP-C02 STUDY HUB",
     headlineLead: "AWS認定ソリューションアーキテクト",
@@ -386,10 +649,24 @@ const DOMAIN_ICONS: Record<string, typeof ShieldCheck> = {
   "clf-domain-2": ShieldCheck,
   "clf-domain-3": Cpu,
   "clf-domain-4": Coins,
+  "aif-domain-1": Brain,
+  "aif-domain-2": Sparkles,
+  "aif-domain-3": Bot,
+  "aif-domain-4": ShieldCheck,
+  "aif-domain-5": Lock,
   "domain-1": ShieldCheck,
   "domain-2": Layers,
   "domain-3": Zap,
   "domain-4": Coins,
+  "dva-domain-1": Terminal,
+  "dva-domain-2": ShieldCheck,
+  "dva-domain-3": GitBranch,
+  "dva-domain-4": Activity,
+  "soa-domain-1": Activity,
+  "soa-domain-2": Layers,
+  "soa-domain-3": Workflow,
+  "soa-domain-4": ShieldCheck,
+  "soa-domain-5": Network,
   "sap-domain-1": Network,
   "sap-domain-2": Layers,
   "sap-domain-3": Gauge,
@@ -494,7 +771,10 @@ export default function AwsInfoPage() {
   const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
   const [progressByCert, setProgressByCert] = useState<Record<AwsCertId, AwsCertProgress>>({
     clf: DEFAULT_PROGRESS,
+    aif: DEFAULT_PROGRESS,
     saa: DEFAULT_PROGRESS,
+    dva: DEFAULT_PROGRESS,
+    soa: DEFAULT_PROGRESS,
     sap: DEFAULT_PROGRESS,
   });
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(
@@ -517,7 +797,10 @@ export default function AwsInfoPage() {
     queueMicrotask(() => {
       setProgressByCert({
         clf: loadAwsProgress(AWS_CERT_CONFIG.clf.storageKey),
+        aif: loadAwsProgress(AWS_CERT_CONFIG.aif.storageKey),
         saa: loadAwsProgress(AWS_CERT_CONFIG.saa.storageKey),
+        dva: loadAwsProgress(AWS_CERT_CONFIG.dva.storageKey),
+        soa: loadAwsProgress(AWS_CERT_CONFIG.soa.storageKey),
         sap: loadAwsProgress(AWS_CERT_CONFIG.sap.storageKey),
       });
     });
@@ -901,18 +1184,25 @@ export default function AwsInfoPage() {
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="AWS・クラウド情報局"
-        subtitle="AWS認定 CLF-C02 / SAA-C03 / SAP-C02 統合学習ハブ"
+        subtitle="AWS認定 全6資格（CLF / AIF / SAA / DVA / SOA / SAP）統合学習ハブ"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* 資格レベル切り替え（CLF-C02 / SAA-C03 / SAP-C02） */}
-        <section className="flex flex-wrap items-center justify-between gap-3 bg-white rounded-2xl border border-slate-200/80 p-3 shadow-xs">
-          <div className="flex items-center space-x-2 px-2">
-            <Cloud size={16} className="text-indigo-600" />
-            <span className="text-xs sm:text-sm font-black text-slate-800">学習資格選択</span>
+        {/* 資格レベル切り替え（全6資格） */}
+        <section className="flex flex-col gap-3 bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs">
+          <div className="flex items-center justify-between gap-2 px-1">
+            <div className="flex items-center space-x-2">
+              <Cloud size={16} className="text-indigo-600" />
+              <span className="text-xs sm:text-sm font-black text-slate-800">
+                学習資格選択（全6資格）
+              </span>
+            </div>
+            <span className="hidden sm:inline text-[11px] text-slate-400 font-medium">
+              Foundational (2) ・ Associate (3) ・ Professional (1)
+            </span>
           </div>
-          <div className="inline-flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
-            {(["clf", "saa", "sap"] as const).map((id) => {
+          <div className="flex flex-wrap gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/70">
+            {(["clf", "aif", "saa", "dva", "soa", "sap"] as const).map((id) => {
               const item = AWS_CERT_CONFIG[id];
               const active = activeCertId === id;
               return (
@@ -921,13 +1211,26 @@ export default function AwsInfoPage() {
                   type="button"
                   onClick={() => handleSwitchCert(id)}
                   onMouseEnter={() => playCyberHover()}
-                  className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition-all cursor-pointer sm:whitespace-nowrap text-left ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-black transition-all cursor-pointer sm:whitespace-nowrap text-left ${
                     active
                       ? "bg-slate-900 text-white shadow-sm"
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                   }`}
                 >
-                  {item.switchLabel}
+                  <span>{item.switchLabel}</span>
+                  <span
+                    className={`text-[9px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                      active
+                        ? "bg-white/15 text-cyan-200"
+                        : item.level === "Foundational"
+                          ? "bg-emerald-50 text-emerald-700 border border-emerald-200/80"
+                          : item.level === "Associate"
+                            ? "bg-indigo-50 text-indigo-700 border border-indigo-200/80"
+                            : "bg-amber-50 text-amber-800 border border-amber-200/80"
+                    }`}
+                  >
+                    {item.level}
+                  </span>
                 </button>
               );
             })}
@@ -1090,7 +1393,7 @@ export default function AwsInfoPage() {
           </button>
         </div>
 
-        {/* Tab 1: 試験概要 & 4ドメイン攻略 */}
+        {/* Tab 1: 試験概要 & ドメイン攻略 */}
         {activeTab === "domains" && (
           <div className="space-y-8">
             {/* 試験基本データグリッド */}
@@ -1149,7 +1452,7 @@ export default function AwsInfoPage() {
               </div>
             </section>
 
-            {/* 4つの出題ドメイン */}
+            {/* 出題ドメイン一覧 */}
             <section className="space-y-4">
               <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
                 <div>
@@ -2152,7 +2455,7 @@ export default function AwsInfoPage() {
         <UnderConstructionAlert
           statusType="construction"
           title="🚧 一部工事中：社内の AWS 利用ルール・受験補助制度は準備中です"
-          message="このページでは AWS認定（CLF-C02 / SAA-C03 / SAP-C02）の学習コンテンツを公開しています。なお、社内の AWS アカウント申請ルール・資格受験補助・相談窓口についてはまだ決まっていないため、決まり次第ここに掲載します。"
+          message="このページでは AWS認定 全6資格（CLF-C02 / AIF-C01 / SAA-C03 / DVA-C02 / SOA-C03 / SAP-C02）の学習コンテンツを公開しています。なお、社内の AWS アカウント申請ルール・資格受験補助・相談窓口についてはまだ決まっていないため、決まり次第ここに掲載します。"
         />
       </div>
     </div>

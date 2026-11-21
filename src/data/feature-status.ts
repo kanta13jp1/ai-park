@@ -255,7 +255,7 @@ export const featureStatusMaster: FeatureStatusItem[] = [
     status: "in_development",
     evidence: "",
     currentBadge: "🚧 工事中",
-    disclaimer: "【一部工事中】AWS 認定（CLF-C02 / SAA-C03 / SAP-C02）統合学習ハブを掲載中。社内の AWS 利用ルールや相談窓口は決まり次第掲載します。",
+    disclaimer: "【一部工事中】AWS 認定（CLF-C02 / AIF-C01 / SAA-C03 / DVA-C02 / SOA-C03 / SAP-C02）統合学習ハブを掲載中。社内の AWS 利用ルールや相談窓口は決まり次第掲載します。",
     releaseDate: "未定",
     releaseCondition: "社内の AWS 利用ルール・相談窓口の決定",
   },

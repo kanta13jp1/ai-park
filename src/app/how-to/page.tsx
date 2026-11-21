@@ -76,14 +76,14 @@ export default function HowToPage() {
     {
       id: "aws-info",
       title: "AWS・クラウド情報局",
-      desc: "CLF-C02・SAA-C03・SAP-C02（AWS認定 3資格）の要点整理・比較表・模擬試験！",
+      desc: "CLF-C02・AIF-C01・SAA-C03・DVA-C02・SOA-C03・SAP-C02（AWS認定 全6資格）の要点整理・比較表・模擬試験！",
       icon: <Cloud className="text-cyan-600" size={32} />,
       iconBg: "bg-cyan-50 border-cyan-100",
       href: "/aws-info",
       badge: "🚧 工事中",
       badgeColor: "bg-cyan-100 text-cyan-700",
-      tags: ["CLF-C02", "SAA-C03", "SAP-C02", "比較表", "模擬試験"],
-      highlights: "AWS 公式試験ガイドに基づく 3資格統合学習ハブ（社内利用ルール・相談窓口は準備中）",
+      tags: ["CLF-C02/AIF-C01", "SAA-C03/DVA-C02", "SOA-C03/SAP-C02", "比較表", "模擬試験"],
+      highlights: "AWS 公式試験ガイドに基づく全6資格統合学習ハブ（社内利用ルール・相談窓口は準備中）",
     },
     {
       id: "gcp-info",
