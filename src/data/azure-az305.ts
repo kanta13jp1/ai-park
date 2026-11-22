@@ -505,10 +505,10 @@ export const az305Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "Azure DB for PostgreSQL / MySQL",
+        feature: "Azure Database for PostgreSQL / MySQL",
         values: [
           "マネージド OSS RDB (Flexible Server)",
-          "ゾーン冗長 HA・読取レプリカ・バースト層選択可",
+          "ゾーン冗長 HA・読取レプリカ・TDE / 保存時暗号化",
           "Linux / OSS スタックアプリのマネージド運用",
         ],
       },
@@ -652,6 +652,49 @@ export const az305Comparisons: AzureComparisonTable[] = [
     ],
     decisionRule:
       "構成固定の長期本番＝RI、構成・サービスが変わる可能性あり＝Savings Plan、SA ライセンス保有＝AHB 併用、中断可バッチ＝Spot VM。",
+  },
+  {
+    id: "az305-comp-enterprise-arch",
+    category: "ガバナンス・監視・コスト",
+    title: "エンタープライズ ID・非リレーショナル・移行・閉域設計一覧",
+    subtitle: "CAF ランディングゾーン・ストレージ・データ統合・移行・Well-Architected 設計の選定軸",
+    columns: ["設計領域", "主要 Azure サービス", "アーキテクチャ設計ポイント", "採用基準の決め手"],
+    rows: [
+      {
+        feature: "ID・ガバナンス・監視設計",
+        values: [
+          "Microsoft Entra ID（条件付きアクセス）・Microsoft Defender for Cloud・Application Insights",
+          "Azure ランディングゾーン（CAF）・タグ戦略・リージョンペアによるガバナンス統一",
+          "組織全体のセキュリティ姿勢管理と分散 APM 監視の標準化",
+        ],
+      },
+      {
+        feature: "非リレーショナル ＆ 分析設計",
+        values: [
+          "Azure Blob Storage・Azure Files・Azure Synapse Analytics",
+          "ADLS Gen2・Microsoft Fabric・不変ストレージ（WORM）を組み合わせた分析基盤",
+          "大規模非構造化データ保管、共有ファイル、MPP 型データウェアハウス分析",
+        ],
+      },
+      {
+        feature: "閉域ネットワーク ＆ API 設計",
+        values: [
+          "VPN Gateway・ExpressRoute・Azure Private Link・Azure API Management",
+          "ハブ＆スポーク / Virtual WAN 上で PaaS 閉域化と API レート制限を統合",
+          "パブリック公開を排除しつつ安全なハイブリッド・API 連携を実現",
+        ],
+      },
+      {
+        feature: "移行 ＆ 設計評価フレームワーク",
+        values: [
+          "Azure Database Migration Service・Azure Storage Mover・Azure Well-Architected Framework",
+          "Azure Migrate 検出→オンライン CDC/ファイル移行後に WAF 5 本柱で継続評価",
+          "最小ダウンタイム移行と信頼性・セキュリティ・コスト最適化の両立",
+        ],
+      },
+    ],
+    decisionRule:
+      "CAF ランディングゾーン＋タグ戦略で土台を固め、Private Link＋VPN Gateway/ExpressRoute で閉域化し、WAF 5 本柱で継続最適化する。",
   },
 ];
 

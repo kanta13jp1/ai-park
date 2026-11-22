@@ -327,7 +327,7 @@ export const dp900Comparisons: AzureComparisonTable[] = [
         feature: "Azure SQL Database",
         values: [
           "PaaS（最小管理負荷・単一 DB / Elastic Pool）",
-          "サーバーレス・Hyperscale・最新 SQL 機能優先",
+          "自動バックアップ・パッチ・HA・サーバーレス・Hyperscale 対応",
           "管理工数を最小化したいクラウドネイティブ業務アプリ",
         ],
       },
@@ -369,7 +369,7 @@ export const dp900Comparisons: AzureComparisonTable[] = [
       {
         feature: "Azure Files",
         values: [
-          "SMB / NFS マネージド共有ファイルシステム",
+          "ファイルストレージ（SMB / NFS マネージド共有フォルダ）",
           "複数 VM・オンプレからの同時ネットワークマウント",
           "既存ファイルサーバー置換やリフト＆シフトアプリの設定共有",
         ],
@@ -383,17 +383,17 @@ export const dp900Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "Cosmos DB (NoSQL / MongoDB)",
+        feature: "Azure Cosmos DB for NoSQL / Azure Cosmos DB for MongoDB",
         values: [
-          "ドキュメント（JSON / BSON）",
+          "ドキュメント データベース（JSON / BSON）",
           "柔軟スキーマ・SQL 風クエリ (NoSQL) / Mongo ドライバ互換",
           "商品カタログ・顧客プロファイル・コンテンツ管理システム",
         ],
       },
       {
-        feature: "Cosmos DB (Apache Cassandra / Gremlin)",
+        feature: "Azure Cosmos DB for Apache Cassandra / Gremlin",
         values: [
-          "列ファミリ (Cassandra) / グラフ頂点・辺 (Gremlin)",
+          "列ファミリ (Cassandra) / グラフ データベース (Gremlin 頂点・辺)",
           "CQL 互換ワイド列格納 / 多対多のグラフ探索クエリ",
           "時系列テレメトリ (Cassandra) / 不正検知・SNS 関係分析 (Gremlin)",
         ],
@@ -501,10 +501,10 @@ export const dp900Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "Azure Event Hubs / Stream Analytics",
+        feature: "Azure Event Hubs / Stream Analytics / Microsoft Fabric Real-Time Intelligence",
         values: [
-          "高スループット受信 ＋ SQL ストリーム処理",
-          "連続イベントストリームの窓関数リアルタイム集計",
+          "高スループット受信 ＋ SQL ストリーム処理 / リアルタイム分析",
+          "連続イベントストリームのウィンドウ集計（Tumbling / Hopping / Sliding）",
           "IoT センサーやクリックストリームの即時監視・Power BI 連携",
         ],
       },
@@ -1371,10 +1371,10 @@ export const dp900OfficialResources: AzureOfficialResource[] = [
     badge: "公式試験ガイド",
   },
   {
-    title: "Exam DP-900 試験詳細・無料練習用評価",
-    description: "Pearson VUE での受験申込および Microsoft Learn 無料の Practice Assessment へアクセスできます。",
-    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/exams/dp-900/",
-    badge: "試験・模擬評価",
+    title: "Azure Architecture Center: データベースアーキテクチャ設計の始め方",
+    description: "リレーショナル／非リレーショナル／分析データストアの選定基準と設計指針を網羅した公式リファレンスです。",
+    url: "https://learn.microsoft.com/ja-jp/azure/architecture/databases/database-get-started",
+    badge: "公式設計ガイド",
   },
   {
     title: "Course DP-900T00 公式ラーニングパス",

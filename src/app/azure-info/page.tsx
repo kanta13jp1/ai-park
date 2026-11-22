@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, type KeyboardEvent } from "react";
 import {
   Cloud,
   ShieldCheck,
@@ -46,6 +46,8 @@ import {
   Container,
   FileCheck2,
   HardDrive,
+  Zap,
+  FileDown,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -159,6 +161,7 @@ import {
   az305OfficialResources,
 } from "@/data/azure-az305";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
+import { normalizeAzureSearchQuery } from "@/lib/azure-search";
 
 type AzureCertId = "az900" | "ai900" | "dp900" | "sc900" | "az104" | "ai103" | "ai200" | "az305";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
@@ -805,8 +808,50 @@ export default function AzureInfoPage() {
   const handleJumpToServiceComparison = (keyword: string) => {
     playCyberClick();
     setCompCategory("すべて");
-    setCompQuery(keyword);
+    setCompQuery(normalizeAzureSearchQuery(keyword));
     setActiveTab("comparisons");
+  };
+
+  const handleExportNotesMarkdown = () => {
+    playCyberClick();
+    const lines: string[] = [
+      `# Azure ${config.shortLabel} 学習メモ`,
+      "",
+      `- エクスポート日時: ${new Date().toLocaleString("ja-JP")}`,
+      "",
+    ];
+    let exportedCount = 0;
+
+    for (const domain of config.domains) {
+      const domainNotes = domain.topics
+        .map((t) => ({ topic: t, note: (progress.topicNotes[t.id] ?? "").trim() }))
+        .filter((item) => item.note.length > 0);
+      if (domainNotes.length === 0) continue;
+
+      lines.push(`## Domain ${domain.number}: ${domain.title}`, "");
+      for (const { topic, note } of domainNotes) {
+        exportedCount++;
+        lines.push(`### Topic ${topic.code}: ${topic.title}`);
+        lines.push(`- サービス・機能: ${topic.services.join(", ")}`);
+        lines.push(`- 学習メモ:\n\n${note}`);
+        lines.push("", `> 試験のポイント: ${topic.examTip}`, "");
+      }
+    }
+
+    if (exportedCount === 0) return;
+
+    const blob = new Blob([lines.join("\n")], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `azure-${config.id}-notes.md`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setImportMessage(`${config.shortLabel} の学習メモ（${exportedCount} 件）を Markdown 出力しました。`);
+    setTimeout(() => setImportMessage(null), 3000);
   };
 
   const handleFocusDomain = (domainId: string) => {
@@ -961,6 +1006,17 @@ export default function AzureInfoPage() {
     );
   }, [config.keyFacts, compQuery]);
 
+  const filteredQuickLookup = useMemo(() => {
+    const q = compQuery.trim().toLowerCase();
+    if (!q) return [];
+    return config.quickLookup.filter((item) =>
+      [item.keyword, item.category, item.recommended, item.reason]
+        .join(" ")
+        .toLowerCase()
+        .includes(q)
+    );
+  }, [config.quickLookup, compQuery]);
+
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     {
       id: "domains",
@@ -984,14 +1040,42 @@ export default function AzureInfoPage() {
     { id: "resources", label: "公式リソース", icon: Compass },
   ];
 
+  const handleTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, currentId: TabId) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const tabIds = tabs.map((t) => t.id);
+    const currentIndex = tabIds.indexOf(currentId);
+    if (currentIndex === -1) return;
+
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowRight") {
+      nextIndex = (currentIndex + 1) % tabIds.length;
+    } else if (e.key === "ArrowLeft") {
+      nextIndex = (currentIndex - 1 + tabIds.length) % tabIds.length;
+    } else if (e.key === "Home") {
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      nextIndex = tabIds.length - 1;
+    }
+
+    if (nextIndex !== null) {
+      e.preventDefault();
+      const nextId = tabIds[nextIndex];
+      playCyberClick();
+      setActiveTab(nextId);
+      requestAnimationFrame(() => {
+        document.getElementById(`azure-tab-${nextId}`)?.focus();
+      });
+    }
+  };
+
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen min-w-0">
       <HeroBanner
         title="Azure・Microsoft Azure情報局"
         subtitle="AZ-900 / AI-900 / DP-900 / SC-900 / AZ-104 / AI-103 / AI-200 / AZ-305（全8資格）統合学習ハブ"
       />
 
-      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="max-w-6xl w-full min-w-0 mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
           message="現在 Microsoft Azure 認定資格（AZ-900 / AI-900 / DP-900 / SC-900 / AZ-104 / AI-103 / AI-200 / AZ-305 全8資格）の公式試験ガイドに基づく学習ハブを掲載しています（AI-103 / AI-200 は旧 AI-102 / AZ-204 の後継試験）。社内の Azure 利用ルールや資格取得支援制度等は準備中（確定次第掲載）です。"
@@ -999,12 +1083,19 @@ export default function AzureInfoPage() {
         />
 
         {/* 資格レベル切り替え（全8資格） */}
-        <section className="flex flex-col gap-3 bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs">
+        <section
+          aria-label="学習資格選択"
+          className="flex flex-col gap-3 bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs min-w-0"
+        >
           <div className="flex items-center space-x-2 px-1">
             <Cloud size={16} className="text-sky-600" />
             <span className="text-xs sm:text-sm font-black text-slate-800">学習資格選択（全8資格）</span>
           </div>
-          <div className="flex flex-wrap gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/70">
+          <div
+            role="group"
+            aria-label="対象資格の切り替え"
+            className="flex flex-wrap gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/70"
+          >
             {(["az900", "ai900", "dp900", "sc900", "az104", "ai103", "ai200", "az305"] as const).map((id) => {
               const item = CERT_CONFIG[id];
               const active = certId === id;
@@ -1012,9 +1103,10 @@ export default function AzureInfoPage() {
                 <button
                   key={id}
                   type="button"
+                  aria-pressed={active}
                   onClick={() => handleSwitchCert(id)}
                   onMouseEnter={() => playCyberHover()}
-                  className={`px-3 py-2 rounded-lg text-xs font-black transition-all cursor-pointer sm:whitespace-nowrap text-left ${
+                  className={`px-3 py-2 rounded-lg text-xs font-black transition-all cursor-pointer lg:whitespace-nowrap max-w-full break-words text-left ${
                     active
                       ? "bg-slate-900 text-white shadow-sm"
                       : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
@@ -1055,8 +1147,8 @@ export default function AzureInfoPage() {
                 </p>
               </div>
 
-              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:min-w-[360px]">
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 lg:min-w-[360px] min-w-0">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
                   <div className="text-xl sm:text-2xl font-black text-sky-300 font-mono">
                     {topicPct}%
@@ -1065,14 +1157,14 @@ export default function AzureInfoPage() {
                     {completedTopicCount} / {allTopics.length}
                   </div>
                 </div>
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">暗記カード</div>
                   <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
                     {masteredCardCount} / {config.quickLookup.length}
                   </div>
                   <div className="text-[11px] text-slate-400">枚習得</div>
                 </div>
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">演習問題</div>
                   <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
                     {correctQuizCount} / {config.practiceQuestions.length}
@@ -1124,6 +1216,23 @@ export default function AzureInfoPage() {
             <div className="flex flex-wrap items-center gap-2 shrink-0">
               <button
                 type="button"
+                onClick={handleExportNotesMarkdown}
+                disabled={notedTopicCount === 0}
+                title={
+                  notedTopicCount === 0
+                    ? "保存済みのメモがあると Markdown 形式で書き出せます"
+                    : `${notedTopicCount} 件の学習メモを Markdown で出力`
+                }
+                className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+              >
+                <FileDown size={13} />
+                <span>メモ出力 (.md)</span>
+              </button>
+
+              <button
+                type="button"
+                aria-expanded={showBackupPanel}
+                aria-controls="azure-backup-panel"
                 onClick={() => {
                   playCyberClick();
                   setShowBackupPanel((v) => !v);
@@ -1149,9 +1258,15 @@ export default function AzureInfoPage() {
             </div>
           </div>
 
+          {!showBackupPanel && importMessage && (
+            <div role="status" aria-live="polite" className="text-xs font-bold text-sky-700">
+              {importMessage}
+            </div>
+          )}
+
           {showBackupPanel && (
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div id="azure-backup-panel" className="pt-4 border-t border-slate-100 space-y-3">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
                 <p className="text-xs text-slate-600">
                   {config.shortLabel} の進捗やメモはブラウザの localStorage に保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
                 </p>
@@ -1164,13 +1279,14 @@ export default function AzureInfoPage() {
                   <span>{copiedBackup ? "コピーしました" : "現在のデータをコピー"}</span>
                 </button>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col lg:flex-row gap-2">
                 <input
                   type="text"
+                  aria-label="バックアップJSON入力"
                   value={backupInput}
                   onChange={(e) => setBackupInput(e.target.value)}
                   placeholder="復元するバックアップJSON文字列を貼り付け..."
-                  className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:border-sky-400"
+                  className="flex-1 min-w-0 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:border-sky-400"
                 />
                 <button
                   type="button"
@@ -1182,25 +1298,37 @@ export default function AzureInfoPage() {
                 </button>
               </div>
               {importMessage && (
-                <div className="text-xs font-bold text-sky-700">{importMessage}</div>
+                <div role="status" aria-live="polite" className="text-xs font-bold text-sky-700">
+                  {importMessage}
+                </div>
               )}
             </div>
           )}
         </section>
 
         {/* タブナビゲーション */}
-        <nav className="flex flex-wrap gap-2 bg-white p-2 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div
+          role="tablist"
+          aria-label="Azure 学習セクション"
+          className="flex flex-wrap gap-2 bg-white p-2 rounded-2xl border border-slate-200/80 shadow-xs"
+        >
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                id={`azure-tab-${tab.id}`}
                 type="button"
+                role="tab"
+                aria-selected={active}
+                aria-controls={`azure-panel-${tab.id}`}
+                tabIndex={active ? 0 : -1}
                 onClick={() => {
                   playCyberClick();
                   setActiveTab(tab.id);
                 }}
+                onKeyDown={(e) => handleTabKeyDown(e, tab.id)}
                 onMouseEnter={() => playCyberHover()}
                 className={`flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer whitespace-nowrap ${
                   active
@@ -1222,19 +1350,25 @@ export default function AzureInfoPage() {
               </button>
             );
           })}
-        </nav>
+        </div>
 
         {/* TAB 1: トピック別学習 */}
         {activeTab === "domains" && (
-          <div className="space-y-5">
+          <div
+            role="tabpanel"
+            id="azure-panel-domains"
+            aria-labelledby="azure-tab-domains"
+            className="space-y-5"
+          >
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-              <div className="relative w-full lg:flex-1 lg:max-w-xs">
+              <div className="relative w-full min-w-0 lg:flex-1 lg:max-w-xs">
                 <Search
                   size={14}
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
                 />
                 <input
                   type="text"
+                  aria-label="Azure トピックを検索"
                   value={topicQuery}
                   onChange={(e) => setTopicQuery(e.target.value)}
                   placeholder="Azure サービス・CLI 検索..."
@@ -1255,6 +1389,7 @@ export default function AzureInfoPage() {
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
+                  aria-pressed={onlyIncompleteTopics}
                   onClick={() => {
                     playCyberClick();
                     setOnlyIncompleteTopics((v) => !v);
@@ -1271,6 +1406,7 @@ export default function AzureInfoPage() {
 
                 <button
                   type="button"
+                  aria-pressed={onlyWithNotesTopics}
                   onClick={() => {
                     playCyberClick();
                     setOnlyWithNotesTopics((v) => !v);
@@ -1398,6 +1534,8 @@ export default function AzureInfoPage() {
                       <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <button
                           type="button"
+                          aria-expanded={isExpanded}
+                          aria-controls={`azure-domain-panel-${domain.id}`}
                           onClick={() => {
                             playCyberClick();
                             setExpandedDomains((prev) => ({
@@ -1442,6 +1580,8 @@ export default function AzureInfoPage() {
                           </button>
                           <button
                             type="button"
+                            aria-expanded={isExpanded}
+                            aria-controls={`azure-domain-panel-${domain.id}`}
                             onClick={() => {
                               playCyberClick();
                               setExpandedDomains((prev) => ({
@@ -1450,7 +1590,7 @@ export default function AzureInfoPage() {
                               }));
                             }}
                             className="p-2 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50 cursor-pointer"
-                            aria-label="展開切り替え"
+                            aria-label={`${domain.title} の展開切り替え`}
                           >
                             {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                           </button>
@@ -1458,7 +1598,10 @@ export default function AzureInfoPage() {
                       </div>
 
                       {isExpanded && (
-                        <div className="border-t border-slate-100 bg-slate-50/50 p-5 space-y-4">
+                        <div
+                          id={`azure-domain-panel-${domain.id}`}
+                          className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-5 space-y-4 min-w-0"
+                        >
                           {domain.visibleTopics.map((topic) => {
                             const isDone = progress.completedTopics.includes(topic.id);
                             const noteText = progress.topicNotes[topic.id] ?? "";
@@ -1478,6 +1621,7 @@ export default function AzureInfoPage() {
                                 <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-2.5 sm:gap-3">
                                   <button
                                     type="button"
+                                    aria-pressed={isDone}
                                     onClick={() => toggleTopic(topic.id)}
                                     className="flex items-start space-x-2.5 text-left cursor-pointer group min-w-0 flex-1"
                                   >
@@ -1502,6 +1646,8 @@ export default function AzureInfoPage() {
 
                                   <button
                                     type="button"
+                                    aria-expanded={isNoteOpen}
+                                    aria-controls={`azure-note-panel-${topic.id}`}
                                     onClick={() => {
                                       playCyberClick();
                                       setOpenNoteTopics((prev) => ({
@@ -1559,8 +1705,15 @@ export default function AzureInfoPage() {
 
                                 {/* 個人メモ */}
                                 {isNoteOpen && (
-                                  <div className="pt-2">
+                                  <div id={`azure-note-panel-${topic.id}`} className="pt-2">
+                                    <label
+                                      htmlFor={`azure-note-input-${topic.id}`}
+                                      className="sr-only"
+                                    >
+                                      {topic.title} の学習メモ
+                                    </label>
                                     <textarea
+                                      id={`azure-note-input-${topic.id}`}
                                       rows={2}
                                       value={noteText}
                                       onChange={(e) =>
@@ -1586,14 +1739,24 @@ export default function AzureInfoPage() {
 
         {/* TAB 2: 比較表・設計パターン */}
         {activeTab === "comparisons" && (
-          <div className="space-y-8">
+          <div
+            role="tabpanel"
+            id="azure-panel-comparisons"
+            aria-labelledby="azure-tab-comparisons"
+            className="space-y-8"
+          >
             <div className="space-y-3">
               <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                <div className="flex flex-wrap gap-1.5">
+                <div
+                  role="group"
+                  aria-label="比較カテゴリ絞り込み"
+                  className="flex flex-wrap gap-1.5"
+                >
                   {availableComparisonCategories.map((cat) => (
                     <button
                       key={cat}
                       type="button"
+                      aria-pressed={compCategory === cat}
                       onClick={() => {
                         playCyberClick();
                         setCompCategory(cat);
@@ -1608,13 +1771,14 @@ export default function AzureInfoPage() {
                     </button>
                   ))}
                 </div>
-                <div className="relative w-full lg:w-64 shrink-0">
+                <div className="relative w-full min-w-0 lg:w-64 shrink-0">
                   <Search
                     size={14}
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
                   />
                   <input
                     type="text"
+                    aria-label="比較表・逆引き・設計パターンを検索"
                     value={compQuery}
                     onChange={(e) => setCompQuery(e.target.value)}
                     placeholder="サービス・特徴で絞り込み..."
@@ -1634,16 +1798,21 @@ export default function AzureInfoPage() {
               </div>
 
               {/* 人気サービス クイック検索チップ */}
-              <div className="flex flex-wrap items-center gap-1.5 px-1">
+              <div
+                role="group"
+                aria-label="よく調べるサービス クイック検索"
+                className="flex flex-wrap items-center gap-1.5 px-1"
+              >
                 <span className="text-[11px] font-bold text-slate-400 mr-1">
                   よく調べるサービス:
                 </span>
                 {config.quickSearchChips.map((kw) => {
-                  const isSelected = compQuery.toLowerCase() === kw.toLowerCase();
+                  const isSelected = compQuery.trim().toLowerCase() === kw.toLowerCase();
                   return (
                     <button
                       key={kw}
                       type="button"
+                      aria-pressed={isSelected}
                       onClick={() => {
                         playCyberClick();
                         setCompCategory("すべて");
@@ -1660,10 +1829,37 @@ export default function AzureInfoPage() {
                   );
                 })}
               </div>
+
+              {/* 検索ヒット件数サマリ（5セクション横断） */}
+              {compQuery.trim() && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="bg-white rounded-2xl border border-slate-200/80 px-4 py-3 text-xs text-slate-600 flex flex-wrap items-center justify-between gap-2 shadow-xs"
+                >
+                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 min-w-0">
+                    <span className="font-bold text-slate-800 break-words">
+                      「{compQuery.trim()}」の検索結果:
+                    </span>
+                    <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-0.5 font-mono text-[11px]">
+                      <span>比較表 {filteredComparisons.length}</span>
+                      <span className="text-slate-300">/</span>
+                      <span>逆引き {filteredQuickLookup.length}</span>
+                      <span className="text-slate-300">/</span>
+                      <span>設計パターン {filteredPatterns.length}</span>
+                      <span className="text-slate-300">/</span>
+                      <span>誤答対策 {filteredPitfalls.length}</span>
+                      <span className="text-slate-300">/</span>
+                      <span>制限値 {filteredKeyFacts.length}</span>
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* すべて0件時のエンプティステート */}
             {filteredComparisons.length === 0 &&
+              filteredQuickLookup.length === 0 &&
               filteredPatterns.length === 0 &&
               filteredPitfalls.length === 0 &&
               filteredKeyFacts.length === 0 && (
@@ -1709,7 +1905,7 @@ export default function AzureInfoPage() {
                     </div>
 
                     <div className="overflow-x-auto">
-                      <table className="w-full min-w-[600px] text-left border-collapse text-xs sm:text-sm">
+                      <table className="w-full min-w-[640px] text-left border-collapse text-xs sm:text-sm">
                         <thead>
                           <tr className="border-b border-slate-200 bg-slate-50">
                             {comp.columns.map((col, idx) => (
@@ -1750,6 +1946,39 @@ export default function AzureInfoPage() {
                   </div>
                 ))}
               </div>
+            )}
+
+            {/* 要件・用途 → Azure サービス逆引き早見表（検索時表示） */}
+            {filteredQuickLookup.length > 0 && (
+              <section className="space-y-4">
+                <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2">
+                  <Zap className="w-5 h-5 text-amber-500" />
+                  <span>
+                    要件・用途 → Azure サービス逆引き早見表 ({filteredQuickLookup.length}件)
+                  </span>
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredQuickLookup.map((item) => (
+                    <div
+                      key={`${config.id}-ql-${item.keyword}`}
+                      className="bg-white rounded-2xl border border-slate-200/80 p-5 space-y-2.5 shadow-xs min-w-0"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-200">
+                          {item.category}
+                        </span>
+                        <span className="font-mono text-xs font-black text-sky-700 break-words">
+                          {item.recommended}
+                        </span>
+                      </div>
+                      <h4 className="text-sm font-black text-slate-900 break-words">
+                        要件: {item.keyword}
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">{item.reason}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
             )}
 
             {/* 頻出アーキテクチャ・運用パターン */}
@@ -1852,41 +2081,58 @@ export default function AzureInfoPage() {
 
         {/* TAB 3: フラッシュカード */}
         {activeTab === "flashcards" && (
-          <CertificationFlashcards
-            key={certId}
-            items={config.quickLookup}
-            masteredKeywords={progress.masteredCards}
-            onToggleMastered={handleToggleMasteredCard}
-            onResetMastered={handleResetMasteredCards}
-            badgeText={`Azure ${config.shortLabel} 直前暗記フラッシュカード`}
-            title={config.flashcardTitle}
-            promptLabel="次の要件に対応する Microsoft Azure サービス・機能は？"
-            answerLabel="推奨サービス・機能"
-          />
+          <div
+            role="tabpanel"
+            id="azure-panel-flashcards"
+            aria-labelledby="azure-tab-flashcards"
+          >
+            <CertificationFlashcards
+              key={certId}
+              items={config.quickLookup}
+              masteredKeywords={progress.masteredCards}
+              onToggleMastered={handleToggleMasteredCard}
+              onResetMastered={handleResetMasteredCards}
+              badgeText={`Azure ${config.shortLabel} 直前暗記フラッシュカード`}
+              title={config.flashcardTitle}
+              promptLabel="次の要件に対応する Microsoft Azure サービス・機能は？"
+              answerLabel="推奨サービス・機能"
+            />
+          </div>
         )}
 
         {/* TAB 4: 練習問題・模擬試験 */}
         {activeTab === "quiz" && (
-          <CertificationPracticeQuiz
-            key={certId}
-            questions={config.practiceQuestions}
-            domains={quizDomains}
-            examBadgeLabel={config.quizBadgeLabel}
-            passingConfig={config.passingConfig}
-            answers={progress.quizAnswers}
-            bookmarkedIds={progress.bookmarkedQuestions}
-            mockExamHistory={progress.mockExamHistory}
-            initialDomain={quizDomainTarget}
-            onSubmitAnswer={handleSubmitAnswer}
-            onToggleBookmark={handleToggleBookmark}
-            onRecordMockExam={handleRecordMockExam}
-            onResetQuiz={handleResetQuiz}
-          />
+          <div
+            role="tabpanel"
+            id="azure-panel-quiz"
+            aria-labelledby="azure-tab-quiz"
+          >
+            <CertificationPracticeQuiz
+              key={certId}
+              questions={config.practiceQuestions}
+              domains={quizDomains}
+              examBadgeLabel={config.quizBadgeLabel}
+              passingConfig={config.passingConfig}
+              answers={progress.quizAnswers}
+              bookmarkedIds={progress.bookmarkedQuestions}
+              mockExamHistory={progress.mockExamHistory}
+              initialDomain={quizDomainTarget}
+              onSubmitAnswer={handleSubmitAnswer}
+              onToggleBookmark={handleToggleBookmark}
+              onRecordMockExam={handleRecordMockExam}
+              onResetQuiz={handleResetQuiz}
+            />
+          </div>
         )}
 
         {/* TAB 5: 公式リソース */}
         {activeTab === "resources" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            role="tabpanel"
+            id="azure-panel-resources"
+            aria-labelledby="azure-tab-resources"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
             {config.officialResources.map((res, idx) => (
               <TiltCard key={`${config.id}-res-${idx}`} className="h-full">
                 <a
@@ -1894,7 +2140,7 @@ export default function AzureInfoPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => playCyberClick()}
-                  className="block h-full bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs hover:border-sky-300 transition-all space-y-3"
+                  className="block h-full min-w-0 bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs hover:border-sky-300 transition-all space-y-3"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200">

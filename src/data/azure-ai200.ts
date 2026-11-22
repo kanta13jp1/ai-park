@@ -355,10 +355,10 @@ export const ai200Comparisons: AzureComparisonTable[] = [
     columns: ["実行基盤", "管理モデル・制御範囲", "スケーリング・タイムアウト特性", "最適ユースケース"],
     rows: [
       {
-        feature: "Azure Container Apps (ACA)",
+        feature: "Azure Container Apps (ACA) / Azure Container Registry (ACR)",
         values: [
-          "サーバーレスコンテナ（K8s 管理不要・Dapr 内蔵）",
-          "KEDA イベント伸縮・ゼロスケール・Multiple リビジョン分割",
+          "サーバーレスコンテナ（K8s 管理不要・ACR Tasks 連携・Dapr 内蔵）",
+          "KEDA イベント伸縮・リビジョン管理・Azure Files マウント",
           "HTTP API・非同期ワーカー・マイクロサービス構築",
         ],
       },
@@ -366,7 +366,7 @@ export const ai200Comparisons: AzureComparisonTable[] = [
         feature: "Azure Kubernetes Service (AKS)",
         values: [
           "フル機能のマネージド Kubernetes（Pod/Node 完全制御）",
-          "HPA/KEDA・GPU ノードプール・3 種ヘルスプローブ細密設定",
+          "HPA/KEDA・Ingress / Application Routing・3 種ヘルスプローブ",
           "独自 CRD・高度なメッシュ・大規模推論クラスタ運用",
         ],
       },
@@ -381,7 +381,7 @@ export const ai200Comparisons: AzureComparisonTable[] = [
       {
         feature: "Azure Functions (Flex Consumption)",
         values: [
-          "イベント駆動 FaaS（トリガー/バインディング・VNet 委任統合）",
+          "イベント駆動 FaaS（Triggers & Bindings・VNet 委任統合）",
           "Always Ready 待機可・非 HTTP 無制限（HTTP 応答は 230 秒上限）",
           "イベント連動の軽量 RAG 索引処理・Durable オーケストレーション",
         ],
@@ -401,15 +401,15 @@ export const ai200Comparisons: AzureComparisonTable[] = [
         feature: "Azure Service Bus",
         values: [
           "プル型キュー / Pub-Sub（Standard 256 KB / Premium AMQP 100 MB）",
-          "セッションによる FIFO 保証・重複検出・PeekLock（最大 5 分）・DLQ",
+          "セッションによる FIFO 保証・重複検出・PeekLock（最大 5 分）・Dead-Letter Queue (DLQ)",
           "推論ジョブキュー・会話順保証処理・確実なコマンド配信",
         ],
       },
       {
         feature: "Azure Event Grid",
         values: [
-          "プッシュ型イベントルーター（1 イベント既定 64 KB〜最大 1 MB）",
-          "属性/CloudEvents フィルタ・最大 24 時間 / 30 回再試行＋Blob DLQ",
+          "プッシュ型イベントルーター（System / Custom トピック・最大 1 MB）",
+          "属性/CloudEvents フィルタ・最大 24 時間 / 30 回再試行＋Dead-lettering",
           "Blob 更新契機の RAG 索引起動・Key Vault 期限通知",
         ],
       },
@@ -444,12 +444,12 @@ export const ai200Comparisons: AzureComparisonTable[] = [
         feature: "Azure Cosmos DB for NoSQL",
         values: [
           "JSON ドキュメント＋組込ベクター検索（DiskANN / Flat）＋全文検索",
-          "グローバル分散・5 段階整合性（既定 Session）・Change Feed 連携",
-          "マルチリージョン RAG ストア・会話履歴・イベント駆動パイプライン起点",
+          "グローバル分散・5 段階整合性レベル（既定 Session）・Change Feed 連携",
+          "マルチリージョン RAG Vector Stores・会話履歴・イベント駆動パイプライン起点",
         ],
       },
       {
-        feature: "Azure DB for PostgreSQL (Flexible)",
+        feature: "Azure Database for PostgreSQL (Flexible Server)",
         values: [
           "リレーショナル DB ＋ `pgvector`（HNSW / IVFFlat・最大 2,000 次元）",
           "ACID トランザクション・SQL JOIN フィルタ・ゾーン冗長 HA",
@@ -559,11 +559,11 @@ export const ai200Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "Azure App Configuration",
+        feature: "Azure App Configuration / Azure API Management",
         values: [
-          "非機密の階層設定（ラベル別）・機能フラグ・Key Vault 参照 URI",
-          "センチネルキー監視による動的リフレッシュ・Managed ID 認証",
-          "モデル切替フラグ・プロンプト温度パラメータ・機能段階公開管理",
+          "非機密の階層設定（Sentinel キー・機能フラグ・Key Vault 参照）/ API ゲートウェイ",
+          "動的リフレッシュ・Managed ID / MSAL 認証・LLM キャッシュ・レート制限",
+          "モデル切替フラグ・セマンティックキャッシュ・Azure API Management 保護",
         ],
       },
     ],
@@ -1369,7 +1369,7 @@ export const ai200OfficialResources: AzureOfficialResource[] = [
     title: "Microsoft Certified: Azure AI Cloud Developer Associate 認定ページ",
     description:
       "AI-200 資格の全体像、対象開発者像（旧 AZ-204 後継）、スキル要件および更新ポリシーを確認できます。",
-    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/azure-ai-cloud-developer/",
+    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/azure-ai-cloud-developer-associate/",
     badge: "公式認定ページ",
   },
   {
@@ -1380,11 +1380,11 @@ export const ai200OfficialResources: AzureOfficialResource[] = [
     badge: "公式試験ガイド",
   },
   {
-    title: "Exam AI-200 試験詳細・模擬評価ページ",
+    title: "Azure Container Apps 公式ドキュメント",
     description:
-      "試験時間・受験登録・Microsoft Learn 試験中参照ルールおよび公式 Practice Assessment へアクセスできます。",
-    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/exams/ai-200/",
-    badge: "試験詳細・模擬",
+      "AI-200 で中核となるサーバーレスコンテナ基盤（KEDA スケーリング・リビジョン管理・Dapr）の技術ガイドです。",
+    url: "https://learn.microsoft.com/ja-jp/azure/container-apps/",
+    badge: "公式ドキュメント",
   },
   {
     title: "コース AI-200T00 公式ラーニング コース (Microsoft Learn)",

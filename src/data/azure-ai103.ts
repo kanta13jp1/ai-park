@@ -341,9 +341,9 @@ export const ai103Comparisons: AzureComparisonTable[] = [
     columns: ["オプション / 手法", "課金・スループット特性", "主なカスタマイズ範囲", "推奨ユースケース"],
     rows: [
       {
-        feature: "Standard / Global Standard",
+        feature: "Standard / Global Standard（Microsoft Foundry Model Catalog）",
         values: [
-          "トークン従量課金（TPM / RPM クォータ制約あり）",
+          "トークン従量課金（TPM / RPM クォータ制約・Serverless API 含む）",
           "システムプロンプト・推論パラメータ調整",
           "開発検証、トラフィック変動が大きいアプリ、PoC",
         ],
@@ -357,15 +357,15 @@ export const ai103Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "RAG（グラウンディング）",
+        feature: "RAG（グラウンディング・ドキュメント チャンキング）",
         values: [
           "検索ストア（AI Search）費用 ＋ 推論トークン費用",
-          "最新の外部知識・出典参照・権限制御（filter）",
+          "ドキュメント チャンキング・Embeddings モデルによるベクトル化・権限制御",
           "頻繁に更新される社内規程・仕様書・ナレッジ検索",
         ],
       },
       {
-        feature: "ファインチューニング",
+        feature: "Fine-tuning（ファインチューニング）",
         values: [
           "学習ジョブ費用 ＋ 専用ホスティング時間課金",
           "モデル重み調整（文体・専門出力形式・SLM 最適化）",
@@ -384,9 +384,9 @@ export const ai103Comparisons: AzureComparisonTable[] = [
     columns: ["ツール種別", "ホスト / 実行主体", "強み・特徴", "適したシナリオ"],
     rows: [
       {
-        feature: "FileSearchTool",
+        feature: "File Search (FileSearchTool)",
         values: [
-          "Foundry Agent Service マネージド ベクターストア",
+          "Microsoft Foundry Agent Service マネージド ベクターストア",
           "アップロードファイルの自動分割・埋め込み・検索を即統合",
           "数個〜小中規模ドキュメントに基づくエージェント内簡易 RAG",
         ],
@@ -400,7 +400,7 @@ export const ai103Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "FunctionTool / OpenApiTool",
+        feature: "Function Calling (FunctionTool / OpenApiTool)",
         values: [
           "アプリ側 Python コード実行 / REST API 呼び出し",
           "独自業務ロジックや既存 REST API スキーマを直接関数定義",
@@ -472,8 +472,8 @@ export const ai103Comparisons: AzureComparisonTable[] = [
       {
         feature: "Azure AI Vision / Custom Vision",
         values: [
-          "静止画（汎用解析 / 独自ラベル学習）",
-          "キャプション・物体座標・Read OCR・マルチモーダルベクトル",
+          "静止画（画像分類・物体検出 / 独自ラベル学習）",
+          "Caption・Dense Captions・Read API (OCR)・Background Removal・マルチモーダルベクトル",
           "画像タグ付けやクロスモーダル検索、エッジ向け独自不良品検知",
         ],
       },
@@ -486,19 +486,27 @@ export const ai103Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "Azure AI Document Intelligence",
+        feature: "Azure AI Document Intelligence (DocumentIntelligenceClient)",
         values: [
-          "帳票・PDF・スキャン文書",
+          "帳票・PDF・スキャン文書（Custom Extraction / Custom Classification Model）",
           "レイアウト Markdown・表・選択マーク・信頼度付きキー・値ペア",
           "請求書・領収書・定型/準定型フォームからの決定論的・高精度抽出",
         ],
       },
       {
-        feature: "Azure Content Understanding",
+        feature: "Azure Content Understanding (Multimodal Analyzers)",
         values: [
           "マルチモーダル（文書・画像・音声・動画）",
           "自然言語スキーマに基づく構造化 JSON ＋ RAG 向け要約・索引出力",
           "複数メディア横断処理や事前ラベル付けなしの柔軟な構造化抽出",
+        ],
+      },
+      {
+        feature: "Azure AI Language / CLU / Speech / Translator",
+        values: [
+          "テキスト・会話意図・音声・多言語翻訳",
+          "Sentiment & Opinion Mining・NER・PII・Summarization・Orchestration Workflow",
+          "感情分析・要約・CLU 意図連携・音声認識/合成・ドキュメント翻訳",
         ],
       },
     ],
@@ -513,11 +521,11 @@ export const ai103Comparisons: AzureComparisonTable[] = [
     columns: ["防御レイヤー", "実装手段・サービス", "防ぐ脅威・リスク", "AI-103 実装ベストプラクティス"],
     rows: [
       {
-        feature: "ID・認証・RBAC",
+        feature: "ID・認証・Azure RBAC",
         values: [
           "マネージド ID + DefaultAzureCredential / Foundry User 等",
           "API キー漏洩・過剰権限による不正操作",
-          "キー認証を無効化し Entra ID + データプレーン最小権限 RBAC",
+          "キー認証を無効化し Entra ID + データプレーン最小権限 Azure RBAC",
         ],
       },
       {
@@ -1365,15 +1373,15 @@ export const ai103OfficialResources: AzureOfficialResource[] = [
     badge: "公式試験ガイド",
   },
   {
-    title: "Exam AI-103 試験詳細・模擬評価ページ",
-    description: "Exam AI-103（旧 AI-102 後継）の試験予約・Microsoft Learn 試験中参照ルール・無料模擬評価にアクセスできます。",
-    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/exams/ai-103/",
-    badge: "試験詳細・模擬",
+    title: "Microsoft Foundry 公式ドキュメント",
+    description: "モデル カタログ・Foundry Agent Service・Tracing・Evaluators の設計と実装を網羅した公式技術ガイドです。",
+    url: "https://learn.microsoft.com/ja-jp/azure/foundry/",
+    badge: "公式ドキュメント",
   },
   {
     title: "Course AI-103T00-A 公式トレーニング コース",
     description: "Microsoft Foundry を用いた AI アプリ・エージェント開発の公式ラーニングパスとハンズオン演習モジュールです。",
-    url: "https://learn.microsoft.com/ja-jp/training/courses/ai-103t00-a",
+    url: "https://learn.microsoft.com/ja-jp/training/courses/ai-103t00",
     badge: "公式トレーニング",
   },
 ];

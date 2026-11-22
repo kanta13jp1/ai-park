@@ -372,7 +372,7 @@ export const ai900Comparisons: AzureComparisonTable[] = [
         feature: "Azure AI Vision",
         values: [
           "事前学習済み API",
-          "タグ・キャプション・一般物体検出・Read OCR",
+          "タグ・キャプション生成・一般物体検出・Read OCR",
           "汎用的な画像の説明生成や写真・看板からの文字読み取り",
         ],
       },
@@ -396,7 +396,7 @@ export const ai900Comparisons: AzureComparisonTable[] = [
         feature: "Azure AI Document Intelligence",
         values: [
           "事前学習済み ＋ カスタムモデル",
-          "キー・値ペア、表、チェックボックスの構造化抽出",
+          "事前構築済み請求書/領収書モデル・レイアウト解析・キー・値ペア抽出",
           "領収書・請求書・ID カード・社内帳票の自動データ入力",
         ],
       },
@@ -441,6 +441,14 @@ export const ai900Comparisons: AzureComparisonTable[] = [
           "リアルタイム REST API / 非同期一括推論",
           "MLOps / アプリ連携",
           "低レイテンシの単発予測（Online）と夜間一括予測（Batch）",
+        ],
+      },
+      {
+        feature: "学習・検証データ分割 (Train/Validation Split)",
+        values: [
+          "データセットを学習用と検証用に分離してモデル評価",
+          "データ準備の基本（過学習・データリーク防止）",
+          "未知データへの汎化性能を RMSE や F1 等で客観検証",
         ],
       },
     ],
@@ -529,6 +537,14 @@ export const ai900Comparisons: AzureComparisonTable[] = [
           "個人の顔識別やカスタムニューラル音声の悪用防止",
         ],
       },
+      {
+        feature: "責任ある AI 6 原則（信頼性と安全性・プライバシーとセキュリティ・透明性・説明責任）",
+        values: [
+          "公平性・信頼性と安全性・プライバシーとセキュリティ・包括性・透明性・説明責任",
+          "バイアス排除・堅牢性検証・データ保護・障がい者配慮・利用明示・人間の統制",
+          "すべての AI システム企画・学習・運用段階における必須ガバナンス基準",
+        ],
+      },
     ],
     decisionRule:
       "有害出力や脱獄防止＝Azure AI Content Safety（＋Prompt Shields）、認証認可＝Entra ID RBAC、顔識別利用＝Limited Access。",
@@ -549,11 +565,19 @@ export const ai900Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "プロンプト エンジニアリング",
+        feature: "プロンプトエンジニアリング",
         values: [
           "低（API 呼び出しと指示文調整のみ）",
           "モデルの学習済み知識に依存",
           "要約・翻訳・一般質問など汎用タスクを低コストで実装",
+        ],
+      },
+      {
+        feature: "Transformer / トークン化 / Embeddings（LLM 基礎）",
+        values: [
+          "中（基盤モデル理解・RAG 設計）",
+          "Transformer の自己注意機構・単語のトークン化・意味ベクトル化",
+          "Azure AI Language（キーフレーズ抽出・NER・感情分析）や RAG 検索との連携",
         ],
       },
       {
@@ -1347,9 +1371,9 @@ export const ai900OfficialResources: AzureOfficialResource[] = [
     badge: "公式試験詳細",
   },
   {
-    title: "Course AI-900T00 公式ラーニングパス",
-    description: "Microsoft Learn の無料オンラインモジュールおよびハンズオン演習コースです。",
-    url: "https://learn.microsoft.com/ja-jp/training/courses/ai-900t00",
-    badge: "公式トレーニング",
+    title: "Microsoft Learn: Azure で AI アプリケーションとエージェントを始める",
+    description: "Azure の AI ワークロード・生成 AI・エージェント基礎を体系的に学べる公式ラーニングパス（日本語）です。",
+    url: "https://learn.microsoft.com/ja-jp/training/paths/get-started-ai-apps-agents/",
+    badge: "公式ラーニングパス",
   },
 ];

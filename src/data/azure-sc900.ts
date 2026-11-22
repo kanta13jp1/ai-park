@@ -325,7 +325,7 @@ export const sc900Comparisons: AzureComparisonTable[] = [
         values: [
           "ユーザー・場所・端末準拠状態・アプリ・リスク",
           "サインイン時の動的 if-then ポリシー評価",
-          "社外 IP や非準拠端末からのアクセスに MFA 要求またはブロック",
+          "社外 IP や非準拠端末からのアクセスに多要素認証 (MFA) 要求またはブロック",
         ],
       },
       {
@@ -356,7 +356,7 @@ export const sc900Comparisons: AzureComparisonTable[] = [
         feature: "ハイブリッド認証 (PHS / PTA / フェデレーション)",
         values: [
           "オンプレミス AD DS と Microsoft Entra ID の認証連携",
-          "Entra Connect / Cloud Sync による同期・認証方式選定",
+          "Microsoft Entra Connect / Cloud Sync による同期・認証方式選定",
           "耐障害性と簡素性重視なら PHS、社内検証必須なら PTA、独自 IdP 連携はフェデレーション",
         ],
       },
@@ -431,7 +431,7 @@ export const sc900Comparisons: AzureComparisonTable[] = [
     columns: ["ソリューション", "主な保護対象領域", "コア機能", "代表的な脅威検知・防御例"],
     rows: [
       {
-        feature: "Microsoft Defender for Cloud (CSPM / CWPP)",
+        feature: "Microsoft Defender for Cloud (CSPM / Defender ワークロード保護 CWPP)",
         values: [
           "Azure・AWS・GCP・オンプレミス（Arc）のサーバー/コンテナー/DB",
           "セキュアスコア評価・規制基準監査・攻撃パス分析・ワークロード保護",
@@ -485,7 +485,7 @@ export const sc900Comparisons: AzureComparisonTable[] = [
         feature: "Microsoft Sentinel",
         values: [
           "クラウドネイティブ SIEM ＋ SOAR（Log Analytics 基盤）",
-          "Microsoft 製＋他社製機器のログ集約・ML 異常検知・Logic Apps プレイブック",
+          "分析ルール・ワークブック・ML 異常検知・Logic Apps プレイブック",
           "組織全体の横断相関分析、KQL 脅威ハンティング、自動修復ワークフロー実行",
         ],
       },
@@ -557,7 +557,7 @@ export const sc900Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "Purview データ ガバナンス (Data Map / Catalog)",
+        feature: "Purview Unified Catalog (Data Map / データ ガバナンス)",
         values: [
           "Azure SQL・Blob Storage・マルチクラウド・オンプレミス DB",
           "自動スキャン・機密データ分類・用語集・データ系統（Lineage）",
@@ -576,15 +576,15 @@ export const sc900Comparisons: AzureComparisonTable[] = [
     columns: ["ツール / サービス", "対象領域・視点", "提供される価値・成果物", "使い分けの判断基準"],
     rows: [
       {
-        feature: "Service Trust Portal (STP)",
+        feature: "Service Trust Portal (STP) / Microsoft プライバシー原則",
         values: [
-          "Microsoft クラウド基盤側のコンプライアンス証明",
-          "ISO・SOC・FedRAMP 等の第三者監査報告書とホワイトペーパー",
+          "Microsoft クラウド基盤側のコンプライアンス証明と GRC 指針",
+          "ISO・SOC・FedRAMP 等の第三者監査報告書とプライバシー設計原則",
           "クラウド採用審査で Microsoft 自体のセキュリティ認証・監査結果を確認する時",
         ],
       },
       {
-        feature: "Purview コンプライアンス マネージャー",
+        feature: "Purview コンプライアンスポータル（コンプライアンス マネージャー）",
         values: [
           "顧客テナント側の規制準拠管理とコンプライアンススコア",
           "法令テンプレート（GDPR/ISO 等）別の改善アクションと数値スコア",
@@ -600,7 +600,7 @@ export const sc900Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "eDiscovery / Purview Audit",
+        feature: "eDiscovery / Microsoft Purview Audit",
         values: [
           "訴訟・法令調査（eDiscovery）と操作証跡ログ（Audit）",
           "訴訟ホールド・検索エクスポート（eDiscovery）／操作履歴追跡（Audit）",
@@ -1394,11 +1394,11 @@ export const sc900OfficialResources: AzureOfficialResource[] = [
     badge: "公式試験ガイド",
   },
   {
-    title: "Exam SC-900 試験詳細・無料練習用評価",
+    title: "Microsoft ゼロ トラスト ガイダンス センター",
     description:
-      "Pearson VUE での試験予約および Microsoft Learn 公式の無料練習用評価（Practice Assessment）へアクセスできます。",
-    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/exams/sc-900/",
-    badge: "試験・模擬評価",
+      "ゼロトラスト原則（明示的検証・最小特権・侵害想定）に基づく ID・デバイス・ネットワーク・データ防御の公式アーキテクチャガイドです。",
+    url: "https://learn.microsoft.com/ja-jp/security/zero-trust/",
+    badge: "公式セキュリティガイド",
   },
   {
     title: "Microsoft Learn 公式トレーニング (SC-900T00)",

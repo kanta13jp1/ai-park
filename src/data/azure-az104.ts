@@ -263,27 +263,35 @@ export const az104Comparisons: AzureComparisonTable[] = [
     columns: ["機能", "制御対象", "評価タイミング / 継承", "典型的なユースケース"],
     rows: [
       {
-        feature: "Azure RBAC",
+        feature: "Azure RBAC（カスタムロール / Check access）",
         values: [
-          "「誰が」リソースに対して操作できるか（ユーザー/グループ/MI）",
-          "管理グループ〜リソースまで継承・Allow の加算評価",
-          "特定部署の担当者に VM の起動・停止のみ許可する",
+          "「誰が」リソースに対して操作できるか（ユーザー/グループ/MI・実効権限 Check access）",
+          "Management Groups〜リソースまで継承・Allow の加算評価・カスタムロール定義可",
+          "特定部署の担当者に VM の起動・停止のみ許可、または委任範囲を限定する",
         ],
       },
       {
-        feature: "Azure Policy",
+        feature: "Entra ID（External ID / SSPR / 管理単位）",
         values: [
-          "「リソースが」組織の構成基準を満たしているか（プロパティ検証）",
+          "組織外ゲスト (External ID B2B)・セルフサービス パスワード リセット (SSPR)・管理単位 (AU)",
+          "グループ単位有効化・部署や地域単位でユーザー管理権限を委任分離",
+          "部門管理者に自部署メンバーのみ操作許可、利用者の自己ロック解除",
+        ],
+      },
+      {
+        feature: "Azure Policy（Management Groups / Tags / Cost Management）",
+        values: [
+          "「リソースが」組織の構成基準を満たしているか（Tags 強制・Cost Management 予算統制）",
           "デプロイ時および定期スキャンで評価（Modify/Deny/Audit）",
-          "リージョンを日本国内に制限し、必須タグを自動継承させる",
+          "リージョンを日本国内に制限し、必須 Tags を自動継承させてコスト集計",
         ],
       },
       {
-        feature: "リソースロック",
+        feature: "Resource Locks（リソースロック）",
         values: [
           "権限を持つ管理者による誤変更・誤削除のブロック",
           "サブスクリプション〜リソースで継承（CanNotDelete / ReadOnly）",
-          "本番 VNet や DB サーバーの誤削除を Owner 権限者からも防ぐ",
+          "本番 Virtual Network や DB サーバーの誤削除を Owner 権限者からも防ぐ",
         ],
       },
     ],
@@ -297,11 +305,11 @@ export const az104Comparisons: AzureComparisonTable[] = [
     columns: ["サービス / 機能", "主目的", "RPO / RTO の目安", "主な機能・制約"],
     rows: [
       {
-        feature: "Azure Backup (VM)",
+        feature: "Azure Backup (Recovery Services Vault / Backup Vault / MARS Agent)",
         values: [
-          "誤削除・データ破損・ランサムウェアからのポイントインタイム復元",
-          "RPO: 日次（最大数時間）、RTO: 数十分〜数時間",
-          "GFS 長期保持・論理削除（14 日）・ファイル単位復元対応",
+          "誤削除・データ破損からの復元（VM は Recovery Services Vault、Blob/Disk 等は Backup Vault）",
+          "RPO: 日次（最大数時間）、Soft Delete（論理削除 14 日）・ファイル単位復元 (MARS Agent)",
+          "オンプレミスファイル保全や本番 VM・ストレージの GFS 長期保持",
         ],
       },
       {
@@ -313,11 +321,11 @@ export const az104Comparisons: AzureComparisonTable[] = [
         ],
       },
       {
-        feature: "マネージドディスク スナップショット",
+        feature: "Azure Monitor (Log Analytics Workspace / AMA & DCR / Application Insights / VM Insights)",
         values: [
-          "メンテナンス作業や OS アップデート直前の即時ポイント保存",
-          "手動 / スクリプト取得時点の即時復元用コピー",
-          "増分スナップショット対応（別 RG/別リージョン複製も可能）",
+          "統合ログ収集（AMA & DCR → Log Analytics Workspace）・APM（Application Insights）・VM Insights",
+          "KQL クエリ解析・メトリクス/ログアラート・アクショングループ通知",
+          "VM ゲスト OS 性能と Web アプリ依存関係の統合監視・自動通知",
         ],
       },
     ],
@@ -362,6 +370,14 @@ export const az104Comparisons: AzureComparisonTable[] = [
           "RA-GZRS はセカンダリ常時読取可（最高レベルの可用性・耐久性）",
         ],
       },
+      {
+        feature: "Storage 運用ツール（Lifecycle Management / Object Replication / AzCopy / Azure Storage Explorer）",
+        values: [
+          "Blob 自動階層化 (Lifecycle Management) / 非同期複製 (Object Replication) / 高速転送 (AzCopy)",
+          "Shared Access Signature (SAS)・Storage Firewall によるアクセス制限",
+          "大容量コマンド移行 (AzCopy)、GUI 管理 (Azure Storage Explorer)、保存期限ポリシー適用",
+        ],
+      },
     ],
     decisionRule: "ゾーン障害対策＝ZRS、リージョン災害対策＝GRS、ゾーン＋リージョン両対応かつ読み取り可＝RA-GZRS。",
   },
@@ -373,11 +389,11 @@ export const az104Comparisons: AzureComparisonTable[] = [
     columns: ["サービス", "実行単位 / モデル", "スケーリング・管理負荷", "向いているケース"],
     rows: [
       {
-        feature: "Azure VM / 可用性セット・ゾーン",
+        feature: "Azure VM / Availability Set / Availability Zones / Custom Script Extension",
         values: [
-          "仮想マシン (IaaS)",
-          "OS・パッチ・拡張機能を自己管理（99.95% / 99.99% SLA）",
-          "OS/カーネル制御・既存商用ソフト・Lift & Shift",
+          "仮想マシン (IaaS)・ARM Template / az deployment / Template Specs で自動化展開",
+          "OS・パッチ・Custom Script Extension を自己管理（Availability Set 99.95% / Availability Zones 99.99% SLA）",
+          "OS/カーネル制御・既存商用ソフト・Bicep / ARM Template による再現性ある展開",
         ],
       },
       {
@@ -465,11 +481,11 @@ export const az104Comparisons: AzureComparisonTable[] = [
     columns: ["接続方式", "通信経路 / IP 形態", "主な用途", "重要な設計制約"],
     rows: [
       {
-        feature: "VNet ピアリング",
+        feature: "VNet Peering (Virtual Network / Azure Private DNS / NSG / ASG / UDR)",
         values: [
-          "Azure バックボーン（プライベート IP）",
-          "同一リージョン / 別リージョン間の VNet 接続",
-          "非推移的・アドレス空間重複不可・Gateway Transit 設定可",
+          "Azure バックボーン（Virtual Network 間のプライベート IP 接続＋NSG/ASG）",
+          "同一リージョン / 別リージョン間の VNet 接続（Azure Private DNS で内部解決）",
+          "非推移的・アドレス空間重複不可・UDR (Route Table) と Gateway Transit でハブ＆スポーク構成",
         ],
       },
       {
@@ -1051,10 +1067,10 @@ export const az104OfficialResources: AzureOfficialResource[] = [
     badge: "公式試験ガイド",
   },
   {
-    title: "Exam AZ-104 試験詳細・模擬評価ページ",
-    description: "試験形式、Microsoft Learn 試験中参照ルール、無料の公式 Practice Assessment にアクセスできます。",
-    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/exams/az-104/",
-    badge: "試験詳細・模擬",
+    title: "Azure CLI 公式ドキュメント・コマンドリファレンス",
+    description: "AZ-104 の実務・試験対策に役立つ `az` コマンドの構文、オプション、操作例を確認できる公式リファレンスです。",
+    url: "https://learn.microsoft.com/ja-jp/cli/azure/?view=azure-cli-latest",
+    badge: "公式リファレンス",
   },
   {
     title: "AZ-104T00 公式ラーニング コース (Microsoft Learn)",

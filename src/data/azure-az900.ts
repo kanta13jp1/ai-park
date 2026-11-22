@@ -285,6 +285,48 @@ export const az900Domains: AzureDomain[] = [
 
 export const az900Comparisons: AzureComparisonTable[] = [
   {
+    id: "az900-comp-cloud-models",
+    category: "ガバナンス・監視・コスト",
+    title: "クラウドコンピューティング展開モデルと財務・設計特性",
+    subtitle: "パブリック・プライベート・ハイブリッド・CapEx/OpEx・基本メリットの整理",
+    columns: ["概念 / モデル", "特徴・仕組み", "コスト・責任・拡張性", "代表的な活用場面"],
+    rows: [
+      {
+        feature: "パブリッククラウド（クラウドコンピューティング）",
+        values: [
+          "Microsoft が Azure データセンターを所有・運用し複数顧客で共有",
+          "初期投資不要の OpEx（従量課金）でスケーラビリティ・弾力性に優れる",
+          "一般的な Web アプリ・SaaS・AI サービス・迅速な検証環境",
+        ],
+      },
+      {
+        feature: "プライベートクラウド",
+        values: [
+          "単一組織専用の仮想化環境（自社データセンターまたは専用ホスティング）",
+          "ハードウェア取得の CapEx が大きく、拡張には物理増設が必要",
+          "厳格な物理隔離要件や既存データセンター投資の継続利用",
+        ],
+      },
+      {
+        feature: "ハイブリッドクラウド",
+        values: [
+          "パブリッククラウドとプライベートクラウドを閉域回線や VPN で連携",
+          "固定資産 (CapEx) と従量課金 (OpEx) をワークロード別に最適化",
+          "機密 DB はオンプレミスに残しつつ需要急増分をクラウドで処理",
+        ],
+      },
+      {
+        feature: "CapEx vs OpEx ＆ 予測可能性",
+        values: [
+          "設備投資（CapEx）から運用費（OpEx）へ転換し従量課金を実現",
+          "SLA による性能予測可能性と料金計算ツールによるコスト予測可能性を両立",
+          "需要変動が大きい新規事業の立ち上げとコスト最適化",
+        ],
+      },
+    ],
+    decisionRule: "迅速性と従量課金＝パブリック、完全専用物理基盤＝プライベート、双方連携＝ハイブリッド（CapEx vs OpEx の対比が頻出）。",
+  },
+  {
     id: "az900-comp-service-models",
     category: "コンピュート",
     title: "オンプレミス / IaaS / PaaS / SaaS 比較",
@@ -386,7 +428,7 @@ export const az900Comparisons: AzureComparisonTable[] = [
     columns: ["サービス / アクセス層", "データ特性・読取方式", "最低保存期間 / 費用傾向", "適したユースケース"],
     rows: [
       {
-        feature: "Blob Storage（Hot 層）",
+        feature: "Azure Blob Storage（Hot 層）",
         values: ["非構造化オブジェクト・オンライン即時読取", "最低期間なし / 保管高め・アクセス最安", "Web 画像・頻繁に読み書きされるアクティブデータ"],
       },
       {
@@ -439,8 +481,12 @@ export const az900Comparisons: AzureComparisonTable[] = [
         feature: "Azure ExpressRoute",
         values: ["オンプレミス網と Microsoft クラウド", "専用プライベート回線（インターネット非経由）", "高帯域・予測可能な低遅延・厳格な閉域接続要件"],
       },
+      {
+        feature: "サブネット (Subnet) と多層防御 (Defense in Depth)",
+        values: ["VNet の IP アドレス分割単位と 7 層多層防御", "NSG でサブネット境界を制御し物理〜データ層を多段階防御", "Web / App / DB 層の通信分離と単一防御突破時の被害局所化"],
+      },
     ],
-    decisionRule: "VNet 間はピアリング、PaaS の閉域利用はプライベートエンドポイント、安価な拠点間は VPN Gateway、専用線閉域は ExpressRoute。",
+    decisionRule: "VNet 間はピアリング、サブネット単位で通信分離しつつ多層防御を適用し、PaaS の閉域利用はプライベートエンドポイント、安価な拠点間は VPN Gateway、専用線閉域は ExpressRoute。",
   },
   {
     id: "az900-comp-governance-cost",
@@ -480,6 +526,18 @@ export const az900Comparisons: AzureComparisonTable[] = [
       {
         feature: "Azure Monitor",
         values: ["メトリクス・ログ収集と障害アラート", "顧客リソース（Azure＋オンプレ）", "VM CPU 率やアプリログ分析・しきい値アラートの実行基盤"],
+      },
+      {
+        feature: "Microsoft Purview / Service Trust Portal",
+        values: ["データガバナンス・コンプライアンス情報ポータル", "全社データの分類統制 (Purview) / 第三者監査資料参照 (STP)", "機密データ保護・規制準拠管理と Microsoft 認証レポート確認"],
+      },
+      {
+        feature: "Azure Portal / Azure Cloud Shell",
+        values: ["Web GUI 管理画面 / ブラウザ内蔵認証済みシェル", "ブラウザから即実行（Bash / PowerShell を切り替えて利用）", "対話的な設定確認とローカル環境構築不要の CLI 操作"],
+      },
+      {
+        feature: "Azure CLI / Azure PowerShell",
+        values: ["クロスプラットフォーム CLI (az) / PowerShell モジュール", "スクリプト自動化・CI/CD 連携・Windows/Linux/macOS 対応", "反復的なリソース作成や運用タスクのコマンドライン自動化"],
       },
     ],
     decisionRule: "事前試算は料金/TCO計算、実費監視はCost Management、ルール強制はPolicy、誤削除防止はロック、基盤障害はService Health、リソース監視はMonitor。",
@@ -1249,10 +1307,10 @@ export const az900OfficialResources: AzureOfficialResource[] = [
     badge: "公式試験ガイド",
   },
   {
-    title: "Exam AZ-900 試験詳細・無料練習用評価",
-    description: "Pearson VUE での受験予約および Microsoft Learn 無料の練習用評価へアクセスできます。",
-    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/exams/az-900/",
-    badge: "試験・模擬評価",
+    title: "Microsoft 認定資格の実践評価（無料模擬テスト）",
+    description: "AZ-900 向けの出題形式に慣れるための Microsoft Learn 公式無料プラクティス評価（日本語）を確認できます。",
+    url: "https://learn.microsoft.com/ja-jp/credentials/certifications/practice-assessments-for-microsoft-certifications",
+    badge: "公式模擬評価",
   },
   {
     title: "Microsoft Learn 公式トレーニング (AZ-900T00)",
