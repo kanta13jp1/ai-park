@@ -13,7 +13,7 @@ description: MightyLINK AI Parkにおける新機能・更新画面の公開前�
 
 1. **嘘や推測の徹底排除（No Fiction, No Speculation）**:
    - 社員向けに公開しているポータルであるため、事実でない情報や推測・未確定のデータが含まれていてはならない。
-   - 実在する組織（株式会社Mighty LINK）、実在する担当者（AI推進担当・梅澤）、実在する基盤（GCPプロジェクトID: `antigravity-pj-509006`）、実在する社内規程・アナウンスのみを記載する。
+   - 実在する組織（株式会社Mighty LINK）、実在する担当者（AI推進担当・梅澤）、実在する社内規程・アナウンスのみを記載する。公開リポジトリであるため、実 GCP プロジェクト ID・請求先アカウント ID・組織 ID・社員メールアドレス等の識別情報は直書きせずマスク表記とする。
 2. **未検証機能の厳格ガード（Under Construction Guards）**:
    - 事実確認が取れていない機能、実データ連携前のデモ画面、開発途中の機能は、必ず `🚧 工事中` `📋 準備中` `🧪 PoC中` として明示し、ユーザーに「本番稼働中」と誤認させない。
    - スクリプト `scripts/verify-deployment-gate.mjs` によるビルドゲート（Quality Gate）で未ガードの混入を機械的に阻止する。
@@ -24,7 +24,7 @@ description: MightyLINK AI Parkにおける新機能・更新画面の公開前�
 
 ## 2. 手動受入テスト（UAT）4大評価軸と詳細点検観点
 
-開発者が実機（Windows 11 / Chrome / 1920x1080 ＋ モバイル実機エミュレーション）で手動点検する観点は以下の通りです。
+実機・ブラウザ検証（`1280x800` デスクトップ ＋ **`768x1024` タブレット** ＋ 必要に応じ `390x844` モバイル）で点検する観点は以下の通りです。
 
 ### ① 仕様・事実確認（Fact & Spec）
 - **嘘や推測のデータがないか（事実性・実在性）**:
@@ -41,7 +41,7 @@ description: MightyLINK AI Parkにおける新機能・更新画面の公開前�
 
 ### ② デザイン・レイアウト（Aesthetics）
 - **レスポンシブ崩れの排除**:
-  - デスクトップ（1920x1080）、ノートPC、タブレット、スマホ（375px〜430px）で要素のはみ出しや不自然な改行がないか。
+  - デスクトップ（`1280x800`〜`1920x1080`）、**タブレット（`768x1024`：288px 固定サイドバー下で本文約 474px となる狭幅環境での `HeroBanner` 見出し重なり・ボタン右端クリップ・縦潰れ有無）**、スマホ（`390x844`）で水平オーバーフローや崩れがないか。
 - **視覚的調和**:
   - フォントサイズ、行間、余白（padding/margin）が適切に保たれているか。
   - 背景グラデーション、カードの境界線、シャドウ、グロー効果がダーク/ライト環境で美しく調和しているか。
@@ -55,8 +55,10 @@ description: MightyLINK AI Parkにおける新機能・更新画面の公開前�
   - 「コピー」ボタンでクリップボードに正確な文字列が保存されるか。
   - 外部リンクが `target="_blank" rel="noopener noreferrer"` で別タブで安全に開くか。
   - 診断ツールやインタラクティブフォームが正確にリアルタイム計算・判定を行うか。
-- **アクセシビリティ・キーボード操作**:
-  - `Tab` キーや `Esc` キー、ショートカット（⌘K / Ctrl+K）が意図通り動作するか。
+- **アクセシビリティ・キーボード操作（WAI-ARIA APG / WCAG 2.1 AA）**:
+  - スキップリンク（`a[href="#main-content"]`）と `<main id="main-content">`、ルート固有の `document.title`（`... | AI Park`）が機能しているか。
+  - モーダル・ダイアログに `role="dialog"` / `aria-modal="true"` / `aria-labelledby` があり、`Escape` キーやバックドロップクリックで閉じるか。
+  - ナビゲーション・トグル・フォーム要素に `aria-expanded` / `aria-controls` / `aria-current="page"` / `aria-pressed` / `htmlFor`・`id` / `type="button"` が適切に付与されているか。
 
 ### ④ 視認性・分かりやすさ（Readability）
 - **平易な日本語と明快な解説**:
@@ -84,7 +86,7 @@ flowchart TD
     S2 --> S3["Step 3: /preflight 画面UI & Markdown報告書の整合確認"]
     S3 --> S4["Step 4: 品質ゲート・型チェック・ビルド検証"]
     S4 --> S5["Step 5: Git コミット & GitHub Actions デプロイ監視"]
-    S5 --> S6["Step 6: Puppeteer実機検証 & ユーザーへの報告・サインオフ"]
+    S5 --> S6["Step 6: ブラウザ実機検証（1280px/768px） & ユーザーへの報告・サインオフ"]
 ```
 
 ### Step 1: 実機画面の精査 & 小項目チェックリスト策定
@@ -109,16 +111,22 @@ flowchart TD
 2. 「UAT報告書をMarkdownでコピー」機能で、詳細チェック項目が正しく出力されることを確認する。
 
 ### Step 4: 品質ゲート・型チェック・ビルド検証
-ターミナル（PowerShell）で以下の検証コマンドを順番に実行し、すべて合格することを確認する。
+ターミナル（PowerShell）で以下の 5 段階検証コマンドを順番に実行し、すべてエラー 0 で合格することを確認する（`.github/workflows/deploy.yml` と同一ゲート）。
 
 ```powershell
-# 1. デプロイ品質ゲート検証（未連携機能ガード & 手動UAT合格確認）
-npm run check:gate
+# 1. ESLint 静的解析
+npm run lint
 
-# 2. TypeScript型チェック
+# 2. TypeScript 型チェック
 npx tsc --noEmit
 
-# 3. Next.js本番ビルド（49ルートSSG生成）
+# 3. 自動品質テスト（データ整合・メタデータ・リンク衛生・品質ゲート）
+npm test
+
+# 4. デプロイ品質ゲート検証（未連携機能ガード & 手動UAT合格確認）
+npm run check:gate
+
+# 5. Next.js 本番 SSG ビルド（全静的ルート生成・エラー 0 件）
 npm run build
 ```
 
@@ -136,11 +144,10 @@ gh run list --workflow deploy.yml -L 1
 gh run watch <run_id>
 ```
 
-### Step 6: Puppeteer実機検証 & ユーザーへの報告・サインオフ
-1. Puppeteer MCP ツール等を用いて本番URL（キャッシュバスター付与: `?cachebust=<timestamp>`）へアクセス。
-2. クリック操作、リスト絞り込み、レスポンシブ崩れの有無を実機評価。
-3. スクリーンショットを撮影して保存・確認。
-4. ユーザーに対して、各小項目の点検根拠と合格判定の要約を報告し、サインオフを得る。
+### Step 6: ブラウザ実機検証 & ユーザーへの報告・サインオフ
+1. 組み込み `browser` サブエージェントを用いて、本番正規 URL（GitHub Pages 配信仕様に合わせ **末尾 `/` なし** ＋ `?cachebust=<timestamp>`、例: `https://kanta13jp1.github.io/ai-park/azure-info?cachebust=...`）へアクセスする。
+2. `1280x800` と `768x1024` の両解像度で、HTTP 200・ルート固有 `document.title`・`ConsoleErrors: 0`・水平オーバーフローなし・`HeroBanner` `Search ⌘K` と `<h1>` の非重複・主要ボタンの折り返し／非クリップ・WAI-ARIA 動作を実測する。
+3. 検証結果は `BROWSER_HOST_FACTS`（訪問オリジン・最新スクリーンショット）と照合し、スクリーンショットを目視確認したうえで各小項目の点検根拠・合格判定の要約を報告し、サインオフを得る。
 
 ---
 
@@ -154,7 +161,10 @@ gh run watch <run_id>
 2. **ナビゲーションと検索への統合**:
    - `src/components/Sidebar.tsx` の適切なグループ（「使い方・学び」「エージェント・ツール」「コミュニティ」等）にメニュー項目を追加。
    - `src/lib/searchIndex.ts`（またはサイト内横断検索インデックス）にルートとキーワードを登録。
-3. **Awards水準のUI/UXと触感音響**:
+3. **メタデータ（SSOT）と自動テストの登録**:
+   - 静的ルートは `src/data/route-metadata.ts` へタイトル・説明文を登録し、同階層の Server Component `layout.tsx` から `getRouteMetadata("/<route>")` を export する（動的ルートは `generateMetadata`）。
+   - `npm test`（`tests/routes-and-metadata.test.mjs` 等）が通ることを確認する。
+4. **Awards水準のUI/UXと触感音響**:
    - `HeroBanner`, `SpotlightCard`, `TiltCard` による一貫した高品質デザイン。
    - ホバー音（`playCyberHover`）、クリック音（`playCyberClick`）の適用。
 
@@ -196,4 +206,6 @@ gh run watch <run_id>
   - `preflight-checklist.ts` 内の `passed: true` や `evidence` 文字列の記述形式が正規表現と一致しているか確認する。
 - **デプロイ後に画面が更新されない場合**:
   - GitHub Pages / CDN のキャッシュの影響があるため、URLに `?cachebust=<現在時刻>` を付与するか、ブラウザでスーパーリロード（`Ctrl+F5` または `Shift+Reload`）を行う。
+- **本番 URL で末尾 `/` を付けると 404 になる場合**:
+  - ローカル `next.config.ts` は `trailingSlash: true` だが、CI（`.github/workflows/deploy.yml`）の `actions/configure-pages@v5`（`static_site_generator: next`）は `./<route>.html` 形式でエクスポートする。本番の正規 URL およびサイト内リンクは末尾 `/` なし（例: `/ai-park/mcp-hub`）となるため、検証 URL の末尾 `/` の有無を確認する。
 

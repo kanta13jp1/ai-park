@@ -16,4 +16,11 @@ AI Park は社員が実際に見て判断に使う社内ポータルです。確
 - 「サンプル」「モデルケース」「PoC」と注記しても、架空の人名や数値は載せない。内容がまだ無いページは `ComingSoonPage`（工事中の表示）にする。
 - 実データを載せるときは、出どころ（どのシート・どの Issue・どの API か）をコードのコメントに書く。
 - 公開サイト・公開リポジトリなので、社員のメールアドレス、請求先アカウント ID、組織 ID などの社内の識別情報を載せない。
-- main への push は本番にそのまま反映される。依頼された変更については、架空の内容や個人情報を含まないこと、および `npm run build`（品質ゲート含む）の通過を確認したうえで、`main` への commit / push（本番デプロイ）まで進めてよい。
+- main への push は本番にそのまま反映される。依頼された変更については、架空の内容や個人情報を含まないこと、および下記 5 段階の検証ゲート通過を確認したうえで、`main` への commit / push（本番デプロイ）まで進めてよい。
+
+# 実装・検証の標準作法（自己流の禁止）
+
+- **一次仕様の事前確認**: Next.js 16 の API・ファイル規約（`metadata`、`generateMetadata`、`error.tsx` の `{ error, retry }`、`output: "export"` 等）は変更前に必ず `node_modules/next/dist/docs/` を確認する。UI・モーダル・ナビゲーションの実装は W3C WAI-ARIA APG / WCAG 2.1 AA（スキップリンク、`role="dialog"` / `aria-modal="true"` / `aria-labelledby`、`Escape` クローズ、`htmlFor`/`id`、`aria-expanded` / `aria-controls` / `aria-current="page"`、`type="button"`）に準拠する。
+- **新規ルート追加時の必須セット**: 静的ルートは `src/data/route-metadata.ts`（SSOT）に登録し、同階層の Server Component `layout.tsx` から `getRouteMetadata("/<route>")` を export する（動的ルートは `generateMetadata`）。品質ゲート（`scripts/verify-deployment-gate.mjs`）との整合のため `page.tsx` のパス構造を維持する。
+- **CI と同一のプッシュ前検証チェーン**: commit / push 前に `npm run lint` → `npx tsc --noEmit` → `npm test` → `npm run check:gate` → `npm run build` をすべてエラー 0 で通過させる（`.github/workflows/deploy.yml` と同一ゲート）。
+- **レスポンシブ＆本番実機検証の基準**: 固定サイドバー（288px）による狭幅崩れを防ぐため、UI 変更時は `1280x800` とあわせて **`768x1024`（タブレット）** の重なり・クリップ・折り返しを必ず検証する。GitHub Pages 本番環境は `actions/configure-pages@v5` により `./<route>.html` 形式で配信されるため、本番検証は正規パス（末尾 `/` なし）＋`?cachebust=<timestamp>` で行う。

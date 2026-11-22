@@ -25,19 +25,21 @@ Run the project's quality gate script:
 ```powershell
 npm run check:gate
 ```
-Verify that all 11 under-construction / unverified pages (`/tools`, `/interviews`, `/ambassadors`, `/agent-cases`, `/adoption`, `/tools-hub`, `/skills-hub`, `/aws-info`, `/antigravity-info`, `/mcp-hub`, `/roadmap`) have proper honest disclaimers (`UnderConstructionAlert` or warning banners).
+Verify dynamically via `scripts/verify-deployment-gate.mjs` (`npm run check:gate`) that all under-construction / unverified pages (`isVerified: false`) have proper honest disclaimers (`UnderConstructionAlert` or warning banners).
 
 ### Phase 2: Manual Developer UAT Verification
 Confirm that all public production routes have passed developer manual preflight verification (4 core axes: Specification, Visual Design, Usability/Interactivity, Readability).
 Check the UAT pass count in `scripts/verify-deployment-gate.mjs` and `src/data/preflight-checklist.ts`.
 
-### Phase 3: Static Export & Next.js Build Integrity
+### Phase 3: Static Export, Quality Tests & Next.js Build Integrity
 Inspect the production build and verify:
 1. `src/app/not-found.tsx` exists and renders a proper 404 page for static export.
 2. `public/data/ai-news-live.json` is valid JSON and contains synced news items.
-3. TypeScript compilation succeeds without errors:
+3. ESLint, TypeScript compilation, and automated quality tests (`tests/*.test.mjs`, including `route-metadata.ts`, certification data, and link hygiene checks) succeed without errors:
 ```powershell
+npm run lint
 npx tsc --noEmit
+npm test
 ```
 
 ### Phase 4: Release Report Generation
