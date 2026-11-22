@@ -57,10 +57,10 @@ export default function CalendarPage() {
             >
               <div onMouseEnter={() => playCyberHover()} className="p-5 flex gap-3.5 cursor-default">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600 shadow-2xs">
-                  <Sparkles className="w-5 h-5" />
+                  <Sparkles className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">AI勉強会のアジェンダは自動で入ります</h4>
+                  <h2 className="font-extrabold text-slate-900 text-sm tracking-tight">AI勉強会のアジェンダは自動で入ります</h2>
                   <p className="text-slate-600 leading-relaxed font-normal">
                     タイトルに「AI勉強会」を含む予定を登録すると、GASによって予定の説明欄にアジェンダ（最新の改善要望・進行中プロジェクト）が自動付与されます。
                   </p>
@@ -76,10 +76,10 @@ export default function CalendarPage() {
             >
               <div onMouseEnter={() => playCyberHover()} className="p-5 flex gap-3.5 cursor-default">
                 <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0 text-emerald-600 shadow-2xs">
-                  <Lock className="w-5 h-5" />
+                  <Lock className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">予定は社内限定公開です</h4>
+                  <h2 className="font-extrabold text-slate-900 text-sm tracking-tight">予定は社内限定公開です</h2>
                   <p className="text-slate-600 leading-relaxed font-normal">
                     会社の Google Workspace アカウントでログインしている時だけ表示されます。表示されない場合は、ブラウザで会社アカウントにログインした状態で再読み込みしてください。
                   </p>
@@ -95,11 +95,11 @@ export default function CalendarPage() {
             href="/study-archive"
             onClick={() => playCyberClick()}
             onMouseEnter={() => playCyberHover()}
-            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white hover:bg-indigo-50/40 border border-slate-200/90 hover:border-indigo-300 rounded-2xl p-4 sm:px-5 shadow-2xs transition-all"
+            className="group flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white hover:bg-indigo-50/40 border border-slate-200/90 hover:border-indigo-300 rounded-2xl p-4 sm:px-5 shadow-2xs transition-all"
           >
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600 shadow-2xs">
-                <Video className="w-5 h-5" />
+                <Video className="w-5 h-5" aria-hidden="true" />
               </div>
               <div className="space-y-0.5">
                 <div className="flex flex-wrap items-center gap-2 text-xs font-extrabold text-slate-900">
@@ -113,9 +113,9 @@ export default function CalendarPage() {
                 </p>
               </div>
             </div>
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 group-hover:text-indigo-700 shrink-0 self-end sm:self-center">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 group-hover:text-indigo-700 shrink-0 self-end lg:self-center">
               <span>アーカイブを開く</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </span>
           </Link>
         )}
@@ -123,9 +123,15 @@ export default function CalendarPage() {
         {AI_PARK_CALENDAR_ID ? (
           <div className="space-y-6">
             {/* ビュー切り替えピルタブ ＆ カレンダー直接追加ボタン */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs">
-              <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs">
+              <div
+                role="group"
+                aria-label="カレンダー表示モード"
+                className="flex flex-wrap items-center gap-1.5 sm:gap-2"
+              >
                 <button
+                  type="button"
+                  aria-pressed={viewMode === "all"}
                   onClick={() => {
                     playCyberClick();
                     setViewMode("all");
@@ -137,10 +143,12 @@ export default function CalendarPage() {
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  <Layers size={14} />
+                  <Layers size={14} aria-hidden="true" />
                   <span>すべて表示</span>
                 </button>
                 <button
+                  type="button"
+                  aria-pressed={viewMode === "month"}
                   onClick={() => {
                     playCyberClick();
                     setViewMode("month");
@@ -152,10 +160,12 @@ export default function CalendarPage() {
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  <CalendarIcon size={14} />
+                  <CalendarIcon size={14} aria-hidden="true" />
                   <span>月間カレンダー</span>
                 </button>
                 <button
+                  type="button"
+                  aria-pressed={viewMode === "agenda"}
                   onClick={() => {
                     playCyberClick();
                     setViewMode("agenda");
@@ -167,7 +177,7 @@ export default function CalendarPage() {
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                   }`}
                 >
-                  <ListFilter size={14} />
+                  <ListFilter size={14} aria-hidden="true" />
                   <span>アジェンダ一覧</span>
                 </button>
               </div>
@@ -178,10 +188,10 @@ export default function CalendarPage() {
                 rel="noopener noreferrer"
                 onClick={() => playCyberClick()}
                 onMouseEnter={() => playCyberHover()}
-                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition-all shadow-2xs self-start sm:self-auto cursor-pointer"
+                className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs font-bold transition-all shadow-2xs self-start lg:self-auto cursor-pointer"
               >
                 <span>Google カレンダーで開く</span>
-                <ExternalLink size={12} />
+                <ExternalLink size={12} aria-hidden="true" />
               </a>
             </div>
 
@@ -194,7 +204,7 @@ export default function CalendarPage() {
                     className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 cursor-default"
                   >
                     <div className="flex items-center space-x-2.5">
-                      <CalendarIcon className="w-4 h-4 text-cyan-400" />
+                      <CalendarIcon className="w-4 h-4 text-cyan-400" aria-hidden="true" />
                       <span className="font-bold text-sm">月間スケジュールビュー</span>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -222,7 +232,7 @@ export default function CalendarPage() {
                     className="px-6 py-4 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 cursor-default"
                   >
                     <div className="flex items-center space-x-2.5">
-                      <CalendarDays className="w-4 h-4 text-indigo-400" />
+                      <CalendarDays className="w-4 h-4 text-indigo-400" aria-hidden="true" />
                       <span className="font-bold text-sm">直近の予定・アジェンダ一覧</span>
                     </div>
                     <span className="text-xs text-slate-400 font-mono">Upcoming Events</span>
@@ -240,7 +250,7 @@ export default function CalendarPage() {
           </div>
         ) : (
           <div className="rounded-3xl border-2 border-dashed border-slate-300 bg-white p-12 text-center text-slate-500 space-y-3">
-            <CalendarDays className="w-10 h-10 mx-auto text-slate-400" />
+            <CalendarDays className="w-10 h-10 mx-auto text-slate-400" aria-hidden="true" />
             <p className="text-base font-bold text-slate-800">🚧 工事中：カレンダーの接続を準備しています</p>
             <p className="text-xs max-w-md mx-auto text-slate-500">
               「AI Park イベント」カレンダーの作成と共有設定が済み次第、ここに予定が表示されます。
