@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-22T14:15:08.042Z",
-  "lastSyncedAtFormatted": "2026/11/22 23:15:08",
+  "lastSyncedAt": "2026-11-22T23:22:46.270Z",
+  "lastSyncedAtFormatted": "2026/11/23 8:22:46",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 52,
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-openai-perplexity-and-intelligence",
+      "title": "OpenAI: Perplexity and Intelligence",
+      "date": "2026/11/22",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "How perplexity measures progress in AI models, and why it could help developers establish a shared approach to evaluating emerging capabilities.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Perplexity and Intelligence」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/perplexity-and-intelligence",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-latentspace-ainews-riemann-hypothesis-proved-twice-independe",
       "title": "Latent Space: [AINews] Riemann Hypothesis proved...twice independently",
@@ -83,31 +108,6 @@
       ],
       "sourceName": "OpenAI Official Feed",
       "sourceUrl": "https://openai.com/business/customer-stories/hebbia",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-introducing-medchembench",
-      "title": "OpenAI: Can AI help scientists identify promising drug candidates?",
-      "date": "2026/11/20",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "MedChemBench evaluates how well AI models interpret molecular structures, reason from experimental evidence, and select compounds in early drug discovery.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Can AI help scientists identify promising drug candidates?」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/introducing-medchembench",
       "tags": [
         "OpenAI",
         "ChatGPT",
