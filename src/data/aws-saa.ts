@@ -1,109 +1,33 @@
-export interface SaaExamFact {
-  label: string;
-  value: string;
-  detail: string;
-}
-
-export interface SaaTopic {
-  id: string;
-  title: string;
-  services: string[];
-  keyPoints: string[];
-  examTip: string;
-}
-
-export interface SaaDomain {
-  id: string;
-  number: number;
-  title: string;
-  englishTitle: string;
-  weight: number; // %
-  accentColor: "indigo" | "emerald" | "amber" | "cyan";
-  summary: string;
-  topics: SaaTopic[];
-}
-
-export interface SaaComparisonRow {
-  feature: string;
-  values: string[];
-}
-
-export interface SaaComparisonTable {
-  id: string;
-  category:
-    | "ネットワーク"
-    | "ストレージ"
-    | "データベース"
-    | "非同期・連携"
-    | "セキュリティ"
-    | "コンピュート"
-    | "コスト最適化";
-  title: string;
-  subtitle: string;
-  columns: string[];
-  rows: SaaComparisonRow[];
-  decisionRule: string;
-}
-
-export interface SaaQuickLookupItem {
-  keyword: string;
-  category: string;
-  recommended: string;
-  reason: string;
-}
-
-export interface SaaQuestion {
-  id: string;
-  domainId: string;
-  domainLabel: string;
-  difficulty: "基礎" | "標準" | "応用";
-  selectCount: 1 | 2; // 1 = 択一, 2 = 2つ選択
-  question: string;
-  options: string[];
-  correctIndices: number[];
-  explanation: string;
-  keywords: string[];
-}
-
-export interface SaaOfficialResource {
-  title: string;
-  description: string;
-  url: string;
-  badge: string;
-}
-
-export interface SaaArchitecturePattern {
-  id: string;
-  title: string;
-  badge: string;
-  flow: string[];
-  summary: string;
-  keyDesignPoints: string[];
-}
-
-export interface SaaPitfall {
-  id: string;
-  trap: string;
-  whyWrong: string;
-  correctApproach: string;
-}
-
-export interface SaaLimitFact {
-  id: string;
-  service: string;
-  limitValue: string;
-  detail: string;
-}
-
-export interface SaaWellArchitectedPillar {
-  id: string;
-  name: string;
-  englishName: string;
-  examKeywords: string[];
-  focus: string;
-}
-
 // 出典: AWS Certified Solutions Architect - Associate (SAA-C03) 公式試験ガイド
+// https://docs.aws.amazon.com/ja_jp/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html
+import type {
+  SaaExamFact,
+  SaaDomain,
+  SaaComparisonTable,
+  SaaQuickLookupItem,
+  SaaQuestion,
+  SaaOfficialResource,
+  SaaArchitecturePattern,
+  SaaPitfall,
+  SaaLimitFact,
+  SaaWellArchitectedPillar,
+} from "@/data/aws-types";
+
+export type {
+  SaaExamFact,
+  SaaTopic,
+  SaaDomain,
+  SaaComparisonRow,
+  SaaComparisonTable,
+  SaaQuickLookupItem,
+  SaaQuestion,
+  SaaOfficialResource,
+  SaaArchitecturePattern,
+  SaaPitfall,
+  SaaLimitFact,
+  SaaWellArchitectedPillar,
+} from "@/data/aws-types";
+
 export const saaExamFacts: SaaExamFact[] = [
   { label: "試験コード", value: "SAA-C03", detail: "Associate レベル" },
   { label: "試験時間", value: "130 分", detail: "約2時間10分" },
@@ -1111,14 +1035,20 @@ export const saaPracticeQuestions: SaaQuestion[] = [
 export const saaOfficialResources: SaaOfficialResource[] = [
   {
     title: "AWS Certified Solutions Architect – Associate 公式試験ページ",
-    description: "最新の試験概要、試験ガイド（PDF）、サンプル問題、受験予約への公式ポータル。",
+    description: "最新の試験概要、試験ガイド、サンプル問題、受験予約への公式ポータル。",
     url: "https://aws.amazon.com/jp/certification/certified-solutions-architect-associate/",
     badge: "AWS公式",
   },
   {
+    title: "SAA-C03 公式試験ガイド（日本語ドキュメント）",
+    description: "4 ドメインの重み付け・出題タスク・対象 AWS サービス一覧の一次資料。",
+    url: "https://docs.aws.amazon.com/ja_jp/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html",
+    badge: "公式試験ガイド",
+  },
+  {
     title: "AWS Skill Builder (公式デジタル学習プラットフォーム)",
     description: "SAA-C03 対応の公式模擬試験（Official Practice Question Set）や無料デジタルトレーニングを提供。",
-    url: "https://explore.skillbuilder.aws/learn",
+    url: "https://skillbuilder.aws/",
     badge: "無料演習あり",
   },
   {
@@ -1339,16 +1269,9 @@ export const saaWellArchitectedPillars: SaaWellArchitectedPillar[] = [
   },
 ];
 
-const SERVICE_QUERY_ALIASES: Record<string, string> = {
+export const saaServiceQueryAliases: Record<string, string> = {
   "ECS / Fargate": "Fargate",
   "Gateway VPC Endpoint": "VPC Endpoint",
   "Same-AZ Placement": "Same-AZ",
   "Route 53 Health Check": "Route 53 Health Check",
 };
-
-/** 4ドメイン内のサービスバッジ名を、比較表・逆引き検索にヒットする正規化クエリへ変換する */
-export function resolveAwsServiceQuery(serviceName: string): string {
-  const mapped = SERVICE_QUERY_ALIASES[serviceName];
-  if (mapped) return mapped;
-  return serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
-}

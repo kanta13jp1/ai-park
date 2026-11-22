@@ -36,7 +36,7 @@ export const ROUTE_METADATA: Record<string, RouteMetaEntry> = {
   },
   "/aws-info": {
     title: "AWS・クラウド情報局",
-    description: "AWS 認定 6 資格（CLF-C02 / AIF-C01 / SAA-C03 / DVA-C02 / SOA-C03 / SAP-C02）統合学習ハブ",
+    description: "AWS 認定 6 資格（CLF-C02 / AIF-C01 / SAA-C03 / DVA-C03 / SOA-C03 / SAP-C03）統合学習ハブ",
   },
   "/azure-info": {
     title: "Azure・Microsoft Azure情報局",

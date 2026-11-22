@@ -8,15 +8,16 @@ import type {
   SaaArchitecturePattern,
   SaaPitfall,
   SaaLimitFact,
-} from "@/data/aws-saa";
+} from "@/data/aws-types";
 
 // 出典: AWS Certified AI Practitioner (AIF-C01) 公式試験ガイド / AWS 公式ドキュメント
+// https://docs.aws.amazon.com/ja_jp/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html
 export const aifExamFacts: SaaExamFact[] = [
   { label: "試験コード", value: "AIF-C01", detail: "Foundational レベル" },
   { label: "試験時間", value: "90 分", detail: "1時間30分" },
   { label: "問題数", value: "65 問", detail: "採点50問 + 非採点15問" },
   { label: "合格ライン", value: "700 点", detail: "100〜1000点スケール" },
-  { label: "出題形式", value: "択一 / 複数", detail: "AI・生成AIの基礎とユースケース選定" },
+  { label: "出題形式", value: "択一 / 複数 / 並べ替え / 内容一致", detail: "公式ガイド定義の4形式（本演習は択一・複数形式）" },
   { label: "受験料", value: "$100 USD", detail: "ピアソンVUE / オンライン可" },
 ];
 
@@ -1260,14 +1261,20 @@ export const aifKeyLimits: SaaLimitFact[] = [
 export const aifOfficialResources: SaaOfficialResource[] = [
   {
     title: "AWS Certified AI Practitioner 公式試験ページ",
-    description: "AIF-C01 の試験概要、最新の試験ガイド（PDF）、サンプル問題、受験予約の公式ページ。",
+    description: "AIF-C01 の試験概要、最新の試験ガイド、サンプル問題、受験予約の公式ページ。",
     url: "https://aws.amazon.com/jp/certification/certified-ai-practitioner/",
     badge: "AWS公式",
   },
   {
+    title: "AIF-C01 公式試験ガイド（日本語ドキュメント）",
+    description: "5 ドメインの重み付け・設問 4 形式（択一 / 複数 / 並べ替え / 内容一致）・出題範囲の一次資料。",
+    url: "https://docs.aws.amazon.com/ja_jp/aws-certification/latest/ai-practitioner-01/ai-practitioner-01.html",
+    badge: "公式試験ガイド",
+  },
+  {
     title: "AWS Skill Builder (公式デジタル学習プラットフォーム)",
     description: "AIF-C01 対応の生成 AI 基礎コースや公式練習問題セット（Official Practice Question Set）を提供。",
-    url: "https://explore.skillbuilder.aws/learn",
+    url: "https://skillbuilder.aws/",
     badge: "無料講座あり",
   },
   {
@@ -1284,7 +1291,7 @@ export const aifOfficialResources: SaaOfficialResource[] = [
   },
 ];
 
-const AIF_SERVICE_QUERY_ALIASES: Record<string, string> = {
+export const aifServiceQueryAliases: Record<string, string> = {
   "基盤モデル (FM)": "基盤モデル",
   "トークンとチャンク": "トークン",
   "Top-P / Top-K": "Top-P",
@@ -1301,10 +1308,3 @@ const AIF_SERVICE_QUERY_ALIASES: Record<string, string> = {
   "SageMaker ML Lineage Tracking": "ML Lineage Tracking",
   "責任ある AI": "責任ある AI",
 };
-
-/** 5ドメイン内のサービスバッジ名を、比較表・逆引き検索にヒットする正規化クエリへ変換する */
-export function resolveAifServiceQuery(serviceName: string): string {
-  const mapped = AIF_SERVICE_QUERY_ALIASES[serviceName];
-  if (mapped) return mapped;
-  return serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
-}

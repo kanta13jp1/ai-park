@@ -174,10 +174,10 @@ const paletteItems: PaletteItem[] = [
   },
   {
     id: "aws-info",
-    title: "AWS・クラウド情報局 (全6資格: CLF-C02/AIF-C01/SAA-C03/DVA-C02/SOA-C03/SAP-C02)",
+    title: "AWS・クラウド情報局 (全6資格: CLF-C02/AIF-C01/SAA-C03/DVA-C03/SOA-C03/SAP-C03)",
     category: "Academy & 学習",
     href: "/aws-info",
-    description: "CLF-C02 / AIF-C01 (AI Practitioner) / SAA-C03 / DVA-C02 (Developer) / SOA-C03 (CloudOps) / SAP-C02 統合学習ハブ・フラッシュカード・模擬試験（社内AWSルール等は工事中）",
+    description: "CLF-C02 / AIF-C01 (AI Practitioner) / SAA-C03 / DVA-C03 (Developer) / SOA-C03 (CloudOps) / SAP-C03 統合学習ハブ・フラッシュカード・模擬試験（社内AWSルール等は工事中）",
     icon: Compass,
   },
   {

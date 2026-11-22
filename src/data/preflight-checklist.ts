@@ -1433,4 +1433,101 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
       "Windows 11 / Chromium (Chrome DevTools MCP) / 1280x800・768x1024・375x812 + Next.js 16.3.5 Static Export 実測",
     memo: "工事中状態（Google Cloud 全11資格学習ハブ先行公開・社内GCP利用ルールおよび資格取得支援制度は準備中）としての誠実表示＆実機UAT完了",
   },
+  {
+    id: "aws-info",
+    name: "AWS・クラウド情報局",
+    path: "/aws-info",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/11/23",
+    verifiedBy: "梅澤（AI推進担当）",
+    overallStatus: "passed",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "社内AWS利用ルール・資格受験補助制度が未確定のため UnderConstructionAlert（🚧 工事中・正式稼働予定: 未定）と isVerified: false で誠実に保護されていることを確認。全6資格（CLF-C02/AIF-C01/SAA-C03/DVA-C03/SOA-C03/SAP-C03）を 2026-11 AWS 公式試験ガイドへ照合済み（SAP-C03 の 5ドメイン 25/25/15/15/20・22問化、DVA-C03 のテストとデプロイ・Guardrails・EKS 対応、CLF-C02 の最新サポート4区分および2027年レガシー終了注記、AIF-C01 の4出題形式、ESL +30分英語受験限定・日本語受験対象外注記）、および公式リソース24ユニークURL全件のHTTP 200ダイレクト疎通（リダイレクト0件）を実測確認済み。",
+        points: [
+          "未確定の社内AWS利用ルール・資格受験補助制度が工事中バナーとナビ表示で誠実に保護されているか",
+          "全6資格（SAP-C03/DVA-C03/CLF-C02/AIF-C01/SAA-C03/SOA-C03）と ESL +30分ルールがAWS一次公式ガイドと一致しているか",
+          "全24ユニーク公式リソースURLが旧転送ドメイン（explore.skillbuilder.aws）なしで HTTP 200 ダイレクト応答するか",
+        ],
+        subChecks: [
+          {
+            id: "aws-fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "未確定社内AWS利用ルール・補助制度・架空事例の非掲載",
+            detail:
+              "社内の AWS アカウント申請ルール・資格受験補助制度・問い合わせ窓口・社内部署名・実名等の架空記述を載せず、UnderConstructionAlert（releaseDate: 未定）と isVerified: false で準備中であることを明示していること。",
+            verified: true,
+          },
+          {
+            id: "aws-fact-02",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "ESL +30分延長の英語受験限定条件の正確表記",
+            detail:
+              "ピアソンVUE の ESL +30 MINUTES 申請について「非英語母語者が英語で受験する場合に限り（日本語受験は対象外）」と全6資格の試験当日チェックリストで正確に明記していること。",
+            verified: true,
+          },
+          {
+            id: "aws-fact-03",
+            category: "official_announcement",
+            groupTitle: "② 公式一次情報と一致しているか（整合性検証確認済み）",
+            label: "SAP-C03 / DVA-C03 / CLF-C02 サポート4区分 / AIF-C01 / SOA-C03 の最新ガイド一致",
+            detail:
+              "SAP-C03（5ドメイン 25/25/15/15/20%・Bedrock/VPC Lattice/RCP/FIS）、DVA-C03（30/26/22/22%・テストとデプロイ・Guardrails/EKS）、CLF-C02 タスク4.3（Basic/ビジネスサポート+/エンタープライズサポート/Unified Operations・2027年移行注記）、AIF-C01（4形式: 択一/複数/並べ替え/内容一致）が公式試験ガイドと一致していること。",
+            verified: true,
+          },
+          {
+            id: "aws-link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先が実在するか（HTTP 200 実測確認済み）",
+            label: "全6資格 公式リソース 24ユニークURL 全件 HTTP 200 ダイレクト",
+            detail:
+              "全6資格の officialResources に掲載したユニーク24 URL（Skill Builder 正規 URL および全6資格の日本語公式試験ガイド HTML 含む）がすべてリダイレクトなしの HTTP 200 を返すこと。",
+            verified: true,
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "静的エクスポート実機ブラウザ（Chromium）にて 1280x800（scrollWidth 1274 <= 1280）・768x1024（固定288pxサイドバー下で scrollWidth 762 <= 768、h1左端304pxで重なりゼロ）・エミュレート 375x812（scrollWidth 375 <= 375）の横溢れゼロ、見出し階層スキップ 0 件、および存在しないURLでの404画面正常描画（Hydration/JSランタイムエラー 0 件）を確認。",
+        points: [
+          "PC (1280x800)・固定サイドバー併設タブレット (768x1024)・スマホ (375x812) で横溢れや要素重なりがないか",
+          "見出し階層（h1〜h4）のスキップや存在しないパスへの404レンダリング破綻がないか",
+        ],
+      },
+      usability: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "初期ページチャンク 510.9 KB → 151.7 KB（初期総JS 1213.2 KB → 854.1 KB）への5資格オンデマンド動的 import 分割後も SAP-C03（チャンク1912 HTTP 200・5ドメイン描画）・DVA-C03・CLF-C02・AIF-C01 切替、サービスバッジ「IAM」クリックでの比較タブ自動検索ジャンプ、および SAA-C03 上での SAP バックアップJSON投入拒否ガード動作を実機確認。",
+        points: [
+          "初期チャンク削減と5資格の動的切り替えがエラーなく機能するか",
+          "サービスバッジ・クイック検索チップの0件ヒット防止と他資格バックアップ誤復元防止ガードが機能するか",
+        ],
+      },
+      readability: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "WAI-ARIA APG タブ（ArrowRight キーでのフォーカス＆選択移動を実機確認済み）・aria-controls・progressbar・比較表 min-w-[640px] + caption/scope を備え、一部工事中ステータスと学習ハブ範囲が明確に区別されていることを確認（JSランタイム/Hydrationエラー0件、Next 16.3.5 静的出力特有のサイドバーRSC事前取得 .txt 404のみログ分離確認）。",
+        points: [
+          "WAI-ARIA APG タブのキーボード操作とラベル付き入力が機能するか",
+          "一部工事中バナーと学習コンテンツの区分が明確でコンソールにJS/Hydrationエラーがないか",
+        ],
+      },
+    },
+    environment:
+      "Windows 11 / Chromium (Chrome DevTools MCP) / 1280x800・768x1024・375x812(emulated) + Next.js 16.3.5 Static Export 実測",
+    memo: "工事中状態（AWS 全6資格統合学習ハブ先行公開・社内AWS利用ルールおよび資格受験補助制度は準備中）としての誠実表示＆実機UAT完了",
+  },
 ];

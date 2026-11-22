@@ -8,15 +8,16 @@ import type {
   SaaArchitecturePattern,
   SaaPitfall,
   SaaLimitFact,
-} from "@/data/aws-saa";
+} from "@/data/aws-types";
 
-// 出典: AWS Certified Solutions Architect - Professional (SAP-C02) 公式試験ガイド・AWS公式ドキュメント
+// 出典: AWS Certified Solutions Architect - Professional (SAP-C03) 公式試験ガイド (旧 SAP-C02 は 2026/11/16 終了・2026/11/17 より SAP-C03 開始)
+// https://docs.aws.amazon.com/ja_jp/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03.html
 export const sapExamFacts: SaaExamFact[] = [
-  { label: "試験コード", value: "SAP-C02", detail: "Professional レベル" },
-  { label: "試験時間", value: "180 分", detail: "3時間 / ESL+30分申請可" },
+  { label: "試験コード", value: "SAP-C03", detail: "Professional（旧SAP-C02は2026/11/16終了・11/17移行）" },
+  { label: "試験時間", value: "180 分", detail: "3時間（英語受験時のみ ESL+30分申請可）" },
   { label: "問題数", value: "75 問", detail: "採点65問 + 非採点10問" },
   { label: "合格ライン", value: "750 点", detail: "100〜1000点スケール" },
-  { label: "出題形式", value: "択一 / 複数", detail: "長文シナリオ設計中心" },
+  { label: "出題形式", value: "択一 / 複数", detail: "長文シナリオ設計・AI/自動運用統合" },
   { label: "受験料", value: "$300 USD", detail: "ピアソンVUE / オンライン可" },
 ];
 
@@ -24,227 +25,213 @@ export const sapDomains: SaaDomain[] = [
   {
     id: "sap-domain-1",
     number: 1,
-    title: "複雑な組織に対応するソリューションの設計",
-    englishTitle: "Design Solutions for Organizational Complexity",
-    weight: 26,
+    title: "クラウド向けに構築されたアーキテクチャの設計と実装",
+    englishTitle: "Architecture Design and Implementation Built for the Cloud",
+    weight: 25,
     accentColor: "indigo",
     summary:
-      "複数アカウント・複数リージョン・オンプレミスを統合するハイブリッドネットワーク、AWS Organizations / Control Tower によるガードレール統制、組織横断の監査・統合課金設計が問われます。",
+      "出題比率 25%（SAP-C03 再編 D1）。ハイブリッドネットワーク（Direct Connect / Cloud WAN / VPC Lattice / IPv6）・データレイクハウス（Glue / Athena / Lake Formation）・生成 AI（Amazon Bedrock / AgentCore / RAG）・マルチテナント分散設計が問われます。",
     topics: [
       {
         id: "sap-d1-t1",
-        title: "ハイブリッド接続と大規模マルチVPCネットワーク設計",
+        title: "ハイブリッド接続・VPC Lattice サービスメッシュ・IPv6 ネットワーク設計",
         services: [
           "Direct Connect",
           "Transit Gateway",
           "Cloud WAN",
           "Route 53 Resolver",
-          "Network Firewall",
           "PrivateLink",
+          "VPC Lattice",
         ],
         keyPoints: [
-          "AWS Direct Connect（専有 1/10/100 Gbps・Hosted 50 Mbps〜10 Gbps）を複数ロケーションで冗長化し、Direct Connect Gateway の Transit VIF 経由で複数リージョンの Transit Gateway と接続する",
-          "AWS Transit Gateway は数千の VPC とオンプレミス接続をハブ＆スポークで集約し、ルートテーブル分離で環境間を隔離する。複数リージョン・拠点を単一のグローバルネットワークポリシーで管理する場合は AWS Cloud WAN を選定する",
-          "検査専用 VPC に AWS Network Firewall を配置する場合は、Transit Gateway アタッチメントの Appliance Mode を有効化して往復通信の同一 AZ 維持（非対称ルーティング防止）を保証する",
-          "CIDR が重複する VPC 間で特定サービスのみを公開する場合は AWS PrivateLink を利用し、オンプレミスとの双方向 DNS 名前解決には Route 53 Resolver のインバウンド/アウトバウンドエンドポイントと転送ルールを使用する",
+          "AWS Direct Connect（専有 1/10/100 Gbps・Hosted）を複数ロケーションで冗長化し、Direct Connect Gateway の Transit VIF 経由で複数リージョンの Transit Gateway と接続する",
+          "AWS Transit Gateway は数千の VPC とオンプレミス接続を集約し、検査 VPC の Appliance Mode 有効化で非対称ルーティングを防止。グローバル網の一元ポリシー管理には AWS Cloud WAN、CIDR 重複時の単方向公開には AWS PrivateLink、オンプレミス DNS 双方向解決には Route 53 Resolver＋AWS RAM を用いる",
+          "SAP-C03 追加範囲: マイクロサービス間通信と可観測性の簡素化に Amazon VPC Lattice や Amazon ECS Service Connect を活用し、IPv6 採用・デュアルスタック移行戦略やハイブリッドコンピューティング（EKS/ECS Anywhere・Outposts・Local Zones）を設計する",
         ],
         examTip:
-          "「CIDR 重複」＝ PrivateLink、「東西トラフィックのステートフル検査で通信断」＝ Transit Gateway の Appliance Mode、「オンプレミス DNS 双方向解決」＝ Route 53 Resolver。",
+          "「CIDR 重複＋単方向公開」＝ PrivateLink。「複数アカウント跨ぎマイクロサービスのサービスメッシュ＋認可統合」＝ VPC Lattice。",
       },
       {
         id: "sap-d1-t2",
-        title: "マルチアカウント統制・ランディングゾーンと ID 連携",
-        services: [
-          "Control Tower",
-          "Organizations",
-          "SCP",
-          "IAM Identity Center",
-          "AWS RAM",
-          "StackSets",
-        ],
-        keyPoints: [
-          "AWS Control Tower はマルチアカウントのランディングゾーン（Log Archive / Audit アカウント、Account Factory、予防的・検出的・プロアクティブガードレール）を標準化して自動展開する",
-          "AWS Organizations のサービスコントロールポリシー（SCP）は管理アカウント以外のメンバーアカウントに対する最大権限の上限を規定し、ルートユーザーや AdministratorAccess 保有者にも適用される",
-          "IAM Identity Center（旧 AWS SSO）で外部 IdP（SAML 2.0 / OIDC）と連携し、Permission Sets を各アカウント・OU へ割り当てて短期認証情報による一元的な SSO を実現する",
-          "AWS RAM（Resource Access Manager）により Transit Gateway、VPC サブネット、Route 53 Resolver ルール等をアカウント間で共有し、CloudFormation StackSets（Service-managed）で新規アカウントにもベースラインを自動展開する",
-        ],
-        examTip:
-          "「複数アカウントでサブネットや TGW を重複なく共有」＝ AWS RAM、「管理アカウント自身は SCP で制限できない」点と「新規アカウントへ自動払い出し」＝ StackSets / Control Tower を確認。",
-      },
-      {
-        id: "sap-d1-t3",
-        title: "組織横断のコンプライアンス監査・脅威集約・統合課金",
-        services: [
-          "Config Aggregator",
-          "Security Hub",
-          "GuardDuty",
-          "CloudTrail",
-          "AWS Budgets",
-          "Cost Explorer",
-        ],
-        keyPoints: [
-          "AWS CloudTrail の組織証跡（Organization Trail）を管理アカウントまたは委任管理者で有効化し、全アカウント・全リージョンの API 履歴をログアーカイブ専用アカウントの S3 バケット（Object Lock ＋整合性検証）へ集約する",
-          "AWS Security Hub、Amazon GuardDuty、AWS Config Aggregator の委任管理者（Delegated Administrator）をセキュリティ監査アカウントに設定し、組織全体の設定ドリフト・脅威・準拠状況を一元監視する",
-          "AWS Organizations の一括請求（Consolidated Billing）によりボリュームディスカウントの合算や Savings Plans / RI のアカウント間共有を実現し、コスト配分タグと AWS Budgets / Cost Explorer で部門別の予実と異常検知を管理する",
-        ],
-        examTip:
-          "「将来追加されるアカウントも含め API ログを改ざん不可で一箇所に集約」＝ CloudTrail Organization Trail ＋ S3 Object Lock（別アカウント保管）。",
-      },
-    ],
-  },
-  {
-    id: "sap-domain-2",
-    number: 2,
-    title: "新規ソリューションの設計",
-    englishTitle: "Design for New Solutions",
-    weight: 29,
-    accentColor: "emerald",
-    summary:
-      "出題比率最大の29%。エンタープライズ規模の CI/CD とセルフサービス IaC、RTO/RPO 要件を満たすマルチリージョン Active-Active / DR 戦略、高スループットなイベント駆動設計が問われます。",
-    topics: [
-      {
-        id: "sap-d2-t1",
-        title: "エンタープライズ IaC・CI/CD デプロイ戦略と権限分離",
-        services: [
-          "CodePipeline",
-          "CodeBuild",
-          "CodeDeploy",
-          "AWS CDK",
-          "Service Catalog",
-          "SSM Automation",
-        ],
-        keyPoints: [
-          "AWS CodePipeline + CodeBuild + CodeDeploy により、EC2 / ECS / Lambda 向けの Blue/Green（即座のトラフィック切替とロールバック）や Canary（一部割合で検証後に全体展開）デプロイを自動化する",
-          "開発者が直接 VPC や IAM ロールを作成する権限を持たずに承認済み環境をプロビジョニングできるよう、AWS Service Catalog に CloudFormation テンプレートを登録し Launch Constraint ロールを適用する",
-          "AWS CDK（TypeScript / Python 等）で再利用可能な L3 Construct として組織標準パターンを配布し、SSM Automation Runbook や CloudFormation StackSets で複数アカウント・複数リージョンへの自動展開と整合性を保つ",
-        ],
-        examTip:
-          "「開発者に強力な IAM 権限を与えずに標準インフラをセルフサービス作成させたい」＝ AWS Service Catalog ＋ Launch Constraint ロール。",
-      },
-      {
-        id: "sap-d2-t2",
-        title: "マルチリージョン Active-Active と BCP / DR 戦略",
-        services: [
-          "Aurora Global Database",
-          "DynamoDB Global Tables",
-          "Route 53 ARC",
-          "Pilot Light",
-          "Warm Standby",
-          "AWS Backup",
-        ],
-        keyPoints: [
-          "Amazon Aurora Global Database は通常 1 秒未満のストレージレプリケーションで最大 5 つのセカンダリリージョンへ複製し、Write Forwarding やリージョン障害時の高速昇格（RTO 約1分目安）に対応する",
-          "Amazon DynamoDB Global Tables は複数リージョン間で Active-Active の双方向レプリケーションを提供し、各リージョンでのローカル読み書きと自動競合解決（Last Writer Wins）を実現する",
-          "リージョン障害時にコントロールプレーン API が不安定になっても確実にルーティングを切り替えられるよう、Route 53 Application Recovery Controller (ARC) のデータプレーンルーティングコントロールと Readiness Check を組み合わせる",
-          "RTO/RPO とコスト要件に応じて DR 4戦略（Backup & Restore ＜ Pilot Light ＜ Warm Standby ＜ Multi-Site Active-Active）を選択し、AWS Backup のクロスリージョン/クロスアカウントコピーと Vault Lock (WORM) でバックアップを保護する",
-        ],
-        examTip:
-          "「リージョン障害時にコントロールプレーン API に依存せず確実にフェイルオーバーしたい」＝ Route 53 ARC。「RDB で RPO 数秒・RTO 数分」＝ Aurora Global Database。",
-      },
-      {
-        id: "sap-d2-t3",
-        title: "イベント駆動アーキテクチャ・大規模ストリーム・API/エッジ保護",
+        title: "イベント駆動・サーバーレスワークフロー・データレイクハウス設計",
         services: [
           "EventBridge",
           "Step Functions",
           "Amazon MSK",
           "Kinesis Data Streams",
           "API Gateway",
-          "CloudFront",
+          "Lake Formation",
+          "AWS Glue",
+          "Amazon Athena",
         ],
         keyPoints: [
-          "Amazon EventBridge はカスタム/SaaS/AWS イベントに対する高度なコンテンツフィルタリング、スキーマレジストリ、アーカイブ・リプレイ、クロスアカウントバスルーティングで大規模疎結合を実現する",
-          "AWS Step Functions は最大 1 年の状態保持・人間の承認待ちコールバック・Saga 補償トランザクションなら Standard、最大 5 分・高スループットイベント処理なら Express ワークフローを使い分ける",
-          "既存 Apache Kafka エコシステム互換や柔軟なトピック保持・消費者制御が必要なら Amazon MSK、サーバーレス運用とオンデマンド自動スケールを重視するリアルタイム収集には Kinesis Data Streams を選択する",
-          "Amazon API Gateway と CloudFront（+ AWS WAF / Shield Advanced）を組み合わせ、エッジキャッシュ・認証（Cognito / JWT / Lambda Authorizer）・使用量プランによるレート制御を統合する",
+          "AWS Step Functions（Standard 最大 1 年・人手承認/Saga 補償、Express 最大 5 分・高スループット）や持続実行ワークフロー、EventBridge のクロスアカウントルーティング/リプレイ、API Gateway WebSocket API によるリアルタイム Pub/Sub パターンを組み合わせる",
+          "既存 Apache Kafka 互換には Amazon MSK、サーバーレス運用重視のストリーム収集には Kinesis Data Streams を選定する",
+          "SAP-C03 追加範囲: Amazon S3 ＋ AWS Lake Formation ＋ AWS Glue Data Catalog ＋ Amazon Athena（Apache Iceberg 含む）によるデータレイクハウス、およびクロスアカウントデータ共有・テナント分離（サイロ/プール型・行レベルセキュリティ）を設計する",
         ],
         examTip:
-          "「数日間の人手承認待ち＋失敗時のロールバック（Saga）」＝ Step Functions Standard。「既存 Kafka アプリの最小改修移行」＝ Amazon MSK。",
+          "「既存 Kafka 資産の無改修移行」＝ Amazon MSK。「S3 ベースでガバナンス・行/列単位アクセス制御付きレイクハウス」＝ Lake Formation＋Athena。",
+      },
+      {
+        id: "sap-d1-t3",
+        title: "生成 AI / RAG 統合・モダンアプリ基盤（Bedrock / コンテナ / サーバーレス）",
+        services: [
+          "Amazon Bedrock",
+          "Bedrock Knowledge Bases",
+          "SageMaker AI",
+          "Amazon ECS",
+          "Amazon EKS",
+          "AWS Fargate",
+          "AWS App Runner",
+          "AWS Lambda",
+          "RDS Proxy",
+        ],
+        keyPoints: [
+          "SAP-C03 Task 1.2 新設: Amazon Bedrock をマルチアカウント構成でアプリ統合し、Amazon Bedrock Knowledge Bases（ベクトルストア連携）による RAG の取り込み/検索戦略、ツール連携を伴う AI エージェント（Bedrock AgentCore）、および独自 ML 推論向け Amazon SageMaker AI エンドポイントを設計する",
+          "ワークロード特性に応じて AWS App Runner（Web 最速）、Amazon ECS on AWS Fargate（AWS 統合＋ノード管理レス）、Amazon EKS（Kubernetes 資産互換）、AWS Lambda（最大 15 分・10 GB、DB 接続スパイク時は Amazon RDS Proxy でプーリング）を使い分ける",
+        ],
+        examTip:
+          "「RAG のマネージド取り込み・ベクトル検索構成」＝ Amazon Bedrock Knowledge Bases。「Lambda の RDB 接続枯渇」＝ RDS Proxy。",
+      },
+    ],
+  },
+  {
+    id: "sap-domain-2",
+    number: 2,
+    title: "セキュリティ、コンプライアンス、ガバナンス",
+    englishTitle: "Security, Compliance, and Governance",
+    weight: 25,
+    accentColor: "emerald",
+    summary:
+      "出題比率 25%（SAP-C03 再編 D2）。Organizations SCP / RCP・Control Tower・ハイブリッド/ワークロード認証（IAM Roles Anywhere / EKS Pod Identity）・ポスト量子暗号含む KMS 暗号化・責任ある AI コントロール（Bedrock Guardrails）が問われます。",
+    topics: [
+      {
+        id: "sap-d2-t1",
+        title: "マルチアカウント統制・SCP / RCP・ハイブリッド/ワークロード認証",
+        services: [
+          "Control Tower",
+          "Organizations",
+          "SCP",
+          "RCP",
+          "IAM Identity Center",
+          "Cognito",
+          "IAM Roles Anywhere",
+          "EKS Pod Identity",
+        ],
+        keyPoints: [
+          "AWS Control Tower と AWS Organizations の予防的ガードレールを組み合わせ、アカウント権限上限を規定する SCP に加え、組織内リソースへの外部/意図しないアクセス境界を制御する RCP（Resource Control Policy）でデータ境界を強制する",
+          "人間の SSO は IAM Identity Center、エンドユーザーの SaaS/マルチテナント認可は Amazon Cognito（OAuth 2.0 / テナントコンテキスト）、オンプレミス/ハイブリッドワークロードの X.509 証明書ベース一時 IAM 認証は IAM Roles Anywhere、Kubernetes Pod 単位の最小権限は EKS Pod Identity を採用する",
+        ],
+        examTip:
+          "「オンプレミスサーバーに長期 IAM アクセスキーを置かず一時認証情報を取得」＝ IAM Roles Anywhere。「全アカウントのリソースポリシー上限を統制」＝ RCP。",
+      },
+      {
+        id: "sap-d2-t2",
+        title: "組織監査・ポスト量子暗号化・境界防御・責任ある AI 統制",
+        services: [
+          "CloudTrail",
+          "Security Hub",
+          "GuardDuty",
+          "Config Aggregator",
+          "AWS Network Firewall",
+          "AWS KMS",
+          "Bedrock Guardrails",
+          "AWS Artifact",
+        ],
+        keyPoints: [
+          "AWS CloudTrail 組織証跡＋S3 Object Lock（別アカウント保存）、Security Hub・GuardDuty・AWS Config Aggregator の委任管理者統合、検査専用 VPC の AWS Network Firewall（TGW Appliance Mode 有効）で組織全体の可視性と防御を統一する",
+          "SAP-C03 Task 2.2/2.4/2.5 追加範囲: AWS KMS のポスト量子暗号（ML-DSA / ML-KEM）を見据えた暗号戦略、データレジデンシー制御、AWS Artifact によるコンプライアンス証跡収集に加え、Amazon Bedrock Guardrails・AgentCore Identity・AWS Step Functions による AI 運用の人間承認（HITL）ワークフローを設計する",
+        ],
+        examTip:
+          "「将来追加されるアカウントも自動集約＆WORM証跡保存」＝ CloudTrail Organization Trail ＋ S3 Object Lock。「AI の不適切出力抑止＋高リスク操作の人間承認」＝ Bedrock Guardrails ＋ Step Functions。",
       },
     ],
   },
   {
     id: "sap-domain-3",
     number: 3,
-    title: "既存のソリューションの継続的な改善",
-    englishTitle: "Continuous Improvement for Existing Solutions",
-    weight: 25,
+    title: "コストを最適化したアーキテクチャの設計",
+    englishTitle: "Cost-Optimized Architecture Design",
+    weight: 15,
     accentColor: "amber",
     summary:
-      "運用中システムのボトルネック解消、オブザーバビリティと自動修復の導入、セキュリティポスチャの継続改善、大規模環境の FinOps コスト削減が問われます。",
+      "出題比率 15%（SAP-C03 再編 D3）。Graviton・AI 推論コスト最適化（階層選択/バッチ/クロスリージョン推論ルーティング）・ネットワーク転送コスト・ストレージ/DB/オブザーバビリティコスト・タグ/Cost Categories 統制が問われます。",
     topics: [
       {
         id: "sap-d3-t1",
-        title: "オブザーバビリティ・運用自動化と構成ドリフト自動修復",
-        services: [
-          "Systems Manager",
-          "Session Manager",
-          "CloudWatch",
-          "AWS X-Ray",
-          "AWS Config",
-        ],
-        keyPoints: [
-          "踏み台サーバーや SSH 鍵・インバウンドポート（22/3389）を廃止し、AWS Systems Manager Session Manager（VPC Interface Endpoint 経由）で IAM 認証とセッション操作ログ監査付きのセキュアな接続へ改善する",
-          "Amazon CloudWatch（Logs Insights / Container Insights / Synthetics）と AWS X-Ray（分散トレース・サービスマップ）を組み合わせ、マイクロサービス間の遅延原因やエラー箇所を特定する",
-          "AWS Config ルール（例: restricted-ssh、暗号化チェック）で非準拠リソースを検出後、SSM Automation と連携した自動修復（Auto Remediation）で即時に規定状態へ戻す",
-        ],
-        examTip:
-          "「踏み台廃止＋SSH鍵不要＋操作コマンドを S3/CloudWatch Logs に記録」＝ SSM Session Manager。「SG の 0.0.0.0/0 開放を自動修正」＝ AWS Config ＋ SSM Automation。",
-      },
-      {
-        id: "sap-d3-t2",
-        title: "DB・キャッシュ・グローバルネットワークの性能ボトルネック解消",
-        services: [
-          "Aurora Serverless v2",
-          "RDS Proxy",
-          "ElastiCache",
-          "DAX",
-          "Global Accelerator",
-          "Read Replica",
-        ],
-        keyPoints: [
-          "AWS Lambda 等のサーバーレス実行数急増により RDS/Aurora の接続数上限（max_connections）が枯渇する場合は、Amazon RDS Proxy を導入してコネクションプーリングとフェイルオーバー時間短縮を実現する",
-          "予測不能なトラフィックスパイクには Aurora Serverless v2（0.5 ACU 単位で細粒度自動スケール）、参照負荷分散には Read Replica や ElastiCache for Redis/Valkey を導入して DB 負荷をオフロードする",
-          "DynamoDB のホットパーティション対策には高カーディナリティなキー設計や書き込みシャーディングを行い、読み取り集中には API 互換の DAX（DynamoDB Accelerator）でマイクロ秒応答を実現する",
-          "グローバルユーザー向けの非 HTTP（TCP/UDP）通信の遅延や DNS キャッシュによる切替遅延を解消するには、AWS Global Accelerator で固定 Anycast IP と AWS バックボーン最適化を適用する",
-        ],
-        examTip:
-          "「Lambda スパイクで RDS max_connections エラー」＝ RDS Proxy。「TCP/UDP の固定 IP＋DNS TTL 非依存の高速フェイルオーバー」＝ Global Accelerator。",
-      },
-      {
-        id: "sap-d3-t3",
-        title: "FinOps・コンピュート＆ストレージ＆転送コストの継続最適化",
+        title: "コンピュート・AI 推論・データベース・オブザーバビリティコスト最適化",
         services: [
           "Compute Optimizer",
           "Savings Plans",
           "Spot Instances",
-          "S3 Intelligent-Tiering",
-          "Gateway VPC Endpoint",
           "Graviton",
+          "S3 Intelligent-Tiering",
+          "Aurora Serverless v2",
+          "ElastiCache",
+          "DAX",
         ],
         keyPoints: [
-          "CloudWatch Agent でメモリ使用率も含めて収集した上で AWS Compute Optimizer の推奨に従い、過剰スペックの EC2/EBS/Lambda/ECS Fargate をライトサイジングし、対応ワークロードは AWS Graviton（ARM64）へ移行して価格性能比を改善する",
-          "ベースライン負荷には Compute Savings Plans（EC2・Fargate・Lambda を横断適用）、中断許容のバッチ・非同期ワーカーには Spot Instances（capacity-optimized 配分戦略）を混在させてコストを最小化する",
-          "Private Subnet から S3 / DynamoDB へのアクセスを NAT Gateway 経由から無料の Gateway 型 VPC エンドポイントへ切り替え、アクセス頻度が不規則なデータは S3 Intelligent-Tiering で自動階層化する",
+          "AWS Compute Optimizer（CloudWatch Agent のメモリ計測連携含む）によるライトサイジング、Compute Savings Plans と EC2 Spot Instances の混在、AWS Graviton（ARM64）移行で単価と電力を削減する",
+          "アクセスパターンが読めない大量データには S3 Intelligent-Tiering、スパイク性 DB には Aurora Serverless v2（0.5 ACU 単位）、読み取りオフロードには ElastiCache / DAX / Read Replica を選定する",
+          "SAP-C03 追加範囲: Amazon Bedrock / SageMaker AI のモデル階層選定・バッチ推論・キャッシュ・クロスリージョン推論ルーティングによる AI コスト最適化と、ログフィルタリング・メトリクス集約・保持最適化によるオブザーバビリティコスト削減を行う",
         ],
         examTip:
-          "「NAT Gateway のデータ処理料金が巨額、通信先は主に S3」＝ Gateway VPC Endpoint。「EC2 と Fargate を将来入れ替える可能性あり」＝ Compute Savings Plans。",
+          "「AI 推論コストをモデル品質を保ちつつ削減」＝ 適切なモデル階層選択＋プロンプトキャッシュ＋バッチ推論活用。",
+      },
+      {
+        id: "sap-d3-t2",
+        title: "ネットワーク転送コスト・組織横断 FinOps・予算統制",
+        services: [
+          "Gateway VPC Endpoint",
+          "CloudFront",
+          "AWS Budgets",
+          "Cost Explorer",
+          "Cost Categories",
+          "AWS RAM",
+        ],
+        keyPoints: [
+          "Private Subnet から S3 / DynamoDB への通信を無料の Gateway 型 VPC エンドポイントへ切り替えて NAT Gateway のデータ処理課金を排除し、インターネット下り配信は S3 直接ではなく CloudFront 経由へ寄せる",
+          "Transit Gateway と AWS PrivateLink のデータ処理・クロス AZ 転送コストやマルチリージョンデータ複製の転送コストを設計段階から最小化する",
+          "AWS Organizations 一括請求の下で、ポリシーベースのタグ強制と AWS Cost Categories / Cost Explorer / AWS Budgets により部門別チャージバック・ショーバック・コスト異常検知を運用する",
+        ],
+        examTip:
+          "「NAT Gateway 課金急増・通信先は S3/DynamoDB」＝ Gateway VPC Endpoint。「Transit Gateway の接続・転送単価を組織横断で最適化＋部門配賦」＝ AWS RAM 共有 ＋ Cost Categories。",
       },
     ],
   },
   {
     id: "sap-domain-4",
     number: 4,
-    title: "ワークロードの移行とモダナイゼーションの加速",
-    englishTitle: "Accelerate Workload Migration and Modernization",
-    weight: 20,
+    title: "回復力、移行、事業の継続性",
+    englishTitle: "Resilience, Migration, and Business Continuity",
+    weight: 15,
     accentColor: "cyan",
     summary:
-      "7R 移行戦略に基づくアセスメント、最小ダウンタイムでのサーバー/異種 DB/ペタバイト級データ移行、モノリスのコンテナ/サーバーレス段階移行（Strangler Fig）が問われます。",
+      "出題比率 15%（SAP-C03 再編 D4）。RPO/RTO 設計・マルチクラスター/マルチリージョン DR（Aurora Global DB / Route 53 ARC）・Backup 耐ランサムウェア保護・AWS FIS 復旧検証・7R 大規模移行（MGN / DMS / AWS Transform）が問われます。",
     topics: [
       {
         id: "sap-d4-t1",
-        title: "7R 戦略・大規模サーバー / DB / オンライン＆オフライン移行",
+        title: "マルチリージョン DR・マルチクラスター可用性・バックアップ統制",
+        services: [
+          "Aurora Global Database",
+          "DynamoDB Global Tables",
+          "Route 53 ARC",
+          "Global Accelerator",
+          "Pilot Light",
+          "Warm Standby",
+          "AWS Backup",
+          "AWS Resilience Hub",
+        ],
+        keyPoints: [
+          "Aurora Global Database（1 秒未満のストレージ複製・Write Forwarding）と DynamoDB Global Tables（Active-Active）に加え、障害中リージョンのコントロールプレーン API に依存しない Route 53 ARC データプレーン切替や Global Accelerator（TCP/UDP 固定 Anycast IP）を組み合わせる",
+          "SAP-C03 追加範囲: Amazon EKS / ECS のマルチクラスター DR 戦略、AWS Resilience Hub による RTO/RPO 評価、AWS Backup Organizations ポリシー＋Backup Vault Lock（WORM）によるランサムウェア/誤削除対策を実施する",
+        ],
+        examTip:
+          "「コントロールプレーン障害下でも確実にリージョン切替」＝ Route 53 ARC。「ランサムウェア対策で管理者も消せない暗号化バックアップ」＝ AWS Backup Vault Lock (WORM)。",
+      },
+      {
+        id: "sap-d4-t2",
+        title: "7R 大規模移行・異種 DB / ストレージ移行・段階的カットオーバー",
         services: [
           "AWS MGN",
           "Migration Hub",
@@ -252,52 +239,70 @@ export const sapDomains: SaaDomain[] = [
           "AWS SCT",
           "AWS DataSync",
           "Snow Family",
-        ],
-        keyPoints: [
-          "AWS Migration Hub（Application Discovery Service 連携）で依存関係とサイジングを可視化し、7R（Rehost / Relocate / Replatform / Refactor / Repurchase / Retire / Retain）に基づいて移行波（Wave）を計画する",
-          "AWS Application Migration Service (MGN) は物理/仮想サーバーをブロックレベルで継続レプリケーションし、最小停止時間で EC2 へ Rehost する",
-          "異種データベース移行（Oracle / SQL Server → Aurora PostgreSQL 等）では、AWS SCT（Schema Conversion Tool）でスキーマとストアドプロシージャを変換し、AWS DMS の Full Load ＋ CDC（継続的変更データキャプチャ）で無停止に近い切替を行う",
-          "ネットワーク帯域が十分でオンライン同期したい場合は AWS DataSync、狭帯域・大容量（数十 TB〜PB 級）で物理輸送が必要な場合は AWS Snow Family（Snowball Edge 等）を選定する",
-        ],
-        examTip:
-          "「Oracle から Aurora への移行でストアドプロシージャも変換」＝ AWS SCT ＋ AWS DMS (CDC)。「100 Mbps 回線で数百 TB を数週間以内に移行」＝ Snowball Edge。",
-      },
-      {
-        id: "sap-d4-t2",
-        title: "コンテナ＆サーバーレスへのモダナイゼーション（Refactor / Replatform）",
-        services: [
-          "Amazon ECS",
-          "Amazon EKS",
-          "AWS Fargate",
-          "AWS App Runner",
-          "AWS Lambda",
-          "Refactor Spaces",
-        ],
-        keyPoints: [
-          "AWS Migration Hub Refactor Spaces を使用すると、Strangler Fig パターンでモノリスから新マイクロサービスへ段階的に切り替える際のマルチアカウント環境・Transit Gateway・API Gateway ルーティングを自動構築できる",
-          "AWS ネイティブ統合と運用負荷最小化を優先するコンテナ移行は Amazon ECS（サーバーレス実行基盤として AWS Fargate）、既存の Kubernetes マニフェストやマルチクラウド標準化が必要なら Amazon EKS、Web アプリ/API をコンテナ管理なしで迅速公開する場合は AWS App Runner を選定する",
-          "ステートレスな処理やファイル変換等は AWS Lambda（最大 15 分 / メモリ 10 GB / コンテナイメージ対応）へリファクタリングして待機コストを削減する",
-        ],
-        examTip:
-          "「既存モノリスと新マイクロサービスをマルチアカウント跨ぎで徐々にパス切替」＝ Migration Hub Refactor Spaces。「K8s 知識なしでコンテナ運用最小化」＝ ECS on Fargate。",
-      },
-      {
-        id: "sap-d4-t3",
-        title: "ハイブリッドストレージ・ファイル転送・段階的カットオーバー",
-        services: [
           "Storage Gateway",
           "Transfer Family",
           "FSx for NetApp ONTAP",
           "S3 Batch Operations",
           "Route 53 Weighted",
+          "Refactor Spaces",
         ],
         keyPoints: [
-          "オンプレミスのローカル低遅延キャッシュを維持しつつ S3 へ階層化・移行するには AWS Storage Gateway（S3 File / Volume / Tape Gateway）を利用する",
-          "オンプレミスの NetApp ONTAP ストレージを SnapMirror 連携やマルチプロトコル（NFS/SMB/iSCSI）互換のまま移行するには Amazon FSx for NetApp ONTAP を選択する",
-          "外部取引先との SFTP / FTPS / FTP / AS2 連携基盤をサーバー管理なしで移行する場合は AWS Transfer Family（S3/EFS バックエンド）を導入し、既存 S3 大量オブジェクトの一括複製やメタデータ更新には S3 Batch Operations を、DNS の段階切替には Route 53 加重ルーティング（Weighted）を活用する",
+          "AWS Migration Hub や AWS Transform（モダナイズ加速）を用いて 7R を計画し、VM の Rehost は AWS MGN、異種 DB（Oracle → Aurora）は AWS SCT ＋ AWS DMS (CDC)、広帯域オンライン同期は AWS DataSync、狭帯域大容量は Snow Family（Snowball Edge）で移行する",
+          "オンプレミス共有維持・移行には Storage Gateway や FSx for NetApp ONTAP（SnapMirror）、パートナー転送は AWS Transfer Family、過去 S3 一括複製は S3 Batch Operations、DNS 段階切替は Route 53 Weighted、モノリス分割には Migration Hub Refactor Spaces を選定する",
         ],
         examTip:
-          "「既存の NetApp ONTAP 機能（SnapMirror / NFS+SMB 同時アクセス）を維持して移行」＝ FSx for NetApp ONTAP。「SFTP サーバーのマネージド化」＝ AWS Transfer Family。",
+          "「Oracle PL/SQL 含む最小停止移行」＝ AWS SCT ＋ AWS DMS (CDC)。「100 Mbps で 450 TB を数週間で移行」＝ Snowball Edge ＋ DataSync 差分。",
+      },
+    ],
+  },
+  {
+    id: "sap-domain-5",
+    number: 5,
+    title: "運用上の優秀性とオートメーション",
+    englishTitle: "Operational Excellence and Automation",
+    weight: 20,
+    accentColor: "indigo",
+    summary:
+      "出題比率 20%（SAP-C03 新設独立 D5）。マルチアカウント IaC・DevSecOps CI/CD（ECR スキャン・Inspector・ロール委任）・高度オブザーバビリティ（CloudWatch Synthetics / RUM / Container Insights / ADOT / AI 監視）・安全制約付き自動修復とカオス試験（AWS FIS）が問われます。",
+    topics: [
+      {
+        id: "sap-d5-t1",
+        title: "マルチアカウント IaC・Policy-as-Code・DevSecOps CI/CD",
+        services: [
+          "AWS CDK",
+          "StackSets",
+          "Service Catalog",
+          "CodePipeline",
+          "CodeBuild",
+          "CodeDeploy",
+          "Amazon Inspector",
+        ],
+        keyPoints: [
+          "CloudFormation StackSets（Service-managed OU 自動展開）、AWS CDK（再利用可能な L3 Construct とユニットテスト）、AWS Service Catalog（Launch Constraint による非特権セルフサービス払い出し）、および Policy-as-Code（ドリフト検出・予防的検証）を組み合わせる",
+          "SAP-C03 Task 5.2 新設: クロスアカウント CodePipeline（ロール委任・アーティファクト昇格）、Amazon Inspector / Amazon ECR イメージスキャニングと署名検証による脆弱性ゲート、および Amazon Bedrock Evaluation による AI 出力の継続検証を CI/CD パイプラインへ統合する",
+        ],
+        examTip:
+          "「開発者に強力な IAM 権限を渡さず承認済みスタックを作成させる」＝ Service Catalog (Launch Constraint)。「パイプラインでコンテナ脆弱性を自動遮断」＝ ECR スキャン / Inspector。",
+      },
+      {
+        id: "sap-d5-t2",
+        title: "高度オブザーバビリティ・AI 監視・制御された自動修復と AWS FIS",
+        services: [
+          "CloudWatch",
+          "AWS X-Ray",
+          "ADOT",
+          "AWS Config",
+          "Systems Manager",
+          "Session Manager",
+          "SSM Automation",
+          "AWS FIS",
+        ],
+        keyPoints: [
+          "AWS Systems Manager Session Manager で踏み台・SSH 鍵を廃止して操作ログを監査し、AWS Config ＋ SSM Automation による自動修復ではサーキットブレーカー・レート制限・指数バックオフ等の安全制約を設けてカスケード障害を防ぐ",
+          "SAP-C03 Task 5.3/5.4 新設: CloudWatch Synthetics（外形監視）・CloudWatch RUM・Container Insights（ECS/EKS）・AWS Distro for OpenTelemetry (ADOT) ＋ X-Ray、さらに AI モデル推論レイテンシ/ドリフト指標を統合監視し、AWS Fault Injection Service (FIS) で制御されたカオス復旧テストを実施する",
+        ],
+        examTip:
+          "「自動修復が暴走して本番を巻き込むのを防ぐ安全設計」＝ サーキットブレーカー＋レート制限。「DR や障害耐性を本番同等で実証計測」＝ AWS Fault Injection Service (FIS)。",
       },
     ],
   },
@@ -796,15 +801,100 @@ export const sapComparisons: SaaComparisonTable[] = [
         ],
       },
       {
-        feature: "AWS Budgets & Cost Explorer",
+        feature: "AWS Budgets & Cost Explorer & Cost Categories",
         values: [
-          "組織横断の予算統制・異常検知・RI/SP 分析",
-          "コスト配分タグで部門・環境別を可視化し、Budgets のしきい値到達で通知または自動 IAM アクションを実行。",
+          "組織横断の予算統制・チャージバック・異常検知",
+          "コスト配分タグと AWS Cost Categories で部門・環境別コストを分類（ショーバック/チャージバック）し、Budgets でしきい値通知や IAM 自動制御を実行。Amazon Bedrock のモデル階層・バッチ推論・ログ保持最適化も重要。",
         ],
       },
     ],
     decisionRule:
-      "「NAT GW の S3 通信課金ゼロ化」＝ Gateway VPC Endpoint、「EC2/Fargate 混在環境の長期割引」＝ Compute Savings Plans、「過剰プロビジョニング自動検出」＝ Compute Optimizer。",
+      "「NAT GW の S3 通信課金ゼロ化」＝ Gateway VPC Endpoint、「EC2/Fargate 混在環境の長期割引」＝ Compute Savings Plans、「過剰プロビジョニング自動検出」＝ Compute Optimizer、「AI推論/ログ最適化」＝ モデル階層選定＋保持フィルタリング。",
+  },
+  {
+    id: "sap-comp-ai-data-sec",
+    category: "セキュリティ",
+    title: "SAP-C03 生成 AI / RAG・ゼロトラスト認証・データ境界・PQC",
+    subtitle: "Bedrock / Knowledge Bases / Guardrails / RCP / IAM Roles Anywhere / EKS Pod Identity / KMS ポスト量子暗号 / AWS Artifact",
+    columns: ["サービス / 機能", "対象レイヤ", "SAP-C03 設計判断のポイント"],
+    rows: [
+      {
+        feature: "Amazon Bedrock & Knowledge Bases (RAG) / AgentCore",
+        values: [
+          "生成 AI アプリ・RAG・AI エージェント",
+          "ベクトルストア連携 RAG による最新知識取り込みと Bedrock AgentCore によるツール実行統合。Amazon SageMaker AI エンドポイントは独自モデル学習・推論向け。",
+        ],
+      },
+      {
+        feature: "Bedrock Guardrails & Step Functions HITL",
+        values: [
+          "AI 入出力フィルタ・人間による監督",
+          "コンテンツフィルタ/拒否トピック/PII 保護を Bedrock Guardrails で強制し、AgentCore Identity によるアクセス制御と Step Functions 承認フロー（HITL）を組み合わせる。",
+        ],
+      },
+      {
+        feature: "Organizations SCP / RCP & AWS KMS (ML-DSA / ML-KEM)",
+        values: [
+          "組織データ境界 & ポスト量子暗号 (PQC)",
+          "SCP（IAM 主体の権限制限）と RCP（組織内リソース側のアクセス上限）で二重ガード。AWS KMS の ML-DSA / ML-KEM ポスト量子暗号戦略とデータレジデンシー制御に対応。",
+        ],
+      },
+      {
+        feature: "IAM Roles Anywhere / EKS Pod Identity / Cognito",
+        values: [
+          "ハイブリッド / K8s / アプリ認証認可",
+          "オンプレミスの X.509 証明書から一時 IAM 認証を得るなら IAM Roles Anywhere、EKS Pod 権限管理は EKS Pod Identity、マルチテナントアプリ認証は Amazon Cognito。",
+        ],
+      },
+      {
+        feature: "Lake Formation / AWS Artifact / AWS Security Lake",
+        values: [
+          "データガバナンス・証跡収集・分析セキュリティ",
+          "AWS Glue / Amazon Athena（Iceberg）構成の行・列レベル認可には Lake Formation、コンプライアンス証跡取得は AWS Artifact。",
+        ],
+      },
+    ],
+    decisionRule:
+      "「オンプレから静的キーなしで AWS IAM 一時認証」＝ IAM Roles Anywhere、「AI 有害入出力・高リスク操作制御」＝ Bedrock Guardrails ＋ Step Functions HITL、「アカウントだけでなく組織内リソースへの外部流入制御」＝ RCP。",
+  },
+  {
+    id: "sap-comp-ops-network",
+    category: "コンピュート",
+    title: "SAP-C03 サービスメッシュ・DevSecOps・高度オブザーバビリティ・カオス試験",
+    subtitle: "VPC Lattice / AWS FIS / Resilience Hub / Inspector / ADOT / Synthetics / RUM",
+    columns: ["サービス / 機能", "カテゴリ", "SAP-C03 運用自動化・信頼性での選定基準"],
+    rows: [
+      {
+        feature: "Amazon VPC Lattice & ECS Service Connect",
+        values: [
+          "マイクロサービス間通信メッシュ",
+          "EC2/ECS/EKS/Lambda を横断したサービスディスカバリ・認証ポリシー・カナリア重み付けルーティングをネットワーク構成負荷なく統合。",
+        ],
+      },
+      {
+        feature: "AWS Fault Injection Service (FIS) & AWS Resilience Hub",
+        values: [
+          "カオスエンジニアリング / DR 検証",
+          "AZ 障害やスロットリングを安全に注入してフェイルオーバーと RTO/RPO を実測検証。Resilience Hub で回復力スコアを継続評価。",
+        ],
+      },
+      {
+        feature: "Amazon Inspector & ECR イメージスキャン",
+        values: [
+          "DevSecOps パイプライン脆弱性検査",
+          "CI/CD でコンテナ脆弱性スキャン（Amazon ECR / Inspector）と署名検証を強制し、重大 CVE 検出時はデプロイを遮断。",
+        ],
+      },
+      {
+        feature: "CloudWatch Synthetics / RUM / ADOT / EC2・DB 運用自動化",
+        values: [
+          "外形監視・OpenTelemetry・安全自動修復",
+          "ADOT で OpenTelemetry トレース/メトリクス統合、Synthetics で死活外形監視、RUM で実ユーザー遅延計測。SSM Automation 自動修復にはサーキットブレーカー等を付与。",
+        ],
+      },
+    ],
+    decisionRule:
+      "「複数 VPC/アカウント間マイクロサービス通信の統一認可と観測」＝ VPC Lattice、「制御された障害注入で RTO 実測」＝ AWS FIS、「CI/CD で脆弱コンテナ遮断」＝ Inspector ＋ ECR スキャン。",
   },
 ];
 
@@ -917,14 +1007,32 @@ export const sapQuickLookup: SaaQuickLookupItem[] = [
     recommended: "AWS Step Functions (Standard ワークフロー)",
     reason: "最大 1 年間の状態保持・タスクコールバック待機・Catch による補償処理実行を宣言的に実装できる。",
   },
+  {
+    keyword: "複数 VPC / アカウント間のマイクロサービス通信と認可を一元メッシュ化",
+    category: "ネットワーク",
+    recommended: "Amazon VPC Lattice (+ ECS Service Connect)",
+    reason: "SAP-C03 追加範囲。サービスディスカバリ・IAM 認証/認可・重み付きカナリア制御をネットワーク負担なく統一できます。",
+  },
+  {
+    keyword: "社内ドキュメントを使った RAG 構成と AI 入出力・ツール実行の安全制御",
+    category: "生成 AI / セキュリティ",
+    recommended: "Bedrock Knowledge Bases + Guardrails (+ Step Functions HITL)",
+    reason: "SAP-C03 新設要件。Knowledge Bases で RAG を構築し、Bedrock Guardrails と Step Functions 承認で安全性を担保します。",
+  },
+  {
+    keyword: "本番相当環境への安全制約付き障害注入（カオス試験）と RTO/RPO 実測",
+    category: "運用自動化・回復力",
+    recommended: "AWS Fault Injection Service (FIS) + AWS Resilience Hub",
+    reason: "SAP-C03 追加範囲。停止条件付きで制御された障害シナリオを実行し、フェイルオーバー時間と回復力スコアを計測します。",
+  },
 ];
 
 export const sapPracticeQuestions: SaaQuestion[] = [
-  // Domain 1: 複雑な組織に対応するソリューションの設計 (sap-q1 .. sap-q4)
+  // Domain 1: クラウド向けに構築されたアーキテクチャの設計と実装
   {
     id: "sap-q1",
     domainId: "sap-domain-1",
-    domainLabel: "Domain 1: 複雑な組織に対応するソリューションの設計",
+    domainLabel: "Domain 1: クラウド向け設計と実装",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -943,7 +1051,7 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   {
     id: "sap-q2",
     domainId: "sap-domain-1",
-    domainLabel: "Domain 1: 複雑な組織に対応するソリューションの設計",
+    domainLabel: "Domain 1: クラウド向け設計と実装",
     difficulty: "応用",
     selectCount: 1,
     question:
@@ -962,7 +1070,7 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   {
     id: "sap-q3",
     domainId: "sap-domain-1",
-    domainLabel: "Domain 1: 複雑な組織に対応するソリューションの設計",
+    domainLabel: "Domain 1: クラウド向け設計と実装",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -980,8 +1088,8 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   },
   {
     id: "sap-q4",
-    domainId: "sap-domain-1",
-    domainLabel: "Domain 1: 複雑な組織に対応するソリューションの設計",
+    domainId: "sap-domain-2",
+    domainLabel: "Domain 2: セキュリティ・ガバナンス",
     difficulty: "応用",
     selectCount: 2,
     question:
@@ -999,11 +1107,11 @@ export const sapPracticeQuestions: SaaQuestion[] = [
     keywords: ["CloudTrail Organization Trail", "S3 Object Lock", "SCP", "複数選択"],
   },
 
-  // Domain 2: 新規ソリューションの設計 (sap-q5 .. sap-q8)
+  // Domain 4: 回復力・移行・事業継続性 & Domain 1: アーキテクチャ設計
   {
     id: "sap-q5",
-    domainId: "sap-domain-2",
-    domainLabel: "Domain 2: 新規ソリューションの設計",
+    domainId: "sap-domain-4",
+    domainLabel: "Domain 4: 回復力・移行・事業継続性",
     difficulty: "応用",
     selectCount: 1,
     question:
@@ -1016,13 +1124,13 @@ export const sapPracticeQuestions: SaaQuestion[] = [
     ],
     correctIndices: [1],
     explanation:
-      "Aurora Global Database はストレージ層で通常 1 秒未満のレプリケーションを行い、RPO 数秒・高速昇格を実現します。また、リージョン障害時にはコントロールプレーン API が影響を受ける可能性があるため、高信頼なデータプレーン API でフェイルオーバーを実行する Route 53 Application Recovery Controller (ARC) のルーティングコントロールが SAP-C02 の定石です。",
+      "Aurora Global Database はストレージ層で通常 1 秒未満のレプリケーションを行い、RPO 数秒・高速昇格を実現します。また、リージョン障害時にはコントロールプレーン API が影響を受ける可能性があるため、高信頼なデータプレーン API でフェイルオーバーを実行する Route 53 Application Recovery Controller (ARC) のルーティングコントロールが SAP-C03 の定石です。",
     keywords: ["Aurora Global Database", "Route 53 ARC", "データプレーン切替", "DR"],
   },
   {
     id: "sap-q6",
-    domainId: "sap-domain-2",
-    domainLabel: "Domain 2: 新規ソリューションの設計",
+    domainId: "sap-domain-4",
+    domainLabel: "Domain 4: 回復力・移行・事業継続性",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -1040,8 +1148,8 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   },
   {
     id: "sap-q7",
-    domainId: "sap-domain-2",
-    domainLabel: "Domain 2: 新規ソリューションの設計",
+    domainId: "sap-domain-5",
+    domainLabel: "Domain 5: 運用上の優秀性と自動化",
     difficulty: "応用",
     selectCount: 1,
     question:
@@ -1059,8 +1167,8 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   },
   {
     id: "sap-q8",
-    domainId: "sap-domain-2",
-    domainLabel: "Domain 2: 新規ソリューションの設計",
+    domainId: "sap-domain-1",
+    domainLabel: "Domain 1: クラウド向け設計と実装",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -1077,11 +1185,10 @@ export const sapPracticeQuestions: SaaQuestion[] = [
     keywords: ["Step Functions Standard", "Sagaパターン", "waitForTaskToken"],
   },
 
-  // Domain 3: 既存のソリューションの継続的な改善 (sap-q9 .. sap-q12)
   {
     id: "sap-q9",
-    domainId: "sap-domain-3",
-    domainLabel: "Domain 3: 既存のソリューションの継続的な改善",
+    domainId: "sap-domain-1",
+    domainLabel: "Domain 1: クラウド向け設計と実装",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -1099,8 +1206,8 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   },
   {
     id: "sap-q10",
-    domainId: "sap-domain-3",
-    domainLabel: "Domain 3: 既存のソリューションの継続的な改善",
+    domainId: "sap-domain-4",
+    domainLabel: "Domain 4: 回復力・移行・事業継続性",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -1118,8 +1225,8 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   },
   {
     id: "sap-q11",
-    domainId: "sap-domain-3",
-    domainLabel: "Domain 3: 既存のソリューションの継続的な改善",
+    domainId: "sap-domain-5",
+    domainLabel: "Domain 5: 運用上の優秀性と自動化",
     difficulty: "応用",
     selectCount: 1,
     question:
@@ -1138,7 +1245,7 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   {
     id: "sap-q12",
     domainId: "sap-domain-3",
-    domainLabel: "Domain 3: 既存のソリューションの継続的な改善",
+    domainLabel: "Domain 3: コスト最適化",
     difficulty: "応用",
     selectCount: 2,
     question:
@@ -1156,11 +1263,10 @@ export const sapPracticeQuestions: SaaQuestion[] = [
     keywords: ["Gateway VPC Endpoint", "Compute Optimizer", "Compute Savings Plans", "複数選択"],
   },
 
-  // Domain 4: ワークロードの移行とモダナイゼーションの加速 (sap-q13 .. sap-q16)
   {
     id: "sap-q13",
     domainId: "sap-domain-4",
-    domainLabel: "Domain 4: ワークロードの移行とモダナイゼーションの加速",
+    domainLabel: "Domain 4: 回復力・移行・事業継続性",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -1179,7 +1285,7 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   {
     id: "sap-q14",
     domainId: "sap-domain-4",
-    domainLabel: "Domain 4: ワークロードの移行とモダナイゼーションの加速",
+    domainLabel: "Domain 4: 回復力・移行・事業継続性",
     difficulty: "応用",
     selectCount: 1,
     question:
@@ -1198,7 +1304,7 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   {
     id: "sap-q15",
     domainId: "sap-domain-4",
-    domainLabel: "Domain 4: ワークロードの移行とモダナイゼーションの加速",
+    domainLabel: "Domain 4: 回復力・移行・事業継続性",
     difficulty: "応用",
     selectCount: 1,
     question:
@@ -1217,7 +1323,7 @@ export const sapPracticeQuestions: SaaQuestion[] = [
   {
     id: "sap-q16",
     domainId: "sap-domain-4",
-    domainLabel: "Domain 4: ワークロードの移行とモダナイゼーションの加速",
+    domainLabel: "Domain 4: 回復力・移行・事業継続性",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -1233,19 +1339,145 @@ export const sapPracticeQuestions: SaaQuestion[] = [
       "AWS Migration Hub Refactor Spaces は Strangler Fig パターンによる段階的モダナイゼーション専用のオーケストレーションサービスであり、複数 AWS アカウントに跨がる環境（Transit Gateway、Resource Access Manager、API Gateway、NLB）とルーティング設定を自動プロビジョニングします。",
     keywords: ["Refactor Spaces", "Strangler Fig", "ECS Fargate", "モダナイゼーション"],
   },
+
+  // SAP-C03 新設領域（AI/RAG・VPC Lattice・RCP/PQC/HITL・Cost Categories・FIS/DevSecOps）
+  {
+    id: "sap-q17",
+    domainId: "sap-domain-1",
+    domainLabel: "Domain 1: クラウド向け設計と実装",
+    difficulty: "応用",
+    selectCount: 2,
+    question:
+      "SAP-C03 Task 1.1 / 1.2 に基づき、複数 AWS アカウントに分散した Amazon ECS / Lambda マイクロサービス群から、社内最新規定に基づく RAG 検索とツール実行を伴う生成 AI 基盤を統合運用したいと考えています。「マルチアカウントの VPC ペアリングや個別プロキシ構築を最小化しつつサービス間認証とカナリア重み付けルーティングを統合すること」と「社内ドキュメントのベクトル検索取り込みと検索・生成（RAG）をフルマネージドで構築すること」を満たす組み合わせを【2つ】選んでください。",
+    options: [
+      "Amazon VPC Lattice（および ECS Service Connect）でアカウント境界を越えたサービスディスカバリ・IAM 認証ポリシー・重み付きルーティングを構成する",
+      "Amazon Bedrock Knowledge Bases とベクトルストアを構成して社内ドキュメントの自動チャンク分割・埋め込み取り込み・RAG 検索を実現する",
+      "全アカウントのサブネットを単一 VPC ピアリングメッシュで接続し、各 EC2 上に手動 Nginx リバースプロキシを配置する",
+      "社内ドキュメントを毎時間パブリック S3 へ公開し、クライアントから無認証で読み込ませる",
+      "基盤モデルの重みパラメータを毎回ゼロから自前 GPU で再事前学習させて知識を更新する",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "SAP-C03 の新設要件では、マルチアカウントのマイクロサービス通信・認可の統合に Amazon VPC Lattice / ECS Service Connect を、RAG 取り込み・検索には Amazon Bedrock Knowledge Bases を選定する設計判断が問われます。",
+    keywords: ["SAP-C03", "VPC Lattice", "Bedrock Knowledge Bases", "RAG"],
+  },
+  {
+    id: "sap-q18",
+    domainId: "sap-domain-2",
+    domainLabel: "Domain 2: セキュリティ・ガバナンス",
+    difficulty: "応用",
+    selectCount: 2,
+    question:
+      "SAP-C03 Task 2.1 / 2.5 に基づき、オンプレミス工場内のサーバー群に長期固定 IAM アクセスキーを一切保存せずに AWS S3/KMS へ安全アクセスさせたい要件と、Amazon Bedrock 上のエージェント AI 基盤で有害コンテンツ遮断・PII 保護・高リスク操作時の人間承認を強制したい要件を同時に満たす設計を【2つ】選んでください。",
+    options: [
+      "オンプレミスサーバーの X.509 クライアント証明書を用いて AWS IAM Roles Anywhere 経由で短期の一時 IAM 認証情報を取得させる",
+      "Amazon Bedrock Guardrails でコンテンツフィルタ・拒否トピック・PII 保護を適用し、機密実行前には AWS Step Functions による人間承認（HITL）ワークフローを介在させる",
+      "オンプレミスサーバー全台にルートユーザーの固定アクセスキーを暗号化せず環境変数として配布する",
+      "組織全体の S3 バケットポリシーを Principal: * に設定してオンプレミスからのアクセスを許可する",
+      "エージェント AI に AdministratorAccess を付与し、承認なしで本番 DB 削除 API を実行させる",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "ハイブリッドワークロードの証明書ベース一時 IAM 認証には AWS IAM Roles Anywhere を用います。また SAP-C03 Task 2.5（責任ある AI コントロール）では Bedrock Guardrails と AgentCore Identity / Step Functions を用いた Human-in-the-Loop（人間による監督）が重要です。",
+    keywords: ["SAP-C03", "IAM Roles Anywhere", "Bedrock Guardrails", "HITL"],
+  },
+  {
+    id: "sap-q19",
+    domainId: "sap-domain-2",
+    domainLabel: "Domain 2: セキュリティ・ガバナンス",
+    difficulty: "応用",
+    selectCount: 1,
+    question:
+      "AWS Organizations 配下で全アカウントの S3 バケットや KMS キー等のリソースに対し、アカウント境界を越えて「組織外（外部アカウント）からの意図しないアクセスをリソースポリシー上限で一括禁止し、外部からの TLS 接続も強制したい」と考えています。IAM 主体側を制限する SCP だけでなく、リソース側へのデータ境界ガードレールとして管理アカウント/委任管理者が適用すべきポリシーはどれですか？",
+    options: [
+      "Resource Control Policy (RCP) を AWS Organizations のルートまたは OU に適用する",
+      "AWS Budgets のアラートアクションを S3 バケットへ付与する",
+      "Amazon CloudWatch Synthetics Canary を各アカウントへ配置する",
+      "EC2 インスタンスメタデータ IMDSv1 を全アカウントで有効化する",
+    ],
+    correctIndices: [0],
+    explanation:
+      "SAP-C03 で明示されたデータ境界統制では、IAM プリンシパルの最大権限を制限する SCP に加え、組織内の AWS リソースへ適用されるアクセス上限を一元規定する Resource Control Policy (RCP) を併用します。",
+    keywords: ["SAP-C03", "RCP", "データ境界", "AWS Organizations"],
+  },
+  {
+    id: "sap-q20",
+    domainId: "sap-domain-3",
+    domainLabel: "Domain 3: コスト最適化",
+    difficulty: "標準",
+    selectCount: 2,
+    question:
+      "SAP-C03 Domain 3 の要件として、複数事業部が共用する生成 AI・分析プラットフォームにおいて「事業部単位の正確なコスト配賦（チャージバック/ショーバック）を自動化すること」と「Amazon Bedrock / CloudWatch Logs 運用における推論およびオブザーバビリティコストを品質を損なわず削減すること」を満たす施策を【2つ】選んでください。",
+    options: [
+      "コスト配分タグのタグポリシー強制と AWS Cost Categories を構成し、事業部別のコストルールとチャージバック集計を自動化する",
+      "Amazon Bedrock のプロンプト階層選択・バッチ推論・キャッシュを活用し、CloudWatch Logs はログフィルタリング・メトリクス集約・保持期間最適化を行う",
+      "全ワークロードの全デバッグログを CloudWatch Logs に無期限（Never Expire）で保存し、毎秒全件を Athena でスキャンする",
+      "軽量な分類タスクも含めすべての AI リクエストを常に最大サイズ基盤モデルのオンデマンド同期推論のみで処理する",
+      "単一の管理アカウントに全事業部のタグなしリソースを混在させ、手動スプレッドシートで按分する",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "SAP-C03 Domain 3（Task 3.1 / 3.3 / 3.4）では、タグ強制と AWS Cost Categories によるチャージバック、AI/ML ワークロードのモデル階層選定・バッチ推論・キャッシュ活用、およびログフィルタリング/保持最適化によるコスト効率的なオブザーバビリティ設計が問われます。",
+    keywords: ["SAP-C03", "AWS Cost Categories", "AIコスト最適化", "複数選択"],
+  },
+  {
+    id: "sap-q21",
+    domainId: "sap-domain-3",
+    domainLabel: "Domain 3: コスト最適化",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "同一リージョン内の複数 AZ にまたがるマイクロサービスと、社外向け大容量メディアダウンロード基盤を運用しています。データ転送コストとコンピュート単価を継続的に削減するため、既存の ARM64 対応コンテナ/EC2 ワークロード移行と配信経路見直しを行う最適な組み合わせはどれですか？",
+    options: [
+      "AWS Graviton プロセッサへの移行で価格性能比を改善し、社外配信は S3 直接ではなく Amazon CloudFront キャッシュ経由へ統合してインターネット転送料単価を抑える",
+      "すべての通信をパブリック IP 経由でクロス AZ 転送させ、NAT Gateway を多段化する",
+      "CloudFront を削除して全リージョンの EC2 から直接インターネットへ配信する",
+      "アクセス頻度が不規則な大規模データをすべてプロビジョンド IOPS SSD (io2) 上に複製保管する",
+    ],
+    correctIndices: [0],
+    explanation:
+      "SAP-C03 Task 3.1/3.2 では AWS Graviton 採用によるコンピュートコスト/サステナビリティ最適化と、CloudFront や PrivateLink/VPC エンドポイントを活用したネットワークデータ転送コスト最適化が問われます。",
+    keywords: ["AWS Graviton", "CloudFront", "データ転送コスト削減"],
+  },
+  {
+    id: "sap-q22",
+    domainId: "sap-domain-5",
+    domainLabel: "Domain 5: 運用上の優秀性と自動化",
+    difficulty: "応用",
+    selectCount: 2,
+    question:
+      "SAP-C03 Domain 5（運用上の優秀性とオートメーション）に基づき、(1) クロスアカウント CI/CD パイプライン内でコンテナイメージの重大な脆弱性 (CVE) をデプロイ前に自動検知して昇格を止める仕組みと、(2) AZ 障害や API レイテンシ悪化時に自動スケーリングやフェイルオーバーが設計通り機能するかを制御された障害注入で定期検証する仕組みを導入したい場合、最適な組み合わせを【2つ】選んでください。",
+    options: [
+      "Amazon ECR のイメージスキャンおよび Amazon Inspector をパイプラインへ統合し、重大脆弱性検出時に昇格ゲートで自動停止する",
+      "AWS Fault Injection Service (FIS) を用いて停止条件（Stop Condition）付きのカオス実験を実施し、AWS Resilience Hub やオブザーバビリティ指標と組み合わせて復旧性を検証する",
+      "本番 EC2 インスタンスを運用者がランダムな時刻に AWS コンソールから手動終了し、アラームが鳴るか目視確認する",
+      "CI/CD のセキュリティスキャンをすべて省略し、本番稼働後に年 1 回の手動チェックのみ実施する",
+      "自動修復アクションのサーキットブレーカーとレート制限をすべて解除し、無制限に再起動ループさせる",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "SAP-C03 Domain 5（Task 5.2 / 5.4）では、DevSecOps パイプラインへの Amazon Inspector / ECR イメージスキャン統合、および AWS Fault Injection Service (FIS) による制御されたカオス試験と安全制約付き（サーキットブレーカー・レート制限・指数バックオフ）自動修復の設計が重視されます。",
+    keywords: ["SAP-C03", "AWS FIS", "Amazon Inspector", "DevSecOps"],
+  },
 ];
 
 export const sapOfficialResources: SaaOfficialResource[] = [
   {
     title: "AWS Certified Solutions Architect – Professional 公式試験ページ",
-    description: "SAP-C02 の公式試験ガイド（PDF）、サンプル問題、受験要項の公式ポータル。",
+    description: "SAP-C03（旧 SAP-C02 は 2026/11/16 終了）の公式試験概要、サンプル問題、受験要項のポータル。",
     url: "https://aws.amazon.com/jp/certification/certified-solutions-architect-professional/",
     badge: "AWS公式",
   },
   {
+    title: "SAP-C03 公式試験ガイド（日本語ドキュメント）",
+    description: "SAP-C02 → SAP-C03 改定比較・5 ドメイン重み（25/25/15/15/20%）・AI/FIS/PQC 出題範囲の一次資料。",
+    url: "https://docs.aws.amazon.com/ja_jp/aws-certification/latest/solutions-architect-professional-03/solutions-architect-professional-03.html",
+    badge: "公式試験ガイド",
+  },
+  {
     title: "AWS Skill Builder (公式デジタル学習プラットフォーム)",
-    description: "SAP-C02 対応の公式練習問題集・模擬試験（Official Practice Exam）や深掘りコースを提供。",
-    url: "https://explore.skillbuilder.aws/learn",
+    description: "SAP 対応の公式練習問題集・模擬試験（Official Practice Exam）や深掘りコースを提供。",
+    url: "https://skillbuilder.aws/",
     badge: "模擬試験あり",
   },
   {
@@ -1256,7 +1488,7 @@ export const sapOfficialResources: SaaOfficialResource[] = [
   },
   {
     title: "AWS Well-Architected フレームワーク",
-    description: "大規模複雑システムにおけるセキュリティ・信頼性・性能・コスト・運用の設計判断基準を体系化。",
+    description: "大規模複雑システムにおけるセキュリティ・信頼性・性能・コスト・運用・持続可能性の設計判断基準を体系化。",
     url: "https://aws.amazon.com/jp/architecture/well-architected/",
     badge: "設計思想",
   },
@@ -1423,7 +1655,7 @@ export const sapKeyLimits: SaaLimitFact[] = [
   },
 ];
 
-const SAP_SERVICE_QUERY_ALIASES: Record<string, string> = {
+export const sapServiceQueryAliases: Record<string, string> = {
   "Gateway VPC Endpoint": "VPC Endpoint",
   "Route 53 Weighted": "Weighted",
   "Systems Manager": "Systems Manager",
@@ -1447,11 +1679,17 @@ const SAP_SERVICE_QUERY_ALIASES: Record<string, string> = {
   "AWS Backup": "Backup",
   "AWS Budgets": "Budgets",
   "AWS X-Ray": "X-Ray",
+  "VPC Lattice": "VPC Lattice",
+  "Lake Formation": "Lake Formation",
+  "Bedrock Knowledge Bases": "Knowledge Bases",
+  "SageMaker AI": "SageMaker AI",
+  "IAM Roles Anywhere": "IAM Roles Anywhere",
+  "EKS Pod Identity": "EKS Pod Identity",
+  "Bedrock Guardrails": "Guardrails",
+  "AWS Artifact": "Artifact",
+  "Cost Categories": "Cost Categories",
+  "AWS Resilience Hub": "Resilience Hub",
+  "Amazon Inspector": "Inspector",
+  "ADOT": "ADOT",
+  "AWS FIS": "FIS",
 };
-
-/** 4ドメイン内のサービスバッジ名を、比較表・逆引き検索にヒットする正規化クエリへ変換する */
-export function resolveSapServiceQuery(serviceName: string): string {
-  const mapped = SAP_SERVICE_QUERY_ALIASES[serviceName];
-  if (mapped) return mapped;
-  return serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
-}

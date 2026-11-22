@@ -8,15 +8,16 @@ import type {
   SaaArchitecturePattern,
   SaaPitfall,
   SaaLimitFact,
-} from "@/data/aws-saa";
+} from "@/data/aws-types";
 
-// 出典: AWS Certified Developer - Associate (DVA-C02) 公式試験ガイド
+// 出典: AWS Certified Developer - Associate (DVA-C03) 公式試験ガイド (旧 DVA-C02 は 2026/11/30 終了・2026/12/01 より DVA-C03)
+// https://docs.aws.amazon.com/ja_jp/aws-certification/latest/developer-associate-03/developer-associate-03.html
 export const dvaExamFacts: SaaExamFact[] = [
-  { label: "試験コード", value: "DVA-C02", detail: "Associate レベル" },
+  { label: "試験コード", value: "DVA-C03", detail: "Associate（旧DVA-C02は2026/11/30終了・12/01開始）" },
   { label: "試験時間", value: "130 分", detail: "約2時間10分" },
   { label: "問題数", value: "65 問", detail: "採点50問 + 非採点15問" },
   { label: "合格ライン", value: "720 点", detail: "100〜1000点スケール" },
-  { label: "出題形式", value: "択一 / 複数", detail: "サーバーレス・API・CI/CD・開発最適化中心" },
+  { label: "出題形式", value: "択一 / 複数", detail: "サーバーレス・コンテナ・AI統合・CI/CD開発最適化" },
   { label: "受験料", value: "$150 USD", detail: "ピアソンVUE / オンライン可" },
 ];
 
@@ -26,10 +27,10 @@ export const dvaDomains: SaaDomain[] = [
     number: 1,
     title: "AWS のサービスによる開発",
     englishTitle: "Development with AWS Services",
-    weight: 32,
+    weight: 30,
     accentColor: "indigo",
     summary:
-      "出題比率最大の 32%。AWS Lambda の呼び出しモデル・ESM・同時実行制御、API Gateway のルーティングと統合、SQS/SNS/EventBridge/Step Functions によるイベント駆動、DynamoDB の設計と最適化が深く問われます。",
+      "出題比率最大の 30%（DVA-C03 改定）。AWS Lambda の呼び出しモデル・ESM・同時実行制御、API Gateway、SQS/SNS/EventBridge/Step Functions、DynamoDB の設計に加え、AI 支援開発ツールおよびマネージド AWS AI サービス統合（Amazon Bedrock 等）が問われます。",
     topics: [
       {
         id: "dva-d1-t1",
@@ -53,7 +54,7 @@ export const dvaDomains: SaaDomain[] = [
       },
       {
         id: "dva-d1-t2",
-        title: "Amazon API Gateway とイベント駆動・非同期メッセージング連携",
+        title: "Amazon API Gateway とイベント駆動・非同期メッセージング・AI 統合",
         services: [
           "Amazon API Gateway",
           "Amazon SQS",
@@ -61,12 +62,13 @@ export const dvaDomains: SaaDomain[] = [
           "Amazon EventBridge",
           "Kinesis Data Streams",
           "DLQ",
+          "Amazon Bedrock",
         ],
         keyPoints: [
           "API Gateway は REST API（Usage Plans/API Key/VTL/レスポンスキャッシュ/Private API 対応）、HTTP API（低遅延・低コスト・JWT/IAM 認可）、WebSocket API（$connect/$disconnect/$default による双方向通信）を使い分ける",
           "SQS Standard は高スループット・少なくとも 1 回配信、FIFO キューは厳密な順序（MessageGroupId）と 5 分間の重複排除（MessageDeduplicationId）を保証する（バッチなし 300 TPS / バッチあり 3,000 TPS）",
-          "Amazon EventBridge はイベントの JSON コンテンツに基づく高度なルールフィルタリング・Input Transformer による整形・SaaS イベント連携・API Destinations を提供する",
-          "Kinesis Data Streams はシャード単位（入力 1 MB/s・出力 2 MB/s）でリアルタイムデータを順序保持し、同一 PartitionKey を同じシャードへルーティングする",
+          "Amazon EventBridge はイベントの JSON コンテンツに基づく高度なルールフィルタリング・Input Transformer による整形・SaaS イベント連携・API Destinations を提供し、Kinesis Data Streams はシャード単位（入力 1 MB/s・出力 2 MB/s）でリアルタイム順序保持を担う",
+          "DVA-C03 追加範囲: AI 支援開発ツールによる仕様駆動コード生成・自動レビュー・リファクタリングを活用し、Amazon Bedrock などのマネージド AWS AI サービスを SDK / 非同期パイプライン経由でアプリケーションに統合する",
         ],
         examTip:
           "「Usage Plans と API キーによるクライアント別スロットリング」や「レスポンスキャッシュ」が必要なら HTTP API ではなく REST API を選ぶ。",
@@ -101,7 +103,7 @@ export const dvaDomains: SaaDomain[] = [
     weight: 26,
     accentColor: "emerald",
     summary:
-      "出題比率 26%。Cognito による認証・フェデレーション、API Gateway Authorizer、IAM/STS/SigV4、KMS エンベロープ暗号化、Secrets Manager / Parameter Store による安全なシークレット管理が問われます。",
+      "出題比率 26%。Cognito 認証・Authorizer・IAM/STS/SigV4・KMS エンベロープ暗号化・Secrets 管理に加え、DVA-C03 新設 Task 2.3 の AI サービス利用セキュリティ（VPC エンドポイントプライベート接続・Bedrock Guardrails・エージェント認可/HITL）が問われます。",
     topics: [
       {
         id: "dva-d2-t1",
@@ -144,38 +146,40 @@ export const dvaDomains: SaaDomain[] = [
       },
       {
         id: "dva-d2-t3",
-        title: "シークレット保護・一時URL発行・Web境界防御",
+        title: "シークレット保護・一時URL発行・AI サービス利用セキュリティ (Task 2.3)",
         services: [
           "AWS Secrets Manager",
           "Parameter Store",
           "S3 Presigned URL",
           "CloudFront Signed URL",
           "AWS WAF",
+          "Bedrock Guardrails",
+          "VPC Endpoint",
         ],
         keyPoints: [
-          "AWS Secrets Manager は RDS/Aurora/Redshift 等の認証情報を保管し Lambda による自動ローテーションをネイティブ提供する（アプリコードへのシークレット埋め込みや平文環境変数保存を排除）",
-          "Systems Manager Parameter Store は階層構造（/app/prod/db-host 等）で設定値や KMS 暗号化 SecureString を安価に管理できる（スタンダード層は無料・最大 4 KB、ネイティブ自動ローテーション機能は非搭載）",
-          "S3 Presigned URL（署名付き URL）を発行すると、バケットを非公開のまま IAM 権限を委譲して期限付きアップロード/ダウンロード（PUT/GET）をクライアントへ直接許可できる",
-          "CloudFront Signed URL / Signed Cookie はエッジ配信コンテンツの限定公開に用い、AWS WAF は API Gateway / ALB / CloudFront 上の SQLi・XSS・レート制限を防御する",
+          "AWS Secrets Manager は RDS/Aurora/Redshift 等の認証情報を保管し Lambda による自動ローテーションをネイティブ提供。Systems Manager Parameter Store は階層設定・KMS 暗号化 SecureString（Standard 無料・最大 4 KB）を管理する",
+          "S3 Presigned URL（署名付き URL）や CloudFront Signed URL / Signed Cookie で時間制限付きの限定公開を行い、AWS WAF で L7 境界を防御する",
+          "DVA-C03 Task 2.3（AI サービスセキュリティ）: Interface 型 VPC エンドポイントでプライベート接続してプロンプト/応答がモデル再学習に使われないようデータプライバシーを制御し、Amazon Bedrock Guardrails でコンテンツフィルタ・PII/PHI リダクション・拒否トピック・プロンプトインジェクション対策を強制する",
+          "AI エージェントとの連携ではツール実行の最小権限認可・セッション分離・機密操作に対する Human-in-the-Loop (HITL) 承認フローを実装し、CloudWatch 等モニタリングログへの機密情報混入を防ぐ",
         ],
         examTip:
-          "「DB パスワードを 30 日ごとに自動ローテーション」＝ Secrets Manager。「安価な階層設定値・暗号化文字列」＝ Parameter Store SecureString。",
+          "「AI 呼び出しを閉域化し入出力 PII 検出＋ツール認可」＝ Interface VPC Endpoint ＋ Bedrock Guardrails ＋ セッション分離/HITL承認。",
       },
     ],
   },
   {
     id: "dva-domain-3",
     number: 3,
-    title: "デプロイ",
-    englishTitle: "Deployment",
-    weight: 24,
+    title: "テストとデプロイ",
+    englishTitle: "Testing and Deployment",
+    weight: 22,
     accentColor: "amber",
     summary:
-      "出題比率 24%。AWS SAM・CloudFormation・CDK による IaC、Lambda バージョン/エイリアスと段階的トラフィックシフト、CodePipeline/CodeBuild/CodeDeploy による CI/CD 自動化、Elastic Beanstalk / ECS / AppConfig が問われます。",
+      "出題比率 22%（DVA-C03 で「テストとデプロイ」へ改称）。AWS SAM / CloudFormation / CDK、SAM ユニットテスト・AI テスト生成、Amazon ECR コンテナイメージと ECS / EKS / Fargate デプロイ、CodePipeline/CodeDeploy が問われます。",
     topics: [
       {
         id: "dva-d3-t1",
-        title: "IaC とサーバーレスデプロイ（AWS SAM / CloudFormation / AWS CDK）",
+        title: "IaC・テスト自動化・サーバーレス展開（SAM / CloudFormation / CDK）",
         services: [
           "AWS SAM",
           "AWS CloudFormation",
@@ -184,17 +188,17 @@ export const dvaDomains: SaaDomain[] = [
           "API Gateway Stages",
         ],
         keyPoints: [
-          "AWS SAM は CloudFormation 拡張（Transform: AWS::Serverless-2016-10-31）であり、sam build / sam local invoke / sam package / sam deploy に加え AutoPublishAlias + DeploymentPreference で Lambda の安全な Canary/Linear デプロイを自動構成する",
-          "CloudFormation は Change Sets（変更セット）で事前差分確認、Stack Policy で重要リソース保護、DeletionPolicy（Retain/Snapshot）で削除保護、Outputs Export + Fn::ImportValue でクロススタック参照を行う",
-          "AWS CDK は TypeScript/Python 等の汎用言語（L1/L2/L3 Construct）でインフラを記述し、cdk synth で CloudFormation テンプレートを生成して cdk deploy する",
-          "Lambda Versions（不変スナップショット）と Aliases（バージョンへの可変ポインタ＋加重トラフィック分割）、API Gateway Stages と Stage Variables（${stageVariables.alias}）を組み合わせて環境切替とカナリアリリースを行う",
+          "AWS SAM は sam build / sam local invoke / sam package / sam deploy に加え、SAM を用いたユニットテスト（Task 3.2 再分類）および AutoPublishAlias + DeploymentPreference による安全な Canary/Linear 展開を自動化できる",
+          "CloudFormation は Change Sets（変更セット）、Stack Policy、DeletionPolicy（Retain/Snapshot）、Outputs Export + Fn::ImportValue で安全に差分適用・スタック間連携を行う",
+          "AWS CDK は TypeScript/Python 等の汎用言語（L1/L2/L3 Construct）でインフラを記述・ユニットテストし、cdk synth 経由で cdk deploy する。AWS AI ツールでテストケース生成や回帰テスト自動化を支援できる",
+          "Lambda Versions / Aliases（加重トラフィック分割）と API Gateway Stages / Stage Variables（${stageVariables.alias}）を組み合わせて環境切替とカナリアリリースを行う",
         ],
         examTip:
-          "「ローカルで Docker を使って Lambda と API Gateway をテスト」＝ sam local invoke / sam local start-api。",
+          "「ローカルで Docker を使って Lambda と API Gateway をユニットテスト・検証」＝ sam local invoke / sam local start-api。",
       },
       {
         id: "dva-d3-t2",
-        title: "CI/CD パイプラインとテスト・デプロイ自動化（CodePipeline / CodeBuild / CodeDeploy）",
+        title: "CI/CD パイプラインとコンテナレジストリ（CodePipeline / CodeBuild / CodeDeploy / ECR）",
         services: [
           "AWS CodePipeline",
           "AWS CodeBuild",
@@ -204,31 +208,31 @@ export const dvaDomains: SaaDomain[] = [
           "AWS CodeArtifact",
         ],
         keyPoints: [
-          "AWS CodePipeline は Source → Build → Test → Deploy のステージを連結し、アーティファクトを S3 で受け渡す。本番デプロイ前には Manual Approval（手動承認）アクションを挟める",
-          "AWS CodeBuild は buildspec.yml（install / pre_build / build / post_build フェーズ）で単体テストやビルドを実行し、Docker ビルド時は privilegedMode: true を有効化して Amazon ECR へイメージをプッシュする",
-          "AWS CodeDeploy は appspec.yml を使い EC2（In-place / Blue-Green）、ECS（Blue-Green）、Lambda（Canary / Linear / AllAtOnce）のデプロイと BeforeAllowTraffic / AfterAllowTraffic フック検証＋CloudWatch アラーム連動自動ロールバックを行う",
-          "AWS CodeArtifact は npm / PyPI / Maven / NuGet 等のプライベートソフトウェアパッケージと依存関係を安全に一元管理・キャッシュする",
+          "AWS CodePipeline は Source → Build → Test → Deploy を S3 アーティファクト連携でオーケストレーションし、Manual Approval（手動承認）や AWS AI ツールによるデプロイ検証・自動承認判断を組み合わせる",
+          "AWS CodeBuild は buildspec.yml で単体テストやビルドを実行し、Docker ビルド時は privilegedMode: true を有効化して Amazon ECR へプッシュする（ECR タグ付け・ライフサイクルポリシー・イメージ脆弱性スキャンも出題対象）",
+          "AWS CodeDeploy は appspec.yml を使い EC2 / ECS / Lambda の Canary / Linear / Blue-Green 展開と BeforeAllowTraffic / AfterAllowTraffic フック検証＋CloudWatch アラーム連動自動ロールバックを行う",
+          "AWS CodeArtifact は npm / PyPI / Maven / NuGet 等のプライベートパッケージ依存関係を安全に一元管理・キャッシュする",
         ],
         examTip:
-          "「CodeBuild で Docker build が失敗する」＝ privilegedMode 未有効化。「トラフィック切替前のスモークテスト」＝ appspec.yml の BeforeAllowTraffic フック。",
+          "「CodeBuild で Docker build が失敗する」＝ privilegedMode 未有効化。「ECR 古いイメージ自動削除＆脆弱性検知」＝ ECR ライフサイクルポリシー＆イメージスキャン。",
       },
       {
         id: "dva-d3-t3",
-        title: "Elastic Beanstalk・コンテナデプロイ・動的設定管理（AppConfig）",
+        title: "コンテナ（ECS / EKS / Fargate）・Elastic Beanstalk・AppConfig",
         services: [
           "AWS Elastic Beanstalk",
           "Amazon ECS",
+          "Amazon EKS",
           "AWS Fargate",
           "AWS AppConfig",
         ],
         keyPoints: [
-          "AWS Elastic Beanstalk はコードと .ebextensions / .platform 設定でアプリ基盤を自動管理し、All at once / Rolling / Rolling with additional batch / Immutable / Traffic splitting / Blue-Green のデプロイポリシーを提供する",
-          "Elastic Beanstalk でダウンタイムなし・既存容量維持・迅速なロールバックを両立したい場合は Immutable デプロイ（新 ASG に健全インスタンスを起動して切替、失敗時は新 ASG を破棄）を選ぶ",
-          "Amazon ECS on AWS Fargate はサーバー管理不要でコンテナを実行し、CodeDeploy と連携した Blue/Green デプロイや Task Definition の IAM タスクロール（ECS タスク単位の最小権限）を適用できる",
-          "AWS AppConfig はアプリの再デプロイなしにフィーチャーフラグや動的設定を JSON Schema / Lambda で事前検証し、アラーム監視付きで段階的ロールアウトする",
+          "AWS Elastic Beanstalk は All at once / Rolling / Immutable / Traffic splitting / Blue-Green の各ポリシーを提供し、ダウンタイムなし・容量維持・高速ロールバックには Immutable を選ぶ",
+          "DVA-C03 Task 3.3 強化: Amazon ECS のタスク定義と AWS Fargate 起動タイプ、または Amazon EKS マニフェスト（Deployment・ローリング更新）を用いてコンテナ化アプリをデプロイする（コンテナの IAM 権限には ECS Task Role を使用）",
+          "AWS AppConfig はアプリの再デプロイなしにフィーチャーフラグや動的設定を JSON Schema / Lambda で検証し、アラーム監視付きで段階的ロールアウトする",
         ],
         examTip:
-          "「コード再デプロイなしで機能フラグを安全に段階配信＆自動ロールバック」＝ AWS AppConfig。",
+          "「コード再デプロイなしで機能フラグを段階配信＆自動ロールバック」＝ AWS AppConfig。「K8s 運用や Fargate タスク定義でロール分離」＝ ECS Task Role / EKS マニフェスト。",
       },
     ],
   },
@@ -237,10 +241,10 @@ export const dvaDomains: SaaDomain[] = [
     number: 4,
     title: "トラブルシューティングと最適化",
     englishTitle: "Troubleshooting and Optimization",
-    weight: 18,
+    weight: 22,
     accentColor: "cyan",
     summary:
-      "出題比率 18%。AWS X-Ray による分散トレース計装（Annotations vs Metadata）、CloudWatch Logs Insights / EMF による可観測性、エラー切り分け・リトライ設計、コールドスタートやキャッシュの最適化が問われます。",
+      "出題比率 22%（DVA-C03 で拡大・Lambda パフォーマンスチューニングを再分類統合）。X-Ray 分散トレース（Annotations vs Metadata）、CloudWatch Logs Insights / EMF、AWS AI ツールを活用したエラー分析と最適化提案、コールドスタート/キャッシュ設計が問われます。",
     topics: [
       {
         id: "dva-d4-t1",
@@ -290,7 +294,7 @@ export const dvaDomains: SaaDomain[] = [
           "SQS Long Polling",
         ],
         keyPoints: [
-          "Lambda コールドスタート最適化: SDK クライアントや DB 接続をハンドラー関数の外で初期化してウォーム実行間で再利用し、不要パッケージ削減・適切なメモリ増量（CPU とネットワーク帯域も比例増加）・Provisioned Concurrency / SnapStart を組み合わせる",
+          "Lambda コールドスタート＆パフォーマンスチューニング（DVA-C03 D4 再分類）: SDK クライアントや DB 接続をハンドラー外で初期化して再利用し、不要パッケージ削減・適切なメモリ増量（CPU とネットワーク帯域も比例増加）・Provisioned Concurrency / SnapStart を組み合わせる。AWS AI ツールでボトルネック分析・最適化提案も可能",
           "API Gateway Caching（REST API ステージキャッシュ: 0.5 GB〜237 GB、TTL 0〜3,600 秒）で GET 応答をキャッシュし、バックエンド呼び出しと課金を削減できる（Cache-Control: max-age=0 でバイパス可）",
           "ElastiCache キャッシュ戦略: Lazy Loading（キャッシュミス時のみ DB 取得して格納・TTL で古いデータ対策）と Write-Through（DB 書き込み時に同時更新・常に最新だが書き込み遅延と未使用データの消費あり）を使い分ける",
           "SQS Long Polling（ReceiveMessageWaitTimeSeconds: 1〜20 秒）を設定すると空レスポンスを排除でき、受信コスト削減とレイテンシ改善を両立できる",
@@ -561,9 +565,16 @@ export const dvaComparisons: SaaComparisonTable[] = [
           "API Gateway や CloudFront の HTTPS 終端には ACM。有料コンテンツや期限付きグローバル配布には CloudFront Signed URL / Cookie",
         ],
       },
+      {
+        feature: "Amazon Bedrock & Bedrock Guardrails（VPC Endpoint）",
+        values: [
+          "Interface VPC Endpoint で閉域接続し入出力のモデル学習オプトアウトを維持。Guardrails で PII/PHI 検出・拒否トピック・プロンプトインジェクション制御",
+          "DVA-C03 Task 2.3 中核。AI エージェントのツール使用認可・セッション分離・HITL 承認およびログ内の機密データ保護を実施",
+        ],
+      },
     ],
     decisionRule:
-      "「JWT 発行」＝ Cognito User Pools、「S3 直接アクセス用の一時 IAM 認証」＝ Identity Pools、「4 KB 超暗号化」＝ KMS Envelope Encryption。",
+      "「JWT 発行」＝ Cognito User Pools、「S3 直接アクセス用の一時 IAM 認証」＝ Identity Pools、「4 KB 超暗号化」＝ KMS Envelope Encryption、「AI 入出力の PII 制御と閉域接続」＝ Bedrock Guardrails ＋ VPC Endpoint。",
   },
   {
     id: "dva-comp-iac",
@@ -633,9 +644,9 @@ export const dvaComparisons: SaaComparisonTable[] = [
         ],
       },
       {
-        feature: "AWS CodeDeploy (appspec.yml) & ECS / AWS Fargate",
+        feature: "AWS CodeDeploy (appspec.yml) & ECS / EKS / AWS Fargate",
         values: [
-          "EC2（In-place / Blue-Green）、Amazon ECS on AWS Fargate（Blue-Green）、Lambda（Versions & Aliases トラフィックシフト）に対応",
+          "EC2（In-place / Blue-Green）、Amazon ECS on AWS Fargate（Blue-Green）、Amazon EKS マニフェスト（Deployment ローリング更新）、Lambda（Versions & Aliases トラフィックシフト: Canary / Linear）に対応",
           "Lambda/ECS では BeforeAllowTraffic / AfterAllowTraffic フックで自動テストを実行。ECS タスク自体の AWS API 権限は Task Role に付与",
         ],
       },
@@ -649,8 +660,8 @@ export const dvaComparisons: SaaComparisonTable[] = [
       {
         feature: "Amazon ECR & AWS CodeArtifact",
         values: [
-          "ECR: フルマネージド Docker コンテナレジストリ（Lambda コンテナ最大 10 GB・脆弱性スキャン） / CodeArtifact: 依存パッケージ管理",
-          "プライベート npm/PyPI/Maven パッケージの安全共有やビルドキャッシュには CodeArtifact、コンテナ格納は ECR",
+          "ECR: フルマネージド Docker コンテナレジストリ（タグ付け・ライフサイクルポリシー・イメージ脆弱性スキャン） / CodeArtifact: 依存パッケージ管理",
+          "DVA-C03 Task 3.1/3.3 強化。古い未タグイメージ自動削除は ECR ライフサイクルポリシー、プライベート npm/PyPI 共有は CodeArtifact",
         ],
       },
     ],
@@ -806,6 +817,18 @@ export const dvaQuickLookup: SaaQuickLookupItem[] = [
     category: "最適化",
     recommended: "SQS Long Polling (ReceiveMessageWaitTimeSeconds: 1〜20 秒)",
     reason: "メッセージ到着まで接続を最大 20 秒待機させることで、空のレスポンス回数と API リクエスト課金を大幅に削減できます。",
+  },
+  {
+    keyword: "生成 AI アプリへの入出力から PII をマスクしインターネット非経由で接続したい",
+    category: "セキュリティ",
+    recommended: "Amazon Bedrock Guardrails + Interface VPC Endpoint",
+    reason: "DVA-C03 Task 2.3 対応。PrivateLink 接続とモデル学習オプトアウトを保ちつつ、PII/PHI リダクションとプロンプトインジェクション制御を強制できます。",
+  },
+  {
+    keyword: "コンテナイメージの脆弱性スキャンと古い未タグイメージの自動削除を行いたい",
+    category: "テスト・デプロイ",
+    recommended: "Amazon ECR（スキャン + ライフサイクルポリシー）& ECS / EKS",
+    reason: "DVA-C03 Domain 3 強化。ECR ライフサイクルポリシーで不要イメージを自動整理し、スキャン後に ECS Fargate / EKS へ安全にデプロイします。",
   },
 ];
 
@@ -966,7 +989,7 @@ export const dvaPracticeQuestions: SaaQuestion[] = [
   {
     id: "dva-q9",
     domainId: "dva-domain-3",
-    domainLabel: "Domain 3: デプロイ",
+    domainLabel: "Domain 3: テストとデプロイ",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -985,7 +1008,7 @@ export const dvaPracticeQuestions: SaaQuestion[] = [
   {
     id: "dva-q10",
     domainId: "dva-domain-3",
-    domainLabel: "Domain 3: デプロイ",
+    domainLabel: "Domain 3: テストとデプロイ",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -1004,7 +1027,7 @@ export const dvaPracticeQuestions: SaaQuestion[] = [
   {
     id: "dva-q11",
     domainId: "dva-domain-3",
-    domainLabel: "Domain 3: デプロイ",
+    domainLabel: "Domain 3: テストとデプロイ",
     difficulty: "標準",
     selectCount: 1,
     question:
@@ -1023,7 +1046,7 @@ export const dvaPracticeQuestions: SaaQuestion[] = [
   {
     id: "dva-q12",
     domainId: "dva-domain-3",
-    domainLabel: "Domain 3: デプロイ",
+    domainLabel: "Domain 3: テストとデプロイ",
     difficulty: "標準",
     selectCount: 2,
     question:
@@ -1116,19 +1139,64 @@ export const dvaPracticeQuestions: SaaQuestion[] = [
       "API Gateway の Lambda プロキシ統合で Lambda 自体がエラーなく終了したにもかかわらず `502 Bad Gateway` が返る典型的な原因は、戻り値フォーマットがプロキシ統合仕様（`statusCode` が整数、`body` が JSON 文字列など）に準拠していないことです（なお 29 秒超過時は `504 Gateway Timeout` になります）。",
     keywords: ["API Gateway 502", "Lambdaプロキシ統合", "トラブルシューティング"],
   },
+  {
+    id: "dva-q17",
+    domainId: "dva-domain-2",
+    domainLabel: "Domain 2: セキュリティ",
+    difficulty: "標準",
+    selectCount: 2,
+    question:
+      "DVA-C03 Task 2.3 の要件に従い、社内開発の Lambda アプリから Amazon Bedrock 基盤モデルを呼び出し、ツール実行を行う AI エージェント基盤を構築しています。「プロンプト・応答がインターネットを経由しないプライベート接続を確立しつつモデル再学習に使われないこと」と「個人情報（PII）のマスキング・拒否トピック制御およびプロンプトインジェクション防御を共通適用すること」を満たす構成を【2つ】選んでください。",
+    options: [
+      "VPC 内に Amazon Bedrock 用の Interface 型 VPC エンドポイント（AWS PrivateLink）を構成してプライベート接続する",
+      "Amazon Bedrock Guardrails を構成して PII/PHI リダクション・拒否トピック・プロンプトインジェクション防御を適用する",
+      "プロンプト文字列と応答全文（PII 含む）を無加工のままパブリック S3 バケットと平文 CloudWatch ログへ出力する",
+      "AI エージェントが実行する機密ツール操作を認証なしで誰でも呼べるようにしセッションを全ユーザーで共有する",
+      "API キーを Lambda 環境変数に平文ハードコードし、パブリックインターネット経由で外部 LLM を呼び出す",
+    ],
+    correctIndices: [0, 1],
+    explanation:
+      "DVA-C03 で新設された Task 2.3（AI サービス利用セキュリティ）では、VPC エンドポイントによるプライベート接続、入出力データのモデルトレーニング非利用、Amazon Bedrock Guardrails によるコンテンツフィルタ/PII リダクション/インジェクション防御、エージェントのツール認可・セッション分離・HITL 承認が重視されます。",
+    keywords: ["DVA-C03 Task 2.3", "Bedrock Guardrails", "VPC Endpoint", "複数選択"],
+  },
+  {
+    id: "dva-q18",
+    domainId: "dva-domain-3",
+    domainLabel: "Domain 3: テストとデプロイ",
+    difficulty: "標準",
+    selectCount: 1,
+    question:
+      "Amazon EKS および Amazon ECS on AWS Fargate 向けのコンテナイメージを CI/CD パイプラインで継続的にビルド・デプロイしています。「イメージプッシュ時の脆弱性自動スキャン」と「古い未タグ（untagged）イメージがレジストリに蓄積するのを自動削除ルールで防ぐこと」を低運用コストで実現する最適な組み合わせはどれですか？",
+    options: [
+      "Amazon ECR リポジトリでプッシュ時イメージスキャンとライフサイクルポリシー（Lifecycle Policy）を設定し、EKS マニフェスト / ECS タスク定義のローリング更新でデプロイする",
+      "Docker Hub のパブリックリポジトリに本番イメージを公開し、毎月手動で削除する",
+      "Amazon S3 に Dockerfile だけ保存し、本番ポッド起動時に毎回インターネットから apt install する",
+      "Amazon CloudWatch Logs の保持期間を 1 日に設定してレジストリ容量を削減する",
+    ],
+    correctIndices: [0],
+    explanation:
+      "DVA-C03（テストとデプロイ）ではコンテナイメージ管理（Amazon ECR のスキャン・タグ付け・ライフサイクルポリシー）および ECS タスク定義 / EKS マニフェスト・Fargate を用いたデプロイが出題強化されています。",
+    keywords: ["Amazon ECR", "ライフサイクルポリシー", "EKS / ECS Fargate"],
+  },
 ];
 
 export const dvaOfficialResources: SaaOfficialResource[] = [
   {
-    title: "AWS Certified Developer – Associate (DVA-C02) 公式試験ページ",
-    description: "DVA-C02 の試験概要、最新の試験ガイド（PDF）、公式サンプル問題、受験予約への公式ポータル。",
+    title: "AWS Certified Developer – Associate 公式試験ページ",
+    description: "DVA-C03（旧 DVA-C02 は 2026/11/30 終了）の試験概要、サンプル問題、受験予約への公式ポータル。",
     url: "https://aws.amazon.com/jp/certification/certified-developer-associate/",
     badge: "AWS公式",
   },
   {
+    title: "DVA-C03 公式試験ガイド（日本語ドキュメント）",
+    description: "DVA-C02 → DVA-C03 改定比較・新設 Task 2.3（AI セキュリティ）・4 ドメイン重み（30/26/22/22%）の一次資料。",
+    url: "https://docs.aws.amazon.com/ja_jp/aws-certification/latest/developer-associate-03/developer-associate-03.html",
+    badge: "公式試験ガイド",
+  },
+  {
     title: "AWS Skill Builder (公式デジタル学習プラットフォーム)",
-    description: "DVA-C02 対応の公式練習問題セット（Official Practice Question Set）やサーバーレス開発ラボを提供。",
-    url: "https://explore.skillbuilder.aws/learn",
+    description: "DVA 対応の公式練習問題セット（Official Practice Question Set）やサーバーレス・コンテナ開発ラボを提供。",
+    url: "https://skillbuilder.aws/",
     badge: "無料演習あり",
   },
   {
@@ -1307,7 +1375,7 @@ export const dvaKeyLimits: SaaLimitFact[] = [
   },
 ];
 
-const DVA_SERVICE_QUERY_ALIASES: Record<string, string> = {
+export const dvaServiceQueryAliases: Record<string, string> = {
   "Lambda Concurrency": "Concurrency",
   "Lambda SnapStart": "SnapStart",
   "Lambda Layers": "Layers",
@@ -1327,11 +1395,6 @@ const DVA_SERVICE_QUERY_ALIASES: Record<string, string> = {
   "Cold Start Optimization": "コールドスタート",
   "ElastiCache Caching Strategies": "Lazy Loading",
   "SQS Long Polling": "Long Polling",
+  "Bedrock Guardrails": "Guardrails",
+  "VPC Endpoint": "VPC Endpoint",
 };
-
-/** 4ドメイン内のサービスバッジ名を、比較表・逆引き検索にヒットする正規化クエリへ変換する */
-export function resolveDvaServiceQuery(serviceName: string): string {
-  const mapped = DVA_SERVICE_QUERY_ALIASES[serviceName];
-  if (mapped) return mapped;
-  return serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
-}

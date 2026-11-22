@@ -8,9 +8,10 @@ import type {
   SaaArchitecturePattern,
   SaaPitfall,
   SaaLimitFact,
-} from "@/data/aws-saa";
+} from "@/data/aws-types";
 
 // 出典: AWS Certified CloudOps Engineer - Associate (SOA-C03) 公式試験ガイド
+// https://docs.aws.amazon.com/ja_jp/aws-certification/latest/sysops-administrator-associate-03/sysops-administrator-associate-03.html
 export const soaExamFacts: SaaExamFact[] = [
   { label: "試験コード", value: "SOA-C03", detail: "Associate レベル・旧SysOps改定" },
   { label: "試験時間", value: "130 分", detail: "約2時間10分" },
@@ -1353,15 +1354,22 @@ export const soaOfficialResources: SaaOfficialResource[] = [
   {
     title: "AWS Certified CloudOps Engineer – Associate 公式試験ページ",
     description:
-      "SOA-C03（旧 SysOps Administrator - Associate 改定版）の試験概要、公式試験ガイド（PDF）、サンプル問題、受験予約の公式ポータル。",
+      "SOA-C03（旧 SysOps Administrator - Associate 改定版）の試験概要、公式試験ガイド、サンプル問題、受験予約の公式ポータル。",
     url: "https://aws.amazon.com/jp/certification/certified-cloudops-engineer-associate/",
     badge: "AWS公式",
+  },
+  {
+    title: "SOA-C03 公式試験ガイド（日本語ドキュメント）",
+    description:
+      "5 ドメインの重み付け（22/22/22/16/18%）・運用タスク・出題範囲の一次資料。",
+    url: "https://docs.aws.amazon.com/ja_jp/aws-certification/latest/sysops-administrator-associate-03/sysops-administrator-associate-03.html",
+    badge: "公式試験ガイド",
   },
   {
     title: "AWS Skill Builder (公式デジタル学習プラットフォーム)",
     description:
       "SOA-C03 対応の CloudOps 実践ラボ、Exam Prep コース、公式模擬試験（Official Practice Question Set）を提供。",
-    url: "https://explore.skillbuilder.aws/learn",
+    url: "https://skillbuilder.aws/",
     badge: "無料演習あり",
   },
   {
@@ -1380,7 +1388,7 @@ export const soaOfficialResources: SaaOfficialResource[] = [
   },
 ];
 
-const SOA_SERVICE_QUERY_ALIASES: Record<string, string> = {
+export const soaServiceQueryAliases: Record<string, string> = {
   "CloudWatch Composite Alarms": "Composite Alarms",
   "CloudWatch Synthetics": "Synthetics",
   "CloudWatch Logs Insights": "Logs Insights",
@@ -1401,10 +1409,3 @@ const SOA_SERVICE_QUERY_ALIASES: Record<string, string> = {
   "VPC Flow Logs": "VPC Flow Logs",
   "VPC Endpoint": "VPC Endpoint",
 };
-
-/** 5ドメイン内のサービスバッジ名を、比較表・逆引き検索にヒットする正規化クエリへ変換する */
-export function resolveSoaServiceQuery(serviceName: string): string {
-  const mapped = SOA_SERVICE_QUERY_ALIASES[serviceName];
-  if (mapped) return mapped;
-  return serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
-}

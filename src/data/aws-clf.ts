@@ -8,9 +8,11 @@ import type {
   SaaArchitecturePattern,
   SaaPitfall,
   SaaLimitFact,
-} from "@/data/aws-saa";
+} from "@/data/aws-types";
 
-// 出典: AWS Certified Cloud Practitioner (CLF-C02) 公式試験ガイド / AWS 公式ドキュメント
+// 出典: AWS Certified Cloud Practitioner (CLF-C02) 公式試験ガイド / AWS サポートプラン比較公式ページ
+// https://docs.aws.amazon.com/ja_jp/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html
+// https://aws.amazon.com/jp/premiumsupport/plans/
 export const clfExamFacts: SaaExamFact[] = [
   { label: "試験コード", value: "CLF-C02", detail: "Foundational レベル" },
   { label: "試験時間", value: "90 分", detail: "1時間30分" },
@@ -215,7 +217,7 @@ export const clfDomains: SaaDomain[] = [
     weight: 12,
     accentColor: "cyan",
     summary:
-      "AWS 課金の基本要素、EC2 購入オプションの選定、見積り・分析・予算アラート・一括請求ツール、そして 4 種類のサポートプランと Trusted Advisor の違いが問われます。",
+      "AWS 課金の基本要素、EC2 購入オプションの選定、見積り・分析・予算アラート・一括請求ツール、そして最新の AWS サポートプラン 4 種（Basic / ビジネスサポート+ / エンタープライズサポート / Unified Operations）と Trusted Advisor の違いが問われます。",
     topics: [
       {
         id: "clf-d4-t1",
@@ -265,12 +267,12 @@ export const clfDomains: SaaDomain[] = [
           "AWS re:Post",
         ],
         keyPoints: [
-          "サポートプランは Basic（無料・請求/アカウント問い合わせ可）、Developer（営業時間内メール技術サポート）、Business（24/7 電話/チャット/メール・本番ダウン 1 時間未満・Trusted Advisor 全チェック）、Enterprise（ビジネスクリティカル障害 15 分未満・専任 TAM）",
-          "AWS Trusted Advisor は「コスト最適化・パフォーマンス・セキュリティ・耐障害性・サービスクォータ」の 5 カテゴリを自動点検しベストプラクティスを提案する",
-          "AWS Health Dashboard は AWS サービス全体の稼働状況や自アカウントに影響するイベント・メンテナンス情報を通知する",
+          "サポートプランは現行 4 区分: ベーシックサポート（無料・請求/アカウント問い合わせのみ）、AWS ビジネスサポート+（本番最小推奨・24/7 技術サポート/Slack 連携/本番ダウン 1h 未満・クリティカル 30 分未満・Trusted Advisor 全チェック＋AI 支援）、AWS エンタープライズサポート（指定 TAM・クリティカル 15 分未満・Priority チェック・Well-Architected 評価）、AWS Unified Operations（ミッションクリティカル最上位・Incident Management Engineer 5 分未満応答・24/7 監視）。※旧 Developer / Business / Enterprise On-Ramp は 2027年1月1日 に提供終了・移行対象",
+          "AWS Trusted Advisor は「コスト最適化・パフォーマンス・セキュリティ・耐障害性・サービスクォータ」の 5 カテゴリを自動点検しベストプラクティスを提案する（チェック一式はビジネスサポート+ 以上で解放）",
+          "AWS Health Dashboard（および Health API）は AWS サービス全体の稼働状況や自アカウントに影響するイベント・メンテナンス情報を通知する",
           "AWS Marketplace からサードパーティ製ソフトウェアを調達でき、公式 Q&A コミュニティの AWS re:Post で技術的な質問やナレッジ検索も行える",
         ],
-        examTip: "「24/7 電話サポート＋Trusted Advisor 全項目を最小コストで」＝ Business。「専任 TAM＋15分以内応答」＝ Enterprise。「障害状況確認」＝ Health Dashboard。",
+        examTip: "「24/7 技術サポート＋Trusted Advisor 全チェック（本番最小推奨）」＝ ビジネスサポート+。「専任 TAM＋15分未満応答」＝ エンタープライズサポート。「5分未満応答＋24/7監視」＝ Unified Operations。「障害状況確認」＝ Health Dashboard。",
       },
     ],
   },
@@ -536,29 +538,49 @@ export const clfComparisons: SaaComparisonTable[] = [
   {
     id: "comp-clf-support-plans",
     category: "コスト最適化",
-    title: "AWS サポートプラン 4種比較（Basic / Developer / Business / Enterprise）",
-    subtitle: "技術サポート体制・初回応答時間 SLA・Trusted Advisor・専任 TAM の違い",
-    columns: ["比較項目", "Basic", "Developer", "Business", "Enterprise"],
+    title: "AWS サポートプラン 4種比較（Basic / ビジネスサポート+ / エンタープライズ / Unified Operations）",
+    subtitle: "CLF-C02 Task 4.3 準拠の技術サポート体制・応答時間 SLA・Trusted Advisor・専任担当の違い（旧プランは 2027/01 終了）",
+    columns: ["比較項目", "Basic", "ビジネスサポート+", "エンタープライズサポート", "Unified Operations"],
     rows: [
       {
-        feature: "サポート窓口・対象",
-        values: ["請求・アカウント問合せのみ（無料）", "営業時間内のメール技術サポート（1 名）", "24/7 電話・チャット・メール（無制限）", "24/7 電話・チャット・メール（無制限）"],
+        feature: "推奨対象・窓口",
+        values: [
+          "すべてのユーザー（無料・請求/アカウント問合せのみ）",
+          "本番最小推奨（24/7 電話/チャット/メール・Slack 連携・AI トラブルシュート）",
+          "ビジネスクリティカル全体（24/7 技術支援＋コンサルティングレビュー）",
+          "ミッションクリティカル最上位（回復力強化・24/7 プロアクティブ監視）",
+        ],
       },
       {
-        feature: "初回応答時間 SLA",
-        values: ["技術サポートなし", "一般 24 時間未満 / 障害 12 時間未満", "本番システム障害 4 時間未満 / ダウン 1 時間未満", "ビジネスクリティカル障害 15 分未満"],
+        feature: "人による応答時間目標",
+        values: [
+          "技術サポートなし",
+          "クリティカル 30 分未満 / 本番ダウン 1 時間未満",
+          "クリティカル 15 分未満 / 本番ダウン 1 時間未満",
+          "Incident Management Engineer 5 分未満 / 本番ダウン 1 時間未満",
+        ],
       },
       {
         feature: "AWS Trusted Advisor",
-        values: ["コアチェックのみ（セキュリティ基本項目等）", "コアチェックのみ", "全チェック項目利用可能（5 カテゴリ）", "全チェック項目利用可能（5 カテゴリ）"],
+        values: [
+          "基本チェックのみ",
+          "チェック一式（全カテゴリ）利用可能",
+          "チェック一式 ＋ Trusted Advisor Priority",
+          "チェック一式 ＋ Trusted Advisor Priority",
+        ],
       },
       {
-        feature: "専任支援・関連リソース",
-        values: ["AWS Health Dashboard / AWS re:Post / AWS Marketplace", "AWS Health Dashboard / ケース起票", "AWS Support API / Infrastructure Event Management (有料)", "専任 TAM (Technical Account Manager) / IEM 込み / Well-Architected レビュー"],
+        feature: "専任体制・主な付属特典",
+        values: [
+          "AWS Health Dashboard / AWS re:Post / Marketplace",
+          "AWS Support API / DevOps エージェントクレジット 30%",
+          "指定 TAM (Technical Account Manager) / Well-Architected 評価 / Security Incident Response",
+          "指定 Domain Specialist Engineer / Incident Detection and Response / Event 計画",
+        ],
       },
     ],
     decisionRule:
-      "「本番向けに 24/7 電話支援＋Trusted Advisor 全項目を最小コストで」＝ Business、「専任 TAM＋15 分以内応答」＝ Enterprise。",
+      "「本番向けに 24/7 技術支援＋Trusted Advisor 全項目を最小推奨コストで」＝ ビジネスサポート+、「指定 TAM＋15分未満応答」＝ エンタープライズサポート、「5分未満＋24/7プロアクティブ監視」＝ Unified Operations（※旧 Developer/Business/On-Ramp は 2027/1/1 終了）。",
   },
 ];
 
@@ -654,10 +676,10 @@ export const clfQuickLookup: SaaQuickLookupItem[] = [
     reason: "Consolidated Billing により支払いを一本化し、グループ全体の利用量に応じた段階割引や RI/SP 共有が可能です。",
   },
   {
-    keyword: "24/7 技術サポート＋Trusted Advisor 全チェックを最小コストで利用",
+    keyword: "24/7 技術サポート＋Trusted Advisor チェック一式を本番最小推奨で利用",
     category: "サポート",
-    recommended: "Business サポートプラン（TAM 付きは Enterprise）",
-    reason: "Business 以上で 24/7 電話/チャット/メール（本番ダウン 1h 未満）と Trusted Advisor 全項目が解放されます。",
+    recommended: "ビジネスサポート+（TAM 付きは エンタープライズサポート / 最上位は Unified Operations）",
+    reason: "ビジネスサポート+ 以上で 24/7 電話/チャット/メール/Slack・本番ダウン 1h 未満応答（クリティカル 30 分未満）と Trusted Advisor チェック一式が解放されます。",
   },
 ];
 
@@ -956,17 +978,17 @@ export const clfPracticeQuestions: SaaQuestion[] = [
     difficulty: "標準",
     selectCount: 1,
     question:
-      "本番稼働システムを運用する企業が、「24時間365日の電話・チャット・メールによる技術サポート」「本番システムダウン時の 1 時間未満の初回応答 SLA」「AWS Trusted Advisor の全チェック項目」を、最も低いサポートプランコストで満たしたい場合、どのプランを選ぶべきですか？",
+      "本番稼働システムを運用する企業が、「24時間365日の電話・チャット・メールによる技術サポート」「本番システムダウン時の 1 時間未満の応答（ビジネス/ミッションクリティカル障害 30 分未満）」「AWS Trusted Advisor のチェック一式」を最小推奨コストで満たしたい場合、最新の AWS サポートプラン体系でどのプランを選ぶべきですか？",
     options: [
-      "Basic サポートプラン",
-      "Developer サポートプラン",
-      "Business サポートプラン",
-      "Enterprise サポートプラン",
+      "ベーシックサポート (Basic)",
+      "ビジネスサポート+ (Business Support+)",
+      "エンタープライズサポート (Enterprise Support)",
+      "AWS Unified Operations",
     ],
-    correctIndices: [2],
+    correctIndices: [1],
     explanation:
-      "Business サポートプランは、24/7 技術サポート、本番システムダウン時 1 時間未満の応答 SLA、AWS Trusted Advisor の全チェック項目、AWS Support API を利用でき、本番環境向けの最もコスト効率が高い選択肢です（専任 TAM や 15 分応答が必須の場合は Enterprise）。",
-    keywords: ["Business サポートプラン", "Trusted Advisor全チェック", "1時間SLA"],
+      "AWS ビジネスサポート+（旧 Business プランの後継）は本番ワークロード向けの最小推奨プランで、24/7 技術サポート、本番ダウン 1 時間未満（クリティカル 30 分未満）の応答目標、Trusted Advisor チェック一式、AWS Support API、AI トラブルシューティング支援を利用できます（指定 TAM や 15 分未満応答はエンタープライズ、5 分未満応答＋24/7 監視は Unified Operations）。",
+    keywords: ["ビジネスサポート+", "AWS サポートプラン", "Trusted Advisorチェック一式"],
   },
 ];
 
@@ -1056,11 +1078,11 @@ export const clfPitfalls: SaaPitfall[] = [
   },
   {
     id: "clf-pit-support-plans",
-    trap: "Basic または Developer サポートプランで、24/7 電話サポートや Trusted Advisor の全チェックが使えると思う",
+    trap: "無料のベーシックサポートでも 24/7 の技術サポートや Trusted Advisor のチェック一式が使えると思う",
     whyWrong:
-      "Basic（無料）と Developer は Trusted Advisor のコアチェックのみ利用可能で、24/7 電話サポートにも対応していません。",
+      "ベーシックサポートは請求・アカウントの問い合わせと Trusted Advisor の基本チェックのみ対応しており、技術的な障害対応や 24/7 技術サポートは含まれません（旧 Developer / Business 等も 2027/01 に終了し新体系へ移行）。",
     correctApproach:
-      "24/7 技術サポート・本番ダウン 1 時間以内 SLA・Trusted Advisor 全項目が必要なら Business 以上、専任 TAM と 15 分応答なら Enterprise を選ぶ。",
+      "24/7 技術サポート・本番ダウン 1h 未満・Trusted Advisor チェック一式ならビジネスサポート+、専任 TAM と 15 分未満応答ならエンタープライズサポート、5 分未満＋24/7 監視なら Unified Operations を選ぶ。",
   },
   {
     id: "clf-pit-storage-mixup",
@@ -1081,9 +1103,9 @@ export const clfKeyLimits: SaaLimitFact[] = [
   },
   {
     id: "clf-lim-support",
-    service: "AWS サポートプラン応答 SLA",
-    limitValue: "Enterprise 15 分未満 / Business 1 時間未満",
-    detail: "Developer は営業時間内メール（一般 24h / 障害 12h 未満）、Business は本番ダウン 1h 未満、Enterprise はビジネスクリティカル障害 15 分未満＋専任 TAM。",
+    service: "AWS サポートプラン応答目標 (最新4区分)",
+    limitValue: "Unified Operations 5分未満 / Enterprise 15分未満 / Business+ 30分未満",
+    detail: "クリティカル障害に対する初回応答目標（本番ダウンは各プラン 1h 未満、Basic は技術支援なし）。※旧 Developer / Business / Enterprise On-Ramp は 2027年1月1日 に提供終了予定。",
   },
   {
     id: "clf-lim-lambda",
@@ -1114,14 +1136,20 @@ export const clfKeyLimits: SaaLimitFact[] = [
 export const clfOfficialResources: SaaOfficialResource[] = [
   {
     title: "AWS Certified Cloud Practitioner 公式試験ページ",
-    description: "CLF-C02 の試験概要、最新の試験ガイド（PDF）、サンプル問題、受験予約の公式ページ。",
+    description: "CLF-C02 の試験概要、最新の試験ガイド、サンプル問題、受験予約の公式ページ。",
     url: "https://aws.amazon.com/jp/certification/certified-cloud-practitioner/",
     badge: "AWS公式",
   },
   {
+    title: "CLF-C02 公式試験ガイド（日本語ドキュメント）",
+    description: "4 ドメインの重み付け（24/30/34/12%）・対象サービス一覧・Task 4.3 サポートオプションの一次資料。",
+    url: "https://docs.aws.amazon.com/ja_jp/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.html",
+    badge: "公式試験ガイド",
+  },
+  {
     title: "AWS Skill Builder (公式デジタル学習プラットフォーム)",
     description: "Cloud Practitioner Essentials 日本語コースや CLF-C02 公式練習問題セットを提供。",
-    url: "https://explore.skillbuilder.aws/learn",
+    url: "https://skillbuilder.aws/",
     badge: "無料講座あり",
   },
   {
@@ -1132,13 +1160,13 @@ export const clfOfficialResources: SaaOfficialResource[] = [
   },
   {
     title: "AWS サポートプラン比較（公式ページ）",
-    description: "Basic / Developer / Business / Enterprise 各プランの対応時間 SLA と含まれる特典一覧。",
+    description: "Basic / ビジネスサポート+ / エンタープライズサポート / Unified Operations の対応時間・特典一覧。",
     url: "https://aws.amazon.com/jp/premiumsupport/plans/",
     badge: "料金・サポート",
   },
 ];
 
-const CLF_SERVICE_QUERY_ALIASES: Record<string, string> = {
+export const clfServiceQueryAliases: Record<string, string> = {
   "スケーラビリティと弾力性": "スケーラビリティ",
   "AWS Well-Architected": "Well-Architected",
   "移行の 6R": "6R",
@@ -1148,10 +1176,3 @@ const CLF_SERVICE_QUERY_ALIASES: Record<string, string> = {
   "AWS サポートプラン": "サポートプラン",
   "AWS Cost and Usage Report": "Cost and Usage Report",
 };
-
-/** 4ドメイン内のサービスバッジ名を、比較表・逆引き検索にヒットする正規化クエリへ変換する */
-export function resolveClfServiceQuery(serviceName: string): string {
-  const mapped = CLF_SERVICE_QUERY_ALIASES[serviceName];
-  if (mapped) return mapped;
-  return serviceName.replace(/^(Amazon|AWS)\s+/i, "").trim();
-}
