@@ -141,6 +141,7 @@ export default function KeyboardShortcutsModal() {
       onClick={() => setIsOpen(false)}
       role="dialog"
       aria-modal="true"
+      aria-labelledby="shortcuts-modal-title"
     >
       <div
         className="relative w-full max-w-xl overflow-hidden rounded-3xl bg-slate-900 border border-slate-700/80 text-white shadow-2xl p-6 sm:p-8 space-y-6"
@@ -150,16 +151,17 @@ export default function KeyboardShortcutsModal() {
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="flex items-center space-x-3">
             <div className="w-9 h-9 rounded-xl bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
-              <Keyboard size={18} />
+              <Keyboard size={18} aria-hidden="true" />
             </div>
             <div>
-              <h3 className="font-extrabold text-base sm:text-lg text-white font-mono tracking-tight">
+              <h2 id="shortcuts-modal-title" className="font-extrabold text-base sm:text-lg text-white font-mono tracking-tight">
                 KEYBOARD SHORTCUTS HUD
-              </h3>
+              </h2>
               <p className="text-xs text-slate-400">キーボードによる高速ナビゲーション</p>
             </div>
           </div>
           <button
+            type="button"
             onClick={() => {
               playCyberClick();
               setIsOpen(false);
@@ -168,7 +170,7 @@ export default function KeyboardShortcutsModal() {
             className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
             aria-label="閉じる"
           >
-            <X size={16} />
+            <X size={16} aria-hidden="true" />
           </button>
         </div>
 

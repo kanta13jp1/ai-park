@@ -145,7 +145,7 @@ gh run watch <run_id>
 ```
 
 ### Step 6: ブラウザ実機検証 & ユーザーへの報告・サインオフ
-1. 組み込み `browser` サブエージェントを用いて、本番正規 URL（GitHub Pages 配信仕様に合わせ **末尾 `/` なし** ＋ `?cachebust=<timestamp>`、例: `https://kanta13jp1.github.io/ai-park/azure-info?cachebust=...`）へアクセスする。
+1. 組み込み `browser` サブエージェントを用いて、本番正規 URL（`next.config.ts` の `trailingSlash: true` に合わせた **末尾 `/` 付き** ＋ `?cachebust=<timestamp>`、例: `https://kanta13jp1.github.io/ai-park/azure-info/?cachebust=...`）へアクセスする。あわせて末尾 `/` なし URL の解決および 404 パスでの Hydration エラー 0 件も点検する。
 2. `1280x800` と `768x1024` の両解像度で、HTTP 200・ルート固有 `document.title`・`ConsoleErrors: 0`・水平オーバーフローなし・`HeroBanner` `Search ⌘K` と `<h1>` の非重複・主要ボタンの折り返し／非クリップ・WAI-ARIA 動作を実測する。
 3. 検証結果は `BROWSER_HOST_FACTS`（訪問オリジン・最新スクリーンショット）と照合し、スクリーンショットを目視確認したうえで各小項目の点検根拠・合格判定の要約を報告し、サインオフを得る。
 
@@ -206,6 +206,6 @@ gh run watch <run_id>
   - `preflight-checklist.ts` 内の `passed: true` や `evidence` 文字列の記述形式が正規表現と一致しているか確認する。
 - **デプロイ後に画面が更新されない場合**:
   - GitHub Pages / CDN のキャッシュの影響があるため、URLに `?cachebust=<現在時刻>` を付与するか、ブラウザでスーパーリロード（`Ctrl+F5` または `Shift+Reload`）を行う。
-- **本番 URL で末尾 `/` を付けると 404 になる場合**:
-  - ローカル `next.config.ts` は `trailingSlash: true` だが、CI（`.github/workflows/deploy.yml`）の `actions/configure-pages@v5`（`static_site_generator: next`）は `./<route>.html` 形式でエクスポートする。本番の正規 URL およびサイト内リンクは末尾 `/` なし（例: `/ai-park/mcp-hub`）となるため、検証 URL の末尾 `/` の有無を確認する。
+- **本番 URL で末尾 `/` 付きが 404 になる・`404.html` 上で Hydration エラーが出る場合**:
+  - `.github/workflows/deploy.yml` の `actions/configure-pages@v5` に `static_site_generator: next` を指定すると、`configure-pages` が空白の `next.config.js` を生成して `next.config.ts`（`trailingSlash: true`）を上書きするため、`/<route>.html` 出力へ変わり末尾 `/` 付き URL が 404 になる。`static_site_generator: next` を指定せず `next.config.ts` を正本維持すること。また `Sidebar.tsx` など `usePathname()` を用いるクライアントコンポーネントはハイドレーション完了前（`useSyncExternalStore`）に空文字扱いとし、静的 `404.html` での React Error #418 を防ぐ。
 

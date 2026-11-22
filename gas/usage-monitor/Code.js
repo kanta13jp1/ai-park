@@ -22,7 +22,8 @@ const CONFIG = {
   MONTHLY_BUDGET_USD: 20
 };
 
-function doGet(e) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function doGet() {
   try {
     const data = getAggregatedUsageData();
     return ContentService.createTextOutput(JSON.stringify(data))

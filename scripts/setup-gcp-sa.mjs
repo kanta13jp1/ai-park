@@ -81,7 +81,7 @@ async function main() {
         `Creating Service Account: ${SA_NAME}`
       );
       console.log('✅ Created Service Account.');
-    } catch (err) {
+    } catch {
       console.log('\n-------------------------------------------------');
       console.log('ℹ️  社内権限の制限により、CLIからのサービスアカウント自動作成がスキップされました。');
       console.log('お手数ですが、以下の Google Cloud コンソールから手動で1つ発行してください（1分で完了）:');

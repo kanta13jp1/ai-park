@@ -77,3 +77,17 @@ test("Academy courses metadata has unique course IDs and valid lesson quiz answe
     }
   }
 });
+
+test("Sidebar nav matching handles trailing slashes and avoids prefix collisions like /tools vs /tools-hub", async () => {
+  const navMatchPath = path.join(rootDir, "src", "lib", "navMatch.ts");
+  const { isNavHrefActive, normalizePathname } = await import(pathToFileURL(navMatchPath).href);
+
+  assert.equal(normalizePathname("/tools-hub/"), "/tools-hub");
+  assert.equal(normalizePathname("/"), "/");
+  assert.equal(isNavHrefActive("/tools-hub", "/tools"), false);
+  assert.equal(isNavHrefActive("/tools-hub/", "/tools-hub"), true);
+  assert.equal(isNavHrefActive("/academy/antigravity-101/what/", "/academy"), true);
+  assert.equal(isNavHrefActive("/", "/"), true);
+  assert.equal(isNavHrefActive("/news/", "/"), false);
+  assert.equal(isNavHrefActive("", "/azure-info"), false);
+});

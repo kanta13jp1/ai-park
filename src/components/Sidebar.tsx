@@ -5,13 +5,18 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { navigationSections } from "@/data/navigation";
 import { ExternalLink, Menu, X, Search, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { basePath } from "@/lib/basePath";
+import { isNavHrefActive } from "@/lib/navMatch";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 import AudioToggle from "@/components/AudioToggle";
 
+const emptySubscribe = () => () => {};
+
 export default function Sidebar() {
   const pathname = usePathname();
+  const isMounted = useSyncExternalStore(emptySubscribe, () => true, () => false);
+  const activePath = isMounted ? pathname : "";
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -133,13 +138,14 @@ export default function Sidebar() {
                 section.href ? (
                   <Link
                     href={section.href}
+                    aria-current={isNavHrefActive(activePath, section.href) ? "page" : undefined}
                     onClick={() => {
                       playCyberClick();
                       setIsOpen(false);
                     }}
                     onMouseEnter={() => playCyberHover()}
                     className={`block px-3 py-1 text-[11px] font-bold tracking-wider uppercase rounded-md transition-colors cursor-pointer ${
-                      pathname === section.href || pathname.startsWith(section.href + "/")
+                      isNavHrefActive(activePath, section.href)
                         ? "text-cyan-300 bg-cyan-950/40"
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
                     }`}
@@ -154,9 +160,7 @@ export default function Sidebar() {
               )}
               <div className="space-y-0.5">
                 {section.items.map((item) => {
-                  const isActive =
-                    pathname === item.href ||
-                    (item.href !== "/" && pathname.startsWith(item.href));
+                  const isActive = isNavHrefActive(activePath, item.href);
 
                   if (item.isExternal) {
                     return (

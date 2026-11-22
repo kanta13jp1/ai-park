@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { X, Copy, Check, Sparkles, Clock } from "lucide-react";
 import { playCyberClick, playCyberSuccess } from "@/lib/sound";
 
@@ -28,6 +28,15 @@ export default function ToolApplicationDraftModal({
   const [customDetail, setCustomDetail] = useState<string>("");
   const [securityChecked, setSecurityChecked] = useState<boolean>(true);
   const [copied, setCopied] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isOpen || !tool) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, tool, onClose]);
 
   if (!isOpen || !tool) return null;
 
@@ -60,48 +69,60 @@ export default function ToolApplicationDraftModal({
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      // fallback
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
+      // クリップボードAPI利用不可環境（非HTTPS等）ではコピー失敗を握りつぶす
     }
   };
 
+  const handleClose = () => {
+    playCyberClick();
+    onClose();
+  };
+
   return (
-    <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 space-y-5">
+    <div
+      className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tool-draft-modal-title"
+      onClick={handleClose}
+    >
+      <div
+        className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 space-y-5"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* ヘッダー */}
         <div className="flex items-start justify-between border-b border-slate-100 pb-3">
           <div className="flex items-center space-x-2.5">
             <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
-              <Sparkles size={18} />
+              <Sparkles size={18} aria-hidden="true" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-slate-900">
+              <h2 id="tool-draft-modal-title" className="text-base font-bold text-slate-900">
                 利用申請ドラフト作成
-              </h3>
+              </h2>
               <p className="text-xs text-slate-500 font-medium">
                 {tool.name} の申請文面をワンクリック生成
               </p>
             </div>
           </div>
           <button
-            onClick={() => {
-              playCyberClick();
-              onClose();
-            }}
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+            type="button"
+            aria-label="閉じる"
+            onClick={handleClose}
+            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
           >
-            <X size={20} />
+            <X size={20} aria-hidden="true" />
           </button>
         </div>
 
         {/* 入力フォーム */}
         <div className="space-y-3.5 text-xs">
           <div>
-            <label className="text-slate-700 font-bold block mb-1">
+            <label htmlFor="tool-draft-purpose" className="text-slate-700 font-bold block mb-1">
               ① 主な利用目的
             </label>
             <select
+              id="tool-draft-purpose"
               value={purpose}
               onChange={(e) => setPurpose(e.target.value)}
               className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none"
@@ -123,6 +144,7 @@ export default function ToolApplicationDraftModal({
                 <button
                   key={hrs}
                   type="button"
+                  aria-pressed={estimatedHours === hrs}
                   onClick={() => {
                     playCyberClick();
                     setEstimatedHours(hrs);
@@ -133,7 +155,7 @@ export default function ToolApplicationDraftModal({
                       : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
                   }`}
                 >
-                  <Clock size={12} className="inline mr-1 opacity-70" />
+                  <Clock size={12} className="inline mr-1 opacity-70" aria-hidden="true" />
                   {hrs}
                 </button>
               ))}
@@ -141,10 +163,11 @@ export default function ToolApplicationDraftModal({
           </div>
 
           <div>
-            <label className="text-slate-700 font-bold block mb-1">
+            <label htmlFor="tool-draft-detail" className="text-slate-700 font-bold block mb-1">
               ③ 具体的な用途・対象業務（任意）
             </label>
             <textarea
+              id="tool-draft-detail"
               rows={2}
               value={customDetail}
               onChange={(e) => setCustomDetail(e.target.value)}

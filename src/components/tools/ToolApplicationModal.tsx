@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { playCyberClick, playCyberSuccess } from "@/lib/sound";
 import {
   X,
@@ -27,7 +27,12 @@ export default function ToolApplicationModal({
   onClose,
   initialToolName = "Google Antigravity 2.0 (Gemini 3.1 Pro)",
 }: ToolApplicationModalProps) {
+  const [prevInitialToolName, setPrevInitialToolName] = useState(initialToolName);
   const [toolName, setToolName] = useState(initialToolName);
+  if (initialToolName !== prevInitialToolName) {
+    setPrevInitialToolName(initialToolName);
+    setToolName(initialToolName);
+  }
   const [applicantName, setApplicantName] = useState("");
   const [department, setDepartment] = useState("");
   const [accountEmail, setAccountEmail] = useState("");
@@ -36,6 +41,15 @@ export default function ToolApplicationModal({
   const [expectedRoi, setExpectedRoi] = useState("週 2〜4 時間程度の工数削減");
   const [securityAgreed, setSecurityAgreed] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -55,11 +69,15 @@ export default function ToolApplicationModal({
 ━━━━━━━━━━━━━━━━━━━━━━━━
 AI推進担当（梅澤）様、ご確認および利用権限・ライセンスの割り当てをお願いいたします。`;
 
-  const handleCopy = () => {
-    playCyberSuccess();
-    navigator.clipboard.writeText(generatedDraft);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard?.writeText(generatedDraft);
+      playCyberSuccess();
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // クリップボードAPI利用不可環境（非HTTPS等）ではコピー失敗を握りつぶす
+    }
   };
 
   const handleClose = () => {
@@ -68,16 +86,25 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="tool-app-modal-title"
+      onClick={handleClose}
+    >
+      <div
+        className="relative w-full max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* ヘッダー */}
         <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border-b border-indigo-900/50">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400 shadow-inner">
-              <Sparkles size={18} />
+              <Sparkles size={18} aria-hidden="true" />
             </div>
             <div>
-              <h2 className="font-bold text-base tracking-wide flex items-center gap-2">
+              <h2 id="tool-app-modal-title" className="font-bold text-base tracking-wide flex items-center gap-2">
                 社内AIツール利用申請ドラフト作成
                 <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
                   即時発行
@@ -89,10 +116,12 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
             </div>
           </div>
           <button
+            type="button"
+            aria-label="閉じる"
             onClick={handleClose}
-            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
@@ -101,11 +130,12 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
           {/* ツール選択 & アカウント */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <Layers size={14} className="text-indigo-600" />
+              <label htmlFor="tool-app-name" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <Layers size={14} className="text-indigo-600" aria-hidden="true" />
                 希望ツール <span className="text-rose-500">*</span>
               </label>
               <select
+                id="tool-app-name"
                 value={toolName}
                 onChange={(e) => setToolName(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -120,13 +150,14 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <Key size={14} className="text-indigo-600" />
+              <label htmlFor="tool-app-email" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <Key size={14} className="text-indigo-600" aria-hidden="true" />
                 対象アカウント (会社メール) <span className="text-rose-500">*</span>
               </label>
               <input
+                id="tool-app-email"
                 type="email"
-                placeholder="user@ml-mightylink.com"
+                placeholder="例: 会社メールアドレス"
                 value={accountEmail}
                 onChange={(e) => setAccountEmail(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -137,13 +168,14 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
           {/* 申請者情報 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <User size={14} className="text-indigo-600" />
+              <label htmlFor="tool-app-applicant" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <User size={14} className="text-indigo-600" aria-hidden="true" />
                 申請者 氏名 <span className="text-rose-500">*</span>
               </label>
               <input
+                id="tool-app-applicant"
                 type="text"
-                placeholder="例: 山田 太郎"
+                placeholder="例: 氏名"
                 value={applicantName}
                 onChange={(e) => setApplicantName(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -151,13 +183,14 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <Building size={14} className="text-indigo-600" />
+              <label htmlFor="tool-app-dept" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <Building size={14} className="text-indigo-600" aria-hidden="true" />
                 所属部署・プロジェクト <span className="text-rose-500">*</span>
               </label>
               <input
+                id="tool-app-dept"
                 type="text"
-                placeholder="例: 開発第一部 / 案件Aチーム"
+                placeholder="例: 所属部署・チーム"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -168,11 +201,12 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
           {/* 利用目的 & 効果 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <HelpCircle size={14} className="text-indigo-600" />
+              <label htmlFor="tool-app-purpose" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <HelpCircle size={14} className="text-indigo-600" aria-hidden="true" />
                 主な利用目的
               </label>
               <select
+                id="tool-app-purpose"
                 value={purpose}
                 onChange={(e) => setPurpose(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -186,11 +220,12 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <Sparkles size={14} className="text-indigo-600" />
+              <label htmlFor="tool-app-roi" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <Sparkles size={14} className="text-indigo-600" aria-hidden="true" />
                 想定される時短効果
               </label>
               <select
+                id="tool-app-roi"
                 value={expectedRoi}
                 onChange={(e) => setExpectedRoi(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -204,10 +239,11 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
 
           {/* 案件名 */}
           <div>
-            <label className="block text-xs font-bold text-slate-900 mb-1">
+            <label htmlFor="tool-app-project" className="block text-xs font-bold text-slate-900 mb-1">
               適用対象の業務・案件詳細（任意）
             </label>
             <input
+              id="tool-app-project"
               type="text"
               placeholder="例: 自社ポータル開発 / 顧客向けWebシステム移行"
               value={targetProject}
@@ -257,17 +293,19 @@ AI推進担当（梅澤）様、ご確認および利用権限・ライセンス
         {/* フッターアクション */}
         <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="text-xs text-slate-500 flex items-center gap-1.5">
-            <ShieldCheck size={15} className="text-emerald-600 shrink-0" />
-            <span>申請後、AI推進担当（梅澤）より 1〜2 営業日以内に認可通知が届きます</span>
+            <ShieldCheck size={15} className="text-emerald-600 shrink-0" aria-hidden="true" />
+            <span>生成した申請文面を Google Chat（AI推進窓口）へ貼り付けてご相談ください</span>
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
+              type="button"
               onClick={handleClose}
-              className="flex-1 sm:flex-none px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 rounded-xl transition-colors"
+              className="flex-1 sm:flex-none px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 rounded-xl transition-colors cursor-pointer"
             >
               閉じる
             </button>
             <button
+              type="button"
               onClick={handleCopy}
               disabled={!securityAgreed}
               className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2 rounded-xl text-xs font-bold transition-all shadow-md ${

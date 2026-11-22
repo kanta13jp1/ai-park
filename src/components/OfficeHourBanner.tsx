@@ -11,31 +11,32 @@ export default function OfficeHourBanner() {
   return (
     <>
       <div className="w-full bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 border-b border-indigo-900/50 px-4 py-2.5 shadow-sm">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2.5">
-          <div className="flex items-center space-x-2.5 text-xs text-slate-300">
-            <span className="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-cyan-300 border border-indigo-400/30 font-semibold font-mono text-[10px]">
-              <Sparkles size={11} className="text-cyan-400" />
+        <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-2.5">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-2.5 gap-y-1 text-xs text-slate-300">
+            <span className="flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-cyan-300 border border-indigo-400/30 font-semibold font-mono text-[10px] shrink-0">
+              <Sparkles size={11} className="text-cyan-400" aria-hidden="true" />
               <span>OFFICE HOUR</span>
             </span>
-            <span className="text-slate-300 hidden md:inline">
+            <span className="text-slate-300 hidden xl:inline whitespace-nowrap">
               担当：梅澤（AI推進担当）
             </span>
-            <span className="text-slate-400 text-[11px]">
+            <span className="text-slate-400 text-[11px] text-center lg:text-left">
               自チームのAI活用・エージェント実装の個別相談を受付中
             </span>
           </div>
 
           <button
+            type="button"
             onClick={() => {
               playCyberClick();
               setModalOpen(true);
             }}
             onMouseEnter={() => playCyberHover()}
-            className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-xs py-1.5 px-4 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer group shrink-0"
+            className="w-full lg:w-auto inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black text-xs py-1.5 px-4 rounded-xl shadow-md transition-all active:scale-95 cursor-pointer group shrink-0"
           >
-            <Calendar className="w-3.5 h-3.5" />
+            <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
             <span>15分個別相談を予約する</span>
-            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" aria-hidden="true" />
           </button>
         </div>
       </div>

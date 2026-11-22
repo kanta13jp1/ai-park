@@ -32,6 +32,8 @@ export default function SoundToggle() {
 
   return (
     <button
+      type="button"
+      aria-pressed={enabled}
       onClick={toggleSound}
       onMouseEnter={() => playCyberHover()}
       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold transition-all cursor-pointer active:scale-95 shadow-xs border ${
@@ -43,12 +45,12 @@ export default function SoundToggle() {
     >
       {enabled ? (
         <>
-          <Volume2 size={14} className="text-cyan-400 animate-pulse" />
+          <Volume2 size={14} className="text-cyan-400 animate-pulse" aria-hidden="true" />
           <span>SOUND ON</span>
         </>
       ) : (
         <>
-          <VolumeX size={14} className="text-slate-500" />
+          <VolumeX size={14} className="text-slate-500" aria-hidden="true" />
           <span>MUTED</span>
         </>
       )}

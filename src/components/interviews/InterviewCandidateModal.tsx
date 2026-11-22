@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { playCyberClick, playCyberSuccess } from "@/lib/sound";
 import {
   X,
@@ -31,9 +31,18 @@ export default function InterviewCandidateModal({
   const [accountEmail, setAccountEmail] = useState("");
   const [targetTool, setTargetTool] = useState("Google Antigravity 2.0 (Gemini 3.1 Pro)");
   const [useCaseTheme, setUseCaseTheme] = useState("定常業務の要約・ドラフト自動作成");
-  const [metricImpact, setMetricImpact] = useState("週 2〜3 時間程度の工数削減");
+  const [metricImpact, setMetricImpact] = useState("週 2〜4 時間程度の工数削減");
   const [preferredTiming, setPreferredTiming] = useState("来週以降の平日オンライン（30分程度）");
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -49,11 +58,15 @@ export default function InterviewCandidateModal({
 ━━━━━━━━━━━━━━━━━━━━━━━━
 AI推進担当（編集部・梅澤）様、現場でのAI実践事例としてインタビュー掲載の検討をお願いいたします！`;
 
-  const handleCopy = () => {
-    playCyberSuccess();
-    navigator.clipboard.writeText(generatedDraft);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard?.writeText(generatedDraft);
+      playCyberSuccess();
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // クリップボードAPI利用不可環境（非HTTPS等）ではコピー失敗を握りつぶす
+    }
   };
 
   const handleClose = () => {
@@ -62,16 +75,25 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-fade-in"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="interview-modal-title"
+      onClick={handleClose}
+    >
+      <div
+        className="relative w-full max-w-2xl bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* ヘッダー */}
         <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white border-b border-indigo-900/50">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400 shadow-inner">
-              <Mic size={18} />
+              <Mic size={18} aria-hidden="true" />
             </div>
             <div>
-              <h2 className="font-bold text-base tracking-wide flex items-center gap-2">
+              <h2 id="interview-modal-title" className="font-bold text-base tracking-wide flex items-center gap-2">
                 現場AI活用インタビュー 取材立候補
                 <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
                   30分・オンライン
@@ -83,10 +105,12 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
             </div>
           </div>
           <button
+            type="button"
+            aria-label="閉じる"
             onClick={handleClose}
-            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors"
+            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
@@ -95,13 +119,14 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
           {/* 基本情報 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <User size={14} className="text-indigo-600" />
+              <label htmlFor="interview-name" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <User size={14} className="text-indigo-600" aria-hidden="true" />
                 お名前 <span className="text-rose-500">*</span>
               </label>
               <input
+                id="interview-name"
                 type="text"
-                placeholder="例: 佐藤 花子"
+                placeholder="例: 氏名"
                 value={candidateName}
                 onChange={(e) => setCandidateName(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -109,13 +134,14 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <Building size={14} className="text-indigo-600" />
+              <label htmlFor="interview-dept" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <Building size={14} className="text-indigo-600" aria-hidden="true" />
                 所属部署 <span className="text-rose-500">*</span>
               </label>
               <input
+                id="interview-dept"
                 type="text"
-                placeholder="例: カスタマーサクセス部"
+                placeholder="例: 所属部署・チーム"
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -125,13 +151,14 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <Key size={14} className="text-indigo-600" />
+              <label htmlFor="interview-email" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <Key size={14} className="text-indigo-600" aria-hidden="true" />
                 会社メールアドレス
               </label>
               <input
+                id="interview-email"
                 type="email"
-                placeholder="user@ml-mightylink.com"
+                placeholder="例: 会社メールアドレス"
                 value={accountEmail}
                 onChange={(e) => setAccountEmail(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -139,11 +166,12 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <Sparkles size={14} className="text-indigo-600" />
+              <label htmlFor="interview-tool" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <Sparkles size={14} className="text-indigo-600" aria-hidden="true" />
                 活用しているAIツール
               </label>
               <select
+                id="interview-tool"
                 value={targetTool}
                 onChange={(e) => setTargetTool(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -161,11 +189,12 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
           {/* テーマと効果 */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <HelpCircle size={14} className="text-indigo-600" />
+              <label htmlFor="interview-theme" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <HelpCircle size={14} className="text-indigo-600" aria-hidden="true" />
                 業務での活用テーマ
               </label>
               <select
+                id="interview-theme"
                 value={useCaseTheme}
                 onChange={(e) => setUseCaseTheme(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -179,11 +208,12 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-                <TrendingUp size={14} className="text-indigo-600" />
+              <label htmlFor="interview-impact" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                <TrendingUp size={14} className="text-indigo-600" aria-hidden="true" />
                 実感している工数削減・成果
               </label>
               <select
+                id="interview-impact"
                 value={metricImpact}
                 onChange={(e) => setMetricImpact(e.target.value)}
                 className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 text-xs focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
@@ -197,11 +227,12 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
-              <Clock size={14} className="text-indigo-600" />
+            <label htmlFor="interview-timing" className="block text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+              <Clock size={14} className="text-indigo-600" aria-hidden="true" />
               取材希望時期・時間帯
             </label>
             <input
+              id="interview-timing"
               type="text"
               placeholder="例: 来週水曜〜金曜の午後（13:00〜16:00の間）で30分"
               value={preferredTiming}
@@ -235,14 +266,16 @@ AI推進担当（編集部・梅澤）様、現場でのAI実践事例として�
           </div>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
+              type="button"
               onClick={handleClose}
-              className="flex-1 sm:flex-none px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 rounded-xl transition-colors"
+              className="flex-1 sm:flex-none px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 rounded-xl transition-colors cursor-pointer"
             >
               閉じる
             </button>
             <button
+              type="button"
               onClick={handleCopy}
-              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-500/25 active:scale-95 transition-all"
+              className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white shadow-md shadow-indigo-500/25 active:scale-95 transition-all cursor-pointer"
             >
               {copied ? (
                 <>

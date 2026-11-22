@@ -126,3 +126,41 @@ test('All <a target="_blank"> tags specify rel="noopener noreferrer"', () => {
     `Found target="_blank" without rel="noopener":\n${violations.join("\n")}`
   );
 });
+
+test("GitHub Actions deploy workflow does not override next.config.ts via configure-pages", () => {
+  const workflowPath = path.join(rootDir, ".github", "workflows", "deploy.yml");
+  const workflowContent = fs.readFileSync(workflowPath, "utf8");
+  assert.doesNotMatch(
+    workflowContent,
+    /static_site_generator:\s*next/,
+    "actions/configure-pages@v5 with static_site_generator: next overwrites next.config.ts"
+  );
+});
+
+test("All modal components implement dialog ARIA role and aria-modal", () => {
+  const modalFiles = [
+    "src/components/CommandPalette.tsx",
+    "src/components/BookingModal.tsx",
+    "src/components/KeyboardShortcutsModal.tsx",
+    "src/components/skills/SkillApplicationModal.tsx",
+    "src/components/interviews/InterviewCandidateModal.tsx",
+    "src/components/tools/ToolApplicationDraftModal.tsx",
+    "src/components/tools/ToolApplicationModal.tsx",
+  ];
+
+  const missingDialogAria = [];
+  for (const rel of modalFiles) {
+    const content = fs.readFileSync(path.join(rootDir, rel), "utf8");
+    const hasRole = /role=["']dialog["']/.test(content);
+    const hasModal = /aria-modal=["']true["']/.test(content);
+    if (!hasRole || !hasModal) {
+      missingDialogAria.push(rel);
+    }
+  }
+
+  assert.deepEqual(
+    missingDialogAria,
+    [],
+    `Modal components missing role="dialog" or aria-modal="true": ${missingDialogAria.join(", ")}`
+  );
+});

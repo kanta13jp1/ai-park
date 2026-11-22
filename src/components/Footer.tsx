@@ -35,10 +35,10 @@ export default function Footer() {
 
           {/* ナビゲーション 1: 学び・導入 */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-1.5">
+            <h2 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-1.5">
               <BookOpen size={13} className="text-cyan-400" />
               <span>学び・導入</span>
-            </h4>
+            </h2>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/academy" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
@@ -76,10 +76,10 @@ export default function Footer() {
 
           {/* ナビゲーション 2: 共創・コミュニティ */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-1.5">
+            <h2 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-1.5">
               <Layers size={13} className="text-indigo-400" />
               <span>共創・コミュニティ</span>
-            </h4>
+            </h2>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/news" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer flex items-center gap-1.5">
@@ -122,10 +122,10 @@ export default function Footer() {
 
           {/* ガバナンス・サポート */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-1.5">
+            <h2 className="text-xs font-bold text-slate-200 tracking-wider uppercase font-mono flex items-center space-x-1.5">
               <ShieldCheck size={13} className="text-emerald-400" />
               <span>ガバナンス・窓口</span>
-            </h4>
+            </h2>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/tools-hub" onClick={() => playCyberClick()} onMouseEnter={() => playCyberHover()} className="hover:text-cyan-300 transition-colors cursor-pointer">
