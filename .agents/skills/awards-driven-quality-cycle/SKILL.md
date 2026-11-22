@@ -1,6 +1,6 @@
 ---
 name: awards-driven-quality-cycle
-description: Awwwards / Webby Awards / FWA 受賞水準のUI/UX・キネマティクス・触感音響（Web Audio API）自律反復改善、GitHub Issues正式起票、改善ToDoボード（/feedback-todo）同期、デプロイ前品質ゲート（scripts/verify-deployment-gate.mjs）検証、SSGビルド（49ルート）、および本番自動デプロイを一気通貫で反復実行する標準ワークフロースキル。
+description: Awwwards / Webby Awards / FWA 受賞水準のUI/UX・キネマティクス・触感音響（Web Audio API）自律反復改善、GitHub Issues正式起票、改善ToDoボード（/feedback-todo）同期、デプロイ前品質ゲート（scripts/verify-deployment-gate.mjs）検証、SSGビルド（全ルート）、および本番自動デプロイを一気通貫で反復実行する標準ワークフロースキル。
 ---
 
 # Awards-Driven Quality Cycle (Awwwards / Webby / FWA 基準自律反復改善スキル)
@@ -31,7 +31,7 @@ description: Awwwards / Webby Awards / FWA 受賞水準のUI/UX・キネマテ�
 5. **Zero-Defect Quality Gate & SSG (完全な品質防衛)**:
    - 事実確認・未連携機能ガード（`UnderConstructionAlert`）
    - デプロイ前品質ゲート検査（`npm run check:gate`）
-   - Next.js 16 SSG ビルド（全49ルート静的生成、エラー0件）
+   - CI 同一 5 段階検証（`npm run lint` / `npx tsc --noEmit` / `npm test` / `npm run check:gate` / Next.js 16 全ルート SSG ビルド、エラー 0 件）
    - `prefers-reduced-motion` とレスポンシブ（モバイル〜4K）のアクセシビリティ担保
 
 ---
@@ -159,11 +159,11 @@ import SpotlightCard from "@/components/SpotlightCard";
 - 終了コードが 0 であることを確認。
 
 ### Phase 5: Next.js 16 プロダクションビルド（`npm run build`）
-- PowerShell環境ではビルドロックの解除を前置して実行：
+- 他セッションの `next build` が稼働していないこと（`.next/lock` 不在）を確認し、稼働中のロックは強制削除せず完了を待ってから 5 段階検証を実行する：
   ```powershell
-  if (Test-Path .next/lock) { Remove-Item .next/lock -Force } ; npm run build
+  npm run lint ; if ($LASTEXITCODE -eq 0) { npx tsc --noEmit } ; if ($LASTEXITCODE -eq 0) { npm test } ; if ($LASTEXITCODE -eq 0) { npm run check:gate } ; if ($LASTEXITCODE -eq 0) { npm run build }
   ```
-- 49ルートすべてのSSG（静的プリレンダリング）がエラーゼロで完了することを確認。
+- 全ルートの SSG（静的プリレンダリング）がエラーゼロで完了することを確認。
 
 ### Phase 6: GitHub Issue クローズ & ToDoステータス更新
 1. [`src/app/feedback-todo/page.tsx`](file:///c:/Users/kanta/GitHub/ai-park/src/app/feedback-todo/page.tsx) 内の該当ToDoステータスを `"done"` に更新し、actionPlanを `【反映済み】...` に書き換える。
@@ -174,9 +174,9 @@ import SpotlightCard from "@/components/SpotlightCard";
 
 ### Phase 7: Git コミット & 本番デプロイ
 1. `git status` で変更内容を精査。
-2. Windows PowerShell では `&&` ではなく `;` を使用してコミット＆プッシュを実行：
+2. Windows PowerShell では `&&` ではなく `;` を使用し、他セッションの変更を巻き込まないよう対象ファイルのみ明示指定してコミット＆プッシュを実行：
    ```powershell
-   git add src/ scripts/ .agents/ ; git commit -m "feat(awards-excellence): ..." ; git push origin main
+   git add <変更対象ファイル群> ; git commit -m "feat(awards-excellence): ..." ; git pull --rebase --autostash origin main ; git push origin main
    ```
 
 ### Phase 8: セルフチェック & 次の改善提案

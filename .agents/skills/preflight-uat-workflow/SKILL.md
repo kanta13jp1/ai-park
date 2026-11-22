@@ -112,6 +112,7 @@ flowchart TD
 
 ### Step 4: 品質ゲート・型チェック・ビルド検証
 ターミナル（PowerShell）で以下の 5 段階検証コマンドを順番に実行し、すべてエラー 0 で合格することを確認する（`.github/workflows/deploy.yml` と同一ゲート）。
+（他セッションが `next build` を実行中で `.next/lock` が存在している場合は、強制削除せず完了を待ってからビルドする。）
 
 ```powershell
 # 1. ESLint 静的解析
@@ -130,13 +131,16 @@ npm run check:gate
 npm run build
 ```
 
+- 大きな画面追加・公開前には、Read-only 監査エージェント（`.agents/agents/ai-park-release-audit.md`）を実行し、リリース合否判定レポートを取得する。
+
 ### Step 5: Git コミット & GitHub Actions デプロイ監視
-検証合格後、コミット・プッシュし、GitHub Actions の自動デプロイを監視する。
+検証合格後、変更したファイルのみ明示指定してコミット・プッシュし、GitHub Actions の自動デプロイを監視する（`git add .` / `git add -A` は使用しない）。
 
 ```powershell
 # コミット & プッシュ
 git add src/data/preflight-checklist.ts
 git commit -m "feat(preflight): granular sub-checklist for fact & spec on <page> page"
+git pull --rebase --autostash origin main
 git push origin main
 
 # GitHub Actions の実行IDを取得して監視
@@ -159,13 +163,14 @@ gh run watch <run_id>
    - 外部APIや実データと連携して公開する場合は、事実性・実在性を担保する。
    - 準備中や開発途中の場合は、即座に `🚧 工事中` `📋 準備中` `🧪 PoC中` のバッジを付与し、`scripts/verify-deployment-gate.mjs` にリストアップして品質ゲートを通過させる。
 2. **ナビゲーションと検索への統合**:
-   - `src/components/Sidebar.tsx` の適切なグループ（「使い方・学び」「エージェント・ツール」「コミュニティ」等）にメニュー項目を追加。
-   - `src/lib/searchIndex.ts`（またはサイト内横断検索インデックス）にルートとキーワードを登録。
+   - `src/data/navigation.ts`（`Sidebar.tsx`）の適切なグループ（「使い方・学び」「エージェント・ツール」「コミュニティ」等）にメニュー項目を追加。
+   - `src/components/SiteOmnisearch.tsx` および `src/components/CommandPalette.tsx` にルートとキーワードを登録。
 3. **メタデータ（SSOT）と自動テストの登録**:
    - 静的ルートは `src/data/route-metadata.ts` へタイトル・説明文を登録し、同階層の Server Component `layout.tsx` から `getRouteMetadata("/<route>")` を export する（動的ルートは `generateMetadata`）。
    - `npm test`（`tests/routes-and-metadata.test.mjs` 等）が通ることを確認する。
-4. **Awards水準のUI/UXと触感音響**:
+4. **Awards水準のUI/UX・アクセシビリティ・触感音響**:
    - `HeroBanner`, `SpotlightCard`, `TiltCard` による一貫した高品質デザイン。
+   - タブ（`tablist`/`tab`/`aria-selected`/`tabpanel`）・トグル（`aria-pressed`）・アコーディオン（`aria-expanded`）・動的通知（`aria-live="polite"`）および横スクロール表の `min-w-[640px]`・`th whitespace-nowrap` を実装。
    - ホバー音（`playCyberHover`）、クリック音（`playCyberClick`）の適用。
 
 ---
