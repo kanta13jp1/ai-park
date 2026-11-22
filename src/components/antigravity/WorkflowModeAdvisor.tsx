@@ -46,6 +46,7 @@ export function WorkflowModeAdvisor({ scenarios }: WorkflowModeAdvisorProps) {
   const [selectedId, setSelectedId] = useState<string>(() => scenarios[0]?.id ?? "");
   const [repoCondition, setRepoCondition] = useState<RepoCondition>("normal");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copyAnnouncement, setCopyAnnouncement] = useState("");
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -66,11 +67,13 @@ export function WorkflowModeAdvisor({ scenarios }: WorkflowModeAdvisorProps) {
       .then(() => {
         playCyberSuccess();
         setCopiedId(id);
+        setCopyAnnouncement("スタータープロンプトをクリップボードにコピーしました。");
         if (copyTimeoutRef.current) {
           clearTimeout(copyTimeoutRef.current);
         }
         copyTimeoutRef.current = setTimeout(() => {
           setCopiedId((prev) => (prev === id ? null : prev));
+          setCopyAnnouncement("");
         }, 2000);
       })
       .catch(() => {});
@@ -78,6 +81,9 @@ export function WorkflowModeAdvisor({ scenarios }: WorkflowModeAdvisorProps) {
 
   return (
     <section className="space-y-4">
+      <p className="sr-only" role="status" aria-live="polite">
+        {copyAnnouncement}
+      </p>
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
@@ -110,7 +116,11 @@ export function WorkflowModeAdvisor({ scenarios }: WorkflowModeAdvisorProps) {
             <p className="text-xs font-bold text-slate-500">
               STEP 1: やりたい作業タイプを選択
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+            <div
+              role="group"
+              aria-label="作業タイプ選択"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5"
+            >
               {scenarios.map((scenario) => {
                 const isSelected = scenario.id === selectedScenario.id;
                 return (

@@ -92,6 +92,7 @@ export default function AntigravityInfoPage() {
   const [exampleCategory, setExampleCategory] = useState<ExampleCategory>("すべて");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copyAnnouncement, setCopyAnnouncement] = useState("");
   const [openFaqId, setOpenFaqId] = useState<string | null>(antigravityFaqs[0]?.id ?? null);
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
@@ -169,7 +170,11 @@ export default function AntigravityInfoPage() {
       .then(() => {
         playCyberSuccess();
         setCopiedId(id);
-        setTimeout(() => setCopiedId((prev) => (prev === id ? null : prev)), 2000);
+        setCopyAnnouncement("クリップボードにコピーしました。");
+        setTimeout(() => {
+          setCopiedId((prev) => (prev === id ? null : prev));
+          setCopyAnnouncement("");
+        }, 2000);
       })
       .catch(() => {});
   };
@@ -197,6 +202,10 @@ export default function AntigravityInfoPage() {
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <p className="sr-only" role="status" aria-live="polite">
+          {copyAnnouncement}
+        </p>
+
         {/* 一部工事中の誠実な注記（社内お知らせ・社内FAQは準備中） */}
         <UnderConstructionAlert
           title="🚧 一部工事中（機能解説・実務実行例を公開中）"
@@ -540,7 +549,7 @@ export default function AntigravityInfoPage() {
         {/* タブ 2: 機能解説カタログ */}
         {activeTab === "features" && (
           <div id="ag-panel-features" role="tabpanel" aria-labelledby="ag-tab-features" className="space-y-6">
-            <div className="flex flex-wrap gap-2">
+            <div role="group" aria-label="機能カテゴリ絞り込み" className="flex flex-wrap gap-2">
               {FEATURE_CATEGORIES.map((cat) => {
                 const active = featureCategory === cat;
                 return (
@@ -646,7 +655,7 @@ export default function AntigravityInfoPage() {
         {/* タブ 3: 実務の実行例 */}
         {activeTab === "examples" && (
           <div id="ag-panel-examples" role="tabpanel" aria-labelledby="ag-tab-examples" className="space-y-6">
-            <div className="flex flex-wrap gap-2">
+            <div role="group" aria-label="実行例カテゴリ絞り込み" className="flex flex-wrap gap-2">
               {EXAMPLE_CATEGORIES.map((cat) => {
                 const active = exampleCategory === cat;
                 return (
