@@ -83,14 +83,14 @@ export interface SwarmLifecycleStep {
 }
 
 export const officialDocLinks = [
-  { label: "公式ドキュメント Top", href: "https://antigravity.google/docs" },
+  { label: "公式ドキュメント Top", href: "https://antigravity.google/docs/getting-started" },
   { label: "Skills", href: "https://antigravity.google/docs/skills" },
-  { label: "Rules & Workflows", href: "https://antigravity.google/docs/rules-workflows" },
+  { label: "Rules & Workflows", href: "https://antigravity.google/docs/rules" },
   { label: "MCP 連携", href: "https://antigravity.google/docs/mcp" },
   { label: "Browser Automation", href: "https://antigravity.google/docs/ide/browser" },
   { label: "Permissions & Security", href: "https://antigravity.google/docs/permissions" },
   { label: "Terminal Sandbox", href: "https://antigravity.google/docs/sandbox" },
-  { label: "Changelog", href: "https://antigravity.google/changelog" },
+  { label: "Changelog", href: "https://antigravity.google/docs/changelog" },
 ];
 
 export const antigravitySurfaces: AntigravitySurface[] = [
@@ -107,7 +107,7 @@ export const antigravitySurfaces: AntigravitySurface[] = [
       "Auxiliary Pane：Subagents・Background Tasks・Artifacts・Files Changed・Terminals を一覧表示",
     ],
     recommendedFor: "複数タスクの並列実行、設計・調査・ドキュメント作成、スケジュール実行",
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "ide",
@@ -122,7 +122,7 @@ export const antigravitySurfaces: AntigravitySurface[] = [
       "Diagnostic Auto-Fix：コンパイルエラーや Lint 警告から直接エージェントへ修正を依頼",
     ],
     recommendedFor: "日々のコーディング、局所的なリファクタリング、エラー修正とテスト実装",
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "cli",
@@ -137,7 +137,7 @@ export const antigravitySurfaces: AntigravitySurface[] = [
       "`agy --help` で CLI フラグやサブコマンドを確認し、スクリプト連携にも活用可能",
     ],
     recommendedFor: "SSH 先やターミナル中心の作業、軽量なコマンド生成・ログ調査",
-    docUrl: "https://antigravity.google/docs/cli/features",
+    docUrl: "https://antigravity.google/docs/features?tab=cli#antigravity-cli-features",
   },
   {
     id: "sdk",
@@ -171,7 +171,7 @@ export const antigravityFeatures: AntigravityFeature[] = [
     ],
     practicalTip:
       "関数名や型定義を書いた直後に一呼吸置くと、実装全体やテストコードの候補が提示されやすくなります。",
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "inline-command",
@@ -187,7 +187,7 @@ export const antigravityFeatures: AntigravityFeature[] = [
     ],
     practicalTip:
       "「この関数に JSDoc と null チェックを追加して」など、スコープが明確な小〜中規模の修正に最適です。",
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "sidebar-agent-planning",
@@ -203,7 +203,7 @@ export const antigravityFeatures: AntigravityFeature[] = [
     ],
     practicalTip:
       "複数ファイルにまたがる改修では、最初に Planning Mode で方針を擦り合わせると手戻りを防げます。",
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "at-mentions",
@@ -219,7 +219,7 @@ export const antigravityFeatures: AntigravityFeature[] = [
     ],
     practicalTip:
       "エラー調査では、該当ソースファイルとエラーが出ているターミナルの両方を `@` で添付すると原因特定が速くなります。",
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "skills",
@@ -251,7 +251,7 @@ export const antigravityFeatures: AntigravityFeature[] = [
     ],
     practicalTip:
       "毎回プロンプトに書いている「日本語で回答」「型定義を省略しない」などの前提は Rules に逃がすと指示が簡潔になります。",
-    docUrl: "https://antigravity.google/docs/rules-workflows",
+    docUrl: "https://antigravity.google/docs/rules",
   },
   {
     id: "mcp-integration",
@@ -299,7 +299,7 @@ export const antigravityFeatures: AntigravityFeature[] = [
     ],
     practicalTip:
       "大きな変更のあとに「セキュリティ」「パフォーマンス」「UI/アクセシビリティ」の観点別チェックを並列で走らせる使い方が有効です。",
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "agent-swarms",
@@ -315,7 +315,7 @@ export const antigravityFeatures: AntigravityFeature[] = [
     ],
     practicalTip:
       '同時編集する複数の Author には workspace: "share" を割り当ててファイル所有権を分離し、編集しない Verifier は workspace: "inherit" で差分監査に専念させると競合を防げます。',
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "run-workflow",
@@ -332,7 +332,7 @@ export const antigravityFeatures: AntigravityFeature[] = [
     ],
     practicalTip:
       "単発の補助委譲は Subagents を使い、リストへのループ処理や段階パイプラインを組む場面で `run_workflow` を選びます。大量ファンアウトでは `ScriptPath` 保存が再実行しやすく、単純チェックには `model: \"flash_lite\"` や `\"flash\"` が適しています。",
-    docUrl: "https://antigravity.google/docs",
+    docUrl: "https://antigravity.google/docs/getting-started",
   },
   {
     id: "browser-automation",

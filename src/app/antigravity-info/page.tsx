@@ -275,7 +275,10 @@ export default function AntigravityInfoPage() {
         </TiltCard>
 
         {/* タブ切り替え + 検索バー */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white border border-slate-200/90 rounded-2xl p-3 shadow-xs">
+        <div
+          id="ag-tablist-container"
+          className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white border border-slate-200/90 rounded-2xl p-3 shadow-xs"
+        >
           <div role="tablist" aria-label="Antigravity 情報局のセクション切替" className="flex flex-wrap gap-2">
             {(
               [
@@ -442,6 +445,7 @@ export default function AntigravityInfoPage() {
               <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[640px] text-left border-collapse">
+                    <caption className="sr-only">操作モダリティ使い分け早見表</caption>
                     <thead>
                       <tr className="bg-slate-900 text-slate-200 text-xs">
                         <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">モダリティ</th>
@@ -480,7 +484,17 @@ export default function AntigravityInfoPage() {
               onJumpToSwarmExamples={() => {
                 setActiveTab("examples");
                 setExampleCategory("すべて");
-                setSearchQuery("Swarm");
+                setSearchQuery("Agent Swarms");
+                const prefersReduced =
+                  typeof window !== "undefined" &&
+                  window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+                document.getElementById("ag-tablist-container")?.scrollIntoView({
+                  behavior: prefersReduced ? "auto" : "smooth",
+                  block: "start",
+                });
+                requestAnimationFrame(() => {
+                  document.getElementById("ag-tab-examples")?.focus();
+                });
               }}
             />
 
@@ -857,6 +871,7 @@ export default function AntigravityInfoPage() {
                 <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[640px] text-left border-collapse">
+                      <caption className="sr-only">ショートカット・CLI コマンド早見表</caption>
                       <thead>
                         <tr className="bg-slate-900 text-slate-200 text-xs">
                           <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">環境</th>

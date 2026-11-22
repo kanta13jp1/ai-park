@@ -70,6 +70,25 @@ test("antigravity-info data arrays satisfy minimum counts, unique IDs, and schem
     }
   }
   assert.ok(hasShareScenario, "workflowAdvisorScenarios should include at least one share scenario");
+
+  const swarmExamples = mod.practicalExamples.filter((item) =>
+    [
+      item.title,
+      item.scene,
+      item.prompt,
+      ...item.usedFeatures,
+      ...item.workflowSteps,
+      ...item.checkPoints,
+    ]
+      .join(" ")
+      .toLowerCase()
+      .includes("agent swarms")
+  );
+  assert.deepEqual(
+    swarmExamples.map((e) => e.id),
+    ["ex-swarm-parallel-feature", "ex-swarm-multi-audit"],
+    'Query "Agent Swarms" should match exactly the 2 Agent Swarms examples'
+  );
 });
 
 test("antigravity-info external doc URLs use official https hosts and data contains no PII", async () => {
@@ -78,6 +97,12 @@ test("antigravity-info external doc URLs use official https hosts and data conta
   const mod = await import(pathToFileURL(dataPath).href);
 
   const allowedHosts = new Set(["antigravity.google", "github.com"]);
+  const deprecatedRedirectUrls = new Set([
+    "https://antigravity.google/docs",
+    "https://antigravity.google/docs/rules-workflows",
+    "https://antigravity.google/changelog",
+    "https://antigravity.google/docs/cli/features",
+  ]);
   const urls = [
     ...mod.officialDocLinks.map((l) => l.href),
     ...mod.antigravitySurfaces.map((s) => s.docUrl),
@@ -86,6 +111,7 @@ test("antigravity-info external doc URLs use official https hosts and data conta
 
   for (const url of urls) {
     assert.ok(typeof url === "string" && !/\s/.test(url), `URL contains whitespace: "${url}"`);
+    assert.equal(deprecatedRedirectUrls.has(url), false, `Deprecated redirecting doc URL found: ${url}`);
     const parsed = new URL(url);
     assert.equal(parsed.protocol, "https:", `Non-HTTPS URL: ${url}`);
     assert.ok(allowedHosts.has(parsed.hostname), `Unexpected doc host in ${url}`);
@@ -137,6 +163,9 @@ test("antigravity-info page and components enforce WAI-ARIA APG, safe inline cod
     "<InlineCodeText text={feat.summary}",
     "<InlineCodeText",
     "text={feat.practicalTip}",
+    '<caption className="sr-only">',
+    'setSearchQuery("Agent Swarms")',
+    "ag-tablist-container",
   ]) {
     assert.ok(pageSrc.includes(token), `antigravity-info/page.tsx missing required token: ${token}`);
   }
@@ -146,6 +175,7 @@ test("antigravity-info page and components enforce WAI-ARIA APG, safe inline cod
   }
 
   assert.ok(swarmSrc.includes('scope="col"'), "AgentSwarmsSection.tsx missing scope=\"col\" on table headers");
+  assert.ok(swarmSrc.includes('<caption className="sr-only">'), "AgentSwarmsSection.tsx missing sr-only caption");
 
   assert.equal(/dangerouslySetInnerHTML\s*=/.test(inlineCodeSrc), false, "InlineCodeText must not use dangerouslySetInnerHTML");
 });

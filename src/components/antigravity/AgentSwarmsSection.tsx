@@ -208,6 +208,7 @@ export function AgentSwarmsSection({
         <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-left border-collapse">
+              <caption className="sr-only">Agent Swarms の workspace 分離モード比較表</caption>
               <thead>
                 <tr className="bg-slate-900 text-slate-200 text-xs">
                   <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">mode</th>
