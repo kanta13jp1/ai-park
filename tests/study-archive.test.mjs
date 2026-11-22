@@ -120,3 +120,11 @@ test("study-archive and calendar routes export metadata via getRouteMetadata SSO
   assert.match(studyLayout, /export const metadata:\s*Metadata\s*=\s*getRouteMetadata\("\/study-archive"\)/);
   assert.match(calendarLayout, /export const metadata:\s*Metadata\s*=\s*getRouteMetadata\("\/calendar"\)/);
 });
+
+test("preflight-checklist records verified UAT status for study-archive and calendar", () => {
+  const preflightPath = path.join(rootDir, "src", "data", "preflight-checklist.ts");
+  const content = fs.readFileSync(preflightPath, "utf8");
+
+  assert.match(content, /id:\s*"study-archive"[\s\S]*?path:\s*"\/study-archive"[\s\S]*?overallStatus:\s*"passed"/);
+  assert.match(content, /id:\s*"calendar"[\s\S]*?path:\s*"\/calendar"[\s\S]*?overallStatus:\s*"passed"/);
+});

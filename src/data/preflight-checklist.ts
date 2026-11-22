@@ -1530,4 +1530,167 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
       "Windows 11 / Chromium (Chrome DevTools MCP) / 1280x800・768x1024・375x812(emulated) + Next.js 16.3.5 Static Export 実測",
     memo: "工事中状態（AWS 全6資格統合学習ハブ先行公開・社内AWS利用ルールおよび資格受験補助制度は準備中）としての誠実表示＆実機UAT完了",
   },
+  {
+    id: "study-archive",
+    name: "AI勉強会アーカイブ",
+    path: "/study-archive",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/11/23",
+    verifiedBy: "梅澤（AI推進担当）",
+    overallStatus: "passed",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "公開リポジトリのため議事メモ本文・社員メールアドレス・生電話番号を非掲載とし、src/data/study-archive.ts に出どころコメント明記の 2026-11-18 Google Drive 録画 URL（未ログイン時 iframe HTTP 401 保護確認）および Google Docs 議事メモ URL・次回開催予定（2026-12-16 15:00〜16:00）のみ掲載していることを確認。",
+        points: [
+          "議事メモ本文や社員個人情報・機密識別情報が公開コードに含まれていないか",
+          "Google Drive 録画・Google Docs 議事メモの限定共有と次回予定の記載が事実と一致しているか",
+        ],
+        subChecks: [
+          {
+            id: "study-fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "議事メモ本文・個人情報・架空予定の非掲載",
+            detail:
+              "src/data/study-archive.ts に議事メモ本文・社員メールアドレス・電話番号を載せず、開催回メタ情報と課題ガイドのみ記載していること。",
+            verified: true,
+          },
+          {
+            id: "study-fact-02",
+            category: "official_announcement",
+            groupTitle: "② 共有権限と告知内容が一致しているか（整合性確認済み）",
+            label: "Google Workspace 限定公開保護と次回予定整合",
+            detail:
+              "未認証ブラウザで Drive / Docs の /preview iframe が HTTP 401 で保護されること、および次回予定（2026-12-16 15:00〜16:00）が告知内容と一致していること。",
+            verified: true,
+          },
+          {
+            id: "study-link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先と導線が実在するか（機能確認済み）",
+            label: "Drive/Docs 直接リンク・/calendar・/guide 導線整合",
+            detail:
+              "録画/議事メモの別タブリンクおよび /calendar・/guide への内部リンクが正しく設定されていること。",
+            verified: true,
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番 GitHub Pages 実機ブラウザにて 1280x800（body 幅 1274 <= 1280）・768x1024（固定 288px サイドバー下で html/body 幅 762 <= 768・main 474px・tablist 幅 392px で重なり/クリップゼロ）・375x812（html/body/main 幅 369 <= 375、横溢れゼロ）および見出し階層（h1→h2→h3→h4 スキップ 0 件）を確認。",
+        points: [
+          "1280x800・768x1024・375x812 で横溢れ・要素重なり・クリップがないか",
+          "見出し階層（h1〜h4）にスキップがないか",
+        ],
+      },
+      usability: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "WAI-ARIA タブのキーボード操作（ArrowRight→End→Home でのフォーカス＆選択・パネル連動）、および「この回のリンクをコピー」（URLをコピーしました表示）・「Google Chat 用に課題をコピー」（コピーしました表示＋role=\"status\" テキスト「課題一覧をクリップボードにコピーしました。」更新、JS エラー 0 件）を本番実機で確認。",
+        points: [
+          "キーボード操作（ArrowRight/End/Home）でタブとパネルが連動するか",
+          "リンクコピー・課題コピーボタンが権限環境下でエラーなく動作するか",
+        ],
+      },
+      readability: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "role=\"tablist\"・role=\"tab\"・aria-selected・aria-controls・role=\"tabpanel\"・aria-pressed・aria-live=\"polite\" の実装、末尾 / なし（/study-archive）の HTTP 200 解決、存在しない URL での 404 Hydration エラー 0 件、およびコンソールエラー 0 件を確認。",
+        points: [
+          "WAI-ARIA APG タブ・ライブ通知属性が揃っているか",
+          "末尾 / なしアクセスと 404 ページで Hydration/JS エラーが発生しないか",
+        ],
+      },
+    },
+    environment: "Windows 11 / Chromium / 1280x800・768x1024・375x812 + GitHub Pages 本番実測",
+    memo: "β版（Google Drive 録画・Google Docs 議事メモ社内限定共有・WAI-ARIA APG 対応）の本番実機 UAT 完了",
+  },
+  {
+    id: "calendar",
+    name: "AI Park カレンダー",
+    path: "/calendar",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/11/23",
+    verifiedBy: "梅澤（AI推進担当）",
+    overallStatus: "passed",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "社内 Google Workspace 限定共有の「AI Park イベント」カレンダー埋め込み、GAS アジェンダ自動付与案内、および /study-archive 相互導線バナー（最新開催回 2026-11-18 表示）の事実整合を確認。",
+        points: [
+          "社内限定共有カレンダーの案内と架空予定非掲載が守られているか",
+          "Google カレンダー直接リンクと /study-archive 導線が有効か",
+        ],
+        subChecks: [
+          {
+            id: "cal-fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "社内限定共有カレンダーとガイド案内の整合",
+            detail:
+              "Workspace ログイン時のみ予定表示される旨の案内と、GAS による勉強会アジェンダ自動付与説明が運用実態と一致していること。",
+            verified: true,
+          },
+          {
+            id: "cal-link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先と導線が実在するか（機能確認済み）",
+            label: "Google カレンダー直接リンク・/study-archive 相互導線",
+            detail:
+              "Google カレンダー直接追加 URL および /study-archive 相互導線リンクが正しく設定されていること。",
+            verified: true,
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番 GitHub Pages 実機ブラウザにて 1280x800・768x1024（html/body 幅 762 <= 768、表示モード 3 ボタンが y=722.33 で 1 行収容＋直接リンクが y=762.33 へ折り返し、重なり/クリップゼロ）・375x812（html/body/main 幅 369 <= 375、横溢れゼロ）および見出し階層（h1→h2）を確認。",
+        points: [
+          "1280x800・768x1024・375x812 で表示モードボタンやバナーにクリップ・横溢れがないか",
+          "見出し階層（h1→h2）が保たれているか",
+        ],
+      },
+      usability: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "「すべて表示」「月間カレンダー」「アジェンダ一覧」の 3 ボタン切替と aria-pressed（true/false）および iframe 表示件数（2 件↔1 件）の連動を本番実機で確認。",
+        points: [
+          "3 種類のビュー切り替えと aria-pressed 状態が連動するか",
+          "/study-archive への相互導線バナーがクリック遷移できるか",
+        ],
+      },
+      readability: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "role=\"group\"（aria-label=\"カレンダー表示モード\"）・type=\"button\"・末尾 / なし（/calendar）の HTTP 200 解決、およびページ側 React/JS コンソールエラー 0 件を確認（1280x800 時は外部 calendar.google.com iframe 側の report-only CSP 通知のみ分離観測、768x1024・375x812 はコンソール出力 0 件）。",
+        points: [
+          "操作グループの WAI-ARIA 属性と末尾 / なし解決が正常か",
+          "ページ側の JS/Hydration エラーが 0 件であるか",
+        ],
+      },
+    },
+    environment: "Windows 11 / Chromium / 1280x800・768x1024・375x812 + GitHub Pages 本番実測",
+    memo: "β版（社内カレンダー埋め込み＋/study-archive 相互導線＋768px 狭幅対応）の本番実機 UAT 完了",
+  },
 ];
