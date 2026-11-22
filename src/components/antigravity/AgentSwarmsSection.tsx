@@ -210,11 +210,11 @@ export function AgentSwarmsSection({
             <table className="w-full min-w-[640px] text-left border-collapse">
               <thead>
                 <tr className="bg-slate-900 text-slate-200 text-xs">
-                  <th className="py-3 px-4 font-bold whitespace-nowrap">mode</th>
-                  <th className="py-3 px-4 font-bold whitespace-nowrap">分離形態</th>
-                  <th className="py-3 px-4 font-bold whitespace-nowrap">仕組み</th>
-                  <th className="py-3 px-4 font-bold whitespace-nowrap">適した役割・用途</th>
-                  <th className="py-3 px-4 font-bold whitespace-nowrap">運用上の注意点</th>
+                  <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">mode</th>
+                  <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">分離形態</th>
+                  <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">仕組み</th>
+                  <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">適した役割・用途</th>
+                  <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">運用上の注意点</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">

@@ -1693,4 +1693,121 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     environment: "Windows 11 / Chromium / 1280x800・768x1024・375x812 + GitHub Pages 本番実測",
     memo: "β版（社内カレンダー埋め込み＋/study-archive 相互導線＋768px 狭幅対応）の本番実機 UAT 完了",
   },
+  {
+    id: "antigravity-info",
+    name: "Antigravity情報局",
+    path: "/antigravity-info",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/11/23",
+    verifiedBy: "梅澤（AI推進担当）",
+    overallStatus: "passed",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "Google Antigravity 公式ドキュメントおよび組み込みガイド（antigravity-guide / swarm-orchestrator / run-workflow）の仕様整合、公式 URL 全 11 件の HEAD HTTP 200 疎通、および一部工事中ガード（UnderConstructionAlert）の維持を確認。",
+        points: [
+          "架空の社内制度・数値・事例・個人情報が含まれていないか",
+          "Antigravity 2.0・IDE・CLI（agy）・SDK・Skills・Rules・MCP・Subagents・run_workflow・Agent Swarms（/swarm）の解説が公式仕様と一致しているか",
+          "社内お知らせ・社内固有 FAQ が未作成である事実を一部工事中として誠実に表示しているか",
+          "全 11 件の公式ドキュメント外部 URL およびポータル内リンクが疎通するか",
+        ],
+        subChecks: [
+          {
+            id: "ag-fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
+            label: "架空情報・数値・社員識別情報の非掲載確認",
+            detail:
+              "実在しない人物・部署名・効果数値・未定のスケジュールや社員メールアドレス（@ml-mightylink.com）等が掲載されていないこと（tests/antigravity-info.test.mjs の PII 検査通過確認済み）。",
+            verified: true,
+          },
+          {
+            id: "ag-fact-02",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
+            label: "Antigravity 公式機能仕様・実行例データの正確性",
+            detail:
+              "Surfaces（2.0 / IDE / CLI agy / SDK）、機能解説 13 件、モダリティ比較 6 行、実務実行例 11 件、ショートカット 12 件、テンプレート 4 件、FAQ 11 問、実行モード診断 6 シナリオが公式仕様と一致していること。",
+            verified: true,
+          },
+          {
+            id: "ag-policy-01",
+            category: "official_announcement",
+            groupTitle: "② 公式アナウンス・安全基準と一致しているか（整合性・周知遵守）",
+            label: "一部工事中ガード（社内お知らせ・FAQ 未作成）の誠実表示",
+            detail:
+              "feature-status.ts の isVerified: false 維持およびページ上部の UnderConstructionAlert により、社内向けお知らせ・社内固有 FAQ が準備中であることを明示していること。",
+            verified: true,
+          },
+          {
+            id: "ag-policy-02",
+            category: "official_announcement",
+            groupTitle: "② 公式アナウンス・安全基準と一致しているか（整合性・周知遵守）",
+            label: "権限・Sandbox・Swarm ワークスペース安全ガイドの準拠",
+            detail:
+              "Tool Execution Policy・Terminal Sandbox・workspace inherit/share/branch の違い、および kill 前のコミット統合必須や安全フォールバック案内が標準方針と一致していること。",
+            verified: true,
+          },
+          {
+            id: "ag-link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先が実在するか（リンク検証・確認済み）",
+            label: "公式ドキュメント外部 URL 全 11 件の HTTP 200 実測",
+            detail:
+              "antigravity.google/docs 配下（docs, skills, rules-workflows, mcp, ide/browser, permissions, sandbox, plugins, cli/features）、changelog、および github.com/google-antigravity/antigravity-sdk-python の全 11 URL が HEAD リクエストで HTTP 200 を返すこと（2026/11/22 実測）。",
+            verified: true,
+          },
+          {
+            id: "ag-link-02",
+            category: "link_integrity",
+            groupTitle: "③ リンク先が実在するか（リンク検証・確認済み）",
+            label: "ポータル内相互導線リンクの整合",
+            detail:
+              "導入ガイド（/guide）・Antigravity Academy（/academy）・社内 Skills カタログ（/skills-hub）・MCP 連携ハブ（/mcp-hub）・エージェント/Swarm ガイド（/agent-cases）・トラブルシューター（/troubleshooting）への遷移が有効であること。",
+            verified: true,
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番 GitHub Pages 実機ブラウザにて 1280x800（html/body 幅 1274px、HeroBanner Search ボタンと h1 の非重複確認）、768x1024（固定 288px サイドバー下で html/body 幅 762px、main 幅 474px、タブ・診断ボタン・テーブルの重なり/クリップなし）、375x812（html/body/main 幅 369px、全表 min-w-640px が 335px 横スクロールコンテナ内に収容）および見出し階層 h1〜h5 スキップ 0 件を確認。",
+        points: [
+          "1280x800・768x1024・375x812 で横溢れ・要素重なり・クリップがないか",
+          "見出し階層（h1〜h5）にスキップがないか",
+          "テーブルの狭幅横スクロール（min-w-[640px]）が崩れていないか",
+        ],
+      },
+      usability: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番実機にて WAI-ARIA タブのキーボード操作（ArrowRight・End・Home による aria-selected と role=tabpanel の連動）、実行モード診断のリポジトリ状態切替（share から安全フォールバック inherit 案内表示）、プロンプト・テンプレート全 4 件のコピー時 コピー済み 遷移、Swarm 実行例ジャンプボタン連動、および FAQ 全 11 問の aria-expanded 切替を確認。",
+        points: [
+          "キーボード操作（ArrowRight/End/Home）でタブとパネルが連動するか",
+          "実行モード診断・リポジトリ状態切替・Swarm 実行例ジャンプが動作するか",
+          "コピーボタン・検索絞り込み・FAQ アコーディオンが正常動作するか",
+        ],
+      },
+      readability: {
+        passed: true,
+        checkedAt: "2026/11/23",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "InlineCodeText により FAQ 全 11 問に加え実行モード診断の選定理由および機能解説の概要・実務のコツも code タグ描画し、全テーブル scope=col・tabpanel tabIndex=0・copyTimeoutRef 競合解消を反映。本番ページで ConsoleErrors 0 件、末尾 / なしアクセス HTTP 200 解決、および 404 パス Hydration エラー 0 件を確認。",
+        points: [
+          "インラインコードが code タグで描画され、生バッククォートが露出していないか",
+          "末尾 / なし解決と 404 ページでコンソール/Hydration エラーが 0 件か",
+        ],
+      },
+    },
+    environment: "Windows 11 / Chromium / 1280x800・768x1024・375x812 + GitHub Pages 本番実測",
+    memo: "公式機能解説・Agent Swarms・実行モード診断・実行例11件・リファレンスFAQの公開版（社内お知らせ等は一部工事中）本番実機 UAT 完了",
+  },
 ];

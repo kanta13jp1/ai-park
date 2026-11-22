@@ -131,13 +131,21 @@ test("antigravity-info page and components enforce WAI-ARIA APG, safe inline cod
     "min-w-[640px]",
     "whitespace-nowrap",
     "UnderConstructionAlert",
+    "copyTimeoutRef",
+    'scope="col"',
+    "tabIndex={0}",
+    "<InlineCodeText text={feat.summary}",
+    "<InlineCodeText",
+    "text={feat.practicalTip}",
   ]) {
     assert.ok(pageSrc.includes(token), `antigravity-info/page.tsx missing required token: ${token}`);
   }
 
-  for (const token of ["aria-pressed", 'role="group"', 'aria-live="polite"', ".catch("]) {
+  for (const token of ["aria-pressed", 'role="group"', 'aria-live="polite"', ".catch(", "InlineCodeText"]) {
     assert.ok(advisorSrc.includes(token), `WorkflowModeAdvisor.tsx missing required token: ${token}`);
   }
+
+  assert.ok(swarmSrc.includes('scope="col"'), "AgentSwarmsSection.tsx missing scope=\"col\" on table headers");
 
   assert.equal(/dangerouslySetInnerHTML\s*=/.test(inlineCodeSrc), false, "InlineCodeText must not use dangerouslySetInnerHTML");
 });

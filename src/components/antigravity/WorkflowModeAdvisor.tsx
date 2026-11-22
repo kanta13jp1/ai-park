@@ -14,6 +14,7 @@ import {
   Terminal,
 } from "lucide-react";
 import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
+import InlineCodeText from "@/components/antigravity/InlineCodeText";
 
 export interface WorkflowAdvisorScenarioItem {
   id: string;
@@ -219,7 +220,9 @@ export function WorkflowModeAdvisor({ scenarios }: WorkflowModeAdvisorProps) {
               <Lightbulb size={16} className="text-amber-600 shrink-0 mt-0.5" />
               <div className="space-y-0.5 text-xs sm:text-sm text-slate-700 leading-relaxed">
                 <span className="font-bold text-slate-900">選定理由: </span>
-                <span>{selectedScenario.reason}</span>
+                <span>
+                  <InlineCodeText text={selectedScenario.reason} />
+                </span>
               </div>
             </div>
 

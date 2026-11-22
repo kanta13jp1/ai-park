@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import Link from "next/link";
 import {
   Sparkles,
@@ -93,7 +93,16 @@ export default function AntigravityInfoPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copyAnnouncement, setCopyAnnouncement] = useState("");
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [openFaqId, setOpenFaqId] = useState<string | null>(antigravityFaqs[0]?.id ?? null);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const normalizedQuery = searchQuery.trim().toLowerCase();
 
@@ -171,7 +180,10 @@ export default function AntigravityInfoPage() {
         playCyberSuccess();
         setCopiedId(id);
         setCopyAnnouncement("クリップボードにコピーしました。");
-        setTimeout(() => {
+        if (copyTimeoutRef.current) {
+          clearTimeout(copyTimeoutRef.current);
+        }
+        copyTimeoutRef.current = setTimeout(() => {
           setCopiedId((prev) => (prev === id ? null : prev));
           setCopyAnnouncement("");
         }, 2000);
@@ -334,7 +346,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ 1: 全体像・使い分け */}
         {activeTab === "overview" && (
-          <div id="ag-panel-overview" role="tabpanel" aria-labelledby="ag-tab-overview" className="space-y-8">
+          <div id="ag-panel-overview" role="tabpanel" aria-labelledby="ag-tab-overview" tabIndex={0} className="space-y-8">
             {/* 4つの実行環境（Surfaces） */}
             <section className="space-y-4">
               <div className="flex items-center justify-between">
@@ -432,10 +444,10 @@ export default function AntigravityInfoPage() {
                   <table className="w-full min-w-[640px] text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-900 text-slate-200 text-xs">
-                        <th className="py-3 px-4 font-bold whitespace-nowrap">モダリティ</th>
-                        <th className="py-3 px-4 font-bold whitespace-nowrap">呼び出し方</th>
-                        <th className="py-3 px-4 font-bold whitespace-nowrap">対象スコープ</th>
-                        <th className="py-3 px-4 font-bold whitespace-nowrap">最適なユースケース</th>
+                        <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">モダリティ</th>
+                        <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">呼び出し方</th>
+                        <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">対象スコープ</th>
+                        <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">最適なユースケース</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
@@ -548,7 +560,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ 2: 機能解説カタログ */}
         {activeTab === "features" && (
-          <div id="ag-panel-features" role="tabpanel" aria-labelledby="ag-tab-features" className="space-y-6">
+          <div id="ag-panel-features" role="tabpanel" aria-labelledby="ag-tab-features" tabIndex={0} className="space-y-6">
             <div role="group" aria-label="機能カテゴリ絞り込み" className="flex flex-wrap gap-2">
               {FEATURE_CATEGORIES.map((cat) => {
                 const active = featureCategory === cat;
@@ -623,7 +635,7 @@ export default function AntigravityInfoPage() {
                       </div>
 
                       <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                        {feat.summary}
+                        <InlineCodeText text={feat.summary} />
                       </p>
 
                       <ul className="space-y-1.5 pt-1">
@@ -642,7 +654,12 @@ export default function AntigravityInfoPage() {
                       <Lightbulb size={15} className="text-amber-600 shrink-0 mt-0.5" />
                       <div>
                         <span className="font-bold">実務のコツ: </span>
-                        <span>{feat.practicalTip}</span>
+                        <span>
+                          <InlineCodeText
+                            text={feat.practicalTip}
+                            codeClassName="font-mono text-[0.9em] bg-amber-100/80 text-amber-950 px-1 py-0.5 rounded break-words"
+                          />
+                        </span>
                       </div>
                     </div>
                   </SpotlightCard>
@@ -654,7 +671,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ 3: 実務の実行例 */}
         {activeTab === "examples" && (
-          <div id="ag-panel-examples" role="tabpanel" aria-labelledby="ag-tab-examples" className="space-y-6">
+          <div id="ag-panel-examples" role="tabpanel" aria-labelledby="ag-tab-examples" tabIndex={0} className="space-y-6">
             <div role="group" aria-label="実行例カテゴリ絞り込み" className="flex flex-wrap gap-2">
               {EXAMPLE_CATEGORIES.map((cat) => {
                 const active = exampleCategory === cat;
@@ -802,7 +819,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ 4: リファレンス・FAQ */}
         {activeTab === "reference" && (
-          <div id="ag-panel-reference" role="tabpanel" aria-labelledby="ag-tab-reference" className="space-y-8">
+          <div id="ag-panel-reference" role="tabpanel" aria-labelledby="ag-tab-reference" tabIndex={0} className="space-y-8">
             {filteredShortcuts.length === 0 &&
               filteredConfigTemplates.length === 0 &&
               filteredFaqs.length === 0 && (
@@ -842,10 +859,10 @@ export default function AntigravityInfoPage() {
                     <table className="w-full min-w-[640px] text-left border-collapse">
                       <thead>
                         <tr className="bg-slate-900 text-slate-200 text-xs">
-                          <th className="py-3 px-4 font-bold whitespace-nowrap">環境</th>
-                          <th className="py-3 px-4 font-bold whitespace-nowrap">キー / コマンド</th>
-                          <th className="py-3 px-4 font-bold whitespace-nowrap">動作</th>
-                          <th className="py-3 px-4 font-bold whitespace-nowrap">補足</th>
+                          <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">環境</th>
+                          <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">キー / コマンド</th>
+                          <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">動作</th>
+                          <th scope="col" className="py-3 px-4 font-bold whitespace-nowrap">補足</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
