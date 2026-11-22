@@ -37,12 +37,12 @@ export default function GeminiStatsSyncStatus({
   return (
     <div id="sync-status" className="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
       {/* ステータスバー */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-start sm:items-center gap-3">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center gap-3 min-w-0">
           <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600">
             <RefreshCw className={`w-5 h-5 ${isLoading ? "animate-spin text-indigo-500" : ""}`} />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="text-sm font-black text-slate-900 tracking-tight">
                 データ同期ステータス
@@ -59,17 +59,18 @@ export default function GeminiStatsSyncStatus({
                 取得元: {dataSource}
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5 font-mono">
+            <p className="text-xs text-slate-500 mt-0.5 font-mono break-words">
               最終同期: <span className="font-bold text-slate-700">{syncedAt}</span> ｜ 対象: <span className="font-bold text-indigo-600">{projectId}</span> ｜ 請求先ステータス: <span className="font-bold text-emerald-600">ACTIVE (利用可能)</span>
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
+        <div className="flex items-center gap-2 self-start lg:self-auto shrink-0">
           <button
+            type="button"
             onClick={onRefresh}
             disabled={isLoading}
-            className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
+            className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
           >
             <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
             <span>{isLoading ? "同期中..." : "最新データを再同期"}</span>
@@ -80,6 +81,8 @@ export default function GeminiStatsSyncStatus({
       {/* 反映されない場合の確認チェックリスト（アコーディオン） */}
       <div className="border border-slate-200/80 rounded-2xl overflow-hidden bg-slate-50/50">
         <button
+          type="button"
+          aria-expanded={isOpenFaq}
           onClick={() => setIsOpenFaq(!isOpenFaq)}
           className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-100/60 transition-colors cursor-pointer"
         >

@@ -23,9 +23,9 @@ export default function NotFound() {
               <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/60">
                 404 PAGE NOT FOUND
               </span>
-              <h2 className="text-2xl font-black text-slate-900 tracking-tight">
+              <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                 ページが見つかりません
-              </h2>
+              </h1>
               <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
                 お探しのページは移動したか、URLが変更された可能性があります。ポータルトップから目的のコンテンツをお探しください。
               </p>

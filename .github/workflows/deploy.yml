@@ -52,6 +52,15 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
 
+      - name: Lint (ESLint)
+        run: npm run lint
+
+      - name: TypeScript Typecheck
+        run: ${{ steps.detect-package-manager.outputs.runner }} tsc --noEmit
+
+      - name: Automated Quality Tests
+        run: npm test
+
       - name: Deployment Quality Gate (Verify Feature Status)
         run: npm run check:gate
 

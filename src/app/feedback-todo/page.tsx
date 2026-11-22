@@ -271,6 +271,17 @@ export default function FeedbackTodoPage() {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    if (!isModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isModalOpen]);
+
   const allItems = [...githubItems, ...todos];
 
   // 保存処理
@@ -939,15 +950,24 @@ export default function FeedbackTodoPage() {
 
       {/* 新規ご意見起票モーダル */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 space-y-5 max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="feedback-modal-title"
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 space-y-5 max-h-[90vh] overflow-y-auto"
+          >
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center space-x-2">
                 <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600">
-                  <MessageSquarePlus size={20} />
+                  <MessageSquarePlus size={20} aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">
+                  <h3 id="feedback-modal-title" className="text-lg font-bold text-slate-900">
                     新しいご意見・改善ToDoを起票
                   </h3>
                   <p className="text-xs text-slate-500">
@@ -956,37 +976,41 @@ export default function FeedbackTodoPage() {
                 </div>
               </div>
               <button
+                type="button"
+                aria-label="閉じる"
                 onClick={() => setIsModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100"
               >
-                <X size={20} />
+                <X size={20} aria-hidden="true" />
               </button>
             </div>
 
             <form onSubmit={handleCreateTodo} className="space-y-4 text-xs">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="font-bold text-slate-700 block">
+                  <label htmlFor="feedback-author" className="font-bold text-slate-700 block">
                     お名前 / 起票元 <span className="text-rose-500">*</span>
                   </label>
                   <input
+                    id="feedback-author"
                     type="text"
                     required
                     value={formAuthor}
                     onChange={(e) => setFormAuthor(e.target.value)}
-                    placeholder="例: 亮一杉村"
+                    placeholder="例: 氏名またはニックネーム"
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <label className="font-bold text-slate-700 block">
+                  <label htmlFor="feedback-dept" className="font-bold text-slate-700 block">
                     所属部署 / チーム
                   </label>
                   <input
+                    id="feedback-dept"
                     type="text"
                     value={formDept}
                     onChange={(e) => setFormDept(e.target.value)}
-                    placeholder="例: クラウド開発部"
+                    placeholder="例: 所属部署・チーム"
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
                   />
                 </div>

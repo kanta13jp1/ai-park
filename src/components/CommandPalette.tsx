@@ -405,6 +405,9 @@ export default function CommandPalette() {
       onClick={() => setIsOpen(false)}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="コマンドパレット"
         className="w-full max-w-2xl bg-[#090d16] border border-cyan-500/35 rounded-3xl shadow-2xl overflow-hidden text-white flex flex-col max-h-[82vh] relative animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
@@ -414,10 +417,11 @@ export default function CommandPalette() {
 
         {/* 検索入力ヘッダー */}
         <div className="relative flex items-center px-6 py-4 border-b border-slate-800/80 z-10">
-          <Search className="w-5 h-5 text-cyan-400 shrink-0 mr-3" />
+          <Search className="w-5 h-5 text-cyan-400 shrink-0 mr-3" aria-hidden="true" />
           <input
             ref={inputRef}
             type="text"
+            aria-label="ページやガイドを検索"
             placeholder="AI Park のページやガイドを瞬時に検索... (↑↓で選択、Enterで移動)"
             value={query}
             onChange={(e) => {
@@ -428,11 +432,13 @@ export default function CommandPalette() {
             className="w-full bg-transparent text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none"
           />
           <button
+            type="button"
+            aria-label="閉じる"
             onClick={() => setIsOpen(false)}
             onMouseEnter={() => playCyberHover()}
             className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors ml-2 cursor-pointer"
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
 
@@ -443,6 +449,7 @@ export default function CommandPalette() {
             return (
               <button
                 key={cat}
+                type="button"
                 onClick={() => {
                   playCyberClick();
                   setSelectedCategory(cat);
@@ -462,7 +469,11 @@ export default function CommandPalette() {
         </div>
 
         {/* 検索結果リスト */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-1 z-10">
+        <div
+          role="listbox"
+          aria-label="検索候補一覧"
+          className="flex-1 overflow-y-auto p-3 space-y-1 z-10"
+        >
           {filteredItems.length === 0 ? (
             <div className="py-12 text-center text-slate-500 text-xs">
               「{query}」に一致するコンテンツが見つかりませんでした。
@@ -475,6 +486,8 @@ export default function CommandPalette() {
               return (
                 <div
                   key={item.id}
+                  role="option"
+                  aria-selected={isSelected}
                   onClick={() => handleSelect(item)}
                   onMouseEnter={() => {
                     setSelectedIndex(index);

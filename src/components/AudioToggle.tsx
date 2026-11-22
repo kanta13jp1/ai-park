@@ -28,6 +28,7 @@ export default function AudioToggle() {
   return (
     <div className="flex items-center justify-center gap-2 w-full">
       <button
+        type="button"
         onClick={() => {
           window.dispatchEvent(new KeyboardEvent("keydown", { key: "?" }));
         }}
@@ -40,6 +41,8 @@ export default function AudioToggle() {
       </button>
 
       <button
+        type="button"
+        aria-pressed={enabled}
         onClick={toggle}
         onMouseEnter={() => playCyberHover()}
         className={`px-3 py-1.5 rounded-full border text-xs font-mono font-bold flex items-center space-x-2 whitespace-nowrap shadow-sm transition-all duration-300 cursor-pointer active:scale-95 ${

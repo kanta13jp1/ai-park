@@ -1421,15 +1421,15 @@ export default function GcpInfoPage() {
             {CERT_LEVEL_GROUPS.map((group) => (
               <div
                 key={group.level}
-                className="flex flex-col sm:flex-row sm:items-center gap-2 bg-slate-100/90 p-2 rounded-xl border border-slate-200/70"
+                className="flex flex-col lg:flex-row lg:items-center gap-2 bg-slate-100/90 p-2 rounded-xl border border-slate-200/70"
               >
-                <div className="flex items-center space-x-1.5 sm:w-44 shrink-0 px-1.5">
+                <div className="flex items-center space-x-1.5 lg:w-44 shrink-0 px-1.5">
                   <span className="text-[11px] font-black text-slate-800">{group.level}</span>
                   <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-white text-slate-600 border border-slate-200">
                     {group.badge}
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-1.5 flex-1">
+                <div className="flex flex-wrap gap-1.5 flex-1 min-w-0">
                   {group.ids.map((id) => {
                     const item = CERT_CONFIG[id];
                     const active = certId === id;
@@ -1439,7 +1439,7 @@ export default function GcpInfoPage() {
                         type="button"
                         onClick={() => handleSwitchCert(id)}
                         onMouseEnter={() => playCyberHover()}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer sm:whitespace-nowrap text-left ${
+                        className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer lg:whitespace-nowrap max-w-full break-words text-left ${
                           active
                             ? "bg-slate-900 text-white shadow-sm"
                             : "text-slate-600 hover:text-slate-900 hover:bg-white/70"

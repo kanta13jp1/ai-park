@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, Copy, Check, ShieldCheck, Wrench } from "lucide-react";
 import { playCyberClick, playCyberSuccess } from "@/lib/sound";
 
@@ -20,6 +20,15 @@ export default function SkillApplicationModal({ isOpen, onClose }: SkillApplicat
   const [securityChecked, setSecurityChecked] = useState(false);
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -66,27 +75,38 @@ ${description || "（未入力）"}
     securityChecked;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fade-in">
-      <div className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-col max-h-[90vh]">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="skill-modal-title"
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200/90 overflow-hidden flex flex-col max-h-[90vh]"
+      >
         {/* ヘッダー */}
         <div className="px-6 py-5 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white flex items-center justify-between border-b border-indigo-900/40">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-400/30">
-              <Wrench className="w-5 h-5 text-indigo-400" />
+              <Wrench className="w-5 h-5 text-indigo-400" aria-hidden="true" />
             </div>
             <div>
-              <h3 className="font-extrabold text-base sm:text-lg">新規社内Skill 登録・提案申請</h3>
+              <h3 id="skill-modal-title" className="font-extrabold text-base sm:text-lg">新規社内Skill 登録・提案申請</h3>
               <p className="text-xs text-slate-300 font-mono mt-0.5">Antigravity Skill Proposal Draft</p>
             </div>
           </div>
           <button
+            type="button"
+            aria-label="閉じる"
             onClick={() => {
               playCyberClick();
               onClose();
             }}
             className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         </div>
 
@@ -94,10 +114,11 @@ ${description || "（未入力）"}
         <div className="p-6 overflow-y-auto space-y-5 text-slate-700 text-sm">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-800 mb-1">
+              <label htmlFor="skill-name" className="block text-xs font-bold text-slate-800 mb-1">
                 スキル名 <span className="text-rose-500">*</span>
               </label>
               <input
+                id="skill-name"
                 type="text"
                 placeholder="例: Git コミット規約自動スキャナ"
                 value={skillName}
@@ -106,8 +127,9 @@ ${description || "（未入力）"}
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-800 mb-1">カテゴリ</label>
+              <label htmlFor="skill-category" className="block text-xs font-bold text-slate-800 mb-1">カテゴリ</label>
               <select
+                id="skill-category"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/40 font-medium bg-white"
@@ -122,10 +144,11 @@ ${description || "（未入力）"}
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-800 mb-1">
+            <label htmlFor="skill-trigger" className="block text-xs font-bold text-slate-800 mb-1">
               呼び出しプロンプト構文（Trigger Phrase） <span className="text-rose-500">*</span>
             </label>
             <input
+              id="skill-trigger"
               type="text"
               placeholder="例: @skill commit-lint 差分チェック"
               value={triggerPhrase}
@@ -135,10 +158,11 @@ ${description || "（未入力）"}
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-800 mb-1">
+            <label htmlFor="skill-description" className="block text-xs font-bold text-slate-800 mb-1">
               スキルの概要・解決する業務課題 <span className="text-rose-500">*</span>
             </label>
             <textarea
+              id="skill-description"
               rows={3}
               placeholder="どのような定常作業を自動化し、どのような手順でエージェントが実行するかを記述してください"
               value={description}
@@ -149,8 +173,9 @@ ${description || "（未入力）"}
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-bold text-slate-800 mb-1">想定削減時間</label>
+              <label htmlFor="skill-time-savings" className="block text-xs font-bold text-slate-800 mb-1">想定削減時間</label>
               <select
+                id="skill-time-savings"
                 value={timeSavings}
                 onChange={(e) => setTimeSavings(e.target.value)}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-medium bg-white"
@@ -162,8 +187,9 @@ ${description || "（未入力）"}
               </select>
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-800 mb-1">申請者 部署</label>
+              <label htmlFor="skill-dept" className="block text-xs font-bold text-slate-800 mb-1">申請者 部署</label>
               <input
+                id="skill-dept"
                 type="text"
                 placeholder="例: 所属チーム・担当（任意）"
                 value={applicantDept}
@@ -172,8 +198,9 @@ ${description || "（未入力）"}
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-800 mb-1">申請者 氏名</label>
+              <label htmlFor="skill-author-name" className="block text-xs font-bold text-slate-800 mb-1">申請者 氏名</label>
               <input
+                id="skill-author-name"
                 type="text"
                 placeholder="例: 氏名（任意）"
                 value={applicantName}
@@ -185,8 +212,9 @@ ${description || "（未入力）"}
 
           {/* セキュリティ宣誓 */}
           <div className="p-3.5 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 space-y-2">
-            <label className="flex items-start gap-2.5 cursor-pointer text-xs leading-relaxed text-indigo-950 font-medium">
+            <label htmlFor="skill-security-check" className="flex items-start gap-2.5 cursor-pointer text-xs leading-relaxed text-indigo-950 font-medium">
               <input
+                id="skill-security-check"
                 type="checkbox"
                 checked={securityChecked}
                 onChange={(e) => {
@@ -222,6 +250,7 @@ ${description || "（未入力）"}
           </p>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
+              type="button"
               onClick={() => {
                 playCyberClick();
                 onClose();
@@ -231,6 +260,7 @@ ${description || "（未入力）"}
               閉じる
             </button>
             <button
+              type="button"
               onClick={handleCopy}
               disabled={!isFormValid}
               className={`flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-bold text-xs transition-all shadow-sm cursor-pointer ${

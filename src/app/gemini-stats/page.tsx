@@ -469,11 +469,11 @@ function doGet() {
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
           <div
             onMouseEnter={() => playCyberHover()}
-            className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-indigo-900/50 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-default"
+            className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-indigo-900/50 flex flex-col xl:flex-row xl:items-center justify-between gap-4 cursor-default"
           >
-            <div className="flex items-center space-x-3.5">
-              <div className={`w-3.5 h-3.5 rounded-full ${isLive ? "bg-emerald-400 animate-pulse shadow-[0_0_10px_#34d399]" : "bg-amber-400"}`} />
-              <div>
+            <div className="flex items-center space-x-3.5 min-w-0">
+              <div className={`w-3.5 h-3.5 rounded-full shrink-0 ${isLive ? "bg-emerald-400 animate-pulse shadow-[0_0_10px_#34d399]" : "bg-amber-400"}`} />
+              <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-extrabold text-sm sm:text-base text-white tracking-tight">
                     監視対象プロジェクト: <span className="font-mono text-cyan-300">{gcpInfo.projectId}</span>
@@ -486,33 +486,35 @@ function doGet() {
                     <span>{syncMode === "api_live" ? "自動同期稼働中" : "検証済みスナップショット"} ({syncedAt})</span>
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-1 font-mono">
+                <p className="text-xs text-slate-400 mt-1 font-mono break-words">
                   組織: {gcpInfo.org} ｜ 請求先ID: {gcpInfo.billingAccountId} ｜ データ元: {dataSource}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-2.5 shrink-0">
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
               <button
+                type="button"
                 onMouseEnter={() => playCyberHover()}
                 onClick={() => {
                   playCyberClick();
                   fetchLiveData();
                 }}
                 disabled={isLoading}
-                className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95 disabled:opacity-50"
+                className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer active:scale-95 disabled:opacity-50"
                 title="最新データを再取得"
               >
                 <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
                 <span>{isLoading ? "更新中..." : "即時再取得"}</span>
               </button>
               <button
+                type="button"
                 onMouseEnter={() => playCyberHover()}
                 onClick={() => {
                   playCyberClick();
                   handleExportCsv();
                 }}
-                className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-all cursor-pointer active:scale-95"
+                className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer active:scale-95"
               >
                 <Download size={13} />
                 <span>CSV出力</span>
@@ -523,7 +525,7 @@ function doGet() {
                 rel="noopener noreferrer"
                 onMouseEnter={() => playCyberHover()}
                 onClick={() => playCyberClick()}
-                className="px-4 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center space-x-1.5 transition-all shadow-md active:scale-95 cursor-pointer"
+                className="px-4 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center space-x-1.5 whitespace-nowrap transition-all shadow-md active:scale-95 cursor-pointer"
               >
                 <span>Cloud Billing コンソール</span>
                 <ExternalLink size={12} />

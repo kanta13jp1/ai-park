@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { navigationSections } from "@/data/navigation";
 import { ExternalLink, Menu, X, Search, Sparkles } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { basePath } from "@/lib/basePath";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 import AudioToggle from "@/components/AudioToggle";
@@ -14,19 +14,33 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
   return (
     <>
       {/* モバイル用トグルボタン */}
       <button
+        type="button"
         onClick={() => {
           playCyberClick();
           setIsOpen(!isOpen);
         }}
         onMouseEnter={() => playCyberHover()}
         className="md:hidden fixed top-3 left-3 z-50 p-2.5 bg-slate-900/90 text-white rounded-xl shadow-lg border border-slate-700/60 backdrop-blur-md focus:outline-none active:scale-95 transition-transform cursor-pointer"
-        aria-label="Toggle navigation"
+        aria-label="ナビゲーションメニューを開閉"
+        aria-expanded={isOpen}
+        aria-controls="site-sidebar-nav"
       >
-        {isOpen ? <X size={20} /> : <Menu size={20} />}
+        {isOpen ? <X size={20} aria-hidden="true" /> : <Menu size={20} aria-hidden="true" />}
       </button>
 
       {/* オーバーレイ (モバイル時) */}
@@ -34,11 +48,13 @@ export default function Sidebar() {
         <div
           className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-40 md:hidden animate-in fade-in duration-200"
           onClick={() => setIsOpen(false)}
+          aria-hidden="true"
         />
       )}
 
       {/* サイドバー本体 */}
       <aside
+        id="site-sidebar-nav"
         className={`fixed top-0 left-0 bottom-0 z-40 w-72 bg-gradient-to-b from-[#0a0f1d] via-[#0d1527] to-[#070a12] text-slate-100 flex flex-col transition-all duration-300 ease-in-out select-none shadow-2xl border-r border-slate-800/80 md:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
@@ -90,6 +106,7 @@ export default function Sidebar() {
 
           {/* クイック検索ボタン（Cmd+K誘導） */}
           <button
+            type="button"
             onClick={() => {
               playCyberClick();
               setIsOpen(false);
@@ -109,7 +126,7 @@ export default function Sidebar() {
         </div>
 
         {/* ナビゲーションリスト */}
-        <nav className="flex-1 overflow-y-auto px-3.5 py-4 space-y-5 text-sm z-10">
+        <nav aria-label="メインナビゲーション" className="flex-1 overflow-y-auto px-3.5 py-4 space-y-5 text-sm z-10">
           {navigationSections.map((section, secIdx) => (
             <div key={secIdx} className="space-y-1">
               {section.title && (
@@ -165,6 +182,7 @@ export default function Sidebar() {
                     <Link
                       key={item.href}
                       href={item.href}
+                      aria-current={isActive ? "page" : undefined}
                       onClick={() => {
                         playCyberClick();
                         setIsOpen(false);

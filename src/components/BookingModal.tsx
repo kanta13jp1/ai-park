@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   X,
   Calendar,
@@ -29,6 +29,22 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [description, setDescription] = useState("");
   const [copiedMemo, setCopiedMemo] = useState(false);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSubmitted(false);
+        setName("");
+        setDepartment("");
+        setPreferredDate("");
+        setDescription("");
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -55,23 +71,41 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}`;
   };
 
-  const handleCopyMemo = () => {
+  const handleCopyMemo = async () => {
     const memo = `【AI Office Hour 予約受付メモ】\n相談者: ${name} (${department})\nテーマ: ${topic}\n希望日時: ${preferredDate}\n相談概要: ${description}`;
-    navigator.clipboard.writeText(memo);
-    setCopiedMemo(true);
-    setTimeout(() => setCopiedMemo(false), 2000);
+    if (typeof navigator === "undefined" || !navigator.clipboard) return;
+    try {
+      await navigator.clipboard.writeText(memo);
+      setCopiedMemo(true);
+      setTimeout(() => setCopiedMemo(false), 2000);
+    } catch {
+      // clipboard permission denied
+    }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-200">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+      onClick={handleResetAndClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="booking-modal-title"
+        onClick={(e) => e.stopPropagation()}
+        className="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-200"
+      >
         {/* モーダルヘッダー */}
         <div className="bg-[#3b4856] text-white px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
-            <Calendar className="w-5 h-5 text-cyan-300" />
-            <h3 className="font-bold text-base md:text-lg">AI Office Hour 予約</h3>
+            <Calendar className="w-5 h-5 text-cyan-300" aria-hidden="true" />
+            <h3 id="booking-modal-title" className="font-bold text-base md:text-lg">
+              AI Office Hour 予約
+            </h3>
           </div>
           <button
+            type="button"
+            aria-label="閉じる"
             onClick={() => {
               playCyberClick();
               handleResetAndClose();
@@ -79,7 +113,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             onMouseEnter={() => playCyberHover()}
             className="text-slate-300 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
           >
-            <X size={20} />
+            <X size={20} aria-hidden="true" />
           </button>
         </div>
 
@@ -167,12 +201,13 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="block font-bold text-slate-700">
+                <label htmlFor="booking-name" className="block font-bold text-slate-700">
                   お名前 <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+                  <User className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" aria-hidden="true" />
                   <input
+                    id="booking-name"
                     type="text"
                     required
                     placeholder="例: お名前"
@@ -184,12 +219,13 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
               </div>
 
               <div className="space-y-1">
-                <label className="block font-bold text-slate-700">
+                <label htmlFor="booking-department" className="block font-bold text-slate-700">
                   所属部署 <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative">
-                  <Building className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+                  <Building className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" aria-hidden="true" />
                   <input
+                    id="booking-department"
                     type="text"
                     required
                     placeholder="例: 所属部署・チーム"
@@ -202,8 +238,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             </div>
 
             <div className="space-y-1">
-              <label className="block font-bold text-slate-700">ご相談テーマ</label>
+              <label htmlFor="booking-topic" className="block font-bold text-slate-700">ご相談テーマ</label>
               <select
+                id="booking-topic"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 bg-white"
@@ -230,12 +267,13 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             </div>
 
             <div className="space-y-1">
-              <label className="block font-bold text-slate-700">
+              <label htmlFor="booking-preferred-date" className="block font-bold text-slate-700">
                 希望日時候補
               </label>
               <div className="relative">
-                <Clock className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+                <Clock className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" aria-hidden="true" />
                 <input
+                  id="booking-preferred-date"
                   type="text"
                   placeholder="例: 来週火曜 14:00 または 木曜午後"
                   value={preferredDate}
@@ -246,8 +284,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             </div>
 
             <div className="space-y-1">
-              <label className="block font-bold text-slate-700">相談概要・事前共有メモ</label>
+              <label htmlFor="booking-description" className="block font-bold text-slate-700">相談概要・事前共有メモ</label>
               <textarea
+                id="booking-description"
                 rows={3}
                 placeholder="困っている点、試してみたいこと、対象プロジェクトの概要などがあればご記入ください。"
                 value={description}
@@ -274,8 +313,8 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
                 onMouseEnter={() => playCyberHover()}
                 className="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-lg shadow-md flex items-center space-x-1.5 transition-all active:scale-98 cursor-pointer"
               >
-                <Send size={14} />
-                <span>予約リクエストを送信</span>
+                <Send size={14} aria-hidden="true" />
+                <span>予約メモを作成する</span>
               </button>
             </div>
           </form>

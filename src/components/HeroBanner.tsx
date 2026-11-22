@@ -42,7 +42,9 @@ export default function HeroBanner({
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`relative w-full overflow-hidden flex items-center justify-center select-none shadow-xl border-b border-slate-800/60 transition-colors duration-500 ${
-        isHome ? "h-64 sm:h-72 md:h-80 bg-[#07130e]" : "h-48 sm:h-52 md:h-56 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950"
+        isHome
+          ? "min-h-64 sm:min-h-72 md:min-h-80 pt-16 pb-8 sm:pt-16 sm:pb-10 bg-[#07130e]"
+          : "min-h-48 sm:min-h-52 md:min-h-56 pt-16 pb-8 sm:pt-16 sm:pb-10 bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950"
       }`}
     >
       {isHome ? (
@@ -66,6 +68,7 @@ export default function HeroBanner({
 
           {/* デジタルAIツリー SVG アートワーク（マウス連動微細パララックス） */}
           <svg
+            aria-hidden="true"
             className="absolute inset-0 w-full h-full object-cover opacity-35 pointer-events-none transition-transform duration-200 ease-out"
             style={{
               transform: `translate(${offset.x * 0.4}px, ${offset.y * 0.4}px) scale(1.02)`,
@@ -150,6 +153,8 @@ export default function HeroBanner({
       {/* 右上の検索バー/トリガー */}
       <div className="absolute top-4 right-5 z-20">
         <button
+          type="button"
+          aria-label="サイト内横断検索を開く (⌘K)"
           onClick={() => {
             playCyberClick();
             window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
