@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
@@ -28,7 +28,17 @@ export default function PreflightUatPage() {
   const [selectedFeatureId, setSelectedFeatureId] = useState<string>(
     preflightChecklistMaster[0]?.id || "home"
   );
-  const [copiedReport, setCopiedReport] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current) {
+        clearTimeout(copyTimerRef.current);
+      }
+    };
+  }, []);
 
   const selectedRecord = records.find((r) => r.id === selectedFeatureId) || records[0];
 
@@ -36,6 +46,7 @@ export default function PreflightUatPage() {
   const verifiedCount = featureStatusMaster.filter((f) => f.isVerified).length;
   const underDevCount = featureStatusMaster.filter((f) => !f.isVerified).length;
   const passedPreflightCount = records.filter((r) => r.overallStatus === "passed").length;
+  const passRate = records.length > 0 ? Math.round((passedPreflightCount / records.length) * 100) : 0;
 
   // レポート生成（Markdown）
   const generateMarkdownReport = () => {
@@ -72,12 +83,41 @@ export default function PreflightUatPage() {
     return md;
   };
 
-  const handleCopyReport = () => {
+  const handleCopyReport = async () => {
     const report = generateMarkdownReport();
-    navigator.clipboard?.writeText(report).then(() => {
-      setCopiedReport(true);
-      setTimeout(() => setCopiedReport(false), 2000);
-    });
+    if (copyTimerRef.current) {
+      clearTimeout(copyTimerRef.current);
+    }
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Clipboard API is unavailable");
+      }
+      await navigator.clipboard.writeText(report);
+      playCyberClick();
+      setCopyStatus("copied");
+    } catch {
+      setCopyStatus("failed");
+    }
+    copyTimerRef.current = setTimeout(() => setCopyStatus("idle"), 2500);
+  };
+
+  const handleTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    if (records.length === 0) return;
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowDown") {
+      nextIndex = (currentIndex + 1) % records.length;
+    } else if (e.key === "ArrowUp") {
+      nextIndex = (currentIndex - 1 + records.length) % records.length;
+    } else if (e.key === "Home") {
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      nextIndex = records.length - 1;
+    }
+    if (nextIndex === null) return;
+    e.preventDefault();
+    playCyberClick();
+    setSelectedFeatureId(records[nextIndex].id);
+    tabRefs.current[nextIndex]?.focus();
   };
 
   return (
@@ -89,9 +129,9 @@ export default function PreflightUatPage() {
 
       <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* ガバナンス宣誓バナー */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 shadow-xl border border-indigo-900/50 flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 shadow-xl border border-indigo-900/50 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30">
                 DEVELOPER UAT GATE
               </span>
@@ -110,12 +150,32 @@ export default function PreflightUatPage() {
 
           <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
             <button
+              type="button"
               onClick={handleCopyReport}
               className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs active:scale-95"
             >
-              {copiedReport ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-              <span>{copiedReport ? "UAT報告書をコピー完了" : "UAT報告書をMarkdownでコピー"}</span>
+              {copyStatus === "copied" ? (
+                <Check size={14} className="text-emerald-400" />
+              ) : copyStatus === "failed" ? (
+                <AlertTriangle size={14} className="text-amber-400" />
+              ) : (
+                <Copy size={14} />
+              )}
+              <span>
+                {copyStatus === "copied"
+                  ? "UAT報告書をコピー完了"
+                  : copyStatus === "failed"
+                  ? "コピーに失敗しました"
+                  : "UAT報告書をMarkdownでコピー"}
+              </span>
             </button>
+            <span className="sr-only" role="status" aria-live="polite">
+              {copyStatus === "copied"
+                ? "UAT報告書をクリップボードにコピーしました。"
+                : copyStatus === "failed"
+                ? "クリップボードへのコピーに失敗しました。"
+                : ""}
+            </span>
           </div>
         </div>
 
@@ -125,13 +185,13 @@ export default function PreflightUatPage() {
             <SpotlightCard spotlightColor="rgba(16, 185, 129, 0.15)" className="bg-white border-slate-200 h-full rounded-2xl">
               <div onMouseEnter={() => playCyberHover()} className="p-5 space-y-2 h-full flex flex-col justify-between">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                  <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs text-slate-500 font-bold">
                     <span className="flex items-center gap-1.5">
                       <FileCheck2 size={15} className="text-emerald-600" />
                       手動UAT 合格機能
                     </span>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono">
-                      100% 承認
+                      {passRate}% 承認
                     </span>
                   </div>
                   <div className="text-2xl font-black text-slate-900 font-mono flex items-baseline gap-1">
@@ -148,7 +208,7 @@ export default function PreflightUatPage() {
             <SpotlightCard spotlightColor="rgba(59, 130, 246, 0.15)" className="bg-white border-slate-200 h-full rounded-2xl">
               <div onMouseEnter={() => playCyberHover()} className="p-5 space-y-2 h-full flex flex-col justify-between">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                  <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs text-slate-500 font-bold">
                     <span className="flex items-center gap-1.5">
                       <ShieldCheck size={15} className="text-blue-600" />
                       公式公開中ページ
@@ -171,7 +231,7 @@ export default function PreflightUatPage() {
             <SpotlightCard spotlightColor="rgba(245, 158, 11, 0.15)" className="bg-white border-slate-200 h-full rounded-2xl">
               <div onMouseEnter={() => playCyberHover()} className="p-5 space-y-2 h-full flex flex-col justify-between">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                  <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs text-slate-500 font-bold">
                     <span className="flex items-center gap-1.5">
                       <AlertTriangle size={15} className="text-amber-600" />
                       工事中・PoCガード
@@ -194,7 +254,7 @@ export default function PreflightUatPage() {
             <SpotlightCard spotlightColor="rgba(168, 85, 247, 0.15)" className="bg-white border-slate-200 h-full rounded-2xl">
               <div onMouseEnter={() => playCyberHover()} className="p-5 space-y-2 h-full flex flex-col justify-between">
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
+                  <div className="flex flex-wrap items-center justify-between gap-1.5 text-xs text-slate-500 font-bold">
                     <span className="flex items-center gap-1.5">
                       <Laptop size={15} className="text-purple-600" />
                       実機検証環境
@@ -204,10 +264,10 @@ export default function PreflightUatPage() {
                     </span>
                   </div>
                   <div className="text-sm font-bold text-slate-900 truncate">
-                    Win 11 / Chrome / 1080p
+                    Win 11 / Chrome・Chromium
                   </div>
                 </div>
-                <p className="text-[11px] text-slate-500">社内標準PC環境で全件確認</p>
+                <p className="text-[11px] text-slate-500">Desktop・Tablet(768px)・Mobile で確認</p>
               </div>
             </SpotlightCard>
           </TiltCard>
@@ -219,22 +279,40 @@ export default function PreflightUatPage() {
           <div className="lg:col-span-4 space-y-3">
             <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-xs font-black text-slate-900 tracking-tight flex items-center gap-1.5">
+                <h2 className="text-xs font-black text-slate-900 tracking-tight flex items-center gap-1.5">
                   <FileCheck2 size={14} className="text-indigo-600" />
                   <span>手動UAT 対象機能</span>
-                </h3>
+                </h2>
                 <span className="text-[10px] font-mono text-slate-400">
                   {records.length} 件登録
                 </span>
               </div>
 
-              <div className="space-y-1.5 max-h-[500px] overflow-y-auto pr-1">
-                {records.map((r) => {
+              <div
+                role="tablist"
+                aria-orientation="vertical"
+                aria-label="手動UAT 対象機能一覧"
+                className="space-y-1.5 max-h-[500px] overflow-y-auto pr-1"
+              >
+                {records.map((r, idx) => {
                   const isSelected = r.id === selectedFeatureId;
                   return (
                     <button
                       key={r.id}
-                      onClick={() => { playCyberClick(); setSelectedFeatureId(r.id); }}
+                      type="button"
+                      role="tab"
+                      id={`preflight-tab-${r.id}`}
+                      aria-selected={isSelected}
+                      aria-controls="preflight-detail-panel"
+                      tabIndex={isSelected ? 0 : -1}
+                      ref={(el) => {
+                        tabRefs.current[idx] = el;
+                      }}
+                      onClick={() => {
+                        playCyberClick();
+                        setSelectedFeatureId(r.id);
+                      }}
+                      onKeyDown={(e) => handleTabKeyDown(e, idx)}
                       onMouseEnter={() => playCyberHover()}
                       className={`w-full p-3 rounded-xl text-left transition-all cursor-pointer flex flex-col gap-1 border ${
                         isSelected
@@ -242,12 +320,12 @@ export default function PreflightUatPage() {
                           : "bg-slate-50/70 hover:bg-slate-100/80 border-slate-200/80 text-slate-700"
                       }`}
                     >
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-2">
                         <span className="text-xs font-bold truncate">
                           {r.name}
                         </span>
                         <span
-                          className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${
+                          className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold shrink-0 ${
                             isSelected
                               ? "bg-emerald-400/20 text-emerald-300 border border-emerald-400/40"
                               : "bg-emerald-100 text-emerald-800"
@@ -268,10 +346,10 @@ export default function PreflightUatPage() {
 
             {/* 工事中・準備中機能の保護リスト */}
             <div className="bg-amber-50/50 rounded-2xl border border-amber-200/80 p-4 space-y-2.5">
-              <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+              <h2 className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
                 <AlertTriangle size={13} className="text-amber-600" />
                 <span>工事中・未検証機能（{underDevCount}件）</span>
-              </h4>
+              </h2>
               <p className="text-[11px] text-amber-800 leading-relaxed">
                 以下の機能は手動UAT未完了のため、ビルドゲートにより「工事中 / 準備中 / PoC」の注意書きが強制表示されています。
               </p>
@@ -279,12 +357,18 @@ export default function PreflightUatPage() {
                 {featureStatusMaster
                   .filter((f) => !f.isVerified)
                   .map((f) => (
-                    <div key={f.id} className="flex items-center justify-between p-1.5 rounded bg-white/70 border border-amber-200/60">
+                    <Link
+                      key={f.id}
+                      href={f.href}
+                      onClick={() => playCyberClick()}
+                      onMouseEnter={() => playCyberHover()}
+                      className="flex items-center justify-between p-1.5 rounded bg-white/70 hover:bg-white border border-amber-200/60 hover:border-amber-400 transition-colors cursor-pointer"
+                    >
                       <span className="truncate max-w-[160px]">{f.name}</span>
                       <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 font-bold shrink-0">
                         {f.currentBadge}
                       </span>
-                    </div>
+                    </Link>
                   ))}
               </div>
             </div>
@@ -292,14 +376,19 @@ export default function PreflightUatPage() {
 
           {/* 右カラム：選択した機能の4大手動チェックシート */}
           <div className="lg:col-span-8 space-y-4">
-            <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-xs space-y-6">
+            <div
+              id="preflight-detail-panel"
+              role="tabpanel"
+              aria-labelledby={`preflight-tab-${selectedRecord.id}`}
+              className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-xs space-y-6"
+            >
               {/* 機能ヘッダー */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 border-b border-slate-100 pb-4">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base sm:text-lg font-black text-slate-900">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h2 className="text-base sm:text-lg font-black text-slate-900">
                       {selectedRecord.name}
-                    </h3>
+                    </h2>
                     <Link
                       href={selectedRecord.path}
                       target="_blank"
@@ -315,7 +404,7 @@ export default function PreflightUatPage() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 shrink-0">
                   <span className="px-3 py-1 rounded-full text-xs font-bold font-mono bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
                     <CheckCircle2 size={13} />
                     <span>手動UAT 全項目合格</span>
@@ -324,15 +413,15 @@ export default function PreflightUatPage() {
               </div>
 
               {/* 4大評価軸詳細 */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                 {/* ① 仕様・事実確認 */}
                 <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-xs font-black text-slate-900">
-                      <FileCheck2 size={15} className="text-indigo-600" />
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="flex items-center gap-1.5 text-xs font-black text-slate-900">
+                      <FileCheck2 size={15} className="text-indigo-600 shrink-0" />
                       <span>① 仕様・事実確認（Fact & Spec）</span>
-                    </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    </h3>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 shrink-0">
                       合格
                     </span>
                   </div>
@@ -347,10 +436,10 @@ export default function PreflightUatPage() {
                       {/* グループごとにレンダリング */}
                       {Array.from(new Set(selectedRecord.checks.factAndSpec.subChecks.map(s => s.groupTitle))).map((group) => (
                         <div key={group} className="space-y-1.5">
-                          <h5 className="font-black text-slate-900 text-[11px] bg-slate-100/80 px-2 py-1 rounded-md text-indigo-950 flex items-center gap-1.5">
+                          <h4 className="font-black text-slate-900 text-[11px] bg-slate-100/80 px-2 py-1 rounded-md text-indigo-950 flex items-center gap-1.5">
                             <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 inline-block" />
                             <span>{group}</span>
-                          </h5>
+                          </h4>
                           <div className="space-y-1.5 pl-1">
                             {selectedRecord.checks.factAndSpec.subChecks
                               ?.filter(s => s.groupTitle === group)
@@ -387,12 +476,12 @@ export default function PreflightUatPage() {
 
                 {/* ② デザイン・レイアウト */}
                 <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-xs font-black text-slate-900">
-                      <Layout size={15} className="text-blue-600" />
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="flex items-center gap-1.5 text-xs font-black text-slate-900">
+                      <Layout size={15} className="text-blue-600 shrink-0" />
                       <span>② デザイン・レイアウト（Aesthetics）</span>
-                    </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    </h3>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 shrink-0">
                       合格
                     </span>
                   </div>
@@ -412,12 +501,12 @@ export default function PreflightUatPage() {
 
                 {/* ③ 操作性・機能性 */}
                 <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-xs font-black text-slate-900">
-                      <MousePointerClick size={15} className="text-purple-600" />
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="flex items-center gap-1.5 text-xs font-black text-slate-900">
+                      <MousePointerClick size={15} className="text-purple-600 shrink-0" />
                       <span>③ 操作性・機能性（Usability）</span>
-                    </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    </h3>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 shrink-0">
                       合格
                     </span>
                   </div>
@@ -437,12 +526,12 @@ export default function PreflightUatPage() {
 
                 {/* ④ 視認性・アクセシビリティ */}
                 <div className="p-4 rounded-2xl bg-slate-50/70 border border-slate-200/80 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-xs font-black text-slate-900">
-                      <Eye size={15} className="text-amber-600" />
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="flex items-center gap-1.5 text-xs font-black text-slate-900">
+                      <Eye size={15} className="text-amber-600 shrink-0" />
                       <span>④ 視認性・分かりやすさ（Readability）</span>
-                    </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                    </h3>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 shrink-0">
                       合格
                     </span>
                   </div>

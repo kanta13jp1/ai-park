@@ -19,6 +19,7 @@ import {
   Wrench,
   AlertTriangle,
   BarChart3,
+  Video,
 } from "lucide-react";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
@@ -29,12 +30,12 @@ export default function HowToPage() {
     {
       id: "tools",
       title: "AIツール一覧",
-      desc: "社内で使えるAIツールの情報を知りたい方はこちら！",
+      desc: "社内確認中のAIツール候補とセキュリティ基準を確認したい方はこちら（PoC検証中）",
       icon: <Bot className="text-sky-600" size={32} />,
       iconBg: "bg-sky-50 border-sky-100",
       href: "/tools",
-      badge: "AIツール一覧",
-      badgeColor: "bg-sky-100 text-sky-700",
+      badge: "🧪 PoC中",
+      badgeColor: "bg-amber-100 text-amber-800",
       tags: ["ツール一覧", "セキュリティLevel 1-3"],
       highlights: "AIツールの一覧と、扱ってよいデータの基準（Level 1〜3）",
     },
@@ -169,6 +170,18 @@ export default function HowToPage() {
       tags: ["利用統計", "課金推移", "無料トライアル"],
       highlights: "社内 Google Cloud プロジェクトの自動同期データと日次利用トレンド",
     },
+    {
+      id: "study-archive",
+      title: "AI勉強会アーカイブ",
+      desc: "社内AI勉強会の録画動画・議事メモ・次回課題を確認したい方はこちら！",
+      icon: <Video className="text-indigo-600" size={32} />,
+      iconBg: "bg-indigo-50 border-indigo-100",
+      href: "/study-archive",
+      badge: "β版",
+      badgeColor: "bg-emerald-100 text-emerald-800",
+      tags: ["録画動画", "議事メモ", "次回課題", "社内限定"],
+      highlights: "開催回ごとの録画動画・議事メモ（Google Workspace 限定共有）と次回課題ガイド",
+    },
   ];
 
   const steps = [
@@ -223,7 +236,7 @@ export default function HowToPage() {
                 使い方・学び
               </h1>
               <p className="text-sm sm:text-base text-slate-300 mt-1 font-light">
-                社内で使えるAIツールの基本操作から実務活用、他部署事例まで体系的に学べるナレッジハブ
+                AIツールの基本操作から実務プロンプト・認定学習・勉強会アーカイブまで体系的に学べるナレッジハブ
               </p>
             </div>
           </div>
@@ -232,9 +245,9 @@ export default function HowToPage() {
 
       {/* メインコンテンツ領域 */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-1 space-y-12">
-        {/* 4大ナレッジカード（参考サイト準拠） */}
+        {/* ナレッジ・コンテンツ一覧 */}
         <section className="space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200">
             <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
               <Sparkles className="text-sky-500" size={20} />
               ナレッジ・コンテンツ一覧
@@ -260,7 +273,7 @@ export default function HowToPage() {
                     onMouseEnter={() => playCyberHover()}
                     className="group block p-6 transition-all duration-200 cursor-pointer"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                       <div className="flex items-start sm:items-center space-x-4">
                         {/* アイコン */}
                         <div
@@ -291,7 +304,7 @@ export default function HowToPage() {
                       </div>
 
                       {/* 右側アクション */}
-                      <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+                      <div className="flex items-center justify-between lg:justify-end gap-3 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100">
                         <div className="flex flex-wrap gap-1.5">
                           {card.tags.map((tag, tIdx) => (
                             <span
@@ -322,11 +335,11 @@ export default function HowToPage() {
               はじめての社内AI活用 3ステップ
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 font-normal">
-              社内で生成AIを実務に導入する際の標準的な学習・ステップアップ手順です。
+              AI Park を使って生成AIを実務に取り入れる際のおすすめ学習ステップです。
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {steps.map((item, idx) => (
               <TiltCard
                 key={idx}
@@ -375,15 +388,15 @@ export default function HowToPage() {
             className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-900/40"
           >
             <div className="absolute top-0 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+            <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-6 relative z-10">
               <div className="space-y-2 max-w-xl">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 text-xs font-semibold border border-cyan-400/30">
                   <Lightbulb size={14} />
                   <span>開発者 & 実務者向け便利リンク</span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight">
+                <h2 className="text-xl sm:text-2xl font-black tracking-tight">
                   日々の開発・業務を加速するリソース集
-                </h3>
+                </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
                   導入ガイド・社内Skillsカタログ・Antigravity情報局へのショートカットです。
                 </p>

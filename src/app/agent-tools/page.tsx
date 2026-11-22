@@ -67,9 +67,9 @@ export default function AgentToolsHubPage() {
     {
       id: "agent-cases",
       title: "AI Agent Case (Subagents活用事例)",
-      desc: "完成済みのエージェントを見るにはこちらから！",
+      desc: "AI Park 実運用エージェント（6種）・Subagents / Swarm 使い分けガイド・テンプレートはこちら！",
       detail:
-        "社内で実際に使っているエージェントの構成と効果を紹介する予定です（事例を集めている段階です）。",
+        "リポジトリ実在エージェント 6 種・Subagents / Workflow / Agent Swarms 比較ガイド・定義テンプレートを掲載中（各部署の業務導入事例は収集中のため一部工事中です）。",
       icon: Cpu,
       iconColor: "text-purple-600",
       iconBg: "bg-purple-50 border-purple-200",
@@ -77,7 +77,7 @@ export default function AgentToolsHubPage() {
       badge: "🚧 工事中",
       badgeColor: "bg-purple-100 text-purple-800 border-purple-200",
       statusType: "poc",
-      tags: ["#Antigravity", "#並列サブエージェント", "#業務自動化"],
+      tags: ["#実運用エージェント6種", "#Swarmガイド", "#定義テンプレート", "#部署事例準備中"],
     },
     {
       id: "adoption",
@@ -144,7 +144,7 @@ export default function AgentToolsHubPage() {
     {
       num: "03",
       title: "効果を測定し全社へ共有",
-      desc: "「社内活用状況」で月間削減工数やROIを可視化。社内インタビューなどを通じて成功ノウハウを全社に還元します。",
+      desc: "効果や気づきを整理し、「社内活用状況（工事中）」や「AI活用インタビュー（準備中）」を通じてノウハウを共有していきます。",
       linkText: "活用状況を見る",
       href: "/adoption",
     },
@@ -190,7 +190,7 @@ export default function AgentToolsHubPage() {
         {/* ハブカード一覧（参考サイトの1カラム縦型カード完全再現） */}
         {/* ======================================================== */}
         <section className="space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
             <div className="flex items-center space-x-2">
               <Layers className="w-5 h-5 text-sky-600" />
               <h2 className="text-lg sm:text-xl font-bold text-slate-900">
@@ -289,15 +289,15 @@ export default function AgentToolsHubPage() {
               <span className="text-[11px] font-bold tracking-widest uppercase text-sky-400 font-mono">
                 How to leverage agents
               </span>
-              <h3 className="text-xl sm:text-2xl font-black text-white">
+              <h2 className="text-xl sm:text-2xl font-black text-white">
                 自律型エージェント活用の3ステップ
-              </h3>
+              </h2>
               <p className="text-xs text-slate-300 max-w-xl">
                 個人のちょっとした業務自動化から、チーム・全社展開までをスムーズに進めるための推進サイクル
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-2">
               {steps.map((st) => (
                 <TiltCard
                   key={st.num}
@@ -313,9 +313,9 @@ export default function AgentToolsHubPage() {
                       <span className="text-2xl font-black text-sky-400 font-mono">
                         {st.num}
                       </span>
-                      <h4 className="text-sm font-bold text-white">
+                      <h3 className="text-sm font-bold text-white">
                         {st.title}
-                      </h4>
+                      </h3>
                       <p className="text-xs text-slate-300 leading-relaxed">
                         {st.desc}
                       </p>
@@ -341,17 +341,17 @@ export default function AgentToolsHubPage() {
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
           <div
             onMouseEnter={() => playCyberHover()}
-            className="p-5 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs"
+            className="p-5 rounded-2xl bg-white border border-slate-200 flex flex-col lg:flex-row lg:items-center justify-between gap-4 shadow-2xs"
           >
             <div className="space-y-1">
               <div className="flex items-center space-x-2">
                 <Calendar className="w-4 h-4 text-sky-600" />
-                <h4 className="text-sm font-bold text-slate-900">
+                <h2 className="text-sm font-bold text-slate-900">
                   PoC中・工事中機能の正式稼働スケジュール
-                </h4>
+                </h2>
               </div>
               <p className="text-xs text-slate-500">
-                各機能の解除条件・本番データ連携予定日は「開発ロードマップ」にて具体的に公開されています。
+                各機能の解除条件や現在の開発ステータスは「開発ロードマップ」にて公開しています。
               </p>
             </div>
             <Link

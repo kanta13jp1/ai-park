@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HeroBanner from "@/components/HeroBanner";
 import SpotlightCard from "@/components/SpotlightCard";
 import TiltCard from "@/components/TiltCard";
@@ -42,24 +42,35 @@ export default function IdeaBoardPage() {
   const [syncState, setSyncState] = useState<"loading" | "ok" | "error">("loading");
   const [stageFilter, setStageFilter] = useState<IdeaStage | "all" | "help">("all");
   const [query, setQuery] = useState("");
+  const abortRef = useRef<AbortController | null>(null);
 
-  const load = (signal?: AbortSignal) =>
+  const load = (signal: AbortSignal) =>
     fetchIdeaIssues(signal).then(
       (items) => {
+        if (signal.aborted) return;
         setIdeas(items);
         setSyncState("ok");
       },
       (e) => {
-        if (signal?.aborted) return;
+        if (signal.aborted) return;
         console.error("Failed to load ideas", e);
         setSyncState("error");
       }
     );
 
+  const handleReload = () => {
+    abortRef.current?.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+    setSyncState("loading");
+    load(controller.signal);
+  };
+
   useEffect(() => {
     const controller = new AbortController();
+    abortRef.current = controller;
     load(controller.signal);
-    return () => controller.abort();
+    return () => abortRef.current?.abort();
   }, []);
 
   const q = query.trim().toLowerCase();
@@ -97,7 +108,7 @@ export default function IdeaBoardPage() {
           >
             <div
               onMouseEnter={() => playCyberHover()}
-              className="p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10 cursor-default"
+              className="p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10 cursor-default"
             >
               <div className="space-y-2 max-w-2xl">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-cyan-300 text-xs font-semibold border border-indigo-400/30">
@@ -133,10 +144,12 @@ export default function IdeaBoardPage() {
 
         {/* フィルター・検索 & 同期状況 */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white/70 backdrop-blur-md p-4 rounded-3xl border border-slate-200/90 shadow-xs">
-          <div className="flex flex-wrap gap-2">
+          <div role="group" aria-label="進捗ステージで絞り込み" className="flex flex-wrap gap-2">
             {filters.map((f) => (
               <button
                 key={f.key}
+                type="button"
+                aria-pressed={stageFilter === f.key}
                 onMouseEnter={() => playCyberHover()}
                 onClick={() => handleFilterClick(f.key)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
@@ -153,8 +166,12 @@ export default function IdeaBoardPage() {
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="relative w-full sm:w-64">
+              <label htmlFor="idea-search-input" className="sr-only">
+                アイデアをキーワードで検索
+              </label>
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
+                id="idea-search-input"
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -164,18 +181,21 @@ export default function IdeaBoardPage() {
             </div>
 
             <div className="flex items-center gap-2 text-xs text-slate-500 shrink-0">
-              <CircleDot size={13} className="text-cyan-500" />
-              {syncState === "loading" && <span className="font-mono">GitHub同期中...</span>}
-              {syncState === "ok" && <span className="font-mono font-bold text-slate-700">{ideas.length} 件</span>}
-              {syncState === "error" && <span className="text-rose-600 font-bold">同期エラー</span>}
+              <div role="status" aria-live="polite" className="flex items-center gap-2">
+                <CircleDot size={13} className="text-cyan-500" />
+                {syncState === "loading" && <span className="font-mono">GitHub同期中...</span>}
+                {syncState === "ok" && <span className="font-mono font-bold text-slate-700">{ideas.length} 件</span>}
+                {syncState === "error" && <span className="text-rose-600 font-bold">同期エラー</span>}
+              </div>
               <button
+                type="button"
+                disabled={syncState === "loading"}
                 onMouseEnter={() => playCyberHover()}
                 onClick={() => {
                   playCyberClick();
-                  setSyncState("loading");
-                  load();
+                  handleReload();
                 }}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200/80 text-slate-700 font-bold cursor-pointer active:scale-95 transition-all"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200/80 text-slate-700 font-bold cursor-pointer active:scale-95 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 <RefreshCw size={12} className={syncState === "loading" ? "animate-spin" : ""} />
                 <span>再読込</span>
@@ -185,7 +205,8 @@ export default function IdeaBoardPage() {
         </div>
 
         {/* アイデア一覧カードグリッド */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <h2 className="sr-only">宣言されたアイデア一覧</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {shown.map((i) => (
             <TiltCard
               key={i.id}
@@ -228,7 +249,7 @@ export default function IdeaBoardPage() {
                       </span>
                     )}
                     {i.wantsHelp && i.stage !== "終了" && (
-                      <span className="inline-flex items-center gap-1 font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60 animate-pulse">
+                      <span className="inline-flex items-center gap-1 font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60 motion-safe:animate-pulse">
                         <HandHelping size={13} />
                         協力者募集中
                       </span>
@@ -311,7 +332,7 @@ export default function IdeaBoardPage() {
               暫定版（クリックで開閉）
             </span>
           </summary>
-          <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5 text-xs text-slate-700 leading-relaxed border-t border-slate-100 pt-5">
+          <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5 text-xs text-slate-700 leading-relaxed border-t border-slate-100 pt-5">
             <div className="space-y-2.5">
               <p><strong className="text-slate-900">目的：</strong>業務効率化だけでなく、AIで新価値・新収益を生むビジネスモデルのアイデアを全社から募集</p>
               <p><strong className="text-slate-900">対象：</strong>全社員（個人・チームどちらでも可、複数応募可）</p>
@@ -340,25 +361,25 @@ export default function IdeaBoardPage() {
 
         {/* 宣言時のルール */}
         <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-4">
-          <h3 className="text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
+          <h2 className="text-base font-black text-slate-900 tracking-tight flex items-center gap-2">
             <HelpCircle size={18} className="text-indigo-600" />
             <span>アイデア宣言の3大ルール</span>
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700 leading-relaxed">
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-xs text-slate-700 leading-relaxed">
             <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1">
-              <h4 className="font-extrabold text-slate-900">1. アイデアの重複は歓迎</h4>
+              <h3 className="font-extrabold text-slate-900">1. アイデアの重複は歓迎</h3>
               <p className="text-slate-600 font-normal">
                 「似たようなアイデアがあるかも」と躊躇する必要はありません。自部署独自の観点やアレンジは大歓迎です。
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1">
-              <h4 className="font-extrabold text-slate-900">2. 機密情報の非記載</h4>
+              <h3 className="font-extrabold text-slate-900">2. 機密情報の非記載</h3>
               <p className="text-slate-600 font-normal">
                 具体的な顧客名・個人情報・未公開案件コードネームを直接記載せず、一般化した業務名で記載してください。
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-1">
-              <h4 className="font-extrabold text-slate-900">3. 作成義務はありません</h4>
+              <h3 className="font-extrabold text-slate-900">3. 作成義務はありません</h3>
               <p className="text-slate-600 font-normal">
                 「こんなのあったらいいな」という構想だけで十分です。他のエンジニアが「作ります！」と合流することもあります。
               </p>
