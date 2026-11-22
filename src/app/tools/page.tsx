@@ -278,6 +278,17 @@ export default function ToolsPage() {
   const [draftModalTool, setDraftModalTool] = useState<MatrixTool | null>(null);
   const [isDraftModalOpen, setIsDraftModalOpen] = useState<boolean>(false);
 
+  useEffect(() => {
+    if (!selectedTool || isDraftModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedTool(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedTool, isDraftModalOpen]);
+
   // 社内推奨ランク判定ヘルパー
   const getToolRank = (tool: MatrixTool): "S" | "A" | "B" | "PoC" => {
     if (tool.id === 2 || tool.id === 7 || tool.id === 3) return "S"; // Gemini, Antigravity, NotebookLM
@@ -1008,8 +1019,20 @@ export default function ToolsPage() {
 
       {/* ツール詳細モーダル */}
       {selectedTool && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 space-y-5">
+        <div
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="tool-detail-modal-title"
+          onClick={() => {
+            playCyberClick();
+            setSelectedTool(null);
+          }}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200 space-y-5"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-3">
                 <div
@@ -1018,19 +1041,21 @@ export default function ToolsPage() {
                   {selectedTool.initial}
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">
+                  <h2 id="tool-detail-modal-title" className="text-lg font-bold text-slate-900">
                     {selectedTool.name}
-                  </h3>
+                  </h2>
                   <span className="text-xs text-slate-500 font-medium">
                     {selectedTool.form}
                   </span>
                 </div>
               </div>
               <button
+                type="button"
+                aria-label="閉じる"
                 onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
-                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+                className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
               >
-                <X size={20} />
+                <X size={20} aria-hidden="true" />
               </button>
             </div>
 
@@ -1115,8 +1140,9 @@ export default function ToolsPage() {
                   </Link>
                 ) : (
                   <button
+                    type="button"
                     onClick={() => { playCyberClick(); setSelectedTool(null); }} onMouseEnter={() => playCyberHover()}
-                    className="px-3 py-2 rounded-lg bg-slate-900 text-xs font-bold text-white hover:bg-slate-800 transition-colors"
+                    className="px-3 py-2 rounded-lg bg-slate-900 text-xs font-bold text-white hover:bg-slate-800 transition-colors cursor-pointer"
                   >
                     閉じる
                   </button>

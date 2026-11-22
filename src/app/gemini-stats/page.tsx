@@ -1091,17 +1091,17 @@ function doGet() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-xs text-left border-collapse">
+            <table className="w-full min-w-[640px] text-xs text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-50/80 text-slate-700 font-bold">
-                  <th className="py-3 px-4">社員名 / アカウント</th>
-                  <th className="py-3 px-4">所属部署</th>
-                  <th className="py-3 px-4 text-center">稼働ステータス</th>
-                  <th className="py-3 px-4 text-right">リクエスト回数</th>
-                  <th className="py-3 px-4 text-right">推定消費トークン</th>
-                  <th className="py-3 px-4 text-right font-mono text-indigo-900">累計利用費用</th>
-                  <th className="py-3 px-4">主要モデル</th>
-                  <th className="py-3 px-4 text-right">最終利用日時</th>
+                  <th className="py-3 px-4 whitespace-nowrap">社員名 / アカウント</th>
+                  <th className="py-3 px-4 whitespace-nowrap">所属部署</th>
+                  <th className="py-3 px-4 text-center whitespace-nowrap">稼働ステータス</th>
+                  <th className="py-3 px-4 text-right whitespace-nowrap">リクエスト回数</th>
+                  <th className="py-3 px-4 text-right whitespace-nowrap">推定消費トークン</th>
+                  <th className="py-3 px-4 text-right font-mono text-indigo-900 whitespace-nowrap">累計利用費用</th>
+                  <th className="py-3 px-4 whitespace-nowrap">主要モデル</th>
+                  <th className="py-3 px-4 text-right whitespace-nowrap">最終利用日時</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-600">

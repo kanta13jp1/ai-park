@@ -18,7 +18,7 @@ import {
   UserPlus,
   Award,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GITHUB_REPO } from "@/lib/githubFeedback";
 
 interface Ambassador {
@@ -77,6 +77,17 @@ export default function AmbassadorsPage() {
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [appliedSuccess, setAppliedSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!isApplyModalOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsApplyModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isApplyModalOpen]);
 
   // 公募フォームステート
   const [applyName, setApplyName] = useState("");
@@ -155,10 +166,11 @@ export default function AmbassadorsPage() {
             </div>
           </div>
           <button
+            type="button"
             onClick={() => { playCyberOpen(); setIsApplyModalOpen(true); }} onMouseEnter={() => playCyberHover()}
-            className="shrink-0 inline-flex items-center space-x-1.5 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors self-end sm:self-center"
+            className="shrink-0 inline-flex items-center space-x-1.5 px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-semibold shadow-xs transition-colors self-end sm:self-center cursor-pointer"
           >
-            <UserPlus size={14} />
+            <UserPlus size={14} aria-hidden="true" />
             <span>アンバサダーに応募する</span>
           </button>
         </div>
@@ -413,22 +425,33 @@ export default function AmbassadorsPage() {
 
       {/* アンバサダー公募モーダル */}
       {isApplyModalOpen && (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ambassador-modal-title"
+          onClick={() => setIsApplyModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
+              type="button"
+              aria-label="閉じる"
               onClick={() => setIsApplyModalOpen(false)}
-              className="absolute top-4 right-4 p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
+              className="absolute top-4 right-4 p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
             >
-              <X size={20} />
+              <X size={20} aria-hidden="true" />
             </button>
 
             <div className="space-y-1">
               <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded">
                 MightyLINK AI 推進リーダー公募
               </span>
-              <h3 className="text-lg font-bold text-slate-900">
+              <h2 id="ambassador-modal-title" className="text-lg font-bold text-slate-900">
                 AIアンバサダーへの参加応募
-              </h3>
+              </h2>
               <p className="text-xs text-slate-600 leading-relaxed">
                 自チームのAI推進をリードし、AI推進担当と連携して知見やSkillsを共有するアンバサダーを募集しています。専門資格や高度なAI開発経験は不問です。
               </p>
@@ -437,7 +460,7 @@ export default function AmbassadorsPage() {
             {appliedSuccess ? (
               <div className="py-8 text-center space-y-3 bg-emerald-50 border border-emerald-200 rounded-xl p-6">
                 <div className="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
-                  <CheckCircle2 size={28} />
+                  <CheckCircle2 size={28} aria-hidden="true" />
                 </div>
                 <h4 className="font-bold text-emerald-950 text-base">応募フォームを開きました</h4>
                 <p className="text-xs text-emerald-800 leading-relaxed">
@@ -450,7 +473,7 @@ export default function AmbassadorsPage() {
                     setAppliedSuccess(false);
                     setIsApplyModalOpen(false);
                   }}
-                  className="px-4 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold"
+                  className="px-4 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold cursor-pointer"
                 >
                   閉じる
                 </button>
@@ -459,26 +482,28 @@ export default function AmbassadorsPage() {
               <form onSubmit={handleApplySubmit} className="space-y-4 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700">
+                    <label htmlFor="ambassador-name" className="font-bold text-slate-700">
                       お名前 <span className="text-rose-500">*</span>
                     </label>
                     <input
+                      id="ambassador-name"
                       type="text"
                       required
-                      placeholder="例: 佐々木 拓也"
+                      placeholder="例: 氏名"
                       value={applyName}
                       onChange={(e) => setApplyName(e.target.value)}
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="font-bold text-slate-700">
+                    <label htmlFor="ambassador-dept" className="font-bold text-slate-700">
                       所属部署 / プロジェクト <span className="text-rose-500">*</span>
                     </label>
                     <input
+                      id="ambassador-dept"
                       type="text"
                       required
-                      placeholder="例: 基幹システム部"
+                      placeholder="例: 所属部署・チーム"
                       value={applyDept}
                       onChange={(e) => setApplyDept(e.target.value)}
                       className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
@@ -487,10 +512,11 @@ export default function AmbassadorsPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">
+                  <label htmlFor="ambassador-specialty" className="font-bold text-slate-700">
                     関心のある領域・得意な技術スタック
                   </label>
                   <input
+                    id="ambassador-specialty"
                     type="text"
                     placeholder="例: Python, BigQuery, テスト自動化, プロンプト設計"
                     value={applySpecialty}
@@ -500,10 +526,11 @@ export default function AmbassadorsPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="font-bold text-slate-700">
+                  <label htmlFor="ambassador-motivation" className="font-bold text-slate-700">
                     自チームでやってみたいこと・志望動機
                   </label>
                   <textarea
+                    id="ambassador-motivation"
                     rows={3}
                     placeholder="自チームの業務でAIを活用してみたい点や、アンバサダーとしてやってみたい活動をご記入ください。"
                     value={applyMotivation}

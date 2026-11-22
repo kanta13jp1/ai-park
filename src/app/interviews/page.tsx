@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
 import TiltCard from "@/components/TiltCard";
 import SpotlightCard from "@/components/SpotlightCard";
@@ -87,6 +87,17 @@ export default function InterviewsPage() {
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [copiedPromptId, setCopiedPromptId] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!selectedArticle) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedArticle(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedArticle]);
+
   const filteredArticles = useMemo(() => {
     return initialInterviewArticles.filter((item) => {
       if (selectedCategory !== "all" && item.category !== selectedCategory) {
@@ -105,11 +116,15 @@ export default function InterviewsPage() {
     });
   }, [selectedCategory, searchQuery]);
 
-  const handleCopyPrompt = (id: string, text: string) => {
-    playCyberSuccess();
-    navigator.clipboard.writeText(text);
-    setCopiedPromptId(id);
-    setTimeout(() => setCopiedPromptId(null), 2500);
+  const handleCopyPrompt = async (id: string, text: string) => {
+    try {
+      await navigator.clipboard?.writeText(text);
+      playCyberSuccess();
+      setCopiedPromptId(id);
+      setTimeout(() => setCopiedPromptId(null), 2500);
+    } catch {
+      // クリップボードAPI利用不可環境では握りつぶす
+    }
   };
 
   const handleOpenArticle = (art: InterviewArticle) => {
@@ -194,11 +209,13 @@ export default function InterviewsPage() {
               部門:
             </span>
             <button
+              type="button"
+              aria-pressed={selectedCategory === "all"}
               onClick={() => {
                 playCyberClick();
                 setSelectedCategory("all");
               }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 cursor-pointer ${
                 selectedCategory === "all"
                   ? "bg-indigo-600 text-white shadow-xs"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -207,11 +224,13 @@ export default function InterviewsPage() {
               すべて ({initialInterviewArticles.length})
             </button>
             <button
+              type="button"
+              aria-pressed={selectedCategory === "dev"}
               onClick={() => {
                 playCyberClick();
                 setSelectedCategory("dev");
               }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 cursor-pointer ${
                 selectedCategory === "dev"
                   ? "bg-blue-600 text-white shadow-xs"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -220,11 +239,13 @@ export default function InterviewsPage() {
               開発・エンジニアリング ({initialInterviewArticles.filter((a) => a.category === "dev").length})
             </button>
             <button
+              type="button"
+              aria-pressed={selectedCategory === "sales"}
               onClick={() => {
                 playCyberClick();
                 setSelectedCategory("sales");
               }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 cursor-pointer ${
                 selectedCategory === "sales"
                   ? "bg-emerald-600 text-white shadow-xs"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -233,11 +254,13 @@ export default function InterviewsPage() {
               営業・CS ({initialInterviewArticles.filter((a) => a.category === "sales").length})
             </button>
             <button
+              type="button"
+              aria-pressed={selectedCategory === "corp"}
               onClick={() => {
                 playCyberClick();
                 setSelectedCategory("corp");
               }}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 ${
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all text-xs shrink-0 cursor-pointer ${
                 selectedCategory === "corp"
                   ? "bg-amber-600 text-white shadow-xs"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
@@ -424,16 +447,30 @@ export default function InterviewsPage() {
 
       {/* 記事詳細スライドモーダル */}
       {selectedArticle && (
-        <div className="fixed inset-0 bg-slate-900/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+        <div
+          className="fixed inset-0 bg-slate-900/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="interview-article-modal-title"
+          onClick={() => {
+            playCyberClick();
+            setSelectedArticle(null);
+          }}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
+              type="button"
+              aria-label="閉じる"
               onClick={() => {
                 playCyberClick();
                 setSelectedArticle(null);
               }}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
             >
-              <X size={20} />
+              <X size={20} aria-hidden="true" />
             </button>
 
             {/* スライドヘッダー */}
@@ -448,9 +485,9 @@ export default function InterviewsPage() {
                   {selectedArticle.date} 取材
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl font-extrabold leading-snug">
+              <h2 id="interview-article-modal-title" className="text-xl sm:text-2xl font-extrabold leading-snug">
                 {selectedArticle.slideTheme.catchphrase}
-              </h3>
+              </h2>
               <p className="text-xs sm:text-sm text-slate-200 leading-relaxed opacity-90">
                 {selectedArticle.slideTheme.subCatchphrase}
               </p>
@@ -552,11 +589,12 @@ export default function InterviewsPage() {
 
             <div className="pt-2 flex justify-end">
               <button
+                type="button"
                 onClick={() => {
                   playCyberClick();
                   setSelectedArticle(null);
                 }}
-                className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors"
+                className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors cursor-pointer"
               >
                 閉じる
               </button>

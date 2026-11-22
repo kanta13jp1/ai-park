@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import Link from "next/link";
 import HeroBanner from "@/components/HeroBanner";
 import OfficeHourBanner from "@/components/OfficeHourBanner";
@@ -221,6 +221,21 @@ export default function McpHubPage() {
     setTransportFilter("all");
   };
 
+  const tabOrder: TabId[] = ["architecture", "templates", "safety"];
+  const handleTabKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabOrder.length;
+    else if (e.key === "ArrowLeft") nextIndex = (currentIndex - 1 + tabOrder.length) % tabOrder.length;
+    else if (e.key === "Home") nextIndex = 0;
+    else if (e.key === "End") nextIndex = tabOrder.length - 1;
+    if (nextIndex === null) return;
+    e.preventDefault();
+    const nextTab = tabOrder[nextIndex];
+    playCyberClick();
+    setActiveTab(nextTab);
+    document.getElementById(`mcp-tab-${nextTab}`)?.focus();
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
@@ -313,9 +328,15 @@ export default function McpHubPage() {
         {/* タブ切り替え＆キーワード検索ツールバー */}
         <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center gap-1.5 min-w-0">
+            <div role="tablist" aria-label="MCP 連携ハブのセクション切替" className="flex flex-wrap items-center gap-1.5 min-w-0">
               <button
+                id="mcp-tab-architecture"
                 type="button"
+                role="tab"
+                aria-selected={activeTab === "architecture"}
+                aria-controls="mcp-panel-architecture"
+                tabIndex={activeTab === "architecture" ? 0 : -1}
+                onKeyDown={(e) => handleTabKeyDown(e, 0)}
                 onClick={() => {
                   playCyberClick();
                   setActiveTab("architecture");
@@ -327,7 +348,7 @@ export default function McpHubPage() {
                     : "text-slate-600 hover:bg-slate-100"
                 }`}
               >
-                <Layers className="w-3.5 h-3.5 shrink-0" />
+                <Layers className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                 <span>MCP の仕組み & 構成ガイド</span>
                 {normalizedQuery && (
                   <span
@@ -343,7 +364,13 @@ export default function McpHubPage() {
               </button>
 
               <button
+                id="mcp-tab-templates"
                 type="button"
+                role="tab"
+                aria-selected={activeTab === "templates"}
+                aria-controls="mcp-panel-templates"
+                tabIndex={activeTab === "templates" ? 0 : -1}
+                onKeyDown={(e) => handleTabKeyDown(e, 1)}
                 onClick={() => {
                   playCyberClick();
                   setActiveTab("templates");
@@ -355,7 +382,7 @@ export default function McpHubPage() {
                     : "text-slate-600 hover:bg-slate-100"
                 }`}
               >
-                <FileJson className="w-3.5 h-3.5 shrink-0" />
+                <FileJson className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                 <span>mcp_config.json 設定テンプレート ({MCP_CONFIG_TEMPLATES.length})</span>
                 {normalizedQuery && (
                   <span
@@ -371,7 +398,13 @@ export default function McpHubPage() {
               </button>
 
               <button
+                id="mcp-tab-safety"
                 type="button"
+                role="tab"
+                aria-selected={activeTab === "safety"}
+                aria-controls="mcp-panel-safety"
+                tabIndex={activeTab === "safety" ? 0 : -1}
+                onKeyDown={(e) => handleTabKeyDown(e, 2)}
                 onClick={() => {
                   playCyberClick();
                   setActiveTab("safety");
@@ -383,7 +416,7 @@ export default function McpHubPage() {
                     : "text-slate-600 hover:bg-slate-100"
                 }`}
               >
-                <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                <ShieldCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
                 <span>安全利用チェックリスト & 導入前確認</span>
                 {normalizedQuery && (
                   <span
@@ -400,7 +433,7 @@ export default function McpHubPage() {
             </div>
 
             <div className="relative w-full lg:w-72 shrink-0">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
               <input
                 type="text"
                 aria-label="キーワード検索"
@@ -422,13 +455,20 @@ export default function McpHubPage() {
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-[11px] text-slate-500">
-            <span className="font-mono">
-              ※ 掲載テンプレートは公式仕様に基づく汎用参考例です（社内承認済み一覧は工事中）
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-mono">
+                ※ 掲載テンプレートは公式仕様に基づく汎用参考例です（社内承認済み一覧は工事中）
+              </span>
+              {normalizedQuery && (
+                <span aria-live="polite" className="font-mono text-indigo-700 font-bold">
+                  一致件数: 仕組み {architectureTabCount} / テンプレ {templatesTabCount} / 安全 {safetyTabCount}
+                </span>
+              )}
+            </div>
             {activeTab === "templates" && (
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="inline-flex items-center gap-1 text-slate-500 font-bold mr-1">
-                  <SlidersHorizontal size={12} />
+                  <SlidersHorizontal size={12} aria-hidden="true" />
                   <span>接続方式:</span>
                 </span>
                 {(
@@ -441,6 +481,7 @@ export default function McpHubPage() {
                   <button
                     key={mode}
                     type="button"
+                    aria-pressed={transportFilter === mode}
                     onClick={() => {
                       playCyberClick();
                       setTransportFilter(mode);
@@ -461,7 +502,7 @@ export default function McpHubPage() {
 
         {/* タブ 1: MCP の仕組み & 構成ガイド */}
         {activeTab === "architecture" && (
-          <div className="space-y-8">
+          <div id="mcp-panel-architecture" role="tabpanel" aria-labelledby="mcp-tab-architecture" className="space-y-8">
             {architectureTabCount === 0 ? (
               <div className="bg-white rounded-2xl p-10 text-center border border-slate-200 space-y-3">
                 <Compass className="w-8 h-8 text-slate-300 mx-auto" />
@@ -608,14 +649,14 @@ export default function McpHubPage() {
                       </p>
                     </div>
                     <div className="overflow-x-auto">
-                      <table className="w-full min-w-[600px] text-left border-collapse text-xs">
+                      <table className="w-full min-w-[640px] text-left border-collapse text-xs">
                         <thead>
                           <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-extrabold">
                             <th className="py-3 px-4 whitespace-nowrap">通信方式</th>
                             <th className="py-3 px-4 whitespace-nowrap">実行形態 / 主なキー</th>
-                            <th className="py-3 px-4 min-w-[200px]">仕組み</th>
-                            <th className="py-3 px-4 min-w-[180px]">向いている用途</th>
-                            <th className="py-3 px-4 min-w-[200px]">運用上の注意点</th>
+                            <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">仕組み</th>
+                            <th className="py-3 px-4 min-w-[180px] whitespace-nowrap">向いている用途</th>
+                            <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">運用上の注意点</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
@@ -667,14 +708,14 @@ export default function McpHubPage() {
                       </p>
                     </div>
                     <div className="overflow-x-auto">
-                      <table className="w-full min-w-[600px] text-left border-collapse text-xs">
+                      <table className="w-full min-w-[640px] text-left border-collapse text-xs">
                         <thead>
                           <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-extrabold">
                             <th className="py-3 px-4 whitespace-nowrap">種別</th>
                             <th className="py-3 px-4 whitespace-nowrap">設定ファイル / 配置先</th>
                             <th className="py-3 px-4 whitespace-nowrap">読み込みタイミング</th>
-                            <th className="py-3 px-4 min-w-[210px]">向いている用途</th>
-                            <th className="py-3 px-4 min-w-[200px]">動作の仕組み</th>
+                            <th className="py-3 px-4 min-w-[210px] whitespace-nowrap">向いている用途</th>
+                            <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">動作の仕組み</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
@@ -763,7 +804,7 @@ export default function McpHubPage() {
 
         {/* タブ 2: mcp_config.json 設定テンプレート */}
         {activeTab === "templates" && (
-          <div className="space-y-6">
+          <div id="mcp-panel-templates" role="tabpanel" aria-labelledby="mcp-tab-templates" className="space-y-6">
             <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 sm:p-5 space-y-2">
               <div className="flex items-center gap-2 text-amber-900 font-extrabold text-sm">
                 <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
@@ -933,7 +974,7 @@ export default function McpHubPage() {
 
         {/* タブ 3: 安全利用チェックリスト & 導入前確認 */}
         {activeTab === "safety" && (
-          <div className="space-y-8">
+          <div id="mcp-panel-safety" role="tabpanel" aria-labelledby="mcp-tab-safety" className="space-y-8">
             {safetyTabCount === 0 ? (
               <div className="bg-white rounded-2xl p-10 text-center border border-slate-200 space-y-3">
                 <Compass className="w-8 h-8 text-slate-300 mx-auto" />
@@ -1045,7 +1086,7 @@ export default function McpHubPage() {
                         <div className="flex-1 lg:w-44 min-w-0 space-y-1">
                           <div className="flex items-center justify-between text-[11px] font-mono font-bold text-slate-600">
                             <span>確認進捗</span>
-                            <span className="shrink-0">
+                            <span aria-live="polite" className="shrink-0">
                               {checkedCount} / {totalChecklistCount} ({checklistProgressPercent}%)
                             </span>
                           </div>
@@ -1115,7 +1156,7 @@ export default function McpHubPage() {
                     </div>
 
                     {checkedCount === totalChecklistCount && (
-                      <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                      <div aria-live="polite" className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs sm:text-sm flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                         <div className="font-bold">
                           全 {totalChecklistCount} 項目のセルフチェックを確認しました。実務データへ接続する場合は、社内ルールが確定するまで事前に AI 推進担当へご相談ください。
                         </div>

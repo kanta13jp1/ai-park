@@ -500,11 +500,12 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                     <input
                       value={progress.learnerName ?? ""}
                       onChange={(e) => setLearnerName(e.target.value)}
-                      placeholder="例: 山田 太郎"
+                      placeholder="例: 氏名"
                       className="px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
                     />
                   </label>
                   <button
+                    type="button"
                     onClick={() => {
                       playCyberClick();
                       window.print();

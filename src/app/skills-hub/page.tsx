@@ -31,10 +31,11 @@ import {
   Sparkles,
   FolderTree,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import Link from "next/link";
 
 type TabId = "catalog" | "guide" | "templates";
+const TAB_ORDER: TabId[] = ["catalog", "guide", "templates"];
 
 export default function SkillsHubPage() {
   const [activeTab, setActiveTab] = useState<TabId>("catalog");
@@ -43,6 +44,20 @@ export default function SkillsHubPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+
+  const handleTabKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowRight") nextIndex = (currentIndex + 1) % TAB_ORDER.length;
+    else if (e.key === "ArrowLeft") nextIndex = (currentIndex - 1 + TAB_ORDER.length) % TAB_ORDER.length;
+    else if (e.key === "Home") nextIndex = 0;
+    else if (e.key === "End") nextIndex = TAB_ORDER.length - 1;
+    if (nextIndex === null) return;
+    e.preventDefault();
+    const nextTab = TAB_ORDER[nextIndex];
+    playCyberClick();
+    setActiveTab(nextTab);
+    document.getElementById(`skills-hub-tab-${nextTab}`)?.focus();
+  };
 
   const categories = ["all", "品質・UAT", "運用自動化", "コード・品質"] as const;
 
@@ -167,8 +182,15 @@ export default function SkillsHubPage() {
 
         {/* タブ切り替えバー */}
         <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div role="tablist" aria-label="社内 Skills カタログのセクション切替" className="flex flex-wrap items-center gap-1.5">
             <button
+              id="skills-hub-tab-catalog"
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "catalog"}
+              aria-controls="skills-hub-panel-catalog"
+              tabIndex={activeTab === "catalog" ? 0 : -1}
+              onKeyDown={(e) => handleTabKeyDown(e, 0)}
               onClick={() => {
                 playCyberClick();
                 setActiveTab("catalog");
@@ -180,10 +202,17 @@ export default function SkillsHubPage() {
                   : "text-slate-600 hover:bg-slate-100"
               }`}
             >
-              <Layers className="w-3.5 h-3.5" />
+              <Layers className="w-3.5 h-3.5" aria-hidden="true" />
               <span>実運用スキル一覧 ({WORKSPACE_SKILLS.length})</span>
             </button>
             <button
+              id="skills-hub-tab-guide"
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "guide"}
+              aria-controls="skills-hub-panel-guide"
+              tabIndex={activeTab === "guide" ? 0 : -1}
+              onKeyDown={(e) => handleTabKeyDown(e, 1)}
               onClick={() => {
                 playCyberClick();
                 setActiveTab("guide");
@@ -195,10 +224,17 @@ export default function SkillsHubPage() {
                   : "text-slate-600 hover:bg-slate-100"
               }`}
             >
-              <BookOpen className="w-3.5 h-3.5" />
+              <BookOpen className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Skills の仕組み & 使い分け</span>
             </button>
             <button
+              id="skills-hub-tab-templates"
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "templates"}
+              aria-controls="skills-hub-panel-templates"
+              tabIndex={activeTab === "templates" ? 0 : -1}
+              onKeyDown={(e) => handleTabKeyDown(e, 2)}
               onClick={() => {
                 playCyberClick();
                 setActiveTab("templates");
@@ -210,7 +246,7 @@ export default function SkillsHubPage() {
                   : "text-slate-600 hover:bg-slate-100"
               }`}
             >
-              <FileCode2 className="w-3.5 h-3.5" />
+              <FileCode2 className="w-3.5 h-3.5" aria-hidden="true" />
               <span>SKILL.md テンプレート ({SKILL_TEMPLATES.length})</span>
             </button>
           </div>
@@ -222,14 +258,15 @@ export default function SkillsHubPage() {
 
         {/* タブ1: 実運用スキル一覧 */}
         {activeTab === "catalog" && (
-          <div className="space-y-6">
+          <div id="skills-hub-panel-catalog" role="tabpanel" aria-labelledby="skills-hub-tab-catalog" className="space-y-6">
             {/* フィルター＆検索バー */}
             <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-3.5">
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" aria-hidden="true" />
                   <input
                     type="text"
+                    aria-label="スキルを検索"
                     placeholder="スキル名、構文、キーワード、ファイルパスで検索..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -237,6 +274,7 @@ export default function SkillsHubPage() {
                   />
                   {searchQuery && (
                     <button
+                      type="button"
                       onClick={() => setSearchQuery("")}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs font-bold cursor-pointer"
                     >
@@ -246,6 +284,7 @@ export default function SkillsHubPage() {
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => {
                     playCyberClick();
                     setIsApplyModalOpen(true);
@@ -253,14 +292,14 @@ export default function SkillsHubPage() {
                   onMouseEnter={() => playCyberHover()}
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all shadow-xs shrink-0 cursor-pointer"
                 >
-                  <Plus className="w-4 h-4 text-cyan-400" />
+                  <Plus className="w-4 h-4 text-cyan-400" aria-hidden="true" />
                   <span>自作Skillの提案</span>
                 </button>
               </div>
 
               <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-thin">
                 <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1 mr-1">
-                  <Filter className="w-3.5 h-3.5" />
+                  <Filter className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>カテゴリ:</span>
                 </span>
                 {categories.map((cat) => {
@@ -271,7 +310,9 @@ export default function SkillsHubPage() {
                   const isSelected = selectedCategory === cat;
                   return (
                     <button
+                      type="button"
                       key={cat}
+                      aria-pressed={isSelected}
                       onClick={() => {
                         playCyberClick();
                         setSelectedCategory(cat);
@@ -295,14 +336,14 @@ export default function SkillsHubPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
                 <div>
                   <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
-                    <Layers className="w-5 h-5 text-indigo-600" />
+                    <Layers className="w-5 h-5 text-indigo-600" aria-hidden="true" />
                     <span>AI Park 実運用 Skills（参考実例・準備中）</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                     AI Park リポジトリ内の <code className="font-mono">.agents/skills/</code> で運用している実在スキル定義です
                   </p>
                 </div>
-                <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/80 self-start sm:self-auto">
+                <span aria-live="polite" className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/80 self-start sm:self-auto">
                   該当 {filteredSkills.length} / 全 {WORKSPACE_SKILLS.length} 件
                 </span>
               </div>
@@ -409,12 +450,12 @@ export default function SkillsHubPage() {
 
         {/* タブ2: Skills の仕組み & 使い分け */}
         {activeTab === "guide" && (
-          <div className="space-y-8">
+          <div id="skills-hub-panel-guide" role="tabpanel" aria-labelledby="skills-hub-tab-guide" className="space-y-8">
             {/* Progressive Disclosure の解説 */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600">
-                  <Sparkles className="w-5 h-5" />
+                  <Sparkles className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <div className="space-y-1.5">
                   <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -440,14 +481,14 @@ export default function SkillsHubPage() {
                 </p>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
+                <table className="w-full min-w-[640px] text-left border-collapse text-xs">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-extrabold">
                       <th className="py-3 px-4 whitespace-nowrap">種別</th>
                       <th className="py-3 px-4 whitespace-nowrap">設定ファイル / 配置先</th>
                       <th className="py-3 px-4 whitespace-nowrap">読み込みタイミング</th>
-                      <th className="py-3 px-4 min-w-[220px]">向いている用途</th>
-                      <th className="py-3 px-4 min-w-[200px]">動作の仕組み</th>
+                      <th className="py-3 px-4 min-w-[220px] whitespace-nowrap">向いている用途</th>
+                      <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">動作の仕組み</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -505,7 +546,7 @@ export default function SkillsHubPage() {
 
         {/* タブ3: SKILL.md テンプレート */}
         {activeTab === "templates" && (
-          <div className="space-y-6">
+          <div id="skills-hub-panel-templates" role="tabpanel" aria-labelledby="skills-hub-tab-templates" className="space-y-6">
             <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs space-y-2">
               <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
                 <FileCode2 className="w-5 h-5 text-indigo-600" />
@@ -548,20 +589,21 @@ export default function SkillsHubPage() {
                           <span>1. フォルダ作成コマンド（Windows PowerShell）</span>
                         </span>
                         <button
+                          type="button"
                           onClick={() => handleCopy(cmdCopyId, tpl.powershellCmd)}
                           onMouseEnter={() => playCyberHover()}
                           className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold cursor-pointer"
                         >
                           {copiedId === cmdCopyId ? (
                             <>
-                              <Check size={12} className="text-emerald-600" />
+                              <Check size={12} className="text-emerald-600" aria-hidden="true" />
                               <span className="text-emerald-600">コピー完了</span>
                             </>
                           ) : copyErrorId === cmdCopyId ? (
                             <span className="text-rose-600">コピー失敗（手動コピーしてください）</span>
                           ) : (
                             <>
-                              <Copy size={12} />
+                              <Copy size={12} aria-hidden="true" />
                               <span>コマンドをコピー</span>
                             </>
                           )}
@@ -577,6 +619,7 @@ export default function SkillsHubPage() {
                       <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
                         <span>2. SKILL.md 内容（そのまま貼り付け）</span>
                         <button
+                          type="button"
                           onClick={() => handleCopy(mdCopyId, tpl.markdownContent)}
                           onMouseEnter={() => playCyberHover()}
                           className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold cursor-pointer"

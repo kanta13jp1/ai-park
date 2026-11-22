@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import Link from "next/link";
 import {
   Sparkles,
@@ -174,6 +174,21 @@ export default function AntigravityInfoPage() {
       .catch(() => {});
   };
 
+  const tabOrder: TabId[] = ["overview", "features", "examples", "reference"];
+  const handleTabKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabOrder.length;
+    else if (e.key === "ArrowLeft") nextIndex = (currentIndex - 1 + tabOrder.length) % tabOrder.length;
+    else if (e.key === "Home") nextIndex = 0;
+    else if (e.key === "End") nextIndex = tabOrder.length - 1;
+    if (nextIndex === null) return;
+    e.preventDefault();
+    const nextTab = tabOrder[nextIndex];
+    playCyberClick();
+    setActiveTab(nextTab);
+    document.getElementById(`ag-tab-${nextTab}`)?.focus();
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-slate-50/70 min-h-screen">
       <HeroBanner
@@ -240,7 +255,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ切り替え + 検索バー */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white border border-slate-200/90 rounded-2xl p-3 shadow-xs">
-          <div className="flex flex-wrap gap-2">
+          <div role="tablist" aria-label="Antigravity 情報局のセクション切替" className="flex flex-wrap gap-2">
             {(
               [
                 { id: "overview", label: "全体像・使い分け", icon: Compass },
@@ -248,13 +263,19 @@ export default function AntigravityInfoPage() {
                 { id: "examples", label: `実務の実行例 (${practicalExamples.length})`, icon: Zap },
                 { id: "reference", label: "リファレンス・FAQ", icon: HelpCircle },
               ] as const
-            ).map((tab) => {
+            ).map((tab, idx) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
+                  id={`ag-tab-${tab.id}`}
                   type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={`ag-panel-${tab.id}`}
+                  tabIndex={isActive ? 0 : -1}
+                  onKeyDown={(e) => handleTabKeyDown(e, idx)}
                   onClick={() => {
                     playCyberClick();
                     setActiveTab(tab.id);
@@ -266,7 +287,7 @@ export default function AntigravityInfoPage() {
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900"
                   }`}
                 >
-                  <Icon size={15} className={`shrink-0 ${isActive ? "text-cyan-300" : "text-slate-500"}`} />
+                  <Icon size={15} className={`shrink-0 ${isActive ? "text-cyan-300" : "text-slate-500"}`} aria-hidden="true" />
                   <span>{tab.label}</span>
                 </button>
               );
@@ -278,9 +299,11 @@ export default function AntigravityInfoPage() {
               <Search
                 size={15}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                aria-hidden="true"
               />
               <input
                 type="text"
+                aria-label="キーワードで絞り込み"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="キーワードで絞り込み..."
@@ -293,7 +316,7 @@ export default function AntigravityInfoPage() {
                   onClick={() => setSearchQuery("")}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
-                  <X size={14} />
+                  <X size={14} aria-hidden="true" />
                 </button>
               )}
             </div>
@@ -302,7 +325,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ 1: 全体像・使い分け */}
         {activeTab === "overview" && (
-          <div className="space-y-8">
+          <div id="ag-panel-overview" role="tabpanel" aria-labelledby="ag-tab-overview" className="space-y-8">
             {/* 4つの実行環境（Surfaces） */}
             <section className="space-y-4">
               <div className="flex items-center justify-between">
@@ -516,7 +539,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ 2: 機能解説カタログ */}
         {activeTab === "features" && (
-          <div className="space-y-6">
+          <div id="ag-panel-features" role="tabpanel" aria-labelledby="ag-tab-features" className="space-y-6">
             <div className="flex flex-wrap gap-2">
               {FEATURE_CATEGORIES.map((cat) => {
                 const active = featureCategory === cat;
@@ -524,6 +547,7 @@ export default function AntigravityInfoPage() {
                   <button
                     key={cat}
                     type="button"
+                    aria-pressed={active}
                     onClick={() => {
                       playCyberClick();
                       setFeatureCategory(cat);
@@ -621,7 +645,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ 3: 実務の実行例 */}
         {activeTab === "examples" && (
-          <div className="space-y-6">
+          <div id="ag-panel-examples" role="tabpanel" aria-labelledby="ag-tab-examples" className="space-y-6">
             <div className="flex flex-wrap gap-2">
               {EXAMPLE_CATEGORIES.map((cat) => {
                 const active = exampleCategory === cat;
@@ -629,6 +653,7 @@ export default function AntigravityInfoPage() {
                   <button
                     key={cat}
                     type="button"
+                    aria-pressed={active}
                     onClick={() => {
                       playCyberClick();
                       setExampleCategory(cat);
@@ -768,7 +793,7 @@ export default function AntigravityInfoPage() {
 
         {/* タブ 4: リファレンス・FAQ */}
         {activeTab === "reference" && (
-          <div className="space-y-8">
+          <div id="ag-panel-reference" role="tabpanel" aria-labelledby="ag-tab-reference" className="space-y-8">
             {filteredShortcuts.length === 0 &&
               filteredConfigTemplates.length === 0 &&
               filteredFaqs.length === 0 && (
@@ -791,7 +816,7 @@ export default function AntigravityInfoPage() {
               <section className="space-y-4">
                 <div>
                   <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
-                    <Keyboard size={19} className="text-indigo-600" />
+                    <Keyboard size={19} className="text-indigo-600" aria-hidden="true" />
                     <span>ショートカット・CLI コマンド早見表</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 mt-1">
@@ -805,13 +830,13 @@ export default function AntigravityInfoPage() {
 
                 <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
                   <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse">
+                    <table className="w-full min-w-[640px] text-left border-collapse">
                       <thead>
                         <tr className="bg-slate-900 text-slate-200 text-xs">
-                          <th className="py-3 px-4 font-bold">環境</th>
-                          <th className="py-3 px-4 font-bold">キー / コマンド</th>
-                          <th className="py-3 px-4 font-bold">動作</th>
-                          <th className="py-3 px-4 font-bold">補足</th>
+                          <th className="py-3 px-4 font-bold whitespace-nowrap">環境</th>
+                          <th className="py-3 px-4 font-bold whitespace-nowrap">キー / コマンド</th>
+                          <th className="py-3 px-4 font-bold whitespace-nowrap">動作</th>
+                          <th className="py-3 px-4 font-bold whitespace-nowrap">補足</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 text-xs sm:text-sm">
@@ -919,6 +944,8 @@ export default function AntigravityInfoPage() {
                       >
                         <button
                           type="button"
+                          aria-expanded={isOpen}
+                          aria-controls={`ag-faq-panel-${faq.id}`}
                           onClick={() => {
                             playCyberClick();
                             setOpenFaqId(isOpen ? null : faq.id);
@@ -934,13 +961,16 @@ export default function AntigravityInfoPage() {
                             </span>
                           </div>
                           {isOpen ? (
-                            <ChevronUp size={18} className="text-slate-400 shrink-0" />
+                            <ChevronUp size={18} className="text-slate-400 shrink-0" aria-hidden="true" />
                           ) : (
-                            <ChevronDown size={18} className="text-slate-400 shrink-0" />
+                            <ChevronDown size={18} className="text-slate-400 shrink-0" aria-hidden="true" />
                           )}
                         </button>
                         {isOpen && (
-                          <div className="px-5 pb-4 pt-1 border-t border-slate-100 text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50/40">
+                          <div
+                            id={`ag-faq-panel-${faq.id}`}
+                            className="px-5 pb-4 pt-1 border-t border-slate-100 text-xs sm:text-sm text-slate-700 leading-relaxed bg-slate-50/40"
+                          >
                             <InlineCodeText text={faq.answer} />
                           </div>
                         )}

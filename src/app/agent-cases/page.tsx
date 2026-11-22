@@ -37,10 +37,11 @@ import {
   AlertTriangle,
   MessageSquare,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import Link from "next/link";
 
 type TabId = "agents" | "orchestration" | "templates";
+const TAB_ORDER: TabId[] = ["agents", "orchestration", "templates"];
 
 const CATEGORIES: Array<"all" | WorkspaceAgentCategory> = [
   "all",
@@ -98,6 +99,20 @@ export default function AgentCasesPage() {
     } catch {
       setCopyErrorId(id);
     }
+  };
+
+  const handleTabKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowRight") nextIndex = (currentIndex + 1) % TAB_ORDER.length;
+    else if (e.key === "ArrowLeft") nextIndex = (currentIndex - 1 + TAB_ORDER.length) % TAB_ORDER.length;
+    else if (e.key === "Home") nextIndex = 0;
+    else if (e.key === "End") nextIndex = TAB_ORDER.length - 1;
+    if (nextIndex === null) return;
+    e.preventDefault();
+    const nextTab = TAB_ORDER[nextIndex];
+    playCyberClick();
+    setActiveTab(nextTab);
+    document.getElementById(`agent-cases-tab-${nextTab}`)?.focus();
   };
 
   return (
@@ -180,9 +195,15 @@ export default function AgentCasesPage() {
 
         {/* タブ切り替えバー */}
         <div className="flex flex-wrap items-center justify-between gap-3 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs">
-          <div className="flex flex-wrap items-center gap-1.5">
+          <div role="tablist" aria-label="カスタムエージェント・Swarm ガイドのセクション切替" className="flex flex-wrap items-center gap-1.5">
             <button
+              id="agent-cases-tab-agents"
               type="button"
+              role="tab"
+              aria-selected={activeTab === "agents"}
+              aria-controls="agent-cases-panel-agents"
+              tabIndex={activeTab === "agents" ? 0 : -1}
+              onKeyDown={(e) => handleTabKeyDown(e, 0)}
               onClick={() => {
                 playCyberClick();
                 setActiveTab("agents");
@@ -194,11 +215,17 @@ export default function AgentCasesPage() {
                   : "text-slate-600 hover:bg-slate-100"
               }`}
             >
-              <Layers className="w-3.5 h-3.5" />
+              <Layers className="w-3.5 h-3.5" aria-hidden="true" />
               <span>実在カスタムエージェント ({WORKSPACE_AGENTS.length})</span>
             </button>
             <button
+              id="agent-cases-tab-orchestration"
               type="button"
+              role="tab"
+              aria-selected={activeTab === "orchestration"}
+              aria-controls="agent-cases-panel-orchestration"
+              tabIndex={activeTab === "orchestration" ? 0 : -1}
+              onKeyDown={(e) => handleTabKeyDown(e, 1)}
               onClick={() => {
                 playCyberClick();
                 setActiveTab("orchestration");
@@ -210,11 +237,17 @@ export default function AgentCasesPage() {
                   : "text-slate-600 hover:bg-slate-100"
               }`}
             >
-              <Network className="w-3.5 h-3.5" />
+              <Network className="w-3.5 h-3.5" aria-hidden="true" />
               <span>Subagents・Swarm 使い分け</span>
             </button>
             <button
+              id="agent-cases-tab-templates"
               type="button"
+              role="tab"
+              aria-selected={activeTab === "templates"}
+              aria-controls="agent-cases-panel-templates"
+              tabIndex={activeTab === "templates" ? 0 : -1}
+              onKeyDown={(e) => handleTabKeyDown(e, 2)}
               onClick={() => {
                 playCyberClick();
                 setActiveTab("templates");
@@ -226,7 +259,7 @@ export default function AgentCasesPage() {
                   : "text-slate-600 hover:bg-slate-100"
               }`}
             >
-              <FileCode2 className="w-3.5 h-3.5" />
+              <FileCode2 className="w-3.5 h-3.5" aria-hidden="true" />
               <span>エージェント定義テンプレート ({AGENT_TEMPLATES.length})</span>
             </button>
           </div>
@@ -238,14 +271,15 @@ export default function AgentCasesPage() {
 
         {/* タブ1: 実在カスタムエージェント (6) */}
         {activeTab === "agents" && (
-          <div className="space-y-6">
+          <div id="agent-cases-panel-agents" role="tabpanel" aria-labelledby="agent-cases-tab-agents" className="space-y-6">
             {/* 検索＆カテゴリフィルター */}
             <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-3.5">
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" aria-hidden="true" />
                   <input
                     type="text"
+                    aria-label="カスタムエージェントを検索"
                     placeholder="エージェント名、ツール名（view_file 等）、説明、ファイルパスで検索..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -267,14 +301,14 @@ export default function AgentCasesPage() {
                   onMouseEnter={() => playCyberHover()}
                   className="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-all shadow-xs shrink-0"
                 >
-                  <MessageSquare className="w-4 h-4 text-cyan-400" />
+                  <MessageSquare className="w-4 h-4 text-cyan-400" aria-hidden="true" />
                   <span>導入事例の取材に立候補</span>
                 </Link>
               </div>
 
               <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-thin">
                 <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1 mr-1">
-                  <Filter className="w-3.5 h-3.5" />
+                  <Filter className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>カテゴリ:</span>
                 </span>
                 {CATEGORIES.map((cat) => {
@@ -287,6 +321,7 @@ export default function AgentCasesPage() {
                     <button
                       type="button"
                       key={cat}
+                      aria-pressed={isSelected}
                       onClick={() => {
                         playCyberClick();
                         setSelectedCategory(cat);
@@ -310,14 +345,14 @@ export default function AgentCasesPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
                 <div>
                   <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
-                    <Bot className="w-5 h-5 text-indigo-600" />
+                    <Bot className="w-5 h-5 text-indigo-600" aria-hidden="true" />
                     <span>AI Park 実在カスタムエージェント定義（参考実例）</span>
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                     AI Park リポジトリ内の <code className="font-mono">.agents/agents/</code> に配置されている実在の定義ファイルです
                   </p>
                 </div>
-                <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/80 self-start sm:self-auto">
+                <span aria-live="polite" className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/80 self-start sm:self-auto">
                   該当 {filteredAgents.length} / 全 {WORKSPACE_AGENTS.length} 件
                 </span>
               </div>
@@ -463,12 +498,12 @@ export default function AgentCasesPage() {
 
         {/* タブ2: Subagents・Swarm 使い分け */}
         {activeTab === "orchestration" && (
-          <div className="space-y-8">
+          <div id="agent-cases-panel-orchestration" role="tabpanel" aria-labelledby="agent-cases-tab-orchestration" className="space-y-8">
             {/* 導入概要カード */}
             <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-3">
               <div className="flex items-start gap-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600">
-                  <Network className="w-5 h-5" />
+                  <Network className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <div className="space-y-1.5">
                   <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -495,15 +530,15 @@ export default function AgentCasesPage() {
                 </p>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
+                <table className="w-full min-w-[640px] text-left border-collapse text-xs">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-extrabold">
                       <th className="py-3 px-4 whitespace-nowrap">実行方式</th>
-                      <th className="py-3 px-4 min-w-[220px]">起動・協調の仕組み</th>
-                      <th className="py-3 px-4 min-w-[200px]">コンテキスト共有</th>
-                      <th className="py-3 px-4 min-w-[200px]">ワークスペース制御</th>
-                      <th className="py-3 px-4 min-w-[200px]">向いている用途</th>
-                      <th className="py-3 px-4 min-w-[200px]">主な注意点</th>
+                      <th className="py-3 px-4 min-w-[220px] whitespace-nowrap">起動・協調の仕組み</th>
+                      <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">コンテキスト共有</th>
+                      <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">ワークスペース制御</th>
+                      <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">向いている用途</th>
+                      <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">主な注意点</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -592,13 +627,13 @@ export default function AgentCasesPage() {
                 </span>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
+                <table className="w-full min-w-[640px] text-left border-collapse text-xs">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-extrabold">
                       <th className="py-3 px-4 whitespace-nowrap">役割</th>
                       <th className="py-3 px-4 whitespace-nowrap">標準 workspace</th>
-                      <th className="py-3 px-4 min-w-[240px]">主な責務（author vs verifier）</th>
-                      <th className="py-3 px-4 min-w-[260px]">共有ボード・@mention 運用</th>
+                      <th className="py-3 px-4 min-w-[240px] whitespace-nowrap">主な責務（author vs verifier）</th>
+                      <th className="py-3 px-4 min-w-[260px] whitespace-nowrap">共有ボード・@mention 運用</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -629,7 +664,7 @@ export default function AgentCasesPage() {
 
         {/* タブ3: エージェント定義テンプレート (2) */}
         {activeTab === "templates" && (
-          <div className="space-y-6">
+          <div id="agent-cases-panel-templates" role="tabpanel" aria-labelledby="agent-cases-tab-templates" className="space-y-6">
             <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs space-y-2">
               <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
                 <FileCode2 className="w-5 h-5 text-indigo-600" />

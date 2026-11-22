@@ -146,6 +146,10 @@ test("All modal components implement dialog ARIA role and aria-modal", () => {
     "src/components/interviews/InterviewCandidateModal.tsx",
     "src/components/tools/ToolApplicationDraftModal.tsx",
     "src/components/tools/ToolApplicationModal.tsx",
+    "src/app/feedback-todo/page.tsx",
+    "src/app/ambassadors/page.tsx",
+    "src/app/interviews/page.tsx",
+    "src/app/tools/page.tsx",
   ];
 
   const missingDialogAria = [];
@@ -162,5 +166,75 @@ test("All modal components implement dialog ARIA role and aria-modal", () => {
     missingDialogAria,
     [],
     `Modal components missing role="dialog" or aria-modal="true": ${missingDialogAria.join(", ")}`
+  );
+});
+
+test("Multi-tab pages implement WAI-ARIA APG tablist, tab, aria-selected, and tabpanel roles", () => {
+  const tabPages = [
+    "src/app/mcp-hub/page.tsx",
+    "src/app/antigravity-info/page.tsx",
+    "src/app/agent-cases/page.tsx",
+    "src/app/skills-hub/page.tsx",
+  ];
+
+  const missingTabAria = [];
+  for (const rel of tabPages) {
+    const content = fs.readFileSync(path.join(rootDir, rel), "utf8");
+    const ok =
+      /role=["']tablist["']/.test(content) &&
+      /role=["']tab["']/.test(content) &&
+      /aria-selected=/.test(content) &&
+      /role=["']tabpanel["']/.test(content);
+    if (!ok) {
+      missingTabAria.push(rel);
+    }
+  }
+
+  assert.deepEqual(
+    missingTabAria,
+    [],
+    `Pages missing WAI-ARIA APG tab attributes: ${missingTabAria.join(", ")}`
+  );
+});
+
+test("All HTML tables declare responsive min-w width classes", () => {
+  const tsxFiles = walkFiles(srcDir, (n) => n.endsWith(".tsx"));
+  const violations = [];
+
+  for (const file of tsxFiles) {
+    const txt = fs.readFileSync(file, "utf8");
+    for (const m of txt.matchAll(/<table\b([^>]*)>/g)) {
+      const attrs = m[1];
+      if (!/min-w-\[(?:[6-9]\d{2}|[1-9]\d{3})px\]/.test(attrs)) {
+        violations.push(`${path.relative(rootDir, file)}: <table${attrs}>`);
+      }
+    }
+  }
+
+  assert.deepEqual(
+    violations,
+    [],
+    `Tables missing min-w-[600px+] class:\n${violations.join("\n")}`
+  );
+});
+
+test("No input/textarea placeholder contains fictional full names or internal domain email", () => {
+  const tsxFiles = walkFiles(srcDir, (n) => n.endsWith(".tsx"));
+  const forbidden = /(?:佐々木\s*拓也|佐藤\s*花子|山田\s*太郎|@ml-mightylink\.com)/;
+  const violations = [];
+
+  for (const file of tsxFiles) {
+    const txt = fs.readFileSync(file, "utf8");
+    for (const m of txt.matchAll(/placeholder=["']([^"']*)["']/g)) {
+      if (forbidden.test(m[1])) {
+        violations.push(`${path.relative(rootDir, file)}: placeholder="${m[1]}"`);
+      }
+    }
+  }
+
+  assert.deepEqual(
+    violations,
+    [],
+    `Found fictional or domain placeholder:\n${violations.join("\n")}`
   );
 });
