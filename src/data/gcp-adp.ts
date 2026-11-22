@@ -12,7 +12,7 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Associate Data Practitioner 公式試験ガイドおよび Google Cloud 公式ドキュメント
+// 出典: Google Cloud 認定 Associate Data Practitioner 公式ページ・試験ガイド・ドキュメント (https://cloud.google.com/learn/certification/data-practitioner?hl=ja / 確認日: 2026-11-22)
 export const adpExamFacts: CertExamFact[] = [
   {
     label: "対象試験",
@@ -41,8 +41,8 @@ export const adpExamFacts: CertExamFact[] = [
   },
   {
     label: "受験形式",
-    value: "Webassessor",
-    detail: "オンライン監督またはテストセンター受験（推奨経験 6 ヶ月+）",
+    value: "CertMetrics / Pearson VUE",
+    detail: "オンライン監督（OnVUE）またはテストセンター受験（推奨経験 6 ヶ月+）",
   },
 ];
 
@@ -1404,28 +1404,35 @@ export const adpOfficialResources: GcpOfficialResource[] = [
     title: "Associate Data Practitioner 認定公式ページ",
     description:
       "試験概要、出題ドメイン、受験登録およびサンプル問題への公式案内を確認できます。",
-    url: "https://cloud.google.com/learn/certification/data-practitioner",
+    url: "https://cloud.google.com/learn/certification/data-practitioner?hl=ja",
     badge: "公式認定ページ",
+  },
+  {
+    title: "Associate Data Practitioner 公式試験ガイド（日本語 PDF）",
+    description:
+      "4 つの出題ドメイン、配点割合、具体的なスキル要件の一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/associate_data_practitioner_exam_guide_japanese.pdf",
+    badge: "公式試験ガイド",
   },
   {
     title: "BigQuery 公式ドキュメント",
     description:
       "SQL 分析、データロード / EXPORT DATA、パーティショニング・クラスタリング、BigQuery ML の一次リファレンスです。",
-    url: "https://cloud.google.com/bigquery/docs",
+    url: "https://docs.cloud.google.com/bigquery/docs?hl=ja",
     badge: "公式ドキュメント",
   },
   {
     title: "Dataform 公式ドキュメント",
     description:
       "SQLX による ELT パイプライン、依存関係定義、アサーション（品質テスト）、ワークフロー実行ガイドです。",
-    url: "https://cloud.google.com/dataform/docs",
+    url: "https://docs.cloud.google.com/dataform/docs?hl=ja",
     badge: "公式ドキュメント",
   },
   {
-    title: "Dataplex 公式ドキュメント",
+    title: "Knowledge Catalog（Dataplex）公式ドキュメント",
     description:
-      "データレイク・ゾーン管理、Data Catalog、データ品質検証、データリネージの公式リファレンスです。",
-    url: "https://cloud.google.com/dataplex/docs",
+      "データレイク・ゾーン管理、メタデータ検索、データ品質検証、データリネージの公式リファレンスです。",
+    url: "https://docs.cloud.google.com/knowledge-catalog/docs?hl=ja",
     badge: "公式ドキュメント",
   },
 ];

@@ -1336,4 +1336,101 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     environment: "Windows 11 / Chrome / 1920x1080 & Mobile",
     memo: "準備中状態（記事0件・取材キット＆立候補受付のみ公開）としての誠実表示UAT完了",
   },
+  {
+    id: "gcp-info",
+    name: "GCP・Google Cloud情報局",
+    path: "/gcp-info",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/11/22",
+    verifiedBy: "梅澤（AI推進担当）",
+    overallStatus: "passed",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        checkedAt: "2026/11/22",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "社内GCP利用ルール・資格取得支援制度が未確定のため UnderConstructionAlert（工事中バナー）およびナビゲーション（🚧 工事中）で誠実に保護されていることを確認。全11資格（CDL/GAIL/ACE/ADP/PCA/PDE/PMLE/PCSE/PCDE/PCD/PCNE）の試験時間・問題数（PDE 40〜50問、PCA 50〜60問）・有効期限（ACE 3年）・受験基盤（CertMetrics / Pearson VUE）・公式スコア非公開表記、および公式学習リソース43ユニークURL全件のHTTP 200疎通を実測確認済み。",
+        points: [
+          "未確定の社内GCP利用ルール・資格取得支援制度が工事中バナーで正しく保護されているか",
+          "全11資格の試験仕様（ACE有効期限3年・PDE 40〜50問・PCA 50〜60問・CertMetrics）がGoogle Cloud公式一次情報と一致しているか",
+          "全43ユニーク公式学習リソースURLがHTTP 200で疎通し404/403が存在しないか",
+        ],
+        subChecks: [
+          {
+            id: "gcp-fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "未確定社内ルール・架空補助制度の非掲載",
+            detail:
+              "社内のGCP利用規定・補助金額・申請窓口などの架空記述を一切載せず、UnderConstructionAlert（releaseDate: 未定）で準備中であることを明示していること。",
+            verified: true,
+          },
+          {
+            id: "gcp-fact-02",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "公式非公開合格スコアの誤認防止",
+            detail:
+              "各資格の examFacts で「公式スコア非公開（Pass / Fail のみ通知）」と明記し、本アプリ演習の 70% 目安と混同しない表記に統一していること。",
+            verified: true,
+          },
+          {
+            id: "gcp-fact-03",
+            category: "official_announcement",
+            groupTitle: "② 公式一次情報と一致しているか（整合性検証確認済み）",
+            label: "全11資格 試験仕様・有効期限・受験基盤の一次情報整合",
+            detail:
+              "ACE の有効期限（3年間）、PDE の問題数（40〜50問）、PCA の問題数（50〜60問）、GAIL/CDL の試験時間（90分・1問90秒タイマー）、および CertMetrics / Pearson VUE 表記が Google Cloud 公式ページと一致していること。",
+            verified: true,
+          },
+          {
+            id: "gcp-link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先が実在するか（HTTP 200 実測確認済み）",
+            label: "公式認定ページ・日本語ガイドPDF・公式ドキュメント 43 URL 全件 HTTP 200",
+            detail:
+              "全11資格の officialResources 掲載 URL（ユニーク 43 件）すべてが HTTP 200 を返し、旧 403 パスや不要な他言語リダイレクトを含まないこと。",
+            verified: true,
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        checkedAt: "2026/11/22",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "静的ビルド済み画面（1280x800 PC / 768x1024 タブレット / 375x812 スマホ）の3ビューポートで横スクロール溢出ゼロ（scrollWidth <= innerWidth）、固定サイドバー 288px 下での HUD/資格切替/比較表の破綻なしを確認。",
+        points: [
+          "PC (1280x800)・タブレット (768x1024)・スマホ (375x812) で横溢れや文字切れがないか",
+          "6ドメイン資格でもクイズ正答率バーが6列均等整列するか",
+        ],
+      },
+      usability: {
+        passed: true,
+        checkedAt: "2026/11/22",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "初期チャンク 865 KB → 135.4 KB への動的チャンク分割後も資格切替（CDL/GAIL/PCDE/ACE/PDE）、クイック検索チップ（責任ある AI / SLO 含む全件ヒット）、比較ジャンプ、バックアップ形式検証の正常動作を実機確認。",
+        points: [
+          "11資格の動的切り替えとチャンク遅延読み込みがエラーなく完了するか",
+          "別資格のバックアップJSON誤上書き防止ガードとMarkdownコピーが動作するか",
+        ],
+      },
+      readability: {
+        passed: true,
+        checkedAt: "2026/11/22",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "WAI-ARIA APG タブ（tablist/tab/tabpanel・左右/Home/Endキー操作）・progressBar・アコーディオン（aria-expanded/controls）・比較テーブル scope/caption・入力欄 aria-label・focus-visible を備え、工事中ステータスが初見で正確に伝わることを確認。",
+        points: [
+          "WAI-ARIA ロール・フォーカス表示・ラベル未設定入力ゼロが維持されているか",
+          "工事中バナーと学習コンテンツの範囲が明確に区別されているか",
+        ],
+      },
+    },
+    environment:
+      "Windows 11 / Chromium (Chrome DevTools MCP) / 1280x800・768x1024・375x812 + Next.js 16.3.5 Static Export 実測",
+    memo: "工事中状態（Google Cloud 全11資格学習ハブ先行公開・社内GCP利用ルールおよび資格取得支援制度は準備中）としての誠実表示＆実機UAT完了",
+  },
 ];

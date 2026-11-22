@@ -12,12 +12,12 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Professional Cloud DevOps Engineer 公式試験ガイド・公式ドキュメント
+// 出典: Google Cloud 認定 Professional Cloud DevOps Engineer 公式ページ・試験ガイド (https://cloud.google.com/learn/certification/cloud-devops-engineer?hl=ja / 確認日: 2026-11-22)
 export const pcdeExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Professional Cloud DevOps Engineer", detail: "SRE・CI/CD・可観測性・GKE運用・FinOps" },
   { label: "試験時間", value: "120 分", detail: "選択問題（単一・複数選択）" },
   { label: "問題数", value: "50〜60 問", detail: "公式ガイド記載・試験回により変動" },
-  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式はスコア非公開（目安 70% 前後）" },
+  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開（Pass / Fail のみ通知）" },
   { label: "有効期限", value: "2 年間", detail: "認定取得日から 2 年で再認定が必要" },
   { label: "推奨経験", value: "業界3年以上 / GCP1年以上", detail: "本番システム運用・CI/CD・監視の設計経験" },
 ];
@@ -865,25 +865,25 @@ export const pcdeOfficialResources: GcpOfficialResource[] = [
   {
     title: "Professional Cloud DevOps Engineer 認定公式ページ",
     description: "試験の概要、推奨実務経験、受験登録および最新アナウンスを確認できます。",
-    url: "https://cloud.google.com/learn/certification/cloud-devops-engineer",
+    url: "https://cloud.google.com/learn/certification/cloud-devops-engineer?hl=ja",
     badge: "公式認定ページ",
   },
   {
-    title: "Professional Cloud DevOps Engineer 試験ガイド",
-    description: "5 つの出題ドメイン、配点目安、詳細トピックの一次情報です。",
-    url: "https://cloud.google.com/learn/certification/guides/cloud-devops-engineer",
+    title: "Professional Cloud DevOps Engineer 公式試験ガイド（日本語 PDF）",
+    description: "5 つの出題ドメイン、配点目安、詳細トピックの一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/professional_cloud_devops_engineer_exam_guide_japanese.pdf",
     badge: "公式試験ガイド",
   },
   {
     title: "Google Cloud SRE 公式ページ",
     description: "SLI / SLO、エラーバジェット、ポストモーテムなど SRE 実践の公式リソースです。",
-    url: "https://cloud.google.com/sre",
+    url: "https://cloud.google.com/sre?hl=ja",
     badge: "公式 SRE ガイド",
   },
   {
     title: "Cloud Deploy 公式ドキュメント",
     description: "Canary / Blue-Green 戦略、Automation ルール、ロールバック手順のリファレンスです。",
-    url: "https://cloud.google.com/deploy/docs",
+    url: "https://docs.cloud.google.com/deploy/docs?hl=ja",
     badge: "CI/CD 公式ドキュメント",
   },
 ];

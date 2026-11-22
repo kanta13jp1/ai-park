@@ -12,7 +12,7 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Professional Cloud Security Engineer 公式試験ガイド
+// 出典: Google Cloud 認定 Professional Cloud Security Engineer 公式ページ・試験ガイド (https://cloud.google.com/learn/certification/cloud-security-engineer?hl=ja / 確認日: 2026-11-22)
 export const pcseExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Professional Cloud Security Engineer", detail: "アクセス・境界・データ保護・運用・コンプライアンス" },
   { label: "試験時間", value: "120 分", detail: "選択問題（単一選択・複数選択）" },
@@ -877,25 +877,25 @@ export const pcseOfficialResources: GcpOfficialResource[] = [
   {
     title: "Professional Cloud Security Engineer 認定公式ページ",
     description: "試験時間・出題数・対象スキル・推奨経験などの公式認定概要を確認できます。",
-    url: "https://cloud.google.com/learn/certification/cloud-security-engineer",
+    url: "https://cloud.google.com/learn/certification/cloud-security-engineer?hl=ja",
     badge: "公式認定ページ",
   },
   {
-    title: "Professional Cloud Security Engineer 試験ガイド",
-    description: "アクセス・境界防御・データ保護・運用・コンプライアンスの 5 ドメイン一次情報です。",
-    url: "https://cloud.google.com/learn/certification/guides/cloud-security-engineer",
+    title: "Professional Cloud Security Engineer 公式試験ガイド（日本語 PDF）",
+    description: "アクセス・境界防御・データ保護・運用・コンプライアンスの 5 ドメイン一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/professional_cloud_security_engineer_exam_guide_japanese.pdf",
     badge: "公式試験ガイド",
   },
   {
     title: "Google Cloud Security Foundations Blueprint",
     description: "組織階層・IAM・VPC-SC・KMS・ログ集約・SCC のエンタープライズ設計ブループリントです。",
-    url: "https://cloud.google.com/architecture/security-foundations",
+    url: "https://docs.cloud.google.com/architecture/blueprints/security-foundations?hl=ja",
     badge: "公式設計ブループリント",
   },
   {
     title: "Professional Cloud Security Engineer サンプル問題",
     description: "Google Cloud 公式の練習問題で出題スタイルとセキュリティ判断軸を確認できます。",
-    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-security-engineer",
+    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-security-engineer?hl=ja",
     badge: "公式サンプル",
   },
 ];

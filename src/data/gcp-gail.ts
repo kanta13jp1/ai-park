@@ -12,14 +12,14 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Generative AI Leader 公式試験ガイド・公式学習ガイド
+// 出典: Google Cloud 認定 Generative AI Leader 公式ページ・試験ガイド・学習ガイド (https://cloud.google.com/learn/certification/generative-ai-leader?hl=ja / 確認日: 2026-11-22)
 export const gailExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Generative AI Leader", detail: "Foundational レベル（技術前提なし）" },
   { label: "試験時間", value: "90 分", detail: "多肢選択・複数選択（日本語・英語対応）" },
   { label: "問題数", value: "約 50〜60 問", detail: "試験回により変動あり" },
   { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開・Pass / Fail で判定" },
   { label: "有効期限", value: "3 年間", detail: "認定取得日から 3 年で再認定が必要" },
-  { label: "受験形式", value: "Webassessor", detail: "テストセンター / オンライン監督試験" },
+  { label: "受験形式", value: "CertMetrics / Pearson VUE", detail: "テストセンター / オンライン監督（OnVUE）" },
 ];
 
 export const gailDomains: GcpDomain[] = [
@@ -1043,7 +1043,7 @@ export const gailOfficialResources: GcpOfficialResource[] = [
   {
     title: "Generative AI Leader 認定公式ページ",
     description: "試験の概要、対象者（ビジネスリーダー向け）、受験登録、最新の試験形式を確認できます。",
-    url: "https://cloud.google.com/learn/certification/generative-ai-leader",
+    url: "https://cloud.google.com/learn/certification/generative-ai-leader?hl=ja",
     badge: "公式認定ページ",
   },
   {
@@ -1059,9 +1059,9 @@ export const gailOfficialResources: GcpOfficialResource[] = [
     badge: "公式学習ガイド",
   },
   {
-    title: "Google Skills（Generative AI Leader ラーニングパス）",
-    description: "公式オンデマンドコースで基礎概念・Google Cloud 生成 AI 製品・戦略を体系的に学べます。",
-    url: "https://www.skills.google/paths/1951",
-    badge: "公式トレーニング",
+    title: "Google Cloud 生成 AI ドキュメント（ビギナーズガイド）",
+    description: "Gemini モデル、グラウンディング、責任ある AI・安全性フィルタの公式一次ガイドです。",
+    url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/beginners-guide?hl=ja",
+    badge: "公式ドキュメント",
   },
 ];

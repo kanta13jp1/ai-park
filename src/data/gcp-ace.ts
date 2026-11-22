@@ -12,13 +12,13 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Associate Cloud Engineer 公式試験ガイド
+// 出典: Google Cloud 認定 Associate Cloud Engineer 公式ページ・試験ガイド (https://cloud.google.com/learn/certification/cloud-engineer?hl=ja / 確認日: 2026-11-22)
 export const aceExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Associate Cloud Engineer", detail: "デプロイ・運用・gcloud CLI 実務" },
   { label: "試験時間", value: "120 分", detail: "選択問題（単一・複数選択）" },
   { label: "問題数", value: "約 50〜60 問", detail: "試験回により変動あり" },
-  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式はスコア非公開（70%前後が目安）" },
-  { label: "有効期限", value: "2 年間", detail: "認定取得日から 2 年で再認定が必要" },
+  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開（Pass / Fail のみ通知）" },
+  { label: "有効期限", value: "3 年間", detail: "認定取得日から 3 年で再認定が必要（Associate レベル）" },
   { label: "推奨経験", value: "実務 6 ヶ月以上", detail: "Cloud Console と CLI の操作経験" },
 ];
 
@@ -866,26 +866,26 @@ export const acePracticeQuestions: CertQuestion[] = [
 export const aceOfficialResources: GcpOfficialResource[] = [
   {
     title: "Associate Cloud Engineer 認定公式ページ",
-    description: "試験概要、推奨経験、受験登録方法を確認できます。",
-    url: "https://cloud.google.com/learn/certification/cloud-engineer",
+    description: "試験概要、推奨経験、受験登録方法（CertMetrics / Pearson VUE）を確認できます。",
+    url: "https://cloud.google.com/learn/certification/cloud-engineer?hl=ja",
     badge: "公式認定ページ",
   },
   {
-    title: "Associate Cloud Engineer 試験ガイド",
-    description: "5 つの出題ドメインと具体的な作業項目の一次情報です。",
-    url: "https://cloud.google.com/learn/certification/guides/cloud-engineer",
+    title: "Associate Cloud Engineer 公式試験ガイド（日本語 PDF）",
+    description: "5 つの出題ドメインと具体的な作業項目の一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/associate_cloud_engineer_exam_guide_japanese.pdf",
     badge: "公式試験ガイド",
   },
   {
     title: "Associate Cloud Engineer サンプル問題",
     description: "公式のサンプル問題で出題形式・難易度を確認できます。",
-    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-engineer",
+    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-engineer?hl=ja",
     badge: "公式サンプル",
   },
   {
     title: "gcloud CLI 公式リファレンス",
     description: "試験頻出の gcloud コマンド構文とフラグ一覧を確認できます。",
-    url: "https://cloud.google.com/sdk/gcloud/reference",
+    url: "https://docs.cloud.google.com/sdk/gcloud/reference",
     badge: "CLI リファレンス",
   },
 ];

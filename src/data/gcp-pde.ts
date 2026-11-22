@@ -12,12 +12,12 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Professional Data Engineer 公式試験ガイドおよび Google Cloud 公式ドキュメント
+// 出典: Google Cloud 認定 Professional Data Engineer 公式ページ・試験ガイド・ドキュメント (https://cloud.google.com/learn/certification/data-engineer?hl=ja / 確認日: 2026-11-22)
 export const pdeExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Professional Data Engineer", detail: "データ基盤設計・パイプライン・ML 運用" },
   { label: "試験時間", value: "120 分", detail: "選択問題（単一・複数選択）" },
   { label: "問題数", value: "40〜50 問", detail: "公式標準試験（英語・日本語対応）" },
-  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式はスコア非公開（70%前後が目安）" },
+  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開（Pass / Fail のみ通知）" },
   { label: "有効期限", value: "2 年間", detail: "認定取得日から 2 年で再認定が必要" },
   { label: "推奨経験", value: "業界3年以上 / GCP1年以上", detail: "データ処理システムの設計・実装・運用経験" },
 ];
@@ -878,25 +878,25 @@ export const pdeOfficialResources: GcpOfficialResource[] = [
   {
     title: "Professional Data Engineer 認定公式ページ",
     description: "試験概要、試験時間、推奨経験、公式試験ガイドおよびサンプル問題へのリンクを確認できます。",
-    url: "https://cloud.google.com/learn/certification/data-engineer",
+    url: "https://cloud.google.com/learn/certification/data-engineer?hl=ja",
     badge: "公式認定ページ",
   },
   {
-    title: "Google Cloud Skills Boost（Data Engineer ラーニングパス）",
-    description: "BigQuery・Dataflow・Dataproc・Pub/Sub・Composer を扱う公式コースとハンズオンラボを受講できます。",
-    url: "https://www.cloudskillsboost.google/paths/16",
-    badge: "公式トレーニング",
+    title: "Professional Data Engineer 公式試験ガイド（日本語 PDF）",
+    description: "5 つの出題領域と配点割合、評価対象スキルの一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/professional_data_engineer_exam_guide_japanese.pdf",
+    badge: "公式試験ガイド",
   },
   {
     title: "BigQuery 公式ドキュメント",
     description: "パーティション・クラスタリング・BigQuery Editions・BigLake・BigQuery ML の一次リファレンスです。",
-    url: "https://cloud.google.com/bigquery/docs",
+    url: "https://docs.cloud.google.com/bigquery/docs?hl=ja",
     badge: "公式ドキュメント",
   },
   {
     title: "Dataflow 公式ドキュメント",
     description: "Apache Beam パイプライン、ウィンドウ、ウォーターマーク、Streaming Engine の設計・運用ガイドです。",
-    url: "https://cloud.google.com/dataflow/docs",
+    url: "https://docs.cloud.google.com/dataflow/docs?hl=ja",
     badge: "公式ドキュメント",
   },
 ];

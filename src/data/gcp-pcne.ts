@@ -12,14 +12,14 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Professional Cloud Network Engineer 公式試験ガイド・公式ドキュメント
+// 出典: Google Cloud 認定 Professional Cloud Network Engineer 公式ページ・試験ガイド (https://cloud.google.com/learn/certification/cloud-network-engineer?hl=ja / 確認日: 2026-11-22)
 export const pcneExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Professional Cloud Network Engineer", detail: "VPC設計・負荷分散・ハイブリッド接続・監視最適化" },
   { label: "試験時間", value: "120 分", detail: "選択問題（単一選択・複数選択）" },
   { label: "問題数", value: "50〜60 問", detail: "公式ガイド基準（出題数は試験回により変動）" },
   { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開（合否のみ通知）" },
   { label: "有効期限", value: "2 年間", detail: "Professional レベル認定（取得日から 2 年）" },
-  { label: "受験環境・推奨経験", value: "Webassessor / 3年以上", detail: "業界3年以上・GCP ネットワーク構築/運用1年以上推奨" },
+  { label: "受験形式・推奨経験", value: "CertMetrics / 3年以上", detail: "業界3年以上・GCP ネットワーク構築/運用1年以上推奨" },
 ];
 
 export const pcneDomains: GcpDomain[] = [
@@ -1007,25 +1007,25 @@ export const pcneOfficialResources: GcpOfficialResource[] = [
   {
     title: "Professional Cloud Network Engineer 認定公式ページ",
     description: "試験概要（120分 / 50〜60問 / 2年間有効）、推奨経験、最新トレーニングパスを確認できます。",
-    url: "https://cloud.google.com/learn/certification/cloud-network-engineer",
+    url: "https://cloud.google.com/learn/certification/cloud-network-engineer?hl=ja",
     badge: "公式認定ページ",
   },
   {
-    title: "Professional Cloud Network Engineer 試験ガイド",
-    description: "VPC 設計・実装・ネットワークサービス・ハイブリッド相互接続・運用監視の出題範囲一次情報です。",
-    url: "https://cloud.google.com/learn/certification/guides/cloud-network-engineer?hl=ja",
+    title: "Professional Cloud Network Engineer 公式試験ガイド（日本語 PDF）",
+    description: "VPC 設計・実装・ネットワークサービス・ハイブリッド相互接続・運用監視の出題範囲一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/professional_cloud_network_engineer_exam_guide_japanese.pdf",
     badge: "公式試験ガイド",
   },
   {
     title: "Professional Cloud Network Engineer サンプル問題",
     description: "Google Cloud 公式のサンプル問題で出題形式・ケース判断の難易度を確認できます。",
-    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-network-engineer",
+    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-network-engineer?hl=ja",
     badge: "公式サンプル",
   },
   {
     title: "VPC 設計ベストプラクティス・リファレンス（公式ドキュメント）",
     description: "Shared VPC・VPC Peering・GKE VPC-Native・ハイブリッド接続の公式設計指針です。",
-    url: "https://cloud.google.com/architecture/best-practices-vpc-design?hl=ja",
+    url: "https://docs.cloud.google.com/architecture/best-practices-vpc-design?hl=ja",
     badge: "公式設計ガイド",
   },
 ];

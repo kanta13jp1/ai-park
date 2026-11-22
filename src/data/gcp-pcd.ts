@@ -12,10 +12,10 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Professional Cloud Developer 公式ページ (https://cloud.google.com/learn/certification/cloud-developer)
+// 出典: Google Cloud 認定 Professional Cloud Developer 公式ページ (https://cloud.google.com/learn/certification/cloud-developer?hl=ja / 確認日: 2026-11-22)
 export const pcdExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Professional Cloud Developer", detail: "クラウドネイティブ設計・開発・CI/CD・可観測性" },
-  { label: "試験時間 / 形式", value: "120 分 / Webassessor", detail: "単一・複数選択（テストセンター / オンライン監督・日英対応）" },
+  { label: "試験時間 / 形式", value: "120 分 / CertMetrics", detail: "単一・複数選択（テストセンター / OnVUE オンライン監督・日英対応）" },
   { label: "問題数", value: "50〜60 問", detail: "公式ページ記載（出題数は試験回により変動）" },
   { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開（合否のみ通知）" },
   { label: "有効期限", value: "2 年間", detail: "Professional 認定は取得日から 2 年で再認定が必要" },
@@ -1252,8 +1252,8 @@ export const pcdPracticeQuestions: CertQuestion[] = [
 export const pcdOfficialResources: GcpOfficialResource[] = [
   {
     title: "Professional Cloud Developer 認定公式ページ",
-    description: "試験概要（120 分・50〜60 問・有効期間 2 年）、推奨経験、Webassessor 受験案内を確認できます。",
-    url: "https://cloud.google.com/learn/certification/cloud-developer",
+    description: "試験概要（120 分・50〜60 問・有効期間 2 年）、推奨経験、CertMetrics / Pearson VUE 受験案内を確認できます。",
+    url: "https://cloud.google.com/learn/certification/cloud-developer?hl=ja",
     badge: "公式認定ページ",
   },
   {
@@ -1265,13 +1265,13 @@ export const pcdOfficialResources: GcpOfficialResource[] = [
   {
     title: "Cloud Run 公式ドキュメント",
     description: "コンテナライフサイクル（SIGTERM）、同時実行数、Direct VPC Egress、トラフィック分割の一次リファレンスです。",
-    url: "https://cloud.google.com/run/docs",
+    url: "https://docs.cloud.google.com/run/docs?hl=ja",
     badge: "サーバーレス公式",
   },
   {
     title: "Google Cloud Architecture Framework",
     description: "クラウドネイティブ設計・信頼性・セキュリティ・パフォーマンス最適化の公式ベストプラクティス集です。",
-    url: "https://cloud.google.com/architecture/framework",
+    url: "https://docs.cloud.google.com/architecture/framework?hl=ja",
     badge: "公式設計ガイド",
   },
 ];

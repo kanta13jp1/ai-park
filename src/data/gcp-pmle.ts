@@ -12,12 +12,12 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Professional Machine Learning Engineer 公式試験ガイド / Vertex AI・BigQuery ML 公式ドキュメント
+// 出典: Google Cloud 認定 Professional Machine Learning Engineer 公式ページ・試験ガイド・Vertex AI ドキュメント (https://cloud.google.com/learn/certification/machine-learning-engineer?hl=ja / 確認日: 2026-11-22)
 export const pmleExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Professional ML Engineer", detail: "ML 設計・生成 AI・MLOps・本番運用" },
   { label: "試験時間", value: "120 分", detail: "多肢選択・複数選択（英語・日本語対応）" },
   { label: "問題数", value: "50〜60 問", detail: "Python・SQL コードスニペットの読解あり" },
-  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式はスコア非公開（70%前後が目安）" },
+  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開（Pass / Fail のみ通知）" },
   { label: "有効期限", value: "2 年間", detail: "認定取得日から 2 年で再認定が必要" },
   { label: "推奨経験", value: "業界3年以上 / GCP1年以上", detail: "Vertex AI・MLOps 本番構築経験" },
 ];
@@ -885,25 +885,25 @@ export const pmleOfficialResources: GcpOfficialResource[] = [
   {
     title: "Professional Machine Learning Engineer 認定公式ページ",
     description: "試験概要、推奨実務経験、受験形式および最新の試験申込情報（日本語対応）を確認できます。",
-    url: "https://cloud.google.com/learn/certification/machine-learning-engineer",
+    url: "https://cloud.google.com/learn/certification/machine-learning-engineer?hl=ja",
     badge: "公式認定ページ",
   },
   {
-    title: "Professional Machine Learning Engineer 試験ガイド",
-    description: "6 つの出題セクションと最新の生成 AI・MLOps 評価スキルの一次情報です。",
-    url: "https://cloud.google.com/learn/certification/guides/machine-learning-engineer",
+    title: "Professional Machine Learning Engineer 公式試験ガイド（日本語 PDF）",
+    description: "6 つの出題セクションと最新の生成 AI・MLOps 評価スキルの一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/professional_machine_learning_engineer_exam_guide_japanese.pdf",
     badge: "公式試験ガイド",
   },
   {
     title: "MLOps: 継続的デリバリーと自動化パイプライン（公式アーキテクチャ）",
     description: "試験頻出の MLOps 成熟度レベル（Level 0 / 1 / 2）と CI/CD/CT 設計の公式リファレンスです。",
-    url: "https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning",
+    url: "https://docs.cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning?hl=ja",
     badge: "公式 MLOps ガイド",
   },
   {
     title: "Vertex AI 公式ドキュメント（統合 AI プラットフォーム概要）",
     description: "Feature Store、Pipelines、Training、Model Garden、Model Monitoring の仕様を確認できます。",
-    url: "https://cloud.google.com/vertex-ai/docs/start/introduction-unified-platform",
+    url: "https://docs.cloud.google.com/gemini-enterprise-agent-platform/machine-learning?hl=ja",
     badge: "公式ドキュメント",
   },
 ];

@@ -525,9 +525,11 @@ export default function CertificationPracticeQuiz({
         {showFeedback && (
           <div
             className={`grid gap-2.5 pt-2 border-t border-slate-100 ${
-              domains.length <= 4
-                ? "grid-cols-2 lg:grid-cols-4"
-                : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+              domains.length >= 6
+                ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
+                : domains.length === 5
+                  ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+                  : "grid-cols-2 lg:grid-cols-4"
             }`}
           >
             {domains.map((d) => {

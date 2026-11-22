@@ -12,12 +12,12 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Professional Cloud Architect 公式試験ガイド
+// 出典: Google Cloud 認定 Professional Cloud Architect 公式ページ・試験ガイド (https://cloud.google.com/learn/certification/cloud-architect?hl=ja / 確認日: 2026-11-22)
 export const pcaExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Professional Cloud Architect", detail: "設計・セキュリティ・SRE・移行" },
   { label: "試験時間", value: "120 分", detail: "選択問題（ケーススタディ含む）" },
-  { label: "問題数", value: "約 50 問", detail: "公式ケーススタディに基づく出題あり" },
-  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式はスコア非公開（70%前後が目安）" },
+  { label: "問題数", value: "50〜60 問", detail: "公式ページ記載（ケーススタディ含む）" },
+  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開（Pass / Fail のみ通知）" },
   { label: "有効期限", value: "2 年間", detail: "認定取得日から 2 年で再認定が必要" },
   { label: "推奨経験", value: "業界3年以上 / GCP1年以上", detail: "エンタープライズ設計・運用経験" },
 ];
@@ -876,25 +876,25 @@ export const pcaOfficialResources: GcpOfficialResource[] = [
   {
     title: "Professional Cloud Architect 認定公式ページ",
     description: "試験概要、推奨経験、公式ケーススタディ一覧を確認できます。",
-    url: "https://cloud.google.com/learn/certification/cloud-architect",
+    url: "https://cloud.google.com/learn/certification/cloud-architect?hl=ja",
     badge: "公式認定ページ",
   },
   {
-    title: "Professional Cloud Architect 試験ガイド",
-    description: "6 つの出題ドメインと評価スキルの一次情報です。",
-    url: "https://cloud.google.com/learn/certification/guides/cloud-architect",
+    title: "Professional Cloud Architect 公式試験ガイド（日本語 PDF）",
+    description: "6 つの出題ドメインと評価スキルの一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/professional_cloud_architect_exam_guide_japanese.pdf",
     badge: "公式試験ガイド",
   },
   {
     title: "Google Cloud Architecture Framework",
     description: "システム設計・運用・セキュリティ・コストの公式ベストプラクティス集です。",
-    url: "https://cloud.google.com/architecture/framework",
+    url: "https://docs.cloud.google.com/architecture/framework?hl=ja",
     badge: "公式設計フレームワーク",
   },
   {
     title: "Professional Cloud Architect サンプル問題",
     description: "公式のサンプル問題でケーススタディを含む出題傾向を確認できます。",
-    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-architect",
+    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-architect?hl=ja",
     badge: "公式サンプル",
   },
 ];

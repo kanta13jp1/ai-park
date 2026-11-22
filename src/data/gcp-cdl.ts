@@ -12,14 +12,14 @@ import type {
   GcpOfficialResource,
 } from "./gcp-types";
 
-// 出典: Google Cloud 認定 Cloud Digital Leader 公式試験ガイド
+// 出典: Google Cloud 認定 Cloud Digital Leader 公式ページ・試験ガイド (https://cloud.google.com/learn/certification/cloud-digital-leader?hl=ja / 確認日: 2026-11-22)
 export const cdlExamFacts: CertExamFact[] = [
   { label: "対象試験", value: "Cloud Digital Leader", detail: "クラウド基礎・ビジネス＆技術全般" },
   { label: "試験時間", value: "90 分", detail: "選択問題（単一・複数選択）" },
   { label: "問題数", value: "約 50〜60 問", detail: "試験回により変動あり" },
-  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式はスコア非公開（70%前後が目安）" },
+  { label: "合格ライン", value: "非公開（合否通知）", detail: "公式スコア非公開（Pass / Fail のみ通知）" },
   { label: "有効期限", value: "3 年間", detail: "認定取得日から 3 年で再認定が必要" },
-  { label: "受験形式", value: "Webassessor", detail: "テストセンター / オンライン監督試験" },
+  { label: "受験形式", value: "CertMetrics / Pearson VUE", detail: "テストセンター / オンライン監督（OnVUE）" },
 ];
 
 export const cdlDomains: GcpDomain[] = [
@@ -163,7 +163,7 @@ export const cdlDomains: GcpDomain[] = [
         id: "cdl-4-1",
         code: "4.1",
         title: "クラウド移行戦略とコンピュート選択肢",
-        services: ["Compute Engine", "GKE", "Cloud Run", "Cloud Functions"],
+        services: ["Compute Engine", "GKE", "Cloud Run", "Cloud Run functions"],
         keyPoints: [
           "リフト＆シフト（Rehost）は Compute Engine へ VM のまま移行し、短期間でデータセンターを脱却する手法",
           "コンテナ化により OS 依存を排除しポータビリティを向上。複数コンテナのオーケストレーションには GKE を使用",
@@ -317,7 +317,7 @@ export const cdlComparisons: GcpComparisonTable[] = [
       { feature: "確約利用割引 (CUD)", values: ["最大 57%〜70%", "1年または3年の利用コミット", "24時間稼働の本番Web/DBサーバー"] },
       { feature: "Spot VM", values: ["最大 60〜91%", "Google側都合で事前通知後停止あり", "中断・再実行可能なバッチ・レンダリング"] },
       { feature: "ストレージ自動階層化", values: ["自動最適化", "Autoclass 有効化", "アクセス頻度が時間経過で下がるデータ"] },
-      { feature: "ゼロスケール", values: ["リクエスト0時は0円", "Cloud Run / Cloud Functions", "夜間や休日にアクセスが無いアプリ"] },
+      { feature: "ゼロスケール", values: ["リクエスト0時は0円", "Cloud Run / Cloud Run functions", "夜間や休日にアクセスが無いアプリ"] },
     ],
     decisionRule: "常時稼働＝CUD、中断OKの大量計算＝Spot VM、アクセスが散発的＝Cloud Run。",
   },
@@ -884,26 +884,26 @@ export const cdlPracticeQuestions: CertQuestion[] = [
 export const cdlOfficialResources: GcpOfficialResource[] = [
   {
     title: "Cloud Digital Leader 認定公式ページ",
-    description: "試験の概要、対象者、受験登録、最新の試験形式を確認できます。",
-    url: "https://cloud.google.com/learn/certification/cloud-digital-leader",
+    description: "試験の概要、対象者、受験登録（CertMetrics / Pearson VUE）、最新の試験形式を確認できます。",
+    url: "https://cloud.google.com/learn/certification/cloud-digital-leader?hl=ja",
     badge: "公式認定ページ",
   },
   {
-    title: "Cloud Digital Leader 試験ガイド",
-    description: "出題範囲（セクション別の詳細トピック）の一次情報です。",
-    url: "https://cloud.google.com/learn/certification/guides/cloud-digital-leader",
+    title: "Cloud Digital Leader 公式試験ガイド（日本語 PDF）",
+    description: "6 つの出題セクション別の詳細トピックと評価項目の一次情報 PDF です。",
+    url: "https://services.google.com/fh/files/misc/cloud_digital_leader_exam_guide_japanese.pdf",
     badge: "公式試験ガイド",
+  },
+  {
+    title: "Cloud Digital Leader 公式学習ガイド（日本語 PDF）",
+    description: "主要クラウド概念と Google Cloud サービスの用語整理に役立つ公式 PDF ガイドです。",
+    url: "https://services.google.com/fh/files/misc/cloud_digital_leader_study_guide_japanese.pdf",
+    badge: "公式学習ガイド",
   },
   {
     title: "Cloud Digital Leader サンプル問題",
     description: "Google Cloud 公式が提供する模擬質問で出題トーンを確認できます。",
-    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-digital-leader",
+    url: "https://cloud.google.com/learn/certification/sample-questions/cloud-digital-leader?hl=ja",
     badge: "公式サンプル",
-  },
-  {
-    title: "Google Cloud Skills Boost（CDL ラーニングパス）",
-    description: "公式のオンライントレーニングとハンズオンラボを受講できます。",
-    url: "https://www.cloudskillsboost.google/paths/9",
-    badge: "公式トレーニング",
   },
 ];
