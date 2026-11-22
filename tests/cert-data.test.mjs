@@ -258,3 +258,155 @@ test("LPIC 6-track data meets schema, 20 questions, 24 unique flashcards, 0 comm
     }
   }
 });
+
+test("IPA 13-exam data modules meet schema, uniqueness, 100% keyword badge hit rate, and valid IPA URLs", async () => {
+  const searchMod = await import(pathToFileURL(path.join(rootDir, "src", "lib", "ipa-search.ts")).href);
+  const { normalizeIpaSearchQuery } = searchMod;
+
+  const [foundationMod, specialistMod, managementMod] = await Promise.all([
+    import(pathToFileURL(path.join(rootDir, "src", "data", "ipa", "foundation.ts")).href),
+    import(pathToFileURL(path.join(rootDir, "src", "data", "ipa", "specialist.ts")).href),
+    import(pathToFileURL(path.join(rootDir, "src", "data", "ipa", "management.ts")).href),
+  ]);
+
+  const examMetas = [
+    ...foundationMod.foundationExamMetas,
+    ...specialistMod.specialistExamMetas,
+    ...managementMod.managementExamMetas,
+  ];
+  const domains = [
+    ...foundationMod.foundationDomains,
+    ...specialistMod.specialistDomains,
+    ...managementMod.managementDomains,
+  ];
+  const comparisons = [
+    ...foundationMod.foundationComparisons,
+    ...specialistMod.specialistComparisons,
+    ...managementMod.managementComparisons,
+  ];
+  const formulas = [
+    ...foundationMod.foundationFormulaPatterns,
+    ...specialistMod.specialistFormulaPatterns,
+    ...managementMod.managementFormulaPatterns,
+  ];
+  const pitfalls = [
+    ...foundationMod.foundationPitfalls,
+    ...specialistMod.specialistPitfalls,
+    ...managementMod.managementPitfalls,
+  ];
+  const keyFacts = [
+    ...foundationMod.foundationKeyFacts,
+    ...specialistMod.specialistKeyFacts,
+    ...managementMod.managementKeyFacts,
+  ];
+  const flashcards = [
+    ...foundationMod.foundationFlashcards,
+    ...specialistMod.specialistFlashcards,
+    ...managementMod.managementFlashcards,
+  ];
+  const questions = [
+    ...foundationMod.foundationQuestions,
+    ...specialistMod.specialistQuestions,
+    ...managementMod.managementQuestions,
+  ];
+
+  const expectedExams = ["ip", "sg", "fe", "ap", "sc", "db", "nw", "es", "st", "sa", "pm", "sm", "au"];
+  assert.deepEqual(
+    examMetas.map((m) => m.id),
+    expectedExams,
+    "IPA examMetas must match the 13 expected exam IDs"
+  );
+
+  const assertUnique = (items, label) => {
+    const seen = new Set();
+    for (const item of items) {
+      assert.ok(!seen.has(item), `IPA duplicate ${label}: ${item}`);
+      seen.add(item);
+    }
+  };
+
+  assertUnique(domains.map((d) => d.id), "domain.id");
+  assertUnique(domains.flatMap((d) => d.topics.map((t) => t.id)), "topic.id");
+  assertUnique(questions.map((q) => q.id), "question.id");
+  assertUnique(comparisons.map((c) => c.id), "comparison.id");
+  assertUnique(formulas.map((f) => f.id), "formula.id");
+  assertUnique(pitfalls.map((p) => p.id), "pitfall.id");
+  assertUnique(keyFacts.map((k) => k.id), "keyFact.id");
+  assertUnique(flashcards.map((c) => c.keyword), "flashcard.keyword");
+
+  const domainExamById = new Map(domains.map((d) => [d.id, d.examId]));
+  for (const q of questions) {
+    assert.equal(
+      domainExamById.get(q.domainId),
+      q.examId,
+      `IPA question ${q.id} references invalid domainId ${q.domainId} for exam ${q.examId}`
+    );
+  }
+
+  for (const comp of comparisons) {
+    for (const row of comp.rows) {
+      assert.equal(
+        row.values.length,
+        comp.columns.length,
+        `IPA comparison ${comp.id} row "${row.feature}" values length mismatch`
+      );
+    }
+  }
+
+  const foundationExams = new Set(["ip", "sg", "fe", "ap"]);
+  const misses = [];
+
+  for (const examId of expectedExams) {
+    const examTopics = domains.filter((d) => d.examId === examId).flatMap((d) => d.topics);
+    const examQuestions = questions.filter((q) => q.examId === examId);
+    const examCards = flashcards.filter((c) => c.examId === examId);
+    const examComps = comparisons.filter((c) => c.examIds.includes(examId));
+    const examFormulas = formulas.filter((f) => f.examIds.includes(examId));
+    const examPitfalls = pitfalls.filter((p) => p.examIds.includes(examId));
+    const examKeyFacts = keyFacts.filter((k) => k.examIds.includes(examId));
+
+    const minQ = foundationExams.has(examId) ? 14 : 12;
+    const minCard = foundationExams.has(examId) ? 12 : 10;
+    assert.ok(examTopics.length >= 5, `IPA ${examId}: expected >= 5 topics, got ${examTopics.length}`);
+    assert.ok(examQuestions.length >= minQ, `IPA ${examId}: expected >= ${minQ} questions, got ${examQuestions.length}`);
+    assert.ok(examCards.length >= minCard, `IPA ${examId}: expected >= ${minCard} flashcards, got ${examCards.length}`);
+    assert.ok(examComps.length >= 3, `IPA ${examId}: expected >= 3 comparisons, got ${examComps.length}`);
+    assert.ok(examFormulas.length >= 1, `IPA ${examId}: expected >= 1 formula`);
+    assert.ok(examPitfalls.length >= 1, `IPA ${examId}: expected >= 1 pitfall`);
+    assert.ok(examKeyFacts.length >= 1, `IPA ${examId}: expected >= 1 keyFact`);
+
+    const compTexts = examComps.map((c) =>
+      [
+        c.title,
+        c.subtitle,
+        c.decisionRule,
+        ...c.columns,
+        ...c.rows.flatMap((r) => [r.feature, ...r.values]),
+      ]
+        .join(" ")
+        .toLowerCase()
+    );
+
+    for (const topic of examTopics) {
+      for (const kw of topic.keywords) {
+        const q = normalizeIpaSearchQuery(kw).toLowerCase();
+        assert.ok(q.length > 0, `IPA ${examId}:${topic.code}: empty normalized query for "${kw}"`);
+        if (!compTexts.some((txt) => txt.includes(q))) {
+          misses.push(`${examId}:${topic.code}:${kw} (query="${q}")`);
+        }
+      }
+    }
+  }
+
+  assert.deepEqual(misses, [], `IPA keyword badge misses found:\n${misses.join("\n")}`);
+
+  const ipaExamText = fs.readFileSync(path.join(rootDir, "src", "data", "ipa-exam.ts"), "utf8");
+  assert.ok(
+    !ipaExamText.includes("https://www.ipa.go.jp/shiken/syllabus.html"),
+    "src/data/ipa-exam.ts must not contain 404 /shiken/syllabus.html URL"
+  );
+  assert.ok(
+    ipaExamText.includes("https://www.ipa.go.jp/shiken/syllabus/gaiyou.html"),
+    "src/data/ipa-exam.ts must link to https://www.ipa.go.jp/shiken/syllabus/gaiyou.html"
+  );
+});

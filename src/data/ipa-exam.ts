@@ -143,7 +143,7 @@ export interface IpaQuestion extends CertQuestion {
   examId: IpaExamId;
 }
 
-// 出典: 独立行政法人情報処理推進機構 (IPA) 情報処理技術者試験・情報処理安全確保支援士試験 試験要綱・シラバス（https://www.ipa.go.jp/shiken/syllabus.html）
+// 出典: 独立行政法人情報処理推進機構 (IPA) 情報処理技術者試験・情報処理安全確保支援士試験 試験要綱・シラバス（https://www.ipa.go.jp/shiken/syllabus/gaiyou.html）
 export const ipaExamMetas: IpaExamMeta[] = [
   ...foundationExamMetas,
   ...specialistExamMetas,
@@ -203,7 +203,7 @@ export const ipaOfficialResources: IpaOfficialResource[] = [
   {
     title: "試験要綱・シラバス（出題範囲）",
     description: "ITパスポート・基本情報・応用情報・高度試験の公式試験要綱、シラバス PDF が掲載されています。",
-    url: "https://www.ipa.go.jp/shiken/syllabus.html",
+    url: "https://www.ipa.go.jp/shiken/syllabus/gaiyou.html",
     badge: "公式シラバス",
   },
   {

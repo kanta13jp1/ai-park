@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, type KeyboardEvent } from "react";
 import {
   ScrollText,
   BookOpen,
@@ -59,6 +59,7 @@ import {
   type IpaDomain,
 } from "@/data/ipa-exam";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
+import { normalizeIpaSearchQuery } from "@/lib/ipa-search";
 
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
@@ -221,10 +222,6 @@ function normalizeMockExamHistory(raw: unknown): Record<IpaExamId, CertMockExamR
     sm: normalizeExamHistoryArray(obj.sm),
     au: normalizeExamHistoryArray(obj.au),
   };
-}
-
-function normalizeIpaSearchQuery(kw: string): string {
-  return kw.split(/[（(/]/)[0].trim();
 }
 
 export default function IpaInfoPage() {
@@ -765,8 +762,36 @@ export default function IpaInfoPage() {
     { id: "resources", label: "公式リソース", icon: Compass },
   ];
 
+  const handleTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, currentId: TabId) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const tabIds = tabs.map((t) => t.id);
+    const currentIndex = tabIds.indexOf(currentId);
+    if (currentIndex === -1) return;
+
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowRight") {
+      nextIndex = (currentIndex + 1) % tabIds.length;
+    } else if (e.key === "ArrowLeft") {
+      nextIndex = (currentIndex - 1 + tabIds.length) % tabIds.length;
+    } else if (e.key === "Home") {
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      nextIndex = tabIds.length - 1;
+    }
+
+    if (nextIndex !== null) {
+      e.preventDefault();
+      const nextId = tabIds[nextIndex];
+      playCyberClick();
+      setActiveTab(nextId);
+      requestAnimationFrame(() => {
+        document.getElementById(`ipa-tab-${nextId}`)?.focus();
+      });
+    }
+  };
+
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen min-w-0">
       <HeroBanner
         title="情報処理技術者試験 情報局"
         subtitle="経産省（IPA）全13区分（IP・SG・FE・AP・高度9区分）統合学習ハブ"
@@ -780,7 +805,10 @@ export default function IpaInfoPage() {
         />
 
         {/* 試験区分セレクター（統合型スイッチャー：3グループ整理） */}
-        <section className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-4">
+        <section
+          aria-label="学習する試験区分選択"
+          className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-4 min-w-0 max-w-full"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
             <span className="text-xs font-black text-slate-700 flex items-center space-x-1.5">
               <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0" />
@@ -854,7 +882,12 @@ export default function IpaInfoPage() {
             {EXAM_TIER_GROUPS.map((group) => {
               const groupMetas = ipaExamMetas.filter((m) => m.tier === group.tier);
               return (
-                <div key={group.tier} className="space-y-1.5">
+                <div
+                  key={group.tier}
+                  role="group"
+                  aria-label={group.label}
+                  className="space-y-1.5"
+                >
                   <div className="text-[11px] font-bold text-slate-500 px-1">
                     {group.label}
                   </div>
@@ -867,6 +900,7 @@ export default function IpaInfoPage() {
                         <button
                           key={meta.id}
                           type="button"
+                          aria-pressed={isSelected}
                           onClick={() => handleSelectExam(meta.id)}
                           className={`text-left p-3 rounded-xl border transition-all cursor-pointer ${
                             isSelected
@@ -950,22 +984,22 @@ export default function IpaInfoPage() {
                 </p>
               </div>
 
-              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:min-w-[360px]">
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 lg:min-w-[360px]">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
                   <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
                   <div className="text-[11px] text-slate-400 font-mono">
                     {completedTopicCount} / {currentTopics.length}
                   </div>
                 </div>
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">暗記カード</div>
                   <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
                     {masteredCardCount} / {currentFlashcards.length}
                   </div>
                   <div className="text-[11px] text-slate-400">枚習得</div>
                 </div>
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">演習問題</div>
                   <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
                     {correctQuizCount} / {currentQuestions.length}
@@ -1017,6 +1051,8 @@ export default function IpaInfoPage() {
             <div className="flex flex-wrap items-center gap-2 shrink-0">
               <button
                 type="button"
+                aria-expanded={showBackupPanel}
+                aria-controls="ipa-backup-panel"
                 onClick={() => {
                   playCyberClick();
                   setShowBackupPanel((v) => !v);
@@ -1042,9 +1078,15 @@ export default function IpaInfoPage() {
             </div>
           </div>
 
+          {!showBackupPanel && importMessage && (
+            <div role="status" aria-live="polite" className="text-xs font-bold text-indigo-700">
+              {importMessage}
+            </div>
+          )}
+
           {showBackupPanel && (
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div id="ipa-backup-panel" className="pt-4 border-t border-slate-100 space-y-3">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
                 <p className="text-xs text-slate-600">
                   全試験区分の進捗やメモはブラウザの localStorage に自動保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
                 </p>
@@ -1057,13 +1099,14 @@ export default function IpaInfoPage() {
                   <span>{copiedBackup ? "コピーしました" : "現在のデータをコピー"}</span>
                 </button>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col lg:flex-row gap-2">
                 <input
                   type="text"
+                  aria-label="バックアップJSON入力"
                   value={backupInput}
                   onChange={(e) => setBackupInput(e.target.value)}
                   placeholder="復元するバックアップ JSON 文字列を貼り付け..."
-                  className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="flex-1 min-w-0 px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <button
                   type="button"
@@ -1075,26 +1118,38 @@ export default function IpaInfoPage() {
                 </button>
               </div>
               {importMessage && (
-                <div className="text-xs font-bold text-indigo-700">{importMessage}</div>
+                <div role="status" aria-live="polite" className="text-xs font-bold text-indigo-700">
+                  {importMessage}
+                </div>
               )}
             </div>
           )}
         </section>
 
         {/* タブナビゲーション */}
-        <nav className="flex flex-wrap gap-2">
+        <div
+          role="tablist"
+          aria-label="IPA 学習セクション"
+          className="flex flex-wrap gap-2"
+        >
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                id={`ipa-tab-${tab.id}`}
                 type="button"
+                role="tab"
+                aria-selected={active}
+                aria-controls={`ipa-panel-${tab.id}`}
+                tabIndex={active ? 0 : -1}
+                onKeyDown={(e) => handleTabKeyDown(e, tab.id)}
                 onClick={() => {
                   playCyberClick();
                   setActiveTab(tab.id);
                 }}
-                className={`inline-flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border whitespace-nowrap ${
+                className={`inline-flex items-center space-x-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer border whitespace-nowrap max-w-full ${
                   active
                     ? "bg-slate-900 text-white border-slate-900 shadow-sm"
                     : "bg-white text-slate-600 border-slate-200/80 hover:border-indigo-300 hover:text-slate-900"
@@ -1114,11 +1169,16 @@ export default function IpaInfoPage() {
               </button>
             );
           })}
-        </nav>
+        </div>
 
         {/* TAB 1: トピック別学習 */}
         {activeTab === "domains" && (
-          <div className="space-y-6">
+          <div
+            role="tabpanel"
+            id="ipa-panel-domains"
+            aria-labelledby="ipa-tab-domains"
+            className="space-y-6"
+          >
             {/* クリック可能な分野別進捗バー */}
             <section className="space-y-2.5">
               <div className="flex flex-wrap items-center justify-between gap-2 px-1">
@@ -1216,6 +1276,7 @@ export default function IpaInfoPage() {
                   />
                   <input
                     type="text"
+                    aria-label="用語・キーワード検索"
                     value={topicQuery}
                     onChange={(e) => setTopicQuery(e.target.value)}
                     placeholder="用語・キーワード検索..."
@@ -1234,7 +1295,11 @@ export default function IpaInfoPage() {
                 </div>
 
                 {topicQuickChips.length > 0 && (
-                  <div className="w-full flex flex-wrap items-center gap-1.5 order-2 lg:order-3 lg:pt-2.5 lg:border-t lg:border-slate-100">
+                  <div
+                    role="group"
+                    aria-label="クイック検索チップ"
+                    className="w-full flex flex-wrap items-center gap-1.5 order-2 lg:order-3 lg:pt-2.5 lg:border-t lg:border-slate-100"
+                  >
                     <span className="text-[11px] font-bold text-slate-400 mr-0.5 shrink-0">
                       クイック検索:
                     </span>
@@ -1245,6 +1310,7 @@ export default function IpaInfoPage() {
                         <button
                           key={kw}
                           type="button"
+                          aria-pressed={isChipActive}
                           onClick={() => {
                             playCyberClick();
                             setTopicQuery(isChipActive ? "" : kw);
@@ -1265,6 +1331,7 @@ export default function IpaInfoPage() {
                 <div className="flex flex-wrap items-center gap-2 order-3 lg:order-2">
                   <button
                     type="button"
+                    aria-pressed={onlyIncompleteTopics}
                     onClick={() => {
                       playCyberClick();
                       setOnlyIncompleteTopics((v) => !v);
@@ -1281,6 +1348,7 @@ export default function IpaInfoPage() {
 
                   <button
                     type="button"
+                    aria-pressed={onlyWithNotesTopics}
                     onClick={() => {
                       playCyberClick();
                       setOnlyWithNotesTopics((v) => !v);
@@ -1350,9 +1418,11 @@ export default function IpaInfoPage() {
                       id={`ipa-domain-${domain.id}`}
                       className={`scroll-mt-6 bg-white rounded-2xl border ${style.border} shadow-xs overflow-hidden`}
                     >
-                      <div className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <button
                           type="button"
+                          aria-expanded={isExpanded}
+                          aria-controls={`ipa-domain-panel-${domain.id}`}
                           onClick={() => {
                             playCyberClick();
                             setExpandedDomains((prev) => ({
@@ -1394,6 +1464,8 @@ export default function IpaInfoPage() {
                           </button>
                           <button
                             type="button"
+                            aria-expanded={isExpanded}
+                            aria-controls={`ipa-domain-panel-${domain.id}`}
                             onClick={() => {
                               playCyberClick();
                               setExpandedDomains((prev) => ({
@@ -1410,7 +1482,10 @@ export default function IpaInfoPage() {
                       </div>
 
                       {isExpanded && (
-                        <div className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-5 space-y-4">
+                        <div
+                          id={`ipa-domain-panel-${domain.id}`}
+                          className="border-t border-slate-100 bg-slate-50/50 p-4 sm:p-5 space-y-4"
+                        >
                           {domain.visibleTopics.map((topic) => {
                             const isDone = progress.completedTopics.includes(topic.id);
                             const noteText = progress.topicNotes[topic.id] ?? "";
@@ -1426,6 +1501,7 @@ export default function IpaInfoPage() {
                                 <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-2.5 sm:gap-3">
                                   <button
                                     type="button"
+                                    aria-pressed={isDone}
                                     onClick={() => toggleTopic(topic.id)}
                                     className="flex items-start space-x-2.5 text-left cursor-pointer group min-w-0 flex-1"
                                   >
@@ -1450,6 +1526,8 @@ export default function IpaInfoPage() {
 
                                   <button
                                     type="button"
+                                    aria-expanded={isNoteOpen}
+                                    aria-controls={`ipa-note-panel-${topic.id}`}
                                     onClick={() => {
                                       playCyberClick();
                                       setOpenNoteTopics((prev) => ({
@@ -1500,8 +1578,15 @@ export default function IpaInfoPage() {
                                 </div>
 
                                 {isNoteOpen && (
-                                  <div className="pt-2">
+                                  <div id={`ipa-note-panel-${topic.id}`} className="pt-2">
+                                    <label
+                                      htmlFor={`ipa-note-input-${topic.id}`}
+                                      className="sr-only"
+                                    >
+                                      {topic.title} の学習メモ
+                                    </label>
                                     <textarea
+                                      id={`ipa-note-input-${topic.id}`}
                                       rows={2}
                                       value={noteText}
                                       onChange={(e) => handleUpdateTopicNote(topic.id, e.target.value)}
@@ -1525,15 +1610,25 @@ export default function IpaInfoPage() {
 
         {/* TAB 2: 比較表・公式パターン */}
         {activeTab === "comparisons" && (
-          <div className="space-y-8">
+          <div
+            role="tabpanel"
+            id="ipa-panel-comparisons"
+            aria-labelledby="ipa-tab-comparisons"
+            className="space-y-8"
+          >
             {/* 比較表フィルタ */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div
+                  role="group"
+                  aria-label="比較表カテゴリフィルター"
+                  className="flex flex-wrap items-center gap-1.5"
+                >
                   {comparisonCategories.map((cat) => (
                     <button
                       key={cat}
                       type="button"
+                      aria-pressed={compCategory === cat}
                       onClick={() => {
                         playCyberClick();
                         setCompCategory(cat);
@@ -1552,6 +1647,7 @@ export default function IpaInfoPage() {
                   <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
+                    aria-label="比較表・逆引き・公式検索"
                     value={compQuery}
                     onChange={(e) => setCompQuery(e.target.value)}
                     placeholder="比較表・逆引き・公式を検索..."
@@ -1572,7 +1668,11 @@ export default function IpaInfoPage() {
 
               {/* 検索ヒット件数サマリバー */}
               {compQuery.trim() && (
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-100 text-[11px] text-slate-600">
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-100 text-[11px] text-slate-600"
+                >
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
                     <span className="font-bold text-slate-700 break-words">
                       「{compQuery.trim()}」のヒット件数:
@@ -1708,7 +1808,7 @@ export default function IpaInfoPage() {
                     </div>
 
                     <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse text-xs sm:text-sm">
+                      <table className="w-full min-w-[640px] text-left border-collapse text-xs sm:text-sm">
                         <thead>
                           <tr className="border-b border-slate-200 bg-slate-50/70">
                             <th className="py-2.5 px-3 font-black text-slate-700 whitespace-nowrap">
@@ -1887,42 +1987,59 @@ export default function IpaInfoPage() {
 
         {/* TAB 3: フラッシュカード */}
         {activeTab === "flashcards" && (
-          <CertificationFlashcards
-            key={`fc-${selectedExam}`}
-            items={currentFlashcards}
-            masteredKeywords={currentMasteredKeywords}
-            onToggleMastered={handleToggleMasteredCard}
-            onResetMastered={handleResetMasteredCards}
-            badgeText={`${currentExamMeta.shortLabel} 暗記カード`}
-            title="出題キーワード・要件 → 用語 / 対策 即答トレーニング"
-            promptLabel="次の説明・要件に該当する用語や対策手法は？"
-            answerLabel="対応する重要用語・対策"
-          />
+          <div
+            role="tabpanel"
+            id="ipa-panel-flashcards"
+            aria-labelledby="ipa-tab-flashcards"
+          >
+            <CertificationFlashcards
+              key={`fc-${selectedExam}`}
+              items={currentFlashcards}
+              masteredKeywords={currentMasteredKeywords}
+              onToggleMastered={handleToggleMasteredCard}
+              onResetMastered={handleResetMasteredCards}
+              badgeText={`${currentExamMeta.shortLabel} 暗記カード`}
+              title="出題キーワード・要件 → 用語 / 対策 即答トレーニング"
+              promptLabel="次の説明・要件に該当する用語や対策手法は？"
+              answerLabel="対応する重要用語・対策"
+            />
+          </div>
         )}
 
         {/* TAB 4: 練習問題・模試 */}
         {activeTab === "quiz" && (
-          <CertificationPracticeQuiz
-            key={`quiz-${selectedExam}-${quizDomainTarget}`}
-            questions={currentQuestions}
-            domains={currentQuizDomains}
-            examBadgeLabel={`${currentExamMeta.shortLabel} 演習`}
-            passingConfig={currentExamMeta.passingConfig}
-            answers={progress.quizAnswers}
-            bookmarkedIds={progress.bookmarkedQuestions}
-            mockExamHistory={progress.mockExamHistory[selectedExam]}
-            initialDomain={quizDomainTarget}
-            secondsPerQuestion={currentExamMeta.secondsPerQuestion}
-            onSubmitAnswer={handleSubmitAnswer}
-            onToggleBookmark={handleToggleBookmark}
-            onRecordMockExam={handleRecordMockExam}
-            onResetQuiz={handleResetQuiz}
-          />
+          <div
+            role="tabpanel"
+            id="ipa-panel-quiz"
+            aria-labelledby="ipa-tab-quiz"
+          >
+            <CertificationPracticeQuiz
+              key={`quiz-${selectedExam}-${quizDomainTarget}`}
+              questions={currentQuestions}
+              domains={currentQuizDomains}
+              examBadgeLabel={`${currentExamMeta.shortLabel} 演習`}
+              passingConfig={currentExamMeta.passingConfig}
+              answers={progress.quizAnswers}
+              bookmarkedIds={progress.bookmarkedQuestions}
+              mockExamHistory={progress.mockExamHistory[selectedExam]}
+              initialDomain={quizDomainTarget}
+              secondsPerQuestion={currentExamMeta.secondsPerQuestion}
+              onSubmitAnswer={handleSubmitAnswer}
+              onToggleBookmark={handleToggleBookmark}
+              onRecordMockExam={handleRecordMockExam}
+              onResetQuiz={handleResetQuiz}
+            />
+          </div>
         )}
 
         {/* TAB 5: 公式リソース */}
         {activeTab === "resources" && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div
+            role="tabpanel"
+            id="ipa-panel-resources"
+            aria-labelledby="ipa-tab-resources"
+            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+          >
             {ipaOfficialResources.map((res) => (
               <TiltCard key={res.url} className="h-full">
                 <a

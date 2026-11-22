@@ -105,3 +105,14 @@ test("normalizeCommandSearchQuery normalizes LPIC command badges cleanly", async
   nodeAssert.equal(normalizeCommandSearchQuery("/boot"), "boot");
   nodeAssert.equal(normalizeCommandSearchQuery("source / ."), "source");
 });
+
+test("normalizeIpaSearchQuery normalizes IPA keyword badges cleanly", async () => {
+  const ipaSearchPath = path.join(rootDir, "src", "lib", "ipa-search.ts");
+  const { normalizeIpaSearchQuery } = await import(pathToFileURL(ipaSearchPath).href);
+
+  assert.equal(normalizeIpaSearchQuery("ISMS (ISO/IEC 27001)"), "ISMS");
+  assert.equal(normalizeIpaSearchQuery("EVM (CPI/SPI/EAC)"), "EVM");
+  assert.equal(normalizeIpaSearchQuery("BCP（事業継続計画）"), "BCP");
+  assert.equal(normalizeIpaSearchQuery("TCP/IP"), "TCP");
+  assert.equal(normalizeIpaSearchQuery("OSPF"), "OSPF");
+});

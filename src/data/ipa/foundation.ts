@@ -10,7 +10,7 @@ import type {
 } from "@/data/ipa-exam";
 
 // 出典: 独立行政法人情報処理推進機構 (IPA) 情報処理技術者試験 試験要綱・シラバス
-// （https://www.ipa.go.jp/shiken/syllabus.html）
+// （https://www.ipa.go.jp/shiken/syllabus/gaiyou.html）
 // 対象シラバス: IP Ver.6.5 / SG Ver.4.1 / FE Ver.9.2 / AP Ver.7.2
 export const foundationExamMetas: IpaExamMeta[] = [
   {
