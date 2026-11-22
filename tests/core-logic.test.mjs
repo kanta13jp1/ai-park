@@ -91,3 +91,17 @@ test("Sidebar nav matching handles trailing slashes and avoids prefix collisions
   assert.equal(isNavHrefActive("/news/", "/"), false);
   assert.equal(isNavHrefActive("", "/azure-info"), false);
 });
+
+test("normalizeCommandSearchQuery normalizes LPIC command badges cleanly", async () => {
+  const { pathToFileURL } = await import("node:url");
+  const nodePath = await import("node:path");
+  const nodeAssert = (await import("node:assert/strict")).default;
+  const searchLibPath = nodePath.join(process.cwd(), "src", "lib", "lpic-search.ts");
+  const { normalizeCommandSearchQuery } = await import(pathToFileURL(searchLibPath).href);
+
+  nodeAssert.equal(normalizeCommandSearchQuery("lsmod"), "lsmod");
+  nodeAssert.equal(normalizeCommandSearchQuery("/etc/pam.d/*"), "etc/pam.d/");
+  nodeAssert.equal(normalizeCommandSearchQuery("systemctl isolate"), "systemctl");
+  nodeAssert.equal(normalizeCommandSearchQuery("/boot"), "boot");
+  nodeAssert.equal(normalizeCommandSearchQuery("source / ."), "source");
+});

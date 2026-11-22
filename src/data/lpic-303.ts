@@ -922,7 +922,7 @@ export const lpic303OfficialResources: LpicOfficialResource[] = [
   {
     title: "LPIC-3 303 Objectives V3.0（日本語訳）",
     description: "LPI Wiki で公開されている Exam 303 Version 3.0 の日本語版試験範囲です。",
-    url: "https://wiki.lpi.org/wiki/LPIC-3_303_Objectives_V3.0(JA)",
+    url: "https://wiki.lpi.org/wiki/LPIC-303_Objectives_V3.0(JA)",
     badge: "日本語範囲",
   },
 ];

@@ -280,8 +280,20 @@ export default function CertificationPracticeQuiz({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
       const target = e.target as HTMLElement | null;
-      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+      if (target?.getAttribute("role") === "tab" && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+        return;
+      }
 
       if (e.key === "ArrowLeft" && safeIndex > 0) {
         e.preventDefault();
@@ -345,9 +357,10 @@ export default function CertificationPracticeQuiz({
 
           <div className="flex flex-wrap items-center gap-2">
             {/* モード切り替え */}
-            <div className="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
+            <div role="group" aria-label="演習モード切替" className="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200">
               <button
                 type="button"
+                aria-pressed={quizMode === "practice"}
                 onClick={() => handleSwitchMode("practice")}
                 className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   quizMode === "practice"
@@ -360,6 +373,7 @@ export default function CertificationPracticeQuiz({
               </button>
               <button
                 type="button"
+                aria-pressed={quizMode === "exam"}
                 onClick={() => handleSwitchMode("exam")}
                 className={`inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   quizMode === "exam"
@@ -376,6 +390,8 @@ export default function CertificationPracticeQuiz({
             {quizMode === "practice" ? (
               <button
                 type="button"
+                aria-pressed={timerRunning}
+                aria-label={timerRunning ? "経過タイマーを一時停止" : "経過タイマーを再開"}
                 onClick={() => {
                   playCyberClick();
                   setTimerRunning((r) => !r);
@@ -401,6 +417,7 @@ export default function CertificationPracticeQuiz({
 
             <button
               type="button"
+              aria-pressed={Boolean(shuffledOrder)}
               onClick={handleToggleShuffle}
               onMouseEnter={() => playCyberHover()}
               className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
@@ -526,6 +543,7 @@ export default function CertificationPracticeQuiz({
                   key={d.id}
                   type="button"
                   disabled={quizMode !== "practice"}
+                  aria-pressed={quizMode === "practice" ? isDomainSelected : undefined}
                   onClick={() => handleDomainChange(isDomainSelected ? "all" : d.id)}
                   className={`rounded-xl border px-3 py-2 space-y-1 text-left transition-all ${
                     quizMode === "practice" ? "cursor-pointer hover:border-indigo-300" : "cursor-default"
@@ -563,6 +581,8 @@ export default function CertificationPracticeQuiz({
       {/* 合格ライン判定バナー（練習全問完了 または 模擬試験提出後） */}
       {((quizMode === "practice" && allCompleted) || (quizMode === "exam" && examSubmitted)) && (
         <div
+          role="status"
+          aria-live="polite"
           className={`rounded-2xl border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
             scorePct >= passingConfig.passingPct
               ? "bg-emerald-50 border-emerald-300 text-emerald-950"
@@ -617,6 +637,7 @@ export default function CertificationPracticeQuiz({
                 <button
                   key={df.id}
                   type="button"
+                  aria-pressed={active}
                   onClick={() => handleDomainChange(df.id)}
                   onMouseEnter={() => playCyberHover()}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -652,6 +673,7 @@ export default function CertificationPracticeQuiz({
             <button
               key={st.id}
               type="button"
+              aria-pressed={statusFilter === st.id}
               onClick={() => handleStatusChange(st.id)}
               className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === st.id
@@ -670,6 +692,7 @@ export default function CertificationPracticeQuiz({
                 <button
                   key={diff}
                   type="button"
+                  aria-pressed={difficultyFilter === diff}
                   onClick={() => {
                     playCyberClick();
                     setDifficultyFilter(diff);
@@ -735,6 +758,8 @@ export default function CertificationPracticeQuiz({
                 <button
                   key={q.id}
                   type="button"
+                  aria-current={isCur ? "step" : undefined}
+                  aria-label={`問題 ${idx + 1}${isBookmarked ? "（要復習）" : ""}`}
                   onClick={() => {
                     playCyberClick();
                     setCurrentIndex(idx);
@@ -787,6 +812,7 @@ export default function CertificationPracticeQuiz({
                     </span>
                     <button
                       type="button"
+                      aria-pressed={isBookmarked}
                       onClick={() => {
                         playCyberClick();
                         onToggleBookmark(currentQuestion.id);
@@ -841,6 +867,7 @@ export default function CertificationPracticeQuiz({
                       <button
                         key={optIdx}
                         type="button"
+                        aria-pressed={isSelected}
                         onClick={() => handleOptionClick(currentQuestion, optIdx)}
                         onMouseEnter={() => playCyberHover()}
                         className={`w-full text-left p-4 rounded-xl border transition-all flex items-start space-x-3 cursor-pointer ${optionStyle}`}
@@ -891,6 +918,8 @@ export default function CertificationPracticeQuiz({
                 {/* 解説パネル */}
                 {showFeedback && hasAnswered ? (
                   <div
+                    role="status"
+                    aria-live="polite"
                     className={`rounded-xl p-5 border space-y-3 ${
                       isCorrect
                         ? "bg-emerald-50/70 border-emerald-200 text-emerald-950"

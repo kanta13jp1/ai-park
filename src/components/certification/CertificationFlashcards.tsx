@@ -89,8 +89,19 @@ export default function CertificationFlashcards({
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
       const target = e.target as HTMLElement | null;
-      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.tagName === "BUTTON" ||
+          target.tagName === "A" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
 
       if (e.code === "Space") {
         e.preventDefault();
@@ -131,6 +142,7 @@ export default function CertificationFlashcards({
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
+            aria-pressed={onlyUnmastered}
             onClick={() => {
               playCyberClick();
               setOnlyUnmastered((v) => !v);
@@ -148,6 +160,7 @@ export default function CertificationFlashcards({
 
           <button
             type="button"
+            aria-pressed={Boolean(shuffledOrder)}
             onClick={handleToggleShuffle}
             className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
               shuffledOrder
@@ -177,13 +190,14 @@ export default function CertificationFlashcards({
 
       {/* カテゴリフィルター */}
       {categories.length > 2 && (
-        <div className="flex flex-wrap items-center gap-1.5">
+        <div role="group" aria-label="フラッシュカード カテゴリ" className="flex flex-wrap items-center gap-1.5">
           {categories.map((cat) => {
             const active = selectedCategory === cat;
             return (
               <button
                 key={cat}
                 type="button"
+                aria-pressed={active}
                 onClick={() => {
                   playCyberClick();
                   setSelectedCategory(cat);
@@ -230,6 +244,12 @@ export default function CertificationFlashcards({
           {/* フリップカード */}
           <button
             type="button"
+            aria-pressed={isFlipped}
+            aria-label={
+              isFlipped
+                ? "カード裏面（答え）を表示中。クリックして表面へ戻す"
+                : "カード表面（問題）を表示中。クリックして答えを見る"
+            }
             onClick={() => {
               playCyberClick();
               setIsFlipped((f) => !f);
@@ -256,24 +276,26 @@ export default function CertificationFlashcards({
               </span>
             </div>
 
-            {!isFlipped ? (
-              <div className="py-6 space-y-2 text-center">
-                <div className="text-xs font-bold text-slate-400">{promptLabel}</div>
-                <div className="text-lg sm:text-2xl font-black text-slate-900 leading-snug">
-                  「{currentCard.keyword}」
+            <div aria-live="polite" className="w-full">
+              {!isFlipped ? (
+                <div className="py-6 space-y-2 text-center">
+                  <div className="text-xs font-bold text-slate-400">{promptLabel}</div>
+                  <div className="text-lg sm:text-2xl font-black text-slate-900 leading-snug">
+                    「{currentCard.keyword}」
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="py-5 space-y-3 text-center">
-                <div className="text-xs font-bold text-indigo-300">{answerLabel}</div>
-                <div className="text-xl sm:text-2xl font-mono font-black text-cyan-300">
-                  {currentCard.recommended}
+              ) : (
+                <div className="py-5 space-y-3 text-center">
+                  <div className="text-xs font-bold text-indigo-300">{answerLabel}</div>
+                  <div className="text-xl sm:text-2xl font-mono font-black text-cyan-300">
+                    {currentCard.recommended}
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-lg mx-auto">
+                    {currentCard.reason}
+                  </p>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed max-w-lg mx-auto">
-                  {currentCard.reason}
-                </p>
-              </div>
-            )}
+              )}
+            </div>
 
             <div className="flex items-center justify-center space-x-1.5 text-[11px] opacity-70 w-full">
               <RotateCw size={12} />
@@ -295,6 +317,7 @@ export default function CertificationFlashcards({
 
             <button
               type="button"
+              aria-pressed={masteredKeywords.includes(currentCard.keyword)}
               onClick={() => {
                 playCyberClick();
                 const already = masteredKeywords.includes(currentCard.keyword);

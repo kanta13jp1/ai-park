@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, type KeyboardEvent } from "react";
 import {
   Terminal,
   Cpu,
@@ -143,6 +143,7 @@ import {
   lpic306KeyPaths,
 } from "@/data/lpic-306";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
+import { normalizeCommandSearchQuery } from "@/lib/lpic-search";
 
 type LpicLevel = "lpic-1" | "lpic-2" | "lpic-300" | "lpic-303" | "lpic-305" | "lpic-306";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
@@ -666,10 +667,6 @@ function loadProgressFromStorage(storageKey: string): LpicProgress {
   }
 }
 
-function normalizeCommandSearchQuery(cmdName: string): string {
-  return cmdName.split(" ")[0].replace(/^\//, "").replace(/\*$/, "").trim();
-}
-
 export default function LpicInfoPage() {
   const [level, setLevel] = useState<LpicLevel>("lpic-1");
   const [activeTab, setActiveTab] = useState<TabId>("domains");
@@ -1034,8 +1031,36 @@ export default function LpicInfoPage() {
     { id: "resources", label: "公式リソース", icon: Compass },
   ];
 
+  const handleTabKeyDown = (e: KeyboardEvent<HTMLButtonElement>, currentId: TabId) => {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const tabIds = tabs.map((t) => t.id);
+    const currentIndex = tabIds.indexOf(currentId);
+    if (currentIndex === -1) return;
+
+    let nextIndex: number | null = null;
+    if (e.key === "ArrowRight") {
+      nextIndex = (currentIndex + 1) % tabIds.length;
+    } else if (e.key === "ArrowLeft") {
+      nextIndex = (currentIndex - 1 + tabIds.length) % tabIds.length;
+    } else if (e.key === "Home") {
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      nextIndex = tabIds.length - 1;
+    }
+
+    if (nextIndex !== null) {
+      e.preventDefault();
+      const nextId = tabIds[nextIndex];
+      playCyberClick();
+      setActiveTab(nextId);
+      requestAnimationFrame(() => {
+        document.getElementById(`lpic-tab-${nextId}`)?.focus();
+      });
+    }
+  };
+
   return (
-    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
+    <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen min-w-0">
       <HeroBanner
         title="LPIC・Linux情報局"
         subtitle="LPIC-1（101/102）・LPIC-2（201/202）・LPIC-3（300/303/305/306）合格学習ハブ"
@@ -1049,16 +1074,23 @@ export default function LpicInfoPage() {
         />
 
         {/* レベル切り替え（基盤 LPIC-1/2 と 専門 LPIC-3） */}
-        <section className="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs space-y-2.5">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
-            <div className="flex items-center space-x-2 px-1">
+        <section
+          aria-label="学習レベル・専門トラック選択"
+          className="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs space-y-2.5 min-w-0 max-w-full"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 min-w-0">
+            <div className="flex items-center space-x-2 px-1 min-w-0">
               <Terminal size={16} className="text-cyan-600 shrink-0" />
-              <span className="text-xs sm:text-sm font-black text-slate-800 whitespace-nowrap">
+              <span className="text-xs sm:text-sm font-black text-slate-800 lg:whitespace-nowrap">
                 学習レベル・専門トラック選択
               </span>
             </div>
-            <div className="flex flex-col xl:flex-row xl:items-center gap-2">
-              <div className="inline-flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/70">
+            <div className="flex flex-col xl:flex-row xl:items-center gap-2 min-w-0">
+              <div
+                role="group"
+                aria-label="基盤レベル (LPIC-1 / LPIC-2)"
+                className="inline-flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/70 max-w-full"
+              >
                 <span className="text-[10px] font-bold text-slate-500 px-2 whitespace-nowrap">
                   基盤
                 </span>
@@ -1069,9 +1101,10 @@ export default function LpicInfoPage() {
                     <button
                       key={lvl}
                       type="button"
+                      aria-pressed={active}
                       onClick={() => handleSwitchLevel(lvl)}
                       onMouseEnter={() => playCyberHover()}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer lg:whitespace-nowrap max-w-full break-words text-left ${
                         active
                           ? "bg-slate-900 text-white shadow-sm"
                           : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
@@ -1083,7 +1116,11 @@ export default function LpicInfoPage() {
                 })}
               </div>
 
-              <div className="inline-flex flex-wrap items-center gap-1 bg-cyan-50/70 p-1 rounded-xl border border-cyan-200/70">
+              <div
+                role="group"
+                aria-label="LPIC-3 専門トラック"
+                className="inline-flex flex-wrap items-center gap-1 bg-cyan-50/70 p-1 rounded-xl border border-cyan-200/70 max-w-full"
+              >
                 <span className="text-[10px] font-bold text-cyan-800 px-2 whitespace-nowrap">
                   LPIC-3 専門
                 </span>
@@ -1094,9 +1131,10 @@ export default function LpicInfoPage() {
                     <button
                       key={lvl}
                       type="button"
+                      aria-pressed={active}
                       onClick={() => handleSwitchLevel(lvl)}
                       onMouseEnter={() => playCyberHover()}
-                      className={`px-2.5 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer whitespace-nowrap ${
+                      className={`px-2.5 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer lg:whitespace-nowrap max-w-full break-words text-left ${
                         active
                           ? "bg-cyan-700 text-white shadow-sm"
                           : "text-slate-700 hover:text-cyan-900 hover:bg-white/80"
@@ -1139,22 +1177,22 @@ export default function LpicInfoPage() {
                 </p>
               </div>
 
-              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:min-w-[360px]">
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 lg:min-w-[360px]">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
                   <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
                   <div className="text-[11px] text-slate-400 font-mono">
                     {completedTopicCount} / {allTopics.length}
                   </div>
                 </div>
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">暗記カード</div>
                   <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
                     {masteredCardCount} / {config.quickLookup.length}
                   </div>
                   <div className="text-[11px] text-slate-400">枚習得</div>
                 </div>
-                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5">
+                <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">演習問題</div>
                   <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
                     {correctQuizCount} / {config.practiceQuestions.length}
@@ -1225,6 +1263,8 @@ export default function LpicInfoPage() {
 
               <button
                 type="button"
+                aria-expanded={showBackupPanel}
+                aria-controls="lpic-backup-panel"
                 onClick={() => {
                   playCyberClick();
                   setShowBackupPanel((v) => !v);
@@ -1251,12 +1291,14 @@ export default function LpicInfoPage() {
           </div>
 
           {!showBackupPanel && importMessage && (
-            <p className="text-xs font-bold text-cyan-700">{importMessage}</p>
+            <p role="status" aria-live="polite" className="text-xs font-bold text-cyan-700">
+              {importMessage}
+            </p>
           )}
 
           {showBackupPanel && (
-            <div className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div id="lpic-backup-panel" className="pt-4 border-t border-slate-100 space-y-3">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
                 <p className="text-xs text-slate-600">
                   {config.label} の進捗やメモはブラウザの localStorage に保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
                 </p>
@@ -1269,13 +1311,14 @@ export default function LpicInfoPage() {
                   <span>{copiedBackup ? "コピーしました" : "現在のデータをコピー"}</span>
                 </button>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col lg:flex-row gap-2">
                 <input
                   type="text"
+                  aria-label="バックアップJSON入力"
                   value={backupInput}
                   onChange={(e) => setBackupInput(e.target.value)}
                   placeholder="復元したいバックアップJSONを貼り付け..."
-                  className="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  className="flex-1 min-w-0 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
                 <button
                   type="button"
@@ -1286,20 +1329,34 @@ export default function LpicInfoPage() {
                   復元する
                 </button>
               </div>
-              {importMessage && <p className="text-xs font-bold text-cyan-700">{importMessage}</p>}
+              {importMessage && (
+                <p role="status" aria-live="polite" className="text-xs font-bold text-cyan-700">
+                  {importMessage}
+                </p>
+              )}
             </div>
           )}
         </section>
 
         {/* タブナビゲーション */}
-        <nav className="flex flex-wrap gap-2 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80">
+        <div
+          role="tablist"
+          aria-label="LPIC 学習セクション"
+          className="flex flex-wrap gap-2 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/80"
+        >
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
             return (
               <button
                 key={tab.id}
+                id={`lpic-tab-${tab.id}`}
                 type="button"
+                role="tab"
+                aria-selected={active}
+                aria-controls={`lpic-panel-${tab.id}`}
+                tabIndex={active ? 0 : -1}
+                onKeyDown={(e) => handleTabKeyDown(e, tab.id)}
                 onClick={() => {
                   playCyberClick();
                   setActiveTab(tab.id);
@@ -1325,20 +1382,30 @@ export default function LpicInfoPage() {
               </button>
             );
           })}
-        </nav>
+        </div>
 
         {/* TAB 1: トピック別学習 */}
         {activeTab === "domains" && (
-          <div className="space-y-6">
+          <div
+            role="tabpanel"
+            id="lpic-panel-domains"
+            aria-labelledby="lpic-tab-domains"
+            className="space-y-6"
+          >
             {/* フィルター＆検索バー */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
               <div className="flex flex-col gap-3">
                 {config.examFilters.length > 1 ? (
-                  <div className="flex flex-wrap items-center gap-1.5">
+                  <div
+                    role="group"
+                    aria-label="対象試験フィルター"
+                    className="flex flex-wrap items-center gap-1.5"
+                  >
                     {config.examFilters.map((ef) => (
                       <button
                         key={ef.id}
                         type="button"
+                        aria-pressed={examFilter === ef.id}
                         onClick={() => {
                           playCyberClick();
                           setExamFilter(ef.id);
@@ -1367,6 +1434,7 @@ export default function LpicInfoPage() {
                     />
                     <input
                       type="text"
+                      aria-label="トピック・コマンド検索"
                       value={topicQuery}
                       onChange={(e) => setTopicQuery(e.target.value)}
                       placeholder="コマンド・設定ファイルで検索..."
@@ -1387,6 +1455,7 @@ export default function LpicInfoPage() {
                   <div className="flex flex-wrap items-center gap-2">
                     <button
                       type="button"
+                      aria-pressed={onlyIncompleteTopics}
                       onClick={() => {
                         playCyberClick();
                         setOnlyIncompleteTopics((v) => !v);
@@ -1403,6 +1472,7 @@ export default function LpicInfoPage() {
 
                     <button
                       type="button"
+                      aria-pressed={onlyWithNotesTopics}
                       onClick={() => {
                         playCyberClick();
                         setOnlyWithNotesTopics((v) => !v);
@@ -1476,6 +1546,8 @@ export default function LpicInfoPage() {
                       <div className="p-4 sm:p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                         <button
                           type="button"
+                          aria-expanded={isExpanded}
+                          aria-controls={`lpic-domain-panel-${domain.id}`}
                           onClick={() => {
                             playCyberClick();
                             setExpandedDomains((prev) => ({
@@ -1520,6 +1592,8 @@ export default function LpicInfoPage() {
                           </button>
                           <button
                             type="button"
+                            aria-expanded={isExpanded}
+                            aria-controls={`lpic-domain-panel-${domain.id}`}
                             onClick={() => {
                               playCyberClick();
                               setExpandedDomains((prev) => ({
@@ -1536,7 +1610,10 @@ export default function LpicInfoPage() {
                       </div>
 
                       {isExpanded && (
-                        <div className="border-t border-slate-100 bg-slate-50/50 p-5 space-y-4">
+                        <div
+                          id={`lpic-domain-panel-${domain.id}`}
+                          className="border-t border-slate-100 bg-slate-50/50 p-5 space-y-4"
+                        >
                           {domain.visibleTopics.map((topic) => {
                             const isDone = progress.completedTopics.includes(topic.id);
                             const noteText = progress.topicNotes[topic.id] ?? "";
@@ -1552,6 +1629,7 @@ export default function LpicInfoPage() {
                                 <div className="flex flex-wrap sm:flex-nowrap items-start justify-between gap-2.5 sm:gap-3">
                                   <button
                                     type="button"
+                                    aria-pressed={isDone}
                                     onClick={() => toggleTopic(topic.id)}
                                     className="flex items-start space-x-2.5 text-left cursor-pointer group min-w-0 flex-1"
                                   >
@@ -1576,6 +1654,8 @@ export default function LpicInfoPage() {
 
                                   <button
                                     type="button"
+                                    aria-expanded={isNoteOpen}
+                                    aria-controls={`lpic-note-panel-${topic.id}`}
                                     onClick={() => {
                                       playCyberClick();
                                       setOpenNoteTopics((prev) => ({
@@ -1630,8 +1710,15 @@ export default function LpicInfoPage() {
 
                                 {/* 個人メモ欄 */}
                                 {isNoteOpen && (
-                                  <div className="pt-2">
+                                  <div id={`lpic-note-panel-${topic.id}`} className="pt-2">
+                                    <label
+                                      htmlFor={`lpic-note-input-${topic.id}`}
+                                      className="sr-only"
+                                    >
+                                      {topic.title} の学習メモ
+                                    </label>
                                     <textarea
+                                      id={`lpic-note-input-${topic.id}`}
                                       rows={2}
                                       value={noteText}
                                       onChange={(e) => handleUpdateTopicNote(topic.id, e.target.value)}
@@ -1655,15 +1742,25 @@ export default function LpicInfoPage() {
 
         {/* TAB 2: 比較表・運用パターン */}
         {activeTab === "comparisons" && (
-          <div className="space-y-8">
+          <div
+            role="tabpanel"
+            id="lpic-panel-comparisons"
+            aria-labelledby="lpic-tab-comparisons"
+            className="space-y-8"
+          >
             {/* 比較表フィルター */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div
+                  role="group"
+                  aria-label="比較表カテゴリフィルター"
+                  className="flex flex-wrap items-center gap-1.5"
+                >
                   {comparisonCategories.map((cat) => (
                     <button
                       key={cat}
                       type="button"
+                      aria-pressed={compCategory === cat}
                       onClick={() => {
                         playCyberClick();
                         setCompCategory(cat);
@@ -1686,6 +1783,7 @@ export default function LpicInfoPage() {
                   />
                   <input
                     type="text"
+                    aria-label="比較表・逆引き・コマンド検索"
                     value={compQuery}
                     onChange={(e) => setCompQuery(e.target.value)}
                     placeholder="比較表・逆引き・コマンド検索..."
@@ -1705,7 +1803,11 @@ export default function LpicInfoPage() {
               </div>
 
               {/* 頻出コマンド・キーワード クイック検索チップ */}
-              <div className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-slate-100">
+              <div
+                role="group"
+                aria-label="クイック検索チップ"
+                className="flex flex-wrap items-center gap-1.5 pt-2.5 border-t border-slate-100"
+              >
                 <span className="text-[11px] font-bold text-slate-400 mr-1">
                   よく調べるコマンド・キーワード:
                 </span>
@@ -1715,6 +1817,7 @@ export default function LpicInfoPage() {
                     <button
                       key={kw}
                       type="button"
+                      aria-pressed={isSelected}
                       onClick={() => {
                         playCyberClick();
                         setCompCategory("すべて");
@@ -2013,41 +2116,58 @@ export default function LpicInfoPage() {
 
         {/* TAB 3: フラッシュカード */}
         {activeTab === "flashcards" && (
-          <CertificationFlashcards
-            key={level}
-            items={config.quickLookup}
-            masteredKeywords={progress.masteredCards}
-            onToggleMastered={handleToggleMasteredCard}
-            onResetMastered={handleResetMasteredCards}
-            badgeText={`${config.id.toUpperCase()} 直前暗記フラッシュカード`}
-            title={config.flashcardTitle}
-            promptLabel="次の要件に対応するコマンド・設定は？"
-            answerLabel="推奨コマンド・設定値"
-          />
+          <div
+            role="tabpanel"
+            id="lpic-panel-flashcards"
+            aria-labelledby="lpic-tab-flashcards"
+          >
+            <CertificationFlashcards
+              key={level}
+              items={config.quickLookup}
+              masteredKeywords={progress.masteredCards}
+              onToggleMastered={handleToggleMasteredCard}
+              onResetMastered={handleResetMasteredCards}
+              badgeText={`${config.id.toUpperCase()} 直前暗記フラッシュカード`}
+              title={config.flashcardTitle}
+              promptLabel="次の要件に対応するコマンド・設定は？"
+              answerLabel="推奨コマンド・設定値"
+            />
+          </div>
         )}
 
         {/* TAB 4: 練習問題・模擬試験 */}
         {activeTab === "quiz" && (
-          <CertificationPracticeQuiz
-            key={level}
-            questions={config.practiceQuestions}
-            domains={quizDomains}
-            examBadgeLabel={config.quizBadgeLabel}
-            passingConfig={config.passingConfig}
-            answers={progress.quizAnswers}
-            bookmarkedIds={progress.bookmarkedQuestions}
-            mockExamHistory={progress.mockExamHistory}
-            initialDomain={quizDomainTarget}
-            onSubmitAnswer={handleSubmitAnswer}
-            onToggleBookmark={handleToggleBookmark}
-            onRecordMockExam={handleRecordMockExam}
-            onResetQuiz={handleResetQuiz}
-          />
+          <div
+            role="tabpanel"
+            id="lpic-panel-quiz"
+            aria-labelledby="lpic-tab-quiz"
+          >
+            <CertificationPracticeQuiz
+              key={level}
+              questions={config.practiceQuestions}
+              domains={quizDomains}
+              examBadgeLabel={config.quizBadgeLabel}
+              passingConfig={config.passingConfig}
+              answers={progress.quizAnswers}
+              bookmarkedIds={progress.bookmarkedQuestions}
+              mockExamHistory={progress.mockExamHistory}
+              initialDomain={quizDomainTarget}
+              onSubmitAnswer={handleSubmitAnswer}
+              onToggleBookmark={handleToggleBookmark}
+              onRecordMockExam={handleRecordMockExam}
+              onResetQuiz={handleResetQuiz}
+            />
+          </div>
         )}
 
         {/* TAB 5: 公式リソース */}
         {activeTab === "resources" && (
-          <div className="space-y-8">
+          <div
+            role="tabpanel"
+            id="lpic-panel-resources"
+            aria-labelledby="lpic-tab-resources"
+            className="space-y-8"
+          >
             {/* 試験本番・直前チェックリスト */}
             <section className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
               <div>

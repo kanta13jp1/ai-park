@@ -1223,9 +1223,9 @@ export const lpic2OfficialResources: LpicOfficialResource[] = [
     badge: "試験範囲",
   },
   {
-    title: "LPI Learning Materials（LPIC-2 公式無料教材）",
-    description: "LPI が公開している LPIC-2（201 / 202）向けの公式ラーニングマテリアルです。",
-    url: "https://learning.lpi.org/en/learning-materials/lpic-2/",
+    title: "LPI Learning Materials（公式教材ポータル）",
+    description: "LPI が無償公開している公式ラーニングマテリアルの総合ポータルです。",
+    url: "https://learning.lpi.org/ja/learning-materials/learning-materials/",
     badge: "公式教材",
   },
 ];

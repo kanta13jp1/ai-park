@@ -1428,9 +1428,15 @@ export const lpic1OfficialResources: LpicOfficialResource[] = [
     badge: "試験範囲",
   },
   {
-    title: "LPI Learning Materials（公式無料教材）",
-    description: "LPI が無償公開している LPIC-1（101 / 102）向けの公式テキスト・演習問題です。",
-    url: "https://learning.lpi.org/en/learning-materials/lpic-1/",
+    title: "LPI 公式日本語教材（Exam 101-500）",
+    description: "LPI が無償公開している LPIC-1 Exam 101-500 向けの公式日本語テキスト・演習です。",
+    url: "https://learning.lpi.org/ja/learning-materials/101-500/",
+    badge: "公式教材",
+  },
+  {
+    title: "LPI 公式日本語教材（Exam 102-500）",
+    description: "LPI が無償公開している LPIC-1 Exam 102-500 向けの公式日本語テキスト・演習です。",
+    url: "https://learning.lpi.org/ja/learning-materials/102-500/",
     badge: "公式教材",
   },
 ];
