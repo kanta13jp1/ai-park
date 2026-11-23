@@ -96,7 +96,7 @@ test("antigravity-info external doc URLs use official https hosts and data conta
   const raw = fs.readFileSync(dataPath, "utf8");
   const mod = await import(pathToFileURL(dataPath).href);
 
-  const allowedHosts = new Set(["antigravity.google", "github.com"]);
+  const allowedHosts = new Set(["antigravity.google", "github.com", "www.youtube.com"]);
   const deprecatedRedirectUrls = new Set([
     "https://antigravity.google/docs",
     "https://antigravity.google/docs/rules-workflows",

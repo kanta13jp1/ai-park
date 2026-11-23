@@ -91,6 +91,7 @@ export const officialDocLinks = [
   { label: "Permissions & Security", href: "https://antigravity.google/docs/permissions" },
   { label: "Terminal Sandbox", href: "https://antigravity.google/docs/sandbox" },
   { label: "Changelog", href: "https://antigravity.google/docs/changelog" },
+  { label: "公式 YouTube (@googleantigravity)", href: "https://www.youtube.com/@googleantigravity" },
 ];
 
 export const antigravitySurfaces: AntigravitySurface[] = [

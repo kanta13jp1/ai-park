@@ -217,7 +217,7 @@ const paletteItems: PaletteItem[] = [
     title: "Antigravity情報局",
     category: "ツール & ガイド",
     href: "/antigravity-info",
-    description: "Antigravity 機能解説・Agent Swarms (/swarm) 並列/ワークスペース運用・実務実行例・FAQ（社内お知らせ等は工事中）",
+    description: "Antigravity 機能解説・Agent Swarms (/swarm)・公式YouTube動画学習（全91本/進捗管理）・実務実行例・FAQ（社内お知らせ等は工事中）",
     icon: Sparkles,
   },
   {

@@ -26,6 +26,7 @@ import {
   HelpCircle,
   ChevronDown,
   ChevronUp,
+  Video,
   X,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
@@ -35,7 +36,9 @@ import TiltCard from "@/components/TiltCard";
 import AgentSwarmsSection from "@/components/antigravity/AgentSwarmsSection";
 import WorkflowModeAdvisor from "@/components/antigravity/WorkflowModeAdvisor";
 import InlineCodeText from "@/components/antigravity/InlineCodeText";
+import OfficialVideoHub, { preloadAntigravityVideos } from "@/components/antigravity/OfficialVideoHub";
 import { playCyberClick, playCyberHover, playCyberSuccess } from "@/lib/sound";
+import { ANTIGRAVITY_VIDEO_COUNTS } from "@/data/antigravity-videos/meta";
 import {
   antigravitySurfaces,
   antigravityFeatures,
@@ -54,7 +57,7 @@ import {
   type SurfaceId,
 } from "@/data/antigravity-info";
 
-type TabId = "overview" | "features" | "examples" | "reference";
+type TabId = "overview" | "features" | "examples" | "videos" | "reference";
 
 const FEATURE_CATEGORIES: FeatureCategory[] = [
   "すべて",
@@ -95,6 +98,30 @@ export default function AntigravityInfoPage() {
   const [copyAnnouncement, setCopyAnnouncement] = useState("");
   const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [openFaqId, setOpenFaqId] = useState<string | null>(antigravityFaqs[0]?.id ?? null);
+  const [initialVideoId, setInitialVideoId] = useState<string | null>(null);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      if (typeof window === "undefined") return;
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      const vParam = params.get("v");
+      if (
+        tabParam === "overview" ||
+        tabParam === "features" ||
+        tabParam === "examples" ||
+        tabParam === "videos" ||
+        tabParam === "reference"
+      ) {
+        setActiveTab(tabParam);
+      } else if (vParam) {
+        setActiveTab("videos");
+      }
+      if (vParam) {
+        setInitialVideoId(vParam);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -191,7 +218,39 @@ export default function AntigravityInfoPage() {
       .catch(() => {});
   };
 
-  const tabOrder: TabId[] = ["overview", "features", "examples", "reference"];
+  const syncUrlParams = (nextTab: TabId, nextVideoId?: string | null) => {
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    if (nextTab === "overview") {
+      url.searchParams.delete("tab");
+      url.searchParams.delete("v");
+    } else {
+      url.searchParams.set("tab", nextTab);
+      if (nextTab === "videos" && nextVideoId) {
+        url.searchParams.set("v", nextVideoId);
+      } else if (nextTab !== "videos") {
+        url.searchParams.delete("v");
+      }
+    }
+    window.history.replaceState(null, "", url.toString());
+  };
+
+  const selectTab = (nextTab: TabId, shouldScrollToTabs = false) => {
+    setActiveTab(nextTab);
+    syncUrlParams(nextTab);
+    if (nextTab === "videos") {
+      void preloadAntigravityVideos();
+    }
+    if (shouldScrollToTabs && typeof window !== "undefined") {
+      const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      document.getElementById("ag-tablist-container")?.scrollIntoView({
+        behavior: prefersReduced ? "auto" : "smooth",
+        block: "start",
+      });
+    }
+  };
+
+  const tabOrder: TabId[] = ["overview", "features", "examples", "videos", "reference"];
   const handleTabKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
     let nextIndex: number | null = null;
     if (e.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabOrder.length;
@@ -202,7 +261,7 @@ export default function AntigravityInfoPage() {
     e.preventDefault();
     const nextTab = tabOrder[nextIndex];
     playCyberClick();
-    setActiveTab(nextTab);
+    selectTab(nextTab);
     document.getElementById(`ag-tab-${nextTab}`)?.focus();
   };
 
@@ -250,6 +309,22 @@ export default function AntigravityInfoPage() {
               </div>
 
               <div className="flex flex-wrap gap-2.5 shrink-0">
+                <button
+                  type="button"
+                  onClick={() => {
+                    playCyberClick();
+                    selectTab("videos", true);
+                  }}
+                  onMouseEnter={() => {
+                    playCyberHover();
+                    void preloadAntigravityVideos();
+                  }}
+                  onFocus={() => void preloadAntigravityVideos()}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-xs font-black text-slate-950 shadow-md transition-all cursor-pointer"
+                >
+                  <Video size={14} aria-hidden="true" />
+                  <span>公式YouTube動画 ({ANTIGRAVITY_VIDEO_COUNTS.total}本)</span>
+                </button>
                 <Link
                   href="/guide"
                   onClick={() => playCyberClick()}
@@ -285,6 +360,7 @@ export default function AntigravityInfoPage() {
                 { id: "overview", label: "全体像・使い分け", icon: Compass },
                 { id: "features", label: `機能解説 (${antigravityFeatures.length})`, icon: Wrench },
                 { id: "examples", label: `実務の実行例 (${practicalExamples.length})`, icon: Zap },
+                { id: "videos", label: `公式YouTube動画 (${ANTIGRAVITY_VIDEO_COUNTS.total})`, icon: Video },
                 { id: "reference", label: "リファレンス・FAQ", icon: HelpCircle },
               ] as const
             ).map((tab, idx) => {
@@ -302,9 +378,19 @@ export default function AntigravityInfoPage() {
                   onKeyDown={(e) => handleTabKeyDown(e, idx)}
                   onClick={() => {
                     playCyberClick();
-                    setActiveTab(tab.id);
+                    selectTab(tab.id);
                   }}
-                  onMouseEnter={() => playCyberHover()}
+                  onMouseEnter={() => {
+                    playCyberHover();
+                    if (tab.id === "videos") {
+                      void preloadAntigravityVideos();
+                    }
+                  }}
+                  onFocus={() => {
+                    if (tab.id === "videos") {
+                      void preloadAntigravityVideos();
+                    }
+                  }}
                   className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all cursor-pointer ${
                     isActive
                       ? "bg-slate-900 text-white shadow-sm"
@@ -499,19 +585,19 @@ export default function AntigravityInfoPage() {
             />
 
             {/* 次に見るアクション */}
-            <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
               <button
                 type="button"
                 onClick={() => {
                   playCyberClick();
-                  setActiveTab("features");
+                  selectTab("features", true);
                 }}
                 className="text-left p-5 rounded-2xl bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all flex items-center justify-between gap-4 cursor-pointer group"
               >
                 <div className="space-y-1">
                   <span className="text-[11px] font-bold text-indigo-600">NEXT STEP 1</span>
                   <h4 className="text-base font-black text-slate-900">
-                    機能解説カタログを見る（{antigravityFeatures.length} 項目）
+                    機能解説カタログ（{antigravityFeatures.length} 項目）
                   </h4>
                   <p className="text-xs text-slate-600">
                     Skills・Rules・MCP・Subagents・Sandbox などの詳細仕様と活用ポイントを解説
@@ -527,14 +613,14 @@ export default function AntigravityInfoPage() {
                 type="button"
                 onClick={() => {
                   playCyberClick();
-                  setActiveTab("examples");
+                  selectTab("examples", true);
                 }}
                 className="text-left p-5 rounded-2xl bg-white border border-slate-200 hover:border-cyan-300 hover:shadow-md transition-all flex items-center justify-between gap-4 cursor-pointer group"
               >
                 <div className="space-y-1">
                   <span className="text-[11px] font-bold text-cyan-600">NEXT STEP 2</span>
                   <h4 className="text-base font-black text-slate-900">
-                    実務の実行例＆プロンプトを見る（{practicalExamples.length} パターン）
+                    実務の実行例＆プロンプト（{practicalExamples.length} 件）
                   </h4>
                   <p className="text-xs text-slate-600">
                     調査・リファクタ・ビルド検証・ブラウザ確認のコピーして使える実行例
@@ -550,12 +636,36 @@ export default function AntigravityInfoPage() {
                 type="button"
                 onClick={() => {
                   playCyberClick();
-                  setActiveTab("reference");
+                  selectTab("videos", true);
+                }}
+                onMouseEnter={() => void preloadAntigravityVideos()}
+                className="text-left p-5 rounded-2xl bg-gradient-to-br from-slate-950 to-indigo-950 text-white border border-indigo-700/50 hover:border-cyan-400 hover:shadow-md transition-all flex items-center justify-between gap-4 cursor-pointer group"
+              >
+                <div className="space-y-1">
+                  <span className="text-[11px] font-bold text-cyan-300">NEXT STEP 3</span>
+                  <h4 className="text-base font-black text-white">
+                    公式 YouTube 動画学習（全 {ANTIGRAVITY_VIDEO_COUNTS.total} 本）
+                  </h4>
+                  <p className="text-xs text-slate-300">
+                    要約・要点 3 点・確認クイズ・視聴進捗トラッカー付きで全動画を体系学習
+                  </p>
+                </div>
+                <ArrowRight
+                  size={18}
+                  className="text-cyan-300 group-hover:translate-x-1 transition-all shrink-0"
+                />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  playCyberClick();
+                  selectTab("reference", true);
                 }}
                 className="text-left p-5 rounded-2xl bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-md transition-all flex items-center justify-between gap-4 cursor-pointer group"
               >
                 <div className="space-y-1">
-                  <span className="text-[11px] font-bold text-emerald-600">NEXT STEP 3</span>
+                  <span className="text-[11px] font-bold text-emerald-600">NEXT STEP 4</span>
                   <h4 className="text-base font-black text-slate-900">
                     リファレンス・FAQ を見る
                   </h4>
@@ -831,7 +941,19 @@ export default function AntigravityInfoPage() {
           </div>
         )}
 
-        {/* タブ 4: リファレンス・FAQ */}
+        {/* タブ 4: 公式YouTube動画学習 */}
+        {activeTab === "videos" && (
+          <div id="ag-panel-videos" role="tabpanel" aria-labelledby="ag-tab-videos" tabIndex={0}>
+            <OfficialVideoHub
+              searchQuery={searchQuery}
+              initialVideoId={initialVideoId}
+              onSelectVideoId={(videoId) => syncUrlParams("videos", videoId)}
+              onResetSearch={() => setSearchQuery("")}
+            />
+          </div>
+        )}
+
+        {/* タブ 5: リファレンス・FAQ */}
         {activeTab === "reference" && (
           <div id="ag-panel-reference" role="tabpanel" aria-labelledby="ag-tab-reference" tabIndex={0} className="space-y-8">
             {filteredShortcuts.length === 0 &&

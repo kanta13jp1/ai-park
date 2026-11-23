@@ -32,7 +32,8 @@ export const ROUTE_METADATA: Record<string, RouteMetaEntry> = {
   },
   "/antigravity-info": {
     title: "Antigravity 情報局",
-    description: "Google Antigravity の機能解説・Agent Swarms・実行環境比較・実務実行例・リファレンスFAQ",
+    description:
+      "Google Antigravity の機能解説・Agent Swarms・実行環境比較・実務実行例・公式YouTube全91本動画学習（進捗管理付き）・リファレンスFAQ",
   },
   "/aws-info": {
     title: "AWS・クラウド情報局",
