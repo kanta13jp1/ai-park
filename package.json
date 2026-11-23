@@ -2,6 +2,9 @@
   "name": "ai-park",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "mcp"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "npm run check:gate && node --max-old-space-size=4096 ./node_modules/next/dist/bin/next build --webpack",
@@ -9,7 +12,13 @@
     "setup:gcp": "node scripts/setup-gcp-sa.mjs",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "mcp:build": "npm --workspace @ai-park/mcp-server run build",
+    "mcp:typecheck": "npm --workspace @ai-park/mcp-server run typecheck",
+    "mcp:stdio": "node .agents/plugins/ai-park-mcp/bin/server.mjs",
+    "mcp:http": "node mcp/dist/http.mjs",
+    "mcp:worker:dry-run": "npm --workspace @ai-park/mcp-server run worker:dry-run",
+    "mcp:worker:whoami": "npm --workspace @ai-park/mcp-server run worker:whoami"
   },
   "dependencies": {
     "lucide-react": "^1.47.0",

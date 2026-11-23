@@ -1,0 +1,24 @@
+{
+  "name": "@ai-park/mcp-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate:snapshot": "node scripts/generate-snapshot.mjs",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "worker:dry-run": "wrangler deploy --config worker/wrangler.jsonc --dry-run",
+    "worker:whoami": "wrangler whoami"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^2.0.4",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "esbuild": "^0.25.0",
+    "typescript": "^5",
+    "wrangler": "^4"
+  }
+}

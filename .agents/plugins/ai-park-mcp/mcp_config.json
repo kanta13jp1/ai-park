@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ai-park": {
+      "command": "node",
+      "args": ["${PLUGIN_ROOT}/bin/server.mjs"]
+    }
+  }
+}

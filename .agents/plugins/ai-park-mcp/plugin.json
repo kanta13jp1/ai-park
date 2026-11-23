@@ -1,0 +1,20 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "ai-park-mcp",
+  "displayName": "AI Park",
+  "version": "1.0.0",
+  "description": "Search MightyLINK AI Park docs, inspect feature/UAT status, monitor AI news and Gemini usage, and manage feedback/idea/project boards from Antigravity.",
+  "logo": "assets/logo.svg",
+  "suggestedPrompts": [
+    "AI Park で Antigravity の導入手順とトラブル解決コマンドを検索して",
+    "ご意見・改善ToDoボードのオープン項目を取得して優先度順に整理して",
+    "AI Park コンソールをサイドパネルで開いて（機能公開状況や品質ゲートも確認）"
+  ],
+  "author": {
+    "name": "MightyLINK AI推進担当"
+  },
+  "homepage": "https://kanta13jp1.github.io/ai-park/mcp-hub/",
+  "repository": "https://github.com/kanta13jp1/ai-park",
+  "license": "MIT",
+  "keywords": ["ai-park", "portal", "github-issues", "mcp-apps", "search"]
+}

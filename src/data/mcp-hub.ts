@@ -269,7 +269,164 @@ export const MCP_CONFIG_LOCATIONS: McpConfigLocationItem[] = [
   },
 ];
 
+export interface AiParkMcpToolSpec {
+  name: string;
+  category: "検索・照会" | "ボード起票・更新" | "品質・UI";
+  summary: string;
+  safetyNote: string;
+}
+
+export interface AiParkMcpTransportEntry {
+  id: string;
+  name: string;
+  transport: string;
+  location: string;
+  availability: string;
+  commandOrUrl: string;
+}
+
+export const AI_PARK_MCP_TOOLS: AiParkMcpToolSpec[] = [
+  {
+    name: "open_ai_park_console",
+    category: "品質・UI",
+    summary:
+      "Antigravity App 向けにサイドパネル・左サイドバー・チャット内で動作する対話型コンソール UI（ui://ai-park/dashboard.html）を開きます。",
+    safetyNote: "読み取り中心。UI 内からの起票も既定で下書きプレビューを生成します。",
+  },
+  {
+    name: "search_portal",
+    category: "検索・照会",
+    summary:
+      "AI Park の全ページ、AI ニュース、Windows トラブル解決コマンド、Skills、MCP 安全チェックリストを横断検索します。",
+    safetyNote: "Read-only（読み取り専用）。",
+  },
+  {
+    name: "get_portal_status",
+    category: "検索・照会",
+    summary:
+      "feature-status.ts と preflight-checklist.ts に基づく公開済み・工事中・PoC 中・UAT 合格状況を返します。",
+    safetyNote: "Read-only（読み取り専用）。",
+  },
+  {
+    name: "get_ai_news",
+    category: "検索・照会",
+    summary:
+      "公式フィード自動巡回（ai-news-live.json）の最新 AI ニュースをキーワード・カテゴリ別に取得します。",
+    safetyNote: "Read-only（読み取り専用）。",
+  },
+  {
+    name: "get_gemini_usage",
+    category: "検索・照会",
+    summary:
+      "GCP トライアル残高・課金推移・リクエスト集計（gcp-usage-live.json 基準）を取得します。",
+    safetyNote: "Read-only（読み取り専用）。",
+  },
+  {
+    name: "list_ai_tools",
+    category: "検索・照会",
+    summary:
+      "社内マスター Google Sheets（PoC 同期中）から AI ツール一覧をライブ取得・絞り込みします。",
+    safetyNote: "Read-only（PoC 参考データであることを注記付きで返却）。",
+  },
+  {
+    name: "list_board_items",
+    category: "検索・照会",
+    summary:
+      "ご意見・改善ToDo（feedback）、社内AIプロジェクト（ai-project）、アイデア宣言（idea）の GitHub Issues 一覧を取得します。",
+    safetyNote: "Read-only（test ラベルおよび Pull Request を自動除外）。",
+  },
+  {
+    name: "create_board_item",
+    category: "ボード起票・更新",
+    summary:
+      "GitHub Issue テンプレート準拠でご意見・AI プロジェクト・アイデア宣言を作成します。",
+    safetyNote:
+      "既定 dryRun: true（下書き＋プリフィル URL 返却）。個人情報・社内メールアドレス・API キーを自動ブロック。",
+  },
+  {
+    name: "update_board_item_status",
+    category: "ボード起票・更新",
+    summary:
+      "既存 GitHub Issue への着手中ラベル付与/解除、クローズ/再オープン、コメント追加を行います。",
+    safetyNote: "既定 dryRun: true（変更予定のみ返却）。機密文字列検出時は実行拒否。",
+  },
+  {
+    name: "run_quality_gate",
+    category: "品質・UI",
+    summary:
+      "ローカルリポジトリ上で scripts/verify-deployment-gate.mjs を実行し、公開品質ゲート合否を返します。",
+    safetyNote: "ローカル環境限定（リポジトリ外・リモート環境では未実行理由を明示）。",
+  },
+];
+
+export const AI_PARK_MCP_TRANSPORTS: AiParkMcpTransportEntry[] = [
+  {
+    id: "plugin-stdio",
+    name: "Antigravity プラグイン / Stdio（リポジトリ同梱）",
+    transport: "Stdio + MCP Apps (ui://)",
+    location: ".agents/plugins/ai-park-mcp/",
+    availability: "リポジトリを開くだけでローカル利用可（認証不要で検索・参照可能）",
+    commandOrUrl: "agy plugin validate --strict .agents/plugins/ai-park-mcp",
+  },
+  {
+    id: "node-http",
+    name: "Streamable HTTP（ローカル Node サーバー）",
+    transport: "Streamable HTTP (/mcp)",
+    location: "mcp/src/http.ts (npm run mcp:http)",
+    availability: "ローカルで http://127.0.0.1:8787/mcp として起動可能（任意 Bearer トークン保護対応）",
+    commandOrUrl: "npm run mcp:http",
+  },
+  {
+    id: "cf-workers",
+    name: "Streamable HTTP（Cloudflare Workers アダプタ）",
+    transport: "Web Standard Streamable HTTP",
+    location: "mcp/worker/index.ts & wrangler.jsonc",
+    availability: "構成コード同梱済み（外部公開デプロイは別途承認・wrangler deploy 後に稼働）",
+    commandOrUrl: "mcp/worker/README.md を参照",
+  },
+  {
+    id: "webmcp-browser",
+    name: "WebMCP ブラウザブリッジ（実験的）",
+    transport: "document.modelContext",
+    location: "src/lib/webmcp.ts & WebMcpBridge.tsx",
+    availability: "Chrome 149+ Origin Trial 等の対応ブラウザ上で画面遷移・コマンドパレット操作を公開（Antigravity 本体のネイティブ接続とは別機構）",
+    commandOrUrl: "4ツール: ai_park_list_routes / ai_park_navigate / ai_park_get_current_page / ai_park_open_command_palette",
+  },
+];
+
 export const MCP_CONFIG_TEMPLATES: McpConfigTemplateItem[] = [
+  {
+    id: "ai-park-stdio",
+    title: "AI Park 公式 MCP サーバー（本リポジトリ同梱・Stdio / MCP Apps 対応）",
+    serverKey: "ai-park",
+    transport: "Stdio (ローカル)",
+    statusBadge: "リポジトリ同梱（自前実装）",
+    packageOrEndpoint: ".agents/plugins/ai-park-mcp/bin/server.mjs",
+    authRequirement: "読み取りは認証不要 / GitHub 起票時は gh CLI 認証または AI_PARK_GITHUB_TOKEN",
+    summary:
+      "このリポジトリに同梱されている AI Park 専用 MCP サーバーです。通常は .agents/plugins/ai-park-mcp プラグインとして認識されますが、グローバルの mcp_config.json へ直接登録する場合にもこのテンプレートを利用できます。",
+    recommendedScope: "Antigravity から AI Park の検索・ボード管理・品質ゲート・MCP App コンソールを直接操作",
+    configJson: `{
+  "mcpServers": {
+    "ai-park": {
+      "command": "node",
+      "args": [
+        "<PATH_TO_AI_PARK_REPO>/.agents/plugins/ai-park-mcp/bin/server.mjs"
+      ],
+      "env": {
+        "AI_PARK_REPO_ROOT": "<PATH_TO_AI_PARK_REPO>"
+      }
+    }
+  }
+}`,
+    notes: [
+      "事前ビルドが必要な場合はリポジトリルートで npm run mcp:build を実行してください。",
+      "<PATH_TO_AI_PARK_REPO> はローカル環境のクローン先パスに置き換え、個人環境パスを含めたファイルを Git にコミットしないでください。",
+      "リポジトリ自体を Antigravity で開いている場合は、.agents/plugins/ai-park-mcp が同梱プラグイン構成として定義されています（agy plugin validate --strict .agents/plugins/ai-park-mcp で検証可能）。",
+    ],
+    docLabel: "ai-park/mcp (GitHub)",
+    docUrl: "https://github.com/kanta13jp1/ai-park",
+  },
   {
     id: "filesystem-readonly",
     title: "Read-only Filesystem（ローカル参照限定）",

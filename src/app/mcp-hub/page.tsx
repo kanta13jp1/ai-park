@@ -14,6 +14,8 @@ import {
   MCP_TRANSPORTS,
   MCP_CUSTOMIZATION_COMPARISON,
   MCP_CONFIG_LOCATIONS,
+  AI_PARK_MCP_TOOLS,
+  AI_PARK_MCP_TRANSPORTS,
   MCP_CONFIG_TEMPLATES,
   MCP_SECURITY_LEVEL_GUIDANCE,
   MCP_SAFETY_CHECKLIST,
@@ -121,6 +123,26 @@ export default function McpHubPage() {
     );
   }, [normalizedQuery]);
 
+  const filteredAiParkTools = useMemo(() => {
+    if (!normalizedQuery) return AI_PARK_MCP_TOOLS;
+    return AI_PARK_MCP_TOOLS.filter((tool) =>
+      [tool.name, tool.category, tool.summary, tool.safetyNote]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedQuery)
+    );
+  }, [normalizedQuery]);
+
+  const filteredAiParkTransports = useMemo(() => {
+    if (!normalizedQuery) return AI_PARK_MCP_TRANSPORTS;
+    return AI_PARK_MCP_TRANSPORTS.filter((entry) =>
+      [entry.name, entry.transport, entry.location, entry.availability, entry.commandOrUrl]
+        .join(" ")
+        .toLowerCase()
+        .includes(normalizedQuery)
+    );
+  }, [normalizedQuery]);
+
   const filteredTemplates = useMemo(() => {
     return MCP_CONFIG_TEMPLATES.filter((tpl) => {
       const matchTransport =
@@ -175,7 +197,9 @@ export default function McpHubPage() {
     filteredPrimitives.length +
     filteredTransports.length +
     filteredCustomization.length +
-    filteredLocations.length;
+    filteredLocations.length +
+    filteredAiParkTools.length +
+    filteredAiParkTransports.length;
   const templatesTabCount = filteredTemplates.length;
   const safetyTabCount =
     filteredSecurityLevels.length + filteredChecklist.length;
@@ -797,6 +821,130 @@ export default function McpHubPage() {
                     </div>
                   </section>
                 )}
+
+                {/* 6. AI Park 自前 MCP サーバー & WebMCP 対応 */}
+                {(filteredAiParkTools.length > 0 || filteredAiParkTransports.length > 0) && (
+                  <section id="ai-park-mcp" className="bg-white rounded-2xl border border-indigo-200 overflow-hidden shadow-sm">
+                    <div className="px-5 sm:px-6 py-4 border-b border-indigo-100 bg-gradient-to-r from-indigo-50/80 via-cyan-50/50 to-white flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+                      <div className="space-y-1">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[11px] font-bold">
+                          <Plug size={12} aria-hidden="true" />
+                          <span>リポジトリ同梱 MCP &amp; WebMCP 実装</span>
+                        </div>
+                        <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                          6. AI Park 専用 MCP サーバー（Antigravity 直接操作対応）
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed">
+                          Antigravity から AI Park の検索・ステータス照会・ボード起票（既定 dryRun）・品質ゲート実行・MCP App UI 表示を行う実装をリポジトリ内に同梱しています。
+                        </p>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 shrink-0">
+                        <span role="status" aria-live="polite" className="sr-only">
+                          {copiedId === "cmd-validate-plugin" ? "プラグイン検証コマンドをクリップボードにコピーしました。" : ""}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleCopy(
+                              "cmd-validate-plugin",
+                              "agy plugin validate --strict .agents/plugins/ai-park-mcp"
+                            )
+                          }
+                          onMouseEnter={() => playCyberHover()}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold cursor-pointer"
+                        >
+                          {copiedId === "cmd-validate-plugin" ? (
+                            <>
+                              <Check size={13} className="text-emerald-400" />
+                              <span className="text-emerald-300">検証コマンドをコピー済</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy size={13} />
+                              <span>プラグイン検証コマンドをコピー</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="p-5 sm:p-6 space-y-6">
+                      {copyErrorId === "cmd-validate-plugin" && (
+                        <div
+                          role="alert"
+                          className="px-3 py-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold"
+                        >
+                          クリップボードへのコピーに失敗しました。コマンドを手動で選択してコピーしてください。
+                        </div>
+                      )}
+
+                      {filteredAiParkTransports.length > 0 && (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                          {filteredAiParkTransports.map((entry) => (
+                            <div
+                              key={entry.id}
+                              className="p-4 rounded-xl bg-slate-50/80 border border-slate-200 space-y-2"
+                            >
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <span className="text-xs font-extrabold text-slate-900">
+                                  {entry.name}
+                                </span>
+                                <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 font-mono text-[10px] font-bold text-indigo-700">
+                                  {entry.transport}
+                                </span>
+                              </div>
+                              <div className="text-[11px] font-mono text-slate-600 break-all">
+                                配置: {entry.location}
+                              </div>
+                              <p className="text-xs text-slate-700 leading-relaxed">
+                                {entry.availability}
+                              </p>
+                              <div className="px-2.5 py-1.5 rounded-lg bg-slate-900 text-cyan-200 font-mono text-[11px] break-all">
+                                {entry.commandOrUrl}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {filteredAiParkTools.length > 0 && (
+                        <div className="overflow-x-auto border border-slate-200 rounded-xl">
+                          <table className="w-full min-w-[640px] text-left border-collapse text-xs">
+                            <thead>
+                              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-extrabold">
+                                <th className="py-3 px-4 whitespace-nowrap">ツール名</th>
+                                <th className="py-3 px-4 whitespace-nowrap">区分</th>
+                                <th className="py-3 px-4 min-w-[220px] whitespace-nowrap">機能概要</th>
+                                <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">安全設計</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100">
+                              {filteredAiParkTools.map((tool) => (
+                                <tr key={tool.name} className="hover:bg-slate-50/60 align-top">
+                                  <td className="py-3 px-4 font-mono font-bold text-indigo-700 whitespace-nowrap">
+                                    {tool.name}
+                                  </td>
+                                  <td className="py-3 px-4 whitespace-nowrap">
+                                    <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700">
+                                      {tool.category}
+                                    </span>
+                                  </td>
+                                  <td className="py-3 px-4 text-slate-700 leading-relaxed">
+                                    {tool.summary}
+                                  </td>
+                                  <td className="py-3 px-4 text-slate-600 leading-relaxed">
+                                    {tool.safetyNote}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  </section>
+                )}
               </>
             )}
           </div>
@@ -811,7 +959,7 @@ export default function McpHubPage() {
                 <span>テンプレート利用前の必須確認（汎用参考例・社内承認リスト準備中）</span>
               </div>
               <p className="text-xs sm:text-sm text-amber-950 leading-relaxed">
-                以下の 3 種は公式ドキュメントに基づく<strong>汎用的な記述例</strong>であり、社内業務利用が承認済みであることを示すものではありません。設定内の{" "}
+                AI Park 専用テンプレートを除く汎用 3 種は公式ドキュメントに基づく<strong>参考記述例</strong>であり、社内業務利用が承認済みであることを示すものではありません。設定内の{" "}
                 <code className="font-mono bg-amber-100 px-1.5 py-0.5 rounded">
                   &lt;ALLOWED_DIRECTORY_PATH&gt;
                 </code>{" "}

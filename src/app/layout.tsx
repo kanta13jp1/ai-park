@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import CommandPalette from "@/components/CommandPalette";
+import WebMcpBridge from "@/components/WebMcpBridge";
 import ScrollProgress from "@/components/ScrollProgress";
 import CursorGlow from "@/components/CursorGlow";
 import KeyboardShortcutsModal from "@/components/KeyboardShortcutsModal";
@@ -49,6 +50,7 @@ export default function RootLayout({
         <CursorGlow />
         <ScrollProgress />
         <CommandPalette />
+        <WebMcpBridge />
         <KeyboardShortcutsModal />
         <Sidebar />
         <div className="md:pl-72 flex-1 flex flex-col min-h-screen">

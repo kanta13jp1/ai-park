@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "ai-park": {
+      "command": "node",
+      "args": ["<PATH_TO_AI_PARK_REPO>/.agents/plugins/ai-park-mcp/bin/server.mjs"],
+      "env": {
+        "AI_PARK_REPO_ROOT": "<PATH_TO_AI_PARK_REPO>"
+      }
+    },
+    "ai-park-remote-example": {
+      "url": "http://127.0.0.1:8787/mcp",
+      "headers": {
+        "Authorization": "Bearer <OPTIONAL_AI_PARK_MCP_AUTH_TOKEN>"
+      }
+    }
+  }
+}

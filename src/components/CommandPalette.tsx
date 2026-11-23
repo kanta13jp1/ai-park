@@ -303,8 +303,8 @@ export default function CommandPalette() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const openPalette = useCallback(() => {
-    setQuery("");
+  const openPalette = useCallback((initialQuery?: string) => {
+    setQuery(typeof initialQuery === "string" ? initialQuery : "");
     setSelectedCategory("すべて");
     setSelectedIndex(0);
     setIsOpen(true);
@@ -335,13 +335,18 @@ export default function CommandPalette() {
       }
     };
 
-    const handleOpenCustom = () => openPalette();
+    const handleOpenCustom = (event: Event) => {
+      const detail = (event as CustomEvent<{ query?: string } | undefined>).detail;
+      openPalette(typeof detail?.query === "string" ? detail.query : undefined);
+    };
 
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("ai-park-open-command-palette", handleOpenCustom);
+    window.addEventListener("ai-park:open-command-palette", handleOpenCustom);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("ai-park-open-command-palette", handleOpenCustom);
+      window.removeEventListener("ai-park:open-command-palette", handleOpenCustom);
     };
   }, [closePalette, openPalette]);
 
