@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-23T06:21:39.146Z",
-  "lastSyncedAtFormatted": "2026/11/23 15:21:39",
+  "lastSyncedAt": "2026-11-23T23:33:14.713Z",
+  "lastSyncedAtFormatted": "2026/11/24 8:33:14",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 52,
+  "totalCount": 53,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -17,27 +17,178 @@
   ],
   "items": [
     {
-      "id": "live-openai-perplexity-and-intelligence",
-      "title": "OpenAI: Perplexity and Intelligence",
-      "date": "2026/11/22",
+      "id": "live-deepmind-finding-faster-quantum-algorithms-with-agents-an",
+      "title": "Google DeepMind: Finding faster quantum algorithms with agents and formal verification",
+      "date": "2026/11/23",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Using agent teams and formal verification to improve quantum algorithms for fusion and chemistry.",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Finding faster quantum algorithms with agents and formal verification」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-antigravity-plugin-ecosystem-momentum",
+      "title": "Google Antigravity: Expanding the Antigravity Plugin Ecosystem",
+      "date": "2026/11/23",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Expanding the Antigravity Plugin Ecosystem」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/plugin-ecosystem-momentum",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-introducing-shirudo",
+      "title": "OpenAI: OpenAI and Cisco introduce Shirudo",
+      "date": "2026/11/23",
       "category": "model",
       "categoryLabel": "基盤モデル・LLM",
       "importance": "official",
       "importanceLabel": "公式発表",
-      "summary": "How perplexity measures progress in AI models, and why it could help developers establish a shared approach to evaluating emerging capabilities.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Perplexity and Intelligence」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "summary": "OpenAI and Cisco introduce Shirudo, an open-source runtime for Linux. It helps teams protect running systems while they roll out patches.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI and Cisco introduce Shirudo」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
       "recommendedFor": [
         "全社員",
         "エンジニア",
         "ライター"
       ],
       "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/perplexity-and-intelligence",
+      "sourceUrl": "https://openai.com/index/introducing-shirudo",
       "tags": [
         "OpenAI",
         "ChatGPT",
         "Codex",
         "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-connected-intelligence-for-in-house-legal",
+      "title": "OpenAI: Connected intelligence for in-house legal",
+      "date": "2026/11/23",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Watch OpenAI’s Stacey Wang and Craig Bruney, Mary O’Carroll of LECG, and Cooley’s Richard Segal explore how AI can help in-house legal teams connect business context, build reusable workflows and get more from outside counsel.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Connected intelligence for in-house legal」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/learn/connected-intelligence-for-in-house-legal",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-richpanel-ai-customer-support",
+      "title": "OpenAI: Richpanel helps companies automate 50% of support in 30 days",
+      "date": "2026/11/23",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Richpanel uses GPT-6 Astra and GPT-6.1 Sol to equip its AI support agents with tools and procedures, and GPT-6 Luna for their conversations.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Richpanel helps companies automate 50% of support in 30 days」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/customer-stories/richpanel-ai-customer-support",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-robotrack",
+      "title": "Hugging Face: RoboTrack: Point tracking for real-world robotic manipulation",
+      "date": "2026/11/23",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「RoboTrack: Point tracking for real-world robotic manipulation」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/allenai/robotrack",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-agentic-evals",
+      "title": "Hugging Face: How to build and maintain an agentic evaluation",
+      "date": "2026/11/23",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「How to build and maintain an agentic evaluation」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/agentic-evals",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
       ],
       "isLiveSynced": true
     },
@@ -63,106 +214,6 @@
         "AI Engineering",
         "Agentic AI",
         "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-combatting-adversarial-distillation",
-      "title": "OpenAI: Combatting adversarial distillation",
-      "date": "2026/11/20",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI’s layered approach to adversarial distillation combines model training, safeguards, detection, and enforcement to protect against capability extraction.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Combatting adversarial distillation」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/combatting-adversarial-distillation",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-hebbia",
-      "title": "OpenAI: Hebbia sees improvements in financial research with GPT-6 Astra",
-      "date": "2026/11/20",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Hebbia tested GPT-6 Astra for financial research. Its prerelease evaluations found gains in source coverage, citation relevance, and presentation quality.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Hebbia sees improvements in financial research with GPT-6 Astra」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/customer-stories/hebbia",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-inkling2mini",
-      "title": "Hugging Face: Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
-      "date": "2026/11/20",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/inkling2mini",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-harness-adapters-at-scale",
-      "title": "Hugging Face: Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
-      "date": "2026/11/20",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「Introducing harness adapters: adapt your favorite model to your harness to improve...」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/harness-adapters-at-scale",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
       ],
       "isLiveSynced": true
     },
@@ -390,31 +441,6 @@
         "AI Coding",
         "開発ワークフロー",
         "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-deepmind-alphagenome-2-deciphering-how-cells-read-dna-to-",
-      "title": "Google DeepMind: AlphaGenome 2: Deciphering how cells read DNA to better understand disease",
-      "date": "2026/11/11",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Predicting how DNA sequences and their variations impact specific human cell types and disease.",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「AlphaGenome 2: Deciphering how cells read DNA to better understand disease」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/alphagenome-2-deciphering-how-cells-read-dna-to-better-understand-disease/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
       ],
       "isLiveSynced": true
     },
