@@ -1,6 +1,6 @@
 {
-  "updatedAt": "2026-11-24T07:31:21.995Z",
-  "syncedAt": "2026-11-24 16:31",
+  "updatedAt": "2026-11-24T19:48:14.843Z",
+  "syncedAt": "2026-11-25 04:48",
   "dataSource": "Google Cloud Billing & Cloud Logging Live Verified (2026/10/05 確定)",
   "isLive": true,
   "gcpInfo": {
@@ -19,7 +19,7 @@
     "totalSpentUsd": 103.07,
     "grossCostUsd": 152.67,
     "trialDaysTotal": 90,
-    "trialDaysLeft": 37,
+    "trialDaysLeft": 36,
     "trialEndDate": "2026-12-31",
     "monthlyBudgetUsd": 50,
     "billingAccountStatus": "ACTIVE",
@@ -145,7 +145,7 @@
     "authVerified": true,
     "projectId": "antigravity-pj-xxxxxx",
     "billingAccountId": "012EB1-xxxxxx-xxxxxx",
-    "lastAuditCheck": "2026-11-24 16:31",
+    "lastAuditCheck": "2026-11-25 04:48",
     "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)"
   }
 }
