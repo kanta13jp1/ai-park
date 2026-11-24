@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-23T23:33:14.713Z",
-  "lastSyncedAtFormatted": "2026/11/24 8:33:14",
+  "lastSyncedAt": "2026-11-24T08:55:15.684Z",
+  "lastSyncedAtFormatted": "2026/11/24 17:55:15",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 53,
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-latentspace-ainews-jensen-is-back-and-openai-shows-its-pretr",
+      "title": "Latent Space: [AINews] Jensen Is Back! and OpenAI Shows Its Pretraining Curve, joined by Microsoft",
+      "date": "2026/11/24",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 23, 2026 — Nvidia reinstates its founder, and OpenAI publishes its internal loss curve and proposes a shared training limit.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Jensen Is Back! and OpenAI Shows Its Pretraining Curve, joined by Microsoft」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-jensen-is-back-and-openai-shows-its-pretraining-curve-joined-by-microsoft/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-deepmind-finding-faster-quantum-algorithms-with-agents-an",
       "title": "Google DeepMind: Finding faster quantum algorithms with agents and formal verification",
@@ -239,31 +264,6 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-formal-verification",
-      "title": "Latent Space: The War Against Slop and an Emerging Weapon to Fight it: Formal Verification",
-      "date": "2026/11/20",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Proving software correct with math has traditionally required specialist work. Now AI and Lean are helping automate the process.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「The War Against Slop and an Emerging Weapon to Fight it: Formal Verification」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/formal-verification/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
       ],
       "isLiveSynced": true
     },
