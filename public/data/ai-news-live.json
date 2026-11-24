@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-24T08:55:15.684Z",
-  "lastSyncedAtFormatted": "2026/11/24 17:55:15",
+  "lastSyncedAt": "2026-11-24T22:02:07.049Z",
+  "lastSyncedAtFormatted": "2026/11/25 7:02:07",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 53,
+  "totalCount": 55,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -16,6 +16,132 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-antigravity-mcp-apps-in-antigravity",
+      "title": "Google Antigravity: Bringing MCP Apps to Antigravity",
+      "date": "2026/11/24",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Bringing MCP Apps to Antigravity」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/mcp-apps-in-antigravity",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-gpt-6-models-demonstrate-intrinsic-protein-desig",
+      "title": "OpenAI: GPT-6 models demonstrate intrinsic protein-design capabilities",
+      "date": "2026/11/24",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "GPT-6 models design protein structures and sequences using reasoning and code. Lab tests found evidence of binding across five targets.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「GPT-6 models demonstrate intrinsic protein-design capabilities」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-searching-for-distant-planets-with-astra",
+      "title": "OpenAI: Searching for distant planets with Astra",
+      "date": "2026/11/24",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "See how two amateur astronomers used Codex and Astra to find potential exoplanets in public data from NASA’s Kepler and TESS space telescopes.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Searching for distant planets with Astra」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/index/searching-for-distant-planets-with-astra",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-openai-intentful-dots",
+      "title": "OpenAI: How Intentful uses dots to make more time for growth",
+      "date": "2026/11/24",
+      "category": "model",
+      "categoryLabel": "基盤モデル・LLM",
+      "importance": "official",
+      "importanceLabel": "公式発表",
+      "summary": "Marina Petrova’s dot Aria helps research websites and build proposals, while proactively flagging messages and resolving issues.",
+      "impactForStaff": "OpenAIの最新機能・モデルアップデート「How Intentful uses dots to make more time for growth」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "ライター"
+      ],
+      "sourceName": "OpenAI Official Feed",
+      "sourceUrl": "https://openai.com/business/customer-stories/intentful-dots",
+      "tags": [
+        "OpenAI",
+        "ChatGPT",
+        "Codex",
+        "公式発表"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-microduck-obstacle-avoidance",
+      "title": "Hugging Face: Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton",
+      "date": "2026/11/24",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-latentspace-ainews-jensen-is-back-and-openai-shows-its-pretr",
       "title": "Latent Space: [AINews] Jensen Is Back! and OpenAI Shows Its Pretraining Curve, joined by Microsoft",
@@ -93,81 +219,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-openai-introducing-shirudo",
-      "title": "OpenAI: OpenAI and Cisco introduce Shirudo",
-      "date": "2026/11/23",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "OpenAI and Cisco introduce Shirudo, an open-source runtime for Linux. It helps teams protect running systems while they roll out patches.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「OpenAI and Cisco introduce Shirudo」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/index/introducing-shirudo",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-connected-intelligence-for-in-house-legal",
-      "title": "OpenAI: Connected intelligence for in-house legal",
-      "date": "2026/11/23",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Watch OpenAI’s Stacey Wang and Craig Bruney, Mary O’Carroll of LECG, and Cooley’s Richard Segal explore how AI can help in-house legal teams connect business context, build reusable workflows and get more from outside counsel.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Connected intelligence for in-house legal」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/learn/connected-intelligence-for-in-house-legal",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-openai-richpanel-ai-customer-support",
-      "title": "OpenAI: Richpanel helps companies automate 50% of support in 30 days",
-      "date": "2026/11/23",
-      "category": "model",
-      "categoryLabel": "基盤モデル・LLM",
-      "importance": "official",
-      "importanceLabel": "公式発表",
-      "summary": "Richpanel uses GPT-6 Astra and GPT-6.1 Sol to equip its AI support agents with tools and procedures, and GPT-6 Luna for their conversations.",
-      "impactForStaff": "OpenAIの最新機能・モデルアップデート「Richpanel helps companies automate 50% of support in 30 days」。ドキュメント作成・コード生成の現場における生産性向上効果を検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "ライター"
-      ],
-      "sourceName": "OpenAI Official Feed",
-      "sourceUrl": "https://openai.com/business/customer-stories/richpanel-ai-customer-support",
-      "tags": [
-        "OpenAI",
-        "ChatGPT",
-        "Codex",
-        "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-huggingface-robotrack",
       "title": "Hugging Face: RoboTrack: Point tracking for real-world robotic manipulation",
       "date": "2026/11/23",
@@ -193,27 +244,52 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-huggingface-agentic-evals",
-      "title": "Hugging Face: How to build and maintain an agentic evaluation",
+      "id": "live-figma-introducing-figma-agent-in-figjam-and-slides",
+      "title": "Figma Blog: The Figma agent is now available in FigJam and Slides",
       "date": "2026/11/23",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
       "importance": "tech",
       "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「How to build and maintain an agentic evaluation」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "summary": "Whether you’re exploring an idea, preparing for a meeting, or presenting your designs, the Figma agent can help you move work forward.",
+      "impactForStaff": "Figma公式ブログ「The Figma agent is now available in FigJam and Slides」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
+      "recommendedFor": [
+        "デザイナー",
+        "フロントエンド開発者",
+        "プロダクトマネージャー"
+      ],
+      "sourceName": "Figma Blog Official Feed",
+      "sourceUrl": "https://www.figma.com/blog/introducing-figma-agent-in-figjam-and-slides/",
+      "tags": [
+        "Figma",
+        "UI/UX",
+        "Design System",
+        "デザイン連携"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-importai-import-ai-482-huawei-kernel-benchmarks",
+      "title": "Import AI: Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national lab's AI science benchmark",
+      "date": "2026/11/23",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Could the scientific method be emergent?",
+      "impactForStaff": "Import AI「Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
       "recommendedFor": [
         "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
+        "リサーチャー",
+        "企画担当"
       ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/agentic-evals",
+      "sourceName": "Import AI Official Feed",
+      "sourceUrl": "https://importai.substack.com/p/import-ai-482-huawei-kernel-benchmarks",
       "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
+        "Import AI",
+        "AI Research",
+        "AI安全性",
+        "先端動向"
       ],
       "isLiveSynced": true
     },
@@ -340,31 +416,6 @@
         "Custom Agents",
         "Plugins",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-figma-source-material-chase-rutherford",
-      "title": "Figma Blog: Source material: Creative Director Chase Rutherford on what makes something iconic",
-      "date": "2026/11/18",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "From internet ephemera and fashion to found images, objects, and cultural oddities, Chase explores how the things around us can be pulled apart, recontextualized, and turned into something new.",
-      "impactForStaff": "Figma公式ブログ「Source material: Creative Director Chase Rutherford on what makes something iconic」。UI/UXデザインとAI・コード連携のワークフロー改善に参考となる情報です。",
-      "recommendedFor": [
-        "デザイナー",
-        "フロントエンド開発者",
-        "プロダクトマネージャー"
-      ],
-      "sourceName": "Figma Blog Official Feed",
-      "sourceUrl": "https://www.figma.com/blog/source-material-chase-rutherford/",
-      "tags": [
-        "Figma",
-        "UI/UX",
-        "Design System",
-        "デザイン連携"
       ],
       "isLiveSynced": true
     },
