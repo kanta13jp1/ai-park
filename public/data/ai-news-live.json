@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-24T22:02:07.049Z",
-  "lastSyncedAtFormatted": "2026/11/25 7:02:07",
+  "lastSyncedAt": "2026-11-25T07:30:43.963Z",
+  "lastSyncedAtFormatted": "2026/11/25 16:30:43",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 55,
+  "totalCount": 54,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -16,6 +16,57 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-latentspace-ainews-gemini-4-neon-marks-gdm-s-full-return-as-",
+      "title": "Latent Space: [AINews] Gemini 4 Neon marks GDM's full return as a Frontier Lab",
+      "date": "2026/11/25",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 24, 2026 — Neon beats Astra and Fable on LiveBench and cuts Theo’s TS Rust benchmark runtime by 48.6%.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Gemini 4 Neon marks GDM's full return as a Frontier Lab」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-gemini-4-neon-marks-gdm-s-full-return-as-a-frontier-lab/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-antigravity-leveling-up-game-development-for-a-good-cause",
+      "title": "Google Antigravity: Leveling up game development for a good cause",
+      "date": "2026/11/24",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Google Antigravityの最新アップデート「Leveling up game development for a good cause」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "モバイル開発者",
+        "セキュリティ担当"
+      ],
+      "sourceName": "Google Antigravity Official Feed",
+      "sourceUrl": "https://antigravity.google/blog/leveling-up-game-development-for-a-good-cause",
+      "tags": [
+        "Google Antigravity",
+        "Custom Agents",
+        "Plugins",
+        "公式ブログ"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-antigravity-mcp-apps-in-antigravity",
       "title": "Google Antigravity: Bringing MCP Apps to Antigravity",
@@ -269,56 +320,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-importai-import-ai-482-huawei-kernel-benchmarks",
-      "title": "Import AI: Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national lab's AI science benchmark",
-      "date": "2026/11/23",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Could the scientific method be emergent?",
-      "impactForStaff": "Import AI「Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
-      "recommendedFor": [
-        "エンジニア",
-        "リサーチャー",
-        "企画担当"
-      ],
-      "sourceName": "Import AI Official Feed",
-      "sourceUrl": "https://importai.substack.com/p/import-ai-482-huawei-kernel-benchmarks",
-      "tags": [
-        "Import AI",
-        "AI Research",
-        "AI安全性",
-        "先端動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-ainews-riemann-hypothesis-proved-twice-independe",
-      "title": "Latent Space: [AINews] Riemann Hypothesis proved...twice independently",
-      "date": "2026/11/21",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 20 2026 —",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Riemann Hypothesis proved...twice independently」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-riemann-hypothesis-proved-twice-independently/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-figma-workflow-lab-specs-and-the-figma-agent",
       "title": "Figma Blog: Workflow lab: Turning context into a plan with Specs and the Figma agent",
       "date": "2026/11/20",
@@ -441,32 +442,6 @@
         "Frontier AI",
         "Gemini",
         "公式発表"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-antigravity-gemini-4-hydrogen-in-google-antigravity",
-      "title": "Google Antigravity: Gemini 4 Hydrogen and Orchestrator",
-      "date": "2026/11/12",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google Antigravity 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google Antigravityの最新アップデート「Gemini 4 Hydrogen and Orchestrator」。公式プラグインやカスタムエージェントを活用した開発効率化と安全なリリースパイプラインを検証します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "モバイル開発者",
-        "セキュリティ担当"
-      ],
-      "sourceName": "Google Antigravity Official Feed",
-      "sourceUrl": "https://antigravity.google/blog/gemini-4-hydrogen-in-google-antigravity",
-      "tags": [
-        "Google Antigravity",
-        "Custom Agents",
-        "Plugins",
-        "公式ブログ"
       ],
       "isLiveSynced": true
     },
