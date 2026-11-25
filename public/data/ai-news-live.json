@@ -1,6 +1,6 @@
 {
-  "lastSyncedAt": "2026-11-25T07:30:43.963Z",
-  "lastSyncedAtFormatted": "2026/11/25 16:30:43",
+  "lastSyncedAt": "2026-11-25T21:15:31.602Z",
+  "lastSyncedAtFormatted": "2026/11/26 6:15:31",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
   "totalCount": 54,
@@ -16,6 +16,81 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-huggingface-where-scientists-draw-the-line-on-ai-agents",
+      "title": "Hugging Face: Where scientists draw the line on AI agents",
+      "date": "2026/11/25",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「Where scientists draw the line on AI agents」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/allenai/where-scientists-draw-the-line-on-ai-agents",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-huggingface-an-indic-voice-agent-with-cuga",
+      "title": "Hugging Face: An Indic Voice Agent with CUGA",
+      "date": "2026/11/25",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「An Indic Voice Agent with CUGA」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/ibm-research/an-indic-voice-agent-with-cuga",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-github-ai-how-to-choose-the-next-safe-step-in-application-",
+      "title": "GitHub Blog (AI & ML): How to choose the next safe step in application modernization",
+      "date": "2026/11/25",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Learn how to assess a legacy application, choose a bounded modernization step, and reuse the method with a GitHub Copilot agent skill. The post How to choose the next safe step in application modernization appeared first on The GitHub Blog.",
+      "impactForStaff": "GitHub公式AIブログ「How to choose the next safe step in application modernization」。GitHub連携・PRレビュー・AIネイティブ開発ワークフローの改善に役立ちます。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "テックリード"
+      ],
+      "sourceName": "GitHub Blog (AI & ML) Official Feed",
+      "sourceUrl": "https://github.blog/ai-and-ml/github-copilot/how-to-choose-the-next-safe-step-in-application-modernization/",
+      "tags": [
+        "GitHub",
+        "AI Coding",
+        "開発ワークフロー",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-latentspace-ainews-gemini-4-neon-marks-gdm-s-full-return-as-",
       "title": "Latent Space: [AINews] Gemini 4 Neon marks GDM's full return as a Frontier Lab",
@@ -38,6 +113,31 @@
         "AI Engineering",
         "Agentic AI",
         "技術動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-deepmind-interpreting-mass-spectra-with-google-antigravit",
+      "title": "Google DeepMind: From spectrum to structure: Identifying molecules with Mass Spec Skills for Google Antigravity",
+      "date": "2026/11/24",
+      "category": "google",
+      "categoryLabel": "Google / Antigravity",
+      "importance": "hot",
+      "importanceLabel": "HOT 🔥",
+      "summary": "Mass Spec Skills empowers scientists using Google Antigravity to interpret tandem mass spectra.",
+      "impactForStaff": "Google DeepMindの最新知能・推論モデル「From spectrum to structure: Identifying molecules with Mass Spec Skills for Google...」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
+      "recommendedFor": [
+        "全社員",
+        "エンジニア",
+        "企画・データ推進"
+      ],
+      "sourceName": "Google DeepMind Official Feed",
+      "sourceUrl": "https://deepmind.google/blog/interpreting-mass-spectra-with-google-antigravity/",
+      "tags": [
+        "Google DeepMind",
+        "Frontier AI",
+        "Gemini",
+        "公式発表"
       ],
       "isLiveSynced": true
     },
@@ -169,31 +269,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-huggingface-microduck-obstacle-avoidance",
-      "title": "Hugging Face: Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton",
-      "date": "2026/11/24",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-latentspace-ainews-jensen-is-back-and-openai-shows-its-pretr",
       "title": "Latent Space: [AINews] Jensen Is Back! and OpenAI Shows Its Pretraining Curve, joined by Microsoft",
       "date": "2026/11/24",
@@ -266,31 +341,6 @@
         "Custom Agents",
         "Plugins",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-robotrack",
-      "title": "Hugging Face: RoboTrack: Point tracking for real-world robotic manipulation",
-      "date": "2026/11/23",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「RoboTrack: Point tracking for real-world robotic manipulation」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/allenai/robotrack",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
       ],
       "isLiveSynced": true
     },
@@ -417,31 +467,6 @@
         "Custom Agents",
         "Plugins",
         "公式ブログ"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-deepmind-introducing-gemini-4-hydrogen",
-      "title": "Google DeepMind: Introducing Gemini 4 Hydrogen",
-      "date": "2026/11/12",
-      "category": "google",
-      "categoryLabel": "Google / Antigravity",
-      "importance": "hot",
-      "importanceLabel": "HOT 🔥",
-      "summary": "Google DeepMind 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Google DeepMindの最新知能・推論モデル「Introducing Gemini 4 Hydrogen」に関する公式発表。社内での活用検証および業務効率化への適用を検討します。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "企画・データ推進"
-      ],
-      "sourceName": "Google DeepMind Official Feed",
-      "sourceUrl": "https://deepmind.google/blog/introducing-gemini-4-hydrogen/",
-      "tags": [
-        "Google DeepMind",
-        "Frontier AI",
-        "Gemini",
-        "公式発表"
       ],
       "isLiveSynced": true
     },
@@ -594,31 +619,6 @@
         "音声対話",
         "公式ブログ"
       ]
-    },
-    {
-      "id": "live-github-ai-beyond-code-generation-a-developers-guide-to-age",
-      "title": "GitHub Blog (AI & ML): Beyond code generation: A developer&#8217;s guide to agentic engineering",
-      "date": "2026/11/06",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Writing code got faster. The work around it didn't. See how you can plan, write code, review changes, and investigate production issues with GitHub Copilot, and what work still needs your judgment. The post Beyond code generation: A developer&#8217;s guide...",
-      "impactForStaff": "GitHub公式AIブログ「Beyond code generation: A developer&#8217;s guide to agentic engineering」。GitHub連携・PRレビュー・AIネイティブ開発ワークフローの改善に役立ちます。",
-      "recommendedFor": [
-        "全社員",
-        "エンジニア",
-        "テックリード"
-      ],
-      "sourceName": "GitHub Blog (AI & ML) Official Feed",
-      "sourceUrl": "https://github.blog/ai-and-ml/github-copilot/beyond-code-generation-a-developers-guide-to-agentic-engineering/",
-      "tags": [
-        "GitHub",
-        "AI Coding",
-        "開発ワークフロー",
-        "技術解説"
-      ],
-      "isLiveSynced": true
     },
     {
       "id": "live-mistral-build-with-studio",
