@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-25T21:15:31.602Z",
-  "lastSyncedAtFormatted": "2026/11/26 6:15:31",
+  "lastSyncedAt": "2026-11-26T07:20:39.430Z",
+  "lastSyncedAtFormatted": "2026/11/26 16:20:39",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 54,
+  "totalCount": 55,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-huggingface-building-on-nemotron-35-parse-open-data-fine-tun",
+      "title": "Hugging Face: Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference",
+      "date": "2026/11/26",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-huggingface-where-scientists-draw-the-line-on-ai-agents",
       "title": "Hugging Face: Where scientists draw the line on AI agents",
@@ -33,31 +58,6 @@
       ],
       "sourceName": "Hugging Face Official Feed",
       "sourceUrl": "https://huggingface.co/blog/allenai/where-scientists-draw-the-line-on-ai-agents",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-an-indic-voice-agent-with-cuga",
-      "title": "Hugging Face: An Indic Voice Agent with CUGA",
-      "date": "2026/11/25",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「An Indic Voice Agent with CUGA」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/ibm-research/an-indic-voice-agent-with-cuga",
       "tags": [
         "Hugging Face",
         "OSS AI",
@@ -92,22 +92,47 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-latentspace-ainews-gemini-4-neon-marks-gdm-s-full-return-as-",
-      "title": "Latent Space: [AINews] Gemini 4 Neon marks GDM's full return as a Frontier Lab",
+      "id": "live-latentspace-the_revolution_vs_the_renaissance_thariq_shihipa",
+      "title": "Latent Space: The Revolution vs The Renaissance — Thariq Shihipar, OpenAI",
       "date": "2026/11/25",
       "category": "industry",
       "categoryLabel": "業界・最新技術",
       "importance": "tech",
       "importanceLabel": "技術解説",
-      "summary": "November 24, 2026 — Neon beats Astra and Fable on LiveBench and cuts Theo’s TS Rust benchmark runtime by 48.6%.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Gemini 4 Neon marks GDM's full return as a Frontier Lab」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "summary": "AI can make software cheap enough to produce by the thousand and still give you more time to make one thing feel right. At AI Engineer CODE, Thariq Shihipar shows how those two futures can coexist. In his fighting game, he edits the size of a rock in t...",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「The Revolution vs The Renaissance — Thariq Shihipar, OpenAI」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
       "recommendedFor": [
         "エンジニア",
         "アーキテクト",
         "AI推進担当"
       ],
       "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-gemini-4-neon-marks-gdm-s-full-return-as-a-frontier-lab/",
+      "sourceUrl": "https://latent.space/p/the_revolution_vs_the_renaissance_thariq_shihipar_openai/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-latentspace-ainews-math-proofs-are-landing-faster-than-we-ca",
+      "title": "Latent Space: [AINews] Math Proofs Are Landing Faster Than We Can Read Them",
+      "date": "2026/11/25",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "November 25, 2026 — From Erdős problems to new bounds for matrix multiplication and Fourier transforms.",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Math Proofs Are Landing Faster Than We Can Read Them」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/ainews-math-proofs-are-landing-faster-than-we-can-read-them/",
       "tags": [
         "Latent Space",
         "AI Engineering",
@@ -269,31 +294,6 @@
       "isLiveSynced": true
     },
     {
-      "id": "live-latentspace-ainews-jensen-is-back-and-openai-shows-its-pretr",
-      "title": "Latent Space: [AINews] Jensen Is Back! and OpenAI Shows Its Pretraining Curve, joined by Microsoft",
-      "date": "2026/11/24",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 23, 2026 — Nvidia reinstates its founder, and OpenAI publishes its internal loss curve and proposes a shared training limit.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Jensen Is Back! and OpenAI Shows Its Pretraining Curve, joined by Microsoft」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-jensen-is-back-and-openai-shows-its-pretraining-curve-joined-by-microsoft/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
       "id": "live-deepmind-finding-faster-quantum-algorithms-with-agents-an",
       "title": "Google DeepMind: Finding faster quantum algorithms with agents and formal verification",
       "date": "2026/11/23",
@@ -366,6 +366,31 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-importai-import-ai-482-huawei-kernel-benchmarks",
+      "title": "Import AI: Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national lab's AI science benchmark",
+      "date": "2026/11/23",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Could the scientific method be emergent?",
+      "impactForStaff": "Import AI「Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
+      "recommendedFor": [
+        "エンジニア",
+        "リサーチャー",
+        "企画担当"
+      ],
+      "sourceName": "Import AI Official Feed",
+      "sourceUrl": "https://importai.substack.com/p/import-ai-482-huawei-kernel-benchmarks",
+      "tags": [
+        "Import AI",
+        "AI Research",
+        "AI安全性",
+        "先端動向"
       ],
       "isLiveSynced": true
     },
