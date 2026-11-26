@@ -441,15 +441,15 @@ export default function InteractivePromptLibrary() {
         {/* 右側：生成されたプロンプトプレビュー＆ワンクリックコピー */}
         <div className="bg-slate-900 text-slate-100 rounded-2xl p-5 border border-slate-800 space-y-4 shadow-md flex flex-col justify-between">
           <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
-              <span className="text-xs font-mono font-bold text-cyan-300 flex items-center gap-1.5">
-                <Sparkles size={14} aria-hidden="true" />
-                完成プロンプト（リアルタイムプレビュー）
+            <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+              <span className="text-xs font-mono font-bold text-cyan-300 flex items-center gap-1.5 min-w-0">
+                <Sparkles size={14} className="shrink-0" aria-hidden="true" />
+                <span>完成プロンプト（リアルタイムプレビュー）</span>
               </span>
               <button
                 type="button"
                 onClick={handleCopy}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shrink-0 whitespace-nowrap transition-all cursor-pointer ${
                   isCopied
                     ? "bg-emerald-500 text-white shadow-xs"
                     : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-xs"
@@ -457,12 +457,12 @@ export default function InteractivePromptLibrary() {
               >
                 {isCopied ? (
                   <>
-                    <Check size={14} />
+                    <Check size={14} aria-hidden="true" />
                     <span>コピー完了！</span>
                   </>
                 ) : (
                   <>
-                    <Copy size={14} />
+                    <Copy size={14} aria-hidden="true" />
                     <span>プロンプトをコピー</span>
                   </>
                 )}

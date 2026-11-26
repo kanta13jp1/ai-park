@@ -128,10 +128,25 @@ test("GuideStepCard defaults to h3 and GcpSetupGuide passes h4 under section h3 
   assert.equal([...gcp.matchAll(/headingLevel="h4"/g)].length, 2, "GcpSetupGuide should pass headingLevel='h4' for admin & user step cards");
 });
 
-test("InteractivePromptLibrary uses lg:flex-row header and nowrap pill badge for 768px tablet layout", () => {
+test("InteractivePromptLibrary uses lg:flex-row header, nowrap pill badge, and nowrap preview copy button", () => {
   const src = readSrc("src/components/InteractivePromptLibrary.tsx");
   for (const token of ["lg:flex-row", "lg:items-center", "shrink-0 whitespace-nowrap"]) {
     assert.ok(src.includes(token), `InteractivePromptLibrary.tsx missing ${token}`);
+  }
+  assert.equal([...src.matchAll(/shrink-0 whitespace-nowrap/g)].length, 2);
+});
+
+test("GeminiStatsSyncStatus uses sequential h2 heading, faq aria-controls, lg:grid-cols-2, and motion-safe spin", () => {
+  const src = readSrc("src/components/GeminiStatsSyncStatus.tsx");
+  assert.equal([...src.matchAll(/<h3\b/g)].length, 0, "GeminiStatsSyncStatus should promote h3 to h2");
+  for (const token of [
+    "<h2",
+    'aria-controls="gemini-stats-sync-faq-panel"',
+    'id="gemini-stats-sync-faq-panel"',
+    "lg:grid-cols-2",
+    "motion-safe:animate-spin",
+  ]) {
+    assert.ok(src.includes(token), `GeminiStatsSyncStatus.tsx missing ${token}`);
   }
 });
 
@@ -213,7 +228,14 @@ test("BookingModal, contact, ambassadors, interviews, skills-hub, and gemini-sta
 
   const skillsHub = readSrc("src/app/skills-hub/page.tsx");
   assert.equal([...skillsHub.matchAll(/<h4\b/g)].length, 0);
-  for (const token of ['role="group"', 'aria-label="カテゴリで絞り込み"', 'aria-live="polite"', "lg:grid-cols-3"]) {
+  for (const token of [
+    'role="group"',
+    'aria-label="カテゴリで絞り込み"',
+    'aria-live="polite"',
+    "lg:grid-cols-3",
+    "lg:flex-row lg:items-start lg:justify-between",
+    "break-words",
+  ]) {
     assert.ok(skillsHub.includes(token), `skills-hub/page.tsx missing ${token}`);
   }
 

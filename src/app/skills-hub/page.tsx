@@ -573,11 +573,11 @@ export default function SkillsHubPage() {
                 return (
                   <div
                     key={tpl.id}
-                    className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4"
+                    className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4 min-w-0"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-                      <div className="space-y-1">
-                        <div className="inline-flex items-center gap-2 text-[11px] font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
+                      <div className="space-y-1 min-w-0">
+                        <div className="inline-flex items-center gap-2 text-[11px] font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100 max-w-full break-all">
                           .agents/skills/{tpl.folderName}/SKILL.md
                         </div>
                         <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
@@ -585,23 +585,23 @@ export default function SkillsHubPage() {
                         </h3>
                         <p className="text-xs sm:text-sm text-slate-600">{tpl.summary}</p>
                       </div>
-                      <span className="shrink-0 text-[11px] font-bold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+                      <span className="self-start lg:shrink-0 max-w-full text-[11px] font-bold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 leading-relaxed">
                         用途: {tpl.useCase}
                       </span>
                     </div>
 
                     {/* PowerShell フォルダ作成コマンド */}
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
+                    <div className="space-y-1.5 min-w-0">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold text-slate-600">
                         <span className="inline-flex items-center gap-1.5">
-                          <Terminal className="w-3.5 h-3.5 text-slate-500" />
+                          <Terminal className="w-3.5 h-3.5 text-slate-500 shrink-0" aria-hidden="true" />
                           <span>1. フォルダ作成コマンド（Windows PowerShell）</span>
                         </span>
                         <button
                           type="button"
                           onClick={() => handleCopy(cmdCopyId, tpl.powershellCmd)}
                           onMouseEnter={() => playCyberHover()}
-                          className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold cursor-pointer"
+                          className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold cursor-pointer shrink-0 whitespace-nowrap"
                         >
                           {copiedId === cmdCopyId ? (
                             <>
@@ -618,37 +618,37 @@ export default function SkillsHubPage() {
                           )}
                         </button>
                       </div>
-                      <div className="bg-slate-900 text-emerald-300 p-3 rounded-xl font-mono text-xs overflow-x-auto border border-slate-800">
+                      <div className="bg-slate-900 text-emerald-300 p-3 rounded-xl font-mono text-xs overflow-x-auto max-w-full border border-slate-800">
                         <code>{tpl.powershellCmd}</code>
                       </div>
                     </div>
 
                     {/* SKILL.md 全文 */}
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
+                    <div className="space-y-1.5 min-w-0">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold text-slate-600">
                         <span>2. SKILL.md 内容（そのまま貼り付け）</span>
                         <button
                           type="button"
                           onClick={() => handleCopy(mdCopyId, tpl.markdownContent)}
                           onMouseEnter={() => playCyberHover()}
-                          className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold cursor-pointer"
+                          className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold cursor-pointer shrink-0 whitespace-nowrap"
                         >
                           {copiedId === mdCopyId ? (
                             <>
-                              <Check size={12} className="text-emerald-600" />
+                              <Check size={12} className="text-emerald-600" aria-hidden="true" />
                               <span className="text-emerald-600">コピー完了</span>
                             </>
                           ) : copyErrorId === mdCopyId ? (
                             <span className="text-rose-600">コピー失敗（手動コピーしてください）</span>
                           ) : (
                             <>
-                              <Copy size={12} />
+                              <Copy size={12} aria-hidden="true" />
                               <span>SKILL.md をコピー</span>
                             </>
                           )}
                         </button>
                       </div>
-                      <pre className="bg-slate-950 text-slate-100 p-4 rounded-xl font-mono text-xs overflow-x-auto border border-slate-800 leading-relaxed whitespace-pre-wrap">
+                      <pre className="bg-slate-950 text-slate-100 p-4 rounded-xl font-mono text-xs overflow-x-auto max-w-full break-words border border-slate-800 leading-relaxed whitespace-pre-wrap">
                         <code>{tpl.markdownContent}</code>
                       </pre>
                     </div>

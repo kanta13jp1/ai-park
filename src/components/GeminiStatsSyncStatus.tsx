@@ -40,13 +40,13 @@ export default function GeminiStatsSyncStatus({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div className="flex items-start sm:items-center gap-3 min-w-0">
           <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600">
-            <RefreshCw className={`w-5 h-5 ${isLoading ? "animate-spin text-indigo-500" : ""}`} />
+            <RefreshCw className={`w-5 h-5 ${isLoading ? "motion-safe:animate-spin text-indigo-500" : ""}`} aria-hidden="true" />
           </div>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className="text-sm font-black text-slate-900 tracking-tight">
+              <h2 className="text-sm font-black text-slate-900 tracking-tight">
                 データ同期ステータス
-              </h3>
+              </h2>
               <span className={`text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border flex items-center gap-1 ${
                 syncMode === "api_live"
                   ? "bg-emerald-50 text-emerald-700 border-emerald-200"
@@ -72,7 +72,7 @@ export default function GeminiStatsSyncStatus({
             disabled={isLoading}
             className="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0 transition-all cursor-pointer shadow-xs active:scale-95 disabled:opacity-50"
           >
-            <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
+            <RefreshCw size={13} className={isLoading ? "motion-safe:animate-spin" : ""} aria-hidden="true" />
             <span>{isLoading ? "同期中..." : "最新データを再同期"}</span>
           </button>
         </div>
@@ -83,21 +83,22 @@ export default function GeminiStatsSyncStatus({
         <button
           type="button"
           aria-expanded={isOpenFaq}
+          aria-controls="gemini-stats-sync-faq-panel"
           onClick={() => setIsOpenFaq(!isOpenFaq)}
           className="w-full p-4 flex items-center justify-between text-left hover:bg-slate-100/60 transition-colors cursor-pointer"
         >
           <div className="flex items-center gap-2">
-            <HelpCircle size={16} className="text-indigo-600" />
+            <HelpCircle size={16} className="text-indigo-600" aria-hidden="true" />
             <span className="text-xs font-bold text-slate-800">
               「利用回数が増えない・反映されない」ときの確認チェックリスト（4項目）
             </span>
           </div>
-          {isOpenFaq ? <ChevronUp size={16} className="text-slate-500" /> : <ChevronDown size={16} className="text-slate-500" />}
+          {isOpenFaq ? <ChevronUp size={16} className="text-slate-500" aria-hidden="true" /> : <ChevronDown size={16} className="text-slate-500" aria-hidden="true" />}
         </button>
 
         {isOpenFaq && (
-          <div className="p-4 pt-1 border-t border-slate-200/70 space-y-3 text-xs text-slate-700 leading-relaxed bg-white">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <div id="gemini-stats-sync-faq-panel" className="p-4 pt-1 border-t border-slate-200/70 space-y-3 text-xs text-slate-700 leading-relaxed bg-white">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 pt-2">
               {/* チェック1 */}
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
                 <div className="flex items-center gap-1.5 font-bold text-slate-900 text-xs">
