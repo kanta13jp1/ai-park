@@ -37,7 +37,8 @@ description: MightyLINK AI Parkにおける新機能・更新画面の公開前�
   - 社内AI利用ガイドライン（個人情報・社外秘の入力禁止、会社アカウント利用徹底）に準拠しているか。
   - 相談窓口やOffice Hourのスケジュールが最新かつ正確か。
 - **リンク先が実在するか（リンク検証・実在性）**:
-  - ページ内のすべての内部リンクおよび外部リンク（Google公式ドキュメント、コンソール等）が実在し、404エラーなく疎通すること。
+  - ページ内のすべての内部リンクおよび外部リンク（Google公式ドキュメント、コンソール、資格試験ガイド等）が実在し、実測 **HTTP 200** で疎通すること（`403`/`404` や不要な言語・パス転送を放置しない）。
+  - 資格試験要綱（有効期限・問題数・受験基盤・合格ライン公表有無）や外部製品仕様は暗記書きせず、公式一次ページと照合して根拠なき断定・旧名称の残存を排除する。
 
 ### ② デザイン・レイアウト（Aesthetics）
 - **レスポンシブ崩れの排除**:
@@ -144,12 +145,14 @@ git pull --rebase --autostash origin main
 git push origin main
 
 # GitHub Actions の実行IDを取得して監視
-gh run list --workflow deploy.yml -L 1
-gh run watch <run_id>
+gh run list --workflow deploy.yml -L 5 --json databaseId,headSha,status,conclusion,url
+gh run watch <run_id> --exit-status
 ```
 
+- **デプロイ完了ハードゲート（先行ブラウザ検証の禁止）**: `gh run watch` がバックグラウンド実行になった場合は、同一ターンで `browser` サブエージェントを起動せず、完了通知を待って `status: completed`・`conclusion: success`・`headSha === push したコミット SHA` を確認してから Step 6 へ進む。
+
 ### Step 6: ブラウザ実機検証 & ユーザーへの報告・サインオフ
-1. 組み込み `browser` サブエージェントを用いて、本番正規 URL（`next.config.ts` の `trailingSlash: true` に合わせた **末尾 `/` 付き** ＋ `?cachebust=<timestamp>`、例: `https://kanta13jp1.github.io/ai-park/azure-info/?cachebust=...`）へアクセスする。あわせて末尾 `/` なし URL の解決および 404 パスでの Hydration エラー 0 件も点検する。
+1. Step 5 のデプロイ成功を確認後、組み込み `browser` サブエージェントを用いて、本番正規 URL（`next.config.ts` の `trailingSlash: true` に合わせた **末尾 `/` 付き** ＋ `?cachebust=<timestamp>`、例: `https://kanta13jp1.github.io/ai-park/azure-info/?cachebust=...`）へアクセスする。今回のコミットで新たに追加した DOM マーカー（新属性・新クラス・新ラベル等）が実画面に反映されていることを最初に確認し、旧キャッシュ検証による誤判定を防ぐ。あわせて末尾 `/` なし URL の解決および 404 パスでの Hydration エラー 0 件も点検する。
 2. `1280x800` と `768x1024` の両解像度で、HTTP 200・ルート固有 `document.title`・`ConsoleErrors: 0`・水平オーバーフローなし・`HeroBanner` `Search ⌘K` と `<h1>` の非重複・主要ボタンの折り返し／非クリップ・WAI-ARIA 動作を実測する。
 3. 検証結果は `BROWSER_HOST_FACTS`（訪問オリジン・最新スクリーンショット）と照合し、スクリーンショットを目視確認したうえで各小項目の点検根拠・合格判定の要約を報告し、サインオフを得る。
 
@@ -172,6 +175,9 @@ gh run watch <run_id>
    - `HeroBanner`, `SpotlightCard`, `TiltCard` による一貫した高品質デザイン。
    - タブ（`tablist`/`tab`/`aria-selected`/`tabpanel`）・トグル（`aria-pressed`）・アコーディオン（`aria-expanded`）・動的通知（`aria-live="polite"`）および横スクロール表の `min-w-[640px]`・`th whitespace-nowrap` を実装。
    - ホバー音（`playCyberHover`）、クリック音（`playCyberClick`）の適用。
+5. **大容量データの動的チャンク分割と専用回帰テスト**:
+   - 複数資格・大型データセットを扱うハブ画面（`*-info` 等）では、初期表示データのみを静的 `import` し残りを動的 `import()`（リクエスト世代ガード＆エラー再試行 UI 付き）でオンデマンド分割読み込みして初期 JS チャンク肥大を防ぐ。
+   - 並行セッションと競合しない専用回帰テスト（例: `tests/<domain>-cert.test.mjs`）でデータ件数・検索チップ 0 件ヒット防止・試験時間・URL 衛生・旧表記非混入を CI 固定する。
 
 ---
 
