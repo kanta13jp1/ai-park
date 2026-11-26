@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, type KeyboardEvent } from "react";
+import { useEffect, useState, useMemo, useRef, type KeyboardEvent } from "react";
 import {
   Terminal,
   Cpu,
@@ -54,6 +54,7 @@ import {
   Layers,
   GitMerge,
   Workflow,
+  Loader2,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -67,455 +68,38 @@ import type {
   CertExamFact,
   CertFlashcardItem,
   CertMockExamRecord,
-  CertPassingConfig,
   CertQuestion,
 } from "@/components/certification/types";
+import type {
+  LpicComparisonTable,
+  LpicKeyPathFact,
+  LpicOfficialResource,
+  LpicPitfall,
+  LpicWorkflowPattern,
+  UnifiedLpicDomain,
+} from "@/data/lpic-types";
 import {
-  lpic1ExamFacts,
-  lpic1Domains,
-  lpic1Comparisons,
-  lpic1QuickLookup,
-  lpic1PracticeQuestions,
-  lpic1OfficialResources,
-  lpic1Patterns,
-  lpic1Pitfalls,
-  lpic1KeyPaths,
-  type LpicTopicItem,
-  type LpicComparisonTable,
-  type LpicWorkflowPattern,
-  type LpicPitfall,
-  type LpicKeyPathFact,
-  type LpicOfficialResource,
-} from "@/data/lpic-1";
-import {
-  lpic2ExamFacts,
-  lpic2Domains,
-  lpic2Comparisons,
-  lpic2QuickLookup,
-  lpic2PracticeQuestions,
-  lpic2OfficialResources,
-  lpic2Patterns,
-  lpic2Pitfalls,
-  lpic2KeyPaths,
-} from "@/data/lpic-2";
-import {
-  lpic300ExamFacts,
-  lpic300Domains,
-  lpic300Comparisons,
-  lpic300QuickLookup,
-  lpic300PracticeQuestions,
-  lpic300OfficialResources,
-  lpic300Patterns,
-  lpic300Pitfalls,
-  lpic300KeyPaths,
-} from "@/data/lpic-300";
-import {
-  lpic303ExamFacts,
-  lpic303Domains,
-  lpic303Comparisons,
-  lpic303QuickLookup,
-  lpic303PracticeQuestions,
-  lpic303OfficialResources,
-  lpic303Patterns,
-  lpic303Pitfalls,
-  lpic303KeyPaths,
-} from "@/data/lpic-303";
-import {
-  lpic305ExamFacts,
-  lpic305Domains,
-  lpic305Comparisons,
-  lpic305QuickLookup,
-  lpic305PracticeQuestions,
-  lpic305OfficialResources,
-  lpic305Patterns,
-  lpic305Pitfalls,
-  lpic305KeyPaths,
-} from "@/data/lpic-305";
-import {
-  lpic306ExamFacts,
-  lpic306Domains,
-  lpic306Comparisons,
-  lpic306QuickLookup,
-  lpic306PracticeQuestions,
-  lpic306OfficialResources,
-  lpic306Patterns,
-  lpic306Pitfalls,
-  lpic306KeyPaths,
-} from "@/data/lpic-306";
+  INITIAL_LPIC_CERT_DATA,
+  LPIC_LEVELS,
+  LPIC_LEVEL_META,
+  loadLpicCertData,
+  type LpicCertData,
+  type LpicLevel,
+} from "@/components/lpic/lpicCertRegistry";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 import { normalizeCommandSearchQuery } from "@/lib/lpic-search";
 
-type LpicLevel = "lpic-1" | "lpic-2" | "lpic-300" | "lpic-303" | "lpic-305" | "lpic-306";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
-interface UnifiedLpicDomain {
-  id: string;
-  exam: string;
-  number: string;
-  title: string;
-  englishTitle: string;
-  accentColor: "indigo" | "emerald" | "amber" | "cyan";
-  summary: string;
-  topics: LpicTopicItem[];
-}
-
-interface LpicLevelConfig {
-  id: LpicLevel;
-  label: string;
-  badgeText: string;
-  shortExamCode: string;
-  headline: string;
-  description: string;
-  storageKey: string;
-  examFacts: CertExamFact[];
-  domains: UnifiedLpicDomain[];
-  comparisons: LpicComparisonTable[];
-  patterns: LpicWorkflowPattern[];
-  pitfalls: LpicPitfall[];
-  keyPaths: LpicKeyPathFact[];
-  quickLookup: CertFlashcardItem[];
-  practiceQuestions: CertQuestion[];
-  officialResources: LpicOfficialResource[];
-  examFilters: { id: string; label: string }[];
-  defaultExpanded: Record<string, boolean>;
-  passingConfig: CertPassingConfig;
-  quizBadgeLabel: string;
-  flashcardTitle: string;
-  quickSearchChips: string[];
-  examDayChecklist: {
-    subtitle: string;
-    tips: { title: string; body: string }[];
-  };
-}
-
-const LEVEL_CONFIG: Record<LpicLevel, LpicLevelConfig> = {
-  "lpic-1": {
-    id: "lpic-1",
-    label: "LPIC-1 (101 / 102)",
-    badgeText: "LPIC-1 (101 / 102) STUDY HUB",
-    shortExamCode: "101-500 / 102-500",
-    headline: "LPIC-1（101-500 / 102-500）",
-    description:
-      "LPI 公式試験範囲（Version 5.0）の Topic 101〜110 に沿って、コマンド比較表・フラッシュカード暗記・択一＆複数選択の実践問題をまとめた学習ページです。学習記録はブラウザに自動保存されます。",
-    storageKey: "ai-park-lpic-1-progress-v1",
-    examFacts: lpic1ExamFacts,
-    domains: lpic1Domains,
-    comparisons: lpic1Comparisons,
-    patterns: lpic1Patterns,
-    pitfalls: lpic1Pitfalls,
-    keyPaths: lpic1KeyPaths,
-    quickLookup: lpic1QuickLookup,
-    practiceQuestions: lpic1PracticeQuestions,
-    officialResources: lpic1OfficialResources,
-    examFilters: [
-      { id: "all", label: "全トピック (101-110)" },
-      { id: "101-500", label: "Exam 101-500 (101-104)" },
-      { id: "102-500", label: "Exam 102-500 (105-110)" },
-    ],
-    defaultExpanded: { "topic-101": true },
-    passingConfig: {
-      minScore: 200,
-      maxScore: 800,
-      passingScore: 500,
-      passingPct: 63,
-      officialExamLabel: "LPIC-1 本試験（101-500 / 102-500）",
-    },
-    quizBadgeLabel: "LPIC-1 (101/102) 演習",
-    flashcardTitle: "要件・用途 → コマンド / 設定ファイル 即答トレーニング",
-    quickSearchChips: ["lsmod", "systemctl", "dpkg", "rpm", "chmod", "umask", "ss", "cron"],
-    examDayChecklist: {
-      subtitle:
-        "LPIC-1（101-500 / 102-500）は各90分・60問の試験です。記述問題での正確なコマンド・パス入力と時間配分が合格（500点）の鍵になります。",
-      tips: [
-        {
-          title: "時間配分：1問約90秒ペース（90分・60問）",
-          body: "30問経過時点で残り45分前後が目安です。長考しそうな設問は仮選択・見直しフラグを活用し、まず60問すべてに目を通して解答し切るのが確実です。",
-        },
-        {
-          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
-          body: "選択問題に加えて記述（穴埋め）問題が出題されます。コマンド名・オプション・設定ファイルパス（例: /etc/fstab 等）は大文字・小文字を含め、タブ補完なしで正確に入力できるよう整理しておきます。",
-        },
-        {
-          title: "合格条件・認定要件：500/800点（2科目合格）",
-          body: "200〜800点スケールで 500 点以上が合格ラインです。LPIC-1 に前提資格はありませんが、認定取得には 101-500 と 102-500 の2科目両方に合格する必要があります（認定の有効期間は5年間）。",
-        },
-        {
-          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
-          body: "予約前に LPI ID（LPI アカウント）との紐付けを確認し、当日は規定の有効な本人確認書類を準備します。OnVUE オンライン受験では事前のシステムテストと受験環境（静かな個室・机上整理）の確認が必須です。",
-        },
-      ],
-    },
-  },
-  "lpic-2": {
-    id: "lpic-2",
-    label: "LPIC-2 (201 / 202)",
-    badgeText: "LPIC-2 (201 / 202) STUDY HUB",
-    shortExamCode: "201-450 / 202-450",
-    headline: "LPIC-2（201-450 / 202-450）",
-    description:
-      "LPI 公式試験範囲（Version 4.5）の Topic 200〜212 に沿って、カーネル・LVM/RAID・BIND・Nginx/Apache・Samba/NFS・PAM・Postfix・iptables 等の実務＆試験対策をまとめた学習ページです。",
-    storageKey: "ai-park-lpic-2-progress-v1",
-    examFacts: lpic2ExamFacts,
-    domains: lpic2Domains,
-    comparisons: lpic2Comparisons,
-    patterns: lpic2Patterns,
-    pitfalls: lpic2Pitfalls,
-    keyPaths: lpic2KeyPaths,
-    quickLookup: lpic2QuickLookup,
-    practiceQuestions: lpic2PracticeQuestions,
-    officialResources: lpic2OfficialResources,
-    examFilters: [
-      { id: "all", label: "全トピック (200-212)" },
-      { id: "201-450", label: "Exam 201-450 (200-206)" },
-      { id: "202-450", label: "Exam 202-450 (207-212)" },
-    ],
-    defaultExpanded: { "topic-200": true },
-    passingConfig: {
-      minScore: 200,
-      maxScore: 800,
-      passingScore: 500,
-      passingPct: 63,
-      officialExamLabel: "LPIC-2 本試験（201-450 / 202-450）",
-    },
-    quizBadgeLabel: "LPIC-2 (201/202) 演習",
-    flashcardTitle: "LPIC-2 要件・運用課題 → コマンド / 設定 即答トレーニング",
-    quickSearchChips: ["vmstat", "mdadm", "lvextend", "BIND", "Nginx", "NFS", "PAM"],
-    examDayChecklist: {
-      subtitle:
-        "LPIC-2（201-450 / 202-450）は各90分・60問の試験です。サービス設定ディレクティブの正確な綴りと前提資格の確認が重要になります。",
-      tips: [
-        {
-          title: "時間配分：1問約90秒ペース（90分・60問）",
-          body: "201・202 それぞれ 90 分で 60 問（1問約90秒）です。設定ファイルや出力結果の読み取りに時間を使いすぎないよう、迷う問題は見直しフラグを付けてテンポ良く進めます。",
-        },
-        {
-          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
-          body: "選択問題に加え、コマンド・オプション・設定ファイルパス・設定パラメータ名を入力する記述問題が出題されます。LVM/RAID・BIND・Apache/Nginx・PAM などの主要パスと綴りを正確に押さえておきます。",
-        },
-        {
-          title: "合格条件・前提資格：500/800点・有効な LPIC-1",
-          body: "各科目とも 200〜800 点スケールで 500 点以上が合格ラインです。LPIC-2 の認定取得には 201-450 と 202-450 の合格に加え、有効（ACTIVE）な LPIC-1 認定の保持が必要です。",
-        },
-        {
-          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
-          body: "LPI ID の紐付けと有効な本人確認書類を事前に確認します。OnVUE オンライン受験を利用する場合は、本番と同じ PC・ネットワーク環境で事前のシステムテストを必ず完了させてください。",
-        },
-      ],
-    },
-  },
-  "lpic-300": {
-    id: "lpic-300",
-    label: "LPIC-3 300 混在環境",
-    badgeText: "LPIC-3 300 MIXED ENVIRONMENTS",
-    shortExamCode: "300-300",
-    headline: "LPIC-3 Mixed Environments（300-300）",
-    description:
-      "LPI 公式試験範囲（Version 3.0）の Topic 301〜305 に沿って、Samba AD DC・Windows ACL/DFS・SSSD/Winbind 統合・FreeIPA・NFSv4+Kerberos をまとめた学習ページです。",
-    storageKey: "ai-park-lpic-300-progress-v1",
-    examFacts: lpic300ExamFacts,
-    domains: lpic300Domains,
-    comparisons: lpic300Comparisons,
-    patterns: lpic300Patterns,
-    pitfalls: lpic300Pitfalls,
-    keyPaths: lpic300KeyPaths,
-    quickLookup: lpic300QuickLookup,
-    practiceQuestions: lpic300PracticeQuestions,
-    officialResources: lpic300OfficialResources,
-    examFilters: [{ id: "all", label: "全トピック (301-305)" }],
-    defaultExpanded: { "topic-301": true },
-    passingConfig: {
-      minScore: 200,
-      maxScore: 800,
-      passingScore: 500,
-      passingPct: 63,
-      officialExamLabel: "LPIC-3 300 本試験（300-300）",
-    },
-    quizBadgeLabel: "LPIC-3 300-300 演習",
-    flashcardTitle: "LPIC-3 300 混在環境・Samba/FreeIPA 即答トレーニング",
-    quickSearchChips: ["smbd", "SSSD", "Winbind", "acl_xattr", "FreeIPA", "krb5p"],
-    examDayChecklist: {
-      subtitle:
-        "LPIC-3 300（300-300）は90分・60問の上級専門試験です。Samba / AD / FreeIPA の設定項目と前提資格の確認が合格（500点）の鍵になります。",
-      tips: [
-        {
-          title: "時間配分：1問約90秒ペース（90分・60問）",
-          body: "60問を90分で解答するため 1 問約 90 秒が目安です。smb.conf や SSSD の設定断片を読み解く設問は時間を要しやすいため、見直しフラグを活用して全問解答を優先します。",
-        },
-        {
-          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
-          body: "選択問題と記述（穴埋め）問題が混在します。Samba デーモン名（smbd / winbindd 等）、samba-tool サブコマンド、smb.conf のパラメータや /etc/sssd/sssd.conf 等のパスを正確な綴りで整理しておきます。",
-        },
-        {
-          title: "合格条件・前提資格：500/800点・有効な LPIC-2",
-          body: "200〜800 点スケールで 500 点以上が合格ラインです。300-300 は 1 科目合格で LPIC-3 Mixed Environments 認定となりますが、認定には有効（ACTIVE）な LPIC-2 認定の保持が必要です。",
-        },
-        {
-          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
-          body: "受験予約時の LPI ID 一致と有効な本人確認書類を確認しておきます。OnVUE オンライン受験の場合は、事前のシステムテストと試験規定に沿った個室環境の準備が必須です。",
-        },
-      ],
-    },
-  },
-  "lpic-303": {
-    id: "lpic-303",
-    label: "LPIC-3 303 セキュリティ",
-    badgeText: "LPIC-3 303 SECURITY",
-    shortExamCode: "303-300",
-    headline: "LPIC-3 Security（303-300）",
-    description:
-      "LPI 公式試験範囲（Version 3.0）の Topic 331〜335 に沿って、X.509/PKI・DNSSEC・AIDE/auditd・SELinux/AppArmor・nftables/WireGuard・脆弱性評価をまとめた学習ページです。",
-    storageKey: "ai-park-lpic-303-progress-v1",
-    examFacts: lpic303ExamFacts,
-    domains: lpic303Domains,
-    comparisons: lpic303Comparisons,
-    patterns: lpic303Patterns,
-    pitfalls: lpic303Pitfalls,
-    keyPaths: lpic303KeyPaths,
-    quickLookup: lpic303QuickLookup,
-    practiceQuestions: lpic303PracticeQuestions,
-    officialResources: lpic303OfficialResources,
-    examFilters: [{ id: "all", label: "全トピック (331-335)" }],
-    defaultExpanded: { "topic-331": true },
-    passingConfig: {
-      minScore: 200,
-      maxScore: 800,
-      passingScore: 500,
-      passingPct: 63,
-      officialExamLabel: "LPIC-3 303 本試験（303-300）",
-    },
-    quizBadgeLabel: "LPIC-3 303-300 演習",
-    flashcardTitle: "LPIC-3 303 暗号・MAC・監査・VPN 即答トレーニング",
-    quickSearchChips: ["SELinux", "AppArmor", "LUKS", "WireGuard", "nftables", "AIDE"],
-    examDayChecklist: {
-      subtitle:
-        "LPIC-3 303（303-300）は90分・60問のセキュリティ専門試験です。暗号・MAC・監査・VPN の正確なコマンド構文とパス知識が求められます。",
-      tips: [
-        {
-          title: "時間配分：1問約90秒ペース（90分・60問）",
-          body: "90分で60問（1問約90秒）の構成です。SELinux ポリシーや nftables ルール・OpenSSL オプションの読み取りで迷ったら仮選択＋見直しフラグで進め、記述問題に時間を残します。",
-        },
-        {
-          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
-          body: "選択問題に加え記述（穴埋め）問題が出題されます。semanage / restorecon / cryptsetup / wg / auditctl 等のコマンドや、/etc/audit/auditd.conf・/etc/aide.conf などの設定パス・オプションを正確に綴れるようにします。",
-        },
-        {
-          title: "合格条件・前提資格：500/800点・有効な LPIC-2",
-          body: "200〜800 点スケールで 500 点以上が合格ラインです。303-300 は 1 科目合格で LPIC-3 Security 認定となりますが、認定には有効（ACTIVE）な LPIC-2 認定の保持が必要です。",
-        },
-        {
-          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
-          body: "LPI ID の確認と規定の有効な本人確認書類の準備を済ませておきます。OnVUE オンライン受験を利用する際は、事前にシステムテストを実施し、通信やカメラ要件を確認してください。",
-        },
-      ],
-    },
-  },
-  "lpic-305": {
-    id: "lpic-305",
-    label: "LPIC-3 305 仮想化・コンテナ",
-    badgeText: "LPIC-3 305 VIRTUALIZATION & CONTAINERS",
-    shortExamCode: "305-300",
-    headline: "LPIC-3 Virtualization & Containerization（305-300）",
-    description:
-      "LPI 公式試験範囲（Version 3.0）の Topic 351〜353 に沿って、KVM/QEMU/Xen/libvirt・Namespaces/cgroups/OCI・Docker/LXC・Packer/cloud-init/Vagrant をまとめた学習ページです。",
-    storageKey: "ai-park-lpic-305-progress-v1",
-    examFacts: lpic305ExamFacts,
-    domains: lpic305Domains,
-    comparisons: lpic305Comparisons,
-    patterns: lpic305Patterns,
-    pitfalls: lpic305Pitfalls,
-    keyPaths: lpic305KeyPaths,
-    quickLookup: lpic305QuickLookup,
-    practiceQuestions: lpic305PracticeQuestions,
-    officialResources: lpic305OfficialResources,
-    examFilters: [{ id: "all", label: "全トピック (351-353)" }],
-    defaultExpanded: { "topic-351": true },
-    passingConfig: {
-      minScore: 200,
-      maxScore: 800,
-      passingScore: 500,
-      passingPct: 63,
-      officialExamLabel: "LPIC-3 305 本試験（305-300）",
-    },
-    quizBadgeLabel: "LPIC-3 305-300 演習",
-    flashcardTitle: "LPIC-3 305 仮想化・コンテナ・自動化 即答トレーニング",
-    quickSearchChips: ["KVM", "qcow2", "virsh", "Docker", "LXC", "Packer", "cloud-init"],
-    examDayChecklist: {
-      subtitle:
-        "LPIC-3 305（305-300）は90分・60問の仮想化・コンテナ専門試験です。KVM / libvirt / コンテナ / プロビジョニングツールの正確なコマンド整理が鍵です。",
-      tips: [
-        {
-          title: "時間配分：1問約90秒ペース（90分・60問）",
-          body: "90分で60問（1問約90秒）のペース配分を意識し、30問時点で残り45分前後を目安に進めます。XML 定義や cloud-init の設定読み取りで立ち止まりすぎないようフラグ機能を活用します。",
-        },
-        {
-          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
-          body: "選択問題に加えて記述（穴埋め）問題が含まれます。virsh・qemu-img・xl・docker・lxc 系のサブコマンドや、/etc/libvirt/qemu/ などの関連パス・オプションの正確な綴りを整理しておきます。",
-        },
-        {
-          title: "合格条件・前提資格：500/800点・有効な LPIC-2",
-          body: "200〜800 点スケールで 500 点以上が合格ラインです。305-300 は 1 科目合格で LPIC-3 Virtualization and Containerization 認定となりますが、認定には有効（ACTIVE）な LPIC-2 認定の保持が必要です。",
-        },
-        {
-          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
-          body: "ピアソンVUE 予約時の LPI ID と有効な本人確認書類を確認します。OnVUE オンライン受験では、事前システムテストの完了と静かな個室環境の確保が必要です。",
-        },
-      ],
-    },
-  },
-  "lpic-306": {
-    id: "lpic-306",
-    label: "LPIC-3 306 高可用性",
-    badgeText: "LPIC-3 306 HIGH AVAILABILITY & STORAGE",
-    shortExamCode: "306-300",
-    headline: "LPIC-3 High Availability & Storage Clusters（306-300）",
-    description:
-      "LPI 公式試験範囲（Version 3.0）の Topic 361〜364 に沿って、Pacemaker/Corosync/STONITH・Keepalived/HAProxy・DRBD/GFS2・GlusterFS/Ceph・Bonding をまとめた学習ページです。",
-    storageKey: "ai-park-lpic-306-progress-v1",
-    examFacts: lpic306ExamFacts,
-    domains: lpic306Domains,
-    comparisons: lpic306Comparisons,
-    patterns: lpic306Patterns,
-    pitfalls: lpic306Pitfalls,
-    keyPaths: lpic306KeyPaths,
-    quickLookup: lpic306QuickLookup,
-    practiceQuestions: lpic306PracticeQuestions,
-    officialResources: lpic306OfficialResources,
-    examFilters: [{ id: "all", label: "全トピック (361-364)" }],
-    defaultExpanded: { "topic-361": true },
-    passingConfig: {
-      minScore: 200,
-      maxScore: 800,
-      passingScore: 500,
-      passingPct: 63,
-      officialExamLabel: "LPIC-3 306 本試験（306-300）",
-    },
-    quizBadgeLabel: "LPIC-3 306-300 演習",
-    flashcardTitle: "LPIC-3 306 クラスタ・分散ストレージ・冗長化 即答トレーニング",
-    quickSearchChips: ["Pacemaker", "Keepalived", "HAProxy", "DRBD", "Ceph", "Bonding"],
-    examDayChecklist: {
-      subtitle:
-        "LPIC-3 306（306-300）は90分・60問の高可用性・ストレージ専門試験です。Pacemaker / HAProxy / DRBD / Ceph のコマンドと構成知識を正確に押さえます。",
-      tips: [
-        {
-          title: "時間配分：1問約90秒ペース（90分・60問）",
-          body: "90分で60問（1問あたり約90秒）です。クラスタ構成やフェンシング・スプリットブレイン対策のシナリオ設問に時間をかけすぎないよう、見直しフラグを使ってペースを保ちます。",
-        },
-        {
-          title: "記述（穴埋め）対策：オプション・パスの正確な綴り",
-          body: "選択問題と記述（穴埋め）問題が出題されます。crm / pcs・corosync・drbdadm・ceph・keepalived・haproxy に関連するコマンド、設定ファイルパス、重要ディレクティブの正確な綴りを定着させます。",
-        },
-        {
-          title: "合格条件・前提資格：500/800点・有効な LPIC-2",
-          body: "200〜800 点スケールで 500 点以上が合格ラインです。306-300 は 1 科目合格で LPIC-3 High Availability and Storage Clusters 認定となりますが、認定には有効（ACTIVE）な LPIC-2 認定の保持が必要です。",
-        },
-        {
-          title: "受験環境準備：ピアソンVUE / OnVUE の事前確認",
-          body: "受験前に LPI ID とピアソンVUE アカウントの紐付け、および有効な本人確認書類を確認します。OnVUE オンライン受験では事前のシステムテストと周囲環境の準備が必須です。",
-        },
-      ],
-    },
-  },
-};
+const EMPTY_EXAM_FACTS: CertExamFact[] = [];
+const EMPTY_DOMAINS: UnifiedLpicDomain[] = [];
+const EMPTY_COMPARISONS: LpicComparisonTable[] = [];
+const EMPTY_PATTERNS: LpicWorkflowPattern[] = [];
+const EMPTY_PITFALLS: LpicPitfall[] = [];
+const EMPTY_KEY_PATHS: LpicKeyPathFact[] = [];
+const EMPTY_QUICK_LOOKUP: CertFlashcardItem[] = [];
+const EMPTY_QUESTIONS: CertQuestion[] = [];
+const EMPTY_RESOURCES: LpicOfficialResource[] = [];
 
 interface LpicProgress {
   completedTopics: string[];
@@ -669,6 +253,15 @@ function loadProgressFromStorage(storageKey: string): LpicProgress {
 
 export default function LpicInfoPage() {
   const [level, setLevel] = useState<LpicLevel>("lpic-1");
+  const meta = LPIC_LEVEL_META[level];
+
+  const [certDataCache, setCertDataCache] = useState<Partial<Record<LpicLevel, LpicCertData>>>({
+    "lpic-1": INITIAL_LPIC_CERT_DATA,
+  });
+  const [loadingLevel, setLoadingLevel] = useState<LpicLevel | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const loadRequestGenRef = useRef(0);
+
   const [activeTab, setActiveTab] = useState<TabId>("domains");
   const [examFilter, setExamFilter] = useState<string>("all");
   const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
@@ -701,25 +294,67 @@ export default function LpicInfoPage() {
   const [copiedNotes, setCopiedNotes] = useState<boolean>(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copiedBackupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copiedNotesTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const importMsgTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setProgressMap({
-      "lpic-1": loadProgressFromStorage(LEVEL_CONFIG["lpic-1"].storageKey),
-      "lpic-2": loadProgressFromStorage(LEVEL_CONFIG["lpic-2"].storageKey),
-      "lpic-300": loadProgressFromStorage(LEVEL_CONFIG["lpic-300"].storageKey),
-      "lpic-303": loadProgressFromStorage(LEVEL_CONFIG["lpic-303"].storageKey),
-      "lpic-305": loadProgressFromStorage(LEVEL_CONFIG["lpic-305"].storageKey),
-      "lpic-306": loadProgressFromStorage(LEVEL_CONFIG["lpic-306"].storageKey),
+    const timers = [resetTimerRef, copiedBackupTimerRef, copiedNotesTimerRef, importMsgTimerRef];
+    return () => {
+      for (const ref of timers) {
+        if (ref.current) {
+          clearTimeout(ref.current);
+          ref.current = null;
+        }
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      const loaded = {} as Record<LpicLevel, LpicProgress>;
+      for (const lvl of LPIC_LEVELS) {
+        loaded[lvl] = loadProgressFromStorage(LPIC_LEVEL_META[lvl].storageKey);
+      }
+      setProgressMap(loaded);
     });
   }, []);
 
-  const config = LEVEL_CONFIG[level];
+  const activeData = certDataCache[level];
+  const examFacts = activeData?.examFacts ?? EMPTY_EXAM_FACTS;
+  const domains = activeData?.domains ?? EMPTY_DOMAINS;
+  const comparisons = activeData?.comparisons ?? EMPTY_COMPARISONS;
+  const patterns = activeData?.patterns ?? EMPTY_PATTERNS;
+  const pitfalls = activeData?.pitfalls ?? EMPTY_PITFALLS;
+  const keyPaths = activeData?.keyPaths ?? EMPTY_KEY_PATHS;
+  const quickLookup = activeData?.quickLookup ?? EMPTY_QUICK_LOOKUP;
+  const practiceQuestions = activeData?.practiceQuestions ?? EMPTY_QUESTIONS;
+  const officialResources = activeData?.officialResources ?? EMPTY_RESOURCES;
   const progress = progressMap[level];
+
+  const triggerLevelLoad = async (targetLevel: LpicLevel) => {
+    const reqGen = ++loadRequestGenRef.current;
+    setLoadingLevel(targetLevel);
+    setLoadError(null);
+    try {
+      const data = await loadLpicCertData(targetLevel);
+      setCertDataCache((prev) => ({ ...prev, [targetLevel]: data }));
+      if (loadRequestGenRef.current === reqGen) {
+        setLoadingLevel(null);
+      }
+    } catch {
+      if (loadRequestGenRef.current === reqGen) {
+        setLoadingLevel(null);
+        setLoadError(`${LPIC_LEVEL_META[targetLevel].label} の学習データ読み込みに失敗しました。`);
+      }
+    }
+  };
 
   const saveProgress = (next: LpicProgress) => {
     setProgressMap((prev) => ({ ...prev, [level]: next }));
     try {
-      localStorage.setItem(config.storageKey, JSON.stringify(next));
+      localStorage.setItem(meta.storageKey, JSON.stringify(next));
     } catch {
       // ignore storage quota errors
     }
@@ -728,6 +363,7 @@ export default function LpicInfoPage() {
   const handleSwitchLevel = (nextLevel: LpicLevel) => {
     if (nextLevel === level) return;
     playCyberClick();
+    loadRequestGenRef.current++;
     setLevel(nextLevel);
     setExamFilter("all");
     setQuizDomainTarget("all");
@@ -735,9 +371,17 @@ export default function LpicInfoPage() {
     setCompQuery("");
     setTopicQuery("");
     setConfirmReset(false);
+    setShowBackupPanel(false);
+    setBackupInput("");
     setCopiedBackup(false);
     setCopiedNotes(false);
     setImportMessage(null);
+    setLoadError(null);
+    if (!certDataCache[nextLevel]) {
+      void triggerLevelLoad(nextLevel);
+    } else {
+      setLoadingLevel(null);
+    }
   };
 
   const toggleTopic = (topicId: string) => {
@@ -784,7 +428,8 @@ export default function LpicInfoPage() {
     playCyberClick();
     if (!confirmReset) {
       setConfirmReset(true);
-      setTimeout(() => setConfirmReset(false), 4000);
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = setTimeout(() => setConfirmReset(false), 4000);
       return;
     }
     saveProgress(DEFAULT_PROGRESS);
@@ -794,7 +439,7 @@ export default function LpicInfoPage() {
   const handleExpandAllDomains = (expand: boolean) => {
     playCyberClick();
     const next: Record<string, boolean> = { ...expandedDomains };
-    for (const d of config.domains) {
+    for (const d of domains) {
       next[d.id] = expand;
     }
     setExpandedDomains(next);
@@ -835,7 +480,8 @@ export default function LpicInfoPage() {
     try {
       await navigator.clipboard.writeText(JSON.stringify(progress));
       setCopiedBackup(true);
-      setTimeout(() => setCopiedBackup(false), 2500);
+      if (copiedBackupTimerRef.current) clearTimeout(copiedBackupTimerRef.current);
+      copiedBackupTimerRef.current = setTimeout(() => setCopiedBackup(false), 2500);
     } catch {
       setImportMessage("クリップボードへのコピーに失敗しました。");
     }
@@ -843,8 +489,8 @@ export default function LpicInfoPage() {
 
   const handleCopyNotesMarkdown = async () => {
     playCyberClick();
-    const lines: string[] = [`# ${config.label} マイメモ`, ""];
-    for (const d of config.domains) {
+    const lines: string[] = [`# ${meta.label} マイメモ`, ""];
+    for (const d of domains) {
       const domainLines: string[] = [];
       for (const t of d.topics) {
         const note = progress.topicNotes[t.id]?.trim();
@@ -859,7 +505,8 @@ export default function LpicInfoPage() {
     try {
       await navigator.clipboard.writeText(lines.join("\n"));
       setCopiedNotes(true);
-      setTimeout(() => setCopiedNotes(false), 2500);
+      if (copiedNotesTimerRef.current) clearTimeout(copiedNotesTimerRef.current);
+      copiedNotesTimerRef.current = setTimeout(() => setCopiedNotes(false), 2500);
     } catch {
       setImportMessage("マイメモのコピーに失敗しました。");
     }
@@ -879,21 +526,22 @@ export default function LpicInfoPage() {
       };
       saveProgress(restored);
       setBackupInput("");
-      setImportMessage(`${config.label} の学習データを復元しました。`);
-      setTimeout(() => setImportMessage(null), 3000);
+      setImportMessage(`${meta.label} の学習データを復元しました。`);
+      if (importMsgTimerRef.current) clearTimeout(importMsgTimerRef.current);
+      importMsgTimerRef.current = setTimeout(() => setImportMessage(null), 3000);
     } catch {
       setImportMessage("JSON形式が正しくありません。コピーしたバックアップ文字列を確認してください。");
     }
   };
 
-  const allTopics = useMemo(() => config.domains.flatMap((d) => d.topics), [config.domains]);
+  const allTopics = useMemo(() => domains.flatMap((d) => d.topics), [domains]);
   const completedTopicCount = allTopics.filter((t) =>
     progress.completedTopics.includes(t.id)
   ).length;
   const topicPct = allTopics.length > 0 ? Math.round((completedTopicCount / allTopics.length) * 100) : 0;
 
   const answeredQuizCount = Object.keys(progress.quizAnswers).length;
-  const correctQuizCount = config.practiceQuestions.filter((q) =>
+  const correctQuizCount = practiceQuestions.filter((q) =>
     isQuestionCorrect(q, progress.quizAnswers[q.id])
   ).length;
 
@@ -901,24 +549,24 @@ export default function LpicInfoPage() {
   const notedTopicCount = Object.values(progress.topicNotes).filter((v) => v.trim().length > 0).length;
 
   const totalActions =
-    allTopics.length + config.practiceQuestions.length + config.quickLookup.length;
+    allTopics.length + practiceQuestions.length + quickLookup.length;
   const doneActions = completedTopicCount + answeredQuizCount + masteredCardCount;
   const overallPct = totalActions > 0 ? Math.round((doneActions / totalActions) * 100) : 0;
 
   const quizDomains = useMemo(
     () =>
-      config.domains.map((d) => ({
+      domains.map((d) => ({
         id: d.id,
         number: d.number,
         shortLabel: `T${d.number}`,
         filterLabel: `${d.number}: ${d.title}`,
       })),
-    [config.domains]
+    [domains]
   );
 
   const filteredDomains = useMemo(() => {
     const q = topicQuery.trim().toLowerCase();
-    return config.domains
+    return domains
       .filter((d) => examFilter === "all" || d.exam === examFilter)
       .map((d) => {
         const topics = d.topics.filter((t) => {
@@ -938,7 +586,7 @@ export default function LpicInfoPage() {
       })
       .filter((d) => d.visibleTopics.length > 0);
   }, [
-    config.domains,
+    domains,
     examFilter,
     topicQuery,
     onlyIncompleteTopics,
@@ -948,14 +596,14 @@ export default function LpicInfoPage() {
   ]);
 
   const comparisonCategories = useMemo(
-    () => ["すべて", ...Array.from(new Set(config.comparisons.map((c) => c.category)))],
-    [config.comparisons]
+    () => ["すべて", ...Array.from(new Set(comparisons.map((c) => c.category)))],
+    [comparisons]
   );
 
   const normalizedCompQuery = compQuery.trim().toLowerCase();
 
   const filteredComparisons = useMemo(() => {
-    return config.comparisons.filter((comp) => {
+    return comparisons.filter((comp) => {
       if (compCategory !== "すべて" && comp.category !== compCategory) return false;
       if (!normalizedCompQuery) return true;
       const haystack = [
@@ -969,64 +617,64 @@ export default function LpicInfoPage() {
         .toLowerCase();
       return haystack.includes(normalizedCompQuery);
     });
-  }, [config.comparisons, compCategory, normalizedCompQuery]);
+  }, [comparisons, compCategory, normalizedCompQuery]);
 
   const filteredQuickLookup = useMemo(() => {
-    if (!normalizedCompQuery) return config.quickLookup;
-    return config.quickLookup.filter((item) =>
+    if (!normalizedCompQuery) return quickLookup;
+    return quickLookup.filter((item) =>
       `${item.keyword} ${item.category} ${item.recommended} ${item.reason}`
         .toLowerCase()
         .includes(normalizedCompQuery)
     );
-  }, [config.quickLookup, normalizedCompQuery]);
+  }, [quickLookup, normalizedCompQuery]);
 
   const filteredPatterns = useMemo(() => {
-    if (!normalizedCompQuery) return config.patterns;
-    return config.patterns.filter((pat) =>
+    if (!normalizedCompQuery) return patterns;
+    return patterns.filter((pat) =>
       [pat.title, pat.badge, pat.summary, ...pat.flow, ...pat.keyDesignPoints]
         .join(" ")
         .toLowerCase()
         .includes(normalizedCompQuery)
     );
-  }, [config.patterns, normalizedCompQuery]);
+  }, [patterns, normalizedCompQuery]);
 
   const filteredPitfalls = useMemo(() => {
-    if (!normalizedCompQuery) return config.pitfalls;
-    return config.pitfalls.filter((pit) =>
+    if (!normalizedCompQuery) return pitfalls;
+    return pitfalls.filter((pit) =>
       `${pit.trap} ${pit.whyWrong} ${pit.correctApproach}`
         .toLowerCase()
         .includes(normalizedCompQuery)
     );
-  }, [config.pitfalls, normalizedCompQuery]);
+  }, [pitfalls, normalizedCompQuery]);
 
   const filteredKeyPaths = useMemo(() => {
-    if (!normalizedCompQuery) return config.keyPaths;
-    return config.keyPaths.filter((kp) =>
+    if (!normalizedCompQuery) return keyPaths;
+    return keyPaths.filter((kp) =>
       `${kp.target} ${kp.value} ${kp.detail}`
         .toLowerCase()
         .includes(normalizedCompQuery)
     );
-  }, [config.keyPaths, normalizedCompQuery]);
+  }, [keyPaths, normalizedCompQuery]);
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     {
       id: "domains",
       label: "トピック別学習",
       icon: BookOpen,
-      badge: `${completedTopicCount}/${allTopics.length}`,
+      badge: activeData ? `${completedTopicCount}/${allTopics.length}` : undefined,
     },
     { id: "comparisons", label: "比較・運用パターン", icon: TableProperties },
     {
       id: "flashcards",
       label: "暗記カード",
       icon: Layers2,
-      badge: `${masteredCardCount}/${config.quickLookup.length}`,
+      badge: activeData ? `${masteredCardCount}/${quickLookup.length}` : undefined,
     },
     {
       id: "quiz",
       label: "練習問題・模試",
       icon: HelpCircle,
-      badge: `${correctQuizCount}/${config.practiceQuestions.length}`,
+      badge: activeData ? `${correctQuizCount}/${practiceQuestions.length}` : undefined,
     },
     { id: "resources", label: "公式リソース", icon: Compass },
   ];
@@ -1095,7 +743,7 @@ export default function LpicInfoPage() {
                   基盤
                 </span>
                 {(["lpic-1", "lpic-2"] as const).map((lvl) => {
-                  const item = LEVEL_CONFIG[lvl];
+                  const item = LPIC_LEVEL_META[lvl];
                   const active = level === lvl;
                   return (
                     <button
@@ -1125,7 +773,7 @@ export default function LpicInfoPage() {
                   LPIC-3 専門
                 </span>
                 {(["lpic-300", "lpic-303", "lpic-305", "lpic-306"] as const).map((lvl) => {
-                  const item = LEVEL_CONFIG[lvl];
+                  const item = LPIC_LEVEL_META[lvl];
                   const active = level === lvl;
                   return (
                     <button
@@ -1161,19 +809,21 @@ export default function LpicInfoPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center space-x-1.5 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 tracking-wider">
                     <Terminal size={12} />
-                    <span>{config.badgeText}</span>
+                    <span>{meta.badgeText}</span>
                   </span>
                   <span className="text-xs text-slate-300">
-                    {allTopics.length} トピック ・ 比較表 {config.comparisons.length} 種 ・ カード{" "}
-                    {config.quickLookup.length} 枚 ・ 演習 {config.practiceQuestions.length} 問
+                    {activeData ? allTopics.length : "-"} トピック ・ 比較表{" "}
+                    {activeData ? comparisons.length : "-"} 種 ・ カード{" "}
+                    {activeData ? quickLookup.length : "-"} 枚 ・ 演習{" "}
+                    {activeData ? practiceQuestions.length : "-"} 問
                   </span>
                 </div>
                 <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-words">
-                  <span className="inline-block">{config.headline}</span>
+                  <span className="inline-block">{meta.headline}</span>
                   <span className="inline-block">合格対策学習ハブ</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                  {config.description}
+                  {meta.description}
                 </p>
               </div>
 
@@ -1182,20 +832,20 @@ export default function LpicInfoPage() {
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
                   <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
                   <div className="text-[11px] text-slate-400 font-mono">
-                    {completedTopicCount} / {allTopics.length}
+                    {completedTopicCount} / {activeData ? allTopics.length : "-"}
                   </div>
                 </div>
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">暗記カード</div>
                   <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
-                    {masteredCardCount} / {config.quickLookup.length}
+                    {masteredCardCount} / {activeData ? quickLookup.length : "-"}
                   </div>
                   <div className="text-[11px] text-slate-400">枚習得</div>
                 </div>
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">演習問題</div>
                   <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
-                    {correctQuizCount} / {config.practiceQuestions.length}
+                    {correctQuizCount} / {activeData ? practiceQuestions.length : "-"}
                   </div>
                   <div className="text-[11px] text-slate-400">問正解</div>
                 </div>
@@ -1204,33 +854,65 @@ export default function LpicInfoPage() {
           </div>
         </TiltCard>
 
-        {/* 試験概要カード */}
-        <section className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
-          {config.examFacts.map((fact) => (
-            <div
-              key={fact.label}
-              className="bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 shadow-xs space-y-1 min-w-0"
-            >
-              <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
-              <div className="text-sm sm:text-base font-black text-slate-900 break-words">
-                {fact.value}
-              </div>
-              <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
-            </div>
-          ))}
-        </section>
+        {/* 動的ロード中・エラー表示 */}
+        {(!activeData || loadingLevel !== null) && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3 shadow-xs"
+          >
+            {loadError ? (
+              <>
+                <AlertTriangle className="w-8 h-8 text-rose-500 mx-auto" />
+                <p className="text-sm font-black text-slate-800">{loadError}</p>
+                <button
+                  type="button"
+                  onClick={() => void triggerLevelLoad(level)}
+                  className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
+                >
+                  再読み込みする
+                </button>
+              </>
+            ) : (
+              <>
+                <Loader2 className="w-7 h-7 text-cyan-600 mx-auto animate-spin" />
+                <p className="text-xs font-bold text-slate-600">
+                  {meta.label} の学習データを読み込み中...
+                </p>
+              </>
+            )}
+          </div>
+        )}
 
-        {/* 総合進捗＆データ管理バー */}
-        <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            <div className="space-y-1.5 flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-2 text-xs font-bold">
-                <span className="text-slate-700 flex items-start space-x-1.5">
-                  <Award className="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" />
-                  <span>
-                    {config.label} 総合学習進捗（トピック・暗記カード・練習問題）
-                  </span>
-                </span>
+        {activeData && loadingLevel === null && (
+          <>
+            {/* 試験概要カード */}
+            <section className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+              {examFacts.map((fact) => (
+                <div
+                  key={fact.label}
+                  className="bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 shadow-xs space-y-1 min-w-0"
+                >
+                  <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
+                  <div className="text-sm sm:text-base font-black text-slate-900 break-words">
+                    {fact.value}
+                  </div>
+                  <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
+                </div>
+              ))}
+            </section>
+
+            {/* 総合進捗＆データ管理バー */}
+            <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-1.5 flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2 text-xs font-bold">
+                    <span className="text-slate-700 flex items-start space-x-1.5">
+                      <Award className="w-4 h-4 text-cyan-600 shrink-0 mt-0.5" />
+                      <span>
+                        {meta.label} 総合学習進捗（トピック・暗記カード・練習問題）
+                      </span>
+                    </span>
                 <span className="font-mono text-cyan-700 shrink-0">{overallPct}%</span>
               </div>
               <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
@@ -1300,7 +982,7 @@ export default function LpicInfoPage() {
             <div id="lpic-backup-panel" className="pt-4 border-t border-slate-100 space-y-3">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
                 <p className="text-xs text-slate-600">
-                  {config.label} の進捗やメモはブラウザの localStorage に保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
+                  {meta.label} の進捗やメモはブラウザの localStorage に保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
                 </p>
                 <button
                   type="button"
@@ -1395,13 +1077,13 @@ export default function LpicInfoPage() {
             {/* フィルター＆検索バー */}
             <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs space-y-3">
               <div className="flex flex-col gap-3">
-                {config.examFilters.length > 1 ? (
+                {meta.examFilters.length > 1 ? (
                   <div
                     role="group"
                     aria-label="対象試験フィルター"
                     className="flex flex-wrap items-center gap-1.5"
                   >
-                    {config.examFilters.map((ef) => (
+                    {meta.examFilters.map((ef) => (
                       <button
                         key={ef.id}
                         type="button"
@@ -1422,7 +1104,7 @@ export default function LpicInfoPage() {
                   </div>
                 ) : (
                   <div className="text-xs font-bold text-slate-500 px-1">
-                    {config.examFilters[0]?.label}
+                    {meta.examFilters[0]?.label}
                   </div>
                 )}
 
@@ -1811,7 +1493,7 @@ export default function LpicInfoPage() {
                 <span className="text-[11px] font-bold text-slate-400 mr-1">
                   よく調べるコマンド・キーワード:
                 </span>
-                {config.quickSearchChips.map((kw) => {
+                {meta.quickSearchChips.map((kw) => {
                   const isSelected = compQuery.trim().toLowerCase() === kw.toLowerCase();
                   return (
                     <button
@@ -1837,7 +1519,11 @@ export default function LpicInfoPage() {
 
               {/* 検索ヒット件数サマリ */}
               {compQuery.trim() && (
-                <div className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-100 text-[11px] text-slate-600">
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="flex flex-wrap items-center justify-between gap-2 pt-2.5 border-t border-slate-100 text-[11px] text-slate-600"
+                >
                   <div className="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
                     <span className="font-bold text-slate-700 break-words">
                       「{compQuery.trim()}」のヒット件数:
@@ -1910,7 +1596,7 @@ export default function LpicInfoPage() {
                     「{compQuery}」に一致する項目が見つかりませんでした
                   </div>
                   <p className="text-xs text-slate-500">
-                    別のキーワード（例：{config.quickSearchChips.slice(0, 4).join("、")}
+                    別のキーワード（例：{meta.quickSearchChips.slice(0, 4).join("、")}
                     ）で検索するか、条件をリセットしてください。
                   </p>
                   <button
@@ -1944,7 +1630,7 @@ export default function LpicInfoPage() {
                     </div>
 
                     <div className="overflow-x-auto">
-                      <table className="w-full min-w-[600px] text-left border-collapse text-xs sm:text-sm">
+                      <table className="w-full min-w-[640px] text-left border-collapse text-xs sm:text-sm">
                         <thead>
                           <tr className="border-b border-slate-200 bg-slate-50">
                             {comp.columns.map((col) => (
@@ -2123,12 +1809,12 @@ export default function LpicInfoPage() {
           >
             <CertificationFlashcards
               key={level}
-              items={config.quickLookup}
+              items={quickLookup}
               masteredKeywords={progress.masteredCards}
               onToggleMastered={handleToggleMasteredCard}
               onResetMastered={handleResetMasteredCards}
-              badgeText={`${config.id.toUpperCase()} 直前暗記フラッシュカード`}
-              title={config.flashcardTitle}
+              badgeText={`${meta.id.toUpperCase()} 直前暗記フラッシュカード`}
+              title={meta.flashcardTitle}
               promptLabel="次の要件に対応するコマンド・設定は？"
               answerLabel="推奨コマンド・設定値"
             />
@@ -2144,10 +1830,10 @@ export default function LpicInfoPage() {
           >
             <CertificationPracticeQuiz
               key={level}
-              questions={config.practiceQuestions}
+              questions={practiceQuestions}
               domains={quizDomains}
-              examBadgeLabel={config.quizBadgeLabel}
-              passingConfig={config.passingConfig}
+              examBadgeLabel={meta.quizBadgeLabel}
+              passingConfig={meta.passingConfig}
               answers={progress.quizAnswers}
               bookmarkedIds={progress.bookmarkedQuestions}
               mockExamHistory={progress.mockExamHistory}
@@ -2172,14 +1858,14 @@ export default function LpicInfoPage() {
             <section className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
               <div>
                 <h3 className="text-lg font-black text-slate-900 break-words">
-                  {config.label} 試験本番・直前チェックリスト（時間配分＆受験のコツ）
+                  {meta.label} 試験本番・直前チェックリスト（時間配分＆受験のコツ）
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  {config.examDayChecklist.subtitle}
+                  {meta.examDayChecklist.subtitle}
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-700">
-                {config.examDayChecklist.tips.map((tip) => (
+                {meta.examDayChecklist.tips.map((tip) => (
                   <div
                     key={tip.title}
                     className="rounded-xl border border-slate-200/80 bg-slate-50/70 p-4 space-y-1.5 min-w-0"
@@ -2196,10 +1882,10 @@ export default function LpicInfoPage() {
             {/* 公式学習リソース */}
             <section className="space-y-3">
               <h3 className="text-lg font-black text-slate-900">
-                LPI 公式学習リソース（{config.label}）
+                LPI 公式学習リソース（{meta.label}）
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {config.officialResources.map((res) => (
+                {officialResources.map((res) => (
                   <TiltCard key={res.url} className="h-full">
                     <a
                       href={res.url}
@@ -2223,6 +1909,8 @@ export default function LpicInfoPage() {
               </div>
             </section>
           </div>
+        )}
+          </>
         )}
       </div>
     </div>

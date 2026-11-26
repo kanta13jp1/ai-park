@@ -4,70 +4,24 @@ import type {
   CertQuestion,
 } from "@/components/certification/types";
 
-export interface LpicTopicItem {
-  id: string;
-  code: string;
-  title: string;
-  commands: string[];
-  keyPoints: string[];
-  examTip: string;
-}
-
-export interface LpicDomain {
-  id: string;
-  exam: "101-500" | "102-500";
-  number: string;
-  title: string;
-  englishTitle: string;
-  accentColor: "indigo" | "emerald" | "amber" | "cyan";
-  summary: string;
-  topics: LpicTopicItem[];
-}
-
-export interface LpicComparisonRow {
-  feature: string;
-  values: string[];
-}
-
-export interface LpicComparisonTable {
-  id: string;
-  category: string;
-  title: string;
-  subtitle: string;
-  columns: string[];
-  rows: LpicComparisonRow[];
-  decisionRule: string;
-}
-
-export interface LpicWorkflowPattern {
-  id: string;
-  title: string;
-  badge: string;
-  flow: string[];
-  summary: string;
-  keyDesignPoints: string[];
-}
-
-export interface LpicPitfall {
-  id: string;
-  trap: string;
-  whyWrong: string;
-  correctApproach: string;
-}
-
-export interface LpicKeyPathFact {
-  id: string;
-  target: string;
-  value: string;
-  detail: string;
-}
-
-export interface LpicOfficialResource {
-  title: string;
-  description: string;
-  url: string;
-  badge: string;
-}
+export type {
+  LpicTopicItem,
+  LpicDomain,
+  LpicComparisonRow,
+  LpicComparisonTable,
+  LpicWorkflowPattern,
+  LpicPitfall,
+  LpicKeyPathFact,
+  LpicOfficialResource,
+} from "./lpic-types";
+import type {
+  LpicDomain,
+  LpicComparisonTable,
+  LpicWorkflowPattern,
+  LpicPitfall,
+  LpicKeyPathFact,
+  LpicOfficialResource,
+} from "./lpic-types";
 
 // 出典: Linux Professional Institute (LPI) LPIC-1 Version 5.0 (Exam 101-500 / 102-500) 公式試験概要
 export const lpic1ExamFacts: CertExamFact[] = [

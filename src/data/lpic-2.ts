@@ -4,24 +4,14 @@ import type {
   CertQuestion,
 } from "@/components/certification/types";
 import type {
-  LpicTopicItem,
+  Lpic2Domain,
   LpicComparisonTable,
   LpicWorkflowPattern,
   LpicPitfall,
   LpicKeyPathFact,
   LpicOfficialResource,
-} from "./lpic-1";
-
-export interface Lpic2Domain {
-  id: string;
-  exam: "201-450" | "202-450";
-  number: string;
-  title: string;
-  englishTitle: string;
-  accentColor: "indigo" | "emerald" | "amber" | "cyan";
-  summary: string;
-  topics: LpicTopicItem[];
-}
+} from "./lpic-types";
+export type { Lpic2Domain } from "./lpic-types";
 
 // 出典: Linux Professional Institute (LPI) LPIC-2 Version 4.5 (Exam 201-450 / 202-450) 公式試験概要
 export const lpic2ExamFacts: CertExamFact[] = [

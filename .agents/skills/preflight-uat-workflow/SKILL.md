@@ -37,7 +37,7 @@ description: MightyLINK AI Parkにおける新機能・更新画面の公開前�
   - 社内AI利用ガイドライン（個人情報・社外秘の入力禁止、会社アカウント利用徹底）に準拠しているか。
   - 相談窓口やOffice Hourのスケジュールが最新かつ正確か。
 - **リンク先が実在するか（リンク検証・実在性）**:
-  - ページ内のすべての内部リンクおよび外部リンク（Google公式ドキュメント、コンソール、資格試験ガイド等）が実在し、実測 **HTTP 200** で疎通すること（`403`/`404` や不要な言語・パス転送を放置しない）。
+  - ページ内のすべての内部リンクおよび外部リンク（Google公式ドキュメント、コンソール、資格試験ガイド等）が実在し、実測 **HTTP 200** で疎通すること（`403`/`404` や不要な言語・パス転送を放置しない）。データファイルの URL 検証時はファイル全文の正規表現抽出ではなく、エクスポート済みリソース配列を `@' ... '@ | node --input-type=module` で直接読み込んで疎通確認する（学習テキスト内の設定例 URL 等の誤検出防止）。
   - 資格試験要綱（有効期限・問題数・受験基盤・合格ライン公表有無）や外部製品仕様は暗記書きせず、公式一次ページと照合して根拠なき断定・旧名称の残存を排除する。
 
 ### ② デザイン・レイアウト（Aesthetics）
@@ -155,6 +155,10 @@ gh run watch <run_id> --exit-status
 1. Step 5 のデプロイ成功を確認後、組み込み `browser` サブエージェントを用いて、本番正規 URL（`next.config.ts` の `trailingSlash: true` に合わせた **末尾 `/` 付き** ＋ `?cachebust=<timestamp>`、例: `https://kanta13jp1.github.io/ai-park/azure-info/?cachebust=...`）へアクセスする。今回のコミットで新たに追加した DOM マーカー（新属性・新クラス・新ラベル等）が実画面に反映されていることを最初に確認し、旧キャッシュ検証による誤判定を防ぐ。あわせて末尾 `/` なし URL の解決および 404 パスでの Hydration エラー 0 件も点検する。
 2. `1280x800` と `768x1024` の両解像度で、HTTP 200・ルート固有 `document.title`・`ConsoleErrors: 0`・水平オーバーフローなし・`HeroBanner` `Search ⌘K` と `<h1>` の非重複・主要ボタンの折り返し／非クリップ・WAI-ARIA 動作を実測する。
 3. 検証結果は `BROWSER_HOST_FACTS`（訪問オリジン・最新スクリーンショット）と照合し、スクリーンショットを目視確認したうえで各小項目の点検根拠・合格判定の要約を報告し、サインオフを得る。
+4. **`browser` サブエージェントがコンテキスト予算等で利用不可な場合の `chrome_devtools` MCP フォールバック**:
+   - まず `fetch(url, { redirect: "manual" })` で正規パス（`200`）・末尾 `/` なし（`301 -> 200`）・存在しないパス（`404`）の HTTP ステータスを確認する。
+   - `chrome_devtools` の `new_page` / `resize_page` / `evaluate_script` / `list_console_messages` で `1280x800`・`768x1024`・404 ページを検証する際、細切れ呼び出しによる承認確認の連続発生を避けるため、1 ビューポート分の DOM・WAI-ARIA・オーバーフロー・クリップ・主要操作確認を自己完結した 1 回の `evaluate_script` へ集約する。
+   - 検証完了後は、共有ブラウザへ影響を残さないよう `resize_page` で `1280x800` へ戻し、`close_page` で検証用の一時タブをすべて閉じる（スクリーンショット未読の場合は `BROWSER_HOST_FACTS` 相当の視覚確認は未実施と明記する）。
 
 ---
 
@@ -214,7 +218,7 @@ gh run watch <run_id> --exit-status
 
 - **ビルドゲート（`npm run check:gate`）でエラーが出る場合**:
   - 未連携機能に `🚧 工事中` `📋 準備中` `🧪 PoC中` 等の注記が漏れていないか確認する。
-  - `preflight-checklist.ts` 内の `passed: true` や `evidence` 文字列の記述形式が正規表現と一致しているか確認する。
+  - `preflight-checklist.ts` は `verify-deployment-gate.mjs` の正規表現で解析されるため、①トップレベルは `id` → `name` → `path` → … → `overallStatus: "passed"` → `checks` → `environment` の順、②各評価軸内は `passed: true` → `evidence` → `points` → `subChecks` の順（`{}` を含む `subChecks` より前に `evidence` を置く）、③`evidence` 文字列内にエスケープ引用符 `\"` を含めないこと（`role=tablist` 等と表記）を厳守する。また並行セッションが別機能の UAT を追記し得るため、本文へ固定の総登録件数ハードコードを避ける。
 - **デプロイ後に画面が更新されない場合**:
   - GitHub Pages / CDN のキャッシュの影響があるため、URLに `?cachebust=<現在時刻>` を付与するか、ブラウザでスーパーリロード（`Ctrl+F5` または `Shift+Reload`）を行う。
 - **本番 URL で末尾 `/` 付きが 404 になる・`404.html` 上で Hydration エラーが出る場合**:

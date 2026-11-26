@@ -4,24 +4,14 @@ import type {
   CertQuestion,
 } from "@/components/certification/types";
 import type {
-  LpicTopicItem,
+  Lpic303Domain,
   LpicComparisonTable,
   LpicWorkflowPattern,
   LpicPitfall,
   LpicKeyPathFact,
   LpicOfficialResource,
-} from "./lpic-1";
-
-export interface Lpic303Domain {
-  id: string;
-  exam: "303-300";
-  number: string;
-  title: string;
-  englishTitle: string;
-  accentColor: "indigo" | "emerald" | "amber" | "cyan";
-  summary: string;
-  topics: LpicTopicItem[];
-}
+} from "./lpic-types";
+export type { Lpic303Domain } from "./lpic-types";
 
 // 出典: Linux Professional Institute (LPI) LPIC-3 Security Version 3.0 (Exam 303-300) 公式試験概要・Objectives
 export const lpic303ExamFacts: CertExamFact[] = [

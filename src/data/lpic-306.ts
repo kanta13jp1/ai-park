@@ -4,24 +4,14 @@ import type {
   CertQuestion,
 } from "@/components/certification/types";
 import type {
-  LpicTopicItem,
+  Lpic306Domain,
   LpicComparisonTable,
   LpicWorkflowPattern,
   LpicPitfall,
   LpicKeyPathFact,
   LpicOfficialResource,
-} from "./lpic-1";
-
-export interface Lpic306Domain {
-  id: string;
-  exam: "306-300";
-  number: string;
-  title: string;
-  englishTitle: string;
-  accentColor: "indigo" | "emerald" | "amber" | "cyan";
-  summary: string;
-  topics: LpicTopicItem[];
-}
+} from "./lpic-types";
+export type { Lpic306Domain } from "./lpic-types";
 
 // 出典: Linux Professional Institute (LPI) LPIC-3 High Availability and Storage Clusters Version 3.0 (Exam 306-300) 公式試験概要・Objectives
 export const lpic306ExamFacts: CertExamFact[] = [
