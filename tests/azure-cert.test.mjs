@@ -4,33 +4,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { normalizeAzureSearchQuery } from "../src/lib/azure-search.ts";
+import { AZURE_CERT_IDS, AZURE_CERT_META } from "../src/components/azure/azureCertMeta.ts";
 
 const repoRoot = process.cwd();
-const CERT_IDS = [
-  "az900",
-  "ai900",
-  "dp900",
-  "sc900",
-  "az104",
-  "ai103",
-  "ai200",
-  "az305",
-];
-
-function extractQuickSearchChips(pageSource, certId) {
-  const re = new RegExp(
-    `\\b${certId}:\\s*\\{[\\s\\S]*?quickSearchChips:\\s*\\[([\\s\\S]*?)\\]`
-  );
-  const match = pageSource.match(re);
-  assert.ok(match, `${certId}: quickSearchChips が azure-info/page.tsx から抽出できること`);
-  const chips = [];
-  const strRe = /"([^"]+)"/g;
-  let m;
-  while ((m = strRe.exec(match[1])) !== null) {
-    chips.push(m[1]);
-  }
-  return chips;
-}
 
 function buildSearchHaystacks(mod, id) {
   const comparisons = mod[`${id}Comparisons`];
@@ -89,12 +65,7 @@ test("normalizeAzureSearchQuery は括弧・スラッシュ注記を除去して
 });
 
 test("Azure 全8資格のデータ整合性・URL妥当性・バッジ/チップ100%ヒット・後継資格注記", async () => {
-  const pageSource = fs.readFileSync(
-    path.join(repoRoot, "src", "app", "azure-info", "page.tsx"),
-    "utf8"
-  );
-
-  for (const id of CERT_IDS) {
+  for (const id of AZURE_CERT_IDS) {
     const fileUrl = pathToFileURL(
       path.join(repoRoot, "src", "data", `azure-${id}.ts`)
     ).href;
@@ -222,7 +193,7 @@ test("Azure 全8資格のデータ整合性・URL妥当性・バッジ/チップ
     );
 
     // quickSearchChips が 5 セクション横断で 0 ミス
-    const chips = extractQuickSearchChips(pageSource, id);
+    const chips = AZURE_CERT_META[id].quickSearchChips;
     assert.ok(chips.length >= 4, `${id}: quickSearchChips が定義されていること`);
     const missedChips = chips.filter((chip) => {
       const q = chip.trim().toLowerCase();
@@ -300,14 +271,22 @@ test("Azure 全8資格のデータ整合性・URL妥当性・バッジ/チップ
   }
 });
 
-test("azure-info/page.tsx に WAI-ARIA・検索正規化・768px対応・ノート出力が実装されている", () => {
+test("azure-info/page.tsx と azureCertRegistry.ts が遅延分割・WAI-ARIA・検索正規化・768px対応・ノート出力・Gate準拠を満たす", () => {
   const pageSource = fs.readFileSync(
     path.join(repoRoot, "src", "app", "azure-info", "page.tsx"),
     "utf8"
   );
+  const registrySource = fs.readFileSync(
+    path.join(repoRoot, "src", "components", "azure", "azureCertRegistry.ts"),
+    "utf8"
+  );
 
   const requiredTokens = [
+    "<UnderConstructionAlert",
     "normalizeAzureSearchQuery",
+    "loadAzureCertData",
+    "loadRequestGenRef",
+    "再読み込みする",
     'role="tablist"',
     'role="tab"',
     'role="tabpanel"',
@@ -327,4 +306,19 @@ test("azure-info/page.tsx に WAI-ARIA・検索正規化・768px対応・ノー�
       `azure-info/page.tsx に ${token} が含まれていること`
     );
   }
+
+  for (const lazyCert of ["ai900", "dp900", "sc900", "az104", "ai103", "ai200", "az305"]) {
+    assert.ok(
+      !pageSource.includes(`from "@/data/azure-${lazyCert}"`),
+      `azure-info/page.tsx は @/data/azure-${lazyCert} を静的 import しないこと`
+    );
+    assert.ok(
+      registrySource.includes(`import("@/data/azure-${lazyCert}")`),
+      `azureCertRegistry.ts は @/data/azure-${lazyCert} を動的 import() すること`
+    );
+  }
+  assert.ok(
+    registrySource.includes('from "@/data/azure-az900"'),
+    "azureCertRegistry.ts は初期表示用に @/data/azure-az900 のみ静的 import すること"
+  );
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, type KeyboardEvent } from "react";
+import { useEffect, useState, useMemo, useRef, type KeyboardEvent } from "react";
 import {
   Cloud,
   ShieldCheck,
@@ -48,6 +48,7 @@ import {
   HardDrive,
   Zap,
   FileDown,
+  Loader2,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -61,7 +62,6 @@ import type {
   CertExamFact,
   CertFlashcardItem,
   CertMockExamRecord,
-  CertPassingConfig,
   CertQuestion,
 } from "@/components/certification/types";
 import type {
@@ -73,425 +73,27 @@ import type {
   AzureOfficialResource,
 } from "@/data/azure-types";
 import {
-  az900ExamFacts,
-  az900Domains,
-  az900Comparisons,
-  az900Patterns,
-  az900Pitfalls,
-  az900KeyFacts,
-  az900QuickLookup,
-  az900PracticeQuestions,
-  az900OfficialResources,
-} from "@/data/azure-az900";
-import {
-  ai900ExamFacts,
-  ai900Domains,
-  ai900Comparisons,
-  ai900Patterns,
-  ai900Pitfalls,
-  ai900KeyFacts,
-  ai900QuickLookup,
-  ai900PracticeQuestions,
-  ai900OfficialResources,
-} from "@/data/azure-ai900";
-import {
-  dp900ExamFacts,
-  dp900Domains,
-  dp900Comparisons,
-  dp900Patterns,
-  dp900Pitfalls,
-  dp900KeyFacts,
-  dp900QuickLookup,
-  dp900PracticeQuestions,
-  dp900OfficialResources,
-} from "@/data/azure-dp900";
-import {
-  sc900ExamFacts,
-  sc900Domains,
-  sc900Comparisons,
-  sc900Patterns,
-  sc900Pitfalls,
-  sc900KeyFacts,
-  sc900QuickLookup,
-  sc900PracticeQuestions,
-  sc900OfficialResources,
-} from "@/data/azure-sc900";
-import {
-  az104ExamFacts,
-  az104Domains,
-  az104Comparisons,
-  az104Patterns,
-  az104Pitfalls,
-  az104KeyFacts,
-  az104QuickLookup,
-  az104PracticeQuestions,
-  az104OfficialResources,
-} from "@/data/azure-az104";
-import {
-  ai103ExamFacts,
-  ai103Domains,
-  ai103Comparisons,
-  ai103Patterns,
-  ai103Pitfalls,
-  ai103KeyFacts,
-  ai103QuickLookup,
-  ai103PracticeQuestions,
-  ai103OfficialResources,
-} from "@/data/azure-ai103";
-import {
-  ai200ExamFacts,
-  ai200Domains,
-  ai200Comparisons,
-  ai200Patterns,
-  ai200Pitfalls,
-  ai200KeyFacts,
-  ai200QuickLookup,
-  ai200PracticeQuestions,
-  ai200OfficialResources,
-} from "@/data/azure-ai200";
-import {
-  az305ExamFacts,
-  az305Domains,
-  az305Comparisons,
-  az305Patterns,
-  az305Pitfalls,
-  az305KeyFacts,
-  az305QuickLookup,
-  az305PracticeQuestions,
-  az305OfficialResources,
-} from "@/data/azure-az305";
+  AZURE_CERT_IDS,
+  AZURE_CERT_META,
+  INITIAL_AZURE_CERT_DATA,
+  loadAzureCertData,
+  type AzureCertData,
+  type AzureCertId,
+} from "@/components/azure/azureCertRegistry";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 import { normalizeAzureSearchQuery } from "@/lib/azure-search";
 
-type AzureCertId = "az900" | "ai900" | "dp900" | "sc900" | "az104" | "ai103" | "ai200" | "az305";
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
-interface AzureCertConfig {
-  id: AzureCertId;
-  label: string;
-  shortLabel: string;
-  badgeText: string;
-  headline: string;
-  description: string;
-  storageKey: string;
-  examFacts: CertExamFact[];
-  domains: AzureDomain[];
-  comparisons: AzureComparisonTable[];
-  patterns: AzureArchitecturePattern[];
-  pitfalls: AzurePitfall[];
-  keyFacts: AzureKeyFact[];
-  quickLookup: CertFlashcardItem[];
-  practiceQuestions: CertQuestion[];
-  officialResources: AzureOfficialResource[];
-  defaultExpanded: Record<string, boolean>;
-  passingConfig: CertPassingConfig;
-  quizBadgeLabel: string;
-  flashcardTitle: string;
-  quickSearchChips: string[];
-}
-
-const CERT_CONFIG: Record<AzureCertId, AzureCertConfig> = {
-  az900: {
-    id: "az900",
-    label: "Azure Fundamentals (AZ-900)",
-    shortLabel: "AZ-900",
-    badgeText: "MICROSOFT AZURE FUNDAMENTALS STUDY HUB",
-    headline: "Azure Fundamentals（AZ-900）",
-    description:
-      "クラウドの基本概念・責任共有モデル・Azure コアサービス（Compute / Network / Storage / Entra ID）・コスト管理とガバナンスを網羅した入門認定試験の学習ハブです。進捗やメモはブラウザに自動保存されます。",
-    storageKey: "ai-park-azure-az900-progress-v1",
-    examFacts: az900ExamFacts,
-    domains: az900Domains,
-    comparisons: az900Comparisons,
-    patterns: az900Patterns,
-    pitfalls: az900Pitfalls,
-    keyFacts: az900KeyFacts,
-    quickLookup: az900QuickLookup,
-    practiceQuestions: az900PracticeQuestions,
-    officialResources: az900OfficialResources,
-    defaultExpanded: { "az900-domain-1": true },
-    passingConfig: {
-      minScore: 0,
-      maxScore: 1000,
-      passingScore: 700,
-      passingPct: 70,
-      officialExamLabel: "Exam AZ-900 本試験（合格基準 700 / 1000 点）",
-    },
-    quizBadgeLabel: "Azure AZ-900 演習",
-    flashcardTitle: "AZ-900 要件・キーワード → Microsoft Azure サービス即答トレーニング",
-    quickSearchChips: [
-      "Azure VM",
-      "App Service",
-      "Azure Functions",
-      "Entra ID",
-      "Azure Policy",
-      "Blob Storage",
-    ],
-  },
-  ai900: {
-    id: "ai900",
-    label: "Azure AI Fundamentals (AI-900)",
-    shortLabel: "AI-900",
-    badgeText: "MICROSOFT AZURE AI FUNDAMENTALS STUDY HUB",
-    headline: "Azure AI Fundamentals（AI-900）",
-    description:
-      "責任ある AI の 6 原則・機械学習（AutoML / 評価指標）・コンピューター ビジョン・自然言語処理（NLP）・Azure OpenAI Service / 生成 AI ワークロードを体系的に学ぶ学習ハブです。",
-    storageKey: "ai-park-azure-ai900-progress-v1",
-    examFacts: ai900ExamFacts,
-    domains: ai900Domains,
-    comparisons: ai900Comparisons,
-    patterns: ai900Patterns,
-    pitfalls: ai900Pitfalls,
-    keyFacts: ai900KeyFacts,
-    quickLookup: ai900QuickLookup,
-    practiceQuestions: ai900PracticeQuestions,
-    officialResources: ai900OfficialResources,
-    defaultExpanded: { "ai900-domain-1": true },
-    passingConfig: {
-      minScore: 0,
-      maxScore: 1000,
-      passingScore: 700,
-      passingPct: 70,
-      officialExamLabel: "Exam AI-900 本試験（合格基準 700 / 1000 点）",
-    },
-    quizBadgeLabel: "Azure AI-900 演習",
-    flashcardTitle: "AI-900 AIワークロード要件 → Azure AI サービス即答トレーニング",
-    quickSearchChips: [
-      "Azure OpenAI",
-      "Azure AI Foundry",
-      "Document Intelligence",
-      "Azure AI Vision",
-      "Azure AI Language",
-      "AutoML",
-      "RAG",
-    ],
-  },
-  dp900: {
-    id: "dp900",
-    label: "Azure Data Fundamentals (DP-900)",
-    shortLabel: "DP-900",
-    badgeText: "MICROSOFT AZURE DATA FUNDAMENTALS STUDY HUB",
-    headline: "Azure Data Fundamentals（DP-900）",
-    description:
-      "コアデータ概念（構造化/半構造化/非構造化・OLTP/OLAP）・Azure SQL / PostgreSQL・Blob / ADLS Gen2 / Cosmos DB・Azure Data Factory / Synapse / Microsoft Fabric / Power BI を網羅したデータ基礎認定試験の学習ハブです。",
-    storageKey: "ai-park-azure-dp900-progress-v1",
-    examFacts: dp900ExamFacts,
-    domains: dp900Domains,
-    comparisons: dp900Comparisons,
-    patterns: dp900Patterns,
-    pitfalls: dp900Pitfalls,
-    keyFacts: dp900KeyFacts,
-    quickLookup: dp900QuickLookup,
-    practiceQuestions: dp900PracticeQuestions,
-    officialResources: dp900OfficialResources,
-    defaultExpanded: { "dp900-domain-1": true },
-    passingConfig: {
-      minScore: 0,
-      maxScore: 1000,
-      passingScore: 700,
-      passingPct: 70,
-      officialExamLabel: "Exam DP-900 本試験（合格基準 700 / 1000 点）",
-    },
-    quizBadgeLabel: "Azure DP-900 演習",
-    flashcardTitle: "DP-900 データ要件・ユースケース → Microsoft Azure データサービス即答トレーニング",
-    quickSearchChips: [
-      "Azure SQL",
-      "Cosmos DB",
-      "ADLS Gen2",
-      "Microsoft Fabric",
-      "Synapse",
-      "Power BI",
-    ],
-  },
-  sc900: {
-    id: "sc900",
-    label: "Security Fundamentals (SC-900)",
-    shortLabel: "SC-900",
-    badgeText: "MICROSOFT SECURITY, COMPLIANCE & IDENTITY STUDY HUB",
-    headline: "Security, Compliance, and Identity Fundamentals（SC-900）",
-    description:
-      "ゼロトラスト原則・Microsoft Entra ID（MFA / 条件付きアクセス / PIM）・Microsoft Defender for Cloud / Sentinel / Defender XDR・Microsoft Purview による情報保護とコンプライアンスを学ぶ基礎学習ハブです。",
-    storageKey: "ai-park-azure-sc900-progress-v1",
-    examFacts: sc900ExamFacts,
-    domains: sc900Domains,
-    comparisons: sc900Comparisons,
-    patterns: sc900Patterns,
-    pitfalls: sc900Pitfalls,
-    keyFacts: sc900KeyFacts,
-    quickLookup: sc900QuickLookup,
-    practiceQuestions: sc900PracticeQuestions,
-    officialResources: sc900OfficialResources,
-    defaultExpanded: { "sc900-domain-1": true },
-    passingConfig: {
-      minScore: 0,
-      maxScore: 1000,
-      passingScore: 700,
-      passingPct: 70,
-      officialExamLabel: "Exam SC-900 本試験（合格基準 700 / 1000 点）",
-    },
-    quizBadgeLabel: "Azure SC-900 演習",
-    flashcardTitle: "SC-900 セキュリティ・ID・コンプライアンス要件 → Microsoft ソリューション即答トレーニング",
-    quickSearchChips: [
-      "Entra ID",
-      "Conditional Access",
-      "Defender for Cloud",
-      "Microsoft Sentinel",
-      "Microsoft Purview",
-      "Zero Trust",
-    ],
-  },
-  az104: {
-    id: "az104",
-    label: "Azure Administrator (AZ-104)",
-    shortLabel: "AZ-104",
-    badgeText: "MICROSOFT AZURE ADMINISTRATOR STUDY HUB",
-    headline: "Azure Administrator Associate（AZ-104）",
-    description:
-      "Entra ID・RBAC・Azure Policy・ストレージ冗長性＆SAS・ARM/Bicep・VM/VMSS/AKS/App Service・VNet/NSG/VPN・Azure Monitor/Backup の運用管理を学ぶ実践学習ハブです。",
-    storageKey: "ai-park-azure-az104-progress-v1",
-    examFacts: az104ExamFacts,
-    domains: az104Domains,
-    comparisons: az104Comparisons,
-    patterns: az104Patterns,
-    pitfalls: az104Pitfalls,
-    keyFacts: az104KeyFacts,
-    quickLookup: az104QuickLookup,
-    practiceQuestions: az104PracticeQuestions,
-    officialResources: az104OfficialResources,
-    defaultExpanded: { "az104-domain-1": true },
-    passingConfig: {
-      minScore: 0,
-      maxScore: 1000,
-      passingScore: 700,
-      passingPct: 70,
-      officialExamLabel: "Exam AZ-104 本試験（合格基準 700 / 1000 点）",
-    },
-    quizBadgeLabel: "Azure AZ-104 演習",
-    flashcardTitle: "AZ-104 運用要件 → Azure 管理機能・CLI/Bicep 即答トレーニング",
-    quickSearchChips: [
-      "RBAC",
-      "Azure Policy",
-      "Bicep",
-      "VNet ピアリング",
-      "NSG",
-      "AzCopy",
-      "Azure Backup",
-    ],
-  },
-  ai103: {
-    id: "ai103",
-    label: "AI Apps & Agents (AI-103)",
-    shortLabel: "AI-103",
-    badgeText: "MICROSOFT AZURE AI APPS & AGENTS STUDY HUB",
-    headline: "Azure AI Apps & Agents Developer（AI-103）",
-    description:
-      "旧 Exam AI-102（2026年6月廃止）の後継試験として刷新された AI アプリケーション＆エージェント開発認定の学習ハブです。Microsoft Foundry・Agent Service・Azure AI Search (RAG)・Vision / Language / Speech・Document Intelligence・Content Safety の設計と実装を網羅します。",
-    storageKey: "ai-park-azure-ai103-progress-v1",
-    examFacts: ai103ExamFacts,
-    domains: ai103Domains,
-    comparisons: ai103Comparisons,
-    patterns: ai103Patterns,
-    pitfalls: ai103Pitfalls,
-    keyFacts: ai103KeyFacts,
-    quickLookup: ai103QuickLookup,
-    practiceQuestions: ai103PracticeQuestions,
-    officialResources: ai103OfficialResources,
-    defaultExpanded: { "ai103-domain-1": true },
-    passingConfig: {
-      minScore: 0,
-      maxScore: 1000,
-      passingScore: 700,
-      passingPct: 70,
-      officialExamLabel: "Exam AI-103 本試験（合格基準 700 / 1000 点）",
-    },
-    quizBadgeLabel: "Azure AI-103 演習",
-    flashcardTitle: "AI-103 生成AI・エージェント・情報抽出要件 → Microsoft Foundry / Azure AI 即答トレーニング",
-    quickSearchChips: [
-      "Microsoft Foundry",
-      "Agent Service",
-      "Azure AI Search",
-      "Document Intelligence",
-      "Content Safety",
-      "RAG",
-    ],
-  },
-  ai200: {
-    id: "ai200",
-    label: "AI Cloud Developer (AI-200)",
-    shortLabel: "AI-200",
-    badgeText: "MICROSOFT AZURE AI CLOUD DEVELOPER STUDY HUB",
-    headline: "Azure AI Cloud Developer（AI-200）",
-    description:
-      "旧 Exam AZ-204（2026年7月廃止）の後継試験として刷新されたクラウドネイティブ＆AI 基盤開発認定の学習ハブです。Container Apps / AKS・Cosmos DB / PostgreSQL (pgvector) / Managed Redis・Service Bus / Event Grid / Functions・Key Vault / OpenTelemetry 観測性を体系的に学びます。",
-    storageKey: "ai-park-azure-ai200-progress-v1",
-    examFacts: ai200ExamFacts,
-    domains: ai200Domains,
-    comparisons: ai200Comparisons,
-    patterns: ai200Patterns,
-    pitfalls: ai200Pitfalls,
-    keyFacts: ai200KeyFacts,
-    quickLookup: ai200QuickLookup,
-    practiceQuestions: ai200PracticeQuestions,
-    officialResources: ai200OfficialResources,
-    defaultExpanded: { "ai200-domain-1": true },
-    passingConfig: {
-      minScore: 0,
-      maxScore: 1000,
-      passingScore: 700,
-      passingPct: 70,
-      officialExamLabel: "Exam AI-200 本試験（合格基準 700 / 1000 点）",
-    },
-    quizBadgeLabel: "Azure AI-200 演習",
-    flashcardTitle: "AI-200 コンテナ・ベクターDB・イベント・観測性要件 → Azure 開発サービス即答トレーニング",
-    quickSearchChips: [
-      "Container Apps",
-      "Cosmos DB",
-      "pgvector",
-      "Service Bus",
-      "Event Grid",
-      "Key Vault",
-      "OpenTelemetry",
-    ],
-  },
-  az305: {
-    id: "az305",
-    label: "Azure Solutions Architect (AZ-305)",
-    shortLabel: "AZ-305",
-    badgeText: "MICROSOFT AZURE SOLUTIONS ARCHITECT EXPERT STUDY HUB",
-    headline: "Azure Solutions Architect Expert（AZ-305）",
-    description:
-      "ランディングゾーン（CAF）・Entra ID / Key Vault 設計・Azure SQL / Cosmos DB 整合性設計・RPO/RTO & 高可用性・ハブ＆スポーク / Virtual WAN・Well-Architected 設計力を問う上級学習ハブです。",
-    storageKey: "ai-park-azure-az305-progress-v1",
-    examFacts: az305ExamFacts,
-    domains: az305Domains,
-    comparisons: az305Comparisons,
-    patterns: az305Patterns,
-    pitfalls: az305Pitfalls,
-    keyFacts: az305KeyFacts,
-    quickLookup: az305QuickLookup,
-    practiceQuestions: az305PracticeQuestions,
-    officialResources: az305OfficialResources,
-    defaultExpanded: { "az305-domain-1": true },
-    passingConfig: {
-      minScore: 0,
-      maxScore: 1000,
-      passingScore: 700,
-      passingPct: 70,
-      officialExamLabel: "Exam AZ-305 本試験（合格基準 700 / 1000 点）",
-    },
-    quizBadgeLabel: "Azure AZ-305 演習",
-    flashcardTitle: "AZ-305 設計要件・制約 → Azure アーキテクチャ選択即答トレーニング",
-    quickSearchChips: [
-      "Cosmos DB",
-      "Azure SQL",
-      "Front Door",
-      "Virtual WAN",
-      "Private Link",
-      "Managed ID",
-      "Savings Plan",
-    ],
-  },
-};
+const EMPTY_EXAM_FACTS: CertExamFact[] = [];
+const EMPTY_DOMAINS: AzureDomain[] = [];
+const EMPTY_COMPARISONS: AzureComparisonTable[] = [];
+const EMPTY_PATTERNS: AzureArchitecturePattern[] = [];
+const EMPTY_PITFALLS: AzurePitfall[] = [];
+const EMPTY_KEY_FACTS: AzureKeyFact[] = [];
+const EMPTY_QUICK_LOOKUP: CertFlashcardItem[] = [];
+const EMPTY_QUESTIONS: CertQuestion[] = [];
+const EMPTY_RESOURCES: AzureOfficialResource[] = [];
 
 interface AzureProgress {
   completedTopics: string[];
@@ -647,7 +249,14 @@ function loadAzureProgress(storageKey: string): AzureProgress {
 
 export default function AzureInfoPage() {
   const [certId, setCertId] = useState<AzureCertId>("az900");
-  const config = CERT_CONFIG[certId];
+  const meta = AZURE_CERT_META[certId];
+
+  const [certDataCache, setCertDataCache] = useState<Partial<Record<AzureCertId, AzureCertData>>>({
+    az900: INITIAL_AZURE_CERT_DATA,
+  });
+  const [loadingCert, setLoadingCert] = useState<AzureCertId | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const loadRequestGenRef = useRef(0);
 
   const [activeTab, setActiveTab] = useState<TabId>("domains");
   const [progressByCert, setProgressByCert] = useState<Record<AzureCertId, AzureProgress>>({
@@ -661,7 +270,7 @@ export default function AzureInfoPage() {
     az305: DEFAULT_PROGRESS,
   });
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(
-    CERT_CONFIG.az900.defaultExpanded
+    AZURE_CERT_META.az900.defaultExpanded
   );
   const [confirmReset, setConfirmReset] = useState(false);
 
@@ -684,27 +293,73 @@ export default function AzureInfoPage() {
   const [copiedBackup, setCopiedBackup] = useState(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copiedBackupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const importMsgTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollFocusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const timers = [resetTimerRef, copiedBackupTimerRef, importMsgTimerRef, scrollFocusTimerRef];
+    return () => {
+      for (const ref of timers) {
+        if (ref.current) {
+          clearTimeout(ref.current);
+          ref.current = null;
+        }
+      }
+    };
+  }, []);
+
   useEffect(() => {
     queueMicrotask(() => {
       setProgressByCert({
-        az900: loadAzureProgress(CERT_CONFIG.az900.storageKey),
-        ai900: loadAzureProgress(CERT_CONFIG.ai900.storageKey),
-        dp900: loadAzureProgress(CERT_CONFIG.dp900.storageKey),
-        sc900: loadAzureProgress(CERT_CONFIG.sc900.storageKey),
-        az104: loadAzureProgress(CERT_CONFIG.az104.storageKey),
-        ai103: loadAzureProgress(CERT_CONFIG.ai103.storageKey),
-        ai200: loadAzureProgress(CERT_CONFIG.ai200.storageKey),
-        az305: loadAzureProgress(CERT_CONFIG.az305.storageKey),
+        az900: loadAzureProgress(AZURE_CERT_META.az900.storageKey),
+        ai900: loadAzureProgress(AZURE_CERT_META.ai900.storageKey),
+        dp900: loadAzureProgress(AZURE_CERT_META.dp900.storageKey),
+        sc900: loadAzureProgress(AZURE_CERT_META.sc900.storageKey),
+        az104: loadAzureProgress(AZURE_CERT_META.az104.storageKey),
+        ai103: loadAzureProgress(AZURE_CERT_META.ai103.storageKey),
+        ai200: loadAzureProgress(AZURE_CERT_META.ai200.storageKey),
+        az305: loadAzureProgress(AZURE_CERT_META.az305.storageKey),
       });
     });
   }, []);
 
+  const activeData = certDataCache[certId];
+  const examFacts = activeData?.examFacts ?? EMPTY_EXAM_FACTS;
+  const domains = activeData?.domains ?? EMPTY_DOMAINS;
+  const comparisons = activeData?.comparisons ?? EMPTY_COMPARISONS;
+  const patterns = activeData?.patterns ?? EMPTY_PATTERNS;
+  const pitfalls = activeData?.pitfalls ?? EMPTY_PITFALLS;
+  const keyFacts = activeData?.keyFacts ?? EMPTY_KEY_FACTS;
+  const quickLookup = activeData?.quickLookup ?? EMPTY_QUICK_LOOKUP;
+  const practiceQuestions = activeData?.practiceQuestions ?? EMPTY_QUESTIONS;
+  const officialResources = activeData?.officialResources ?? EMPTY_RESOURCES;
+
   const progress = progressByCert[certId];
+
+  const triggerCertLoad = async (targetCert: AzureCertId) => {
+    const reqGen = ++loadRequestGenRef.current;
+    setLoadingCert(targetCert);
+    setLoadError(null);
+    try {
+      const data = await loadAzureCertData(targetCert);
+      setCertDataCache((prev) => ({ ...prev, [targetCert]: data }));
+      if (loadRequestGenRef.current === reqGen) {
+        setLoadingCert(null);
+      }
+    } catch {
+      if (loadRequestGenRef.current === reqGen) {
+        setLoadingCert(null);
+        setLoadError(`${AZURE_CERT_META[targetCert].label} の学習データ読み込みに失敗しました。`);
+      }
+    }
+  };
 
   const saveProgress = (next: AzureProgress) => {
     setProgressByCert((prev) => ({ ...prev, [certId]: next }));
     try {
-      window.localStorage.setItem(config.storageKey, JSON.stringify(next));
+      window.localStorage.setItem(meta.storageKey, JSON.stringify(next));
     } catch {
       // localStorage quota exceeded / disabled
     }
@@ -713,14 +368,24 @@ export default function AzureInfoPage() {
   const handleSwitchCert = (nextCert: AzureCertId) => {
     if (nextCert === certId) return;
     playCyberClick();
+    loadRequestGenRef.current++;
     setCertId(nextCert);
-    setExpandedDomains(CERT_CONFIG[nextCert].defaultExpanded);
+    setExpandedDomains(AZURE_CERT_META[nextCert].defaultExpanded);
     setTopicQuery("");
     setCompCategory("すべて");
     setCompQuery("");
     setQuizDomainTarget("all");
     setConfirmReset(false);
+    setShowBackupPanel(false);
+    setBackupInput("");
+    setCopiedBackup(false);
     setImportMessage(null);
+    setLoadError(null);
+    if (!certDataCache[nextCert]) {
+      void triggerCertLoad(nextCert);
+    } else {
+      setLoadingCert(null);
+    }
   };
 
   const toggleTopic = (topicId: string) => {
@@ -782,7 +447,8 @@ export default function AzureInfoPage() {
     if (!confirmReset) {
       playCyberClick();
       setConfirmReset(true);
-      setTimeout(() => setConfirmReset(false), 4000);
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = setTimeout(() => setConfirmReset(false), 4000);
       return;
     }
     playCyberClick();
@@ -793,7 +459,7 @@ export default function AzureInfoPage() {
   const handleExpandAllDomains = (open: boolean) => {
     playCyberClick();
     const next: Record<string, boolean> = {};
-    for (const d of config.domains) {
+    for (const d of domains) {
       next[d.id] = open;
     }
     setExpandedDomains(next);
@@ -815,14 +481,14 @@ export default function AzureInfoPage() {
   const handleExportNotesMarkdown = () => {
     playCyberClick();
     const lines: string[] = [
-      `# Azure ${config.shortLabel} 学習メモ`,
+      `# Azure ${meta.shortLabel} 学習メモ`,
       "",
       `- エクスポート日時: ${new Date().toLocaleString("ja-JP")}`,
       "",
     ];
     let exportedCount = 0;
 
-    for (const domain of config.domains) {
+    for (const domain of domains) {
       const domainNotes = domain.topics
         .map((t) => ({ topic: t, note: (progress.topicNotes[t.id] ?? "").trim() }))
         .filter((item) => item.note.length > 0);
@@ -844,20 +510,22 @@ export default function AzureInfoPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `azure-${config.id}-notes.md`;
+    link.download = `azure-${meta.id}-notes.md`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
 
-    setImportMessage(`${config.shortLabel} の学習メモ（${exportedCount} 件）を Markdown 出力しました。`);
-    setTimeout(() => setImportMessage(null), 3000);
+    setImportMessage(`${meta.shortLabel} の学習メモ（${exportedCount} 件）を Markdown 出力しました。`);
+    if (importMsgTimerRef.current) clearTimeout(importMsgTimerRef.current);
+    importMsgTimerRef.current = setTimeout(() => setImportMessage(null), 3000);
   };
 
   const handleFocusDomain = (domainId: string) => {
     playCyberClick();
     setExpandedDomains((prev) => ({ ...prev, [domainId]: true }));
-    setTimeout(() => {
+    if (scrollFocusTimerRef.current) clearTimeout(scrollFocusTimerRef.current);
+    scrollFocusTimerRef.current = setTimeout(() => {
       document.getElementById(domainId)?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 40);
   };
@@ -867,7 +535,8 @@ export default function AzureInfoPage() {
     try {
       await navigator.clipboard.writeText(JSON.stringify(progress));
       setCopiedBackup(true);
-      setTimeout(() => setCopiedBackup(false), 2500);
+      if (copiedBackupTimerRef.current) clearTimeout(copiedBackupTimerRef.current);
+      copiedBackupTimerRef.current = setTimeout(() => setCopiedBackup(false), 2500);
     } catch {
       setImportMessage("クリップボードへのコピーに失敗しました。");
     }
@@ -887,21 +556,22 @@ export default function AzureInfoPage() {
       };
       saveProgress(restored);
       setBackupInput("");
-      setImportMessage(`${config.shortLabel} の学習データを復元しました。`);
-      setTimeout(() => setImportMessage(null), 3000);
+      setImportMessage(`${meta.shortLabel} の学習データを復元しました。`);
+      if (importMsgTimerRef.current) clearTimeout(importMsgTimerRef.current);
+      importMsgTimerRef.current = setTimeout(() => setImportMessage(null), 3000);
     } catch {
       setImportMessage("JSON形式が正しくありません。コピーしたバックアップ文字列を確認してください。");
     }
   };
 
-  const allTopics = useMemo(() => config.domains.flatMap((d) => d.topics), [config.domains]);
+  const allTopics = useMemo(() => domains.flatMap((d) => d.topics), [domains]);
   const completedTopicCount = allTopics.filter((t) =>
     progress.completedTopics.includes(t.id)
   ).length;
   const topicPct = allTopics.length > 0 ? Math.round((completedTopicCount / allTopics.length) * 100) : 0;
 
   const answeredQuizCount = Object.keys(progress.quizAnswers).length;
-  const correctQuizCount = config.practiceQuestions.filter((q) =>
+  const correctQuizCount = practiceQuestions.filter((q) =>
     isQuestionCorrect(q, progress.quizAnswers[q.id])
   ).length;
 
@@ -909,24 +579,24 @@ export default function AzureInfoPage() {
   const notedTopicCount = Object.values(progress.topicNotes).filter((v) => v.trim().length > 0).length;
 
   const totalActions =
-    allTopics.length + config.practiceQuestions.length + config.quickLookup.length;
+    allTopics.length + practiceQuestions.length + quickLookup.length;
   const doneActions = completedTopicCount + answeredQuizCount + masteredCardCount;
   const overallPct = totalActions > 0 ? Math.round((doneActions / totalActions) * 100) : 0;
 
   const quizDomains = useMemo(
     () =>
-      config.domains.map((d) => ({
+      domains.map((d) => ({
         id: d.id,
         number: d.number,
         shortLabel: `D${d.number}`,
         filterLabel: `${d.number}: ${d.title}`,
       })),
-    [config.domains]
+    [domains]
   );
 
   const filteredDomains = useMemo(() => {
     const q = topicQuery.trim().toLowerCase();
-    return config.domains
+    return domains
       .map((d) => {
         const topics = d.topics.filter((t) => {
           if (onlyIncompleteTopics && progress.completedTopics.includes(t.id)) {
@@ -945,7 +615,7 @@ export default function AzureInfoPage() {
       })
       .filter((d) => d.visibleTopics.length > 0);
   }, [
-    config.domains,
+    domains,
     topicQuery,
     onlyIncompleteTopics,
     onlyWithNotesTopics,
@@ -956,14 +626,14 @@ export default function AzureInfoPage() {
   const availableComparisonCategories = useMemo(
     () =>
       COMPARISON_CATEGORIES.filter(
-        (cat) => cat === "すべて" || config.comparisons.some((c) => c.category === cat)
+        (cat) => cat === "すべて" || comparisons.some((c) => c.category === cat)
       ),
-    [config.comparisons]
+    [comparisons]
   );
 
   const filteredComparisons = useMemo(() => {
     const q = compQuery.trim().toLowerCase();
-    return config.comparisons.filter((comp) => {
+    return comparisons.filter((comp) => {
       if (compCategory !== "すべて" && comp.category !== compCategory) return false;
       if (!q) return true;
       const haystack = [
@@ -977,65 +647,65 @@ export default function AzureInfoPage() {
         .toLowerCase();
       return haystack.includes(q);
     });
-  }, [config.comparisons, compCategory, compQuery]);
+  }, [comparisons, compCategory, compQuery]);
 
   const filteredPatterns = useMemo(() => {
     const q = compQuery.trim().toLowerCase();
-    if (!q) return config.patterns;
-    return config.patterns.filter((pat) =>
+    if (!q) return patterns;
+    return patterns.filter((pat) =>
       [pat.title, pat.badge, pat.summary, ...pat.flow, ...pat.keyDesignPoints]
         .join(" ")
         .toLowerCase()
         .includes(q)
     );
-  }, [config.patterns, compQuery]);
+  }, [patterns, compQuery]);
 
   const filteredPitfalls = useMemo(() => {
     const q = compQuery.trim().toLowerCase();
-    if (!q) return config.pitfalls;
-    return config.pitfalls.filter((pit) =>
+    if (!q) return pitfalls;
+    return pitfalls.filter((pit) =>
       [pit.trap, pit.whyWrong, pit.correctApproach].join(" ").toLowerCase().includes(q)
     );
-  }, [config.pitfalls, compQuery]);
+  }, [pitfalls, compQuery]);
 
   const filteredKeyFacts = useMemo(() => {
     const q = compQuery.trim().toLowerCase();
-    if (!q) return config.keyFacts;
-    return config.keyFacts.filter((kf) =>
+    if (!q) return keyFacts;
+    return keyFacts.filter((kf) =>
       [kf.target, kf.value, kf.detail].join(" ").toLowerCase().includes(q)
     );
-  }, [config.keyFacts, compQuery]);
+  }, [keyFacts, compQuery]);
 
   const filteredQuickLookup = useMemo(() => {
     const q = compQuery.trim().toLowerCase();
     if (!q) return [];
-    return config.quickLookup.filter((item) =>
+    return quickLookup.filter((item) =>
       [item.keyword, item.category, item.recommended, item.reason]
         .join(" ")
         .toLowerCase()
         .includes(q)
     );
-  }, [config.quickLookup, compQuery]);
+  }, [quickLookup, compQuery]);
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     {
       id: "domains",
       label: "トピック別学習",
       icon: BookOpen,
-      badge: `${completedTopicCount}/${allTopics.length}`,
+      badge: activeData ? `${completedTopicCount}/${allTopics.length}` : "-",
     },
     { id: "comparisons", label: "比較・設計パターン", icon: TableProperties },
     {
       id: "flashcards",
       label: "暗記カード",
       icon: Layers2,
-      badge: `${masteredCardCount}/${config.quickLookup.length}`,
+      badge: activeData ? `${masteredCardCount}/${quickLookup.length}` : "-",
     },
     {
       id: "quiz",
       label: "練習問題・模試",
       icon: HelpCircle,
-      badge: `${correctQuizCount}/${config.practiceQuestions.length}`,
+      badge: activeData ? `${correctQuizCount}/${practiceQuestions.length}` : "-",
     },
     { id: "resources", label: "公式リソース", icon: Compass },
   ];
@@ -1096,8 +766,8 @@ export default function AzureInfoPage() {
             aria-label="対象資格の切り替え"
             className="flex flex-wrap gap-1.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200/70"
           >
-            {(["az900", "ai900", "dp900", "sc900", "az104", "ai103", "ai200", "az305"] as const).map((id) => {
-              const item = CERT_CONFIG[id];
+            {AZURE_CERT_IDS.map((id) => {
+              const item = AZURE_CERT_META[id];
               const active = certId === id;
               return (
                 <button
@@ -1131,19 +801,21 @@ export default function AzureInfoPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center space-x-1.5 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-400/20 text-sky-300 border border-sky-400/30 tracking-wider">
                     <Cloud size={12} />
-                    <span>{config.badgeText}</span>
+                    <span>{meta.badgeText}</span>
                   </span>
                   <span className="text-xs text-slate-300">
-                    {allTopics.length} トピック ・ 比較表 {config.comparisons.length} 種 ・ カード{" "}
-                    {config.quickLookup.length} 枚 ・ 演習 {config.practiceQuestions.length} 問
+                    {activeData ? allTopics.length : "-"} トピック ・ 比較表{" "}
+                    {activeData ? comparisons.length : "-"} 種 ・ カード{" "}
+                    {activeData ? quickLookup.length : "-"} 枚 ・ 演習{" "}
+                    {activeData ? practiceQuestions.length : "-"} 問
                   </span>
                 </div>
                 <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-words">
-                  <span className="inline-block">{config.headline}</span>
+                  <span className="inline-block">{meta.headline}</span>
                   <span className="inline-block ml-1">合格対策学習ハブ</span>
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
-                  {config.description}
+                  {meta.description}
                 </p>
               </div>
 
@@ -1154,20 +826,20 @@ export default function AzureInfoPage() {
                     {topicPct}%
                   </div>
                   <div className="text-[11px] text-slate-400 font-mono">
-                    {completedTopicCount} / {allTopics.length}
+                    {completedTopicCount} / {activeData ? allTopics.length : "-"}
                   </div>
                 </div>
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">暗記カード</div>
                   <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
-                    {masteredCardCount} / {config.quickLookup.length}
+                    {masteredCardCount} / {activeData ? quickLookup.length : "-"}
                   </div>
                   <div className="text-[11px] text-slate-400">枚習得</div>
                 </div>
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">演習問題</div>
                   <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
-                    {correctQuizCount} / {config.practiceQuestions.length}
+                    {correctQuizCount} / {activeData ? practiceQuestions.length : "-"}
                   </div>
                   <div className="text-[11px] text-slate-400">問正解</div>
                 </div>
@@ -1176,100 +848,132 @@ export default function AzureInfoPage() {
           </div>
         </TiltCard>
 
-        {/* 試験概要カード */}
-        <section className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
-          {config.examFacts.map((fact) => (
-            <div
-              key={`${config.id}-${fact.label}`}
-              className="bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 shadow-xs space-y-1 min-w-0"
-            >
-              <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
-              <div className="text-sm sm:text-base font-black text-slate-900 break-words">
-                {fact.value}
-              </div>
-              <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
-            </div>
-          ))}
-        </section>
-
-        {/* 総合進捗＆データ管理バー */}
-        <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-            <div className="space-y-1.5 flex-1 min-w-0">
-              <div className="flex items-start justify-between gap-2 text-xs font-bold">
-                <span className="text-slate-700 flex items-start space-x-1.5">
-                  <Award className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
-                  <span>
-                    {config.shortLabel} 総合学習進捗（トピック・暗記カード・練習問題）
-                  </span>
-                </span>
-                <span className="font-mono text-sky-700 shrink-0">{overallPct}%</span>
-              </div>
-              <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 transition-all duration-500"
-                  style={{ width: `${overallPct}%` }}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={handleExportNotesMarkdown}
-                disabled={notedTopicCount === 0}
-                title={
-                  notedTopicCount === 0
-                    ? "保存済みのメモがあると Markdown 形式で書き出せます"
-                    : `${notedTopicCount} 件の学習メモを Markdown で出力`
-                }
-                className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
-              >
-                <FileDown size={13} />
-                <span>メモ出力 (.md)</span>
-              </button>
-
-              <button
-                type="button"
-                aria-expanded={showBackupPanel}
-                aria-controls="azure-backup-panel"
-                onClick={() => {
-                  playCyberClick();
-                  setShowBackupPanel((v) => !v);
-                }}
-                className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
-              >
-                <Download size={13} />
-                <span>バックアップ / 復元</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleResetAllClick}
-                className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
-                  confirmReset
-                    ? "bg-rose-600 text-white border-rose-600"
-                    : "border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-rose-600"
-                }`}
-              >
-                <RotateCcw size={13} />
-                <span>{confirmReset ? "もう一度押すと全消去" : "進捗リセット"}</span>
-              </button>
-            </div>
-          </div>
-
-          {!showBackupPanel && importMessage && (
-            <div role="status" aria-live="polite" className="text-xs font-bold text-sky-700">
-              {importMessage}
-            </div>
-          )}
-
-          {showBackupPanel && (
-            <div id="azure-backup-panel" className="pt-4 border-t border-slate-100 space-y-3">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
-                <p className="text-xs text-slate-600">
-                  {config.shortLabel} の進捗やメモはブラウザの localStorage に保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
+        {/* 動的ロード中・エラー表示 */}
+        {(!activeData || loadingCert !== null) && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3 shadow-xs"
+          >
+            {loadError ? (
+              <>
+                <AlertTriangle className="w-8 h-8 text-rose-500 mx-auto" />
+                <p className="text-sm font-black text-slate-800">{loadError}</p>
+                <button
+                  type="button"
+                  onClick={() => void triggerCertLoad(certId)}
+                  className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
+                >
+                  再読み込みする
+                </button>
+              </>
+            ) : (
+              <>
+                <Loader2 className="w-7 h-7 text-sky-600 mx-auto animate-spin" />
+                <p className="text-xs font-bold text-slate-600">
+                  {meta.label} の学習データを読み込み中...
                 </p>
+              </>
+            )}
+          </div>
+        )}
+
+        {activeData && loadingCert === null && (
+          <>
+            {/* 試験概要カード */}
+            <section className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3">
+              {examFacts.map((fact) => (
+                <div
+                  key={`${meta.id}-${fact.label}`}
+                  className="bg-white rounded-2xl border border-slate-200/80 p-3.5 sm:p-4 shadow-xs space-y-1 min-w-0"
+                >
+                  <div className="text-[11px] font-bold text-slate-400">{fact.label}</div>
+                  <div className="text-sm sm:text-base font-black text-slate-900 break-words">
+                    {fact.value}
+                  </div>
+                  <div className="text-[11px] text-slate-500 leading-snug">{fact.detail}</div>
+                </div>
+              ))}
+            </section>
+
+            {/* 総合進捗＆データ管理バー */}
+            <section className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs space-y-4">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                <div className="space-y-1.5 flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2 text-xs font-bold">
+                    <span className="text-slate-700 flex items-start space-x-1.5">
+                      <Award className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
+                      <span>
+                        {meta.shortLabel} 総合学習進捗（トピック・暗記カード・練習問題）
+                      </span>
+                    </span>
+                    <span className="font-mono text-sky-700 shrink-0">{overallPct}%</span>
+                  </div>
+                  <div className="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 transition-all duration-500"
+                      style={{ width: `${overallPct}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={handleExportNotesMarkdown}
+                    disabled={notedTopicCount === 0}
+                    title={
+                      notedTopicCount === 0
+                        ? "保存済みのメモがあると Markdown 形式で書き出せます"
+                        : `${notedTopicCount} 件の学習メモを Markdown で出力`
+                    }
+                    className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    <FileDown size={13} />
+                    <span>メモ出力 (.md)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    aria-expanded={showBackupPanel}
+                    aria-controls="azure-backup-panel"
+                    onClick={() => {
+                      playCyberClick();
+                      setShowBackupPanel((v) => !v);
+                    }}
+                    className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-700 hover:bg-slate-100 cursor-pointer"
+                  >
+                    <Download size={13} />
+                    <span>バックアップ / 復元</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleResetAllClick}
+                    className={`inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl border text-xs font-bold transition-colors cursor-pointer ${
+                      confirmReset
+                        ? "bg-rose-600 text-white border-rose-600"
+                        : "border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-rose-600"
+                    }`}
+                  >
+                    <RotateCcw size={13} />
+                    <span>{confirmReset ? "もう一度押すと全消去" : "進捗リセット"}</span>
+                  </button>
+                </div>
+              </div>
+
+              {!showBackupPanel && importMessage && (
+                <div role="status" aria-live="polite" className="text-xs font-bold text-sky-700">
+                  {importMessage}
+                </div>
+              )}
+
+              {showBackupPanel && (
+                <div id="azure-backup-panel" className="pt-4 border-t border-slate-100 space-y-3">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
+                    <p className="text-xs text-slate-600">
+                      {meta.shortLabel} の進捗やメモはブラウザの localStorage に保存されます。別端末へ移行する場合は JSON 文字列をコピーしてください。
+                    </p>
                 <button
                   type="button"
                   onClick={handleCopyBackup}
@@ -1442,14 +1146,14 @@ export default function AzureInfoPage() {
             {/* ドメイン別クイックジャンプ＆進捗ミニバー */}
             <div
               className={`grid grid-cols-2 sm:grid-cols-3 gap-2.5 ${
-                config.domains.length === 3
+                domains.length === 3
                   ? "lg:grid-cols-3"
-                  : config.domains.length === 4
+                  : domains.length === 4
                     ? "lg:grid-cols-4"
                     : "lg:grid-cols-5"
               }`}
             >
-              {config.domains.map((domain) => {
+              {domains.map((domain) => {
                 const style = ACCENT_STYLES[domain.accentColor];
                 const done = domain.topics.filter((t) =>
                   progress.completedTopics.includes(t.id)
@@ -1806,7 +1510,7 @@ export default function AzureInfoPage() {
                 <span className="text-[11px] font-bold text-slate-400 mr-1">
                   よく調べるサービス:
                 </span>
-                {config.quickSearchChips.map((kw) => {
+                {meta.quickSearchChips.map((kw) => {
                   const isSelected = compQuery.trim().toLowerCase() === kw.toLowerCase();
                   return (
                     <button
@@ -1869,7 +1573,7 @@ export default function AzureInfoPage() {
                     「{compQuery}」に一致する項目が見つかりませんでした
                   </div>
                   <p className="text-xs text-slate-500">
-                    別のキーワード（例：{config.quickSearchChips.slice(0, 4).join("、")}）で検索するか、条件をリセットしてください。
+                    別のキーワード（例：{meta.quickSearchChips.slice(0, 4).join("、")}）で検索するか、条件をリセットしてください。
                   </p>
                   <button
                     type="button"
@@ -1960,7 +1664,7 @@ export default function AzureInfoPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {filteredQuickLookup.map((item) => (
                     <div
-                      key={`${config.id}-ql-${item.keyword}`}
+                      key={`${meta.id}-ql-${item.keyword}`}
                       className="bg-white rounded-2xl border border-slate-200/80 p-5 space-y-2.5 shadow-xs min-w-0"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -2088,12 +1792,12 @@ export default function AzureInfoPage() {
           >
             <CertificationFlashcards
               key={certId}
-              items={config.quickLookup}
+              items={quickLookup}
               masteredKeywords={progress.masteredCards}
               onToggleMastered={handleToggleMasteredCard}
               onResetMastered={handleResetMasteredCards}
-              badgeText={`Azure ${config.shortLabel} 直前暗記フラッシュカード`}
-              title={config.flashcardTitle}
+              badgeText={`Azure ${meta.shortLabel} 直前暗記フラッシュカード`}
+              title={meta.flashcardTitle}
               promptLabel="次の要件に対応する Microsoft Azure サービス・機能は？"
               answerLabel="推奨サービス・機能"
             />
@@ -2109,10 +1813,10 @@ export default function AzureInfoPage() {
           >
             <CertificationPracticeQuiz
               key={certId}
-              questions={config.practiceQuestions}
+              questions={practiceQuestions}
               domains={quizDomains}
-              examBadgeLabel={config.quizBadgeLabel}
-              passingConfig={config.passingConfig}
+              examBadgeLabel={meta.quizBadgeLabel}
+              passingConfig={meta.passingConfig}
               answers={progress.quizAnswers}
               bookmarkedIds={progress.bookmarkedQuestions}
               mockExamHistory={progress.mockExamHistory}
@@ -2133,8 +1837,8 @@ export default function AzureInfoPage() {
             aria-labelledby="azure-tab-resources"
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
           >
-            {config.officialResources.map((res, idx) => (
-              <TiltCard key={`${config.id}-res-${idx}`} className="h-full">
+            {officialResources.map((res, idx) => (
+              <TiltCard key={`${meta.id}-res-${idx}`} className="h-full">
                 <a
                   href={res.url}
                   target="_blank"
@@ -2155,6 +1859,8 @@ export default function AzureInfoPage() {
               </TiltCard>
             ))}
           </div>
+        )}
+          </>
         )}
       </div>
     </div>
