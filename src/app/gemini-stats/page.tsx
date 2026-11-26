@@ -147,6 +147,7 @@ export default function GeminiStatsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isGcpDocOpen, setIsGcpDocOpen] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
   const [clientNowMs, setClientNowMs] = useState<number | null>(null);
 
   // 為替レート（概算 1ドル=150円）
@@ -414,6 +415,7 @@ export default function GeminiStatsPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const gasScriptExample = `/**
@@ -449,15 +451,26 @@ function doGet() {
     .setMimeType(ContentService.MimeType.JSON);
 }`;
 
-  const handleCopyCode = () => {
-    navigator.clipboard?.writeText(gasScriptExample).catch(() => {});
-    playCyberSuccess();
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+  const handleCopyCode = async () => {
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Clipboard API unavailable");
+      }
+      await navigator.clipboard.writeText(gasScriptExample);
+      playCyberSuccess();
+      setCopiedCode(true);
+      setLiveNotice("GAS連携スクリプトをクリップボードにコピーしました");
+      setTimeout(() => setCopiedCode(false), 2000);
+    } catch {
+      setLiveNotice("クリップボードへのコピーに失敗しました。コードを手動で選択してコピーしてください");
+    }
   };
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
+      <div role="status" aria-live="polite" className="sr-only">
+        {liveNotice}
+      </div>
       <HeroBanner
         title="Antigravity / Gemini 利用監視ダッシュボード"
         subtitle="社内アカウントの利用実績・無料クレジット消化状況・ユーザー別推移の可視化"
@@ -472,7 +485,7 @@ function doGet() {
             className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-5 sm:p-6 shadow-xl border border-indigo-900/50 flex flex-col xl:flex-row xl:items-center justify-between gap-4 cursor-default"
           >
             <div className="flex items-center space-x-3.5 min-w-0">
-              <div className={`w-3.5 h-3.5 rounded-full shrink-0 ${isLive ? "bg-emerald-400 animate-pulse shadow-[0_0_10px_#34d399]" : "bg-amber-400"}`} />
+              <div className={`w-3.5 h-3.5 rounded-full shrink-0 ${isLive ? "bg-emerald-400 motion-safe:animate-pulse shadow-[0_0_10px_#34d399]" : "bg-amber-400"}`} />
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-extrabold text-sm sm:text-base text-white tracking-tight">
@@ -504,7 +517,7 @@ function doGet() {
                 className="px-3.5 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 whitespace-nowrap transition-all cursor-pointer active:scale-95 disabled:opacity-50"
                 title="最新データを再取得"
               >
-                <RefreshCw size={13} className={isLoading ? "animate-spin" : ""} />
+                <RefreshCw size={13} className={isLoading ? "motion-safe:animate-spin" : ""} aria-hidden="true" />
                 <span>{isLoading ? "更新中..." : "即時再取得"}</span>
               </button>
               <button
@@ -558,9 +571,9 @@ function doGet() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="font-bold text-sm tracking-tight text-white flex items-center gap-2">
+                  <h2 className="font-bold text-sm tracking-tight text-white flex items-center gap-2">
                     Google Cloud Billing 実機コンソール確定データ
-                  </h3>
+                  </h2>
                   <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold">
                     実機一致確認済
                   </span>
@@ -797,7 +810,7 @@ function doGet() {
                   </span>
                 </div>
                 <div className="pt-2 flex items-center gap-1.5 text-xs text-slate-600">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 motion-safe:animate-pulse" />
                   <span>登録アカウント: {users.length}名</span>
                 </div>
               </div>
@@ -847,21 +860,23 @@ function doGet() {
 
         {/* 期間別利用推移チャート */}
         <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-xs space-y-5">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
               <div className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-bold text-slate-900 text-base">
+                <BarChart3 className="w-5 h-5 text-indigo-600" aria-hidden="true" />
+                <h2 className="font-bold text-slate-900 text-base">
                   日次利用推移（リクエスト回数 & 推定費用）
-                </h3>
+                </h2>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
                 直近のAntigravity / Gemini API呼び出し頻度と日別のトークン消費推移
               </p>
             </div>
 
-            <div className="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+            <div role="group" aria-label="集計期間を選択" className="flex items-center space-x-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold self-start lg:self-auto">
               <button
+                type="button"
+                aria-pressed={period === "7d"}
                 onClick={() => {
                   playCyberClick();
                   setPeriod("7d");
@@ -874,6 +889,8 @@ function doGet() {
                 過去7日
               </button>
               <button
+                type="button"
+                aria-pressed={period === "14d"}
                 onClick={() => {
                   playCyberClick();
                   setPeriod("14d");
@@ -886,6 +903,8 @@ function doGet() {
                 過去14日
               </button>
               <button
+                type="button"
+                aria-pressed={period === "30d"}
                 onClick={() => {
                   playCyberClick();
                   setPeriod("30d");
@@ -952,24 +971,24 @@ function doGet() {
 
         {/* AIモデル・SKU別 コスト分析（Google Cloud Billing 確定実績 - TODO-27） */}
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
             <div>
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-bold text-slate-900 text-base">
+                <Sparkles className="w-5 h-5 text-indigo-600" aria-hidden="true" />
+                <h2 className="font-bold text-slate-900 text-base">
                   利用モデル・SKU別 コスト分析（Google Cloud Billing 確定実績）
-                </h3>
+                </h2>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
                 Vertex AI (Gemini 3.8 Flash / 3.1 Pro) および Agent Platform の SKU 別支出比率（2026/10 初期計測 計 ¥7,105 時点の内訳スナップショット）
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full self-start sm:self-auto">
+            <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full self-start lg:self-auto shrink-0 whitespace-nowrap">
               全額無料クレジット枠で相殺中（実質0円）
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* SKU 1: Gemini 3.8 Flash */}
             <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
               <SpotlightCard
@@ -1061,13 +1080,13 @@ function doGet() {
 
         {/* ユーザー別利用量ランキング・詳細テーブル */}
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden space-y-4 p-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-bold text-slate-900 text-base">
+                <Users className="w-5 h-5 text-indigo-600" aria-hidden="true" />
+                <h2 className="font-bold text-slate-900 text-base">
                   社内アカウント別利用状況（誰がどれくらい使っているか）
-                </h3>
+                </h2>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
                 社員ごとのAPIリクエスト回数、消費トークン数、累計推定費用
@@ -1075,12 +1094,17 @@ function doGet() {
             </div>
 
             {/* 検索フィルター */}
-            <div className="relative w-full sm:w-64">
+            <div className="relative w-full lg:w-64">
+              <label htmlFor="gemini-stats-user-search" className="sr-only">
+                社員名・メールで検索
+              </label>
               <Search
                 size={15}
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                aria-hidden="true"
               />
               <input
+                id="gemini-stats-user-search"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -1161,43 +1185,48 @@ function doGet() {
 
         {/* GCPから実データを取得する仕組み・技術解説 & 設定手順 */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 space-y-4">
-          <div
-            onClick={() => {
-              playCyberClick();
-              setIsGcpDocOpen(!isGcpDocOpen);
-            }}
-            onMouseEnter={() => playCyberHover()}
-            className="flex items-center justify-between cursor-pointer select-none"
-          >
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
-                <Code size={20} />
+          <h2 className="m-0">
+            <button
+              type="button"
+              aria-expanded={isGcpDocOpen}
+              aria-controls="gemini-stats-gcp-doc-panel"
+              onClick={() => {
+                playCyberClick();
+                setIsGcpDocOpen(!isGcpDocOpen);
+              }}
+              onMouseEnter={() => playCyberHover()}
+              className="w-full text-left flex items-center justify-between gap-3 cursor-pointer"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="p-2 rounded-xl bg-blue-50 text-blue-600 shrink-0">
+                  <Code size={20} aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-bold text-slate-900 text-base flex flex-wrap items-center gap-2">
+                    <span>GCPから実データを自動取得・連携する仕組み（技術仕様）</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-mono">
+                      ARCHITECTURE
+                    </span>
+                  </div>
+                  <p className="text-xs font-normal text-slate-500 mt-0.5">
+                    「誰が」「どれくらい」「クレジット残高」をGCPからリアルタイム同期する方法
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                  <span>GCPから実データを自動取得・連携する仕組み（技術仕様）</span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-mono">
-                    ARCHITECTURE
-                  </span>
-                </h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  「誰が」「どれくらい」「クレジット残高」をGCPからリアルタイム同期する方法
-                </p>
-              </div>
-            </div>
-            <button className="text-slate-400 hover:text-slate-600 p-1">
-              {isGcpDocOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+              <span className="text-slate-400 hover:text-slate-600 p-1 shrink-0" aria-hidden="true">
+                {isGcpDocOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+              </span>
             </button>
-          </div>
+          </h2>
 
           {isGcpDocOpen && (
-            <div className="pt-4 border-t border-slate-100 space-y-5 text-xs text-slate-700 leading-relaxed animate-in fade-in duration-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div id="gemini-stats-gcp-doc-panel" className="pt-4 border-t border-slate-100 space-y-5 text-xs text-slate-700 leading-relaxed animate-in fade-in duration-200">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                  <h4 className="font-bold text-slate-900 flex items-center gap-1.5 text-sm">
-                    <CreditCard size={15} className="text-emerald-600" />
+                  <h3 className="font-bold text-slate-900 flex items-center gap-1.5 text-sm">
+                    <CreditCard size={15} className="text-emerald-600" aria-hidden="true" />
                     ① 無料クレジット残高・費用データの取得
-                  </h4>
+                  </h3>
                   <p>
                     Google Cloud の <strong>Cloud Billing API</strong>（または Billing の BigQuery エクスポート）から取得できます。
                   </p>
@@ -1208,10 +1237,10 @@ function doGet() {
                 </div>
 
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
-                  <h4 className="font-bold text-slate-900 flex items-center gap-1.5 text-sm">
-                    <Users size={15} className="text-blue-600" />
+                  <h3 className="font-bold text-slate-900 flex items-center gap-1.5 text-sm">
+                    <Users size={15} className="text-blue-600" aria-hidden="true" />
                     ②「誰が使っているか」社員別データの取得
-                  </h4>
+                  </h3>
                   <p>
                     課金（Billing）には直接個人名は載らないため、<strong>Cloud Logging（Data Access 監査ログ）</strong>を活用します。
                   </p>
@@ -1226,15 +1255,16 @@ function doGet() {
 
               {/* GAS連携スクリプトの案内 */}
               <div className="bg-slate-900 text-slate-200 rounded-xl p-5 space-y-3 font-mono">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2 gap-2">
                   <span className="text-cyan-300 text-xs font-bold">
                     📄 Google Apps Script (GAS) 連携用集計エンドポイントのサンプル
                   </span>
                   <button
+                    type="button"
                     onClick={handleCopyCode}
-                    className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[11px] flex items-center gap-1 transition-colors cursor-pointer"
+                    className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[11px] flex items-center gap-1 transition-colors cursor-pointer shrink-0"
                   >
-                    {copiedCode ? <Check size={12} className="text-emerald-400" /> : <Copy size={12} />}
+                    {copiedCode ? <Check size={12} className="text-emerald-400" aria-hidden="true" /> : <Copy size={12} aria-hidden="true" />}
                     <span>{copiedCode ? "コピー完了" : "コードをコピー"}</span>
                   </button>
                 </div>
@@ -1251,19 +1281,19 @@ function doGet() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-mono mb-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
                       AUTOMATION ACTIVE (TODO-32 COMPLETED)
                     </div>
-                    <h4 className="font-bold text-base text-white flex items-center gap-2">
+                    <h3 className="font-bold text-base text-white flex items-center gap-2">
                       <span>⚡ GitHub Secrets 連携による完全自動同期パイプライン（稼働中）</span>
-                    </h4>
+                    </h3>
                     <p className="text-xs text-indigo-200/80 mt-1">
                       管理者アカウント連携（authorized_user / ADC）により GitHub Secrets（GCP_SA_KEY）が登録され、定期ワークフローによる完全自動同期が本番稼働中です。
                     </p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 pt-2">
                   <div className="p-3.5 rounded-xl bg-white/5 border border-emerald-500/30 space-y-2">
                     <div className="flex items-center justify-between text-xs font-bold text-cyan-300">
                       <span>STEP 1: 認証情報検出</span>
@@ -1328,7 +1358,7 @@ powershell -ExecutionPolicy Bypass -File ./scripts/setup-gcp-sa.ps1
                   <p className="text-[11px] text-purple-100/90 leading-relaxed">
                     Google Cloud Billing REST API は無料クレジット残高を直接返さない仕様のため、Google Cloud 公式推奨の「課金データのエクスポート」を有効化することで、毎日のクレジット残高・相殺額・SKU別コストが 1 円単位で完全自動蓄積・同期されます。
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 text-xs">
                     <div className="bg-black/40 p-2.5 rounded-lg border border-purple-500/20 font-mono text-[11px]">
                       <div className="text-purple-300 font-bold text-[10px] mb-1">BigQuery 保存先（作成済）:</div>
                       <div className="text-purple-100 select-all">mighty-link-ai-connect-xxxxxx:gcp_billing_export</div>

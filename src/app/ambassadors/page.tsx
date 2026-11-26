@@ -179,13 +179,13 @@ export default function AmbassadorsPage() {
         {/* 第1期 制度（案） */}
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-xl">
           <div onMouseEnter={() => playCyberHover()} className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <h3 className="font-bold text-sm text-slate-900">第1期 AIアンバサダー制度</h3>
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2">
+            <h2 className="font-bold text-sm text-slate-900">第1期 AIアンバサダー制度</h2>
             <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 self-start">
               📋 準備中：社内決裁前の案です
             </span>
           </div>
-          <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-xs">
+          <dl className="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-2 text-xs">
             {programDraft.map((d) => (
               <div key={d.label} className="flex gap-2">
                 <dt className="font-bold text-slate-700 shrink-0 w-24">{d.label}</dt>
@@ -197,10 +197,14 @@ export default function AmbassadorsPage() {
       </TiltCard>
 
         {/* 検索 & フィルター */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="relative flex-1 max-w-sm">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <label htmlFor="ambassadors-search-input" className="sr-only">
+              アンバサダーを検索
+            </label>
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" aria-hidden="true" />
             <input
+              id="ambassadors-search-input"
               type="text"
               placeholder="アンバサダー名、所属、得意技術で検索..."
               value={searchQuery}
@@ -209,12 +213,14 @@ export default function AmbassadorsPage() {
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+          <div role="group" aria-label="得意技術で絞り込み" className="flex flex-wrap items-center gap-1.5 text-xs">
             {filterCategories.map((cat) => (
               <button
+                type="button"
                 key={cat}
+                aria-pressed={selectedCategory === cat}
                 onClick={() => { playCyberClick(); setSelectedCategory(cat); }} onMouseEnter={() => playCyberHover()}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${
                   selectedCategory === cat
                     ? "bg-slate-900 text-white shadow-xs font-semibold"
                     : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
@@ -227,7 +233,7 @@ export default function AmbassadorsPage() {
         </div>
 
         {/* アンバサダーグリッド */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
           {filteredAmbassadors.map((amb) => (
             <TiltCard
               key={amb.id}
@@ -247,7 +253,7 @@ export default function AmbassadorsPage() {
                     {amb.name.slice(0, 2)}
                   </div>
                   <div>
-                    <h4 className="font-bold text-slate-900 text-base">{amb.name}</h4>
+                    <h3 className="font-bold text-slate-900 text-base">{amb.name}</h3>
                     {amb.isModel && (
                       <span className="inline-block text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300">
                         📋 モデル（架空）
@@ -297,8 +303,9 @@ export default function AmbassadorsPage() {
               {/* アクションボタン */}
               <div className="pt-3 border-t border-slate-100 flex items-center space-x-2">
                 <button
+                  type="button"
                   onClick={() => { playCyberOpen(); setIsBookingModalOpen(true); }} onMouseEnter={() => playCyberHover()}
-                  className="flex-1 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-lg text-xs transition-colors border border-blue-200 text-center"
+                  className="flex-1 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold rounded-lg text-xs transition-colors border border-blue-200 text-center cursor-pointer"
                 >
                   Office Hourで相談
                 </button>
@@ -323,28 +330,29 @@ export default function AmbassadorsPage() {
                 <Users size={24} />
               </div>
               <div className="space-y-1">
-                <h4 className="text-base font-bold text-slate-900">
+                <h2 className="text-base font-bold text-slate-900">
                   第1期 社内AIアンバサダー 公募中
-                </h4>
+                </h2>
                 <p className="text-xs text-slate-500 max-w-lg mx-auto leading-relaxed">
                   アンバサダーは現在選定準備中です。各事業部・開発チームからAI活用を盛り上げてくださる推進メンバー（自薦・他薦問わず）をお待ちしています。
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => { playCyberOpen(); setIsApplyModalOpen(true); }} onMouseEnter={() => playCyberHover()}
-                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors"
+                className="inline-flex items-center space-x-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-xs transition-colors cursor-pointer"
               >
-                <UserPlus size={14} />
+                <UserPlus size={14} aria-hidden="true" />
                 <span>アンバサダーに応募・立候補する</span>
               </button>
             </div>
 
             {/* アンバサダー参加の4大メリット */}
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
-              <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-amber-500" />
+              <h2 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
+                <Sparkles className="w-4 h-4 text-amber-500" aria-hidden="true" />
                 <span>アンバサダー参加の4大メリット</span>
-              </h3>
+              </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
                 <SpotlightCard
                   spotlightColor="rgba(56, 189, 248, 0.2)"
@@ -394,10 +402,10 @@ export default function AmbassadorsPage() {
             </div>
             {/* よくある質問 (FAQ) */}
             <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs space-y-4">
-              <h3 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
-                <MessageCircle className="w-4 h-4 text-blue-600" />
+              <h2 className="font-bold text-slate-900 text-sm flex items-center space-x-2">
+                <MessageCircle className="w-4 h-4 text-blue-600" aria-hidden="true" />
                 <span>よくある質問 (FAQ)</span>
-              </h3>
+              </h2>
               <div className="space-y-3 text-xs">
                 <div className="p-3.5 rounded-xl border border-slate-100 bg-slate-50 space-y-1">
                   <p className="font-bold text-slate-900">Q. プログラミングやAIの専門知識に自信がなくても応募できますか？</p>
@@ -462,7 +470,7 @@ export default function AmbassadorsPage() {
                 <div className="w-12 h-12 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-md">
                   <CheckCircle2 size={28} aria-hidden="true" />
                 </div>
-                <h4 className="font-bold text-emerald-950 text-base">応募フォームを開きました</h4>
+                <h3 className="font-bold text-emerald-950 text-base">応募フォームを開きました</h3>
                 <p className="text-xs text-emerald-800 leading-relaxed">
                   別タブで開いた GitHub の画面で「Submit new issue」を押すと応募が完了し、AI推進担当 に通知が届きます。
                   選定後、AI推進担当 から Google Chat でご連絡します。

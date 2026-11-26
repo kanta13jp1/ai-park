@@ -70,6 +70,9 @@ const accountFaqs = [
 
 export default function ContactPage() {
   const [sent, setSent] = useState(false);
+  const [copiedText, setCopiedText] = useState("");
+  const [copySucceeded, setCopySucceeded] = useState(true);
+  const [liveNotice, setLiveNotice] = useState("");
   const [faqSearch, setFaqSearch] = useState("");
 
   const filteredFaqs = accountFaqs.filter(
@@ -80,6 +83,9 @@ export default function ContactPage() {
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
+      <div role="status" aria-live="polite" className="sr-only">
+        {liveNotice}
+      </div>
       <HeroBanner
         title="お問い合わせ"
         subtitle="AI Park運営・AI推進担当へのご意見・ご質問"
@@ -95,12 +101,12 @@ export default function ContactPage() {
           <div className="p-6 sm:p-8 space-y-6">
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200/60">
-                <MessageSquare size={13} />
+                <MessageSquare size={13} aria-hidden="true" />
                 <span>AI推進担当（担当：梅澤）へのお問い合わせ</span>
               </div>
-              <h3 className="font-black text-slate-900 text-xl tracking-tight">
+              <h2 className="font-black text-slate-900 text-xl tracking-tight">
                 ご意見・ご相談窓口
-              </h3>
+              </h2>
               <p className="text-xs sm:text-sm text-slate-500 font-normal">
                 ツールの新規申請相談、バグ報告、機能リクエスト等、お気軽にお問い合わせください。
               </p>
@@ -109,14 +115,30 @@ export default function ContactPage() {
             {sent ? (
               <div className="p-6 bg-emerald-500/10 border border-emerald-400/30 text-emerald-900 rounded-3xl text-center space-y-3">
                 <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mx-auto text-emerald-600">
-                  <CheckCircle2 size={24} />
+                  <CheckCircle2 size={24} aria-hidden="true" />
                 </div>
-                <h4 className="font-extrabold text-base text-emerald-950">
-                  問い合わせ内容をクリップボードにコピーしました！
-                </h4>
+                <h3 className="font-extrabold text-base text-emerald-950">
+                  {copySucceeded
+                    ? "問い合わせ内容をクリップボードにコピーしました！"
+                    : "問い合わせ内容を作成しました（手動でコピーしてください）"}
+                </h3>
                 <p className="text-xs text-emerald-800 leading-relaxed max-w-md mx-auto">
-                  Google Chat で <strong>AI推進担当（担当：梅澤）</strong> に貼り付けてそのまま送信してください。内容を確認のうえ迅速に折り返しご連絡いたします。
+                  {copySucceeded ? (
+                    <>
+                      Google Chat で <strong>AI推進担当（担当：梅澤）</strong> に貼り付けてそのまま送信してください。内容を確認のうえ迅速に折り返しご連絡いたします。
+                    </>
+                  ) : (
+                    <>
+                      ブラウザの制限により自動コピーできなかったため、下の内容をコピーして Google Chat で{" "}
+                      <strong>AI推進担当（担当：梅澤）</strong> に送信してください。
+                    </>
+                  )}
                 </p>
+                {!copySucceeded && copiedText && (
+                  <pre className="p-3 bg-white border border-emerald-200 rounded-xl text-left text-[11px] font-mono text-slate-800 whitespace-pre-wrap overflow-x-auto select-all max-w-lg mx-auto">
+                    {copiedText}
+                  </pre>
+                )}
                 <button
                   type="button"
                   onClick={() => {
@@ -131,7 +153,7 @@ export default function ContactPage() {
               </div>
             ) : (
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
                   // サーバーが無いため送信はせず、Google Chat に貼り付けられるよう内容をコピーする
                   const f = new FormData(e.currentTarget);
@@ -143,7 +165,20 @@ export default function ContactPage() {
                     "内容:",
                     String(f.get("body") ?? ""),
                   ].join("\n");
-                  navigator.clipboard?.writeText(text).catch(() => {});
+                  setCopiedText(text);
+                  let ok = false;
+                  try {
+                    if (!navigator.clipboard?.writeText) {
+                      throw new Error("Clipboard API unavailable");
+                    }
+                    await navigator.clipboard.writeText(text);
+                    ok = true;
+                    setLiveNotice("問い合わせ内容をクリップボードにコピーしました");
+                  } catch {
+                    ok = false;
+                    setLiveNotice("自動コピーに失敗しました。画面の文面を手動でコピーしてください");
+                  }
+                  setCopySucceeded(ok);
                   playCyberSuccess();
                   setSent(true);
                 }}
@@ -228,21 +263,25 @@ export default function ContactPage() {
             className="bg-white border-slate-200/90 shadow-sm rounded-3xl"
           >
           <div className="p-6 sm:p-8 space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200/60 flex items-center justify-center text-indigo-600">
-                  <HelpCircle size={18} />
+                <div className="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200/60 flex items-center justify-center text-indigo-600 shrink-0">
+                  <HelpCircle size={18} aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-lg">よくある質問：アカウント・ライセンス</h3>
+                  <h2 className="font-extrabold text-slate-900 text-lg">よくある質問：アカウント・ライセンス</h2>
                   <span className="text-[11px] text-slate-400">社内導入・課金・仕様に関するFAQ</span>
                 </div>
               </div>
 
               {/* FAQインクリメンタル検索バー */}
-              <div className="relative w-full sm:w-60">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+              <div className="relative w-full lg:w-60">
+                <label htmlFor="contact-faq-search" className="sr-only">
+                  FAQをキーワード検索
+                </label>
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
                 <input
+                  id="contact-faq-search"
                   type="text"
                   aria-label="FAQをキーワード検索"
                   value={faqSearch}
@@ -303,16 +342,16 @@ export default function ContactPage() {
         {/* 開発規模ごとのコスト目安 & 予算上限設定ガイド（ご意見TODO-09への対応） */}
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
           <section id="cost-guidelines" className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6 scroll-mt-6">
-          <div className="border-b border-slate-100 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="border-b border-slate-100 pb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-2">
             <div>
               <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 font-mono uppercase tracking-wider">
                 COST MANAGEMENT
               </span>
-              <h3 className="font-extrabold text-slate-900 text-lg mt-1.5">
+              <h2 className="font-extrabold text-slate-900 text-lg mt-1.5">
                 Antigravity 開発規模別コスト目安表 & 予算アラート設定
-              </h3>
+              </h2>
             </div>
-            <span className="text-xs text-slate-400 font-medium">社内エンジニア向け（小林さんご意見反映）</span>
+            <span className="text-xs text-slate-400 font-medium shrink-0">社内エンジニア向け（小林さんご意見反映）</span>
           </div>
 
           <p className="text-xs text-slate-600 leading-relaxed">
@@ -380,9 +419,9 @@ export default function ContactPage() {
 
           {/* 予算上限・アラート設定手順 */}
           <div className="bg-slate-50 rounded-xl p-5 border border-slate-200/80 space-y-3 text-xs">
-            <h4 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+            <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
               <span>🛡️ 予期せぬ課金を防ぐ「予算アラート」の3ステップ設定</span>
-            </h4>
+            </h3>
             <ol className="list-decimal pl-5 space-y-1.5 text-slate-700 leading-relaxed">
               <li>
                 <a href="https://console.cloud.google.com/billing" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">

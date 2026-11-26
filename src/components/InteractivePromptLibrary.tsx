@@ -305,10 +305,10 @@ export default function InteractivePromptLibrary() {
         {liveNotice}
       </div>
       {/* ヘッダー */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-indigo-600" aria-hidden="true" />
+            <Sparkles className="w-5 h-5 text-indigo-600 shrink-0" aria-hidden="true" />
             <h2 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
               実務ですぐ使えるプロンプト集（穴埋め入力＆ワンクリックコピー）
             </h2>
@@ -317,7 +317,7 @@ export default function InteractivePromptLibrary() {
             プレースホルダーに業務内容を入力するだけで、社内ルールに即した安全なプロンプトがリアルタイムで完成します。
           </p>
         </div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/60 self-start sm:self-auto">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/60 self-start lg:self-auto shrink-0 whitespace-nowrap">
           <span>⚡ コピペですぐ動く</span>
         </div>
       </div>

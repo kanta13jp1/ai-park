@@ -146,10 +146,10 @@ export default function Home() {
           <div className="absolute -top-12 -right-12 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-12 -left-12 w-72 h-72 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
             <div className="flex items-start sm:items-center space-x-4">
               <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-indigo-500/30 to-blue-500/20 border border-indigo-400/40 flex items-center justify-center shrink-0 text-cyan-300 shadow-inner">
-                <Sparkles size={24} className="animate-pulse" />
+                <Sparkles size={24} className="motion-safe:animate-pulse" aria-hidden="true" />
               </div>
               <div className="space-y-1">
                 <div className="flex items-center space-x-2">
@@ -158,9 +158,9 @@ export default function Home() {
                   </span>
                   <span className="text-xs font-semibold text-indigo-200">社員のご意見から進化中</span>
                 </div>
-                <h3 className="font-extrabold text-base sm:text-lg text-white tracking-tight">
+                <h2 className="font-extrabold text-base sm:text-lg text-white tracking-tight">
                   社内Chatでいただいたご意見を「改善ToDoボード」として蓄積・自動同期しています
-                </h3>
+                </h2>
                 <p className="text-xs text-slate-300/90 leading-relaxed max-w-2xl">
                   杉村さんからの「シンプル導線」「導入・初級・実践編」や小林さんからのアカウント疑問などをタスク化し、GitHub Issueとリアルタイム連携しています。
                 </p>
@@ -171,10 +171,10 @@ export default function Home() {
               href="/feedback-todo"
               onClick={() => playCyberClick()}
               onMouseEnter={() => playCyberHover()}
-              className="shrink-0 inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black rounded-xl text-xs transition-all shadow-lg hover:shadow-cyan-400/25 active:scale-95 self-start sm:self-center cursor-pointer"
+              className="shrink-0 inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-black rounded-xl text-xs transition-all shadow-lg hover:shadow-cyan-400/25 active:scale-95 self-start lg:self-center cursor-pointer"
             >
               <span>改善ToDoボードを見る</span>
-              <ArrowRight size={14} />
+              <ArrowRight size={14} aria-hidden="true" />
             </Link>
           </div>
         </div>
@@ -184,26 +184,26 @@ export default function Home() {
 
         {/* はじめての方向け 迷わない3ステップ導線（インフォグラフィック・ジャーニー） */}
         <section className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div className="space-y-1">
               <div className="flex items-center space-x-2">
                 <span className="p-1 rounded-lg bg-emerald-50 text-emerald-600">
-                  <Compass size={20} />
+                  <Compass size={20} aria-hidden="true" />
                 </span>
-                <h3 className="font-extrabold text-slate-900 text-lg sm:text-xl tracking-tight">
+                <h2 className="font-extrabold text-slate-900 text-lg sm:text-xl tracking-tight">
                   はじめての方へ：迷わない社内AI活用 3ステップ
-                </h3>
+                </h2>
               </div>
               <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
                 「情報が多くてどこから手をつければいいか分からない」というお声に応え、最短で実務に活かせる王道ステップを整理しました。
               </p>
             </div>
-            <span className="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-3 py-1 rounded-full self-start sm:self-center shadow-xs">
+            <span className="text-xs font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/60 px-3 py-1 rounded-full self-start lg:self-center shrink-0 whitespace-nowrap shadow-xs">
               最短10分でスタート！
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Step 1: 導入編 */}
             <TiltCard maxTilt={5} glareOpacity={0.1} className="h-full rounded-2xl">
               <SpotlightCard
@@ -223,10 +223,10 @@ export default function Home() {
                       <span className="text-xs text-slate-400 font-medium">所要 10分</span>
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-extrabold text-slate-900 group-hover:text-sky-600 text-base flex items-center space-x-2 transition-colors">
+                      <h3 className="font-extrabold text-slate-900 group-hover:text-sky-600 text-base flex items-center space-x-2 transition-colors">
                         <span className="text-xl">🔰</span>
                         <span>AI環境セットアップ</span>
-                      </h4>
+                      </h3>
                       <p className="text-xs text-slate-600 leading-relaxed">
                         Google Antigravity のインストールと VS Code / IDE の日本語化。迷わず安全に使える開発環境を最速で構築します。
                       </p>
@@ -259,10 +259,10 @@ export default function Home() {
                       <span className="text-xs text-slate-400 font-medium">初心者・非エンジニア向け</span>
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-extrabold text-slate-900 group-hover:text-amber-700 text-base flex items-center space-x-2 transition-colors">
+                      <h3 className="font-extrabold text-slate-900 group-hover:text-amber-700 text-base flex items-center space-x-2 transition-colors">
                         <span className="text-xl">📖</span>
                         <span>基本プロンプト & 指示法</span>
-                      </h4>
+                      </h3>
                       <p className="text-xs text-slate-600 leading-relaxed">
                         Antigravityへの的確な指示出し、ファイル編集の依頼法、エラー解決の基本手順書（チートシート）を習得します。
                       </p>
@@ -295,10 +295,10 @@ export default function Home() {
                       <span className="text-xs text-slate-400 font-medium">社内実践事例</span>
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-extrabold text-slate-900 group-hover:text-indigo-600 text-base flex items-center space-x-2 transition-colors">
+                      <h3 className="font-extrabold text-slate-900 group-hover:text-indigo-600 text-base flex items-center space-x-2 transition-colors">
                         <span className="text-xl">🏢</span>
                         <span>社内プロジェクト実践</span>
-                      </h4>
+                      </h3>
                       <p className="text-xs text-slate-600 leading-relaxed">
                         各事業部が何のツールでどんな業務改善を行っているかをリアルタイム一覧で確認し、自チームの業務へ横展開します。
                       </p>
@@ -317,7 +317,7 @@ export default function Home() {
           <Link
             href="/academy"
             onClick={() => playCyberClick()}
-            className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-indigo-950 to-blue-950 text-white border border-indigo-600/50 shadow-lg hover:shadow-2xl hover:border-indigo-400 transition-all duration-300 p-6 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-5 group"
+            className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-950 via-indigo-950 to-blue-950 text-white border border-indigo-600/50 shadow-lg hover:shadow-2xl hover:border-indigo-400 transition-all duration-300 p-6 sm:p-7 flex flex-col lg:flex-row lg:items-center justify-between gap-5 group"
           >
             {/* 背景のネオングロー */}
             <div className="absolute top-0 right-1/4 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none group-hover:bg-indigo-500/30 transition-colors" />
@@ -335,23 +335,23 @@ export default function Home() {
                   </span>
                   <span className="text-xs text-indigo-200">動画全12レッスン ＆ ブラウザ内修了証発行</span>
                 </div>
-                <h4 className="text-base sm:text-lg font-black text-white tracking-tight">
+                <h3 className="text-base sm:text-lg font-black text-white tracking-tight">
                   Antigravity Academy — 体系的に学ぶ実践チュートリアル
-                </h4>
+                </h3>
                 <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
                   基本操作からSubagents並列実行、外部MCP連携、安全な社内AI利用規約までを全3コースで完全網羅。
                 </p>
               </div>
             </div>
 
-            <div className="relative z-10 shrink-0 inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-black rounded-xl text-xs transition-all shadow-md group-hover:shadow-cyan-400/30 self-start md:self-center">
+            <div className="relative z-10 shrink-0 inline-flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-black rounded-xl text-xs transition-all shadow-md group-hover:shadow-cyan-400/30 self-start lg:self-center">
               <span>Academyを受講する（無料）</span>
               <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
             </div>
           </Link>
 
           {/* 注目のサブ導線（ビジネスモデル懸賞 ＆ セキュリティ基準） */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1">
             <Link
               href="/idea-board"
               className="flex items-center justify-between p-4 bg-slate-50/80 hover:bg-amber-50/70 border border-slate-200 hover:border-amber-300 rounded-2xl transition-all shadow-2xs group"
@@ -359,15 +359,15 @@ export default function Home() {
               <div className="flex items-center space-x-3.5">
                 <span className="text-2xl p-2 bg-amber-100 rounded-xl">💡</span>
                 <div>
-                  <h5 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-amber-800 transition-colors">
+                  <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-amber-800 transition-colors">
                     社内AIビジネスモデル提案（懸賞・企画）
-                  </h5>
+                  </h3>
                   <p className="text-[11px] text-slate-500">
                     AIを使った新しい業務改革・事業アイデアの宣言ボード
                   </p>
                 </div>
               </div>
-              <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 group-hover:text-amber-600 transition-all" />
+              <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 group-hover:text-amber-600 transition-all shrink-0" />
             </Link>
 
             <Link
@@ -377,15 +377,15 @@ export default function Home() {
               <div className="flex items-center space-x-3.5">
                 <span className="text-2xl p-2 bg-rose-100 rounded-xl">⚠️</span>
                 <div>
-                  <h5 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-rose-800 transition-colors">
+                  <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-rose-800 transition-colors">
                     社内AI利用時の注意事項・セキュリティ基準
-                  </h5>
+                  </h3>
                   <p className="text-[11px] text-slate-500">
                     機密情報マスキングルールとLevel 1〜3早見表
                   </p>
                 </div>
               </div>
-              <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 group-hover:text-rose-600 transition-all" />
+              <ChevronRight size={18} className="text-slate-400 group-hover:translate-x-1 group-hover:text-rose-600 transition-all shrink-0" />
             </Link>
           </div>
         </section>
@@ -397,7 +397,7 @@ export default function Home() {
         <SiteOmnisearch />
 
         {/* 3. プロジェクト進捗・ロードマップ案内バナー */}
-        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-6 md:p-7 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-5 border border-slate-700/60">
+        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 rounded-3xl p-6 md:p-7 text-white shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-5 border border-slate-700/60">
           <div className="space-y-1.5 max-w-2xl">
             <div className="flex items-center space-x-2">
               <span className="px-2.5 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-400/30 rounded-full text-[11px] font-bold">
@@ -405,32 +405,32 @@ export default function Home() {
               </span>
               <span className="text-xs text-slate-300 font-semibold">透明性の高い開発推進</span>
             </div>
-            <h3 className="font-black text-base md:text-lg text-white tracking-tight">
+            <h2 className="font-black text-base md:text-lg text-white tracking-tight">
               準備中機能の実装スケジュール & 開発ロードマップ
-            </h3>
+            </h2>
             <p className="text-xs text-slate-300 leading-relaxed">
               事実確認・実データ連携が完了していない機能の公式公開日と、クリアすべき条件をすべて公開しています。
             </p>
           </div>
           <Link
             href="/roadmap"
-            className="shrink-0 inline-flex items-center space-x-2 px-5 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black rounded-xl text-xs transition-colors shadow-sm self-start md:self-center"
+            className="shrink-0 inline-flex items-center space-x-2 px-5 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-slate-950 font-black rounded-xl text-xs transition-colors shadow-sm self-start lg:self-center"
           >
             <span>開発ロードマップを見る</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
           </Link>
         </div>
 
         {/* 4. メインナビゲーションカードグリッド（8大機能カード / SpotlightCard適用） */}
         <section className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2 tracking-tight">
-              <Layers className="w-5 h-5 text-blue-600" />
+            <h2 className="text-lg font-black text-slate-900 flex items-center space-x-2 tracking-tight">
+              <Layers className="w-5 h-5 text-blue-600" aria-hidden="true" />
               <span>おすすめ・主要コンテンツ</span>
-            </h3>
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5">
             {quickLinks.map((item) => (
               <TiltCard
                 key={item.href}
@@ -466,9 +466,9 @@ export default function Home() {
                         </span>
                       )}
                     </div>
-                    <h4 className="font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors text-base leading-snug">
+                    <h3 className="font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors text-base leading-snug">
                       {item.title}
-                    </h4>
+                    </h3>
                     <p className="text-xs text-slate-600 leading-relaxed">
                       {item.description}
                     </p>
@@ -510,12 +510,12 @@ export default function Home() {
 
         {/* 6. なぜ Antigravity なのか？ 3つの強み */}
         <section className="space-y-4">
-          <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2 tracking-tight">
-            <Zap className="w-5 h-5 text-amber-500" />
+          <h2 className="text-lg font-black text-slate-900 flex items-center space-x-2 tracking-tight">
+            <Zap className="w-5 h-5 text-amber-500" aria-hidden="true" />
             <span>なぜ Google Antigravity なのか？ 3つの革新性</span>
-          </h3>
+          </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl h-full">
               <div onMouseEnter={() => playCyberHover()} className="h-full">
                 <SpotlightCard
@@ -524,9 +524,9 @@ export default function Home() {
                 >
                   <div className="p-6 space-y-3">
                     <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold shadow-2xs border border-blue-100">
-                      <Boxes size={22} />
+                      <Boxes size={22} aria-hidden="true" />
                     </div>
-                    <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">自律型Subagentsの並列協調</h4>
+                    <h3 className="font-extrabold text-slate-900 text-sm tracking-tight">自律型Subagentsの並列協調</h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">
                       単一プロンプトにとどまらず、リサーチ・設計・テスト生成など専門役割を持つサブエージェントを自律的に並列実行できます。
                     </p>
@@ -543,9 +543,9 @@ export default function Home() {
                 >
                   <div className="p-6 space-y-3">
                     <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shadow-2xs border border-emerald-100">
-                      <Terminal size={22} />
+                      <Terminal size={22} aria-hidden="true" />
                     </div>
-                    <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">Skills & Rules による社内統制</h4>
+                    <h3 className="font-extrabold text-slate-900 text-sm tracking-tight">Skills & Rules による社内統制</h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">
                       破壊的コマンド実行防止や独自のコーディング規約を `SKILL.md` や `RULE` として定義し、社内標準をAIに確実に遵守させます。
                     </p>
@@ -562,9 +562,9 @@ export default function Home() {
                 >
                   <div className="p-6 space-y-3">
                     <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold shadow-2xs border border-purple-100">
-                      <Plug size={22} />
+                      <Plug size={22} aria-hidden="true" />
                     </div>
-                    <h4 className="font-extrabold text-slate-900 text-sm tracking-tight">オープン標準 MCP ツール連携</h4>
+                    <h3 className="font-extrabold text-slate-900 text-sm tracking-tight">オープン標準 MCP ツール連携</h3>
                     <p className="text-xs text-slate-600 leading-relaxed font-normal">
                       社内データベース、GitHub、ブラウザテストツールを直結し、エージェントが必要な外部ツールを自律的に呼び出せます。
                     </p>
@@ -583,9 +583,9 @@ export default function Home() {
             <span className="text-xs font-mono font-bold px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 inline-block">
               AI推進担当 サポートデスク
             </span>
-            <h3 className="text-2xl sm:text-3xl font-black tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
               AI導入の疑問や自チームへの適用相談をお待ちしています
-            </h3>
+            </h2>
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
               「自チームの業務にエージェントを組み込みたい」「カスタムSkillsの作り方を教えてほしい」など、AI推進担当（担当：梅澤）がOffice Hourで個別に対応します。
             </p>

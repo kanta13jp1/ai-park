@@ -107,25 +107,28 @@ export default function PurposeJump() {
     <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
       <div className="flex items-center space-x-3 border-b border-slate-100 pb-4">
         <div className="p-2.5 bg-gradient-to-br from-rose-500 to-amber-500 text-white rounded-2xl shadow-sm shadow-rose-500/20">
-          <Rocket size={20} />
+          <Rocket size={20} aria-hidden="true" />
         </div>
         <div>
-          <h3 className="font-black text-slate-900 text-lg sm:text-xl flex items-center space-x-2 tracking-tight">
+          <h2 className="font-black text-slate-900 text-lg sm:text-xl flex items-center space-x-2 tracking-tight">
             <span>何がしたい？</span>
             <span className="text-xs text-slate-500 font-normal">目的に合わせて最短アクセス</span>
-          </h3>
+          </h2>
         </div>
       </div>
 
       {/* 3大カテゴリセレクターカード */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div role="group" aria-label="目的別カテゴリ選択" className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {jumpSections.map((sec) => {
           const Icon = sec.icon;
           const isSelected = activeCategory === sec.id;
 
           return (
             <button
+              type="button"
               key={sec.id}
+              aria-expanded={isSelected}
+              aria-controls={isSelected ? "purpose-jump-panel" : undefined}
               onClick={() => {
                 playCyberClick();
                 setActiveCategory(isSelected ? null : sec.id);
@@ -142,11 +145,11 @@ export default function PurposeJump() {
                   isSelected ? "bg-white shadow-md" : "bg-white"
                 }`}
               >
-                <Icon size={28} className={sec.color} />
+                <Icon size={28} className={sec.color} aria-hidden="true" />
               </div>
 
               <div className="space-y-1">
-                <h4 className="font-extrabold text-slate-900 text-base tracking-tight">{sec.title}</h4>
+                <span className="block font-extrabold text-slate-900 text-base tracking-tight">{sec.title}</span>
                 <p className="text-xs text-slate-500 font-normal leading-relaxed">{sec.subtitle}</p>
               </div>
 
@@ -164,17 +167,17 @@ export default function PurposeJump() {
 
       {/* 展開されたリンク一覧エリア */}
       {currentSection && (
-        <div className="pt-2 animate-in fade-in zoom-in-95 duration-200">
+        <div id="purpose-jump-panel" className="pt-2 animate-in fade-in zoom-in-95 duration-200">
           <div className="bg-slate-50/80 rounded-2xl p-5 border border-slate-200/80 space-y-3">
             <div className="flex items-center justify-between text-xs text-slate-500 pb-1">
               <span className="font-bold text-slate-800 flex items-center space-x-1.5">
-                <Sparkles size={14} className={currentSection.color} />
+                <Sparkles size={14} className={currentSection.color} aria-hidden="true" />
                 <span>「{currentSection.title}」の関連ページ ({currentSection.items.length}件)</span>
               </span>
               <span className="text-[11px]">目的のページをクリックしてください</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3.5">
               {currentSection.items.map((item) => {
                 const isExternal = item.href.startsWith("http");
 
@@ -191,9 +194,9 @@ export default function PurposeJump() {
                       >
                         <div>
                           <div className="flex items-center justify-between gap-2">
-                            <h5 className="font-extrabold text-slate-900 text-xs group-hover:text-blue-600 transition-colors">
+                            <h3 className="font-extrabold text-slate-900 text-xs group-hover:text-blue-600 transition-colors">
                               {item.name}
-                            </h5>
+                            </h3>
                             {item.badge && (
                               <span className="text-[9.5px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold border border-slate-200/60 shrink-0">
                                 {item.badge}
@@ -223,9 +226,9 @@ export default function PurposeJump() {
                     >
                       <div>
                         <div className="flex items-center justify-between gap-2">
-                          <h5 className="font-extrabold text-slate-900 text-xs group-hover:text-blue-600 transition-colors">
+                          <h3 className="font-extrabold text-slate-900 text-xs group-hover:text-blue-600 transition-colors">
                             {item.name}
-                          </h5>
+                          </h3>
                           {item.badge && (
                             <span className="text-[9.5px] px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200/60 shrink-0">
                               {item.badge}

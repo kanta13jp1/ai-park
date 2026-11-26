@@ -333,19 +333,19 @@ export default function SiteOmnisearch() {
   return (
     <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-3xl overflow-hidden shadow-xs">
       {/* 検索ヘッダーバー (ラグジュアリー・サイバーグラデーション) */}
-      <div className="bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 text-white px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-blue-900/40">
+      <div className="bg-gradient-to-r from-slate-950 via-blue-950 to-indigo-950 text-white px-6 sm:px-8 py-5 flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-blue-900/40">
         <div className="flex items-center space-x-3">
           <div className="p-2.5 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl text-slate-950 shadow-md shadow-cyan-500/20">
-            <Search size={18} />
+            <Search size={18} aria-hidden="true" />
           </div>
           <div>
-            <h3 className="font-black text-base sm:text-lg tracking-tight">サイト内横断検索</h3>
+            <h2 className="font-black text-base sm:text-lg tracking-tight">サイト内横断検索</h2>
             <p className="text-xs text-slate-300 font-light">
               AI Park 内のガイド、Academy、事例、アンバサダー、利用規約を瞬時に横断検索
             </p>
           </div>
         </div>
-        <div className="hidden sm:flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-slate-300 font-mono">
+        <div className="hidden lg:flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs text-slate-300 font-mono">
           <span className="flex items-center space-x-1">
             <kbd className="px-1.5 py-0.5 text-[10px] bg-white/15 rounded">/</kbd>
             <span className="text-[11px] text-slate-400">フォーカス</span>
@@ -361,7 +361,10 @@ export default function SiteOmnisearch() {
       {/* 検索フォーム & サジェストタグ */}
       <div className="p-6 sm:p-8 space-y-4">
         <div className="relative flex items-center">
-          <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" />
+          <label htmlFor="site-omnisearch-input" className="sr-only">
+            サイト内横断検索
+          </label>
+          <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" aria-hidden="true" />
           <input
             id="site-omnisearch-input"
             type="text"
@@ -372,6 +375,8 @@ export default function SiteOmnisearch() {
           />
           {query && (
             <button
+              type="button"
+              aria-label="検索をクリア"
               onClick={() => {
                 playCyberClick();
                 setQuery("");
@@ -379,7 +384,7 @@ export default function SiteOmnisearch() {
               onMouseEnter={() => playCyberHover()}
               className="absolute right-3.5 p-1 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-200 transition-colors cursor-pointer"
             >
-              <X size={16} />
+              <X size={16} aria-hidden="true" />
             </button>
           )}
         </div>
@@ -387,11 +392,12 @@ export default function SiteOmnisearch() {
         {/* 人気の検索キーワード */}
         <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
           <span className="font-bold text-slate-700 flex items-center space-x-1 mr-1">
-            <Tag size={12} className="text-blue-600" />
+            <Tag size={12} className="text-blue-600" aria-hidden="true" />
             <span>クイック検索タグ:</span>
           </span>
           {popularTags.map((tag) => (
             <button
+              type="button"
               key={tag}
               onClick={() => {
                 playCyberClick();
@@ -409,14 +415,14 @@ export default function SiteOmnisearch() {
         {query.trim() && (
           <div className="pt-3 border-t border-slate-100 space-y-3 animate-in fade-in duration-150">
             <div className="flex items-center justify-between text-xs text-slate-500">
-              <span className="font-bold text-slate-800">
+              <span role="status" aria-live="polite" className="font-bold text-slate-800">
                 検索結果: {searchResults.length} 件がヒットしました
               </span>
               <span>「{query}」の検索結果</span>
             </div>
 
             {searchResults.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {searchResults.map((result) => (
                   <Link
                     key={result.title}
@@ -431,9 +437,9 @@ export default function SiteOmnisearch() {
                           {result.category}
                         </span>
                       </div>
-                      <h4 className="font-extrabold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
+                      <h3 className="font-extrabold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
                         {result.title}
-                      </h4>
+                      </h3>
                       <p className="text-xs text-slate-600 leading-relaxed font-normal">
                         {result.description}
                       </p>

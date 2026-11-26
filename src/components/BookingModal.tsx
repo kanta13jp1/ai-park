@@ -28,6 +28,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
   const [preferredDate, setPreferredDate] = useState("");
   const [description, setDescription] = useState("");
   const [copiedMemo, setCopiedMemo] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
 
   useEffect(() => {
     if (!isOpen) return;
@@ -73,13 +74,17 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
   const handleCopyMemo = async () => {
     const memo = `【AI Office Hour 予約受付メモ】\n相談者: ${name} (${department})\nテーマ: ${topic}\n希望日時: ${preferredDate}\n相談概要: ${description}`;
-    if (typeof navigator === "undefined" || !navigator.clipboard) return;
+    if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) {
+      setLiveNotice("クリップボードへコピーできませんでした");
+      return;
+    }
     try {
       await navigator.clipboard.writeText(memo);
       setCopiedMemo(true);
+      setLiveNotice("予約詳細メモをクリップボードにコピーしました");
       setTimeout(() => setCopiedMemo(false), 2000);
     } catch {
-      // clipboard permission denied
+      setLiveNotice("クリップボードへのコピーに失敗しました");
     }
   };
 
@@ -95,13 +100,16 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
         onClick={(e) => e.stopPropagation()}
         className="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-200"
       >
+        <div role="status" aria-live="polite" className="sr-only">
+          {liveNotice}
+        </div>
         {/* モーダルヘッダー */}
         <div className="bg-[#3b4856] text-white px-6 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Calendar className="w-5 h-5 text-cyan-300" aria-hidden="true" />
-            <h3 id="booking-modal-title" className="font-bold text-base md:text-lg">
+            <h2 id="booking-modal-title" className="font-bold text-base md:text-lg">
               AI Office Hour 予約
-            </h3>
+            </h2>
           </div>
           <button
             type="button"
@@ -125,9 +133,9 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
             </div>
 
             <div className="space-y-1">
-              <h4 className="text-lg font-bold text-slate-800">
+              <h3 className="text-lg font-bold text-slate-800">
                 予約メモができました（まだ送信されていません）
-              </h4>
+              </h3>
               <p className="text-xs text-slate-600 leading-relaxed max-w-sm mx-auto">
                 下の「予約詳細メモをコピー」を押し、Google Chat で AI推進担当（担当：梅澤）に送ってください。日程が決まったら Google Meet の招待が届きます。
               </p>
@@ -182,6 +190,7 @@ export default function BookingModal({ isOpen, onClose }: BookingModalProps) {
 
             <div className="pt-2">
               <button
+                type="button"
                 onClick={() => {
                   playCyberClick();
                   handleResetAndClose();

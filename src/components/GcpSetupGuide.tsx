@@ -189,7 +189,7 @@ export default function GcpSetupGuide() {
           <Building2 size={15} aria-hidden="true" /> 管理者の初回設定（1回だけ）
         </h3>
         {adminSteps.map((s) => (
-          <StepCard key={s.id} step={s} />
+          <StepCard key={s.id} step={s} headingLevel="h4" />
         ))}
       </div>
 
@@ -198,7 +198,7 @@ export default function GcpSetupGuide() {
           <UserCheck size={15} aria-hidden="true" /> 利用者の設定
         </h3>
         {userSteps.map((s) => (
-          <StepCard key={s.id} step={s} />
+          <StepCard key={s.id} step={s} headingLevel="h4" />
         ))}
       </div>
 

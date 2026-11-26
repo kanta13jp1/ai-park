@@ -16,7 +16,14 @@ export interface GuideStep {
   imageAlt: string;
 }
 
-export default function StepCard({ step }: { step: GuideStep }) {
+export default function StepCard({
+  step,
+  headingLevel = "h3",
+}: {
+  step: GuideStep;
+  headingLevel?: "h3" | "h4";
+}) {
+  const HeadingTag = headingLevel;
   return (
     <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
       <div
@@ -30,9 +37,9 @@ export default function StepCard({ step }: { step: GuideStep }) {
             <span className="text-xs font-mono font-black px-3 py-1 rounded-full bg-slate-900 text-white tracking-wider shadow-xs">
               {step.id}
             </span>
-            <h4 className="font-extrabold text-slate-900 text-base leading-snug tracking-tight">
+            <HeadingTag className="font-extrabold text-slate-900 text-base leading-snug tracking-tight">
               {step.title}
-            </h4>
+            </HeadingTag>
             {step.who && (
               <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-200/60 text-indigo-700 font-bold">
                 担当：{step.who}

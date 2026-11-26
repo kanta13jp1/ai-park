@@ -86,6 +86,7 @@ export default function InterviewsPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [copiedPromptId, setCopiedPromptId] = useState<string | null>(null);
+  const [liveNotice, setLiveNotice] = useState("");
 
   useEffect(() => {
     if (!selectedArticle) return;
@@ -118,12 +119,16 @@ export default function InterviewsPage() {
 
   const handleCopyPrompt = async (id: string, text: string) => {
     try {
-      await navigator.clipboard?.writeText(text);
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Clipboard API unavailable");
+      }
+      await navigator.clipboard.writeText(text);
       playCyberSuccess();
       setCopiedPromptId(id);
+      setLiveNotice(id === "sheet" ? "質問シートをクリップボードにコピーしました" : "プロンプトをクリップボードにコピーしました");
       setTimeout(() => setCopiedPromptId(null), 2500);
     } catch {
-      // クリップボードAPI利用不可環境では握りつぶす
+      setLiveNotice("クリップボードへのコピーに失敗しました。画面の文章を手動でコピーしてください");
     }
   };
 
@@ -134,6 +139,9 @@ export default function InterviewsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center">
+      <div role="status" aria-live="polite" className="sr-only">
+        {liveNotice}
+      </div>
       {/* ヒーローヘッダー */}
       <div className="w-full relative overflow-hidden bg-gradient-to-r from-slate-950 via-slate-900 to-indigo-950 text-white py-14 sm:py-20 px-4 border-b border-slate-800 shadow-lg">
         <div className="absolute inset-0 opacity-25 pointer-events-none">
@@ -161,7 +169,7 @@ export default function InterviewsPage() {
       <div className="max-w-5xl w-full mx-auto px-4 py-8 space-y-8">
         {/* 取材立候補案内バナー */}
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
-          <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 text-white rounded-2xl p-6 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-5 border border-indigo-700/50">
+          <div className="bg-gradient-to-r from-indigo-900 via-slate-900 to-indigo-950 text-white rounded-2xl p-6 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-5 border border-indigo-700/50">
             <div className="space-y-1.5">
               <div className="flex items-center space-x-2">
                 <span className="px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 text-[10px] font-bold border border-cyan-400/30">
@@ -169,22 +177,23 @@ export default function InterviewsPage() {
                 </span>
                 <span className="text-xs text-slate-300 font-medium">次回インタビューの主役はあなたです！</span>
               </div>
-              <h3 className="text-base sm:text-lg font-bold text-white tracking-wide">
+              <h2 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 あなたのチームのAI活用事例や時短ワザを社内に共有しませんか？
-              </h3>
+              </h2>
               <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
                 「自作プロンプトで作業を時短した」「Antigravityを導入してみた」など、小さな工夫でも大歓迎です。所要30分でAI推進担当が取材・記事化をサポートします。
               </p>
             </div>
             <button
+              type="button"
               onClick={() => {
                 playCyberOpen();
                 setIsSubmitModalOpen(true);
               }}
               onMouseEnter={() => playCyberHover()}
-              className="shrink-0 px-5 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-slate-950 rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 transition-all flex items-center space-x-1.5 self-start sm:self-center cursor-pointer active:scale-95"
+              className="shrink-0 px-5 py-2.5 bg-cyan-400 hover:bg-cyan-300 text-slate-950 rounded-xl text-xs font-bold shadow-md shadow-cyan-500/20 transition-all flex items-center space-x-1.5 self-start lg:self-center cursor-pointer active:scale-95"
             >
-              <PlusCircle size={16} />
+              <PlusCircle size={16} aria-hidden="true" />
               <span>取材に立候補する</span>
             </button>
           </div>
@@ -193,8 +202,12 @@ export default function InterviewsPage() {
         {/* 検索 & カテゴリフィルター */}
         <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-xs space-y-3">
           <div className="relative w-full">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+            <label htmlFor="interviews-search-input" className="sr-only">
+              インタビュー記事を検索
+            </label>
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" aria-hidden="true" />
             <input
+              id="interviews-search-input"
               type="text"
               placeholder="氏名、部署名、活用ツール、キーワードで記事を検索..."
               value={searchQuery}
@@ -203,7 +216,7 @@ export default function InterviewsPage() {
             />
           </div>
 
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+          <div role="group" aria-label="部門で絞り込み" className="flex flex-wrap items-center gap-2 pb-1 text-xs">
             <span className="text-slate-400 font-bold flex items-center gap-1 text-[11px] shrink-0">
               <Filter size={12} />
               部門:
@@ -274,10 +287,10 @@ export default function InterviewsPage() {
         {/* 記事一覧 */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-indigo-600" />
+            <h2 className="font-bold text-slate-900 text-base flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-indigo-600" aria-hidden="true" />
               <span>実践インタビュー記事一覧</span>
-            </h3>
+            </h2>
             <span className="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
               該当 {filteredArticles.length} / 全 {initialInterviewArticles.length} 件
             </span>
@@ -293,7 +306,7 @@ export default function InterviewsPage() {
             {filteredArticles.map((article) => (
               <TiltCard key={article.id} maxTilt={3} glareOpacity={0.05} className="rounded-2xl">
                 <SpotlightCard className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs hover:shadow-md transition-shadow">
-                  <div className="flex flex-col md:flex-row items-start justify-between gap-5">
+                  <div className="flex flex-col lg:flex-row items-start justify-between gap-5">
                     {/* 左側：イニシャルアイコン & 基本情報 */}
                     <div className="flex items-start gap-4">
                       <div
@@ -316,9 +329,9 @@ export default function InterviewsPage() {
                           </span>
                         </div>
 
-                        <h4 className="text-base font-bold text-slate-900 leading-snug">
+                        <h3 className="text-base font-bold text-slate-900 leading-snug">
                           {article.title}
-                        </h4>
+                        </h3>
 
                         <div className="flex items-center gap-3 text-xs text-slate-500 font-medium pt-0.5">
                           <span className="flex items-center gap-1 text-slate-700 font-bold">
@@ -335,7 +348,7 @@ export default function InterviewsPage() {
                     </div>
 
                     {/* 右側：成果指標バッジ */}
-                    <div className="w-full md:w-auto p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-1 shrink-0">
+                    <div className="w-full lg:w-auto p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl space-y-1 shrink-0">
                       <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1">
                         <TrendingUp size={12} />
                         実感している定量的効果
@@ -353,11 +366,12 @@ export default function InterviewsPage() {
                     </p>
 
                     <button
+                      type="button"
                       onClick={() => handleOpenArticle(article)}
-                      className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-colors"
+                      className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold transition-colors cursor-pointer"
                     >
                       <span>インタビューを読む</span>
-                      <ArrowRight size={13} />
+                      <ArrowRight size={13} aria-hidden="true" />
                     </button>
                   </div>
                 </SpotlightCard>
@@ -370,10 +384,10 @@ export default function InterviewsPage() {
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
           <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-xs grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="space-y-3">
-              <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-indigo-600" />
+              <h2 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                <Calendar className="w-4 h-4 text-indigo-600" aria-hidden="true" />
                 <span>取材から公開までの流れ</span>
-              </h3>
+              </h2>
               <ol className="space-y-2">
                 {interviewFlow.map((f, i) => (
                   <li key={f.step} className="flex items-start gap-2.5 text-xs">
@@ -391,10 +405,10 @@ export default function InterviewsPage() {
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                  <HelpCircle className="w-4 h-4 text-indigo-600" />
+                <h2 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                  <HelpCircle className="w-4 h-4 text-indigo-600" aria-hidden="true" />
                   <span>取材でお聞きすること（所要30分）</span>
-                </h3>
+                </h2>
                 <button
                   type="button"
                   onMouseEnter={() => playCyberHover()}
@@ -408,12 +422,9 @@ export default function InterviewsPage() {
                       "5. うまくいかなかったこと・つまずいた点:",
                       "6. これから始める社員へのアドバイス:",
                     ].join("\n");
-                    navigator.clipboard.writeText(sheetText);
-                    playCyberSuccess();
-                    setCopiedPromptId("sheet");
-                    setTimeout(() => setCopiedPromptId(null), 2000);
+                    void handleCopyPrompt("sheet", sheetText);
                   }}
-                  className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-colors cursor-pointer"
                 >
                   {copiedPromptId === "sheet" ? (
                     <>
@@ -501,10 +512,10 @@ export default function InterviewsPage() {
 
             {/* ハイライト3点 */}
             <div className="space-y-2">
-              <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                <BadgeCheck className="w-4 h-4 text-indigo-600" />
+              <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                <BadgeCheck className="w-4 h-4 text-indigo-600" aria-hidden="true" />
                 <span>実践のハイライト</span>
-              </h4>
+              </h3>
               <div className="grid grid-cols-1 gap-2">
                 {selectedArticle.highlights.map((h, i) => (
                   <div
@@ -522,10 +533,10 @@ export default function InterviewsPage() {
 
             {/* Q&A 形式の本文 */}
             <div className="space-y-4">
-              <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                <Quote className="w-4 h-4 text-indigo-600" />
+              <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                <Quote className="w-4 h-4 text-indigo-600" aria-hidden="true" />
                 <span>インタビュー詳細</span>
-              </h4>
+              </h3>
               <div className="space-y-4">
                 {selectedArticle.qna.map((item, i) => (
                   <div key={i} className="p-4 bg-slate-50 rounded-xl space-y-2 border border-slate-100">
@@ -545,18 +556,19 @@ export default function InterviewsPage() {
             {selectedArticle.promptTemplate && (
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-bold text-sm text-slate-900 flex items-center gap-2">
-                    <FileCode className="w-4 h-4 text-indigo-600" />
+                  <h3 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+                    <FileCode className="w-4 h-4 text-indigo-600" aria-hidden="true" />
                     <span>{selectedArticle.promptTemplate.title}</span>
-                  </h4>
+                  </h3>
                   <button
+                    type="button"
                     onClick={() =>
                       handleCopyPrompt(
                         selectedArticle.id,
                         selectedArticle.promptTemplate!.content
                       )
                     }
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold transition-colors cursor-pointer"
                   >
                     {copiedPromptId === selectedArticle.id ? (
                       <>

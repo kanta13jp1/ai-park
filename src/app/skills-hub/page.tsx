@@ -44,6 +44,7 @@ export default function SkillsHubPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
 
   const handleTabKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
     let nextIndex: number | null = null;
@@ -78,8 +79,9 @@ export default function SkillsHubPage() {
 
   const handleCopy = async (id: string, text: string) => {
     playCyberClick();
-    if (typeof navigator === "undefined" || !navigator.clipboard) {
+    if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) {
       setCopyErrorId(id);
+      setLiveNotice("クリップボードへコピーできませんでした。手動でコピーしてください");
       return;
     }
     try {
@@ -87,14 +89,19 @@ export default function SkillsHubPage() {
       playCyberSuccess();
       setCopyErrorId(null);
       setCopiedId(id);
+      setLiveNotice("クリップボードにコピーしました");
       setTimeout(() => setCopiedId((prev) => (prev === id ? null : prev)), 2000);
     } catch {
       setCopyErrorId(id);
+      setLiveNotice("クリップボードへのコピーに失敗しました");
     }
   };
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
+      <div role="status" aria-live="polite" className="sr-only">
+        {liveNotice}
+      </div>
       <HeroBanner
         title="社内 Skills カタログ"
         subtitle="AI Park 実運用 Skills の参考実例・作り方ガイド・SKILL.md テンプレート（全社カタログ準備中）"
@@ -130,6 +137,7 @@ export default function SkillsHubPage() {
                 </p>
                 <div className="pt-2 flex flex-wrap items-center gap-2.5">
                   <button
+                    type="button"
                     onClick={() => {
                       playCyberClick();
                       setIsApplyModalOpen(true);
@@ -297,7 +305,7 @@ export default function SkillsHubPage() {
                 </button>
               </div>
 
-              <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 scrollbar-thin">
+              <div role="group" aria-label="カテゴリで絞り込み" className="flex flex-wrap items-center gap-2 pb-1 pt-1">
                 <span className="text-[11px] font-bold text-slate-400 shrink-0 flex items-center gap-1 mr-1">
                   <Filter className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>カテゴリ:</span>
@@ -333,17 +341,17 @@ export default function SkillsHubPage() {
 
             {/* スキル一覧 */}
             <div className="space-y-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
                 <div>
-                  <h3 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
+                  <h2 className="font-extrabold text-slate-900 text-lg flex items-center gap-2">
                     <Layers className="w-5 h-5 text-indigo-600" aria-hidden="true" />
                     <span>AI Park 実運用 Skills（参考実例・準備中）</span>
-                  </h3>
+                  </h2>
                   <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
                     AI Park リポジトリ内の <code className="font-mono">.agents/skills/</code> で運用している実在スキル定義です
                   </p>
                 </div>
-                <span aria-live="polite" className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/80 self-start sm:self-auto">
+                <span aria-live="polite" className="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200/80 self-start lg:self-auto shrink-0 whitespace-nowrap">
                   該当 {filteredSkills.length} / 全 {WORKSPACE_SKILLS.length} 件
                 </span>
               </div>
@@ -383,9 +391,9 @@ export default function SkillsHubPage() {
                             </div>
 
                             <div className="space-y-1">
-                              <h4 className="font-extrabold text-slate-900 text-base sm:text-lg">
+                              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
                                 {skill.displayName}
-                              </h4>
+                              </h3>
                               <div className="text-[11px] font-mono text-slate-500 break-all">
                                 {skill.sourcePath}
                               </div>
@@ -400,6 +408,7 @@ export default function SkillsHubPage() {
                               <div className="flex items-center justify-between text-[11px] text-slate-500">
                                 <span>呼び出しプロンプト例:</span>
                                 <button
+                                  type="button"
                                   onClick={() => handleCopy(skill.id, skill.triggerPhrase)}
                                   onMouseEnter={() => playCyberHover()}
                                   className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 font-bold transition-colors cursor-pointer"
@@ -458,9 +467,9 @@ export default function SkillsHubPage() {
                   <Sparkles className="w-5 h-5" aria-hidden="true" />
                 </div>
                 <div className="space-y-1.5">
-                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                  <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
                     なぜ Rules だけでなく Skills を使うのか？（Progressive Disclosure）
-                  </h3>
+                  </h2>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                     <code className="font-mono text-indigo-700">AGENTS.md</code> などの Rules は会話のたびに常時読み込まれるため、長い手順書をすべて書くとコンテキストを圧迫します。
                     一方 <strong>Skills</strong> は、通常時は「スキル名（<code className="font-mono">name</code>）と概要（<code className="font-mono">description</code>）」だけを読み込み、
@@ -473,9 +482,9 @@ export default function SkillsHubPage() {
             {/* カスタマイズ 5 機能の使い分け表 */}
             <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
               <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/70">
-                <h3 className="text-sm sm:text-base font-extrabold text-slate-900">
+                <h2 className="text-sm sm:text-base font-extrabold text-slate-900">
                   Antigravity カスタマイズ機能 5 種の使い分け
-                </h3>
+                </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
                   目的に合わせて Rules・Skills・Hooks・MCP・Plugins を使い分けます
                 </p>
@@ -513,12 +522,12 @@ export default function SkillsHubPage() {
             {/* 読み込み優先順位 3 階層 */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <FolderTree className="w-5 h-5 text-indigo-600" />
-                <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
+                <FolderTree className="w-5 h-5 text-indigo-600" aria-hidden="true" />
+                <h2 className="text-base sm:text-lg font-extrabold text-slate-900">
                   Skills の配置場所と読み込み優先順位
-                </h3>
+                </h2>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 {SKILL_DISCOVERY_TIERS.map((tier) => (
                   <div
                     key={tier.priority}
@@ -532,7 +541,7 @@ export default function SkillsHubPage() {
                         {tier.scope}
                       </span>
                     </div>
-                    <h4 className="text-sm font-extrabold text-slate-900">{tier.label}</h4>
+                    <h3 className="text-sm font-extrabold text-slate-900">{tier.label}</h3>
                     <div className="bg-slate-100 text-slate-800 px-2.5 py-1.5 rounded-lg font-mono text-[11px] break-all">
                       {tier.path}
                     </div>
@@ -548,10 +557,10 @@ export default function SkillsHubPage() {
         {activeTab === "templates" && (
           <div id="skills-hub-panel-templates" role="tabpanel" aria-labelledby="skills-hub-tab-templates" className="space-y-6">
             <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs space-y-2">
-              <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                <FileCode2 className="w-5 h-5 text-indigo-600" />
+              <h2 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                <FileCode2 className="w-5 h-5 text-indigo-600" aria-hidden="true" />
                 <span>そのまま使える SKILL.md スターターテンプレート（全 {SKILL_TEMPLATES.length} 種）</span>
-              </h3>
+              </h2>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                 自分のリポジトリに <code className="font-mono">.agents/skills/&lt;フォルダ名&gt;/SKILL.md</code> を作成して貼り付けるだけで使えます。AI勉強会の「ステップ1：スキル作成課題」のベースとしても利用できます。
               </p>
@@ -571,9 +580,9 @@ export default function SkillsHubPage() {
                         <div className="inline-flex items-center gap-2 text-[11px] font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
                           .agents/skills/{tpl.folderName}/SKILL.md
                         </div>
-                        <h4 className="text-base sm:text-lg font-extrabold text-slate-900">
+                        <h3 className="text-base sm:text-lg font-extrabold text-slate-900">
                           {tpl.title}
-                        </h4>
+                        </h3>
                         <p className="text-xs sm:text-sm text-slate-600">{tpl.summary}</p>
                       </div>
                       <span className="shrink-0 text-[11px] font-bold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
