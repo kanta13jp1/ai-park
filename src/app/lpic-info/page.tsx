@@ -726,14 +726,14 @@ export default function LpicInfoPage() {
           aria-label="学習レベル・専門トラック選択"
           className="bg-white rounded-2xl border border-slate-200/80 p-3.5 shadow-xs space-y-2.5 min-w-0 max-w-full"
         >
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 min-w-0">
+          <div className="flex flex-col gap-2.5 min-w-0">
             <div className="flex items-center space-x-2 px-1 min-w-0">
               <Terminal size={16} className="text-cyan-600 shrink-0" />
-              <span className="text-xs sm:text-sm font-black text-slate-800 lg:whitespace-nowrap">
+              <span className="text-xs sm:text-sm font-black text-slate-800">
                 学習レベル・専門トラック選択
               </span>
             </div>
-            <div className="flex flex-col xl:flex-row xl:items-center gap-2 min-w-0">
+            <div className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center gap-2 min-w-0">
               <div
                 role="group"
                 aria-label="基盤レベル (LPIC-1 / LPIC-2)"

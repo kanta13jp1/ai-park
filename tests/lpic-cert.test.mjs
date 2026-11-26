@@ -381,6 +381,12 @@ test("lpic-info/page.tsx と lpicCertRegistry.ts が遅延分割・WAI-ARIA・76
     assert.ok(pageSrc.includes(token), `lpic-info/page.tsx に ${token} が含まれていること`);
   }
 
+  assert.ok(
+    !pageSrc.includes('text-slate-800 lg:whitespace-nowrap">\n                学習レベル・専門トラック選択') &&
+      !pageSrc.includes('text-slate-800 lg:whitespace-nowrap">\r\n                学習レベル・専門トラック選択'),
+    "lpic-info/page.tsx の資格切替見出しには 1280px 重なり要因の lg:whitespace-nowrap を付けないこと"
+  );
+
   for (const lazyTrack of ["lpic-2", "lpic-300", "lpic-303", "lpic-305", "lpic-306"]) {
     assert.ok(
       !pageSrc.includes(`from "@/data/${lazyTrack}"`),

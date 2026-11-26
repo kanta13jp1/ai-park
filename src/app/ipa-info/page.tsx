@@ -897,7 +897,7 @@ export default function IpaInfoPage() {
         subtitle="経産省（IPA）全13区分（IP・SG・FE・AP・高度9区分）統合学習ハブ"
       />
 
-      <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <div className="max-w-6xl w-full min-w-0 mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         <UnderConstructionAlert
           title="🚧 一部工事中・学習ハブ先行公開"
           message="現在 IPA 情報処理技術者試験・情報処理安全確保支援士試験の全13区分（IP / SG / FE / AP / SC / DB / NW / ES / ST / SA / PM / SM / AU）の公式シラバスに基づく統合学習ハブを掲載しています。社内の資格取得支援・受験補助ルール等は準備中（確定次第掲載）です。"
@@ -1086,7 +1086,7 @@ export default function IpaInfoPage() {
                 </p>
               </div>
 
-              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 lg:min-w-[360px]">
+              <div className="shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-2.5 lg:min-w-[360px] min-w-0">
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
                   <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
