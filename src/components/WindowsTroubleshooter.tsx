@@ -43,9 +43,9 @@ const troubleshootList: TroubleshootingItem[] = [
     errorSnippet: "ERROR: (gcloud...) does not have permission / Reauthentication required.",
     cause: "OAuth認証のセッション期限切れ、または個人アカウント（@gmail.com）がアクティブになっているためです。",
     command: "gcloud auth login <会社のメールアドレス> --force",
-    commandExplanation: "社用アカウント（@ml-mightylink.com）を指定してブラウザ認証を強制再取得します。",
+    commandExplanation: "会社の Google アカウントを指定してブラウザ認証を強制再取得します。",
     note: "ログイン後にアクティブアカウントを固定する場合: gcloud config set account <会社のメールアドレス>",
-    docUrl: "https://cloud.google.com/sdk/gcloud/reference/auth/login",
+    docUrl: "https://docs.cloud.google.com/sdk/gcloud/reference/auth/login",
   },
   {
     id: "ts-3",
@@ -55,7 +55,7 @@ const troubleshootList: TroubleshootingItem[] = [
     cause: "Python SDKやNode.jsスクリプトが参照するローカル認証ファイル（application_default_credentials.json）が存在しないか無効です。",
     command: "gcloud auth application-default login",
     commandExplanation: "ブラウザが開き、ローカル開発ツール用の統一認証情報（ADC）を生成・保存します。",
-    docUrl: "https://cloud.google.com/docs/authentication/provide-credentials-adc",
+    docUrl: "https://docs.cloud.google.com/docs/authentication/provide-credentials-adc",
   },
   {
     id: "ts-4",
@@ -93,7 +93,7 @@ const troubleshootList: TroubleshootingItem[] = [
     cause: "課金エクスポート設定には「請求先アカウント管理者（roles/billing.admin）」権限が必要です。一般のプロジェクト閲覧者では保存できません。",
     command: "gcloud billing accounts get-iam-policy 012EB1-xxxxxx-xxxxxx",
     commandExplanation: "請求先アカウントの管理者を確認し、コンソールの「アクセスをリクエスト」または社内Chatで設定依頼を行ってください。",
-    docUrl: "https://cloud.google.com/billing/docs/how-to/export-data-bigquery",
+    docUrl: "https://docs.cloud.google.com/billing/docs/how-to/export-data-bigquery?hl=ja",
   },
 ];
 
@@ -101,15 +101,21 @@ export default function WindowsTroubleshooter() {
   const [selectedCategory, setSelectedCategory] = useState<string>("すべて");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [liveNotice, setLiveNotice] = useState<string>("");
 
   const categories = ["すべて", "PowerShell", "GCP認証", "ADC・クォータ", "プロキシ・環境", "課金・権限"];
 
-  const handleCopy = (id: string, text: string) => {
-    navigator.clipboard?.writeText(text).then(() => {
+  const handleCopy = async (id: string, text: string) => {
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(text);
       playCyberSuccess();
       setCopiedId(id);
+      setLiveNotice("コマンドをクリップボードにコピーしました");
       setTimeout(() => setCopiedId(null), 2000);
-    });
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
   };
 
   const filteredItems = troubleshootList.filter((item) => {
@@ -135,11 +141,14 @@ export default function WindowsTroubleshooter() {
         <div className="absolute -bottom-24 -left-24 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10">
+          <div role="status" aria-live="polite" className="sr-only">
+            {liveNotice}
+          </div>
           {/* ヘッダー */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-800">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 border-b border-slate-800">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold mb-2">
-                <Wrench size={13} className="animate-spin-slow" />
+                <Wrench size={13} aria-hidden="true" className="animate-spin-slow" />
                 <span>社内実務サポート (TODO-18)</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
@@ -151,9 +160,13 @@ export default function WindowsTroubleshooter() {
             </div>
 
             {/* 検索バー */}
-            <div className="relative w-full md:w-72">
-              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <div className="relative w-full lg:w-72">
+              <label htmlFor="win-troubleshooter-search" className="sr-only">
+                エラー文・キーワードで検索
+              </label>
+              <Search size={15} aria-hidden="true" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
+                id="win-troubleshooter-search"
                 type="text"
                 placeholder="エラー文・キーワードで検索..."
                 value={searchQuery}
@@ -164,10 +177,16 @@ export default function WindowsTroubleshooter() {
           </div>
 
           {/* カテゴリフィルタタブ */}
-          <div className="flex flex-wrap items-center gap-2 pt-6 pb-4">
+          <div
+            role="group"
+            aria-label="カテゴリで絞り込み"
+            className="flex flex-wrap items-center gap-2 pt-6 pb-4"
+          >
             {categories.map((cat) => (
               <button
                 key={cat}
+                type="button"
+                aria-pressed={selectedCategory === cat}
                 onClick={() => {
                   playCyberClick();
                   setSelectedCategory(cat);
@@ -182,7 +201,7 @@ export default function WindowsTroubleshooter() {
                 {cat}
               </button>
             ))}
-            <span className="ml-auto text-xs text-slate-400 font-mono">
+            <span role="status" aria-live="polite" className="ml-auto text-xs text-slate-400 font-mono">
               該当件数: {filteredItems.length} 件
             </span>
           </div>
@@ -233,6 +252,7 @@ export default function WindowsTroubleshooter() {
                       {item.command}
                     </code>
                     <button
+                      type="button"
                       onClick={() => handleCopy(item.id, item.command)}
                       onMouseEnter={() => playCyberHover()}
                       className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/10 hover:bg-cyan-500 text-cyan-300 hover:text-slate-950 border border-cyan-500/30 text-xs font-bold transition-all cursor-pointer shadow-xs active:scale-95"

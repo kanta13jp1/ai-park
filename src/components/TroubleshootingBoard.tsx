@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useId, useState, useMemo } from "react";
 import {
   troubleshootingCommands,
   type TroubleshootingCommand,
@@ -20,9 +20,11 @@ import {
 } from "lucide-react";
 
 export default function TroubleshootingBoard() {
+  const searchInputId = useId();
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [liveNotice, setLiveNotice] = useState<string>("");
 
   const categories = [
     { id: "all", label: "すべて" },
@@ -51,26 +53,39 @@ export default function TroubleshootingBoard() {
     });
   }, [selectedCategory, searchQuery]);
 
-  const handleCopy = (cmd: TroubleshootingCommand) => {
+  const handleCopy = async (cmd: TroubleshootingCommand) => {
     playCyberSuccess();
-    navigator.clipboard?.writeText(cmd.solutionCommand).then(() => {
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(cmd.solutionCommand);
       setCopiedId(cmd.id);
+      setLiveNotice("コマンドをクリップボードにコピーしました");
       setTimeout(() => setCopiedId(null), 2500);
-    });
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
   };
 
   return (
     <div className="space-y-6" id="troubleshooting-board">
+      <div role="status" aria-live="polite" className="sr-only">
+        {liveNotice}
+      </div>
       {/* ツールバー */}
       <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* 検索入力欄 */}
           <div className="relative flex-1 max-w-md">
+            <label htmlFor={searchInputId} className="sr-only">
+              エラー文、コマンド、キーワードで検索
+            </label>
             <Search
               size={15}
+              aria-hidden="true"
               className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
             />
             <input
+              id={searchInputId}
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -79,15 +94,17 @@ export default function TroubleshootingBoard() {
             />
             {searchQuery && (
               <button
+                type="button"
+                aria-label="検索をクリア"
                 onClick={() => setSearchQuery("")}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
               >
-                <X size={14} />
+                <X size={14} aria-hidden="true" />
               </button>
             )}
           </div>
 
-          <div className="text-xs text-slate-500 font-mono flex items-center gap-1.5 self-end sm:self-auto">
+          <div role="status" aria-live="polite" className="text-xs text-slate-500 font-mono flex items-center gap-1.5 self-end sm:self-auto">
             <span>該当:</span>
             <strong className="text-indigo-600 text-sm">{filteredItems.length}</strong>
             <span>/ {troubleshootingCommands.length} 件</span>
@@ -95,7 +112,11 @@ export default function TroubleshootingBoard() {
         </div>
 
         {/* カテゴリタブ */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pt-2 border-t border-slate-100 scrollbar-none">
+        <div
+          role="group"
+          aria-label="カテゴリで絞り込み"
+          className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-100"
+        >
           {categories.map((cat) => {
             const count =
               cat.id === "all"
@@ -106,12 +127,14 @@ export default function TroubleshootingBoard() {
             return (
               <button
                 key={cat.id}
+                type="button"
+                aria-pressed={isActive}
                 onClick={() => {
                   playCyberClick();
                   setSelectedCategory(cat.id);
                 }}
                 onMouseEnter={playCyberHover}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                   isActive
                     ? "bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-400/30"
                     : "bg-slate-100 text-slate-600 hover:bg-slate-200/70"
@@ -166,14 +189,14 @@ export default function TroubleshootingBoard() {
                         </span>
                       )}
                     </div>
-                    <h4 className="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">
+                    <h3 className="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">
                       {item.errorTitle}
-                    </h4>
+                    </h3>
                   </div>
                 </div>
 
                 {/* エラー症状と原因 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 text-xs">
                   <div className="p-3 rounded-xl bg-rose-50/50 border border-rose-100 space-y-1">
                     <span className="font-bold text-rose-900 flex items-center gap-1 text-[11px]">
                       <AlertTriangle size={13} className="text-rose-600" />
@@ -210,6 +233,7 @@ export default function TroubleshootingBoard() {
                       {item.solutionCommand}
                     </code>
                     <button
+                      type="button"
                       onClick={() => handleCopy(item)}
                       onMouseEnter={playCyberHover}
                       className="shrink-0 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all cursor-pointer shadow-xs active:scale-95 text-xs font-bold flex items-center gap-1.5"

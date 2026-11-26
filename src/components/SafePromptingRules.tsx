@@ -40,19 +40,20 @@ export default function SafePromptingRules() {
         {/* 画面表示時の「A4印刷 / PDF保存」ボタン（印刷時は非表示） */}
         <div className="flex items-center gap-2 print:hidden shrink-0">
           <button
+            type="button"
             onClick={handlePrint}
             onMouseEnter={() => playCyberHover()}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-indigo-600 text-white font-bold text-xs shadow-md hover:shadow-indigo-500/25 transition-all cursor-pointer active:scale-95"
             title="A4用紙1枚で印刷・PDF保存"
           >
-            <Printer size={14} className="text-cyan-300" />
+            <Printer size={14} className="text-cyan-300" aria-hidden="true" />
             <span>A4印刷 / PDF保存</span>
           </button>
         </div>
       </div>
 
       {/* OK / NG 早見表 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* NG カード */}
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
           <div
@@ -132,7 +133,7 @@ export default function SafePromptingRules() {
           <EyeOff className="w-4 h-4 text-indigo-600" />
           <span>実務で使える「安全なプロンプト記述テクニック」</span>
         </h3>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 text-xs">
           <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-xl">
             <div
               onMouseEnter={() => playCyberHover()}

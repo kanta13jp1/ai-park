@@ -135,21 +135,22 @@ export default function SafetySelfChecker() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-indigo-600" />
-            <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+            <ShieldCheck className="w-5 h-5 text-indigo-600" aria-hidden="true" />
+            <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
               社内AI入力 セルフチェック診断ツール
-            </h3>
+            </h2>
           </div>
           <p className="text-xs text-slate-500 mt-1">
             「この業務データや議事録はAIに入力して大丈夫？」を3つの質問で10秒判定します。
           </p>
         </div>
         <button
+          type="button"
           onClick={handleReset}
           onMouseEnter={() => playCyberHover()}
           className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1.5 self-start sm:self-auto px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer"
         >
-          <RotateCcw size={13} />
+          <RotateCcw size={13} aria-hidden="true" />
           <span>リセット</span>
         </button>
       </div>
@@ -197,19 +198,25 @@ export default function SafetySelfChecker() {
                 </div>
                 <div className="space-y-2 flex-1">
                   <div>
-                    <h4 className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+                    <h3 id={`self-check-q-${q.id}`} className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
                       {q.title}
-                    </h4>
+                    </h3>
                     <p className="text-[11px] text-slate-500 mt-0.5">{q.desc}</p>
                   </div>
 
                   {/* 選択肢ボタン */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                  <div
+                    role="group"
+                    aria-labelledby={`self-check-q-${q.id}`}
+                    className="grid grid-cols-1 lg:grid-cols-2 gap-2.5 pt-1"
+                  >
                     {q.options.map((opt, idx) => {
                       const isSelected = currentAns === idx;
                       return (
                         <button
                           key={idx}
+                          type="button"
+                          aria-pressed={isSelected}
                           onClick={() => handleSelect(q.id, idx)}
                           onMouseEnter={() => playCyberHover()}
                           className={`p-3 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-between gap-1 ${
@@ -224,9 +231,9 @@ export default function SafetySelfChecker() {
                             <span>{opt.label}</span>
                             {isSelected && (
                               opt.isRisk ? (
-                                <AlertTriangle size={14} className="text-rose-600 shrink-0 ml-1" />
+                                <AlertTriangle size={14} className="text-rose-600 shrink-0 ml-1" aria-hidden="true" />
                               ) : (
-                                <CheckCircle2 size={14} className="text-emerald-600 shrink-0 ml-1" />
+                                <CheckCircle2 size={14} className="text-emerald-600 shrink-0 ml-1" aria-hidden="true" />
                               )
                             )}
                           </span>
@@ -245,16 +252,17 @@ export default function SafetySelfChecker() {
       </div>
 
       {/* 診断結果の表示 */}
+      <div aria-live="polite">
       {isCompleted ? (
         <div className="pt-2 animate-in fade-in zoom-in-95 duration-500">
           {hasAccountRisk ? (
             /* 私用アカウントによるNG */
             <div className="p-5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-950 space-y-3">
               <div className="flex items-center gap-2">
-                <XCircle className="w-6 h-6 text-rose-600 shrink-0" />
-                <h4 className="text-base font-extrabold text-rose-900">
+                <XCircle className="w-6 h-6 text-rose-600 shrink-0" aria-hidden="true" />
+                <h3 className="text-base font-extrabold text-rose-900">
                   【利用不可】個人の私用アカウントでの入力は禁止されています
-                </h4>
+                </h3>
               </div>
               <p className="text-xs text-rose-800 leading-relaxed">
                 私用アカウントで入力した業務データは、一般利用規約に基づき外部モデルの再学習に利用される恐れがあります。
@@ -265,10 +273,10 @@ export default function SafetySelfChecker() {
             /* 未公開社外秘によるNG */
             <div className="p-5 rounded-2xl bg-rose-50 border-2 border-rose-300 text-rose-950 space-y-3">
               <div className="flex items-center gap-2">
-                <XCircle className="w-6 h-6 text-rose-600 shrink-0" />
-                <h4 className="text-base font-extrabold text-rose-900">
+                <XCircle className="w-6 h-6 text-rose-600 shrink-0" aria-hidden="true" />
+                <h3 className="text-base font-extrabold text-rose-900">
                   【入力禁止】未公開の社外秘データ・認証情報はAIに投入できません
-                </h4>
+                </h3>
               </div>
               <p className="text-xs text-rose-800 leading-relaxed">
                 未発表の財務数値、契約書の固有条件、本番APIキー・パスワードはAIへの直接投入が禁止されています。
@@ -279,10 +287,10 @@ export default function SafetySelfChecker() {
             /* 個人情報マスキングによる注意OK */
             <div className="p-5 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-950 space-y-3">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0" />
-                <h4 className="text-base font-extrabold text-amber-900">
+                <AlertTriangle className="w-6 h-6 text-amber-600 shrink-0" aria-hidden="true" />
+                <h3 className="text-base font-extrabold text-amber-900">
                   【条件付きOK】実名をダミーに「マスキング」すれば安全に入力できます
-                </h4>
+                </h3>
               </div>
               <p className="text-xs text-amber-800 leading-relaxed">
                 会社アカウント環境のため学習には利用されませんが、個人情報保護の観点から実名の入力は避けるルールとなっています。
@@ -296,10 +304,10 @@ export default function SafetySelfChecker() {
             /* 完全クリア（安全に入力可能） */
             <div className="p-5 rounded-2xl bg-emerald-50 border-2 border-emerald-300 text-emerald-950 space-y-3">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" />
-                <h4 className="text-base font-extrabold text-emerald-900">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0" aria-hidden="true" />
+                <h3 className="text-base font-extrabold text-emerald-900">
                   【入力OK】社内ガイドラインに適合しています。安心してご利用ください！
-                </h4>
+                </h3>
               </div>
               <p className="text-xs text-emerald-800 leading-relaxed">
                 会社正規アカウント環境下で、個人情報や極秘データを含まない一般的な業務データです。
@@ -313,6 +321,7 @@ export default function SafetySelfChecker() {
           すべての質問（3問）を選択すると、判定結果と推奨アクションが表示されます。
         </div>
       )}
+      </div>
     </div>
   );
 }

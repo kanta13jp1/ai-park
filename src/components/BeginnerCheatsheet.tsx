@@ -53,13 +53,19 @@ const sections = [
 
 export default function BeginnerCheatsheet() {
   const [copied, setCopied] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
 
-  const handleCopyExample = (text: string) => {
-    navigator.clipboard?.writeText(text).then(() => {
+  const handleCopyExample = async (text: string) => {
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(text);
       playCyberSuccess();
       setCopied(true);
+      setLiveNotice("プロンプト例をクリップボードにコピーしました");
       setTimeout(() => setCopied(false), 2000);
-    });
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
   };
 
   return (
@@ -132,6 +138,7 @@ export default function BeginnerCheatsheet() {
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-sky-700">プロンプト入力例:</span>
                       <button
+                        type="button"
                         onClick={() => handleCopyExample(s.example!)}
                         onMouseEnter={() => playCyberHover()}
                         className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-600 hover:text-sky-800 transition-colors cursor-pointer"
@@ -139,16 +146,19 @@ export default function BeginnerCheatsheet() {
                       >
                         {copied ? (
                           <>
-                            <Check size={12} className="text-emerald-600" />
+                            <Check size={12} className="text-emerald-600" aria-hidden="true" />
                             <span className="text-emerald-600 font-mono">コピー完了</span>
                           </>
                         ) : (
                           <>
-                            <Copy size={12} />
+                            <Copy size={12} aria-hidden="true" />
                             <span className="font-mono">コピー</span>
                           </>
                         )}
                       </button>
+                      <span role="status" aria-live="polite" className="sr-only">
+                        {liveNotice}
+                      </span>
                     </div>
                     <p className="italic text-slate-600 select-all font-mono text-[11px] bg-sky-50/50 p-2 rounded-lg border border-sky-100">
                       &ldquo;{s.example}&rdquo;

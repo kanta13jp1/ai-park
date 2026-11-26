@@ -12,25 +12,37 @@ import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 function CodeBlock({ label, text }: { label?: string; text: string }) {
   const [copied, setCopied] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
+  const handleCopy = async () => {
+    playCyberClick();
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setLiveNotice("コードをクリップボードにコピーしました");
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
+  };
   return (
     <div className="space-y-1">
       {label && <p className="text-xs font-bold text-slate-600">{label}</p>}
       <div className="flex items-start gap-3 bg-white border border-slate-200 rounded-lg px-4 py-3">
         <code className="flex-1 font-mono text-[13px] text-slate-800 break-all whitespace-pre-wrap">{text}</code>
         <button
-          onClick={() => {
-            playCyberClick();
-            navigator.clipboard?.writeText(text).then(() => {
-              setCopied(true);
-              setTimeout(() => setCopied(false), 1500);
-            });
-          }}
+          type="button"
+          aria-label="コードをコピー"
+          onClick={handleCopy}
           onMouseEnter={() => playCyberHover()}
           className="shrink-0 text-slate-500 hover:text-slate-900 cursor-pointer"
           title="コピー"
         >
-          {copied ? <Check size={16} className="text-emerald-600" /> : <Copy size={16} />}
+          {copied ? <Check size={16} className="text-emerald-600" aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
         </button>
+        <span role="status" aria-live="polite" className="sr-only">
+          {liveNotice}
+        </span>
       </div>
     </div>
   );
@@ -52,6 +64,7 @@ function CompletionReport({
 }) {
   const [dept, setDept] = useState("");
   const [copied, setCopied] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
   const text = [
     "【Antigravity Academy 修了報告】",
     `コース: ${courseTitle}`,
@@ -62,19 +75,32 @@ function CompletionReport({
     `修了証番号: ${certificateId}`,
   ].join("\n");
   const ready = learnerName.trim() !== "" && dept.trim() !== "";
+  const handleCopyReport = async () => {
+    playCyberClick();
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setLiveNotice("報告文をコピーしました");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
+  };
   return (
     <div className="print:hidden bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
       <div className="space-y-1">
-        <h3 className="font-bold text-sm text-slate-900">修了を AI推進担当 に報告する</h3>
+        <h2 className="font-bold text-sm text-slate-900">修了を AI推進担当 に報告する</h2>
         <p className="text-xs text-slate-600 leading-relaxed">
           報告すると、AI推進担当 が修了者として記録します（記録は社内のみで、このサイトには載りません）。報告文をコピーして、Google Chat で AI推進担当（担当：梅澤）に送ってください。
           このボタンだけでは送信されません。
         </p>
       </div>
       <div className="flex flex-wrap items-end gap-3">
-        <label className="text-xs text-slate-700 space-y-1">
+        <label htmlFor="academy-report-dept" className="text-xs text-slate-700 space-y-1">
           <span className="font-bold block">部署</span>
           <input
+            id="academy-report-dept"
             value={dept}
             onChange={(e) => setDept(e.target.value)}
             placeholder="例: クラウド開発部"
@@ -82,20 +108,18 @@ function CompletionReport({
           />
         </label>
         <button
-          onClick={() => {
-            playCyberClick();
-            navigator.clipboard?.writeText(text).then(() => {
-              setCopied(true);
-              setTimeout(() => setCopied(false), 2000);
-            });
-          }}
+          type="button"
+          onClick={handleCopyReport}
           onMouseEnter={() => playCyberHover()}
           disabled={!ready}
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-bold disabled:opacity-40 cursor-pointer"
         >
-          {copied ? <Check size={15} /> : <Copy size={15} />}
+          {copied ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
           {copied ? "コピーしました" : "報告文をコピー"}
         </button>
+        <span role="status" aria-live="polite" className="sr-only">
+          {liveNotice}
+        </span>
         <a
           href="https://chat.google.com/"
           target="_blank"
@@ -113,6 +137,19 @@ function CompletionReport({
 
 function PromptCard({ label, text }: { label?: string; text: string }) {
   const [copied, setCopied] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
+  const handleCopyPrompt = async () => {
+    playCyberClick();
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setLiveNotice("プロンプトをクリップボードにコピーしました");
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
+  };
   return (
     <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-2xl">
       <div
@@ -128,19 +165,17 @@ function PromptCard({ label, text }: { label?: string; text: string }) {
         <p className="mx-3 mt-2 border border-slate-200 rounded-xl px-4 py-3 text-[15px] text-slate-800 leading-relaxed whitespace-pre-wrap">{text}</p>
         <div className="flex justify-end px-4 py-3">
           <button
-            onClick={() => {
-              playCyberClick();
-              navigator.clipboard?.writeText(text).then(() => {
-                setCopied(true);
-                setTimeout(() => setCopied(false), 1500);
-              });
-            }}
+            type="button"
+            onClick={handleCopyPrompt}
             onMouseEnter={() => playCyberHover()}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-300 text-sm text-slate-700 hover:bg-slate-50 cursor-pointer transition-all active:scale-95"
           >
-            {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
+            {copied ? <Check size={14} className="text-emerald-600" aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
             <span>{copied ? "コピーしました" : "プロンプトをコピー"}</span>
           </button>
+          <span role="status" aria-live="polite" className="sr-only">
+            {liveNotice}
+          </span>
         </div>
       </div>
     </TiltCard>
@@ -169,9 +204,9 @@ function Block({ block }: { block: LessonBlock }) {
       );
     case "h":
       return (
-        <h3 id={block.id} className="scroll-mt-6 font-bold text-xl sm:text-2xl text-slate-900 pt-6 tracking-tight">
+        <h2 id={block.id} className="scroll-mt-6 font-bold text-xl sm:text-2xl text-slate-900 pt-6 tracking-tight">
           {block.text}
-        </h3>
+        </h2>
       );
     case "p":
       return <p className="text-[15px] text-slate-700 leading-relaxed">{block.text}</p>;
@@ -221,6 +256,8 @@ function Helpful({ lessonKey }: { lessonKey: string }) {
       ) : (
         <div className="flex gap-2">
           <button
+            type="button"
+            aria-label="役に立った"
             onClick={() => {
               playCyberClick();
               choose("up");
@@ -229,9 +266,11 @@ function Helpful({ lessonKey }: { lessonKey: string }) {
             title="役に立った"
             className="w-9 h-9 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-50 cursor-pointer transition-transform active:scale-90"
           >
-            <ThumbsUp size={16} />
+            <ThumbsUp size={16} aria-hidden="true" />
           </button>
           <button
+            type="button"
+            aria-label="分かりにくかった"
             onClick={() => {
               playCyberClick();
               choose("down");
@@ -240,7 +279,7 @@ function Helpful({ lessonKey }: { lessonKey: string }) {
             title="分かりにくかった"
             className="w-9 h-9 rounded-full bg-white border border-slate-300 flex items-center justify-center hover:bg-slate-50 cursor-pointer transition-transform active:scale-90"
           >
-            <ThumbsDown size={16} />
+            <ThumbsDown size={16} aria-hidden="true" />
           </button>
         </div>
       )}
@@ -269,8 +308,8 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
   return (
     <div className="flex-1 flex flex-col bg-slate-50/70 min-h-screen">
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-8">
-        <main className="space-y-6 min-w-0">
-          <nav className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 print:hidden">
+        <div className="space-y-6 min-w-0">
+          <nav aria-label="パンくずリスト" className="flex flex-wrap items-center gap-1.5 text-xs text-slate-500 print:hidden">
             <ArrowLeft size={13} />
             <Link
               href="/academy"
@@ -361,6 +400,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
               <div className="pt-6 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {index > 0 ? (
                   <button
+                    type="button"
                     onClick={() => {
                       playCyberClick();
                       go(steps[index - 1].id);
@@ -368,7 +408,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                     onMouseEnter={() => playCyberHover()}
                     className="flex items-center gap-3 text-left bg-white border border-slate-200 rounded-xl px-4 py-4 hover:border-slate-400 cursor-pointer transition-all active:scale-98 shadow-xs hover:shadow-md"
                   >
-                    <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0"><ArrowLeft size={15} /></span>
+                    <span className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center shrink-0"><ArrowLeft size={15} aria-hidden="true" /></span>
                     <span>
                       <span className="block text-xs text-slate-500">前のレッスン</span>
                       <span className="block text-sm font-bold text-slate-900">{steps[index - 1].label}</span>
@@ -378,6 +418,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                   <span />
                 )}
                 <button
+                  type="button"
                   onClick={() => {
                     playCyberClick();
                     markLessonDone(lesson.id);
@@ -390,7 +431,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                     <span className="block text-xs text-slate-300">完了して次へ</span>
                     <span className="block text-sm font-bold">{steps[index + 1].label}</span>
                   </span>
-                  <span className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center shrink-0"><ArrowRight size={15} /></span>
+                  <span className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center shrink-0"><ArrowRight size={15} aria-hidden="true" /></span>
                 </button>
               </div>
             </>
@@ -425,6 +466,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                             <input
                               type="radio"
                               name={`q${qi}`}
+                              aria-label={c}
                               checked={chosen}
                               disabled={submitted}
                               onChange={() => {
@@ -444,12 +486,17 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
               <div className="flex flex-wrap items-center justify-end gap-3">
                 {submitted ? (
                   <>
-                    <p className={`text-sm font-bold ${passed ? "text-emerald-700" : "text-rose-700"}`}>
+                    <p
+                      role="status"
+                      aria-live="polite"
+                      className={`text-sm font-bold ${passed ? "text-emerald-700" : "text-rose-700"}`}
+                    >
                       {Math.round(score * 100)}% 正解・{passed ? "合格です！" : "もう一度挑戦しましょう"}
                       {passed && !allLessonsDone && "（未完了のレッスンを終えると修了証を発行できます）"}
                     </p>
                     {passed && allLessonsDone ? (
                       <button
+                        type="button"
                         onClick={() => {
                           playCyberClick();
                           go("certificate");
@@ -461,6 +508,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                       </button>
                     ) : (
                       <button
+                        type="button"
                         onClick={() => {
                           playCyberClick();
                           setAnswers(course.quiz.map(() => null));
@@ -475,6 +523,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                   </>
                 ) : (
                   <button
+                    type="button"
                     onClick={() => {
                       playCyberClick();
                       setSubmitted(true);
@@ -495,9 +544,10 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
             (progress.completedAt && progress.certificateId ? (
               <div className="space-y-4">
                 <div className="flex flex-wrap items-end gap-3 print:hidden">
-                  <label className="text-xs text-slate-700 space-y-1">
+                  <label htmlFor="academy-cert-name" className="text-xs text-slate-700 space-y-1">
                     <span className="font-bold block">修了証に載せる氏名</span>
                     <input
+                      id="academy-cert-name"
                       value={progress.learnerName ?? ""}
                       onChange={(e) => setLearnerName(e.target.value)}
                       placeholder="例: 氏名"
@@ -558,15 +608,16 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
                 </p>
               </div>
             ))}
-        </main>
+        </div>
 
         {/* 右側：レッスン切り替え＆ページ内目次 */}
         <aside className="space-y-4 print:hidden lg:sticky lg:top-6 self-start">
-          <label className="block bg-white border border-slate-200 rounded-xl px-4 py-3 space-y-1">
+          <label htmlFor="academy-step-select" className="block bg-white border border-slate-200 rounded-xl px-4 py-3 space-y-1">
             <span className="text-[11px] text-slate-500 block">
               {lesson ? `レッスン ${index + 1} / ${course.lessons.length}` : stepId === "quiz" ? "評価テスト" : "修了証"}・{course.title}
             </span>
             <select
+              id="academy-step-select"
               value={stepId}
               onChange={(e) => go(e.target.value)}
               className="w-full text-sm font-bold text-slate-900 bg-transparent cursor-pointer"
@@ -581,7 +632,7 @@ export default function LessonView({ course, stepId }: { course: Course; stepId:
             </select>
           </label>
           {headings.length > 0 && (
-            <nav className="border-l-2 border-slate-200 space-y-2 pl-3">
+            <nav aria-label="ページ内目次" className="border-l-2 border-slate-200 space-y-2 pl-3">
               {headings.map((h) => (
                 <a key={h.id} href={`#${h.id}`} className="block text-sm text-slate-600 hover:text-slate-900">
                   {h.text}

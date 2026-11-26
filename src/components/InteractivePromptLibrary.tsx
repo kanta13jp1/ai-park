@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   Sparkles,
   Copy,
@@ -60,7 +60,7 @@ const TEMPLATES: PromptTemplate[] = [
         key: "rawNotes",
         label: "メモ・文字起こし本文",
         placeholder: "会議のメモや発言ログをここに貼り付けてください（個人名は仮名または役職に置き換えてください）",
-        defaultValue: "・来週月曜までにAntigravityの社内利用規程の初稿を作成する（担当：田中）\n・GAS連携の同期不具合について、APIエンドポイントの権限を再確認する\n・次回ミーティングは木曜15時〜",
+        defaultValue: "・来週月曜までにAntigravityの社内利用規程の初稿を作成する（担当：Aさん）\n・GAS連携の同期不具合について、APIエンドポイントの権限を再確認する\n・次回ミーティングは木曜15時〜",
         type: "textarea",
       },
     ],
@@ -218,6 +218,7 @@ ${v.idea}
 
 export default function InteractivePromptLibrary() {
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>(TEMPLATES[0].id);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [values, setValues] = useState<Record<string, string>>(() => {
     const init: Record<string, string> = {};
     TEMPLATES[0].placeholders.forEach((p) => {
@@ -226,6 +227,7 @@ export default function InteractivePromptLibrary() {
     return init;
   });
   const [isCopied, setIsCopied] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
 
   const currentTemplate = TEMPLATES.find((t) => t.id === selectedTemplateId) || TEMPLATES[0];
 
@@ -238,6 +240,19 @@ export default function InteractivePromptLibrary() {
     });
     setValues(newValues);
     setIsCopied(false);
+  };
+
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, idx: number) => {
+    let nextIdx: number | null = null;
+    if (e.key === "ArrowRight") nextIdx = (idx + 1) % TEMPLATES.length;
+    else if (e.key === "ArrowLeft") nextIdx = (idx - 1 + TEMPLATES.length) % TEMPLATES.length;
+    else if (e.key === "Home") nextIdx = 0;
+    else if (e.key === "End") nextIdx = TEMPLATES.length - 1;
+    if (nextIdx !== null) {
+      e.preventDefault();
+      handleTemplateSelect(TEMPLATES[nextIdx]);
+      tabRefs.current[nextIdx]?.focus();
+    }
   };
 
   const handleValueChange = (key: string, val: string) => {
@@ -253,36 +268,47 @@ export default function InteractivePromptLibrary() {
     });
     setValues(defaultVals);
     setIsCopied(false);
+    setLiveNotice("入力内容を初期値に戻しました");
   };
 
   const generatedPrompt = currentTemplate.templateFn(values);
 
   const handleCopy = async () => {
-    playCyberSuccess();
     try {
       await navigator.clipboard.writeText(generatedPrompt);
+      playCyberSuccess();
       setIsCopied(true);
+      setLiveNotice("プロンプトをクリップボードにコピーしました");
       setTimeout(() => setIsCopied(false), 2500);
     } catch {
-      // フォールバック
-      const textarea = document.createElement("textarea");
-      textarea.value = generatedPrompt;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2500);
+      try {
+        const textarea = document.createElement("textarea");
+        textarea.value = generatedPrompt;
+        document.body.appendChild(textarea);
+        textarea.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(textarea);
+        if (!ok) throw new Error("execCommand copy returned false");
+        playCyberSuccess();
+        setIsCopied(true);
+        setLiveNotice("プロンプトをクリップボードにコピーしました");
+        setTimeout(() => setIsCopied(false), 2500);
+      } catch {
+        setLiveNotice("コピーに失敗しました");
+      }
     }
   };
 
   return (
     <section id="interactive-prompts" className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+      <div role="status" aria-live="polite" className="sr-only">
+        {liveNotice}
+      </div>
       {/* ヘッダー */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
         <div>
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-indigo-600" />
+            <Sparkles className="w-5 h-5 text-indigo-600" aria-hidden="true" />
             <h2 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
               実務ですぐ使えるプロンプト集（穴埋め入力＆ワンクリックコピー）
             </h2>
@@ -297,13 +323,27 @@ export default function InteractivePromptLibrary() {
       </div>
 
       {/* テンプレート選択タブ */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-        {TEMPLATES.map((tmpl) => {
+      <div
+        role="tablist"
+        aria-label="プロンプトテンプレート切替"
+        className="flex flex-wrap items-center gap-2 pb-1"
+      >
+        {TEMPLATES.map((tmpl, idx) => {
           const Icon = tmpl.categoryIcon;
           const isSelected = tmpl.id === selectedTemplateId;
           return (
             <button
               key={tmpl.id}
+              ref={(el) => {
+                tabRefs.current[idx] = el;
+              }}
+              type="button"
+              role="tab"
+              id={`prompt-tab-${tmpl.id}`}
+              aria-selected={isSelected}
+              aria-controls={`prompt-panel-${tmpl.id}`}
+              tabIndex={isSelected ? 0 : -1}
+              onKeyDown={(e) => handleTabKeyDown(e, idx)}
               onClick={() => handleTemplateSelect(tmpl)}
               onMouseEnter={() => playCyberHover()}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold shrink-0 transition-all cursor-pointer ${
@@ -312,7 +352,7 @@ export default function InteractivePromptLibrary() {
                   : "bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/80"
               }`}
             >
-              <Icon size={14} className={isSelected ? "text-cyan-300" : "text-slate-400"} />
+              <Icon size={14} aria-hidden="true" className={isSelected ? "text-cyan-300" : "text-slate-400"} />
               <span>{tmpl.title}</span>
             </button>
           );
@@ -320,67 +360,80 @@ export default function InteractivePromptLibrary() {
       </div>
 
       {/* メイン編集エリア：左に入力フォーム、右にプレビュー＆コピー */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+      <div
+        role="tabpanel"
+        id={`prompt-panel-${currentTemplate.id}`}
+        aria-labelledby={`prompt-tab-${currentTemplate.id}`}
+        tabIndex={0}
+        className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start"
+      >
         {/* 左側：穴埋め入力フォーム */}
         <div className="bg-slate-50/80 rounded-2xl p-5 border border-slate-200/80 space-y-4">
           <div className="flex items-center justify-between border-b border-slate-200 pb-2.5">
             <span className="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
-              <Sliders size={14} className="text-indigo-600" />
+              <Sliders size={14} className="text-indigo-600" aria-hidden="true" />
               変数（プレースホルダー）の入力
             </span>
             <button
+              type="button"
               onClick={handleReset}
               className="text-[11px] text-slate-500 hover:text-slate-800 flex items-center gap-1 font-bold cursor-pointer transition-colors"
             >
-              <RotateCcw size={12} />
+              <RotateCcw size={12} aria-hidden="true" />
               初期値に戻す
             </button>
           </div>
 
           <div className="space-y-3.5">
-            {currentTemplate.placeholders.map((p) => (
-              <div key={p.key} className="space-y-1">
-                <label className="text-xs font-bold text-slate-700 block">
-                  {p.label}
-                </label>
-                {p.type === "textarea" ? (
-                  <textarea
-                    rows={4}
-                    value={values[p.key] ?? ""}
-                    onChange={(e) => handleValueChange(p.key, e.target.value)}
-                    placeholder={p.placeholder}
-                    className="w-full text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
-                  />
-                ) : p.type === "select" ? (
-                  <select
-                    value={values[p.key] ?? ""}
-                    onChange={(e) => handleValueChange(p.key, e.target.value)}
-                    className="w-full text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-                  >
-                    {p.options?.map((opt) => (
-                      <option key={opt} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <input
-                    type="text"
-                    value={values[p.key] ?? ""}
-                    onChange={(e) => handleValueChange(p.key, e.target.value)}
-                    placeholder={p.placeholder}
-                    className="w-full text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
-                  />
-                )}
-              </div>
-            ))}
+            {currentTemplate.placeholders.map((p) => {
+              const fieldId = `prompt-field-${currentTemplate.id}-${p.key}`;
+              return (
+                <div key={p.key} className="space-y-1">
+                  <label htmlFor={fieldId} className="text-xs font-bold text-slate-700 block">
+                    {p.label}
+                  </label>
+                  {p.type === "textarea" ? (
+                    <textarea
+                      id={fieldId}
+                      rows={4}
+                      value={values[p.key] ?? ""}
+                      onChange={(e) => handleValueChange(p.key, e.target.value)}
+                      placeholder={p.placeholder}
+                      className="w-full text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                    />
+                  ) : p.type === "select" ? (
+                    <select
+                      id={fieldId}
+                      value={values[p.key] ?? ""}
+                      onChange={(e) => handleValueChange(p.key, e.target.value)}
+                      className="w-full text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                    >
+                      {p.options?.map((opt) => (
+                        <option key={opt} value={opt}>
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      id={fieldId}
+                      type="text"
+                      value={values[p.key] ?? ""}
+                      onChange={(e) => handleValueChange(p.key, e.target.value)}
+                      placeholder={p.placeholder}
+                      className="w-full text-xs p-2.5 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-mono"
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           {/* セーフティリマインダー */}
           <div className="flex items-start gap-2 bg-amber-50/80 p-3 rounded-xl border border-amber-200/80 text-[11px] text-amber-800">
-            <ShieldAlert size={15} className="text-amber-600 shrink-0 mt-0.5" />
+            <ShieldAlert size={15} className="text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
             <p className="leading-relaxed">
-              <strong>社内セキュリティ注意:</strong> お客様の個人情報（氏名・メールアドレス・電話番号等）や本番アクセスキーは直接入力せず、仮名（「田中様」「&lt;API_KEY&gt;」等）に置換してください。
+              <strong>社内セキュリティ注意:</strong> お客様の個人情報（氏名・メールアドレス・電話番号等）や本番アクセスキーは直接入力せず、仮名（「担当者A」「&lt;API_KEY&gt;」等）に置換してください。
             </p>
           </div>
         </div>
@@ -390,10 +443,11 @@ export default function InteractivePromptLibrary() {
           <div className="space-y-3">
             <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
               <span className="text-xs font-mono font-bold text-cyan-300 flex items-center gap-1.5">
-                <Sparkles size={14} />
+                <Sparkles size={14} aria-hidden="true" />
                 完成プロンプト（リアルタイムプレビュー）
               </span>
               <button
+                type="button"
                 onClick={handleCopy}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                   isCopied

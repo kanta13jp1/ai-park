@@ -6,7 +6,6 @@ import OfficeHourBanner from "@/components/OfficeHourBanner";
 import Link from "next/link";
 import GcpSetupGuide from "@/components/GcpSetupGuide";
 import WindowsAntigravityGuide from "@/components/WindowsAntigravityGuide";
-import TroubleshootingBoard from "@/components/TroubleshootingBoard";
 import SafetySelfChecker from "@/components/SafetySelfChecker";
 import StepCard, { type GuideStep } from "@/components/GuideStepCard";
 import SpotlightCard from "@/components/SpotlightCard";
@@ -27,20 +26,26 @@ import {
 const officialLinks = [
   { label: "ダウンロード", href: "https://antigravity.google/download" },
   { label: "Getting Started", href: "https://antigravity.google/docs/getting-started" },
-  { label: "CLI インストール", href: "https://antigravity.google/docs/cli/install/" },
+  { label: "CLI インストール", href: "https://antigravity.google/docs/install?tab=cli" },
   { label: "プラン & クォータ", href: "https://antigravity.google/docs/plans/" },
   { label: "FAQ・よくある質問", href: "https://antigravity.google/docs/faq/" },
 ];
 
 function CopyableCode({ code, label }: { code: string; label?: string }) {
   const [copied, setCopied] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
 
-  const handleCopy = () => {
-    navigator.clipboard?.writeText(code).then(() => {
+  const handleCopy = async () => {
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(code);
       playCyberSuccess();
       setCopied(true);
+      setLiveNotice("コードをクリップボードにコピーしました");
       setTimeout(() => setCopied(false), 2000);
-    });
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
   };
 
   return (
@@ -49,13 +54,18 @@ function CopyableCode({ code, label }: { code: string; label?: string }) {
       <div className="relative flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 group shadow-inner">
         <code className="font-mono text-xs text-cyan-300 break-all select-all mr-2">{code}</code>
         <button
+          type="button"
+          aria-label="コードをコピー"
           onClick={handleCopy}
           onMouseEnter={() => playCyberHover()}
           className="shrink-0 p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
           title="コードをコピー"
         >
-          {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+          {copied ? <Check size={14} className="text-emerald-400" aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
         </button>
+        <span role="status" aria-live="polite" className="sr-only">
+          {liveNotice}
+        </span>
       </div>
     </div>
   );
@@ -195,9 +205,9 @@ export default function GuidePage() {
 
       <div className="max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
         {/* 公式ドキュメントリンク HUD バー */}
-        <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3.5 text-xs">
+        <div className="bg-white/90 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 text-xs">
           <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 shrink-0">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 motion-safe:animate-pulse shrink-0" aria-hidden="true" />
             <span className="font-extrabold text-slate-900 tracking-tight whitespace-nowrap">Google 公式ドキュメント</span>
             <span className="text-slate-400 font-mono text-[11px] whitespace-nowrap">| 2026/09/26 確認済み</span>
           </div>
@@ -213,14 +223,14 @@ export default function GuidePage() {
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 font-bold transition-all text-[11px] cursor-pointer"
               >
                 <span>{l.label}</span>
-                <ExternalLink size={11} />
+                <ExternalLink size={11} aria-hidden="true" />
               </a>
             ))}
           </div>
         </div>
 
         {/* ページ内クイックナビゲーション */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs">
+        <nav aria-label="ページ内目次" className="flex flex-wrap items-center gap-2 text-xs">
           <span className="text-slate-400 font-bold shrink-0 text-[11px] mr-1">ページ内目次:</span>
           {[
             { label: "初期導入 7ステップ", href: "#setup-steps", icon: "📥" },
@@ -245,13 +255,13 @@ export default function GuidePage() {
               <span>{nav.label}</span>
             </a>
           ))}
-        </div>
+        </nav>
 
         {/* アカウント利用に関するセキュリティ注意バナー */}
         <div className="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-300/80 rounded-2xl p-5 flex items-start gap-3.5 text-xs text-amber-950 leading-relaxed shadow-2xs">
-          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
           <div className="space-y-1">
-            <h4 className="font-extrabold text-amber-900 text-sm">業務で使う前に必ずご確認ください</h4>
+            <h2 className="font-extrabold text-amber-900 text-sm">業務で使う前に必ずご確認ください</h2>
             <p className="text-slate-700 leading-relaxed">
               業務利用時は会社の Google Cloud プロジェクト経由で利用します（従量課金・個人のPro加入は不要）。
               個人アカウント利用時は個人向け規約が適用されます。
@@ -268,10 +278,10 @@ export default function GuidePage() {
         {/* 初期導入ステップ一覧 */}
         <section className="space-y-4" id="setup-steps">
           <div className="flex items-center space-x-2">
-            <Download className="w-5 h-5 text-indigo-600" />
-            <h3 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
+            <Download className="w-5 h-5 text-indigo-600" aria-hidden="true" />
+            <h2 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
               初期導入ステップ（はじめての方はここから・所要15〜20分）
-            </h3>
+            </h2>
           </div>
           <p className="text-xs text-slate-600 leading-relaxed font-normal">
             上から順番に進めるだけで即日エージェント開発環境が整います。画像の赤枠の場所を順番にクリックしてください。
@@ -288,12 +298,7 @@ export default function GuidePage() {
           <GcpSetupGuide />
         </div>
 
-        {/* Windows トラブルシューティング＆エラー解決早見表 */}
-        <div>
-          <TroubleshootingBoard />
-        </div>
-
-        {/* Windows 実践Tips & MCP活用ガイド */}
+        {/* Windows 実践Tips & MCP活用・トラブルシューティングガイド */}
         <WindowsAntigravityGuide />
 
         {/* 社内AI入力セルフチェック診断ツール */}
@@ -304,23 +309,23 @@ export default function GuidePage() {
         {/* IDE 日本語化ガイド */}
         <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6" id="ide-japanese">
           <div className="flex items-center space-x-2.5 border-b border-slate-100 pb-4">
-            <Languages className="w-5 h-5 text-emerald-600" />
+            <Languages className="w-5 h-5 text-emerald-600" aria-hidden="true" />
             <div>
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+              <h2 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
                 IDE の日本語化（STEP 7 で IDE を入れた方向け・3つの設定）
-              </h3>
+              </h2>
               <p className="text-xs text-slate-500 font-normal">UIメニューとAIエージェントの返答言語の両方を日本語に最適化します</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {japaneseSteps.map((s, i) => (
               <TiltCard key={s.title} maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
                 <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/70 space-y-2 relative h-full">
                   <div className="w-7 h-7 rounded-full bg-emerald-600 text-white text-xs font-mono font-bold flex items-center justify-center shadow-xs">
                     0{i + 1}
                   </div>
-                  <h4 className="font-extrabold text-slate-900 text-sm leading-snug">{s.title}</h4>
+                  <h3 className="font-extrabold text-slate-900 text-sm leading-snug">{s.title}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed font-normal">{s.desc}</p>
                 </div>
               </TiltCard>
@@ -331,16 +336,16 @@ export default function GuidePage() {
         {/* CLI インストールガイド */}
         <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-5">
           <div className="flex items-center space-x-2.5 border-b border-slate-100 pb-4">
-            <Terminal className="w-5 h-5 text-cyan-600" />
+            <Terminal className="w-5 h-5 text-cyan-600" aria-hidden="true" />
             <div>
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+              <h2 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
                 CLI（agy）のワンクリック・インストール（任意）
-              </h3>
+              </h2>
               <p className="text-xs text-slate-500 font-normal">ターミナルからエージェントを直接呼び出したい場合に使用します</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <CopyableCode
               label="Windows (PowerShell)"
               code="irm https://antigravity.google/cli/install.ps1 | iex"
@@ -355,11 +360,11 @@ export default function GuidePage() {
         {/* Git 連携プラクティス */}
         <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
           <div className="flex items-center space-x-2.5 border-b border-slate-100 pb-4">
-            <GitBranch className="w-5 h-5 text-orange-600" />
+            <GitBranch className="w-5 h-5 text-orange-600" aria-hidden="true" />
             <div>
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+              <h2 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
                 Git / GitHub との付き合い方（事故を防ぐ必須ルール）
-              </h3>
+              </h2>
               <p className="text-xs text-slate-500 font-normal">
                 AIエージェントは複数ファイルを一括生成・編集します。作業前ブランチの作成と変更確認を徹底してください。
               </p>

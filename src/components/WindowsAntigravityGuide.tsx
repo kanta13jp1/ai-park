@@ -17,13 +17,19 @@ import { playCyberClick, playCyberHover } from "@/lib/sound";
 
 function CopyableCodeSnippet({ code, label }: { code: string; label?: string }) {
   const [copied, setCopied] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     playCyberClick();
-    navigator.clipboard?.writeText(code).then(() => {
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(code);
       setCopied(true);
+      setLiveNotice("コードをクリップボードにコピーしました");
       setTimeout(() => setCopied(false), 2000);
-    });
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
   };
 
   return (
@@ -32,13 +38,18 @@ function CopyableCodeSnippet({ code, label }: { code: string; label?: string }) 
       <div className="relative flex items-center justify-between bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 group shadow-inner">
         <code className="font-mono text-xs text-cyan-300 break-all select-all mr-2">{code}</code>
         <button
+          type="button"
+          aria-label="コードをコピー"
           onClick={handleCopy}
           onMouseEnter={() => playCyberHover()}
           className="shrink-0 p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-all cursor-pointer shadow-xs active:scale-95"
           title="コードをコピー"
         >
-          {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+          {copied ? <Check size={14} className="text-emerald-400" aria-hidden="true" /> : <Copy size={14} aria-hidden="true" />}
         </button>
+        <span role="status" aria-live="polite" className="sr-only">
+          {liveNotice}
+        </span>
       </div>
     </div>
   );
@@ -53,31 +64,37 @@ export default function WindowsAntigravityGuide() {
     <div className="space-y-6" id="windows-powershell-tips">
       {/* 1. Windows (PowerShell) 実践Tips */}
       <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
-        <div
-          className="flex items-center justify-between border-b border-slate-100 pb-4 cursor-pointer select-none"
-          onClick={() => { playCyberClick(); setIsPsOpen(!isPsOpen); }} onMouseEnter={() => playCyberHover()}
-        >
-          <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-xl bg-sky-100 text-sky-700">
-              <Terminal className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
-                Windows (PowerShell) 実践Tips・記法＆文字化け対策
-              </h3>
-              <p className="text-xs text-slate-500 font-normal">
-                Windows環境でAntigravity CLIやエージェント操作を行う際の必須ノウハウ
-              </p>
-            </div>
-          </div>
-          <button className="text-slate-400 hover:text-slate-600 p-1">
-            {isPsOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        <h2 className="m-0">
+          <button
+            type="button"
+            aria-expanded={isPsOpen}
+            aria-controls="win-guide-ps-panel"
+            onClick={() => { playCyberClick(); setIsPsOpen(!isPsOpen); }}
+            onMouseEnter={() => playCyberHover()}
+            className="w-full text-left flex items-center justify-between gap-3 border-b border-slate-100 pb-4 cursor-pointer select-none"
+          >
+            <span className="flex items-center space-x-2.5">
+              <span className="p-2 rounded-xl bg-sky-100 text-sky-700 shrink-0">
+                <Terminal className="w-5 h-5" aria-hidden="true" />
+              </span>
+              <span>
+                <span className="block font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+                  Windows (PowerShell) 実践Tips・記法＆文字化け対策
+                </span>
+                <span className="block text-xs text-slate-500 font-normal">
+                  Windows環境でAntigravity CLIやエージェント操作を行う際の必須ノウハウ
+                </span>
+              </span>
+            </span>
+            <span className="text-slate-400 hover:text-slate-600 p-1 shrink-0" aria-hidden="true">
+              {isPsOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            </span>
           </button>
-        </div>
+        </h2>
 
         {isPsOpen && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div id="win-guide-ps-panel" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
                 <div className="flex items-center space-x-2 text-xs font-bold text-slate-800">
                   <span className="w-5 h-5 rounded-full bg-sky-600 text-white flex items-center justify-center text-[10px]">
@@ -145,35 +162,41 @@ export default function WindowsAntigravityGuide() {
 
       {/* 2. MCP (Model Context Protocol) 連携手順 */}
       <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
-        <div
-          className="flex items-center justify-between border-b border-slate-100 pb-4 cursor-pointer select-none"
-          onClick={() => { playCyberClick(); setIsMcpOpen(!isMcpOpen); }} onMouseEnter={() => playCyberHover()}
-        >
-          <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-xl bg-purple-100 text-purple-700">
-              <Cpu className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
-                社内MCP（Model Context Protocol）ツールの活用と安全設定
-              </h3>
-              <p className="text-xs text-slate-500 font-normal">
-                AIがブラウザ自動検証や公式ドキュメント参照を自律的に動かす仕組み
-              </p>
-            </div>
-          </div>
-          <button className="text-slate-400 hover:text-slate-600 p-1">
-            {isMcpOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        <h2 className="m-0">
+          <button
+            type="button"
+            aria-expanded={isMcpOpen}
+            aria-controls="win-guide-mcp-panel"
+            onClick={() => { playCyberClick(); setIsMcpOpen(!isMcpOpen); }}
+            onMouseEnter={() => playCyberHover()}
+            className="w-full text-left flex items-center justify-between gap-3 border-b border-slate-100 pb-4 cursor-pointer select-none"
+          >
+            <span className="flex items-center space-x-2.5">
+              <span className="p-2 rounded-xl bg-purple-100 text-purple-700 shrink-0">
+                <Cpu className="w-5 h-5" aria-hidden="true" />
+              </span>
+              <span>
+                <span className="block font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+                  社内MCP（Model Context Protocol）ツールの活用と安全設定
+                </span>
+                <span className="block text-xs text-slate-500 font-normal">
+                  AIがブラウザ自動検証や公式ドキュメント参照を自律的に動かす仕組み
+                </span>
+              </span>
+            </span>
+            <span className="text-slate-400 hover:text-slate-600 p-1 shrink-0" aria-hidden="true">
+              {isMcpOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            </span>
           </button>
-        </div>
+        </h2>
 
         {isMcpOpen && (
-          <div className="space-y-4">
+          <div id="win-guide-mcp-panel" className="space-y-4">
             <p className="text-xs text-slate-600 leading-relaxed">
               Antigravity は「MCP」標準にネイティブ対応しています。社内環境で検証済みのMCPサーバーを利用することで、ブラウザの自動検証やドキュメント参照をエージェントに直接実行させることができます。
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3.5">
               <TiltCard maxTilt={4} glareOpacity={0.08} className="rounded-2xl">
                 <div
                   onMouseEnter={() => playCyberHover()}
@@ -242,41 +265,47 @@ export default function WindowsAntigravityGuide() {
 
       {/* 3. 実践トラブルシューティング＆エラー解決早見表（TODO-18） */}
       <section className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
-        <div
-          className="flex items-center justify-between border-b border-slate-100 pb-4 cursor-pointer select-none"
-          onClick={() => { playCyberClick(); setIsFaqOpen(!isFaqOpen); }} onMouseEnter={() => playCyberHover()}
-        >
-          <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-xl bg-amber-100 text-amber-700">
-              <HelpCircle className="w-5 h-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
-                  Windows環境 エラー解決＆トラブルシューティング早見表
-                </h3>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                  確定コマンド集
+        <h2 className="m-0">
+          <button
+            type="button"
+            aria-expanded={isFaqOpen}
+            aria-controls="win-guide-faq-panel"
+            onClick={() => { playCyberClick(); setIsFaqOpen(!isFaqOpen); }}
+            onMouseEnter={() => playCyberHover()}
+            className="w-full text-left flex items-center justify-between gap-3 border-b border-slate-100 pb-4 cursor-pointer select-none"
+          >
+            <span className="flex items-center space-x-2.5">
+              <span className="p-2 rounded-xl bg-amber-100 text-amber-700 shrink-0">
+                <HelpCircle className="w-5 h-5" aria-hidden="true" />
+              </span>
+              <span>
+                <span className="flex flex-wrap items-center gap-2">
+                  <span className="font-extrabold text-slate-900 text-base sm:text-lg tracking-tight">
+                    Windows環境 エラー解決＆トラブルシューティング早見表
+                  </span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                    確定コマンド集
+                  </span>
                 </span>
-              </div>
-              <p className="text-xs text-slate-500 font-normal">
-                PowerShell実行ポリシー、GCPアカウント・プロジェクト切替、文字化け、ポート競合のワンクリック解決コマンド
-              </p>
-            </div>
-          </div>
-          <button className="text-slate-400 hover:text-slate-600 p-1">
-            {isFaqOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                <span className="block text-xs text-slate-500 font-normal">
+                  PowerShell実行ポリシー、GCPアカウント・プロジェクト切替、文字化け、ポート競合のワンクリック解決コマンド
+                </span>
+              </span>
+            </span>
+            <span className="text-slate-400 hover:text-slate-600 p-1 shrink-0" aria-hidden="true">
+              {isFaqOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+            </span>
           </button>
-        </div>
+        </h2>
 
         {isFaqOpen && (
-          <div className="space-y-8">
+          <div id="win-guide-faq-panel" className="space-y-8">
             <TroubleshootingBoard />
 
             <div className="pt-6 border-t border-slate-100 space-y-3">
-              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                 社内実例Q&A・運用Tips
-              </h4>
+              </h3>
               <div className="space-y-3">
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
                 <p className="text-xs font-bold text-slate-900 flex items-center space-x-1.5">

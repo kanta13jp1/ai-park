@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Award, BookOpen, Clock, ListChecks, ArrowRight, CheckCircle2, Trophy, Flame } from "lucide-react";
-import { courses, courseMinutes } from "@/data/academy";
+import { courses, courseMinutes, PASS_RATE } from "@/data/academy";
 import { loadProgress, type CourseProgress } from "@/lib/academyProgress";
 import { stepCounts } from "@/components/academy/useCourseProgress";
 import HeroBanner from "@/components/HeroBanner";
@@ -39,7 +39,7 @@ export default function AcademyPage() {
     const cp = progress[c.id];
     const done =
       (cp && Array.isArray(cp.lessonsDone) ? cp.lessonsDone.length : 0) +
-      (cp && typeof cp.bestScore === "number" && cp.bestScore >= 80 ? 1 : 0);
+      (cp && typeof cp.bestScore === "number" && cp.bestScore >= PASS_RATE ? 1 : 0);
     return acc + done;
   }, 0);
 
@@ -60,7 +60,7 @@ export default function AcademyPage() {
           >
             <div className="absolute top-0 right-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="space-y-2 max-w-2xl">
                 <div className="flex items-center space-x-2">
                   <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 tracking-wider">
@@ -97,10 +97,10 @@ export default function AcademyPage() {
         {inProgress.length > 0 && (
           <section className="space-y-4">
             <div className="flex items-center space-x-2">
-              <Flame size={20} className="text-amber-500 animate-pulse" />
-              <h3 className="text-lg font-black text-slate-900 tracking-tight">学習の続きから再開</h3>
+              <Flame size={20} className="text-amber-500 motion-safe:animate-pulse" aria-hidden="true" />
+              <h2 className="text-lg font-black text-slate-900 tracking-tight">学習の続きから再開</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-5">
               {inProgress.map((c) => {
                 const { done, total } = stepCounts(c, progress[c.id]);
                 const pct = Math.round((done / total) * 100);
@@ -125,9 +125,9 @@ export default function AcademyPage() {
                           </span>
                         </div>
                         <div>
-                          <h4 className="font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors text-base leading-snug">
+                          <h3 className="font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors text-base leading-snug">
                             {c.title}
-                          </h4>
+                          </h3>
                           <p className="text-xs text-slate-500 mt-1">
                             {done} / {total} ステップ達成中
                           </p>
@@ -155,15 +155,15 @@ export default function AcademyPage() {
 
         {/* コース一覧グリッド */}
         <section className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-black text-slate-900 flex items-center space-x-2 tracking-tight">
-              <BookOpen className="w-5 h-5 text-indigo-600" />
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 className="text-lg font-black text-slate-900 flex items-center space-x-2 tracking-tight">
+              <BookOpen className="w-5 h-5 text-indigo-600" aria-hidden="true" />
               <span>全カリキュラム一覧</span>
-            </h3>
+            </h2>
             <span className="text-xs text-slate-500 font-medium">※ブラウザ内に進捗と修了証が自動保存されます</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {courses.map((c) => {
               const p = progress[c.id];
               const done = p?.lessonsDone.length ?? 0;
@@ -202,9 +202,9 @@ export default function AcademyPage() {
                         </div>
 
                         <div className="space-y-1.5">
-                          <h4 className="font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors text-base leading-snug">
+                          <h3 className="font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors text-base leading-snug">
                             {c.title}
-                          </h4>
+                          </h3>
                           <p className="text-xs text-slate-600 leading-relaxed font-normal">
                             {c.summary}
                           </p>

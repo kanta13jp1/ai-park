@@ -114,20 +114,27 @@ const userSteps: GuideStep[] = [
 
 export default function GcpSetupGuide() {
   const [copied, setCopied] = useState(false);
+  const [liveNotice, setLiveNotice] = useState("");
 
-  const handleCopyProjectId = () => {
-    navigator.clipboard?.writeText(COMPANY_GCP_INFO.projectId).catch(() => {});
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopyProjectId = async () => {
+    try {
+      if (!navigator.clipboard) throw new Error("Clipboard unavailable");
+      await navigator.clipboard.writeText(COMPANY_GCP_INFO.projectId);
+      setCopied(true);
+      setLiveNotice("プロジェクトIDをコピーしました");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
   };
 
   return (
     <section id="company-setup" className="scroll-mt-6 space-y-6">
       <div className="space-y-1">
-        <h3 className="font-bold text-slate-800 text-lg flex items-center gap-2">
-          <Building2 className="w-5 h-5 text-indigo-600" />
+        <h2 className="font-bold text-slate-800 text-lg flex items-center gap-2">
+          <Building2 className="w-5 h-5 text-indigo-600" aria-hidden="true" />
           会社の Google Cloud で Antigravity を使う（業務利用の標準）
-        </h3>
+        </h2>
         <p className="text-xs text-slate-600 leading-relaxed">
           会社のアカウントのまま使え、料金は使った分だけ会社の Google Cloud 請求にまとまります（個人の Pro 加入は不要）。
           管理者の初回設定（A1〜A5）→ 利用者のサインイン（U1）の順に進めてください。
@@ -139,8 +146,8 @@ export default function GcpSetupGuide() {
         <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
-            <h4 className="font-extrabold text-sm sm:text-base text-white tracking-tight">社内本番環境 接続情報</h4>
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 motion-safe:animate-pulse shadow-[0_0_8px_#34d399]" aria-hidden="true" />
+            <h3 className="font-extrabold text-sm sm:text-base text-white tracking-tight">社内本番環境 接続情報</h3>
           </div>
           <span className="text-[11px] text-cyan-300 font-mono px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-400/30">
             Managed by your organization
@@ -158,13 +165,17 @@ export default function GcpSetupGuide() {
               <span className="font-bold text-emerald-300 font-mono text-sm tracking-wide">{COMPANY_GCP_INFO.projectId}</span>
             </div>
             <button
+              type="button"
               onClick={handleCopyProjectId}
               className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-emerald-500 hover:text-slate-950 text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer active:scale-95 shadow-sm"
               title="プロジェクトIDをコピー"
             >
-              {copied ? <Check size={13} className="text-emerald-300" /> : <Copy size={13} />}
+              {copied ? <Check size={13} className="text-emerald-300" aria-hidden="true" /> : <Copy size={13} aria-hidden="true" />}
               <span>{copied ? "コピー済" : "コピー"}</span>
             </button>
+            <span role="status" aria-live="polite" className="sr-only">
+              {liveNotice}
+            </span>
           </div>
           <div className="bg-white/5 backdrop-blur-md rounded-2xl p-4 border border-white/10 space-y-1">
             <span className="text-slate-400 block text-[11px] font-mono">ライセンスプラン</span>
@@ -174,18 +185,18 @@ export default function GcpSetupGuide() {
       </div>
 
       <div className="space-y-3">
-        <h4 className="font-bold text-sm text-indigo-900 flex items-center gap-1.5">
-          <Building2 size={15} /> 管理者の初回設定（1回だけ）
-        </h4>
+        <h3 className="font-bold text-sm text-indigo-900 flex items-center gap-1.5">
+          <Building2 size={15} aria-hidden="true" /> 管理者の初回設定（1回だけ）
+        </h3>
         {adminSteps.map((s) => (
           <StepCard key={s.id} step={s} />
         ))}
       </div>
 
       <div className="space-y-3">
-        <h4 className="font-bold text-sm text-emerald-900 flex items-center gap-1.5">
-          <UserCheck size={15} /> 利用者の設定
-        </h4>
+        <h3 className="font-bold text-sm text-emerald-900 flex items-center gap-1.5">
+          <UserCheck size={15} aria-hidden="true" /> 利用者の設定
+        </h3>
         {userSteps.map((s) => (
           <StepCard key={s.id} step={s} />
         ))}
@@ -194,10 +205,10 @@ export default function GcpSetupGuide() {
       {/* 実機トラブルシューティング（実機検証で判明した2大エラーと解消法） */}
       <div className="bg-amber-500/5 border border-amber-300/80 rounded-3xl p-6 sm:p-7 space-y-5 shadow-xs">
         <div className="flex items-center gap-2.5 border-b border-amber-200/80 pb-3">
-          <Wrench className="w-5 h-5 text-amber-600" />
-          <h4 className="font-extrabold text-sm sm:text-base text-amber-950 tracking-tight">
+          <Wrench className="w-5 h-5 text-amber-600" aria-hidden="true" />
+          <h3 className="font-extrabold text-sm sm:text-base text-amber-950 tracking-tight">
             実機トラブルシューティング：セットアップ時のよくあるエラーと解消法
-          </h4>
+          </h3>
         </div>
 
         <div className="space-y-3.5 text-xs leading-relaxed text-amber-950">
@@ -232,10 +243,10 @@ export default function GcpSetupGuide() {
       </div>
 
       <div className="bg-indigo-50/70 border border-indigo-200/80 rounded-3xl p-6 sm:p-7 space-y-3 shadow-xs">
-        <h4 className="font-extrabold text-sm sm:text-base text-indigo-950 flex items-center gap-2 tracking-tight">
-          <UserPlus size={16} className="text-indigo-600" />
+        <h3 className="font-extrabold text-sm sm:text-base text-indigo-950 flex items-center gap-2 tracking-tight">
+          <UserPlus size={16} className="text-indigo-600" aria-hidden="true" />
           <span>利用者が増えたとき（毎回この2つだけ）</span>
-        </h4>
+        </h3>
         <ol className="list-decimal pl-5 text-xs text-indigo-950 space-y-1.5 leading-relaxed font-medium">
           <li>A3 の手順で、新しい利用者に「Cloud AI Companion ユーザー（または Vertex AI ユーザー）」を付ける</li>
           <li>A4 で作った予算を開き、目標金額を「3,000円 × 新しい人数」に変更する</li>

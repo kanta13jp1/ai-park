@@ -87,14 +87,21 @@ export default function ProgressManager({
   const handleCopyJSON = async () => {
     playCyberClick();
     const jsonStr = exportProgressJSON();
-    await safeCopy(jsonStr);
-    playCyberSuccess();
-    setCopiedType("json");
-    setTimeout(() => setCopiedType(null), 2500);
-    setMessage({
-      type: "success",
-      text: "進捗JSONをクリップボードにコピーしました。",
-    });
+    const ok = await safeCopy(jsonStr);
+    if (ok) {
+      playCyberSuccess();
+      setCopiedType("json");
+      setTimeout(() => setCopiedType(null), 2500);
+      setMessage({
+        type: "success",
+        text: "進捗JSONをクリップボードにコピーしました。",
+      });
+    } else {
+      setMessage({
+        type: "error",
+        text: "コピーに失敗しました。手動で選択してコピーしてください。",
+      });
+    }
   };
 
   // Google Chat報告用コピー
@@ -102,14 +109,21 @@ export default function ProgressManager({
     playCyberClick();
     const all = loadProgress();
     const report = generateChatReportText(all, totalLessons, doneLessons);
-    await safeCopy(report);
-    playCyberSuccess();
-    setCopiedType("chat");
-    setTimeout(() => setCopiedType(null), 2500);
-    setMessage({
-      type: "success",
-      text: "Google Chat報告用テキストをコピーしました！推進担当へのチャットや日報にそのまま貼り付け可能です。",
-    });
+    const ok = await safeCopy(report);
+    if (ok) {
+      playCyberSuccess();
+      setCopiedType("chat");
+      setTimeout(() => setCopiedType(null), 2500);
+      setMessage({
+        type: "success",
+        text: "Google Chat報告用テキストをコピーしました！推進担当へのチャットや日報にそのまま貼り付け可能です。",
+      });
+    } else {
+      setMessage({
+        type: "error",
+        text: "コピーに失敗しました。手動で選択してコピーしてください。",
+      });
+    }
   };
 
   // ファイルアップロードからインポート
@@ -172,25 +186,26 @@ export default function ProgressManager({
             </span>
             <span className="text-xs text-slate-500 font-medium">ブラウザ内完結・安心バックアップ</span>
           </div>
-          <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-0.5">
+          <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight mt-0.5">
             学習進捗のバックアップ・復元 & Google Chat報告
-          </h3>
+          </h2>
         </div>
 
         {/* チャット報告ワンクリックコピー */}
         <button
+          type="button"
           onClick={handleCopyChatReport}
           onMouseEnter={() => playCyberHover()}
           className="inline-flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-md shadow-emerald-500/20 active:scale-95 transition-all cursor-pointer shrink-0"
         >
           {copiedType === "chat" ? (
             <>
-              <Check size={14} className="text-white" />
+              <Check size={14} className="text-white" aria-hidden="true" />
               <span>報告テキスト コピー完了！</span>
             </>
           ) : (
             <>
-              <MessageSquare size={14} />
+              <MessageSquare size={14} aria-hidden="true" />
               <span>Google Chat 報告文をコピー</span>
             </>
           )}
@@ -200,6 +215,8 @@ export default function ProgressManager({
       {/* お知らせバナー */}
       {message && (
         <div
+          role="status"
+          aria-live="polite"
           className={`flex items-start justify-between p-3.5 rounded-xl border text-xs leading-relaxed transition-all ${
             message.type === "success"
               ? "bg-emerald-50/90 border-emerald-200 text-emerald-900"
@@ -208,15 +225,17 @@ export default function ProgressManager({
         >
           <div className="flex items-center space-x-2">
             {message.type === "success" ? (
-              <ShieldCheck size={16} className="text-emerald-600 shrink-0" />
+              <ShieldCheck size={16} className="text-emerald-600 shrink-0" aria-hidden="true" />
             ) : (
-              <AlertCircle size={16} className="text-rose-600 shrink-0" />
+              <AlertCircle size={16} className="text-rose-600 shrink-0" aria-hidden="true" />
             )}
             <span>{message.text}</span>
           </div>
           <button
+            type="button"
+            aria-label="お知らせを閉じる"
             onClick={() => setMessage(null)}
-            className="text-slate-400 hover:text-slate-600 ml-2"
+            className="text-slate-400 hover:text-slate-600 ml-2 cursor-pointer"
           >
             ✕
           </button>
@@ -224,35 +243,37 @@ export default function ProgressManager({
       )}
 
       {/* バックアップ操作カード群 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* エクスポート */}
         <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600">
-              <Download size={16} />
+              <Download size={16} aria-hidden="true" />
             </div>
             <div>
-              <h4 className="text-xs sm:text-sm font-bold text-slate-900">進捗を書き出す（バックアップ）</h4>
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900">進捗を書き出す（バックアップ）</h3>
               <p className="text-[11px] text-slate-500">PC交換やキャッシュ削除に備えてJSON保存</p>
             </div>
           </div>
 
           <div className="flex items-center space-x-2 pt-1">
             <button
+              type="button"
               onClick={handleDownload}
               onMouseEnter={() => playCyberHover()}
               className="flex-1 inline-flex items-center justify-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-all active:scale-95 cursor-pointer"
             >
-              <FileJson size={13} />
+              <FileJson size={13} aria-hidden="true" />
               <span>JSON保存 (.json)</span>
             </button>
             <button
+              type="button"
               onClick={handleCopyJSON}
               onMouseEnter={() => playCyberHover()}
               className="inline-flex items-center justify-center space-x-1 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium border border-slate-200 transition-all active:scale-95 cursor-pointer"
               title="JSONを直接コピー"
             >
-              {copiedType === "json" ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
+              {copiedType === "json" ? <Check size={13} className="text-emerald-600" aria-hidden="true" /> : <Copy size={13} aria-hidden="true" />}
               <span>コピー</span>
             </button>
           </div>
@@ -262,10 +283,10 @@ export default function ProgressManager({
         <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-3">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
-              <Upload size={16} />
+              <Upload size={16} aria-hidden="true" />
             </div>
             <div>
-              <h4 className="text-xs sm:text-sm font-bold text-slate-900">進捗を読み込む（復元）</h4>
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900">進捗を読み込む（復元）</h3>
               <p className="text-[11px] text-slate-500">以前保存したJSONから進捗状態を復元</p>
             </div>
           </div>
@@ -273,12 +294,14 @@ export default function ProgressManager({
           <div className="flex items-center space-x-2 pt-1">
             <input
               type="file"
+              aria-label="進捗JSONファイルを選択"
               ref={fileInputRef}
               onChange={handleFileUpload}
               accept=".json,application/json"
               className="hidden"
             />
             <button
+              type="button"
               onClick={() => {
                 playCyberClick();
                 fileInputRef.current?.click();
@@ -286,10 +309,13 @@ export default function ProgressManager({
               onMouseEnter={() => playCyberHover()}
               className="flex-1 inline-flex items-center justify-center space-x-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold border border-slate-200 transition-all active:scale-95 cursor-pointer"
             >
-              <Upload size={13} />
+              <Upload size={13} aria-hidden="true" />
               <span>ファイルを選択</span>
             </button>
             <button
+              type="button"
+              aria-expanded={showImportBox}
+              aria-controls="academy-import-json-panel"
               onClick={() => {
                 playCyberClick();
                 setShowImportBox(!showImportBox);
@@ -305,11 +331,15 @@ export default function ProgressManager({
 
       {/* JSON貼り付けインポートボックス */}
       {showImportBox && (
-        <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 space-y-3 animate-in fade-in duration-200">
-          <label className="block text-xs font-bold text-indigo-950">
+        <div
+          id="academy-import-json-panel"
+          className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100 space-y-3 animate-in fade-in duration-200"
+        >
+          <label htmlFor="academy-import-json-textarea" className="block text-xs font-bold text-indigo-950">
             エクスポートしたJSONテキストを直接貼り付け:
           </label>
           <textarea
+            id="academy-import-json-textarea"
             value={importText}
             onChange={(e) => setImportText(e.target.value)}
             placeholder='{"version": "1.0", "progress": { ... }}'
@@ -318,12 +348,14 @@ export default function ProgressManager({
           />
           <div className="flex justify-end space-x-2">
             <button
+              type="button"
               onClick={() => setShowImportBox(false)}
-              className="px-3 py-1.5 rounded-lg text-xs text-slate-600 hover:bg-slate-200/60"
+              className="px-3 py-1.5 rounded-lg text-xs text-slate-600 hover:bg-slate-200/60 cursor-pointer"
             >
               キャンセル
             </button>
             <button
+              type="button"
               onClick={handleTextImport}
               disabled={!importText.trim()}
               className="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold shadow-xs active:scale-95 transition-all cursor-pointer"

@@ -111,7 +111,13 @@ export function generateChatReportText(progress: ProgressMap, totalLessons: numb
 
   for (const [courseId, cp] of Object.entries(progress)) {
     if (cp.completedAt) {
-      const scoreText = cp.bestScore !== undefined ? ` (正答率: ${cp.bestScore}%)` : "";
+      const scorePct =
+        cp.bestScore !== undefined
+          ? cp.bestScore <= 1
+            ? Math.round(cp.bestScore * 100)
+            : Math.round(cp.bestScore)
+          : undefined;
+      const scoreText = scorePct !== undefined ? ` (正答率: ${scorePct}%)` : "";
       const certText = cp.certificateId ? ` [修了証ID: ${cp.certificateId}]` : "";
       completedCourses.push(`- ${courseId}${scoreText}${certText}`);
     } else if ((cp.lessonsDone?.length ?? 0) > 0) {
@@ -136,7 +142,7 @@ export function generateChatReportText(progress: ProgressMap, totalLessons: numb
     text += inProgressCourses.join("\n") + "\n\n";
   }
 
-  text += `■ 受講ポータル: https://kanta13jp1.github.io/ai-park/academy\n`;
+  text += `■ 受講ポータル: https://kanta13jp1.github.io/ai-park/academy/\n`;
   text += `━━━━━━━━━━━━━━━━━━━━━\n`;
   text += `※ AI推進担当への修了報告・受講相談用`;
 
