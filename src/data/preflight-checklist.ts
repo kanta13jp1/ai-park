@@ -2003,4 +2003,263 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     environment: "Windows 11 / Chromium / 1280x800・768x1024・375x812 + GitHub Pages 本番実測",
     memo: "β版（GitHub Issues live連携＋WAI-ARIA＋768px対応＋404確認）の本番実機 UAT 完了",
   },
+  {
+    id: "azure-info",
+    name: "Azure・Microsoft Azure情報局",
+    path: "/azure-info",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/11/27",
+    verifiedBy: "梅澤（AI推進担当）",
+    overallStatus: "passed",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "社内 Azure 利用ルール・資格取得支援制度が未確定のため UnderConstructionAlert（🚧 一部工事中・学習ハブ先行公開）および feature-status.ts（isVerified: false）で誠実に保護されていることを確認。全8資格（AZ-900 / AI-900 / DP-900 / SC-900 / AZ-104 / AI-103 / AI-200 / AZ-305、うち AI-103 / AI-200 は旧 AI-102 / AZ-204 後継）・バッジ/検索チップ100%ヒット・learn.microsoft.com 資格別4ユニークURL（計32件）の妥当性を tests/azure-cert.test.mjs で検証済み。",
+        points: [
+          "未確定の社内 Azure 利用ルール・資格取得支援制度が工事中バナーと isVerified: false で保護されているか",
+          "全8資格のバッジ・quickSearchChips が 5 セクション横断検索で 0 ミス（100%ヒット）となるか",
+          "AI-103 / AI-200 の後継試験注記と learn.microsoft.com 公式 URL 一意性が保たれているか",
+        ],
+        subChecks: [
+          {
+            id: "azure-fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "未確定社内ルール・架空補助制度の非掲載",
+            detail:
+              "社内の Azure 利用申請窓口・補助金額・架空担当者等の記述を一切載せず、UnderConstructionAlert（releaseDate: 未定）と isVerified: false で準備中であることを明示していること。",
+            verified: true,
+          },
+          {
+            id: "azure-fact-02",
+            category: "official_announcement",
+            groupTitle: "② 公式一次情報・テスト契約と一致しているか（整合性確認済み）",
+            label: "全8資格・後継試験注記・100%逆引きヒット検証",
+            detail:
+              "tests/azure-cert.test.mjs にて全8資格（AZ-900〜AZ-305）・AI-103（旧AI-102後継）/AI-200（旧AZ-204後継）注記・20問/24カード整合・サービスバッジ＆検索チップ100%ヒットが自動テストで合格していること。",
+            verified: true,
+          },
+          {
+            id: "azure-link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先・公式URL衛生が保たれているか（テスト固定済み）",
+            label: "learn.microsoft.com 全32 URL の一意性・旧404/Soft-404除外",
+            detail:
+              "全8資格の officialResources（各4件・一意）が https://learn.microsoft.com/ 配下であり、旧404（ai-103t00-a）・/training/browse/ リダイレクト・重複 /exams/ URL を含まないこと。",
+            verified: true,
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番 GitHub Pages 実機ブラウザ（Chromium）にて 1280x800（html/body 幅 1274px・main 幅 986px）・768x1024（固定 288px サイドバー下で html/body 幅 762px・main 幅 474px、比較 table 実測幅 640px を親ラッパー幅 376px 内に横スクロール収容）の横溢れ 0 件を確認（viewportSize / boundingBox 実測および本番 404 実画面スクリーンショット確認による検証）。",
+        points: [
+          "1280x800 および固定サイドバー併設 768x1024 で横溢れ・レイアウト破綻がないか",
+          "比較表 min-w-[640px] が 768px 幅の横スクロールコンテナ内に正しく収容されるか",
+        ],
+      },
+      usability: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "azureCertRegistry.ts による初期 az900 のみ静的 import＋残り 7 資格（各 36〜48KB）の動的 import() チャンク分割とレースガード（loadRequestGenRef）・再読込UIを実装。本番画面で「AI Apps & Agents (AI-103)」クリック時にチャンク 2402.68c05dd17dae7e42.js が HTTP 200 で読み込まれ 0/13 トピック・0/24 カード・0/20 演習が描画されること、検索チップ「Microsoft Foundry」で比較表 6 件→2 件絞込、末尾 / なし（/azure-info）の HTTP 200 リダイレクト解決を確認。",
+        points: [
+          "7資格の動的チャンク読み込み・切り替えとチップ検索がエラーなく動作するか",
+          "末尾 / なしアクセスが /azure-info/ へ正常リダイレクト解決するか",
+        ],
+      },
+      readability: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "WAI-ARIA APG タブ（tablist/tab/aria-selected/aria-controls/tabpanel）・aria-pressed・aria-expanded・role=\"status\"（aria-live=\"polite\"）・Markdown メモ出力（handleExportNotesMarkdown）を備え、本番操作を通じて ConsoleErrors 0 件を確認。",
+        points: [
+          "WAI-ARIA APG 属性とライブ通知が揃い、コンソールエラーが 0 件か",
+        ],
+      },
+    },
+    environment:
+      "Windows 11 / Chromium (Built-in Browser Subagent) / 1280x800・768x1024 + GitHub Pages 本番実測",
+    memo: "工事中状態（Azure 全8資格統合学習ハブ先行公開・動的チャンク分割対応）の本番実機・CI回帰テスト UAT 完了",
+  },
+  {
+    id: "lpic-info",
+    name: "LPIC・Linux情報局",
+    path: "/lpic-info",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/11/27",
+    verifiedBy: "梅澤（AI推進担当）",
+    overallStatus: "passed",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "社内の資格取得支援・受験補助ルール等が未確定のため UnderConstructionAlert（🚧 一部工事中・学習ハブ先行公開）および feature-status.ts（isVerified: false）で誠実に保護されていることを確認。全6トラック（LPIC-1 / LPIC-2 / LPIC-3 300/303/305/306）の各20問・24カード・コマンドバッジ＆検索チップ100%ヒット・LPI公式URL（旧404 URL除外）の整合を tests/lpic-cert.test.mjs で検証済み。",
+        points: [
+          "未確定の社内資格取得支援・受験補助ルールが工事中バナーと isVerified: false で保護されているか",
+          "全6トラックのコマンドバッジ・quickSearchChips が 0 ミス（100%ヒット）となるか",
+          "LPI 公式リソース URL が有効で旧 404 URL を含まないか",
+        ],
+        subChecks: [
+          {
+            id: "lpic-fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "未確定社内支援制度・架空数値の非掲載",
+            detail:
+              "社内の受験補助金額・取得奨励金・申請窓口等の未確定事項を載せず、UnderConstructionAlert（releaseDate: 未定）と isVerified: false で準備中であることを明示していること。",
+            verified: true,
+          },
+          {
+            id: "lpic-fact-02",
+            category: "official_announcement",
+            groupTitle: "② 公式仕様・回帰テストと一致しているか（整合性確認済み）",
+            label: "全6トラック試験要綱・100%逆引きヒット検証",
+            detail:
+              "tests/lpic-cert.test.mjs にて全6トラックの試験時間（90分）・合格ライン（500点）・有効期限/前提資格表記・20問/24カード整合・コマンド＆検索チップ100%ヒットが自動テストで合格していること。",
+            verified: true,
+          },
+          {
+            id: "lpic-link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先・公式URL衛生が保たれているか（テスト固定済み）",
+            label: "LPI 公式サイト配下 URL 一意性・旧404除外",
+            detail:
+              "各トラックの officialResources（各3件以上・一意）が LPI 公式サイト配下（www/wiki/learning.lpi.org）であり、旧404パス（learning-materials/lpic-*、LPIC-3_30X 等）を含まないこと。",
+            verified: true,
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番 GitHub Pages 実機ブラウザ（Chromium）にて 1280x800（html/body 幅 1274px・main 幅 986px）・768x1024（html/body 幅 762px・main 幅 474px）の横溢れ 0 件を確認。初回 QA 時に 1280x800 で検出した「学習レベル・専門トラック選択」見出し右端と「基盤」グループの重なりを上下2段配置へ修正（59d701e）し、再デプロイ後の本番 1280x800 スクリーンショット（read_file 直接目視）および boundingBox 実測（ラベル y=464..484、基盤 x=335..651、LPIC-3 専門 x=659..1192）で重なり・見切れの完全解消を確認済み。",
+        points: [
+          "1280x800 でトラック選択見出しと基盤ボタングループが重ならないか",
+          "1280x800 および 768x1024 で横溢れや比較表の崩れがないか",
+        ],
+      },
+      usability: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "lpicCertRegistry.ts による初期 lpic-1 のみ静的 import＋残り 5 トラックの動的 import() 分割とレースガード（loadRequestGenRef）・再読込UIを実装。本番画面で「LPIC-2 (201 / 202)」クリック時に見出し「LPIC-2（201-450 / 202-450）合格対策学習ハブ」へ切り替わり 0/13 トピック（Topic 200〜212）・0/24 カード・0/20 演習がエラー 0 件で正常表示されることを確認。",
+        points: [
+          "トラック切り替え時に遅延データが正常ロードされエラーが出ないか",
+        ],
+      },
+      readability: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "WAI-ARIA APG タブ・aria-pressed・aria-expanded・aria-controls・role=\"status\"（aria-live=\"polite\"）・比較表 min-w-[640px]・lg:min-w-[360px] を備え、本番操作および再検証で ConsoleErrors 0 件を確認。",
+        points: [
+          "WAI-ARIA APG 属性とライブ通知が揃い、コンソールエラーが 0 件か",
+        ],
+      },
+    },
+    environment:
+      "Windows 11 / Chromium (Built-in Browser Subagent) / 1280x800（実画面スクリーンショット目視確認済）・768x1024 + GitHub Pages 本番実測",
+    memo: "工事中状態（LPIC 全6トラック学習ハブ先行公開・動的チャンク分割＋1280pxラベル重なり修正済）の本番実機・目視 UAT 完了",
+  },
+  {
+    id: "ipa-info",
+    name: "情報処理技術者試験情報局",
+    path: "/ipa-info",
+    targetAudience: "全社員",
+    lastVerifiedAt: "2026/11/27",
+    verifiedBy: "梅澤（AI推進担当）",
+    overallStatus: "passed",
+    checks: {
+      factAndSpec: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "社内の資格取得支援・受験補助ルール等が未確定のため UnderConstructionAlert（🚧 一部工事中・学習ハブ先行公開）および feature-status.ts（isVerified: false）で誠実に保護されていることを確認。全13区分（IP/SG/FE/AP/SC/DB/NW/ES/ST/SA/PM/SM/AU）の試験要綱・キーワードバッジ100%ヒット・IPA公式シラバスURL（https://www.ipa.go.jp/shiken/syllabus/gaiyou.html、旧404 /shiken/syllabus.html 非混入）を tests/cert-data.test.mjs および tests/ipa-cert.test.mjs で検証済み。",
+        points: [
+          "未確定の社内資格取得支援・受験補助ルールが工事中バナーと isVerified: false で保護されているか",
+          "全13区分のトピック・問題・カード件数とキーワードバッジ100%ヒットが検証されているか",
+          "IPA 公式シラバス URL が有効（syllabus/gaiyou.html）で旧 404 URL を含まないか",
+        ],
+        subChecks: [
+          {
+            id: "ipa-fact-01",
+            category: "no_fiction",
+            groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
+            label: "未確定社内支援制度・架空情報の非掲載",
+            detail:
+              "社内の受験料補助・報奨金制度等の未確定情報を載せず、UnderConstructionAlert（releaseDate: 未定）と isVerified: false で準備中であることを明示していること。",
+            verified: true,
+          },
+          {
+            id: "ipa-fact-02",
+            category: "official_announcement",
+            groupTitle: "② 公式要綱・回帰テストと一致しているか（整合性確認済み）",
+            label: "IPA 全13区分メタ・件数・ID一意性・100%逆引きヒット検証",
+            detail:
+              "tests/cert-data.test.mjs および tests/ipa-cert.test.mjs にて全13区分の IPA_EXAM_METAS・IPA_EXAM_COUNTS・全IDプレフィックス一意性・キーワードバッジ100%ヒットが自動テストで合格していること。",
+            verified: true,
+          },
+          {
+            id: "ipa-link-01",
+            category: "link_integrity",
+            groupTitle: "③ リンク先・公式URL衛生が保たれているか（テスト固定済み）",
+            label: "IPA 公式サイト URL（syllabus/gaiyou.html）採用・旧404除外",
+            detail:
+              "IPA_OFFICIAL_RESOURCES 3件が https://www.ipa.go.jp/ 配下で一意であり、正規シラバス URL（/shiken/syllabus/gaiyou.html）を含み、旧 404（/shiken/syllabus.html）を含まないこと。",
+            verified: true,
+          },
+        ],
+      },
+      designAndLayout: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番 GitHub Pages 実機ブラウザ（Chromium）にて 1280x800（html/body 幅 1274px・main 幅 986px）・768x1024（初期および PM 表示時とも html/body 幅 762px・main 幅 474px）で横溢れ 0 件を確認（viewportSize / boundingBox 実測、および min-w-0・lg:min-w-[360px]・比較表 min-w-[640px] を実装・確認）。",
+        points: [
+          "1280x800 および固定サイドバー併設 768x1024 で横溢れ・レイアウト崩れがないか",
+          "全13区分セレクター・横断進捗サマリ・比較表がタブレット幅でも崩れないか",
+        ],
+      },
+      usability: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "ipaCertRegistry.ts による初期 foundation 階層のみ静的 import＋specialist（89KB）・management（88KB）階層の動的 import() 分割とレースガード（loadRequestGenRef）・再読込UIを実装。本番画面で「安全確保支援士 (SC)」（0/7 トピック・0/10 カード・0/12 演習）および「プロジェクトマネージャ (PM)」（0/5 トピック・0/10 カード・0/12 演習）の階層切替がエラー 0 件で完了することを確認。",
+        points: [
+          "基礎/専門/管理の3階層切り替え時に動的データ読み込み・表示がエラーなく動作するか",
+        ],
+      },
+      readability: {
+        passed: true,
+        checkedAt: "2026/11/27",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "WAI-ARIA APG タブ・role=\"group\"＋aria-pressed・aria-expanded・role=\"status\"（aria-live=\"polite\"）を備え、本番操作での ConsoleErrors 0 件および存在しない URL での 404 画面描画（React Hydration / JS エラー 0 件・スクリーンショット目視確認済み）を確認。",
+        points: [
+          "WAI-ARIA APG 属性とライブ通知が揃い、コンソール・404 Hydration エラーが 0 件か",
+        ],
+      },
+    },
+    environment:
+      "Windows 11 / Chromium (Built-in Browser Subagent) / 1280x800・768x1024 + GitHub Pages 本番実測",
+    memo: "工事中状態（IPA 全13区分統合学習ハブ先行公開・階層別動的チャンク分割対応）の本番実機・CI回帰テスト UAT 完了",
+  },
 ];
