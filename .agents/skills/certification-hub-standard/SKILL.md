@@ -18,9 +18,9 @@ AI Park 内の資格試験学習ハブ（`src/app/*-info`）で自己流実装�
 
 新規作成や大規模更新の前に、最新リファレンス実装を必ず確認して差分を棚卸しする。
 
-- **UI 基準実装**: `src/app/ipa-info/page.tsx`、`src/app/lpic-info/page.tsx`
-- **検索正規化ヘルパー**: `src/lib/ipa-search.ts`、`src/lib/lpic-search.ts`
-- **データ構造と回帰テスト**: `tests/cert-data.test.mjs`、`tests/core-logic.test.mjs`
+- **UI 基準実装**: `src/app/ipa-info/page.tsx`、`src/app/lpic-info/page.tsx`、`src/app/azure-info/page.tsx`
+- **検索正規化ヘルパー**: `src/lib/ipa-search.ts`、`src/lib/lpic-search.ts`、`src/lib/azure-search.ts`
+- **データ構造と回帰テスト**: `tests/cert-data.test.mjs`（共通）、`tests/<domain>-cert.test.mjs`（例: `tests/azure-cert.test.mjs` — 並行セッション競合回避のためドメイン専用テストへ分離）
 
 ---
 
@@ -44,28 +44,30 @@ AI Park 内の資格試験学習ハブ（`src/app/*-info`）で自己流実装�
    - トピックのキーワード／コマンドバッジ押下時の検索正規化ロジックを `"use client"` な `page.tsx` に直書きせず、`src/lib/<cert>-search.ts` に純粋関数として切り出す。
    - 全角括弧 `（`・半角括弧 `(`・スラッシュ `/` 付きの表記揺れ（例: `ISMS (ISO/IEC 27001)`, `EVM (CPI/SPI/EAC)`）を確実に正規化できるよう `kw.split(/[（(/]/)[0].trim()` 相当の設計を行い、`tests/core-logic.test.mjs` に境界値テストを追加する。
 2. **100% ヒット率（miss 0）と 5 セクション逆引き UX**:
-   - すべての試験・トラックにおいて、各トピックの全バッジを正規化したクエリが比較／逆引きデータセットに **100% ヒット（miss 0）** することを `tests/cert-data.test.mjs` で検証する。
-   - どの試験タブでも比較表・パターン/公式・ひっかけ・重要数値/パス・一問一答の 5 セクションが **0 件（空振り）** にならないよう網羅し、検索バー直下にセクション別ヒット件数・フィルタ解除ボタン・0 件時ガイダンスを配置する。
+   - すべての試験・トラックにおいて、各トピックの全サービス／キーワードバッジ（正規化後）**および `page.tsx` の `quickSearchChips` 全件**が 5 セクション横断検索で **100% ヒット（miss 0）** することを `tests/<domain>-cert.test.mjs` で検証する。
+   - **テストと UI の検索対象 1:1 一致（偽陽性防止）**: テストの haystack 構築ロジックは `page.tsx` 側のフィルタ対象フィールドと完全一致させる（例: `filteredComparisons` が `comp.category` を検索しない場合、テスト側にも `c.category` を含めない）。
+   - どの試験タブでも比較表・逆引き（`filteredQuickLookup`）・パターン/公式・ひっかけ・重要数値/仕様の 5 セクションが **0 件（空振り）** にならないよう網羅し、検索バー直下に `role="status" aria-live="polite"` のセクション別ヒット件数・0 件時ガイダンスを配置する。あわせて学習メモの Markdown 出力（`handleExportNotesMarkdown`）とパネル閉鎖時の `role="status"` フィードバックを備える。
 
 ---
 
 ## 4. 外部公式 URL のライブ HTTP 200 実測と回帰固定
 
-- Web 検索スニペットや記憶から公式ドキュメント URL を転記しない。追加・変更した全外部 URL について、PowerShell でライブ応答（最終遷移先 HTTP `200`）を実測する。
+- Web 検索スニペットや記憶から公式ドキュメント URL を転記しない。追加・変更した全外部 URL について、`HEAD` のステータス確認だけで済ませず **最終遷移先 URL（リダイレクト解決後）と HTML `<title>` を `GET` で実測** し、以下 3 点をすべて確認する：
+  1. 最終ステータスが HTTP `200` であること（`403`/`404` ゼロ）。
+  2. **Soft-404 リダイレクトではないこと**: 一覧・検索・トップページ（例: Microsoft Learn の `/training/browse/?resource_type=course`）へ HTTP `200` で転送されていないかを最終 URL と `<title>` で確認する。
+  3. **最終 URL が資格内で一意であること**: 元の URL 文字列が異なっても、リダイレクト後に同一ページへ収束する重複（例: `/credentials/certifications/exams/az-900/` → `/credentials/certifications/azure-fundamentals/`）を排除する。
   ```powershell
-  $urls = @("https://example.org/official-syllabus")
-  foreach ($u in $urls) {
-    try {
-      $r = Invoke-WebRequest -Uri $u -Method Head -MaximumRedirection 5 -TimeoutSec 15 -UseBasicParsing
-      "$($r.StatusCode) $u"
-    } catch {
-      # HEAD が 405 のサーバーは GET でフォールバック確認
-      $r = Invoke-WebRequest -Uri $u -Method Get -MaximumRedirection 5 -TimeoutSec 15 -UseBasicParsing
-      "$($r.StatusCode) $u"
-    }
+  # Node による最終遷移先 URL・<title>・資格内一意性の一括実測例
+  @'
+  for (const url of process.argv.slice(1)) {
+    const res = await fetch(url, { redirect: "follow" });
+    const html = await res.text();
+    const title = (html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1] ?? "").trim();
+    console.log(`${res.status} | ${url === res.url ? "OK" : "REDIR -> " + res.url} | ${title}`);
   }
+  '@ | node --input-type=module - "https://learn.microsoft.com/ja-jp/credentials/certifications/azure-fundamentals/"
   ```
-- 過去に 404 が判明した旧 URL（例: `ipa.go.jp/shiken/syllabus.html`, `learning-materials/lpic-*`）は `tests/cert-data.test.mjs` に禁止アサーションを追加して再混入を機械的に防ぐ。
+- 過去に 404・Soft-404・重複リダイレクトが判明した旧 URL パターン（例: `ipa.go.jp/shiken/syllabus.html`, `/training/courses/ai-900t00`, `/credentials/certifications/exams/(az-900|...)/`）は `tests/<domain>-cert.test.mjs` に禁止アサーションを追加して再混入を機械的に防ぐ。
 
 ---
 
@@ -85,7 +87,7 @@ AI Park 内の資格試験学習ハブ（`src/app/*-info`）で自己流実装�
 
 ## 6. テスト登録・検証手順
 
-1. 新規データファイルを追加した場合、`tests/cert-data.test.mjs` の対象ファイル収集ロジックと期待ファイル件数アサーションを更新し、専用テストブロック（一意性・`domainId` 整合・セル数・100% バッジヒット率・公式 URL 禁止パターン）を追加する。
+1. 新規ドメイン・大幅拡充時は、並行セッションと競合する共有テスト（`tests/cert-data.test.mjs` / `tests/core-logic.test.mjs`）を直接肥大化させず、ドメイン専用テスト（`tests/<domain>-cert.test.mjs`）を追加して、正規化関数・一意性・`domainId` 整合・セル数・バッジ＆`quickSearchChips` 100% ヒット率・公式 URL 禁止パターン・WAI-ARIA/768px 実装トークンを CI 固定する（`tests/cert-data.test.mjs` が自動収集するファイル数の期待値変更が必須な場合のみ最小差分で同期する）。
 2. 変更後、PowerShell で 5 段階検証チェーンをすべてエラー 0 で通過させる：
    ```powershell
    npm run lint; if ($?) { npx tsc --noEmit }; if ($?) { npm test }; if ($?) { npm run check:gate }; if ($?) { npm run build }

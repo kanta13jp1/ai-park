@@ -29,6 +29,7 @@ export default function PreflightUatPage() {
     preflightChecklistMaster[0]?.id || "home"
   );
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
+  const [liveNotice, setLiveNotice] = useState("");
   const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -88,6 +89,7 @@ export default function PreflightUatPage() {
     if (copyTimerRef.current) {
       clearTimeout(copyTimerRef.current);
     }
+    setLiveNotice("");
     try {
       if (!navigator.clipboard?.writeText) {
         throw new Error("Clipboard API is unavailable");
@@ -95,8 +97,10 @@ export default function PreflightUatPage() {
       await navigator.clipboard.writeText(report);
       playCyberClick();
       setCopyStatus("copied");
+      setLiveNotice("UAT報告書をクリップボードにコピーしました。");
     } catch {
       setCopyStatus("failed");
+      setLiveNotice("クリップボードへのコピーに失敗しました。");
     }
     copyTimerRef.current = setTimeout(() => setCopyStatus("idle"), 2500);
   };
@@ -170,11 +174,7 @@ export default function PreflightUatPage() {
               </span>
             </button>
             <span className="sr-only" role="status" aria-live="polite">
-              {copyStatus === "copied"
-                ? "UAT報告書をクリップボードにコピーしました。"
-                : copyStatus === "failed"
-                ? "クリップボードへのコピーに失敗しました。"
-                : ""}
+              {liveNotice}
             </span>
           </div>
         </div>
@@ -263,7 +263,7 @@ export default function PreflightUatPage() {
                       TESTBED
                     </span>
                   </div>
-                  <div className="text-sm font-bold text-slate-900 truncate">
+                  <div className="text-sm font-bold text-slate-900 leading-snug">
                     Win 11 / Chrome・Chromium
                   </div>
                 </div>

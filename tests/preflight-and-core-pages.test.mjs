@@ -43,6 +43,7 @@ test("preflight page implements vertical WAI-ARIA tabs, clipboard error handling
     "End",
     'role="status"',
     'aria-live="polite"',
+    "liveNotice",
     "try {",
     "catch {",
     "コピーに失敗しました",
@@ -60,6 +61,11 @@ test("preflight page implements vertical WAI-ARIA tabs, clipboard error handling
   assert.equal(/<h5[\s>]/i.test(content), false, "preflight/page.tsx must not skip heading levels to <h5>");
   assert.equal(content.includes("社内標準"), false, "preflight/page.tsx must not claim unverified 社内標準PC環境");
   assert.equal(content.includes('"100% 承認"'), false, "preflight/page.tsx must calculate passRate dynamically");
+  assert.doesNotMatch(
+    content,
+    /className="[^"]*\btruncate\b[^"]*">\s*Win 11 \/ Chrome・Chromium/,
+    "KPI Card 4 (Win 11 / Chrome・Chromium) must not apply truncate class"
+  );
 });
 
 test("how-to page keeps /tools PoC badge alignment, links /study-archive, fixes heading hierarchy and 768px responsiveness", () => {
@@ -137,4 +143,28 @@ test("route-metadata and route layouts register /preflight, /how-to, /agent-tool
       `${seg}/layout.tsx must export getRouteMetadata("${route}")`
     );
   }
+});
+
+test("100% of isVerified: true features in feature-status.ts have passed UAT records in preflight-checklist.ts", () => {
+  const featureStatus = readSrc("src/data/feature-status.ts");
+  const preflightChecklist = readSrc("src/data/preflight-checklist.ts");
+
+  const verifiedIds = [
+    ...featureStatus.matchAll(
+      /\{\s*id:\s*"([^"]+)"[^}]*?\bisVerified:\s*true\b[^}]*?\}/g
+    ),
+  ].map((m) => m[1]);
+
+  assert.equal(verifiedIds.length, 13, `Expected 13 verified features, got ${verifiedIds.length}: ${verifiedIds.join(", ")}`);
+
+  const missingUat = verifiedIds.filter((id) => {
+    const pattern = new RegExp(`id:\\s*"${id}"[^}]*?overallStatus:\\s*"passed"`);
+    return !pattern.test(preflightChecklist);
+  });
+
+  assert.deepEqual(
+    missingUat,
+    [],
+    `Verified features missing passed UAT in preflight-checklist.ts: ${missingUat.join(", ")}`
+  );
 });
