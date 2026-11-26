@@ -148,12 +148,18 @@ export default function AiProjectsPage() {
   const [deptFilter, setDeptFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedDept, setCopiedDept] = useState<string | null>(null);
+  const [liveNotice, setLiveNotice] = useState<string>("");
 
-  const handleCopyWorkflow = (dept: string, text: string) => {
-    navigator.clipboard.writeText(text);
-    playCyberSuccess();
-    setCopiedDept(dept);
-    setTimeout(() => setCopiedDept(null), 2000);
+  const handleCopyWorkflow = async (dept: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      playCyberSuccess();
+      setCopiedDept(dept);
+      setLiveNotice(`${dept} の実践フローをコピーしました`);
+      setTimeout(() => setCopiedDept(null), 2000);
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
   };
 
   const load = (signal?: AbortSignal) =>
@@ -200,8 +206,11 @@ export default function AiProjectsPage() {
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <div role="status" aria-live="polite" className="sr-only">
+          {liveNotice}
+        </div>
         {/* プロジェクト登録アナウンスバナー（グラスモーフィズム） */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 border border-indigo-700/50 p-6 sm:p-7 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 border border-indigo-700/50 p-6 sm:p-7 text-white shadow-xl flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="absolute top-0 right-1/3 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="relative z-10 space-y-2 max-w-2xl">
@@ -236,35 +245,42 @@ export default function AiProjectsPage() {
         </div>
 
         {/* フィルター & リアルタイム同期状況バー */}
-        <div className="bg-white/80 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-white/80 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-2">
-            {(["all", ...projectStages] as const).map((s) => {
-              const count = s === "all" ? all.length : all.filter((p) => p.stage === s).length;
-              const isSelected = stageFilter === s;
-              return (
-                <button
-                  key={s}
-                  onClick={() => {
-                    playCyberClick();
-                    setStageFilter(s);
-                  }}
-                  onMouseEnter={() => playCyberHover()}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                    isSelected
-                      ? "bg-slate-900 text-white shadow-xs"
-                      : "bg-slate-100/80 text-slate-600 hover:bg-slate-200/70"
-                  }`}
-                >
-                  {s === "all" ? "すべて" : s} ({count})
-                </button>
-              );
-            })}
+            <div role="group" aria-label="進捗ステージで絞り込み" className="flex flex-wrap items-center gap-2">
+              {(["all", ...projectStages] as const).map((s) => {
+                const count = s === "all" ? all.length : all.filter((p) => p.stage === s).length;
+                const isSelected = stageFilter === s;
+                return (
+                  <button
+                    key={s}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => {
+                      playCyberClick();
+                      setStageFilter(s);
+                    }}
+                    onMouseEnter={() => playCyberHover()}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-slate-900 text-white shadow-xs"
+                        : "bg-slate-100/80 text-slate-600 hover:bg-slate-200/70"
+                    }`}
+                  >
+                    {s === "all" ? "すべて" : s} ({count})
+                  </button>
+                );
+              })}
+            </div>
 
             {/* 部署別フィルター */}
             {departments.length > 0 && (
               <div className="flex items-center gap-1.5 ml-1 pl-2 border-l border-slate-200">
-                <span className="text-[11px] font-bold text-slate-500">部署:</span>
+                <label htmlFor="ai-projects-dept-filter" className="text-[11px] font-bold text-slate-500">
+                  部署:
+                </label>
                 <select
+                  id="ai-projects-dept-filter"
                   value={deptFilter}
                   onChange={(e) => {
                     playCyberClick();
@@ -284,8 +300,12 @@ export default function AiProjectsPage() {
 
             {/* リアルタイムキーワード検索 */}
             <div className="relative flex items-center ml-1">
-              <Search size={13} className="absolute left-2.5 text-slate-400 pointer-events-none" />
+              <label htmlFor="ai-projects-search-input" className="sr-only">
+                プロジェクト・ツール・概要を検索
+              </label>
+              <Search size={13} aria-hidden="true" className="absolute left-2.5 text-slate-400 pointer-events-none" />
               <input
+                id="ai-projects-search-input"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -294,39 +314,48 @@ export default function AiProjectsPage() {
               />
               {searchQuery && (
                 <button
+                  type="button"
+                  aria-label="検索をクリア"
                   onClick={() => setSearchQuery("")}
                   className="absolute right-2 text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
-                  <X size={12} />
+                  <X size={12} aria-hidden="true" />
                 </button>
               )}
             </div>
           </div>
 
-          <div className="flex items-center gap-3 text-xs text-slate-500 font-medium self-end md:self-center">
-            <div className="flex items-center gap-1.5">
-              <CircleDot size={13} className={syncState === "loading" ? "animate-spin text-cyan-600" : "text-emerald-500"} />
+          <div className="flex items-center gap-3 text-xs text-slate-500 font-medium self-end lg:self-center">
+            <div className="flex items-center gap-1.5" role="status" aria-live="polite">
+              <CircleDot
+                size={13}
+                aria-hidden="true"
+                className={syncState === "loading" ? "motion-safe:animate-spin text-cyan-600" : "text-emerald-500"}
+              />
               {syncState === "loading" && <span>GitHub 同期中...</span>}
               {syncState === "ok" && <span>GitHub 登録 {issueProjects.length} 件 同期中</span>}
               {syncState === "error" && <span className="text-rose-600">GitHub 同期失敗（CoE登録分のみ表示）</span>}
             </div>
             <button
+              type="button"
+              disabled={syncState === "loading"}
               onClick={() => {
                 playCyberClick();
                 setSyncState("loading");
                 load();
               }}
               onMouseEnter={() => playCyberHover()}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-[11px] font-bold text-slate-700 shadow-2xs cursor-pointer transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-[11px] font-bold text-slate-700 shadow-2xs cursor-pointer transition-colors disabled:opacity-50"
             >
-              <RefreshCw size={11} />
+              <RefreshCw size={11} aria-hidden="true" className={syncState === "loading" ? "motion-safe:animate-spin" : ""} />
               <span>更新</span>
             </button>
           </div>
         </div>
 
+        <h2 className="sr-only">登録済みAIプロジェクト一覧（{shown.length}件）</h2>
         {/* プロジェクト一覧カードグリッド（SpotlightCard適用） */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {shown.map((p) => {
             const currentStage = stageStyle[p.stage] ?? stageStyle["検討中"];
             return (
@@ -409,11 +438,12 @@ export default function AiProjectsPage() {
           })}
 
           {shown.length === 0 && (
-            <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center text-slate-500 md:col-span-2 space-y-2">
-              <FolderGit2 size={36} className="mx-auto text-slate-300" />
+            <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center text-slate-500 lg:col-span-2 space-y-2">
+              <FolderGit2 size={36} className="mx-auto text-slate-300" aria-hidden="true" />
               <p className="text-xs font-semibold">該当する条件（ステータス・部署・検索ワード）のプロジェクトはありません。</p>
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery("")}
                   className="text-xs text-indigo-600 font-bold hover:underline cursor-pointer"
                 >
@@ -429,10 +459,10 @@ export default function AiProjectsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-indigo-600" />
-                <h3 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
+                <Sparkles className="w-5 h-5 text-indigo-600" aria-hidden="true" />
+                <h2 className="font-black text-slate-900 text-lg sm:text-xl tracking-tight">
                   部署別 実務ベストプラクティス・実践フロー
-                </h3>
+                </h2>
               </div>
               <p className="text-xs text-slate-500 mt-1">
                 「自分の部署では具体的に何から始めればいい？」を解決する、真似して始められる業務効率化モデルです。
@@ -443,7 +473,7 @@ export default function AiProjectsPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {DEPT_PRACTICES.map((dp) => {
               const Icon = dp.deptIcon;
               return (
@@ -455,9 +485,9 @@ export default function AiProjectsPage() {
                 >
                   <div className="p-5 rounded-2xl bg-slate-50/70 border border-slate-200/80 flex flex-col justify-between h-full space-y-4 hover:border-indigo-300 transition-all shadow-2xs">
                   <div className="space-y-3">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between flex-wrap gap-1.5">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-800 shadow-2xs">
-                        <Icon size={14} className="text-indigo-600" />
+                        <Icon size={14} className="text-indigo-600" aria-hidden="true" />
                         <span>{dp.dept}</span>
                       </span>
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
@@ -466,9 +496,9 @@ export default function AiProjectsPage() {
                     </div>
 
                     <div>
-                      <h4 className="font-extrabold text-slate-900 text-sm leading-snug">
+                      <h3 className="font-extrabold text-slate-900 text-sm leading-snug">
                         {dp.title}
-                      </h4>
+                      </h3>
                       <p className="text-xs text-slate-500 mt-1">
                         対象業務: {dp.targetTask}
                       </p>
@@ -478,6 +508,7 @@ export default function AiProjectsPage() {
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold text-slate-700 block">実践フロー:</span>
                         <button
+                          type="button"
                           onClick={() => handleCopyWorkflow(dp.dept, dp.workflow.join("\n"))}
                           onMouseEnter={() => playCyberHover()}
                           className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 transition-colors cursor-pointer border border-slate-200/70"

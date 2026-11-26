@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   RefreshCw,
@@ -263,8 +263,16 @@ const matrixTools: MatrixTool[] = [
   }
 ];
 
+const VIEW_TABS = [
+  { id: "matrix", label: "マトリクス", icon: Layers },
+  { id: "quadrant", label: "クアドラント", icon: Compass },
+  { id: "coverage", label: "カバレッジ", icon: BarChart3 },
+  { id: "diagnosis", label: "ツール診断", icon: Sparkles },
+] as const;
+
 export default function ToolsPage() {
   const [activeTab, setActiveTab] = useState<"matrix" | "quadrant" | "coverage" | "diagnosis">("matrix");
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [statusFilter, setStatusFilter] = useState<"all" | "available" | "verifying" | "listup">("all");
   const [recommendFilter, setRecommendFilter] = useState<"all" | "S" | "A" | "B" | "PoC">("all");
   const [targetFilter, setTargetFilter] = useState<"all" | "全社員" | "エンジニア" | "マーケ・企画" | "デザイン">("all");
@@ -377,6 +385,20 @@ export default function ToolsPage() {
     if (!TOOLS_SHEET_CSV_URL) return;
     setIsSyncing(true);
     loadSheetTools();
+  };
+
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, idx: number) => {
+    let nextIdx: number | null = null;
+    if (e.key === "ArrowRight") nextIdx = (idx + 1) % VIEW_TABS.length;
+    else if (e.key === "ArrowLeft") nextIdx = (idx - 1 + VIEW_TABS.length) % VIEW_TABS.length;
+    else if (e.key === "Home") nextIdx = 0;
+    else if (e.key === "End") nextIdx = VIEW_TABS.length - 1;
+    if (nextIdx !== null) {
+      e.preventDefault();
+      playCyberClick();
+      setActiveTab(VIEW_TABS[nextIdx].id);
+      tabRefs.current[nextIdx]?.focus();
+    }
   };
 
   // フィルタリング処理（ステータス・推奨ランク・職種・検索語）
@@ -545,7 +567,7 @@ export default function ToolsPage() {
           />
 
           {/* 4大KPIカード */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-1">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
             <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
               <SpotlightCard
                 spotlightColor="rgba(255, 255, 255, 0.1)"
@@ -595,12 +617,20 @@ export default function ToolsPage() {
               >
                 <div className="p-4 flex flex-col justify-between h-full">
                   <span className="text-xs font-mono text-slate-400 block">同期ステータス</span>
-                  <div className="flex items-center space-x-2 mt-1.5">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <div className="flex items-center space-x-2 mt-1.5" role="status" aria-live="polite">
+                    <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
+                      <span className="motion-safe:animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
                     </span>
-                    <span className="text-sm font-bold text-emerald-300 font-mono">Sheet連携中</span>
+                    <span className="text-sm font-bold text-emerald-300 font-mono">
+                      {!TOOLS_SHEET_CSV_URL
+                        ? "組込みデータ"
+                        : isSyncing
+                          ? "同期中..."
+                          : lastSynced.includes("失敗")
+                            ? "組込み表示"
+                            : "Sheet連携中"}
+                    </span>
                   </div>
                 </div>
               </SpotlightCard>
@@ -613,75 +643,52 @@ export default function ToolsPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-6">
         {/* ビュー切り替えタブ */}
         <div className="flex items-center justify-between flex-wrap gap-4 border-b border-slate-200 pb-3">
-          <div className="flex space-x-1 sm:space-x-2">
-            <button
-              onClick={() => {
-                playCyberClick();
-                setActiveTab("matrix");
-              }}
-              onMouseEnter={() => playCyberHover()}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
-                activeTab === "matrix"
-                  ? "bg-indigo-600 text-white shadow-xs"
-                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
-              }`}
-            >
-              <Layers size={16} />
-              <span>マトリクス</span>
-            </button>
-            <button
-              onClick={() => {
-                playCyberClick();
-                setActiveTab("quadrant");
-              }}
-              onMouseEnter={() => playCyberHover()}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
-                activeTab === "quadrant"
-                  ? "bg-indigo-600 text-white shadow-xs"
-                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
-              }`}
-            >
-              <Compass size={16} />
-              <span>クアドラント</span>
-            </button>
-            <button
-              onClick={() => {
-                playCyberClick();
-                setActiveTab("coverage");
-              }}
-              onMouseEnter={() => playCyberHover()}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
-                activeTab === "coverage"
-                  ? "bg-indigo-600 text-white shadow-xs"
-                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
-              }`}
-            >
-              <BarChart3 size={16} />
-              <span>カバレッジ</span>
-            </button>
-            <button
-              onClick={() => {
-                playCyberClick();
-                setActiveTab("diagnosis");
-              }}
-              onMouseEnter={() => playCyberHover()}
-              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
-                activeTab === "diagnosis"
-                  ? "bg-indigo-600 text-white shadow-xs"
-                  : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
-              }`}
-            >
-              <Sparkles size={16} />
-              <span>ツール診断</span>
-            </button>
+          <div
+            role="tablist"
+            aria-label="ツール一覧の表示切替"
+            className="flex flex-wrap gap-1.5 sm:gap-2"
+          >
+            {VIEW_TABS.map((tab, idx) => {
+              const Icon = tab.icon;
+              const isSelected = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  ref={(el) => {
+                    tabRefs.current[idx] = el;
+                  }}
+                  type="button"
+                  role="tab"
+                  id={`tools-tab-${tab.id}`}
+                  aria-selected={isSelected}
+                  aria-controls={`tools-panel-${tab.id}`}
+                  tabIndex={isSelected ? 0 : -1}
+                  onKeyDown={(e) => handleTabKeyDown(e, idx)}
+                  onClick={() => {
+                    playCyberClick();
+                    setActiveTab(tab.id);
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer ${
+                    isSelected
+                      ? "bg-indigo-600 text-white shadow-xs"
+                      : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
+                  }`}
+                >
+                  <Icon size={16} aria-hidden="true" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* 右側：再読込（同期）ボタン */}
           <div className="flex items-center space-x-3">
-            <span className="text-[11px] text-slate-400 hidden sm:inline">
+            <span className="text-[11px] text-slate-400 hidden sm:inline" role="status" aria-live="polite">
               最終同期: {lastSynced}
             </span>
             <button
+              type="button"
               onClick={() => {
                 playCyberClick();
                 handleSync();
@@ -692,7 +699,8 @@ export default function ToolsPage() {
             >
               <RefreshCw
                 size={13}
-                className={isSyncing ? "animate-spin text-sky-600" : "text-slate-500"}
+                aria-hidden="true"
+                className={isSyncing ? "motion-safe:animate-spin text-sky-600" : "text-slate-500"}
               />
               <span>{isSyncing ? "同期中..." : "再読込（同期）"}</span>
             </button>
@@ -701,18 +709,29 @@ export default function ToolsPage() {
 
         {/* 1. マトリクスビュー */}
         {activeTab === "matrix" && (
-          <div className="space-y-4">
+          <div
+            role="tabpanel"
+            id="tools-panel-matrix"
+            aria-labelledby="tools-tab-matrix"
+            tabIndex={0}
+            className="space-y-4"
+          >
             {/* フィルター & 検索 & 凡例コントロールパネル */}
             <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs space-y-3.5">
               {/* 上段：検索バー & 推奨ランクフィルター */}
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
                 {/* 検索入力 */}
                 <div className="relative flex-1 max-w-md">
+                  <label htmlFor="tools-search-input" className="sr-only">
+                    ツール名・特徴・用途で検索
+                  </label>
                   <Search
                     size={15}
+                    aria-hidden="true"
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
                   />
                   <input
+                    id="tools-search-input"
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -721,16 +740,22 @@ export default function ToolsPage() {
                   />
                   {searchQuery && (
                     <button
+                      type="button"
+                      aria-label="検索をクリア"
                       onClick={() => setSearchQuery("")}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs cursor-pointer"
                     >
-                      <X size={13} />
+                      <X size={13} aria-hidden="true" />
                     </button>
                   )}
                 </div>
 
                 {/* 推奨ランクピル */}
-                <div className="flex items-center space-x-1.5 flex-wrap gap-y-1 text-xs">
+                <div
+                  role="group"
+                  aria-label="社内推奨ランクで絞り込み"
+                  className="flex items-center space-x-1.5 flex-wrap gap-y-1 text-xs"
+                >
                   <span className="text-[11px] font-bold text-slate-400 mr-1">社内推奨:</span>
                   {(
                     [
@@ -743,6 +768,8 @@ export default function ToolsPage() {
                   ).map((r) => (
                     <button
                       key={r.id}
+                      type="button"
+                      aria-pressed={recommendFilter === r.id}
                       onClick={() => {
                         playCyberClick();
                         setRecommendFilter(r.id);
@@ -762,9 +789,15 @@ export default function ToolsPage() {
 
               {/* 下段：ステータス & 職種フィルター & 該当件数 */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-slate-100">
-                <div className="flex items-center space-x-1.5 flex-wrap gap-y-1.5">
+                <div
+                  role="group"
+                  aria-label="利用状態で絞り込み"
+                  className="flex items-center space-x-1.5 flex-wrap gap-y-1.5"
+                >
                   <span className="text-[11px] font-bold text-slate-400 mr-1">利用状態:</span>
                   <button
+                    type="button"
+                    aria-pressed={statusFilter === "all"}
                     onClick={() => {
                       playCyberClick();
                       setStatusFilter("all");
@@ -779,6 +812,8 @@ export default function ToolsPage() {
                     すべて ({tools.length})
                   </button>
                   <button
+                    type="button"
+                    aria-pressed={statusFilter === "available"}
                     onClick={() => {
                       playCyberClick();
                       setStatusFilter("available");
@@ -793,6 +828,8 @@ export default function ToolsPage() {
                     利用可能 ({tools.filter((t) => t.status === "全社員利用可能" || t.status === "利用可能" || t.status === "社内セキュア網").length})
                   </button>
                   <button
+                    type="button"
+                    aria-pressed={statusFilter === "verifying"}
                     onClick={() => {
                       playCyberClick();
                       setStatusFilter("verifying");
@@ -807,6 +844,8 @@ export default function ToolsPage() {
                     検証中 ({tools.filter((t) => t.status === "検証中").length})
                   </button>
                   <button
+                    type="button"
+                    aria-pressed={statusFilter === "listup"}
                     onClick={() => {
                       playCyberClick();
                       setStatusFilter("listup");
@@ -824,8 +863,11 @@ export default function ToolsPage() {
 
                 <div className="flex items-center space-x-3 text-[11px] text-slate-500">
                   <div className="flex items-center space-x-1.5">
-                    <span className="font-bold text-slate-400">職種:</span>
+                    <label htmlFor="tools-target-filter" className="font-bold text-slate-400">
+                      職種:
+                    </label>
                     <select
+                      id="tools-target-filter"
                       value={targetFilter}
                       onChange={(e) => {
                         playCyberClick();
@@ -841,7 +883,11 @@ export default function ToolsPage() {
                     </select>
                   </div>
 
-                  <span className="font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                  <span
+                    role="status"
+                    aria-live="polite"
+                    className="font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded"
+                  >
                     該当: {filteredTools.length} 件
                   </span>
                 </div>
@@ -870,14 +916,14 @@ export default function ToolsPage() {
                 <table className="w-full text-left text-sm border-collapse min-w-[950px]">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-600">
-                      <th className="py-3 px-3 w-12 text-center">#</th>
-                      <th className="py-3 px-4 min-w-[200px]">ブランド / 形態</th>
-                      <th className="py-3 px-4 min-w-[170px]">利用ステータス</th>
-                      <th className="py-3 px-3 text-center min-w-[110px]">開発</th>
-                      <th className="py-3 px-3 text-center min-w-[110px]">文書・資料</th>
-                      <th className="py-3 px-3 text-center min-w-[110px]">調査・分析</th>
-                      <th className="py-3 px-3 text-center min-w-[110px]">業務自動化</th>
-                      <th className="py-3 px-4 min-w-[90px] text-center">カバー</th>
+                      <th className="py-3 px-3 w-12 text-center whitespace-nowrap">#</th>
+                      <th className="py-3 px-4 min-w-[200px] whitespace-nowrap">ブランド / 形態</th>
+                      <th className="py-3 px-4 min-w-[170px] whitespace-nowrap">利用ステータス</th>
+                      <th className="py-3 px-3 text-center min-w-[110px] whitespace-nowrap">開発</th>
+                      <th className="py-3 px-3 text-center min-w-[110px] whitespace-nowrap">文書・資料</th>
+                      <th className="py-3 px-3 text-center min-w-[110px] whitespace-nowrap">調査・分析</th>
+                      <th className="py-3 px-3 text-center min-w-[110px] whitespace-nowrap">業務自動化</th>
+                      <th className="py-3 px-4 min-w-[90px] text-center whitespace-nowrap">カバー</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -1008,7 +1054,13 @@ export default function ToolsPage() {
 
         {/* 2. クアドラントビュー */}
         {activeTab !== "matrix" && (
-          <div className="rounded-2xl border-2 border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 space-y-2">
+          <div
+            role="tabpanel"
+            id={`tools-panel-${activeTab}`}
+            aria-labelledby={`tools-tab-${activeTab}`}
+            tabIndex={0}
+            className="rounded-2xl border-2 border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 space-y-2"
+          >
             <p className="text-sm font-bold text-slate-700">🚧 工事中：社内での確認が済むまで表示しません</p>
             <p className="text-xs">
               クアドラント・カバレッジ・ツール診断は、ツールの評価や「おすすめ」を含むため、社内で内容を確認してから公開します。

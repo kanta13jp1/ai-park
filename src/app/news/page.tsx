@@ -73,6 +73,7 @@ export default function AiNewsPage() {
   const [selectedImportance, setSelectedImportance] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [liveNotice, setLiveNotice] = useState<string>("");
 
   // 自動同期パイプラインから最新ニュースをフェッチ（Fail-Open安全設計）
   const fetchLiveNews = useCallback(async (isManual = false) => {
@@ -152,14 +153,17 @@ export default function AiNewsPage() {
   }, [newsList, selectedCategory, selectedImportance, searchQuery]);
 
   // URL共有コピー
-  const handleCopyShareUrl = (item: AINewsItem) => {
+  const handleCopyShareUrl = async (item: AINewsItem) => {
     playCyberClick();
-    if (typeof window !== "undefined") {
-      const url = `${window.location.origin}${window.location.pathname}#${item.id}`;
-      navigator.clipboard.writeText(url).then(() => {
-        setCopiedId(item.id);
-        setTimeout(() => setCopiedId(null), 2500);
-      });
+    if (typeof window === "undefined") return;
+    const url = `${window.location.origin}${window.location.pathname}#${item.id}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedId(item.id);
+      setLiveNotice("記事の共有リンクをコピーしました");
+      setTimeout(() => setCopiedId(null), 2500);
+    } catch {
+      setLiveNotice("コピーに失敗しました");
     }
   };
 
@@ -169,7 +173,7 @@ export default function AiNewsPage() {
       case "hot":
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-rose-500/10 text-rose-600 border border-rose-500/20 shadow-xs">
-            <Flame size={11} className="text-rose-500 animate-pulse" />
+            <Flame size={11} className="text-rose-500 motion-safe:animate-pulse" aria-hidden="true" />
             <span>{label}</span>
           </span>
         );
@@ -247,13 +251,16 @@ export default function AiNewsPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-8">
+        <div role="status" aria-live="polite" className="sr-only">
+          {liveNotice}
+        </div>
         {/* 自動巡回パイプライン HUDステータスバー */}
         <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-4 sm:p-5 rounded-2xl border border-indigo-500/30 shadow-lg relative overflow-hidden">
           <div className="absolute -right-12 -top-12 w-48 h-48 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none" />
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="flex items-start sm:items-center gap-3">
               <div className="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30 shrink-0">
-                <Radio className="w-5 h-5 animate-pulse text-emerald-400" />
+                <Radio className="w-5 h-5 motion-safe:animate-pulse text-emerald-400" aria-hidden="true" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
@@ -261,12 +268,12 @@ export default function AiNewsPage() {
                     ⚡ 自動巡回ニュースパイプライン
                   </span>
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping inline-block" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 motion-safe:animate-ping inline-block" aria-hidden="true" />
                     完全自動反映 (LIVE)
                   </span>
                   {refreshSuccess && (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/30 text-indigo-200 border border-indigo-400/50 animate-bounce">
-                      <Check size={10} />
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-500/30 text-indigo-200 border border-indigo-400/50 motion-safe:animate-bounce">
+                      <Check size={10} aria-hidden="true" />
                       最新ライブデータを同期しました
                     </span>
                   )}
@@ -274,7 +281,7 @@ export default function AiNewsPage() {
                 <p className="text-xs text-slate-300 mt-1">
                   GitHub Actions（6時間定時Cron）が各社公式フィード（Google DeepMind, OpenAI, Anthropic, xAI, DeepSeek等）を自動巡回・最新情報を即時反映。
                 </p>
-                <div className="flex items-center gap-4 text-[11px] text-slate-400 mt-1.5 font-mono">
+                <div className="flex items-center gap-4 text-[11px] text-slate-400 mt-1.5 font-mono" role="status" aria-live="polite">
                   <span>最終自動巡回: <strong className="text-indigo-200">{lastSyncedAt}</strong></span>
                   <span className="hidden sm:inline">•</span>
                   <span className="hidden sm:inline">配信中: <strong className="text-emerald-300">{newsList.length}件</strong></span>
@@ -282,8 +289,9 @@ export default function AiNewsPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
+            <div className="flex items-center gap-2 self-start lg:self-auto shrink-0">
               <button
+                type="button"
                 onClick={() => fetchLiveNews(true)}
                 disabled={isRefreshing}
                 onMouseEnter={() => playCyberHover()}
@@ -293,7 +301,7 @@ export default function AiNewsPage() {
                     : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/30 hover:scale-[1.02] active:scale-[0.98]"
                 }`}
               >
-                <RefreshCw size={13} className={isRefreshing ? "animate-spin" : ""} />
+                <RefreshCw size={13} aria-hidden="true" className={isRefreshing ? "motion-safe:animate-spin" : ""} />
                 <span>{isRefreshing ? "同期中..." : "最新ニュースを今すぐ再取得"}</span>
               </button>
             </div>
@@ -376,14 +384,19 @@ export default function AiNewsPage() {
 
         {/* フィルター＆検索ツールバー */}
         <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
             {/* 検索入力欄 */}
             <div className="relative flex-1 max-w-md">
+              <label htmlFor="news-search-input" className="sr-only">
+                ニュース、タグ、キーワードで検索
+              </label>
               <Search
                 size={16}
+                aria-hidden="true"
                 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
               />
               <input
+                id="news-search-input"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -392,18 +405,24 @@ export default function AiNewsPage() {
               />
               {searchQuery && (
                 <button
+                  type="button"
+                  aria-label="検索をクリア"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
-                  <X size={14} />
+                  <X size={14} aria-hidden="true" />
                 </button>
               )}
             </div>
 
             {/* 重要度フィルター */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+            <div
+              role="group"
+              aria-label="重要度で絞り込み"
+              className="flex flex-wrap items-center gap-1.5"
+            >
               <span className="text-xs text-slate-500 font-bold shrink-0 mr-1 flex items-center gap-1">
-                <Filter size={12} />
+                <Filter size={12} aria-hidden="true" />
                 <span>重要度:</span>
               </span>
               {[
@@ -415,12 +434,14 @@ export default function AiNewsPage() {
               ].map((imp) => (
                 <button
                   key={imp.id}
+                  type="button"
+                  aria-pressed={selectedImportance === imp.id}
                   onClick={() => {
                     playCyberClick();
                     setSelectedImportance(imp.id);
                   }}
                   onMouseEnter={playCyberHover}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 ${
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer ${
                     selectedImportance === imp.id
                       ? "bg-slate-900 text-white shadow-xs"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200/70"
@@ -433,7 +454,11 @@ export default function AiNewsPage() {
           </div>
 
           {/* カテゴリピルタブ */}
-          <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-slate-100 scrollbar-none">
+          <div
+            role="group"
+            aria-label="カテゴリで絞り込み"
+            className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100"
+          >
             {aiNewsCategoryMaster.map((cat) => {
               const count =
                 cat.id === "all"
@@ -444,12 +469,14 @@ export default function AiNewsPage() {
               return (
                 <button
                   key={cat.id}
+                  type="button"
+                  aria-pressed={isActive}
                   onClick={() => {
                     playCyberClick();
                     setSelectedCategory(cat.id);
                   }}
                   onMouseEnter={playCyberHover}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shrink-0 ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                     isActive
                       ? "bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-400/30"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200/70"
@@ -473,10 +500,11 @@ export default function AiNewsPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* ニュース一覧エリア */}
           <div className="lg:col-span-8 space-y-5">
+            <h2 className="sr-only">ニュース一覧（{filteredNews.length}件）</h2>
             {filteredNews.length === 0 ? (
               <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-3">
                 <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
-                  <Search size={24} />
+                  <Search size={24} aria-hidden="true" />
                 </div>
                 <h3 className="text-base font-bold text-slate-800">
                   該当するニュースが見つかりませんでした
@@ -485,12 +513,13 @@ export default function AiNewsPage() {
                   検索キーワードを変更するか、フィルターをリセットしてお試しください。
                 </p>
                 <button
+                  type="button"
                   onClick={() => {
                     setSelectedCategory("all");
                     setSelectedImportance("all");
                     setSearchQuery("");
                   }}
-                  className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm"
+                  className="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-colors shadow-sm cursor-pointer"
                 >
                   フィルターをリセット
                 </button>
@@ -571,10 +600,11 @@ export default function AiNewsPage() {
                     <div className="flex items-center gap-2">
                       {/* URL共有コピーボタン */}
                       <button
+                        type="button"
                         onClick={() => handleCopyShareUrl(news)}
                         onMouseEnter={playCyberHover}
                         title="記事の直接リンクをクリップボードにコピー"
-                        className="px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-600 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
+                        className="px-2.5 py-1.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-600 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
                       >
                         {copiedId === news.id ? (
                           <>
@@ -616,16 +646,16 @@ export default function AiNewsPage() {
               className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-3xl border border-indigo-700/50 shadow-xl space-y-4"
             >
               <div className="flex items-center gap-2 text-cyan-400">
-                <TrendingUp size={18} />
-                <h4 className="text-sm font-black tracking-wide uppercase">
+                <TrendingUp size={18} aria-hidden="true" />
+                <h2 className="text-sm font-black tracking-wide uppercase">
                   今週のAIトレンド 3大要点
-                </h4>
+                </h2>
               </div>
 
               <div className="space-y-3.5 text-xs text-slate-300 font-light leading-relaxed">
                 <div className="p-3 rounded-xl bg-white/5 border border-white/10 space-y-1">
                   <p className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse inline-block" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 motion-safe:animate-pulse inline-block" aria-hidden="true" />
                     <span>Gemini 4 Carbon & Antigravity /swarm (Google)</span>
                   </p>
                   <p className="text-[11px] text-slate-300 pl-3">
@@ -657,10 +687,10 @@ export default function AiNewsPage() {
 
             {/* 社内推奨クイックアクション */}
             <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
-              <h4 className="text-xs font-black text-slate-900 tracking-wider uppercase flex items-center gap-2">
-                <Sparkles size={14} className="text-indigo-600" />
+              <h2 className="text-xs font-black text-slate-900 tracking-wider uppercase flex items-center gap-2">
+                <Sparkles size={14} className="text-indigo-600" aria-hidden="true" />
                 <span>社内推奨クイックアクション</span>
-              </h4>
+              </h2>
 
               <div className="space-y-2.5 text-xs">
                 <Link

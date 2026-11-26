@@ -128,6 +128,7 @@ export default function TroubleshootingPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [liveNotice, setLiveNotice] = useState<string>("");
 
   const categories = [
     { id: "all", label: "すべて", icon: Wrench },
@@ -151,13 +152,18 @@ export default function TroubleshootingPage() {
     });
   }, [selectedCategory, searchQuery]);
 
-  const handleCopyCommand = (id: string, command: string) => {
-    navigator.clipboard.writeText(command);
-    playCyberSuccess();
-    setCopiedId(id);
-    setTimeout(() => {
-      setCopiedId(null);
-    }, 2500);
+  const handleCopyCommand = async (id: string, command: string) => {
+    try {
+      await navigator.clipboard.writeText(command);
+      playCyberSuccess();
+      setCopiedId(id);
+      setLiveNotice("コマンドをクリップボードにコピーしました");
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 2500);
+    } catch {
+      setLiveNotice("コピーに失敗しました");
+    }
   };
 
   return (
@@ -168,6 +174,9 @@ export default function TroubleshootingPage() {
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-8">
+        <div role="status" aria-live="polite" className="sr-only">
+          {liveNotice}
+        </div>
         {/* HUD サマリーバナー */}
         <TiltCard maxTilt={3} glareOpacity={0.06} className="rounded-3xl">
           <div
@@ -176,7 +185,7 @@ export default function TroubleshootingPage() {
           >
             <div className="absolute top-0 right-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div className="space-y-2 max-w-2xl">
                 <div className="flex items-center space-x-2">
                   <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-cyan-400/20 text-cyan-300 border border-cyan-400/30 tracking-wider">
@@ -215,8 +224,12 @@ export default function TroubleshootingPage() {
           <div className="flex flex-col sm:flex-row gap-3 items-center justify-between">
             {/* 検索入力欄 */}
             <div className="relative w-full sm:max-w-md">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <label htmlFor="troubleshooting-search-input" className="sr-only">
+                エラーメッセージ、コマンド、キーワードで検索
+              </label>
+              <Search size={16} aria-hidden="true" className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
+                id="troubleshooting-search-input"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -225,15 +238,17 @@ export default function TroubleshootingPage() {
               />
               {searchQuery && (
                 <button
+                  type="button"
+                  aria-label="検索をクリア"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
                 >
-                  <X size={14} />
+                  <X size={14} aria-hidden="true" />
                 </button>
               )}
             </div>
 
-            <div className="text-xs text-slate-500 flex items-center gap-1.5 self-end sm:self-center">
+            <div role="status" aria-live="polite" className="text-xs text-slate-500 flex items-center gap-1.5 self-end sm:self-center">
               <span>該当件数:</span>
               <span className="font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded-md">
                 {filteredItems.length} 件
@@ -242,7 +257,11 @@ export default function TroubleshootingPage() {
           </div>
 
           {/* カテゴリーピルタブ */}
-          <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-slate-100 scrollbar-none">
+          <div
+            role="group"
+            aria-label="カテゴリで絞り込み"
+            className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100"
+          >
             {categories.map((cat) => {
               const Icon = cat.icon;
               const isActive = selectedCategory === cat.id;
@@ -254,18 +273,20 @@ export default function TroubleshootingPage() {
               return (
                 <button
                   key={cat.id}
+                  type="button"
+                  aria-pressed={isActive}
                   onClick={() => {
                     playCyberClick();
                     setSelectedCategory(cat.id);
                   }}
                   onMouseEnter={() => playCyberHover()}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
                     isActive
                       ? "bg-indigo-600 text-white shadow-xs ring-2 ring-indigo-400/30"
                       : "bg-slate-100 text-slate-600 hover:bg-slate-200/70"
                   }`}
                 >
-                  <Icon size={13} />
+                  <Icon size={13} aria-hidden="true" />
                   <span>{cat.label}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
@@ -282,10 +303,11 @@ export default function TroubleshootingPage() {
 
         {/* トラブルシューティングカード一覧 */}
         <div className="space-y-4">
+          <h2 className="sr-only">トラブルシューティング一覧（{filteredItems.length}件）</h2>
           {filteredItems.length === 0 ? (
             <div className="bg-white p-12 rounded-3xl border border-slate-200 text-center space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
-                <Search size={24} />
+                <Search size={24} aria-hidden="true" />
               </div>
               <h3 className="text-base font-bold text-slate-800">
                 該当するトラブル項目が見つかりませんでした
@@ -294,12 +316,13 @@ export default function TroubleshootingPage() {
                 キーワードを変更するか、上部のカテゴリーフィルターを「すべて」に戻してお試しください。
               </p>
               <button
+                type="button"
                 onClick={() => {
                   setSearchQuery("");
                   setSelectedCategory("all");
                   playCyberClick();
                 }}
-                className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 pt-2"
+                className="inline-flex items-center gap-1 text-xs font-bold text-indigo-600 hover:text-indigo-700 pt-2 cursor-pointer"
               >
                 <span>フィルターをリセット</span>
               </button>
@@ -332,7 +355,7 @@ export default function TroubleshootingPage() {
                     </h3>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 text-xs">
                     <div className="p-3 bg-rose-50/60 rounded-xl border border-rose-100/80 space-y-1">
                       <p className="font-bold text-rose-900 flex items-center gap-1">
                         <span>⚠️ 症状・発生エラー</span>
@@ -350,16 +373,17 @@ export default function TroubleshootingPage() {
 
                   {/* 解決策 ＆ コマンド */}
                   <div className="p-4 bg-slate-900 rounded-xl text-white space-y-2.5 shadow-sm">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <p className="text-xs font-bold text-cyan-300 flex items-center gap-1.5">
-                        <CheckCircle2 size={14} className="text-cyan-400" />
+                        <CheckCircle2 size={14} className="text-cyan-400 shrink-0" aria-hidden="true" />
                         <span>解決手順: {item.solutionSummary}</span>
                       </p>
                       {item.command && (
                         <button
+                          type="button"
                           onClick={() => handleCopyCommand(item.id, item.command!)}
                           onMouseEnter={() => playCyberHover()}
-                          className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-xs cursor-pointer active:scale-95"
+                          className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
                         >
                           {copiedId === item.id ? (
                             <>
@@ -397,9 +421,9 @@ export default function TroubleshootingPage() {
         {/* 相談窓口リンク */}
         <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-6 rounded-2xl border border-indigo-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h4 className="font-bold text-slate-900 text-sm">
+            <h2 className="font-bold text-slate-900 text-sm">
               解決しないトラブルや、PC固有の特殊なエラーですか？
-            </h4>
+            </h2>
             <p className="text-xs text-slate-600">
               社内AI推進担当（担当：梅澤）が個別環境の切り分けやサポートを実施します。
             </p>

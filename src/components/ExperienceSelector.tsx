@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import TiltCard from "@/components/TiltCard";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
@@ -165,8 +165,23 @@ const personaModes: PersonaMode[] = [
 
 export default function ExperienceSelector() {
   const [activeTab, setActiveTab] = useState<PersonaMode["id"]>("beginner");
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const currentMode = personaModes.find((m) => m.id === activeTab)!;
+
+  const handleTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, idx: number) => {
+    let nextIdx: number | null = null;
+    if (e.key === "ArrowRight") nextIdx = (idx + 1) % personaModes.length;
+    else if (e.key === "ArrowLeft") nextIdx = (idx - 1 + personaModes.length) % personaModes.length;
+    else if (e.key === "Home") nextIdx = 0;
+    else if (e.key === "End") nextIdx = personaModes.length - 1;
+    if (nextIdx !== null) {
+      e.preventDefault();
+      playCyberClick();
+      setActiveTab(personaModes[nextIdx].id);
+      tabRefs.current[nextIdx]?.focus();
+    }
+  };
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-white/80 backdrop-blur-xl p-6 sm:p-8 shadow-sm">
@@ -174,10 +189,10 @@ export default function ExperienceSelector() {
       <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-indigo-500/5 via-cyan-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
       {/* ヘッダー部 */}
-      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-5 border-b border-slate-100">
+      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 pb-5 border-b border-slate-100">
         <div>
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold tracking-wide uppercase font-mono mb-2">
-            <Sparkles size={12} className="text-indigo-600" />
+            <Sparkles size={12} className="text-indigo-600" aria-hidden="true" />
             <span>Personalized Journey</span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
@@ -189,14 +204,28 @@ export default function ExperienceSelector() {
         </div>
 
         {/* タブナビゲーション */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200/80">
-          {personaModes.map((mode) => {
+        <div
+          role="tablist"
+          aria-label="役割・目的別のおすすめルート"
+          className="flex flex-wrap items-center gap-1.5 p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200/80"
+        >
+          {personaModes.map((mode, idx) => {
             const Icon = mode.icon;
             const isActive = activeTab === mode.id;
 
             return (
               <button
                 key={mode.id}
+                ref={(el) => {
+                  tabRefs.current[idx] = el;
+                }}
+                type="button"
+                role="tab"
+                id={`persona-tab-${mode.id}`}
+                aria-selected={isActive}
+                aria-controls={`persona-panel-${mode.id}`}
+                tabIndex={isActive ? 0 : -1}
+                onKeyDown={(e) => handleTabKeyDown(e, idx)}
                 onClick={() => {
                   playCyberClick();
                   setActiveTab(mode.id);
@@ -208,7 +237,11 @@ export default function ExperienceSelector() {
                     : "text-slate-600 hover:text-slate-900 hover:bg-white/60"
                 }`}
               >
-                <Icon size={14} className={isActive ? "text-indigo-600" : "text-slate-400"} />
+                <Icon
+                  size={14}
+                  aria-hidden="true"
+                  className={isActive ? "text-indigo-600" : "text-slate-400"}
+                />
                 <span>{mode.label}</span>
               </button>
             );
@@ -217,7 +250,13 @@ export default function ExperienceSelector() {
       </div>
 
       {/* コンテンツカードグリッド */}
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div
+        role="tabpanel"
+        id={`persona-panel-${currentMode.id}`}
+        aria-labelledby={`persona-tab-${currentMode.id}`}
+        tabIndex={0}
+        className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-4"
+      >
         {currentMode.recommendations.map((item, idx) => {
           const Icon = item.icon;
 

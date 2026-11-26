@@ -373,6 +373,7 @@ export default function FeedbackTodoPage() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   // 集計カウント
@@ -409,10 +410,10 @@ export default function FeedbackTodoPage() {
       <div className="relative overflow-hidden bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 text-white border-b border-slate-800 shadow-md">
         <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-10 space-y-6 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div className="space-y-1.5">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold border border-indigo-500/30">
-                <MessageSquarePlus size={14} className="text-cyan-300" />
+                <MessageSquarePlus size={14} className="text-cyan-300" aria-hidden="true" />
                 <span>みんなのフィードバックからつくるAI広場</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
@@ -427,24 +428,26 @@ export default function FeedbackTodoPage() {
             {/* アクションボタン */}
             <div className="flex items-center space-x-3 shrink-0">
               <button
+                type="button"
                 onClick={handleExportCsv}
                 className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-bold text-white flex items-center space-x-1.5 transition-colors cursor-pointer"
               >
-                <Download size={15} />
+                <Download size={15} aria-hidden="true" />
                 <span>CSV出力</span>
               </button>
               <button
+                type="button"
                 onClick={() => setIsModalOpen(true)}
                 className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white flex items-center space-x-1.5 transition-all shadow-md hover:shadow-indigo-500/20 cursor-pointer"
               >
-                <Plus size={16} />
+                <Plus size={16} aria-hidden="true" />
                 <span>ご意見を起票する</span>
               </button>
             </div>
           </div>
 
           {/* 4大KPI統計 */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-2">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
             <div className="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-xs">
               <span className="text-xs text-slate-400 block font-medium">蓄積されたご意見</span>
               <span className="text-2xl sm:text-3xl font-extrabold text-white mt-1 block">
@@ -477,10 +480,16 @@ export default function FeedbackTodoPage() {
       {/* メインエリア */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1 space-y-6">
         {/* フィルター＆検索ツールバー */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
           {/* ステータス切り替えピル */}
-          <div className="flex items-center space-x-2 flex-wrap gap-y-2">
+          <div
+            role="group"
+            aria-label="ステータスで絞り込み"
+            className="flex items-center space-x-2 flex-wrap gap-y-2"
+          >
             <button
+              type="button"
+              aria-pressed={statusFilter === "unresolved"}
               onClick={() => setStatusFilter("unresolved")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === "unresolved"
@@ -491,6 +500,8 @@ export default function FeedbackTodoPage() {
               ⚡ 未対応 ({unresolvedCount})
             </button>
             <button
+              type="button"
+              aria-pressed={statusFilter === "in_progress"}
               onClick={() => setStatusFilter("in_progress")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === "in_progress"
@@ -501,6 +512,8 @@ export default function FeedbackTodoPage() {
               🚧 対応中 ({inProgressCount})
             </button>
             <button
+              type="button"
+              aria-pressed={statusFilter === "todo"}
               onClick={() => setStatusFilter("todo")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === "todo"
@@ -511,6 +524,8 @@ export default function FeedbackTodoPage() {
               📥 検討中 ({todoCount})
             </button>
             <button
+              type="button"
+              aria-pressed={statusFilter === "done"}
               onClick={() => setStatusFilter("done")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === "done"
@@ -521,6 +536,8 @@ export default function FeedbackTodoPage() {
               ✅ 反映済み ({doneCount})
             </button>
             <button
+              type="button"
+              aria-pressed={statusFilter === "all"}
               onClick={() => setStatusFilter("all")}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 statusFilter === "all"
@@ -551,11 +568,16 @@ export default function FeedbackTodoPage() {
 
             {/* 検索ボックス */}
             <div className="relative w-full sm:w-60">
+              <label htmlFor="feedback-search-input" className="sr-only">
+                ご意見・改善ToDoを検索
+              </label>
               <Search
                 size={15}
+                aria-hidden="true"
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
               />
               <input
+                id="feedback-search-input"
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -565,8 +587,15 @@ export default function FeedbackTodoPage() {
             </div>
 
             {/* ビュー切替（リスト / カンバン） */}
-            <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/80">
+            <div
+              role="group"
+              aria-label="表示モード切替"
+              className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200/80"
+            >
               <button
+                type="button"
+                aria-label="リスト表示"
+                aria-pressed={viewMode === "list"}
                 onClick={() => setViewMode("list")}
                 title="リスト表示"
                 className={`p-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
@@ -575,9 +604,12 @@ export default function FeedbackTodoPage() {
                     : "text-slate-500 hover:text-slate-800"
                 }`}
               >
-                <List size={14} />
+                <List size={14} aria-hidden="true" />
               </button>
               <button
+                type="button"
+                aria-label="カンバンボード表示"
+                aria-pressed={viewMode === "kanban"}
                 onClick={() => setViewMode("kanban")}
                 title="カンバンボード表示"
                 className={`p-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
@@ -586,7 +618,7 @@ export default function FeedbackTodoPage() {
                     : "text-slate-500 hover:text-slate-800"
                 }`}
               >
-                <LayoutGrid size={14} />
+                <LayoutGrid size={14} aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -594,8 +626,8 @@ export default function FeedbackTodoPage() {
 
         {/* GitHub Issue 同期ステータス */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white px-4 py-3 rounded-xl border border-slate-200 shadow-2xs text-xs">
-          <div className="flex items-center gap-2 text-slate-600 flex-wrap">
-            <CircleDot size={15} className="text-slate-800 shrink-0" />
+          <div className="flex items-center gap-2 text-slate-600 flex-wrap" role="status" aria-live="polite">
+            <CircleDot size={15} className="text-slate-800 shrink-0" aria-hidden="true" />
             <span className="font-bold text-slate-800">GitHub Issue 連携</span>
             {syncState === "loading" && <span className="text-slate-500">同期中...</span>}
             {syncState === "ok" && (
@@ -621,14 +653,19 @@ export default function FeedbackTodoPage() {
               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold"
             >
               Issue一覧
-              <ExternalLink size={12} />
+              <ExternalLink size={12} aria-hidden="true" />
             </a>
             <button
+              type="button"
               onClick={() => syncGithubIssues()}
               disabled={syncState === "loading"}
               className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-700 text-white font-bold disabled:opacity-50 cursor-pointer"
             >
-              <RefreshCw size={12} className={syncState === "loading" ? "animate-spin" : ""} />
+              <RefreshCw
+                size={12}
+                aria-hidden="true"
+                className={syncState === "loading" ? "motion-safe:animate-spin" : ""}
+              />
               再同期
             </button>
           </div>
@@ -636,14 +673,14 @@ export default function FeedbackTodoPage() {
 
         {/* カンバンボード表示 または リスト表示 */}
         {viewMode === "kanban" ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
             {/* カラム 1: 検討中 / ToDo */}
             <div className="bg-slate-100/80 rounded-2xl p-4 border border-slate-200/90 space-y-3.5">
               <div className="flex items-center justify-between pb-1 border-b border-slate-200">
-                <span className="font-extrabold text-xs text-amber-800 flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                <h2 className="font-extrabold text-xs text-amber-800 flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500" aria-hidden="true" />
                   📥 検討中 / ToDo
-                </span>
+                </h2>
                 <span className="text-xs font-mono font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
                   {filteredTodos.filter((t) => t.status === "todo").length}
                 </span>
@@ -664,14 +701,15 @@ export default function FeedbackTodoPage() {
                           {item.category}
                         </span>
                       </div>
-                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h4>
+                      <h3 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h3>
                       <p className="text-[11px] text-slate-500 line-clamp-2 italic">{item.feedbackQuote}</p>
                       <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-100">
                         <span>{item.author}</span>
                         {!item.issueNumber && (
                           <button
+                            type="button"
                             onClick={() => handleStatusChange(item.id, "in_progress")}
-                            className="text-sky-700 hover:text-sky-900 font-bold bg-sky-50 hover:bg-sky-100 px-2 py-0.5 rounded transition-colors"
+                            className="text-sky-700 hover:text-sky-900 font-bold bg-sky-50 hover:bg-sky-100 px-2 py-0.5 rounded transition-colors cursor-pointer"
                           >
                             対応中へ ➔
                           </button>
@@ -685,10 +723,10 @@ export default function FeedbackTodoPage() {
             {/* カラム 2: 対応中 / 進行中 */}
             <div className="bg-sky-50/70 rounded-2xl p-4 border border-sky-200/80 space-y-3.5">
               <div className="flex items-center justify-between pb-1 border-b border-sky-200">
-                <span className="font-extrabold text-xs text-sky-800 flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-sky-500" />
+                <h2 className="font-extrabold text-xs text-sky-800 flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-sky-500" aria-hidden="true" />
                   🚧 対応中 / 進行中
-                </span>
+                </h2>
                 <span className="text-xs font-mono font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full">
                   {filteredTodos.filter((t) => t.status === "in_progress").length}
                 </span>
@@ -709,21 +747,23 @@ export default function FeedbackTodoPage() {
                           {item.category}
                         </span>
                       </div>
-                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h4>
+                      <h3 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h3>
                       <p className="text-[11px] text-slate-600 line-clamp-2">{item.actionPlan}</p>
                       <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-100">
                         <span>{item.author}</span>
                         {!item.issueNumber && (
                           <div className="flex items-center gap-1">
                             <button
+                              type="button"
                               onClick={() => handleStatusChange(item.id, "todo")}
-                              className="text-slate-600 hover:text-slate-800 font-bold bg-slate-100 px-1.5 py-0.5 rounded"
+                              className="text-slate-600 hover:text-slate-800 font-bold bg-slate-100 px-1.5 py-0.5 rounded cursor-pointer"
                             >
                               ⬅ 戻す
                             </button>
                             <button
+                              type="button"
                               onClick={() => handleStatusChange(item.id, "done")}
-                              className="text-emerald-700 hover:text-emerald-900 font-bold bg-emerald-50 hover:bg-emerald-100 px-1.5 py-0.5 rounded"
+                              className="text-emerald-700 hover:text-emerald-900 font-bold bg-emerald-50 hover:bg-emerald-100 px-1.5 py-0.5 rounded cursor-pointer"
                             >
                               完了 ➔
                             </button>
@@ -738,10 +778,10 @@ export default function FeedbackTodoPage() {
             {/* カラム 3: 反映済み / 完了 */}
             <div className="bg-emerald-50/70 rounded-2xl p-4 border border-emerald-200/80 space-y-3.5">
               <div className="flex items-center justify-between pb-1 border-b border-emerald-200">
-                <span className="font-extrabold text-xs text-emerald-800 flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                <h2 className="font-extrabold text-xs text-emerald-800 flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true" />
                   ✅ 反映済み / 完了
-                </span>
+                </h2>
                 <span className="text-xs font-mono font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
                   {filteredTodos.filter((t) => t.status === "done").length}
                 </span>
@@ -762,7 +802,7 @@ export default function FeedbackTodoPage() {
                           {item.category}
                         </span>
                       </div>
-                      <h4 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h4>
+                      <h3 className="text-xs font-bold text-slate-900 leading-snug">{item.title}</h3>
                       <p className="text-[11px] text-slate-600 line-clamp-2">{item.actionPlan}</p>
                       <div className="pt-1 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-100">
                         <span>{item.author}</span>
@@ -783,6 +823,7 @@ export default function FeedbackTodoPage() {
         ) : (
           /* ToDoカード一覧 (リスト表示) */
           <div className="space-y-4">
+            <h2 className="sr-only">ご意見・改善ToDo一覧（{filteredTodos.length}件）</h2>
             {filteredTodos.length === 0 ? (
               <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-400 space-y-2">
                 <AlertCircle size={32} className="mx-auto text-slate-300" />
@@ -859,8 +900,10 @@ export default function FeedbackTodoPage() {
                       )}
                     </div>
                   ) : (
-                  <div className="flex items-center space-x-1.5">
+                  <div role="group" aria-label="ステータス変更" className="flex items-center space-x-1.5">
                     <button
+                      type="button"
+                      aria-pressed={item.status === "todo"}
                       onClick={() => handleStatusChange(item.id, "todo")}
                       className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-all cursor-pointer ${
                         item.status === "todo"
@@ -871,6 +914,8 @@ export default function FeedbackTodoPage() {
                       📥 検討中
                     </button>
                     <button
+                      type="button"
+                      aria-pressed={item.status === "in_progress"}
                       onClick={() => handleStatusChange(item.id, "in_progress")}
                       className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-all cursor-pointer ${
                         item.status === "in_progress"
@@ -881,6 +926,8 @@ export default function FeedbackTodoPage() {
                       🚧 対応中
                     </button>
                     <button
+                      type="button"
+                      aria-pressed={item.status === "done"}
                       onClick={() => handleStatusChange(item.id, "done")}
                       className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-all cursor-pointer ${
                         item.status === "done"
@@ -967,9 +1014,9 @@ export default function FeedbackTodoPage() {
                   <MessageSquarePlus size={20} aria-hidden="true" />
                 </div>
                 <div>
-                  <h3 id="feedback-modal-title" className="text-lg font-bold text-slate-900">
+                  <h2 id="feedback-modal-title" className="text-lg font-bold text-slate-900">
                     新しいご意見・改善ToDoを起票
-                  </h3>
+                  </h2>
                   <p className="text-xs text-slate-500">
                     チャットや会議でいただいた意見を登録してタスク化します
                   </p>
@@ -1018,10 +1065,11 @@ export default function FeedbackTodoPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
-                  <label className="font-bold text-slate-700 block">
+                  <label htmlFor="feedback-category" className="font-bold text-slate-700 block">
                     カテゴリ
                   </label>
                   <select
+                    id="feedback-category"
                     value={formCategory}
                     onChange={(e) => setFormCategory(e.target.value as FeedbackTodoItem["category"])}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
@@ -1040,10 +1088,11 @@ export default function FeedbackTodoPage() {
                   </select>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="font-bold text-slate-700 block">
+                  <label htmlFor="feedback-priority" className="font-bold text-slate-700 block">
                     優先度
                   </label>
                   <select
+                    id="feedback-priority"
                     value={formPriority}
                     onChange={(e) => setFormPriority(e.target.value as FeedbackTodoItem["priority"])}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
@@ -1056,10 +1105,11 @@ export default function FeedbackTodoPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 block">
+                <label htmlFor="feedback-title" className="font-bold text-slate-700 block">
                   ToDoタスク名（対応テーマ） <span className="text-rose-500">*</span>
                 </label>
                 <input
+                  id="feedback-title"
                   type="text"
                   required
                   value={formTitle}
@@ -1070,10 +1120,11 @@ export default function FeedbackTodoPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 block">
+                <label htmlFor="feedback-quote" className="font-bold text-slate-700 block">
                   いただいたご意見の原文・引用メモ
                 </label>
                 <textarea
+                  id="feedback-quote"
                   rows={3}
                   value={formQuote}
                   onChange={(e) => setFormQuote(e.target.value)}
@@ -1083,10 +1134,11 @@ export default function FeedbackTodoPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="font-bold text-slate-700 block">
+                <label htmlFor="feedback-action-plan" className="font-bold text-slate-700 block">
                   ポータルでの対応方針・アクションプラン
                 </label>
                 <textarea
+                  id="feedback-action-plan"
                   rows={2}
                   value={formActionPlan}
                   onChange={(e) => setFormActionPlan(e.target.value)}

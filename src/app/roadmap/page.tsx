@@ -451,7 +451,7 @@ export default function RoadmapPage() {
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* いまの最優先 */}
-        <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 md:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 md:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1">
             <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-500 text-white text-xs font-bold">いま最優先</span>
             <h2 className="text-lg font-bold text-slate-900">会社の Google アカウントで Antigravity を使えるようにする</h2>
@@ -461,7 +461,7 @@ export default function RoadmapPage() {
           </div>
           <Link
             href="/guide#company-setup"
-            className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-white text-xs font-bold self-start md:self-center"
+            className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-white text-xs font-bold self-start lg:self-center"
           >
             手順を見る（導入ガイド）
           </Link>
@@ -473,7 +473,7 @@ export default function RoadmapPage() {
           className="bg-white border-slate-200/90 shadow-sm"
         >
           <div className="p-6 sm:p-8 space-y-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center space-x-2">
                   <span className="px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200/60 text-xs font-bold font-mono tracking-wider uppercase">
@@ -489,28 +489,25 @@ export default function RoadmapPage() {
                 </p>
               </div>
 
-              <div className="flex items-center space-x-3 sm:space-x-4 bg-slate-50/80 border border-slate-200/90 p-3.5 rounded-2xl shrink-0">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/80 border border-slate-200/90 p-3.5 rounded-2xl shrink-0">
                 <div className="text-center px-2">
                   <div className="text-[11px] text-slate-500 font-semibold">全体タスク</div>
                   <div className="text-lg font-black text-slate-800 font-mono">
                     <AnimatedCounter value={totalTasks} /> 件
                   </div>
                 </div>
-                <div className="w-px h-8 bg-slate-200" />
                 <div className="text-center px-2">
                   <div className="text-[11px] text-emerald-600 font-semibold">公開・完了</div>
                   <div className="text-lg font-black text-emerald-600 font-mono">
                     <AnimatedCounter value={completedTasks} /> 件
                   </div>
                 </div>
-                <div className="w-px h-8 bg-slate-200" />
                 <div className="text-center px-2">
                   <div className="text-[11px] text-blue-600 font-semibold">進行中</div>
                   <div className="text-lg font-black text-blue-600 font-mono">
                     <AnimatedCounter value={inProgressTasks} /> 件
                   </div>
                 </div>
-                <div className="w-px h-8 bg-slate-200" />
                 <div className="text-center px-2">
                   <div className="text-[11px] text-amber-600 font-semibold">準備中</div>
                   <div className="text-lg font-black text-amber-600 font-mono">
@@ -550,7 +547,7 @@ export default function RoadmapPage() {
                     </span>
                     <span className="text-[11px] text-emerald-600 font-mono font-semibold">公開済み</span>
                   </div>
-                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">ポータル公開・学習基盤</h4>
+                  <h3 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">ポータル公開・学習基盤</h3>
                   <p className="text-[11px] text-slate-600 leading-relaxed">トップ、導入ガイド、初級編チートシート、Academy、トラブル対処、Office Hour</p>
                 </div>
               </TiltCard>
@@ -564,7 +561,7 @@ export default function RoadmapPage() {
                     </span>
                     <span className="text-[11px] text-emerald-600 font-mono font-semibold">稼働中</span>
                   </div>
-                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">自動同期・利用監視・共創</h4>
+                  <h3 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">自動同期・利用監視・共創</h3>
                   <p className="text-[11px] text-slate-600 leading-relaxed">AIニュース自動巡回、Antigravity利用監視、社内プロジェクト一覧、宣言ボード、カレンダー</p>
                 </div>
               </TiltCard>
@@ -573,12 +570,12 @@ export default function RoadmapPage() {
                 <div onMouseEnter={() => playCyberHover()} className="p-4 rounded-2xl border border-blue-200/90 bg-blue-50/60 space-y-1.5 ring-2 ring-blue-500/20 transition-all hover:bg-blue-50/90 h-full cursor-default">
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-bold text-blue-800 px-2.5 py-0.5 bg-blue-100/80 rounded-full border border-blue-200 font-mono flex items-center space-x-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping mr-0.5" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 motion-safe:animate-ping mr-0.5" aria-hidden="true" />
                       <span>Phase 3 (進行中)</span>
                     </span>
                     <span className="text-[11px] text-blue-600 font-mono font-semibold">現在進行中</span>
                   </div>
-                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">社内展開・確認・取材・公募</h4>
+                  <h3 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">社内展開・確認・取材・公募</h3>
                   <p className="text-[11px] text-slate-600 leading-relaxed">会社アカウント権限拡大、ご意見ボード連携、ツールシート確認、インタビュー取材、アンバサダー公募</p>
                 </div>
               </TiltCard>
@@ -591,7 +588,7 @@ export default function RoadmapPage() {
                     </span>
                     <span className="text-[11px] text-amber-600 font-mono font-semibold">未定</span>
                   </div>
-                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">工事中ページの内容準備</h4>
+                  <h3 className="font-bold text-slate-900 text-xs sm:text-sm mt-1">工事中ページの内容準備</h3>
                   <p className="text-[11px] text-slate-600 leading-relaxed">社内AI活用状況の実データ、Subagents事例・Skills、ツール利用方針、AWS・MCP情報局</p>
                 </div>
               </TiltCard>
@@ -610,9 +607,9 @@ export default function RoadmapPage() {
                 </span>
                 <span className="text-xs text-slate-400">公開・解除に必要な条件一覧</span>
               </div>
-              <h3 className="text-lg sm:text-2xl font-black text-white mt-1.5 tracking-tight">
+              <h2 className="text-lg sm:text-2xl font-black text-white mt-1.5 tracking-tight">
                 📌 準備中・PoC中・工事中機能の正式稼働スケジュール
-              </h3>
+              </h2>
               <p className="text-xs sm:text-sm text-slate-300 mt-1 leading-relaxed">
                 現在ポータル上で「準備中」「PoC中」「工事中」となっている全機能について、いつ正式稼働し注意書きが解除されるかのロードマップです。
               </p>
@@ -622,7 +619,7 @@ export default function RoadmapPage() {
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 pt-1">
             {unverifiedReleaseSchedule.map((item, idx) => (
               <TiltCard
                 key={idx}
@@ -641,7 +638,7 @@ export default function RoadmapPage() {
                     <div className="space-y-2.5">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-xs font-black text-emerald-400 font-mono flex items-center space-x-1.5">
-                          <Clock size={13} />
+                          <Clock size={13} aria-hidden="true" />
                           <span>{item.date}</span>
                         </span>
                         <span
@@ -651,9 +648,9 @@ export default function RoadmapPage() {
                         </span>
                       </div>
 
-                      <h4 className="font-extrabold text-white text-sm sm:text-base">
+                      <h3 className="font-extrabold text-white text-sm sm:text-base">
                         {item.pageName}
-                      </h4>
+                      </h3>
 
                       <p className="text-[11px] text-slate-300 leading-relaxed bg-black/40 p-3 rounded-xl border border-white/5">
                         <span className="text-slate-400 font-semibold block mb-0.5 font-mono">🔑 解除マイルストーン:</span>
@@ -683,18 +680,26 @@ export default function RoadmapPage() {
         {/* フィルターバー */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/80 pb-4">
           <div className="flex items-center space-x-2 text-sm font-bold text-slate-800">
-            <Filter className="w-4 h-4 text-cyan-600" />
-            <span>開発タスク詳細一覧 ({filteredTasks.length}件)</span>
+            <Filter className="w-4 h-4 text-cyan-600" aria-hidden="true" />
+            <h2 className="text-sm font-bold text-slate-800">
+              開発タスク詳細一覧 ({filteredTasks.length}件)
+            </h2>
           </div>
 
-          <div className="flex items-center space-x-1.5 bg-slate-200/80 p-1 rounded-xl text-xs font-medium self-start sm:self-auto font-mono">
+          <div
+            role="group"
+            aria-label="ステータスで絞り込み"
+            className="flex flex-wrap items-center gap-1.5 bg-slate-200/80 p-1 rounded-xl text-xs font-medium self-start sm:self-auto font-mono"
+          >
             <button
+              type="button"
+              aria-pressed={selectedStatus === "all"}
               onMouseEnter={() => playCyberHover()}
               onClick={() => {
                 playCyberClick();
                 setSelectedStatus("all");
               }}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 selectedStatus === "all"
                   ? "bg-white text-slate-900 shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
@@ -703,12 +708,14 @@ export default function RoadmapPage() {
               すべて ({totalTasks})
             </button>
             <button
+              type="button"
+              aria-pressed={selectedStatus === "in-progress"}
               onMouseEnter={() => playCyberHover()}
               onClick={() => {
                 playCyberClick();
                 setSelectedStatus("in-progress");
               }}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 selectedStatus === "in-progress"
                   ? "bg-blue-600 text-white shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
@@ -717,12 +724,14 @@ export default function RoadmapPage() {
               進行中 ({inProgressTasks})
             </button>
             <button
+              type="button"
+              aria-pressed={selectedStatus === "planned"}
               onMouseEnter={() => playCyberHover()}
               onClick={() => {
                 playCyberClick();
                 setSelectedStatus("planned");
               }}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 selectedStatus === "planned"
                   ? "bg-amber-500 text-white shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
@@ -731,12 +740,14 @@ export default function RoadmapPage() {
               準備中 ({plannedTasks})
             </button>
             <button
+              type="button"
+              aria-pressed={selectedStatus === "completed"}
               onMouseEnter={() => playCyberHover()}
               onClick={() => {
                 playCyberClick();
                 setSelectedStatus("completed");
               }}
-              className={`px-3 py-1.5 rounded-lg transition-all ${
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 selectedStatus === "completed"
                   ? "bg-emerald-600 text-white shadow-xs font-bold"
                   : "text-slate-600 hover:text-slate-900"
@@ -748,7 +759,7 @@ export default function RoadmapPage() {
         </div>
 
         {/* タスク一覧グリッド */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {filteredTasks.map((task) => {
             const isProgress = task.status === "in-progress";
             const isCompleted = task.status === "completed";
@@ -803,7 +814,7 @@ export default function RoadmapPage() {
 
                       <div className="shrink-0 font-mono">
                         {isProgress && (
-                          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs animate-pulse">
+                          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-full text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs motion-safe:animate-pulse">
                             <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1" />
                             <span>進行中</span>
                           </span>
