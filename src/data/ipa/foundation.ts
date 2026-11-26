@@ -7,7 +7,7 @@ import type {
   IpaKeyFact,
   IpaFlashcardItem,
   IpaQuestion,
-} from "@/data/ipa-exam";
+} from "../ipa-types";
 
 // 出典: 独立行政法人情報処理推進機構 (IPA) 情報処理技術者試験 試験要綱・シラバス
 // （https://www.ipa.go.jp/shiken/syllabus/gaiyou.html）

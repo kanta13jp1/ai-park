@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo, type KeyboardEvent } from "react";
+import { useEffect, useState, useMemo, useRef, type KeyboardEvent } from "react";
 import {
   ScrollText,
   BookOpen,
@@ -34,6 +34,7 @@ import {
   Briefcase,
   Layers,
   Calculator,
+  Loader2,
 } from "lucide-react";
 import HeroBanner from "@/components/HeroBanner";
 import TiltCard from "@/components/TiltCard";
@@ -44,22 +45,38 @@ import CertificationPracticeQuiz, {
   isQuestionCorrect,
 } from "@/components/certification/CertificationPracticeQuiz";
 import type { CertMockExamRecord } from "@/components/certification/types";
+import type {
+  IpaComparisonTable,
+  IpaDomain,
+  IpaExamId,
+  IpaExamTier,
+  IpaFlashcardItem,
+  IpaFormulaPattern,
+  IpaKeyFact,
+  IpaPitfall,
+  IpaQuestion,
+} from "@/data/ipa-types";
 import {
-  ipaExamMetas,
-  ipaDomains,
-  ipaComparisons,
-  ipaFormulaPatterns,
-  ipaPitfalls,
-  ipaKeyFacts,
-  ipaFlashcards,
-  ipaPracticeQuestions,
-  ipaOfficialResources,
-  type IpaExamId,
-  type IpaExamTier,
-  type IpaDomain,
-} from "@/data/ipa-exam";
+  INITIAL_IPA_TIER_DATA,
+  IPA_EXAM_COUNTS,
+  IPA_EXAM_IDS,
+  IPA_EXAM_METAS,
+  IPA_EXAM_TIER_MAP,
+  IPA_OFFICIAL_RESOURCES,
+  IPA_TIER_GROUPS,
+  loadIpaTierData,
+  type IpaTierData,
+} from "@/components/ipa/ipaCertRegistry";
 import { playCyberClick, playCyberHover } from "@/lib/sound";
 import { normalizeIpaSearchQuery } from "@/lib/ipa-search";
+
+const EMPTY_DOMAINS: IpaDomain[] = [];
+const EMPTY_COMPARISONS: IpaComparisonTable[] = [];
+const EMPTY_FORMULAS: IpaFormulaPattern[] = [];
+const EMPTY_PITFALLS: IpaPitfall[] = [];
+const EMPTY_KEY_FACTS: IpaKeyFact[] = [];
+const EMPTY_FLASHCARDS: IpaFlashcardItem[] = [];
+const EMPTY_QUESTIONS: IpaQuestion[] = [];
 
 type TabId = "domains" | "comparisons" | "flashcards" | "quiz" | "resources";
 
@@ -96,12 +113,6 @@ const DEFAULT_PROGRESS: IpaProgress = {
     au: [],
   },
 };
-
-const EXAM_TIER_GROUPS: { tier: IpaExamTier; label: string }[] = [
-  { tier: "foundation", label: "基礎・応用（Lv.1〜3）" },
-  { tier: "specialist", label: "高度・専門技術（Lv.4）" },
-  { tier: "management", label: "高度・戦略・設計・管理（Lv.4）" },
-];
 
 const CATEGORY_ICONS: Record<IpaDomain["category"], typeof Cpu> = {
   ストラテジ系: Briefcase,
@@ -226,17 +237,22 @@ function normalizeMockExamHistory(raw: unknown): Record<IpaExamId, CertMockExamR
 
 export default function IpaInfoPage() {
   const [selectedExam, setSelectedExam] = useState<IpaExamId>("fe");
+  const selectedTier = IPA_EXAM_TIER_MAP[selectedExam];
+
+  const [tierDataCache, setTierDataCache] = useState<Partial<Record<IpaExamTier, IpaTierData>>>({
+    foundation: INITIAL_IPA_TIER_DATA,
+  });
+  const [loadingTier, setLoadingTier] = useState<IpaExamTier | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const loadRequestGenRef = useRef(0);
+
   const [activeTab, setActiveTab] = useState<TabId>("domains");
   const [quizDomainTarget, setQuizDomainTarget] = useState<string>("all");
   const [progress, setProgress] = useState<IpaProgress>(DEFAULT_PROGRESS);
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
-    const seenExams = new Set<IpaExamId>();
-    for (const d of ipaDomains) {
-      if (!seenExams.has(d.examId)) {
-        seenExams.add(d.examId);
-        initial[d.id] = true;
-      }
+    for (const examId of IPA_EXAM_IDS) {
+      initial[IPA_EXAM_COUNTS[examId].firstDomainId] = true;
     }
     return initial;
   });
@@ -252,25 +268,71 @@ export default function IpaInfoPage() {
   const [copiedBackup, setCopiedBackup] = useState<boolean>(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
 
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copiedBackupTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const importMsgTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scrollFocusTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
+    const timers = [resetTimerRef, copiedBackupTimerRef, importMsgTimerRef, scrollFocusTimerRef];
+    return () => {
+      for (const ref of timers) {
+        if (ref.current) {
+          clearTimeout(ref.current);
+          ref.current = null;
+        }
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw) as Record<string, unknown>;
+          setProgress({
+            completedTopics: normalizeStringArray(parsed.completedTopics),
+            quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
+            bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
+            masteredCards: normalizeStringArray(parsed.masteredCards),
+            topicNotes: normalizeStringRecord(parsed.topicNotes),
+            mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
+          });
+        }
+      } catch {
+        // localStorage 読み取り失敗時は初期状態のまま
+      }
+    });
+  }, []);
+
+  const activeTierData = tierDataCache[selectedTier];
+  const tierDomains = activeTierData?.domains ?? EMPTY_DOMAINS;
+  const tierComparisons = activeTierData?.comparisons ?? EMPTY_COMPARISONS;
+  const tierFormulas = activeTierData?.formulaPatterns ?? EMPTY_FORMULAS;
+  const tierPitfalls = activeTierData?.pitfalls ?? EMPTY_PITFALLS;
+  const tierKeyFacts = activeTierData?.keyFacts ?? EMPTY_KEY_FACTS;
+  const tierFlashcards = activeTierData?.flashcards ?? EMPTY_FLASHCARDS;
+  const tierQuestions = activeTierData?.questions ?? EMPTY_QUESTIONS;
+
+  const triggerTierLoad = async (targetTier: IpaExamTier) => {
+    const reqGen = ++loadRequestGenRef.current;
+    setLoadingTier(targetTier);
+    setLoadError(null);
+    const tierLabel = IPA_TIER_GROUPS.find((g) => g.tier === targetTier)?.label ?? targetTier;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as Record<string, unknown>;
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setProgress({
-          completedTopics: normalizeStringArray(parsed.completedTopics),
-          quizAnswers: normalizeQuizAnswers(parsed.quizAnswers),
-          bookmarkedQuestions: normalizeStringArray(parsed.bookmarkedQuestions),
-          masteredCards: normalizeStringArray(parsed.masteredCards),
-          topicNotes: normalizeStringRecord(parsed.topicNotes),
-          mockExamHistory: normalizeMockExamHistory(parsed.mockExamHistory),
-        });
+      const data = await loadIpaTierData(targetTier);
+      setTierDataCache((prev) => ({ ...prev, [targetTier]: data }));
+      if (loadRequestGenRef.current === reqGen) {
+        setLoadingTier(null);
       }
     } catch {
-      // localStorage 読み取り失敗時は初期状態のまま
+      if (loadRequestGenRef.current === reqGen) {
+        setLoadingTier(null);
+        setLoadError(`${tierLabel} の学習データ読み込みに失敗しました。`);
+      }
     }
-  }, []);
+  };
 
   const saveProgress = (next: IpaProgress) => {
     setProgress(next);
@@ -282,13 +344,13 @@ export default function IpaInfoPage() {
   };
 
   const currentExamMeta = useMemo(
-    () => ipaExamMetas.find((m) => m.id === selectedExam) ?? ipaExamMetas[0],
+    () => IPA_EXAM_METAS.find((m) => m.id === selectedExam) ?? IPA_EXAM_METAS[0],
     [selectedExam]
   );
 
   const currentDomains = useMemo(
-    () => ipaDomains.filter((d) => d.examId === selectedExam),
-    [selectedExam]
+    () => tierDomains.filter((d) => d.examId === selectedExam),
+    [tierDomains, selectedExam]
   );
 
   const currentTopics = useMemo(
@@ -297,13 +359,13 @@ export default function IpaInfoPage() {
   );
 
   const currentFlashcards = useMemo(
-    () => ipaFlashcards.filter((c) => c.examId === selectedExam),
-    [selectedExam]
+    () => tierFlashcards.filter((c) => c.examId === selectedExam),
+    [tierFlashcards, selectedExam]
   );
 
   const currentQuestions = useMemo(
-    () => ipaPracticeQuestions.filter((q) => q.examId === selectedExam),
-    [selectedExam]
+    () => tierQuestions.filter((q) => q.examId === selectedExam),
+    [tierQuestions, selectedExam]
   );
 
   const currentQuizDomains = useMemo(
@@ -318,17 +380,25 @@ export default function IpaInfoPage() {
   );
 
   const handleSelectExam = (examId: IpaExamId) => {
+    if (examId === selectedExam) return;
     playCyberClick();
+    loadRequestGenRef.current++;
     setSelectedExam(examId);
     setQuizDomainTarget("all");
     setTopicQuery("");
     setCompCategory("すべて");
     setCompQuery("");
-    const firstDomainId = ipaDomains.find((d) => d.examId === examId)?.id;
-    if (firstDomainId) {
-      setExpandedDomains((prev) =>
-        prev[firstDomainId] === undefined ? { ...prev, [firstDomainId]: true } : prev
-      );
+    setConfirmReset(false);
+    setLoadError(null);
+    const firstDomainId = IPA_EXAM_COUNTS[examId].firstDomainId;
+    setExpandedDomains((prev) =>
+      prev[firstDomainId] === undefined ? { ...prev, [firstDomainId]: true } : prev
+    );
+    const targetTier = IPA_EXAM_TIER_MAP[examId];
+    if (!tierDataCache[targetTier]) {
+      void triggerTierLoad(targetTier);
+    } else {
+      setLoadingTier(null);
     }
   };
 
@@ -384,7 +454,8 @@ export default function IpaInfoPage() {
     playCyberClick();
     if (!confirmReset) {
       setConfirmReset(true);
-      setTimeout(() => setConfirmReset(false), 4000);
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = setTimeout(() => setConfirmReset(false), 4000);
       return;
     }
     saveProgress(DEFAULT_PROGRESS);
@@ -413,7 +484,8 @@ export default function IpaInfoPage() {
     setOnlyIncompleteTopics(false);
     setOnlyWithNotesTopics(false);
     setExpandedDomains((prev) => ({ ...prev, [domainId]: true }));
-    setTimeout(() => {
+    if (scrollFocusTimerRef.current) clearTimeout(scrollFocusTimerRef.current);
+    scrollFocusTimerRef.current = setTimeout(() => {
       document
         .getElementById(`ipa-domain-${domainId}`)
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -461,7 +533,8 @@ export default function IpaInfoPage() {
     try {
       await navigator.clipboard.writeText(JSON.stringify(progress));
       setCopiedBackup(true);
-      setTimeout(() => setCopiedBackup(false), 2500);
+      if (copiedBackupTimerRef.current) clearTimeout(copiedBackupTimerRef.current);
+      copiedBackupTimerRef.current = setTimeout(() => setCopiedBackup(false), 2500);
     } catch {
       setImportMessage("クリップボードへのコピーに失敗しました。");
     }
@@ -482,7 +555,8 @@ export default function IpaInfoPage() {
       saveProgress(restored);
       setBackupInput("");
       setImportMessage("学習データを復元しました。");
-      setTimeout(() => setImportMessage(null), 3000);
+      if (importMsgTimerRef.current) clearTimeout(importMsgTimerRef.current);
+      importMsgTimerRef.current = setTimeout(() => setImportMessage(null), 3000);
     } catch {
       setImportMessage("JSON形式が正しくありません。コピーしたバックアップ文字列を確認してください。");
     }
@@ -541,40 +615,66 @@ export default function IpaInfoPage() {
     let totalFlashcards = 0;
     let masteredCards = 0;
 
-    for (const meta of ipaExamMetas) {
-      const topics = ipaDomains
-        .filter((d) => d.examId === meta.id)
-        .flatMap((d) => d.topics);
-      const doneT = topics.filter((t) => completedTopicSet.has(t.id)).length;
+    for (const meta of IPA_EXAM_METAS) {
+      const cachedTier = tierDataCache[meta.tier];
+      const counts = IPA_EXAM_COUNTS[meta.id];
+      let totalT = counts.totalTopics;
+      let doneT = 0;
+      let totalQ = counts.totalQuestions;
+      let answeredQ = 0;
+      let correctQ = 0;
+      let totalC = counts.totalFlashcards;
+      let masteredC = 0;
+      let hasNotes = false;
 
-      const qs = ipaPracticeQuestions.filter((q) => q.examId === meta.id);
-      const answeredQ = qs.filter((q) => Boolean(progress.quizAnswers[q.id]?.length)).length;
-      const correctQ = qs.filter((q) => isQuestionCorrect(q, progress.quizAnswers[q.id])).length;
+      if (cachedTier) {
+        const topics = cachedTier.domains
+          .filter((d) => d.examId === meta.id)
+          .flatMap((d) => d.topics);
+        totalT = topics.length;
+        doneT = topics.filter((t) => completedTopicSet.has(t.id)).length;
 
-      const cards = ipaFlashcards.filter((c) => c.examId === meta.id);
-      const masteredC = cards.filter((c) => masteredCardSet.has(c.keyword)).length;
+        const qs = cachedTier.questions.filter((q) => q.examId === meta.id);
+        totalQ = qs.length;
+        answeredQ = qs.filter((q) => Boolean(progress.quizAnswers[q.id]?.length)).length;
+        correctQ = qs.filter((q) => isQuestionCorrect(q, progress.quizAnswers[q.id])).length;
 
-      const hasNotes = topics.some((t) => (progress.topicNotes[t.id] ?? "").trim().length > 0);
+        const cards = cachedTier.flashcards.filter((c) => c.examId === meta.id);
+        totalC = cards.length;
+        masteredC = cards.filter((c) => masteredCardSet.has(c.keyword)).length;
+
+        hasNotes = topics.some((t) => (progress.topicNotes[t.id] ?? "").trim().length > 0);
+      } else {
+        const prefix = `${meta.id}-`;
+        doneT = progress.completedTopics.filter((id) => id.startsWith(prefix)).length;
+        answeredQ = Object.entries(progress.quizAnswers).filter(
+          ([qId, ans]) => qId.startsWith(prefix) && ans.length > 0
+        ).length;
+        hasNotes = Object.entries(progress.topicNotes).some(
+          ([tId, note]) => tId.startsWith(prefix) && note.trim().length > 0
+        );
+      }
+
       const hasMock = (progress.mockExamHistory[meta.id] ?? []).length > 0;
       const started = doneT > 0 || answeredQ > 0 || masteredC > 0 || hasMock || hasNotes;
 
       byId[meta.id] = {
-        totalTopics: topics.length,
+        totalTopics: totalT,
         doneTopics: doneT,
-        totalQuestions: qs.length,
+        totalQuestions: totalQ,
         answeredQuestions: answeredQ,
         correctQuestions: correctQ,
-        totalFlashcards: cards.length,
+        totalFlashcards: totalC,
         masteredCards: masteredC,
         started,
       };
 
       if (started) startedExams += 1;
-      totalTopics += topics.length;
+      totalTopics += totalT;
       doneTopics += doneT;
-      totalQuestions += qs.length;
+      totalQuestions += totalQ;
       correctQuestions += correctQ;
-      totalFlashcards += cards.length;
+      totalFlashcards += totalC;
       masteredCards += masteredC;
     }
 
@@ -585,7 +685,7 @@ export default function IpaInfoPage() {
     return {
       examStatsById: byId,
       crossExamSummary: {
-        totalExams: ipaExamMetas.length,
+        totalExams: IPA_EXAM_METAS.length,
         startedExams,
         totalTopics,
         doneTopics,
@@ -596,7 +696,7 @@ export default function IpaInfoPage() {
         overallPct: crossOverallPct,
       },
     };
-  }, [progress]);
+  }, [progress, tierDataCache]);
 
   const topicQuickChips = useMemo(() => {
     const seen = new Set<string>();
@@ -666,8 +766,8 @@ export default function IpaInfoPage() {
   ]);
 
   const currentComparisons = useMemo(
-    () => ipaComparisons.filter((comp) => comp.examIds.includes(selectedExam)),
-    [selectedExam]
+    () => tierComparisons.filter((comp) => comp.examIds.includes(selectedExam)),
+    [tierComparisons, selectedExam]
   );
 
   const comparisonCategories = useMemo(
@@ -709,7 +809,7 @@ export default function IpaInfoPage() {
   }, [currentFlashcards, normalizedCompQuery]);
 
   const filteredFormulas = useMemo(() => {
-    return ipaFormulaPatterns.filter((pat) => {
+    return tierFormulas.filter((pat) => {
       if (!pat.examIds.includes(selectedExam)) return false;
       if (!normalizedCompQuery) return true;
       return [pat.title, pat.badge, pat.summary, ...pat.flow, ...pat.keyDesignPoints]
@@ -717,47 +817,47 @@ export default function IpaInfoPage() {
         .toLowerCase()
         .includes(normalizedCompQuery);
     });
-  }, [selectedExam, normalizedCompQuery]);
+  }, [tierFormulas, selectedExam, normalizedCompQuery]);
 
   const filteredPitfalls = useMemo(() => {
-    return ipaPitfalls.filter((pit) => {
+    return tierPitfalls.filter((pit) => {
       if (!pit.examIds.includes(selectedExam)) return false;
       if (!normalizedCompQuery) return true;
       return `${pit.trap} ${pit.whyWrong} ${pit.correctApproach}`
         .toLowerCase()
         .includes(normalizedCompQuery);
     });
-  }, [selectedExam, normalizedCompQuery]);
+  }, [tierPitfalls, selectedExam, normalizedCompQuery]);
 
   const filteredKeyFacts = useMemo(() => {
-    return ipaKeyFacts.filter((kf) => {
+    return tierKeyFacts.filter((kf) => {
       if (!kf.examIds.includes(selectedExam)) return false;
       if (!normalizedCompQuery) return true;
       return `${kf.target} ${kf.value} ${kf.detail}`
         .toLowerCase()
         .includes(normalizedCompQuery);
     });
-  }, [selectedExam, normalizedCompQuery]);
+  }, [tierKeyFacts, selectedExam, normalizedCompQuery]);
 
   const tabs: { id: TabId; label: string; icon: typeof BookOpen; badge?: string }[] = [
     {
       id: "domains",
       label: "トピック別学習",
       icon: BookOpen,
-      badge: `${completedTopicCount}/${currentTopics.length}`,
+      badge: activeTierData ? `${completedTopicCount}/${currentTopics.length}` : "-",
     },
     { id: "comparisons", label: "比較・公式パターン", icon: TableProperties },
     {
       id: "flashcards",
       label: "暗記カード",
       icon: Layers2,
-      badge: `${masteredCardCount}/${currentFlashcards.length}`,
+      badge: activeTierData ? `${masteredCardCount}/${currentFlashcards.length}` : "-",
     },
     {
       id: "quiz",
       label: "練習問題・模試",
       icon: HelpCircle,
-      badge: `${correctQuizCount}/${currentQuestions.length}`,
+      badge: activeTierData ? `${correctQuizCount}/${currentQuestions.length}` : "-",
     },
     { id: "resources", label: "公式リソース", icon: Compass },
   ];
@@ -879,8 +979,8 @@ export default function IpaInfoPage() {
           </div>
 
           <div className="space-y-3.5">
-            {EXAM_TIER_GROUPS.map((group) => {
-              const groupMetas = ipaExamMetas.filter((m) => m.tier === group.tier);
+            {IPA_TIER_GROUPS.map((group) => {
+              const groupMetas = IPA_EXAM_METAS.filter((m) => m.tier === group.tier);
               return (
                 <div
                   key={group.tier}
@@ -972,8 +1072,10 @@ export default function IpaInfoPage() {
                     <span>IPA {currentExamMeta.id.toUpperCase()} STUDY HUB</span>
                   </span>
                   <span className="text-xs text-slate-300">
-                    {currentTopics.length} トピック ・ 比較表 {currentComparisons.length} 種 ・ カード{" "}
-                    {currentFlashcards.length} 枚 ・ 演習 {currentQuestions.length} 問
+                    {activeTierData ? currentTopics.length : "-"} トピック ・ 比較表{" "}
+                    {activeTierData ? currentComparisons.length : "-"} 種 ・ カード{" "}
+                    {activeTierData ? currentFlashcards.length : "-"} 枚 ・ 演習{" "}
+                    {activeTierData ? currentQuestions.length : "-"} 問
                   </span>
                 </div>
                 <h2 className="text-lg sm:text-2xl font-black tracking-tight text-white break-words">
@@ -989,20 +1091,20 @@ export default function IpaInfoPage() {
                   <div className="text-[11px] text-slate-400 font-semibold">トピック習得</div>
                   <div className="text-xl sm:text-2xl font-black text-cyan-300 font-mono">{topicPct}%</div>
                   <div className="text-[11px] text-slate-400 font-mono">
-                    {completedTopicCount} / {currentTopics.length}
+                    {completedTopicCount} / {activeTierData ? currentTopics.length : "-"}
                   </div>
                 </div>
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">暗記カード</div>
                   <div className="text-xl sm:text-2xl font-black text-amber-300 font-mono">
-                    {masteredCardCount} / {currentFlashcards.length}
+                    {masteredCardCount} / {activeTierData ? currentFlashcards.length : "-"}
                   </div>
                   <div className="text-[11px] text-slate-400">枚習得</div>
                 </div>
                 <div className="rounded-2xl bg-white/5 border border-white/10 p-3.5 backdrop-blur-xs space-y-1.5 min-w-0">
                   <div className="text-[11px] text-slate-400 font-semibold">演習問題</div>
                   <div className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
-                    {correctQuizCount} / {currentQuestions.length}
+                    {correctQuizCount} / {activeTierData ? currentQuestions.length : "-"}
                   </div>
                   <div className="text-[11px] text-slate-400">問正解</div>
                 </div>
@@ -1011,6 +1113,38 @@ export default function IpaInfoPage() {
           </div>
         </TiltCard>
 
+        {/* 動的ロード中・エラー表示 */}
+        {(!activeTierData || loadingTier !== null) && (
+          <div
+            role="status"
+            aria-live="polite"
+            className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center space-y-3 shadow-xs"
+          >
+            {loadError ? (
+              <>
+                <AlertTriangle className="w-8 h-8 text-rose-500 mx-auto" />
+                <p className="text-sm font-black text-slate-800">{loadError}</p>
+                <button
+                  type="button"
+                  onClick={() => void triggerTierLoad(selectedTier)}
+                  className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 cursor-pointer"
+                >
+                  再読み込みする
+                </button>
+              </>
+            ) : (
+              <>
+                <Loader2 className="w-7 h-7 text-indigo-600 mx-auto animate-spin" />
+                <p className="text-xs font-bold text-slate-600">
+                  {currentExamMeta.title} の学習データを読み込み中...
+                </p>
+              </>
+            )}
+          </div>
+        )}
+
+        {activeTierData && loadingTier === null && (
+          <>
         {/* 試験概要カード */}
         <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {currentExamMeta.examFacts.map((fact) => (
@@ -2040,7 +2174,7 @@ export default function IpaInfoPage() {
             aria-labelledby="ipa-tab-resources"
             className="grid grid-cols-1 md:grid-cols-3 gap-4"
           >
-            {ipaOfficialResources.map((res) => (
+            {IPA_OFFICIAL_RESOURCES.map((res) => (
               <TiltCard key={res.url} className="h-full">
                 <a
                   href={res.url}
@@ -2062,6 +2196,8 @@ export default function IpaInfoPage() {
               </TiltCard>
             ))}
           </div>
+        )}
+          </>
         )}
       </div>
     </div>
