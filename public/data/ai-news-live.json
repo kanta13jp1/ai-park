@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-26T21:04:27.183Z",
-  "lastSyncedAtFormatted": "2026/11/27 6:04:27",
+  "lastSyncedAt": "2026-11-27T07:16:34.467Z",
+  "lastSyncedAtFormatted": "2026/11/27 16:16:34",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 54,
+  "totalCount": 55,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -67,6 +67,31 @@
       "isLiveSynced": true
     },
     {
+      "id": "live-latentspace-how-clay-builds-gtm-agents-jeff-barg-head-of-ai",
+      "title": "Latent Space: How Clay Builds GTM Agents — Jeff Barg, Head of AI",
+      "date": "2026/11/26",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "How $1,500 could qualify every company in the world, why customers hate the model selector, and how Clay is building go-to-market infrastructure for every agent",
+      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「How Clay Builds GTM Agents — Jeff Barg, Head of AI」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
+      "recommendedFor": [
+        "エンジニア",
+        "アーキテクト",
+        "AI推進担当"
+      ],
+      "sourceName": "Latent Space Official Feed",
+      "sourceUrl": "https://latent.space/p/how-clay-builds-gtm-agents-jeff-barg-head-of-ai/",
+      "tags": [
+        "Latent Space",
+        "AI Engineering",
+        "Agentic AI",
+        "技術動向"
+      ],
+      "isLiveSynced": true
+    },
+    {
       "id": "live-github-ai-how-to-choose-the-next-safe-step-in-application-",
       "title": "GitHub Blog (AI & ML): How to choose the next safe step in application modernization",
       "date": "2026/11/25",
@@ -108,31 +133,6 @@
       ],
       "sourceName": "Latent Space Official Feed",
       "sourceUrl": "https://latent.space/p/the_revolution_vs_the_renaissance_thariq_shihipar_openai/",
-      "tags": [
-        "Latent Space",
-        "AI Engineering",
-        "Agentic AI",
-        "技術動向"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-latentspace-ainews-math-proofs-are-landing-faster-than-we-ca",
-      "title": "Latent Space: [AINews] Math Proofs Are Landing Faster Than We Can Read Them",
-      "date": "2026/11/25",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "November 25, 2026 — From Erdős problems to new bounds for matrix multiplication and Fourier transforms.",
-      "impactForStaff": "AIエンジニアリング専門メディア Latent Space「[AINews] Math Proofs Are Landing Faster Than We Can Read Them」。最新のAIエージェント設計・実務適用のトレンドを把握できます。",
-      "recommendedFor": [
-        "エンジニア",
-        "アーキテクト",
-        "AI推進担当"
-      ],
-      "sourceName": "Latent Space Official Feed",
-      "sourceUrl": "https://latent.space/p/ainews-math-proofs-are-landing-faster-than-we-can-read-them/",
       "tags": [
         "Latent Space",
         "AI Engineering",
@@ -366,6 +366,31 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
+      ],
+      "isLiveSynced": true
+    },
+    {
+      "id": "live-importai-import-ai-482-huawei-kernel-benchmarks",
+      "title": "Import AI: Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national lab's AI science benchmark",
+      "date": "2026/11/23",
+      "category": "industry",
+      "categoryLabel": "業界・最新技術",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Could the scientific method be emergent?",
+      "impactForStaff": "Import AI「Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
+      "recommendedFor": [
+        "エンジニア",
+        "リサーチャー",
+        "企画担当"
+      ],
+      "sourceName": "Import AI Official Feed",
+      "sourceUrl": "https://importai.substack.com/p/import-ai-482-huawei-kernel-benchmarks",
+      "tags": [
+        "Import AI",
+        "AI Research",
+        "AI安全性",
+        "先端動向"
       ],
       "isLiveSynced": true
     },
