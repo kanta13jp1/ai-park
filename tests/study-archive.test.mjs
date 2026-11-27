@@ -17,6 +17,12 @@ function extractDocsId(url) {
   return match ? match[1] : null;
 }
 
+function extractSheetsId(url) {
+  if (!url) return null;
+  const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
 function assertAllButtonsHaveTypeButton(source, fileLabel) {
   const buttonMatches = [...source.matchAll(/<button\b/g)];
   assert.ok(buttonMatches.length > 0, `${fileLabel} should contain buttons`);
@@ -41,8 +47,11 @@ test("study-archive data contains verified 2026-11-18 session, valid Drive/Docs 
 
   const driveMatches = [...content.matchAll(/https:\/\/drive\.google\.com\/file\/d\/[a-zA-Z0-9_-]+[^\s"']*/g)];
   const docsMatches = [...content.matchAll(/https:\/\/docs\.google\.com\/document\/d\/[a-zA-Z0-9_-]+[^\s"']*/g)];
+  const sheetsMatches = [...content.matchAll(/https:\/\/docs\.google\.com\/spreadsheets\/d\/[a-zA-Z0-9_-]+[^\s"']*/g)];
   assert.ok(driveMatches.length >= 1, "At least one Google Drive video URL should be registered");
   assert.ok(docsMatches.length >= 1, "At least one Google Docs minutes URL should be registered");
+  assert.ok(sheetsMatches.length >= 1, "Weekly progress Google Sheets URL should be registered");
+  assert.ok(content.includes("toSheetsPreviewUrl"), "toSheetsPreviewUrl helper should be exported");
 
   for (const m of driveMatches) {
     assert.ok(extractDriveFileId(m[0]), `Invalid Google Drive URL: ${m[0]}`);
@@ -50,8 +59,12 @@ test("study-archive data contains verified 2026-11-18 session, valid Drive/Docs 
   for (const m of docsMatches) {
     assert.ok(extractDocsId(m[0]), `Invalid Google Docs URL: ${m[0]}`);
   }
+  for (const m of sheetsMatches) {
+    assert.ok(extractSheetsId(m[0]), `Invalid Google Sheets URL: ${m[0]}`);
+  }
 
-  // 社員メールアドレス・生電話番号など公開禁止情報が含まれないこと
+  // 社員実名・社員メールアドレス・生電話番号など公開禁止情報が含まれないこと
+  assert.equal(/但木|小林|杉村|藤井/.test(content), false, "Member real names must not appear");
   assert.equal(/@ml-mightylink\.com/i.test(content), false, "Employee email domain must not appear");
   assert.equal(/\b0\d{1,3}-\d{2,4}-\d{4}\b/.test(content), false, "Raw phone number must not appear");
 });
@@ -76,6 +89,8 @@ test("study-archive page implements WAI-ARIA APG tabs, heading hierarchy, live r
     "Home",
     "End",
     "lg:flex-row",
+    "study-archive-tab-progress",
+    "study-archive-panel-progress",
   ];
   for (const token of requiredTokens) {
     assert.ok(content.includes(token), `study-archive/page.tsx missing required token: ${token}`);

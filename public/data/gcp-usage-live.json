@@ -1,7 +1,7 @@
 {
-  "updatedAt": "2026-11-27T05:47:24.976Z",
-  "syncedAt": "2026-11-27 14:47",
-  "dataSource": "Google Cloud Billing & Cloud Logging Live Verified (2026/10/05 確定)",
+  "updatedAt": "2026-11-27T12:38:00.000Z",
+  "syncedAt": "2026-11-27 21:38",
+  "dataSource": "Google Cloud Billing 実画面照合 (2026/11/27 確定) & IAM 実測",
   "isLive": true,
   "gcpInfo": {
     "org": "ml-mightylink.com",
@@ -9,29 +9,29 @@
     "projectId": "antigravity-pj-xxxxxx",
     "billingAccountId": "012EB1-xxxxxx-xxxxxx",
     "totalCreditJpy": 47813,
-    "remainingCreditJpy": 32352.49,
-    "totalSpentJpy": 15460.51,
-    "grossCostJpy": 22900,
-    "costReductionJpy": 22900,
+    "remainingCreditJpy": 19745.72,
+    "totalSpentJpy": 28067.28,
+    "grossCostJpy": 56100,
+    "costReductionJpy": 56100,
     "netCostJpy": 0,
     "totalCreditUsd": 318.75,
-    "remainingCreditUsd": 215.68,
-    "totalSpentUsd": 103.07,
-    "grossCostUsd": 152.67,
+    "remainingCreditUsd": 131.64,
+    "totalSpentUsd": 187.11,
+    "grossCostUsd": 374,
     "trialDaysTotal": 90,
-    "trialDaysLeft": 34,
+    "trialDaysLeft": 33,
     "trialEndDate": "2026-12-31",
     "monthlyBudgetUsd": 50,
     "billingAccountStatus": "ACTIVE",
     "currencyCode": "JPY",
     "bigQueryExportDataset": "mighty-link-ai-connect-xxxxxx:gcp_billing_export",
-    "bigQueryConnected": true
+    "bigQueryConnected": false
   },
   "summary": {
     "totalRequests": 1840,
     "totalTokens": 38400000,
-    "activeUsers": 2,
-    "totalUsers": 2
+    "activeUsers": 3,
+    "totalUsers": 3
   },
   "dailyHistory": [
     {
@@ -109,7 +109,7 @@
     {
       "id": "U-01",
       "name": "利用者A",
-      "email": "k***@ml-mightylink.com",
+      "email": "k-***@ml-mightylink.com",
       "department": "社内",
       "role": "Agent Platform ユーザー",
       "requestCount": 1620,
@@ -120,12 +120,12 @@
       "costJpy": 5280,
       "lastActive": "2026/10/03 11:45",
       "status": "active",
-      "primaryModel": "Agent Platform (Gemini 3.8 Flash / 3.1 Pro)"
+      "primaryModel": "Vertex AI (10/05 時点参考値)"
     },
     {
       "id": "U-02",
       "name": "利用者B",
-      "email": "k***@ml-mightylink.com",
+      "email": "ko***@ml-mightylink.com",
       "department": "社内",
       "role": "Agent Platform ユーザー",
       "requestCount": 220,
@@ -136,7 +136,23 @@
       "costJpy": 538,
       "lastActive": "2026/10/01 18:20",
       "status": "active",
-      "primaryModel": "Agent Platform (Gemini 3.1 Pro)"
+      "primaryModel": "Vertex AI (10/05 時点参考値)"
+    },
+    {
+      "id": "U-03",
+      "name": "利用者C",
+      "email": "h-***@ml-mightylink.com",
+      "department": "社内",
+      "role": "Agent Platform ユーザー",
+      "requestCount": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "totalTokens": 0,
+      "costUsd": 0,
+      "costJpy": 0,
+      "lastActive": "2026/11/27（Workspace枠利用・監査ログ未連携）",
+      "status": "active",
+      "primaryModel": "Antigravity（Workspace枠）"
     }
   ],
   "syncMode": "snapshot_verified",
@@ -145,7 +161,7 @@
     "authVerified": true,
     "projectId": "antigravity-pj-xxxxxx",
     "billingAccountId": "012EB1-xxxxxx-xxxxxx",
-    "lastAuditCheck": "2026-11-27 14:47",
+    "lastAuditCheck": "2026-11-27 21:38",
     "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)"
   }
 }

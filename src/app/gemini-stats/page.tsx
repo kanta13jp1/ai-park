@@ -30,27 +30,27 @@ import {
   Database,
 } from "lucide-react";
 
-// 社内本番環境の確定情報 (Google Cloud Billing 実画面検証済み 2026/10/05 確定)
+// 社内本番環境の確定情報 (Google Cloud Billing 実画面照合 2026/11/27 確定)
 const DEFAULT_GCP_INFO = {
   org: "ml-mightylink.com",
   projectId: "antigravity-pj-xxxxxx",
   billingAccountId: "012EB1-xxxxxx-xxxxxx",
   totalCreditJpy: 47813,
-  remainingCreditJpy: 32352.49, // 2026/10/05 Cloud Billing 実機コンソール確定 (¥32,352.49)
-  totalSpentJpy: 15460.51,
-  grossCostJpy: 22900, // 合計費用 (2026/10/01〜2026/10/05): ¥2.29万
-  costReductionJpy: 22900, // コスト削減: -¥2.29万
+  remainingCreditJpy: 19745.72, // 2026/11/27 Cloud Billing 実機コンソール確定 (¥19,745.72)
+  totalSpentJpy: 28067.28,
+  grossCostJpy: 56100, // 合計費用 (2026/08/30〜2026/11/27 過去90日): ¥56,100
+  costReductionJpy: 56100, // コスト削減: -¥56,100
   netCostJpy: 0, // 総費用: ¥0
   totalCreditUsd: 318.75,
-  remainingCreditUsd: 215.68,
-  totalSpentUsd: 103.07,
-  grossCostUsd: 152.67,
+  remainingCreditUsd: 131.64,
+  totalSpentUsd: 187.11,
+  grossCostUsd: 374,
   trialDaysTotal: 90,
-  trialDaysLeft: 87, // 初期スナップショット確定値（画面上は現在時刻から自動再計算）
+  trialDaysLeft: 33, // 初期スナップショット確定値（画面上は現在時刻から自動再計算）
   trialEndDate: "2026-12-31",
   monthlyBudgetUsd: 50,
   bigQueryExportDataset: "mighty-link-ai-connect-xxxxxx:gcp_billing_export",
-  bigQueryConnected: true,
+  bigQueryConnected: false,
 };
 
 function calcRemainingDaysJst(endDateStr: string, nowMs: number): number {
@@ -62,27 +62,27 @@ function calcRemainingDaysJst(endDateStr: string, nowMs: number): number {
   return Math.max(0, Math.round((endUtc - todayJstUtc) / 86_400_000));
 }
 
-// 初期ユーザーデータ（実機確定値）
+// 初期ユーザーデータ（実機・IAM 実測値）
 const DEFAULT_USERS: UserUsage[] = [
   {
-    id: "usr-01",
+    id: "U-01",
     name: "利用者A",
-    email: "k***@ml-mightylink.com",
+    email: "k-***@ml-mightylink.com",
     department: "社内",
     role: "Agent Platform ユーザー",
     requestCount: 1620,
-    inputTokens: 29800000,
-    outputTokens: 5200000,
+    inputTokens: 31200000,
+    outputTokens: 3800000,
     totalTokens: 35000000,
     costUsd: 35.20,
     lastActive: "2026/10/03 11:45",
     status: "active",
-    primaryModel: "Agent Platform (Gemini 3.8 Flash / 3.1 Pro)"
+    primaryModel: "Vertex AI (10/05 時点参考値)"
   },
   {
-    id: "usr-02",
+    id: "U-02",
     name: "利用者B",
-    email: "k***@ml-mightylink.com",
+    email: "ko***@ml-mightylink.com",
     department: "社内",
     role: "Agent Platform ユーザー",
     requestCount: 220,
@@ -92,7 +92,22 @@ const DEFAULT_USERS: UserUsage[] = [
     costUsd: 3.59,
     lastActive: "2026/10/01 18:20",
     status: "active",
-    primaryModel: "Agent Platform (Gemini 3.1 Pro)"
+    primaryModel: "Vertex AI (10/05 時点参考値)"
+  },
+  {
+    id: "U-03",
+    name: "利用者C",
+    email: "h-***@ml-mightylink.com",
+    department: "社内",
+    role: "Agent Platform ユーザー",
+    requestCount: 0,
+    inputTokens: 0,
+    outputTokens: 0,
+    totalTokens: 0,
+    costUsd: 0,
+    lastActive: "2026/11/27（Workspace枠利用・監査ログ未連携）",
+    status: "active",
+    primaryModel: "Antigravity（Workspace枠）"
   }
 ];
 
@@ -137,8 +152,8 @@ export default function GeminiStatsPage() {
   const [users, setUsers] = useState<UserUsage[]>(DEFAULT_USERS);
   const [dailyData, setDailyData] = useState<DailyUsage[]>(DEFAULT_DAILY_DATA);
   const [gcpInfo, setGcpInfo] = useState(DEFAULT_GCP_INFO);
-  const [syncedAt, setSyncedAt] = useState<string>("2026-10-05 00:40");
-  const [dataSource, setDataSource] = useState<string>("Google Cloud Billing Live Verified (2026/10/05 確定)");
+  const [syncedAt, setSyncedAt] = useState<string>("2026-11-27 21:38");
+  const [dataSource, setDataSource] = useState<string>("Google Cloud Billing 実画面照合 (2026/11/27 確定) & IAM 実測");
   const [syncMode, setSyncMode] = useState<"api_live" | "snapshot_verified">("api_live");
   const [syncModeLabel, setSyncModeLabel] = useState<string>("完全API自動同期中");
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -285,6 +300,7 @@ export default function GeminiStatsPage() {
     [users]
   );
   const remainingCreditUsd = gcpInfo.remainingCreditUsd || (gcpInfo.totalCreditUsd - totalCostUsd);
+  const spentCreditUsd = gcpInfo.totalSpentUsd || Math.max(0, gcpInfo.totalCreditUsd - remainingCreditUsd);
   const creditUsagePercent = Math.min(
     100,
     ((gcpInfo.totalCreditUsd - remainingCreditUsd) / gcpInfo.totalCreditUsd) * 100
@@ -348,9 +364,9 @@ export default function GeminiStatsPage() {
     // 2. モデル・SKU別コストサマリー
     lines.push("--- AIモデル / SKU別コストサマリー ---");
     lines.push("モデル・SKU名,利用金額(JPY),利用金額(USD),比率(%),備考");
-    lines.push('"Gemini 3.8 Flash Global Text Input",4348,28.99,61.2%,"最頻出・超高速推論"');
-    lines.push('"Vertex AI Agent Platform / 3.1 Pro",1598,10.65,22.5%,"Model Garden & 高推論エージェント"');
-    lines.push('"us-east7 リージョン基盤",1159,7.73,16.3%,"Cloud Run / Functions / 監査ログ"');
+    lines.push('"Gemini 3.8 Flash（入力・推論）",29148,194.32,52.0%,"Global Text Input - Predictions（最頻出・高速推論）"');
+    lines.push('"Gemini 3.8 Flash（キャッシュ）",19988,133.25,35.6%,"Global Text Input Caching（コンテキストキャッシュ）"');
+    lines.push('"出力・画像・Flash Lite 他",6964,46.43,12.4%,"Text Output ¥5,378 / Image ¥1,552 / Flash Lite ¥34"');
     lines.push("");
 
     // 3. 社員別利用実績明細
@@ -584,20 +600,20 @@ function doGet() {
               </div>
             </div>
             <div className="text-right text-[11px] font-mono text-slate-400">
-              照合日時: <span className="text-cyan-300 font-bold">2026/10/05 00:40</span>
+              照合日時: <span className="text-cyan-300 font-bold">2026/11/27 21:38</span>
             </div>
           </div>
 
           <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
-            {/* 左側: 合計費用 (2026/10/01〜2026/10/05) */}
+            {/* 左側: 合計費用 (2026/08/30〜2026/11/27 過去90日) */}
             <div className="space-y-4 pr-0 lg:pr-4" onMouseEnter={() => playCyberHover()}>
               <div className="flex items-center justify-between text-xs text-slate-500 font-bold">
                 <span className="flex items-center gap-1.5">
                   <TrendingUp size={15} className="text-indigo-600" />
-                  合計費用（2026/10/01 〜 2026/10/05）
+                  合計費用（2026/08/30 〜 2026/11/27）
                 </span>
                 <span className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-mono text-[11px]">
-                  今月
+                  過去90日
                 </span>
               </div>
 
@@ -719,7 +735,7 @@ function doGet() {
                     />
                   </div>
                   <div className="flex justify-between text-[10px] text-slate-400 font-mono">
-                    <span>消化: <AnimatedCounter value={totalCostUsd} decimals={2} prefix="$" /> ({creditUsagePercent.toFixed(1)}%)</span>
+                    <span>消化: <AnimatedCounter value={spentCreditUsd} decimals={2} prefix="$" /> ({creditUsagePercent.toFixed(1)}%)</span>
                     <span>残り: {(100 - creditUsagePercent).toFixed(1)}%</span>
                   </div>
                 </div>
@@ -980,7 +996,7 @@ function doGet() {
                 </h2>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                Vertex AI (Gemini 3.8 Flash / 3.1 Pro) および Agent Platform の SKU 別支出比率（2026/10 初期計測 計 ¥7,105 時点の内訳スナップショット）
+                Vertex AI（Gemini 3.8 Flash / 3.5 Flash Lite）の SKU 別実績（2026/08/30〜2026/11/27 計 ¥56,100 時点の Cloud Billing 確定値）
               </p>
             </div>
             <span className="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full self-start lg:self-auto shrink-0 whitespace-nowrap">
@@ -989,7 +1005,7 @@ function doGet() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* SKU 1: Gemini 3.8 Flash */}
+            {/* SKU 1: Gemini 3.8 Flash 入力・推論 */}
             <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
               <SpotlightCard
                 spotlightColor="rgba(99, 102, 241, 0.15)"
@@ -999,26 +1015,26 @@ function doGet() {
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
                       <Zap size={14} className="text-indigo-600" />
-                      Gemini 3.8 Flash
+                      Gemini 3.8 Flash（入力・推論）
                     </span>
                     <span className="text-xs font-mono font-bold text-indigo-700 bg-indigo-100/70 px-2 py-0.5 rounded-md">
-                      61.2%
+                      52.0%
                     </span>
                   </div>
                   <div className="text-lg font-black font-mono text-slate-900">
-                    ¥4,348 <span className="text-xs font-normal text-slate-500">($28.99)</span>
+                    ¥29,148 <span className="text-xs font-normal text-slate-500">($194.32)</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: "61.2%" }} />
+                    <div className="bg-indigo-600 h-1.5 rounded-full" style={{ width: "52.0%" }} />
                   </div>
                   <p className="text-[11px] text-slate-500">
-                    Global Text Input - Predictions（最頻出・超高速コーディング推論）
+                    Global Text Input - Predictions（最頻出・高速推論）
                   </p>
                 </div>
               </SpotlightCard>
             </TiltCard>
 
-            {/* SKU 2: Agent Platform / Model Garden */}
+            {/* SKU 2: Gemini 3.8 Flash キャッシュ */}
             <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
               <SpotlightCard
                 spotlightColor="rgba(6, 182, 212, 0.15)"
@@ -1028,26 +1044,26 @@ function doGet() {
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-cyan-900 flex items-center gap-1.5">
                       <Sparkles size={14} className="text-cyan-600" />
-                      Agent Platform / 3.1 Pro
+                      Gemini 3.8 Flash（キャッシュ）
                     </span>
                     <span className="text-xs font-mono font-bold text-cyan-700 bg-cyan-100/70 px-2 py-0.5 rounded-md">
-                      22.5%
+                      35.6%
                     </span>
                   </div>
                   <div className="text-lg font-black font-mono text-slate-900">
-                    ¥1,598 <span className="text-xs font-normal text-slate-500">($10.65)</span>
+                    ¥19,988 <span className="text-xs font-normal text-slate-500">($133.25)</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-cyan-500 h-1.5 rounded-full" style={{ width: "22.5%" }} />
+                    <div className="bg-cyan-500 h-1.5 rounded-full" style={{ width: "35.6%" }} />
                   </div>
                   <p className="text-[11px] text-slate-500">
-                    Vertex AI Model Garden & 高推論自律エージェント呼び出し
+                    Global Text Input Caching（コンテキストキャッシュ）
                   </p>
                 </div>
               </SpotlightCard>
             </TiltCard>
 
-            {/* SKU 3: リージョン基盤 (us-east7) */}
+            {/* SKU 3: 出力・画像・Flash Lite 他 */}
             <TiltCard maxTilt={5} glareOpacity={0.08} className="h-full rounded-2xl">
               <SpotlightCard
                 spotlightColor="rgba(148, 163, 184, 0.15)"
@@ -1057,20 +1073,20 @@ function doGet() {
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                       <ShieldCheck size={14} className="text-slate-500" />
-                      us-east7 リージョン基盤
+                      出力・画像・Flash Lite 他
                     </span>
                     <span className="text-xs font-mono font-bold text-slate-600 bg-slate-200/70 px-2 py-0.5 rounded-md">
-                      16.3%
+                      12.4%
                     </span>
                   </div>
                   <div className="text-lg font-black font-mono text-slate-900">
-                    ¥1,159 <span className="text-xs font-normal text-slate-500">($7.73)</span>
+                    ¥6,964 <span className="text-xs font-normal text-slate-500">($46.43)</span>
                   </div>
                   <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
-                    <div className="bg-slate-400 h-1.5 rounded-full" style={{ width: "16.3%" }} />
+                    <div className="bg-slate-400 h-1.5 rounded-full" style={{ width: "12.4%" }} />
                   </div>
                   <p className="text-[11px] text-slate-500">
-                    Cloud Run / Functions / 監査ログ転送トラフィック基盤
+                    Text Output ¥5,378 / Image Input・Caching ¥1,552 / Gemini 3.5 Flash Lite ¥34
                   </p>
                 </div>
               </SpotlightCard>
@@ -1089,7 +1105,7 @@ function doGet() {
                 </h2>
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                社員ごとのAPIリクエスト回数、消費トークン数、累計推定費用
+                IAM登録済み3アカウントのステータス（Antigravity通常利用はWorkspace枠処理のため、ユーザー別回数は監査ログ・BigQuery連携前の10/05参考値を併記）
               </p>
             </div>
 

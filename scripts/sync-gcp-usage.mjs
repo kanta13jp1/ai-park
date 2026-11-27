@@ -17,8 +17,24 @@ const BILLING_ACCOUNT_ID = process.env.GCP_BILLING_ACCOUNT_ID || '012EB1-xxxxxx-
 const BQ_PROJECT_ID = process.env.GCP_BQ_PROJECT_ID || 'mighty-link-ai-connect-xxxxxx';
 
 // 公開ファイルに載せる値は伏せる（実際の ID は API 呼び出しにだけ使う）
-const maskEmail = (e) => (e && e.includes('@') && !e.includes('***') ? `${e[0]}***@${e.split('@')[1]}` : e);
-function sanitizeForPublish(d) {
+export function maskEmail(email) {
+  if (!email || typeof email !== 'string' || !email.includes('@') || email.includes('***@')) {
+    return email;
+  }
+  const [local, domain] = email.split('@');
+  const prefix = local.slice(0, Math.min(2, local.length));
+  return `${prefix}***@${domain}`;
+}
+
+function formatJstTimestamp(isoStr) {
+  if (!isoStr) return '';
+  const ms = Date.parse(isoStr);
+  if (Number.isNaN(ms)) return '';
+  const jst = new Date(ms + 9 * 60 * 60 * 1000);
+  return jst.toISOString().replace('T', ' ').slice(0, 16).replaceAll('-', '/');
+}
+
+export function sanitizeForPublish(d) {
   const g = d.gcpInfo || {};
   g.projectId = 'antigravity-pj-xxxxxx';
   g.billingAccountId = '012EB1-xxxxxx-xxxxxx';
@@ -28,9 +44,99 @@ function sanitizeForPublish(d) {
     d.syncDetails.projectId = g.projectId;
     d.syncDetails.billingAccountId = g.billingAccountId;
   }
-  (d.users || []).forEach((u, i) => { u.email = maskEmail(u.email); u.name = `利用者${String.fromCharCode(65 + i)}`; u.department = '社内'; u.role = 'Agent Platform ユーザー'; });
+  (d.users || []).forEach((u, i) => {
+    u.email = maskEmail(u.email);
+    u.name = `利用者${String.fromCharCode(65 + i)}`;
+    u.department = '社内';
+    u.role = 'Agent Platform ユーザー';
+  });
   return d;
 }
+
+export function mergeLoggingEntries(currentUsers, entries) {
+  const userStats = {};
+  (entries || []).forEach((entry) => {
+    const email = entry?.protoPayload?.authenticationInfo?.principalEmail;
+    if (!email) return;
+
+    const key = maskEmail(email);
+    const tsJst = formatJstTimestamp(entry.timestamp);
+    if (!userStats[key]) {
+      userStats[key] = { count: 0, lastActive: tsJst };
+    }
+    userStats[key].count += 1;
+    if (tsJst && (!userStats[key].lastActive || tsJst > userStats[key].lastActive)) {
+      userStats[key].lastActive = tsJst;
+    }
+  });
+
+  const merged = Array.isArray(currentUsers) ? currentUsers.map((u) => ({ ...u })) : [];
+  const idxByEmail = new Map();
+  merged.forEach((u, idx) => {
+    const masked = maskEmail(u.email);
+    u.email = masked;
+    idxByEmail.set(masked, idx);
+  });
+
+  Object.entries(userStats).forEach(([maskedEmail, stat]) => {
+    if (idxByEmail.has(maskedEmail)) {
+      const target = merged[idxByEmail.get(maskedEmail)];
+      target.requestCount = Math.max(target.requestCount || 0, stat.count);
+      target.totalTokens = target.requestCount * 4500;
+      target.costUsd = +(target.requestCount * 0.024).toFixed(2);
+      target.costJpy = Math.round(target.costUsd * 150);
+      if (stat.lastActive) target.lastActive = stat.lastActive;
+      target.status = 'active';
+    } else {
+      const newIdx = merged.length;
+      const costUsd = +(stat.count * 0.024).toFixed(2);
+      merged.push({
+        id: `U-${String(newIdx + 1).padStart(2, '0')}`,
+        name: `利用者${String.fromCharCode(65 + newIdx)}`,
+        email: maskedEmail,
+        department: '社内',
+        role: 'Agent Platform ユーザー',
+        requestCount: stat.count,
+        inputTokens: Math.round(stat.count * 3800),
+        outputTokens: Math.round(stat.count * 700),
+        totalTokens: stat.count * 4500,
+        costUsd,
+        costJpy: Math.round(costUsd * 150),
+        lastActive: stat.lastActive || '同期済み',
+        status: 'active',
+        primaryModel: 'Vertex AI / Gemini',
+      });
+      idxByEmail.set(maskedEmail, newIdx);
+    }
+  });
+
+  const summary = {
+    totalRequests: merged.reduce((acc, u) => acc + (u.requestCount || 0), 0),
+    totalTokens: merged.reduce((acc, u) => acc + (u.totalTokens || 0), 0),
+    activeUsers: merged.filter((u) => u.status === 'active').length,
+    totalUsers: merged.length,
+  };
+
+  return { users: merged, summary };
+}
+
+export function applySyncFailure(currentData, auditTimeStr, reasonCode, authOk = false) {
+  currentData.syncMode = 'snapshot_verified';
+  currentData.syncModeLabel = authOk
+    ? '実機コンソール確定検証同期（保護中）'
+    : '実機コンソール確定検証同期（保護中・API再認証待ち）';
+  currentData.syncDetails = {
+    ...(currentData.syncDetails || {}),
+    authVerified: authOk,
+    projectId: PROJECT_ID,
+    billingAccountId: BILLING_ACCOUNT_ID,
+    lastAuditCheck: auditTimeStr,
+    lastSyncError: reasonCode,
+    nextScheduledSync: '09:00 / 18:00 JST (GitHub Actions)',
+  };
+  return currentData;
+}
+
 const TARGET_FILE = path.join(__dirname, '..', 'public', 'data', 'gcp-usage-live.json');
 
 // サービスアカウント (JWT) または ユーザー認証情報 (ADC / refresh_token) から Google OAuth2 アクセストークンを生成
@@ -97,7 +203,7 @@ async function getGcpAccessToken(saKey) {
   return tokenData.access_token;
 }
 
-async function syncUsageData() {
+export async function syncUsageData() {
   console.log(`[INFO] Starting GCP Usage Sync for Project: ${PROJECT_ID}`);
 
   const now = new Date();
@@ -108,34 +214,34 @@ async function syncUsageData() {
   let currentData = {
     updatedAt: now.toISOString(),
     syncedAt: formattedDate,
-    dataSource: "Google Cloud Billing & Cloud Logging Live Sync",
+    dataSource: 'Google Cloud Billing & Cloud Logging Live Sync',
     isLive: true,
     gcpInfo: {
-      org: "ml-mightylink.com",
+      org: 'ml-mightylink.com',
       projectId: PROJECT_ID,
       billingAccountId: BILLING_ACCOUNT_ID,
       totalCreditUsd: 318.75,
-      remainingCreditUsd: 285.39,
-      totalSpentUsd: 33.36,
-      grossCostUsd: 47.37,
+      remainingCreditUsd: 131.64,
+      totalSpentUsd: 187.11,
+      grossCostUsd: 374,
       totalCreditJpy: 47813,
-      remainingCreditJpy: 42808,
-      totalSpentJpy: 5005,
-      grossCostJpy: 7105,
+      remainingCreditJpy: 19745.72,
+      totalSpentJpy: 28067.28,
+      grossCostJpy: 56100,
       netCostJpy: 0,
       trialDaysTotal: 90,
-      trialDaysLeft: 88,
-      trialEndDate: "2026-12-31",
-      monthlyBudgetUsd: 50
+      trialDaysLeft: 33,
+      trialEndDate: '2026-12-31',
+      monthlyBudgetUsd: 50,
     },
     summary: {
       totalRequests: 1840,
       totalTokens: 38400000,
-      activeUsers: 2,
-      totalUsers: 5
+      activeUsers: 3,
+      totalUsers: 3,
     },
     dailyHistory: [],
-    users: []
+    users: [],
   };
 
   if (fs.existsSync(TARGET_FILE)) {
@@ -159,7 +265,6 @@ async function syncUsageData() {
   } else if (process.env.GOOGLE_APPLICATION_CREDENTIALS && fs.existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)) {
     saKeyJson = JSON.parse(fs.readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, 'utf-8'));
   } else {
-    // ローカル開発環境の ADC 自動探索
     const userProfile = process.env.USERPROFILE || process.env.HOME || '';
     const localAdcPath = path.join(process.env.APPDATA || path.join(userProfile, '.config'), 'gcloud', 'application_default_credentials.json');
     if (fs.existsSync(localAdcPath)) {
@@ -175,14 +280,18 @@ async function syncUsageData() {
     saKeyJson.refresh_token
   );
 
+  let hasLiveSuccess = false;
+  let authOk = false;
+  let failureReason = '';
+
   if (isValidAuth) {
     const authIdentity = saKeyJson.client_email || saKeyJson.account || 'authorized_user';
     console.log(`[INFO] Google Cloud Credentials detected: ${authIdentity}`);
     try {
       const accessToken = await getGcpAccessToken(saKeyJson);
+      authOk = true;
       console.log('[INFO] Successfully obtained GCP OAuth2 access token.');
 
-      // 監査ログフィルタ（Gemini / Vertex AI / Cloud AI Companion / Generative Language）
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
       const filter = [
         `(protoPayload.serviceName="cloudaicompanion.googleapis.com" OR protoPayload.serviceName="aiplatform.googleapis.com" OR protoPayload.serviceName="generativelanguage.googleapis.com" OR protoPayload.serviceName="serviceusage.googleapis.com")`,
@@ -196,8 +305,8 @@ async function syncUsageData() {
         });
         if (billingRes.ok) {
           const billingData = await billingRes.json();
-          currentData.gcpInfo.billingAccountStatus = billingData.open ? "ACTIVE" : "CLOSED";
-          currentData.gcpInfo.currencyCode = billingData.currencyCode || "JPY";
+          currentData.gcpInfo.billingAccountStatus = billingData.open ? 'ACTIVE' : 'CLOSED';
+          currentData.gcpInfo.currencyCode = billingData.currencyCode || 'JPY';
           console.log(`[INFO] Cloud Billing Account verified: ${billingData.displayName} (Status: ${billingData.open ? 'ACTIVE' : 'CLOSED'})`);
         }
       } catch (billingErr) {
@@ -240,6 +349,7 @@ async function syncUsageData() {
             currentData.gcpInfo.grossCostJpy = Math.round(bqCost);
             currentData.gcpInfo.grossCostUsd = +(bqCost / 150).toFixed(2);
             currentData.gcpInfo.bigQueryConnected = true;
+            hasLiveSuccess = true;
           } else {
             console.log('[INFO] BigQuery dataset ready. Awaiting initial export table population from Cloud Billing.');
           }
@@ -270,53 +380,29 @@ async function syncUsageData() {
         console.log(`[INFO] Cloud Logging returned ${entries.length} log entries.`);
 
         if (entries.length > 0) {
-          currentData.syncMode = "api_live";
-          currentData.syncModeLabel = "完全API自動同期中";
-          const userStats = {};
-          entries.forEach((entry) => {
-            const email = entry?.protoPayload?.authenticationInfo?.principalEmail;
-            if (!email) return;
-
-            const key = maskEmail(email);
-            if (!userStats[key]) {
-              userStats[key] = { count: 0, lastActive: entry.timestamp };
-            }
-            userStats[key].count += 1;
-          });
-
-          // ユーザーデータ反映
-          if (Array.isArray(currentData.users)) {
-            currentData.users.forEach((u) => {
-              if (userStats[u.email]) {
-                u.requestCount = Math.max(u.requestCount, userStats[u.email].count);
-                u.totalTokens = u.requestCount * 4500;
-                u.costUsd = +(u.requestCount * 0.024).toFixed(2);
-                u.status = 'active';
-              }
-            });
-          }
+          const merged = mergeLoggingEntries(currentData.users, entries);
+          currentData.users = merged.users;
+          currentData.summary = merged.summary;
+          currentData.syncMode = 'api_live';
+          currentData.syncModeLabel = '完全API自動同期中';
+          hasLiveSuccess = true;
         } else {
-          // ログがまだ記録されていない（監査ログ初期設定待ち）場合は確定検証スナップショットを安全保護
-          currentData.syncMode = "snapshot_verified";
-          currentData.syncModeLabel = "実機コンソール確定検証同期（保護中）";
+          failureReason = 'no_live_entries';
           console.log('[INFO] No data-access audit entries yet. Protecting verified console metrics.');
         }
       } else {
         const errText = await loggingRes.text();
         console.warn(`[WARN] Cloud Logging API responded with ${loggingRes.status}: ${errText}`);
-        currentData.syncMode = "snapshot_verified";
-        currentData.syncModeLabel = "実機コンソール確定検証同期（保護中）";
+        failureReason = `logging_http_${loggingRes.status}`;
       }
     } catch (err) {
       console.error('[ERROR] Failed during GCP live sync:', err.message);
-      currentData.syncMode = "snapshot_verified";
-      currentData.syncModeLabel = "実機コンソール確定検証同期（保護中）";
+      failureReason = err.message.includes('invalid_rapt') ? 'invalid_rapt' : 'auth_failed';
     }
   } else {
     console.log('[INFO] No external GCP Service Account key detected in CI/Local environment.');
-    console.log('[INFO] Safe fallback: maintaining verified Google Cloud metrics with updated synchronization timestamps.');
-    currentData.syncMode = "snapshot_verified";
-    currentData.syncModeLabel = "実機コンソール確定検証同期（保護中）";
+    console.log('[INFO] Safe fallback: maintaining verified Google Cloud metrics with updated audit check timestamp.');
+    failureReason = 'no_credentials';
   }
 
   // トライアル残日数を JST 基準で自動再計算
@@ -329,17 +415,20 @@ async function syncUsageData() {
     currentData.gcpInfo.trialDaysLeft = Math.max(0, Math.round((endUtc - todayJstUtc) / 86400000));
   }
 
-  // 最新タイムスタンプの更新
-  currentData.updatedAt = now.toISOString();
-  currentData.syncedAt = formattedDate;
-  currentData.isLive = true;
-  currentData.syncDetails = {
-    authVerified: true,
-    projectId: PROJECT_ID,
-    billingAccountId: BILLING_ACCOUNT_ID,
-    lastAuditCheck: formattedDate,
-    nextScheduledSync: "09:00 / 18:00 JST (GitHub Actions)"
-  };
+  if (hasLiveSuccess) {
+    currentData.updatedAt = now.toISOString();
+    currentData.syncedAt = formattedDate;
+    currentData.isLive = true;
+    currentData.syncDetails = {
+      authVerified: true,
+      projectId: PROJECT_ID,
+      billingAccountId: BILLING_ACCOUNT_ID,
+      lastAuditCheck: formattedDate,
+      nextScheduledSync: '09:00 / 18:00 JST (GitHub Actions)',
+    };
+  } else {
+    applySyncFailure(currentData, formattedDate, failureReason || 'snapshot_protected', authOk);
+  }
 
   // JSON出力
   const outputDir = path.dirname(TARGET_FILE);
@@ -351,7 +440,9 @@ async function syncUsageData() {
   console.log(`[SUCCESS] Live usage data synchronized to ${TARGET_FILE} (Mode: ${currentData.syncMode})`);
 }
 
-syncUsageData().catch((err) => {
-  console.error('[FATAL] Sync failed:', err);
-  process.exit(1);
-});
+if (process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename)) {
+  syncUsageData().catch((err) => {
+    console.error('[FATAL] Sync failed:', err);
+    process.exit(1);
+  });
+}

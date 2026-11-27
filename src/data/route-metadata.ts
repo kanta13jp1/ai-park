@@ -113,7 +113,7 @@ export const ROUTE_METADATA: Record<string, RouteMetaEntry> = {
   },
   "/study-archive": {
     title: "AI勉強会アーカイブ",
-    description: "AI勉強会の録画動画・議事メモ・次回課題の社内限定アーカイブ（β版）",
+    description: "AI勉強会の録画動画・議事メモ・次回課題・週次進捗の社内限定アーカイブ（β版）",
   },
   "/tools": {
     title: "AIツール検証マトリックス（PoC中）",

@@ -10,6 +10,8 @@ import {
   studySessions,
   toDocsPreviewUrl,
   toDrivePreviewUrl,
+  toSheetsPreviewUrl,
+  weeklyProgressSheet,
 } from "@/data/study-archive";
 import {
   Video,
@@ -25,10 +27,11 @@ import {
   Copy,
   Check,
   Link2,
+  Table2,
 } from "lucide-react";
 
-type MediaTab = "video" | "minutes" | "tasks";
-const TAB_ORDER: MediaTab[] = ["video", "minutes", "tasks"];
+type MediaTab = "video" | "minutes" | "tasks" | "progress";
+const TAB_ORDER: MediaTab[] = ["video", "minutes", "tasks", "progress"];
 
 export default function StudyArchivePage() {
   const [selectedId, setSelectedId] = useState<string>(studySessions[0]?.id ?? "");
@@ -55,9 +58,17 @@ export default function StudyArchivePage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const sessionParam = params.get("session");
-    if (sessionParam && studySessions.some((s) => s.id === sessionParam)) {
+    const tabParam = params.get("tab") as MediaTab | null;
+    const validSession = Boolean(sessionParam && studySessions.some((s) => s.id === sessionParam));
+    const validTab = Boolean(tabParam && TAB_ORDER.includes(tabParam));
+    if (validSession || validTab) {
       queueMicrotask(() => {
-        setSelectedId(sessionParam);
+        if (validSession && sessionParam) {
+          setSelectedId(sessionParam);
+        }
+        if (validTab && tabParam) {
+          setActiveTab(tabParam);
+        }
       });
     }
   }, []);
@@ -75,12 +86,13 @@ export default function StudyArchivePage() {
 
   const videoPreviewUrl = toDrivePreviewUrl(currentSession?.videoDriveUrl ?? null);
   const minutesPreviewUrl = toDocsPreviewUrl(currentSession?.minutesDocUrl ?? null);
+  const progressPreviewUrl = toSheetsPreviewUrl(weeklyProgressSheet.sheetUrl);
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50/80 bg-grid-pattern min-h-screen">
       <HeroBanner
         title="AI勉強会アーカイブ"
-        subtitle="開催回ごとの録画動画・議事メモ・次回課題をまとめて確認できます（社内 Google Workspace 限定公開）"
+        subtitle="開催回ごとの録画動画・議事メモ・次回課題・週次進捗をまとめて確認できます（社内 Google Workspace 限定公開）"
       />
 
       <div className="max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -356,6 +368,28 @@ export default function StudyArchivePage() {
                   <ListChecks className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>次回の課題・リンク ({currentSession.tasks.length})</span>
                 </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="study-archive-tab-progress"
+                  aria-selected={activeTab === "progress"}
+                  aria-controls="study-archive-panel-progress"
+                  tabIndex={activeTab === "progress" ? 0 : -1}
+                  onKeyDown={(e) => handleTabKeyDown(e, 3)}
+                  onClick={() => {
+                    playCyberClick();
+                    setActiveTab("progress");
+                  }}
+                  onMouseEnter={() => playCyberHover()}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                    activeTab === "progress"
+                      ? "bg-slate-900 text-white shadow-xs"
+                      : "text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  <Table2 className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>週次進捗</span>
+                </button>
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
@@ -382,6 +416,19 @@ export default function StudyArchivePage() {
                   >
                     <FileText className="w-3.5 h-3.5" aria-hidden="true" />
                     <span>議事メモを別タブで開く</span>
+                    <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                  </a>
+                )}
+                {weeklyProgressSheet.sheetUrl && (
+                  <a
+                    href={weeklyProgressSheet.sheetUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => playCyberClick()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-2xs"
+                  >
+                    <Table2 className="w-3.5 h-3.5" aria-hidden="true" />
+                    <span>週次進捗を別タブで開く</span>
                     <ExternalLink className="w-3 h-3" aria-hidden="true" />
                   </a>
                 )}
@@ -584,6 +631,65 @@ export default function StudyArchivePage() {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {activeTab === "progress" && (
+              <div
+                role="tabpanel"
+                id="study-archive-panel-progress"
+                aria-labelledby="study-archive-tab-progress"
+                tabIndex={0}
+                className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm focus:outline-none"
+              >
+                <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                    <Table2 className="w-4 h-4 text-emerald-600" aria-hidden="true" />
+                    <span>週次進捗プレビュー（Google スプレッドシート）</span>
+                  </span>
+                  <span className="text-[11px] font-bold text-slate-500">
+                    {weeklyProgressSheet.updateRule}
+                  </span>
+                </div>
+                <div className="px-4 py-2.5 border-b border-slate-100 bg-emerald-50/40 text-xs text-slate-700">
+                  {weeklyProgressSheet.description}
+                </div>
+                {progressPreviewUrl ? (
+                  <>
+                    <div className="w-full h-[680px] bg-white">
+                      <iframe
+                        src={progressPreviewUrl}
+                        title={weeklyProgressSheet.title}
+                        className="w-full h-full border-0"
+                      />
+                    </div>
+                    {weeklyProgressSheet.sheetUrl && (
+                      <div className="px-4 py-2.5 border-t border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-600">
+                        <span>
+                          プレビューが表示されない場合は、会社の Google Workspace アカウントでログインした状態で別タブから開いてください。
+                        </span>
+                        <a
+                          href={weeklyProgressSheet.sheetUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-bold text-indigo-600 hover:text-indigo-700 inline-flex items-center gap-1"
+                        >
+                          <span>Google スプレッドシートで開く</span>
+                          <ExternalLink className="w-3 h-3" aria-hidden="true" />
+                        </a>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="p-10 text-center space-y-2">
+                    <div className="text-sm font-bold text-slate-700">
+                      週次進捗シートの共有 URL はまだページに登録されていません（準備中）
+                    </div>
+                    <p className="text-xs text-slate-500">
+                      Google スプレッドシートの共有設定を「社内限定公開」で確認したうえで URL を登録すると、ここにプレビュー表示されます。
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>

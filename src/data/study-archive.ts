@@ -25,6 +25,14 @@ export interface StudySession {
   tasks: StudyTaskItem[];
 }
 
+export interface WeeklyProgressSheetConfig {
+  title: string;
+  description: string;
+  updateRule: string;
+  /** Google Spreadsheets 共有URL（.../spreadsheets/d/<ID>/...）。社内 Google Workspace 限定公開のもののみ設定する */
+  sheetUrl: string | null;
+}
+
 /**
  * Google Drive の file URL から iframe 埋め込み用の /preview URL を生成する。
  */
@@ -44,6 +52,34 @@ export function toDocsPreviewUrl(url: string | null): string | null {
   if (!match) return null;
   return `https://docs.google.com/document/d/${match[1]}/preview`;
 }
+
+/**
+ * Google Spreadsheets の URL から iframe 埋め込み用の /preview URL を生成する。
+ */
+export function toSheetsPreviewUrl(url: string | null): string | null {
+  if (!url) return null;
+  const match = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+  if (!match) return null;
+  return `https://docs.google.com/spreadsheets/d/${match[1]}/preview`;
+}
+
+/**
+ * AI勉強会 週次進捗シート設定
+ *
+ * 出どころメモ（AGENTS.md 準拠）:
+ * - Google Chat「AI勉強会」スペースの週次進捗報告（毎週金曜目安）を集約する
+ *   社内 Google Workspace 限定共有（ml-mightylink.com 閲覧専用）スプレッドシート
+ *   (ID: 1HfGcGFm8hDKG1PLHi_nRqbzQeCsrjJD4IbNYg1IuReo)。
+ * - 公開リポジトリのため、各メンバーの実名や進捗本文は本ファイルへ記載しない。
+ */
+export const weeklyProgressSheet: WeeklyProgressSheetConfig = {
+  title: "AI勉強会 週次進捗シート",
+  description:
+    "Google Chat「AI勉強会」スペースで毎週共有される各メンバー・AI推進担当の進捗状況とネクストアクションを一覧できます（社内 Google Workspace 限定公開）。",
+  updateRule: "毎週金曜日目安で週次更新（社内限定公開）",
+  sheetUrl:
+    "https://docs.google.com/spreadsheets/d/1HfGcGFm8hDKG1PLHi_nRqbzQeCsrjJD4IbNYg1IuReo/edit?usp=sharing",
+};
 
 /**
  * 開催回ごとの AI 勉強会アーカイブデータ
