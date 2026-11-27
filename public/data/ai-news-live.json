@@ -1,9 +1,9 @@
 {
-  "lastSyncedAt": "2026-11-27T07:16:34.467Z",
-  "lastSyncedAtFormatted": "2026/11/27 16:16:34",
+  "lastSyncedAt": "2026-11-27T20:49:17.608Z",
+  "lastSyncedAtFormatted": "2026/11/28 5:49:17",
   "syncStatus": "live",
   "pipelineVersion": "v1.2-auto",
-  "totalCount": 55,
+  "totalCount": 54,
   "activeSources": [
     "Google DeepMind Official Feed",
     "Google Antigravity Official Feed",
@@ -16,6 +16,31 @@
     "Import AI Official Feed"
   ],
   "items": [
+    {
+      "id": "live-huggingface-video-trainium3",
+      "title": "Hugging Face: Taking Trainium3 to the Track: Generating Videos with LTX-2.5",
+      "date": "2026/11/27",
+      "category": "agent_mcp",
+      "categoryLabel": "開発エージェント・MCP",
+      "importance": "tech",
+      "importanceLabel": "技術解説",
+      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
+      "impactForStaff": "Hugging Face公式ブログ「Taking Trainium3 to the Track: Generating Videos with LTX-2.5」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
+      "recommendedFor": [
+        "エンジニア",
+        "データサイエンティスト",
+        "アーキテクト"
+      ],
+      "sourceName": "Hugging Face Official Feed",
+      "sourceUrl": "https://huggingface.co/blog/video-trainium3",
+      "tags": [
+        "Hugging Face",
+        "OSS AI",
+        "エージェント評価",
+        "技術解説"
+      ],
+      "isLiveSynced": true
+    },
     {
       "id": "live-huggingface-llamacpp-amd-bench",
       "title": "Hugging Face: Introducing the llama.cpp benchmark dashboard for AMD Ryzen and Radeon",
@@ -33,31 +58,6 @@
       ],
       "sourceName": "Hugging Face Official Feed",
       "sourceUrl": "https://huggingface.co/blog/ggml-org/llamacpp-amd-bench",
-      "tags": [
-        "Hugging Face",
-        "OSS AI",
-        "エージェント評価",
-        "技術解説"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-huggingface-building-on-nemotron-35-parse-open-data-fine-tun",
-      "title": "Hugging Face: Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference",
-      "date": "2026/11/26",
-      "category": "agent_mcp",
-      "categoryLabel": "開発エージェント・MCP",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Hugging Face 公式アナウンスメント。最新の技術アップデートと提供開始情報です。",
-      "impactForStaff": "Hugging Face公式ブログ「Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference」。オープンソースAIエコシステム・モデル評価・エージェント実装の参考知見です。",
-      "recommendedFor": [
-        "エンジニア",
-        "データサイエンティスト",
-        "アーキテクト"
-      ],
-      "sourceName": "Hugging Face Official Feed",
-      "sourceUrl": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin",
       "tags": [
         "Hugging Face",
         "OSS AI",
@@ -366,31 +366,6 @@
         "UI/UX",
         "Design System",
         "デザイン連携"
-      ],
-      "isLiveSynced": true
-    },
-    {
-      "id": "live-importai-import-ai-482-huawei-kernel-benchmarks",
-      "title": "Import AI: Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national lab's AI science benchmark",
-      "date": "2026/11/23",
-      "category": "industry",
-      "categoryLabel": "業界・最新技術",
-      "importance": "tech",
-      "importanceLabel": "技術解説",
-      "summary": "Could the scientific method be emergent?",
-      "impactForStaff": "Import AI「Import AI 482: Huawei kernel benchmarks; airborne drone detection; and a national...」。AI安全性・評価ベンチマーク・先端研究の週次トレンドとして共有します。",
-      "recommendedFor": [
-        "エンジニア",
-        "リサーチャー",
-        "企画担当"
-      ],
-      "sourceName": "Import AI Official Feed",
-      "sourceUrl": "https://importai.substack.com/p/import-ai-482-huawei-kernel-benchmarks",
-      "tags": [
-        "Import AI",
-        "AI Research",
-        "AI安全性",
-        "先端動向"
       ],
       "isLiveSynced": true
     },
