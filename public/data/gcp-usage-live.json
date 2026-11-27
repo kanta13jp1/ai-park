@@ -156,12 +156,13 @@
     }
   ],
   "syncMode": "snapshot_verified",
-  "syncModeLabel": "実機コンソール確定検証同期（保護中）",
+  "syncModeLabel": "実機コンソール確定検証同期（保護中・API再認証待ち）",
   "syncDetails": {
-    "authVerified": true,
+    "authVerified": false,
     "projectId": "antigravity-pj-xxxxxx",
     "billingAccountId": "012EB1-xxxxxx-xxxxxx",
-    "lastAuditCheck": "2026-11-27 21:38",
-    "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)"
+    "lastAuditCheck": "2026-11-28 03:34",
+    "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)",
+    "lastSyncError": "invalid_rapt"
   }
 }
