@@ -152,7 +152,7 @@ gh run watch <run_id> --exit-status
 - **デプロイ完了ハードゲート（先行ブラウザ検証の禁止）**: `gh run watch` がバックグラウンド実行になった場合は、同一ターンで `browser` サブエージェントを起動せず、完了通知を待って `status: completed`・`conclusion: success`・`headSha === push したコミット SHA` を確認してから Step 6 へ進む。
 
 ### Step 6: ブラウザ実機検証 & ユーザーへの報告・サインオフ
-1. Step 5 のデプロイ成功を確認後、組み込み `browser` サブエージェントを用いて、本番正規 URL（`next.config.ts` の `trailingSlash: true` に合わせた **末尾 `/` 付き** ＋ `?cachebust=<timestamp>`、例: `https://kanta13jp1.github.io/ai-park/azure-info/?cachebust=...`）へアクセスする。今回のコミットで新たに追加した DOM マーカー（新属性・新クラス・新ラベル等）が実画面に反映されていることを最初に確認し、旧キャッシュ検証による誤判定を防ぐ。あわせて末尾 `/` なし URL の解決および 404 パスでの Hydration エラー 0 件も点検する。
+1. Step 5 のデプロイ成功を確認後、組み込み `browser` サブエージェントを用いて、本番正規 URL（`next.config.ts` の `trailingSlash: true` に合わせた **末尾 `/` 付き** ＋ `?cachebust=<timestamp>`、例: `https://kanta13jp1.github.io/ai-park/azure-info/?cachebust=...`）へアクセスする。今回のコミットで新たに追加した DOM マーカー（新属性・新クラス・新ラベル等）が実画面に反映されていることを最初に確認し、旧キャッシュ検証による誤判定を防ぐ。あわせて末尾 `/` なし URL の解決および 404 パスでの Hydration エラー 0 件も点検する（なお `BROWSER_HOST_FACTS` の `latest_screenshot` が 404 画面で上書きされないよう、末尾なし／404 の点検は対象画面の最終レイアウト撮影より前に実施する）。
 2. `1280x800` と `768x1024` の両解像度で、HTTP 200・ルート固有 `document.title`・`ConsoleErrors: 0`・水平オーバーフローなし・`HeroBanner` `Search ⌘K` と `<h1>` の非重複・主要ボタンの折り返し／非クリップ・WAI-ARIA 動作を実測する。
 3. 検証結果は `BROWSER_HOST_FACTS`（訪問オリジン・最新スクリーンショット）と照合し、スクリーンショットを目視確認したうえで各小項目の点検根拠・合格判定の要約を報告し、サインオフを得る。
 4. **`browser` サブエージェントがコンテキスト予算等で利用不可な場合の `chrome_devtools` MCP フォールバック**:
