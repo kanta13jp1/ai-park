@@ -556,50 +556,57 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     name: "Gemini利用統計ダッシュボード",
     path: "/gemini-stats",
     targetAudience: "推進担当・管理者",
-    lastVerifiedAt: "2026/10/05",
+    lastVerifiedAt: "2026/11/28",
     verifiedBy: "梅澤（AI推進担当）",
     overallStatus: "passed",
     checks: {
       factAndSpec: {
         passed: true,
-        evidence: "Google Cloud Billing 実機コンソール画面（2026/10/05 00:40 照合）と完全一致確認。無料トライアルクレジット残高 ¥32,352.49（残り87日 / 2026年12月31日終了）、合計費用 ¥2.29万 - コスト削減 ¥2.29万 = 総費用 ¥0 を完全検証済み。",
+        checkedAt: "2026/11/28",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "2026/11/27 Google Cloud Billing 実機コンソールおよび IAM/Logging 実測と照合済み（残りクレジット ¥19,745.72 / 元の資金 ¥47,813 / 残り 33 日・2026-12-31 終了 / 過去90日 SKU 小計 約¥56,100 を無料トライアル枠で全額相殺・実質 ¥0 / 登録 3 名匿名化表示）。sync-gcp-usage.mjs の課金データ反映修正および単体テスト追加、公開画面で生の社員個人情報・GCP識別子が非露出であることを本番確認済み。",
         points: [
-          "API連携が本物か",
-          "フォールバックJSONが正確か",
-          "集計ラグの公式仕様注記があるか",
-          "リンク先が実在するか",
+          "Cloud Billing・IAM 実測値とフォールバックJSONが一致しているか",
+          "生のGCPプロジェクトID・請求先ID・社員メールアドレスが非露出か",
+          "集計ラグ・Workspace枠利用注記・sync-gcp-usage.mjsの自動テストが整合しているか",
+          "リンク先と実機画面の表示が実在・疎通しているか",
         ],
         subChecks: [
           {
             id: "stats-fact-01",
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
-            label: "GCP基盤実在ID・組織情報の完全一致",
-            detail: "プロジェクトID「antigravity-pj-xxxxxx」、組織「ml-mightylink.com」、請求先ID「012EB1-xxxxxx-xxxxxx」が実在する社内本番リソースと完全一致していること。",
+            label: "GCP基盤マスク済みID・組織情報の完全一致",
+            detail:
+              "プロジェクトID（antigravity-pj-xxxxxx）、組織（ml-mightylink.com）、請求先ID（012EB1-xxxxxx-xxxxxx）がマスク表記で公開され、生の識別子や個人メールアドレスが画面・DOM に露出していないこと。",
             verified: true,
           },
           {
             id: "stats-fact-02",
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
-            label: "無料クレジット・消化額の確定データ整合",
-            detail: "無料トライアル残額（¥32,352.49 / 元の資金 ¥47,813、残り87日）および10/01〜10/05合計費用（費用 ¥2.29万 - 削減 ¥2.29万 = 総費用 ¥0）が、Google Cloud Billing実機コンソール確定数値と完全合致していること。",
+            label: "無料クレジット・消化額の確定データ整合（2026/11/27 照合）",
+            detail:
+              "無料トライアル残額（¥19,745.72 / 元の資金 ¥47,813、残り 33 日・2026/12/31 終了）および過去90日 SKU 小計（約 ¥56,100、トライアルクレジット相殺で実質 ¥0）が実機コンソール画面と合致していること。",
             verified: true,
           },
           {
             id: "stats-fact-03",
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
-            label: "社内アカウント・利用モデルの事実性",
-            detail: "社内アカウント（利用者A・利用者Bの2名、匿名化済み）および利用モデル（Gemini 3.8 Flash / 3.1 Pro）の実績と一致していること。",
+            label: "社内アカウント（3名匿名化）・Workspace枠注記の事実性",
+            detail:
+              "IAM で確認済みの社内アカウント 3 名（利用者A〜C として匿名化）と、Antigravity 標準利用（Workspace 枠利用）および Vertex AI 従量利用の切り分け注記が実態と一致していること。",
             verified: true,
           },
           {
             id: "stats-fact-04",
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・正確性検証）",
-            label: "SKU別コスト比率・モデル分類の事実性",
-            detail: "Gemini 3.8 Flash（59.2%）、Agent Platform / 3.1 Pro（22.2%）、us-east7基盤（18.6%）のSKU内訳が、Cloud Billingのエクスポート実績データに基づいていること。",
+            label: "SKU別コスト比率・同期スクリプト改修の事実性",
+            detail:
+              "Cloud Billing 実測の SKU 内訳（Gemini 3.8 Flash Input/Caching/Output/Image・Gemini 3.5 Flash Lite 等）と、scripts/sync-gcp-usage.mjs の課金集計修正・自動テスト合格が一致していること。",
             verified: true,
           },
           {
@@ -607,15 +614,17 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "official_announcement",
             groupTitle: "② 公式アナウンス・安全基準と一致しているか（整合性・周知遵守）",
             label: "会社プロジェクト経由利用（個人課金不要）原則の明示",
-            detail: "社員個人への直接請求が発生せず、全額会社のGoogle Cloudクレジットから相殺・一元管理されている実態と公式アナウンスが合致していること。",
+            detail:
+              "社員個人への直接請求が発生せず、無料トライアルクレジット相殺および組織アカウントで管理されている実態が公式案内と合致していること。",
             verified: true,
           },
           {
             id: "stats-policy-02",
             category: "official_announcement",
             groupTitle: "② 公式アナウンス・安全基準と一致しているか（整合性・周知遵守）",
-            label: "集計ラグ・データ反映遅延（4大チェックリスト）の周知整合",
-            detail: "Cloud Billing・Cloud Loggingの確定までに数時間〜最大1日の反映ラグが存在する公式仕様と、「利用回数が増えないときの確認手順①〜④」が正しく一致していること。",
+            label: "集計ラグ・データ反映遅延（4項目チェックリスト）の周知整合",
+            detail:
+              "Workspace 枠利用分・BigQuery 課金エクスポート未接続・監査ログ未有効時における「利用回数が増えない・反映されないときの確認チェックリスト（4項目）」が実態と一致していること。",
             verified: true,
           },
           {
@@ -623,15 +632,17 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "official_announcement",
             groupTitle: "② 公式アナウンス・安全基準と一致しているか（整合性・周知遵守）",
             label: "予算アラート・月額上限ガイドラインの整合",
-            detail: "月額上限予算（$20 / 3,000円）の管理基準が、社内AI運用ポリシーおよび安全枠内で設定されていること。",
+            detail:
+              "月額上限予算（$50 / 7,500円）の管理基準およびオーナー作業依頼中ステータスが社内運用と整合していること。",
             verified: true,
           },
           {
             id: "stats-link-01",
             category: "link_integrity",
             groupTitle: "③ リンク先が実在するか（リンク検証・確認済み）",
-            label: "Cloud Billingコンソールへの外部リンク疎通",
-            detail: "ヘッダー内の「Cloud Billing コンソール」リンクが、実在する請求先レポート（https://console.cloud.google.com/billing/...）へ正常に遷移すること（確認済み）。",
+            label: "Cloud Billingコンソール・正規/末尾リダイレクト疎通",
+            detail:
+              "ヘッダー内の「Cloud Billing コンソール」外部リンク、および /gemini-stats/ の HTTP 200 と末尾スラッシュなし /gemini-stats の HTTP 301 リダイレクトが実測確認済みであること。",
             verified: true,
           },
           {
@@ -639,37 +650,59 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
             category: "link_integrity",
             groupTitle: "③ リンク先が実在するか（リンク検証・確認済み）",
             label: "CSVエクスポート機能の正常性",
-            detail: "「CSV出力」ボタンをクリックした際に、文字化け（BOM付与）のないUTF-8 CSVファイル（利用実績データ）が正常にダウンロードされること。",
+            detail:
+              "「CSV出力」ボタン押下で BOM 付き UTF-8 CSV ファイルがブラウザから生成・出力できること。",
             verified: true,
           },
           {
             id: "stats-link-03",
             category: "link_integrity",
             groupTitle: "③ リンク先が実在するか（リンク検証・確認済み）",
-            label: "同期API（GAS Web API / fallback）の正常疎通",
-            detail: "「最新データを再同期」実行時に、GAS Live API またはフォールバックJSON（public/data/gcp-usage-live.json）からエラーなくデータを取得・更新できること。",
+            label: "同期JSON参照と安全フォールバック表示",
+            detail:
+              "public/data/gcp-usage-live.json（syncedAt=2026-11-27 21:38）をエラーなく読み込み、本番ブラウザでコンソールエラー 0 件で描画されること。",
             verified: true,
           },
         ],
       },
       designAndLayout: {
         passed: true,
-        evidence: "KPIカード4枚、グラフ、同期ステータスバー、FAQアコーディオンの配置確認",
-        points: ["カード数値の整列", "アコーディオン開閉時のスムーズさ", "ステータスバッジの明瞭さ", "モバイル表示"],
+        checkedAt: "2026/11/28",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番 GitHub Pages 実機ブラウザ（2026/11/28）にて 1280x800（html/body 幅 1274 <= 1280、main 幅 986、HeroBanner h1 と Search ボタン垂直間隔 27.5px で非重複）および 768x1024（html/body 幅 762 <= 768、main 幅 474、KPI カード 2x2 折り返し x=313..737・期間フィルタボタン折り返し・横溢れゼロ）を実測しスクリーンショット目視確認済み。",
+        points: [
+          "1280x800・768x1024 で横溢れ・要素重なり・クリップがないか",
+          "KPIカード・ボタン群・テーブル横スクロールが狭幅環境で崩れないか",
+          "HeroBanner 見出しと Search ボタンが重ならないか",
+        ],
       },
       usability: {
         passed: true,
-        evidence: "「最新データを再同期」ボタンのローディング動作、CSV出力、FAQ展開を確認",
-        points: ["再同期ボタン押下時の動作", "CSVが文字化けせず開けるか", "FAQクリックの反応"],
+        checkedAt: "2026/11/28",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "本番実機ブラウザにて FAQ 確認チェックリストのアコーディオン開閉（aria-expanded false→true→false）および日次推移期間フィルタ（過去7日・過去14日・過去30日の aria-pressed 切替とサマリー更新）がコンソールエラー 0 件で動作することを確認。",
+        points: [
+          "期間フィルタ（過去7日/14日/30日）の切り替え動作",
+          "確認チェックリストのアコーディオン開閉（aria-expanded連動）",
+          "CSV出力・再同期操作時のエラーゼロ",
+        ],
       },
       readability: {
         passed: true,
-        evidence: "「反映されないときの4大チェックリスト」の文字サイズとアイコン配置の視認性を確認",
-        points: ["確認手順（①〜④）が迷わず読めるか", "フォントの強弱が適切か", "数値の桁区切り・通貨単位"],
+        checkedAt: "2026/11/28",
+        inspector: "梅澤（AI推進担当）",
+        evidence:
+          "2026/11/27 確定スナップショット（¥19,745.72・残り33日・登録3名）と実機スクショ目視での文字切れゼロ・コンソールエラー 0 件を確認。",
+        points: [
+          "確認手順（4項目）とスナップショット注記が迷わず読めるか",
+          "数値の桁区切り・通貨単位・マスク表記が明瞭か",
+        ],
       },
     },
-    environment: "Windows 11 / Chrome / Excel (CSV出力確認)",
-    memo: "TODO-16（データ同期ステータス＆FAQ表示）の実機UAT確認完了",
+    environment: "Windows 11 / Chromium / 1280x800・768x1024 + GitHub Pages 本番実測",
+    memo: "2026/11/27 Cloud Billing/IAM 実数値同期＆2026/11/28 本番実機ビジュアルUAT完了",
   },
   {
     id: "ai-projects",
@@ -1519,86 +1552,86 @@ export const preflightChecklistMaster: FeaturePreflightRecord[] = [
     name: "AI勉強会アーカイブ",
     path: "/study-archive",
     targetAudience: "全社員",
-    lastVerifiedAt: "2026/11/23",
+    lastVerifiedAt: "2026/11/28",
     verifiedBy: "梅澤（AI推進担当）",
     overallStatus: "passed",
     checks: {
       factAndSpec: {
         passed: true,
-        checkedAt: "2026/11/23",
+        checkedAt: "2026/11/28",
         inspector: "梅澤（AI推進担当）",
         evidence:
-          "公開リポジトリのため議事メモ本文・社員メールアドレス・生電話番号を非掲載とし、src/data/study-archive.ts に出どころコメント明記の 2026-11-18 Google Drive 録画 URL（未ログイン時 iframe HTTP 401 保護確認）および Google Docs 議事メモ URL・次回開催予定（2026-12-16 15:00〜16:00）のみ掲載していることを確認。",
+          "公開リポジトリのため議事メモ・週次進捗本文・社員メールアドレス・生電話番号を非掲載とし、src/data/study-archive.ts に出どころコメント明記の 2026-11-18 Google Drive 録画 URL、Google Docs 議事メモ URL、および新規「週次進捗」タブ用の社内限定共有 Google スプレッドシート URL（未ログイン時 /preview HTTP 401 保護をライブ疎通＋分離ブラウザで実測確認済み。ログイン済みの社内 Workspace Chrome でのシート実表示は別途確認）のみ掲載していることを確認。",
         points: [
-          "議事メモ本文や社員個人情報・機密識別情報が公開コードに含まれていないか",
-          "Google Drive 録画・Google Docs 議事メモの限定共有と次回予定の記載が事実と一致しているか",
+          "議事メモ本文・週次進捗本文・社員個人情報・機密識別情報が公開コードに含まれていないか",
+          "Google Drive 録画・Google Docs 議事メモ・週次進捗シートの社内限定共有（未ログイン時 HTTP 401）と次回予定が事実と一致しているか",
         ],
         subChecks: [
           {
             id: "study-fact-01",
             category: "no_fiction",
             groupTitle: "① 嘘や推測のデータがないか（事実性・実在性確認済み）",
-            label: "議事メモ本文・個人情報・架空予定の非掲載",
+            label: "議事メモ・週次進捗本文および個人情報の非掲載",
             detail:
-              "src/data/study-archive.ts に議事メモ本文・社員メールアドレス・電話番号を載せず、開催回メタ情報と課題ガイドのみ記載していること。",
+              "src/data/study-archive.ts に議事メモ本文・週次進捗の社員実名/内容・メールアドレス・電話番号を載せず、開催回メタ情報・課題ガイド・限定共有シート参照メタのみ記載していること。",
             verified: true,
           },
           {
             id: "study-fact-02",
             category: "official_announcement",
             groupTitle: "② 共有権限と告知内容が一致しているか（整合性確認済み）",
-            label: "Google Workspace 限定公開保護と次回予定整合",
+            label: "Google Workspace 限定公開保護（HTTP 401）と次回予定整合",
             detail:
-              "未認証ブラウザで Drive / Docs の /preview iframe が HTTP 401 で保護されること、および次回予定（2026-12-16 15:00〜16:00）が告知内容と一致していること。",
+              "未認証環境で Drive / Docs / Spreadsheets の /preview iframe が HTTP 401 で保護されること（ログイン済み社内ブラウザでは閲覧可能）、および次回予定（2026-12-16 15:00〜16:00）が告知内容と一致していること。",
             verified: true,
           },
           {
             id: "study-link-01",
             category: "link_integrity",
             groupTitle: "③ リンク先と導線が実在するか（機能確認済み）",
-            label: "Drive/Docs 直接リンク・/calendar・/guide 導線整合",
+            label: "週次進捗シート・Drive/Docs 直接リンク・内部導線整合",
             detail:
-              "録画/議事メモの別タブリンクおよび /calendar・/guide への内部リンクが正しく設定されていること。",
+              "週次進捗シート別タブリンク（target=_blank, rel=noopener noreferrer）、録画/議事メモの別タブリンク、および /calendar・/guide への内部リンクが正しく設定されていること。",
             verified: true,
           },
         ],
       },
       designAndLayout: {
         passed: true,
-        checkedAt: "2026/11/23",
+        checkedAt: "2026/11/28",
         inspector: "梅澤（AI推進担当）",
         evidence:
-          "本番 GitHub Pages 実機ブラウザにて 1280x800（body 幅 1274 <= 1280）・768x1024（固定 288px サイドバー下で html/body 幅 762 <= 768・main 474px・tablist 幅 392px で重なり/クリップゼロ）・375x812（html/body/main 幅 369 <= 375、横溢れゼロ）および見出し階層（h1→h2→h3→h4 スキップ 0 件）を確認。",
+          "本番 GitHub Pages 実機ブラウザ（?tab=progress, 2026/11/28）にて 1280x800（html/body 幅 1274 <= 1280、main 幅 986、HeroBanner h1 と Search ボタン非重複、iframe 920x680）および 768x1024（html/body 幅 762 <= 768、main 幅 474、tablist 幅 392 で 4 タブ右端クリップなし、iframe 幅 424 <= 474 で重なり・横溢れゼロ）を実測＋スクリーンショット目視確認。見出し階層（h1→h2→h3 スキップ 0 件）も確認。",
         points: [
-          "1280x800・768x1024・375x812 で横溢れ・要素重なり・クリップがないか",
-          "見出し階層（h1〜h4）にスキップがないか",
+          "1280x800・768x1024 で横溢れ・要素重なり・クリップがないか",
+          "4タブ（「週次進捗」含む）と埋め込み iframe が狭幅環境で収まるか",
         ],
       },
       usability: {
         passed: true,
-        checkedAt: "2026/11/23",
+        checkedAt: "2026/11/28",
         inspector: "梅澤（AI推進担当）",
         evidence:
-          "WAI-ARIA タブのキーボード操作（ArrowRight→End→Home でのフォーカス＆選択・パネル連動）、および「この回のリンクをコピー」（URLをコピーしました表示）・「Google Chat 用に課題をコピー」（コピーしました表示＋role=\"status\" テキスト「課題一覧をクリップボードにコピーしました。」更新、JS エラー 0 件）を本番実機で確認。",
+          "本番実機ブラウザにて ?tab=progress 直遷移時の初期選択（study-archive-tab-progress aria-selected=true / study-archive-panel-progress 表示）、WAI-ARIA タブのキーボード操作（ArrowLeft→Home→End でのフォーカス＆選択連動）、および別タブリンク（target=_blank, rel=noopener noreferrer）の正常動作（JS エラー 0 件）を確認。",
         points: [
-          "キーボード操作（ArrowRight/End/Home）でタブとパネルが連動するか",
-          "リンクコピー・課題コピーボタンが権限環境下でエラーなく動作するか",
+          "?tab=progress 初期表示とキーボード操作（ArrowLeft/Home/End）の連動",
+          "未ログイン時の保護表示下でも案内文・別タブリンクが操作できるか",
         ],
       },
       readability: {
         passed: true,
-        checkedAt: "2026/11/23",
+        checkedAt: "2026/11/28",
         inspector: "梅澤（AI推進担当）",
         evidence:
-          "role=\"tablist\"・role=\"tab\"・aria-selected・aria-controls・role=\"tabpanel\"・aria-pressed・aria-live=\"polite\" の実装、末尾 / なし（/study-archive）の HTTP 200 解決、存在しない URL での 404 Hydration エラー 0 件、およびコンソールエラー 0 件を確認。",
+          "role=tablist・role=tab・aria-selected・aria-controls・role=tabpanel・aria-live=polite の実装、末尾 / なし（/study-archive）の HTTP 301→200 解決、存在しない URL での 404 Hydration エラー 0 件、およびコンソールエラー 0 件を確認。",
         points: [
           "WAI-ARIA APG タブ・ライブ通知属性が揃っているか",
-          "末尾 / なしアクセスと 404 ページで Hydration/JS エラーが発生しないか",
+          "末尾 / なしリダイレクトと 404 ページで Hydration/JS エラーが発生しないか",
         ],
       },
     },
-    environment: "Windows 11 / Chromium / 1280x800・768x1024・375x812 + GitHub Pages 本番実測",
-    memo: "β版（Google Drive 録画・Google Docs 議事メモ社内限定共有・WAI-ARIA APG 対応）の本番実機 UAT 完了",
+    environment: "Windows 11 / Chromium / 1280x800・768x1024 + GitHub Pages 本番実測",
+    memo: "β版（録画・議事メモ＋社内限定「週次進捗」シート埋め込み・WAI-ARIA APG 4タブ対応）の本番実機 UAT 完了",
   },
   {
     id: "calendar",
