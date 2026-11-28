@@ -161,7 +161,7 @@
     "authVerified": false,
     "projectId": "antigravity-pj-xxxxxx",
     "billingAccountId": "012EB1-xxxxxx-xxxxxx",
-    "lastAuditCheck": "2026-11-28 03:34",
+    "lastAuditCheck": "2026-11-28 14:26",
     "nextScheduledSync": "09:00 / 18:00 JST (GitHub Actions)",
     "lastSyncError": "invalid_rapt"
   }
